@@ -22,5 +22,6 @@ private:
 
 	int m_handle; // グラフィックのハンドル
 	Vec2 m_pos;	  // 表示位置
+	bool isJumpFlag; //ジャンプ中かどうか
 };
 
