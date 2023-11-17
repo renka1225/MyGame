@@ -15,13 +15,11 @@ namespace
 }
 
 
-Player::Player() :
-	m_playerHandle(-1),
-	m_pos(Game::kScreenWidth / 2, Game::kScreenHeight - kWidth)
+Player::Player(SceneMain* pMain) :
+	m_pMain(pMain),
+	m_handle(-1),
+	m_pos(Game::kScreenWidth / 2, Game::kScreenHeight - kWidth * 2)
 {
-	// グラフィックのロード
-	m_playerHandle = LoadGraph("data/image/player.png");
-	assert(m_playerHandle != -1);
 }
 
 Player::~Player()
@@ -54,5 +52,4 @@ void Player::Update()
 
 void Player::Draw()
 {
-	DrawGraph(100, 100, m_playerHandle, FALSE);
 }
