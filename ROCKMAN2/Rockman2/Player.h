@@ -1,5 +1,6 @@
 #pragma once
 #include "Vec2.h"
+#include "Rect.h"
 
 class SceneMain;
 class Player
@@ -20,8 +21,19 @@ public:
 private:
 	SceneMain* m_pMain;
 
-	int m_handle; // グラフィックのハンドル
-	Vec2 m_pos;	  // 表示位置
-	bool isJumpFlag; //ジャンプ中かどうか
+	// 表示位置
+	Vec2 m_pos;
+	// 当たり判定用の矩形
+	Rect m_colRect;
+	// グラフィックのハンドル
+	int m_handle;
+	// ジャンプのフレーム数
+	int m_jumpFrame;
+	// ジャンプ中かどうか
+	bool m_isJumpFlag;
+	// HP
+	int m_hp;
+	// 残機
+	int m_life;
 };
 

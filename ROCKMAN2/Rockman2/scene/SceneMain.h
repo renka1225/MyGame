@@ -3,7 +3,7 @@
 #include "Vec2.h"
 
 class Player;
-
+class ShotBase;
 class SceneMain
 {
 public:
@@ -15,9 +15,10 @@ public:
 	void Update();
 	void Draw();
 
+
 private:
 	// グラフィックのハンドル
-	int m_playerHandle;
+	int m_playerHandle; // プレイヤー
 
 	// プレイヤー
 	Player* m_pPlayer;

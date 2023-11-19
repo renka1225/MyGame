@@ -2,8 +2,13 @@
 #include "DxLib.h"
 #include "Pad.h"
 #include "Player.h"
-
 #include <cassert>
+
+namespace
+{
+	// 画面内に1度に出せる弾数
+	constexpr int kShotMax = 3;
+}
 
 SceneMain::SceneMain()
 {
@@ -14,6 +19,7 @@ SceneMain::SceneMain()
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
+
 }
 
 SceneMain::~SceneMain()
@@ -47,5 +53,5 @@ void SceneMain::Draw()
 
 	// プレイヤーの座標をデバッグ表示する
 	Vec2 playerPos = m_pPlayer->GetPos();
-	DrawFormatString(8, 24, GetColor(255, 255, 255), "プレイヤーの座標(%.2f, %.2f)", playerPos.x, playerPos.y);
+	DrawFormatString(8, 24, 0xffffff, "プレイヤーの座標(%.2f, %.2f)", playerPos.x, playerPos.y);
 }

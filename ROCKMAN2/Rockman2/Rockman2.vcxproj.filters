@@ -31,6 +31,12 @@
     <Filter Include="ヘッダー ファイル\enemy">
       <UniqueIdentifier>{e1323bc2-57a2-407b-bf00-87523d0a5555}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\shot">
+      <UniqueIdentifier>{75568a10-d9b6-4fcf-b399-01a698f95bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\shot">
+      <UniqueIdentifier>{506926ce-805f-4124-b25d-685009f7fb31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -51,6 +57,15 @@
     <ClCompile Include="scene\SceneManager.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="util\Rect.cpp">
+      <Filter>ソース ファイル\util</Filter>
+    </ClCompile>
+    <ClCompile Include="shot\ShotBase.cpp">
+      <Filter>ソース ファイル\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="shot\ShotBuster.cpp">
+      <Filter>ソース ファイル\shot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -70,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="scene\SceneManager.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Rect.h">
+      <Filter>ヘッダー ファイル\util</Filter>
+    </ClInclude>
+    <ClInclude Include="shot\ShotBase.h">
+      <Filter>ヘッダー ファイル\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="shot\ShotBuster.h">
+      <Filter>ヘッダー ファイル\shot</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

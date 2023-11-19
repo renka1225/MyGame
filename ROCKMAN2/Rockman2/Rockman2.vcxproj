@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)scene;$(ProjectDir)util;$(ProjectDir)enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)scene;$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)shot</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -142,6 +142,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pad.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="shot\ShotBuster.cpp" />
+    <ClCompile Include="shot\ShotBase.cpp" />
+    <ClCompile Include="util\Rect.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
     <ClCompile Include="scene\SceneMain.cpp" />
     <ClCompile Include="util\Vec2.cpp" />
@@ -150,6 +153,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Pad.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="shot\ShotBuster.h" />
+    <ClInclude Include="shot\ShotBase.h" />
+    <ClInclude Include="util\Rect.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="util\Vec2.h" />
