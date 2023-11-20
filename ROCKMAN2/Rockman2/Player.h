@@ -17,6 +17,8 @@ public:
 	void SetHandle(int handle) { m_handle = handle; }
 	// プレイヤーの現在座標を取得する
 	Vec2 GetPos() const { return m_pos; }
+	// プレイヤーの当たり判定を取得する
+	Rect GetColRect() const { return m_colRect; }
 
 private:
 	SceneMain* m_pMain;

@@ -3,6 +3,7 @@
 ShotBase::ShotBase() :
 	m_pMain(nullptr),
 	m_pPlayer(nullptr),
+	m_handle(-1),
 	m_isExist(false)
 {
 }

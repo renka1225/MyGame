@@ -1,7 +1,9 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Game.h"
+#include "Pad.h"
 #include "SceneMain.h"
+#include "ShotBuster.h"
 #include <cassert>
 
 // Playerで使用する定数
@@ -14,7 +16,7 @@ namespace
 	// ジャンプの長さ
 	constexpr float kJumpTime = 5.0f;
 	// 重力
-	constexpr float kGravity = 3.0f;
+	constexpr float kGravity = 5.0f;
 
 	// サイズ
 	constexpr int kWidth = 32;
@@ -52,11 +54,11 @@ void Player::Update()
 	Vec2 move{ 0.0f, kGravity }; // 移動量
 
 
-	if (pad & PAD_INPUT_4) // Aキーを押したら左に移動
+	if (pad & PAD_INPUT_LEFT) // ←を押したら左に移動
 	{
 		move.x -= kSpeed;
 	}
-	if (pad & PAD_INPUT_6) // Dキーを押したら右に移動
+	if (pad & PAD_INPUT_RIGHT) // →を押したら右に移動
 	{
 		move.x += kSpeed;
 	}
@@ -90,6 +92,20 @@ void Player::Update()
 	m_pos += move; // 現在値の更新
 	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight); // 当たり判定の更新
 
+	// ロックバスター発射
+	if (Pad::IsTrigger(PAD_INPUT_1))
+	{
+		// メモリの確保
+		ShotBuster* pShot = new ShotBuster;
+
+		pShot->Init();
+		pShot->SetMain(m_pMain);
+		pShot->SetPlayer(this);
+		pShot->Start(GetPos());
+
+		// 更新やメモリの解放はSceneMainが行う
+		m_pMain->AddShot(pShot);
+	}
 }
 
 void Player::Draw()

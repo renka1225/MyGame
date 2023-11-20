@@ -33,7 +33,11 @@ protected:
 	// ショットを撃ったプレイヤーのポインタを覚えておく
 	Player* m_pPlayer;
 
-	bool m_isExist;	// 存在するかフラグ(使用中かどうか)
+	// グラフィックのハンドル
+	int m_handle;
+
+	// 存在するかフラグ(使用中かどうか)
+	bool m_isExist;
 
 	// 表示位置
 	Vec2 m_pos;
