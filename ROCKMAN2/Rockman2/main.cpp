@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		shotFlag[i] = false;
 	}
-	// ショットボタンが前のフレームで押されたかどうかを保存する変数にfalse(押されいない)を代入
+	// ショットボタンが前のフレームで押されたかどうか
 	bool prevShotFlag = false;
 
 	// Sceneの開始
@@ -61,10 +61,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					if (shotFlag[i] == false)
 					{
 						// 弾iの位置をセット、位置はプレイヤーの中心にする
-						shotX[i] = 32;
-						shotY[i] = 32;
+						shotX[i] = 640;
+						shotY[i] = 380;
 
-						// 弾iは現時点を持って存在するので、存在状態を保持する変数に１を代入する
 						shotFlag[i] = true;
 
 						break;
@@ -83,11 +82,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			if (shotFlag[i] == true)
 			{
-				// 弾iを１６ドット上に移動させる
-				shotY[i] -= 8;
+				// 弾iを右に移動させる
+				shotX[i] += 8;
 
 				// 画面外に出てしまった場合は存在状態を保持している変数にfalse(存在しない)を代入する
-				if (shotY[i] < -80)
+				if (shotX[i] > Game::kScreenWidth)
 				{
 					shotFlag[i] = false;
 				}

@@ -1,3 +1,4 @@
 ﻿  main.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\main.cpp(84,23): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
-  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\main.cpp(83,23): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
+  Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
