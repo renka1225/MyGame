@@ -1,0 +1,5 @@
+﻿  Player.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\_Rockman2\Player.cpp(17,28): warning C4244: '=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\_Rockman2\Player.cpp(113,26): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\_Rockman2\Player.cpp(113,17): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\_Rockman2\x64\Debug\Rockman2.exe
