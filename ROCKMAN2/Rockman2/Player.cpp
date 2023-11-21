@@ -14,16 +14,16 @@ namespace
 	// ジャンプ速度
 	constexpr float kJumpSpeed = -10.0f;
 	// ジャンプの長さ
-	constexpr float kJumpTime = 5.0f;
-	// 重力
-	constexpr float kGravity = 5.0f;
+	constexpr float kJumpTime = 10.0f;
+	// 落下速度
+	constexpr float kFallSpeed = 8.0f;
 
 	// サイズ
 	constexpr int kWidth = 32;
 	constexpr int kHeight = 64;
 
 	// 床の高さ
-	constexpr int kFloorHeight = Game::kScreenHeight / 2;
+	constexpr int kFloorHeight = 300;
 }
 
 
@@ -51,7 +51,7 @@ void Player::Update()
 	// パッドの十字キーを使用してプレイヤーを移動させる
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	Vec2 move{ 0.0f, kGravity }; // 移動量
+	Vec2 move{ 0.0f, kFallSpeed }; // 移動量
 
 
 	if (pad & PAD_INPUT_LEFT) // ←を押したら左に移動
@@ -73,7 +73,7 @@ void Player::Update()
 		}
 		else
 		{
-			move.y += kGravity;	// 落下し続ける
+			move.y += kFallSpeed;	// 落下し続ける
 			m_jumpFrame--;
 		}
 	}
