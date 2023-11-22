@@ -38,10 +38,11 @@ SceneMain::~SceneMain()
 	DeleteGraph(m_playerHandle);
 	DeleteGraph(m_shotBusterHandle);
 
-	// メモリの解放
+	// プレイヤーのメモリ解放
 	delete m_pPlayer;
 	m_pPlayer = nullptr;
 
+	// ショットのメモリ解放
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		if (m_pShot[i])
@@ -55,6 +56,7 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
+	// プレイヤーの初期化
 	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
 	m_pPlayer->Init();
 }
@@ -65,10 +67,12 @@ void SceneMain::End()
 
 void SceneMain::Update()
 {
+	// プレイヤーの更新
 	m_pPlayer->Update();
 
 	Rect playerRect = m_pPlayer->GetColRect();
 
+	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		// nullptrなら処理は行わない

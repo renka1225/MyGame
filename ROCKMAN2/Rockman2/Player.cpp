@@ -33,6 +33,7 @@ Player::Player(SceneMain* pMain) :
 	m_handle(-1),
 	m_jumpFrame(0),
 	m_isJumpFlag(false),
+	m_prevShotFlag(false),
 	m_hp(28),
 	m_life(2)
 {
@@ -79,7 +80,7 @@ void Player::Update()
 	}
 
 	// zキーでロックバスター発射
-	if (pad & PAD_INPUT_1)
+	if (Pad::IsPress(PAD_INPUT_1))
 	{
 		// メモリの確保
 		ShotBuster* pShot = new ShotBuster;
