@@ -33,7 +33,6 @@ Player::Player(SceneMain* pMain) :
 	m_handle(-1),
 	m_jumpFrame(0),
 	m_isJumpFlag(false),
-	m_prevShotFlag(false),
 	m_hp(28),
 	m_life(2)
 {

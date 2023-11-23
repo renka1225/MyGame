@@ -100,11 +100,6 @@ void SceneMain::Draw()
 		if (!m_pShot[i])continue;
 		m_pShot[i]->Draw();
 	}
-
-
-	// プレイヤーの座標をデバッグ表示する
-	Vec2 playerPos = m_pPlayer->GetPos();
-	DrawFormatString(8, 24, 0xffffff, "プレイヤーの座標(%.2f, %.2f)", playerPos.x, playerPos.y);
 }
 
 bool SceneMain::AddShot(ShotBase* pShot)

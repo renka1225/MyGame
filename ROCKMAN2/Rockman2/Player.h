@@ -33,8 +33,6 @@ private:
 	int m_jumpFrame;
 	// ジャンプ中かどうか
 	bool m_isJumpFlag;
-	// ショットボタンが前のフレームで押されたかどうか
-	bool m_prevShotFlag;
 	// HP
 	int m_hp;
 	// 残機

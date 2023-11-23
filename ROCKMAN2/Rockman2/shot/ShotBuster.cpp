@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "SceneMain.h"
 #include "Player.h"
+#include "Game.h"
 #include <cassert>
 
 // 定数の定義
@@ -15,7 +16,8 @@ namespace
 	constexpr float kHeight = 16.0f;
 }
 
-ShotBuster::ShotBuster()
+ShotBuster::ShotBuster():
+	m_handle(-1)
 {
 }
 
@@ -35,7 +37,10 @@ void ShotBuster::Update()
 	// プレイヤーのポインタが設定されていないとき止まる
 	assert(m_pPlayer);
 
-
+	// 現在位置の更新
+	m_pos += m_vec;
+	// 当たり判定の更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	// 障害物に当たったら消える
 	//if ()
@@ -44,14 +49,28 @@ void ShotBuster::Update()
 	//	return;	// 終了が確定したら以降の処理は行わない
 	//}
 
-	// 画面外に出たら消える
+	// 画面外に出た処理
+	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
+	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
+	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
+
+	// チェック中の座標が画面内ならここで終了
+	if (!isOut) return;
+
+	// ここに来たということは画面外にいる
 	m_isExist = false;
+
 }
 
 void ShotBuster::Draw()
 {
 	if (!m_isExist) return;
-	DrawCircle(m_pos.x - kWidth / 2, m_pos.y - kHeight / 2, 0x00ff00, true);
+	DrawGraph(m_pos.x, m_pos.y, m_handle, false);
+
+#ifdef _DEBUG
+	// 弾の当たり判定デバッグ表示
+	m_colRect.Draw(0xff0000, false);
+#endif
 }
 
 void ShotBuster::Start(Vec2 pos)
@@ -60,4 +79,7 @@ void ShotBuster::Start(Vec2 pos)
 
 	// 初期位置の設定
 	m_pos = pos;
+
+	// 1フレームあたりの移動ベクトルを決定する
+	m_vec.x = kSpeed;
 }
