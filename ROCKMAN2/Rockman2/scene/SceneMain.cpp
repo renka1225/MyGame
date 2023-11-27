@@ -14,11 +14,10 @@ namespace
 
 SceneMain::SceneMain()
 {
-	// グラフィックのロード
+	// プレイヤーのグラフィックロード
 	m_playerHandle = LoadGraph("data/image/player.png");
 	assert(m_playerHandle != -1);
-	m_shotBusterHandle = LoadGraph("data/image/shotBuster.png");
-	assert(m_shotBusterHandle != -1);
+
 
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
@@ -29,6 +28,7 @@ SceneMain::SceneMain()
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		m_pShot[i] = nullptr; // 未使用状態にする
+
 	}
 }
 
@@ -79,6 +79,7 @@ void SceneMain::Update()
 		if (!m_pShot[i]) continue;
 
 		m_pShot[i]->Update();
+
 		// 画面外に出たらメモリを解放する
 		if (!m_pShot[i]->IsExist())
 		{

@@ -31,6 +31,7 @@ Player::Player(SceneMain* pMain) :
 	m_pMain(pMain),
 	m_pos(Game::kScreenWidth / 2, kFloorHeight),
 	m_handle(-1),
+	m_isRight(true),
 	m_jumpFrame(0),
 	m_isJumpFlag(false),
 	m_hp(28),
@@ -57,10 +58,13 @@ void Player::Update()
 	if (pad & PAD_INPUT_LEFT) // ←を押したら左に移動
 	{
 		move.x -= kSpeed;
+		m_isRight = false;
+
 	}
 	if (pad & PAD_INPUT_RIGHT) // →を押したら右に移動
 	{
 		move.x += kSpeed;
+		m_isRight = true;
 	}
 
 	if (Pad::IsTrigger(PAD_INPUT_10)) // Spaceでジャンプ
@@ -78,21 +82,19 @@ void Player::Update()
 		}
 	}
 
-	// zキーでロックバスター発射
-	if (Pad::IsPress(PAD_INPUT_1))
+	if(Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// メモリの確保
 		ShotBuster* pShot = new ShotBuster;
-
+		
+		// 新しい弾を生成する
 		pShot->Init();
 		pShot->SetMain(m_pMain);
 		pShot->SetPlayer(this);
 		pShot->Start(GetPos());
-
-		// 更新やメモリの解放はSceneMainが行う
+		// 以降更新やメモリの解放はSceneMainに任せる
 		m_pMain->AddShot(pShot);
 	}
-	
+
 	if (kFloorHeight < m_pos.y) // 床より下に移動したら床上に戻す
 	{
 		m_pos.y = kFloorHeight;
@@ -110,7 +112,14 @@ void Player::Update()
 
 void Player::Draw()
 {
-	DrawGraph(m_pos.x, m_pos.y, m_handle, false);
+	if (m_isRight) // 右を向いている場合
+	{
+		DrawGraph(m_pos.x, m_pos.y, m_handle, false);
+	}
+	else // 左を向いている場合
+	{
+		DrawTurnGraph(m_pos.x, m_pos.y, m_handle, false);
+	}
 
 #ifdef _DEBUG
 	// 当たり判定の表示

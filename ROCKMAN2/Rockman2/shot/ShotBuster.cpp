@@ -12,8 +12,8 @@ namespace
 	// 弾の移動速度
 	constexpr float kSpeed = 8.0f;
 	// ショットの大きさ
-	constexpr float kWidth = 16.0f;
-	constexpr float kHeight = 16.0f;
+	constexpr float kWidth = 32.0f;
+	constexpr float kHeight = 32.0f;
 }
 
 ShotBuster::ShotBuster():
@@ -27,6 +27,8 @@ ShotBuster::~ShotBuster()
 
 void ShotBuster::Init()
 {
+	// 弾のグラフィックロード
+	m_handle = LoadGraph("data/image/shotBuster.png");
 }
 
 void ShotBuster::Update()
@@ -39,8 +41,9 @@ void ShotBuster::Update()
 
 	// 現在位置の更新
 	m_pos += m_vec;
+
 	// 当たり判定の更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
+	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	// 障害物に当たったら消える
 	//if ()
@@ -65,7 +68,8 @@ void ShotBuster::Update()
 void ShotBuster::Draw()
 {
 	if (!m_isExist) return;
-	DrawGraph(m_pos.x, m_pos.y, m_handle, false);
+
+	DrawGraph(m_pos.x, m_pos.y, m_handle, true);
 
 #ifdef _DEBUG
 	// 弾の当たり判定デバッグ表示
@@ -81,5 +85,14 @@ void ShotBuster::Start(Vec2 pos)
 	m_pos = pos;
 
 	// 1フレームあたりの移動ベクトルを決定する
-	m_vec.x = kSpeed;
+	if (m_pPlayer->GetDir()) // プレイヤーが右を向いている場合
+	{
+		m_vec.x = kSpeed;
+	}
+	else // プレイヤーが左を向いている場合
+	{
+		m_vec.x = -kSpeed;
+	}
+
+
 }

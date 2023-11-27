@@ -15,10 +15,11 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	// メンバー変数にアクセスする
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 
-	// エネミーが存在しているか
+	// 弾が存在しているか
 	bool IsExist() const { return m_isExist; }
 	// 当たり判定の矩形を取得する
 	Rect GetColRect() const { return m_colRect; }
