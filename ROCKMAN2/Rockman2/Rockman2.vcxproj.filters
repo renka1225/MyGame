@@ -66,6 +66,9 @@
     <ClCompile Include="shot\ShotBuster.cpp">
       <Filter>ソース ファイル\shot</Filter>
     </ClCompile>
+    <ClCompile Include="Bg.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="shot\ShotBuster.h">
       <Filter>ヘッダー ファイル\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bg.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

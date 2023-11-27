@@ -18,7 +18,7 @@ namespace
 	// 落下速度
 	constexpr float kFallSpeed = 8.0f;
 
-	// サイズ
+	// プレイヤーのサイズ
 	constexpr int kWidth = 32;
 	constexpr int kHeight = 64;
 
