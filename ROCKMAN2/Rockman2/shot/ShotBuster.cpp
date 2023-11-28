@@ -16,9 +16,10 @@ namespace
 	constexpr float kHeight = 32.0f;
 }
 
-ShotBuster::ShotBuster():
-	m_handle(-1)
+ShotBuster::ShotBuster()
 {
+	// 弾のグラフィックロード
+	m_handle = LoadGraph("data/image/shotBuster.png");
 }
 
 ShotBuster::~ShotBuster()
@@ -27,8 +28,6 @@ ShotBuster::~ShotBuster()
 
 void ShotBuster::Init()
 {
-	// 弾のグラフィックロード
-	m_handle = LoadGraph("data/image/shotBuster.png");
 }
 
 void ShotBuster::Update()
@@ -93,6 +92,4 @@ void ShotBuster::Start(Vec2 pos)
 	{
 		m_vec.x = -kSpeed;
 	}
-
-
 }

@@ -5,7 +5,7 @@
 namespace
 {
 	// 背景のスクロール速度
-	constexpr int kSpeed = 10;
+	constexpr int kSpeed = 5;
 
 	// 背景画像をループさせる位置
 	constexpr float kLoopPos = 500;

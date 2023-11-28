@@ -40,6 +40,7 @@ namespace Pad
 	{
 		bool isNow = (nowPad & key);	// このフレーム
 		bool isLast = (lastPad & key);	// 前のフレーム
+
 		//	return !isLast && isNow;
 		if (!isNow && isLast)	// このフレームに押されていなくて前回のフレームは押されていた
 		{

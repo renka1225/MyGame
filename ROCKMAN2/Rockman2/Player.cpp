@@ -5,6 +5,7 @@
 #include "SceneMain.h"
 #include "ShotBuster.h"
 #include "ShotMetal.h"
+#include "ShotFire.h"
 #include <cassert>
 
 // Player‚ÅŽg—p‚·‚é’è”
@@ -36,7 +37,10 @@ Player::Player(SceneMain* pMain) :
 	m_jumpFrame(0),
 	m_isJumpFlag(false),
 	m_hp(28),
-	m_life(2)
+	m_life(2),
+	m_metalEnergy(28),
+	m_fireEnergy(28),
+	m_fireHoldFrame(0)
 {
 }
 
@@ -90,7 +94,7 @@ void Player::Update()
 	if(Pad::IsTrigger(PAD_INPUT_1))
 	{
 		ShotBuster* pShot = new ShotBuster;
-		
+
 		// V‚µ‚¢’e‚ð¶¬‚·‚é
 		pShot->Init();
 		pShot->SetMain(m_pMain);
@@ -100,18 +104,77 @@ void Player::Update()
 		m_pMain->AddShot(pShot);
 	}
 
-	// XƒL[‚ÅƒoƒXƒ^[”­ŽË
+	// XƒL[‚Åƒƒ^ƒ‹”­ŽË
 	if (Pad::IsTrigger(PAD_INPUT_2))
 	{
-		ShotMetal* pShot = new ShotMetal;
+		if (m_metalEnergy > 0)
+		{
+			// ’eƒGƒlƒ‹ƒM[‚ð0.25Œ¸‚ç‚·
+			m_metalEnergy -= 0.25f;
 
-		// V‚µ‚¢’e‚ð¶¬‚·‚é
-		pShot->Init();
-		pShot->SetMain(m_pMain);
-		pShot->SetPlayer(this);
-		pShot->Start(GetPos());
-		// ˆÈ~XV‚âƒƒ‚ƒŠ‚Ì‰ð•ú‚ÍSceneMain‚É”C‚¹‚é
-		m_pMain->AddShot(pShot);
+			ShotMetal* pShot = new ShotMetal;
+
+			// V‚µ‚¢’e‚ð¶¬‚·‚é
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(GetPos());
+			// ˆÈ~XV‚âƒƒ‚ƒŠ‚Ì‰ð•ú‚ÍSceneMain‚É”C‚¹‚é
+			m_pMain->AddShot(pShot);
+		}
+		else
+		{
+			m_metalEnergy = 0;
+		}
+	}
+
+	// CƒL[‚Åƒtƒ@ƒCƒ„[”­ŽË
+	if (Pad::IsRelase(PAD_INPUT_3))
+	{
+		m_fireHoldFrame++;
+		if (m_fireEnergy > 0)
+		{
+			if (m_fireHoldFrame < 2) // ’·‰Ÿ‚µŽžŠÔ‚ª2•bˆÈ‰º
+			{
+				m_fireEnergy--; // ’eƒGƒlƒ‹ƒM[‚ð1Œ¸‚ç‚·
+			}
+			else if (m_fireHoldFrame < 5) // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈ‰º
+			{
+				if (m_fireEnergy - 6 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡‚ÍÁ”ï1‚Ì’e‚ðo‚·
+				{
+					m_fireEnergy--; // ’eƒGƒlƒ‹ƒM[‚ð1Œ¸‚ç‚·
+				}
+				else
+				{
+					m_fireEnergy -= 6; // ’eƒGƒlƒ‹ƒM[‚ð6Œ¸‚ç‚·
+				}
+			}
+			else // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈã
+			{
+				if (m_fireEnergy - 10 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡‚ÍÁ”ï1‚Ì’e‚ðo‚·
+				{
+					m_fireEnergy--; // ’eƒGƒlƒ‹ƒM[‚ð1Œ¸‚ç‚·
+				}
+				else
+				{
+					m_fireEnergy -= 10; // ’eƒGƒlƒ‹ƒM[‚ð10Œ¸‚ç‚·
+				}
+			}
+
+			ShotFire* pShot = new ShotFire;
+
+			// V‚µ‚¢’e‚ð¶¬‚·‚é
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(GetPos());
+			// ˆÈ~XV‚âƒƒ‚ƒŠ‚Ì‰ð•ú‚ÍSceneMain‚É”C‚¹‚é
+			m_pMain->AddShot(pShot);
+		}
+		else
+		{
+			m_fireEnergy = 0;
+		}
 	}
 
 	if (kFloorHeight < m_pos.y) // °‚æ‚è‰º‚ÉˆÚ“®‚µ‚½‚ç°ã‚É–ß‚·

@@ -21,7 +21,6 @@ SceneMain::SceneMain()
 	m_bgHandle = LoadGraph("data/image/backGround.png");
 	assert(m_bgHandle != -1);
 
-
 	// 背景のメモリ確保
 	m_pBg = new Bg;
 	m_pBg->SetHandle(m_bgHandle);
@@ -120,6 +119,10 @@ void SceneMain::Draw()
 		if (!m_pShot[i])continue;
 		m_pShot[i]->Draw();
 	}
+
+	// 現在の弾エネルギー数を表示
+	DrawFormatString(8, 8, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
+	DrawFormatString(8, 28, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
 }
 
 bool SceneMain::AddShot(ShotBase* pShot)

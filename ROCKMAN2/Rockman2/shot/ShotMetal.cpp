@@ -18,8 +18,10 @@ namespace
 }
 
 ShotMetal::ShotMetal() :
-	m_handle(-1)
+	m_energy(28)
 {
+	// 弾のグラフィックロード
+	m_handle = LoadGraph("data/image/shotMetal.png");
 }
 
 ShotMetal::~ShotMetal()
@@ -28,8 +30,6 @@ ShotMetal::~ShotMetal()
 
 void ShotMetal::Init()
 {
-	// 弾のグラフィックロード
-	m_handle = LoadGraph("data/image/shotMetal.png");
 }
 
 void ShotMetal::Update()
@@ -39,6 +39,9 @@ void ShotMetal::Update()
 
 	// プレイヤーのポインタが設定されていないとき止まる
 	assert(m_pPlayer);
+
+	// 弾エネルギー数を1減らす
+	m_energy--;
 
 	// 現在位置の更新
 	m_pos += m_vec;
@@ -54,9 +57,11 @@ void ShotMetal::Update()
 	//}
 
 	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
-	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
-	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
+	bool isOut = false;	// チェック中の座標が画面外かどうか		true:画面外、false:画面内
+	if (m_pos.x < 0.0f - kWidth / 2) isOut = true;					// 画面左端
+	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true;	// 画面右端
+	if (m_pos.y < 0.0f - kWidth) isOut = true;						// 画面上
+	if (m_pos.y > Game::kScreenHeight) isOut = true;				// 画面下
 
 	// チェック中の座標が画面内ならここで終了
 	if (!isOut) return;
@@ -88,45 +93,53 @@ void ShotMetal::Start(Vec2 pos)
 	if (Pad::IsPress(PAD_INPUT_RIGHT)) // →長押し
 	{
 		m_vec.x = kSpeed;
+		m_vec.y = 0.0f;
 	}
 	if (Pad::IsPress(PAD_INPUT_LEFT)) // ←長押し
 	{
 		m_vec.x = -kSpeed;
+		m_vec.y = 0.0f;
 	}
 	if (Pad::IsPress(PAD_INPUT_UP))	// ↑長押し
 	{
+		m_vec.x = 0.0f;
 		m_vec.y = -kSpeed;
 	}
 	if (Pad::IsPress(PAD_INPUT_DOWN)) // ↓長押し
 	{
+		m_vec.x = 0.0f;
 		m_vec.y = kSpeed;
 	}
-	if (Pad::IsPress(PAD_INPUT_RIGHT && PAD_INPUT_UP)) // →+↑同時長押し
+	if (Pad::IsPress(PAD_INPUT_RIGHT) && Pad::IsPress(PAD_INPUT_UP)) // →+↑同時長押し
 	{
 		m_vec.x = kSpeed;
 		m_vec.y = -kSpeed;
 	}
-	if (Pad::IsPress(PAD_INPUT_RIGHT && PAD_INPUT_DOWN)) // →+↓同時長押し
+	if (Pad::IsPress(PAD_INPUT_RIGHT) && Pad::IsPress(PAD_INPUT_DOWN)) // →+↓同時長押し
 	{
 		m_vec.x = kSpeed;
 		m_vec.y = kSpeed;
 	}
-	if (Pad::IsPress(PAD_INPUT_LEFT && PAD_INPUT_UP)) // ←+↑同時長押し
+	if (Pad::IsPress(PAD_INPUT_LEFT) && Pad::IsPress(PAD_INPUT_UP)) // ←+↑同時長押し
 	{
 		m_vec.x = -kSpeed;
 		m_vec.y = -kSpeed;
 	}
-	if (Pad::IsPress(PAD_INPUT_LEFT && PAD_INPUT_DOWN)) // ←+↓同時長押し
+	if (Pad::IsPress(PAD_INPUT_LEFT) && Pad::IsPress(PAD_INPUT_DOWN)) // ←+↓同時長押し
 	{
 		m_vec.x = -kSpeed;
 		m_vec.y = kSpeed;
 	}
-	else if (m_pPlayer->GetDir()) // プレイヤーが右を向いている場合
+	if (!Pad::IsPress(PAD_INPUT_RIGHT) && !Pad::IsPress(PAD_INPUT_LEFT) &&
+		!Pad::IsPress(PAD_INPUT_UP) && !Pad::IsPress(PAD_INPUT_DOWN)) // 矢印キーが押されていない
 	{
-		m_vec.x = kSpeed;
-	}
-	else if (!m_pPlayer->GetDir()) // プレイヤーが左を向いている場合
-	{
-		m_vec.x = -kSpeed;
+		if(m_pPlayer->GetDir()) // プレイヤーが右を向いている場合
+		{
+			m_vec.x = kSpeed;
+		}
+		if (!m_pPlayer->GetDir()) // プレイヤーが左を向いている場合
+		{
+			m_vec.x = -kSpeed;
+		}
 	}
 }

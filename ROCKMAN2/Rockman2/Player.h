@@ -22,6 +22,10 @@ public:
 	// プレイヤーの当たり判定を取得する
 	Rect GetColRect() const { return m_colRect; }
 
+	// 現在の弾エネルギー数を取得する
+	float GetMetalEnergy() const { return m_metalEnergy; }
+	float GetFireEnergy() const { return m_fireEnergy; }
+
 private:
 	SceneMain* m_pMain;
 
@@ -32,15 +36,24 @@ private:
 
 	// グラフィックのハンドル
 	int m_handle;
+
 	// 向いている方向
 	bool m_isRight;
 	// ジャンプのフレーム数
 	int m_jumpFrame;
 	// ジャンプ中かどうか
 	bool m_isJumpFlag;
+
 	// HP
 	int m_hp;
 	// 残機
 	int m_life;
+
+	// メタルの弾エネルギー数
+	float m_metalEnergy;
+	// ファイヤーの弾エネルギー数
+	float m_fireEnergy;
+	// ファイヤーのボタンの長押し時間
+	int m_fireHoldFrame;
 };
 

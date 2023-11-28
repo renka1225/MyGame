@@ -20,5 +20,8 @@ public:
 private:
 	// グラフィックのハンドル
 	int m_handle;
+
+	// 現在の弾エネルギー数
+	float m_energy;
 };
 

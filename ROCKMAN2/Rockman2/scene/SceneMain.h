@@ -28,10 +28,8 @@ private:
 
 	// 背景
 	Bg* m_pBg;
-
 	// プレイヤー
 	Player* m_pPlayer;
-
 	// ショット
 	std::vector<ShotBase*> m_pShot;
 
