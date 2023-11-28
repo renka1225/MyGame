@@ -3,6 +3,7 @@
 #include "Vec2.h"
 
 class Player;
+class Bg;
 class ShotBase;
 class SceneMain
 {
@@ -22,13 +23,17 @@ public:
 
 private:
 	// グラフィックのハンドル
+	int m_bgHandle;			// 背景
 	int m_playerHandle;		// プレイヤー
-	int m_shotBusterHandle; // ロックバスター
+
+	// 背景
+	Bg* m_pBg;
 
 	// プレイヤー
 	Player* m_pPlayer;
 
 	// ショット
 	std::vector<ShotBase*> m_pShot;
+
 };
 

@@ -4,6 +4,7 @@
 #include "Pad.h"
 #include "SceneMain.h"
 #include "ShotBuster.h"
+#include "ShotMetal.h"
 #include <cassert>
 
 // Playerで使用する定数
@@ -54,20 +55,23 @@ void Player::Update()
 
 	Vec2 move{ 0.0f, kFallSpeed }; // 移動量
 
-
-	if (pad & PAD_INPUT_LEFT) // ←を押したら左に移動
+	// ←を押したら左に移動
+	if (pad & PAD_INPUT_LEFT)
 	{
-		move.x -= kSpeed;
+		//move.x -= kSpeed;
 		m_isRight = false;
 
 	}
-	if (pad & PAD_INPUT_RIGHT) // →を押したら右に移動
+
+	// →を押したら右に移動
+	if (pad & PAD_INPUT_RIGHT)
 	{
-		move.x += kSpeed;
+		//move.x += kSpeed;
 		m_isRight = true;
 	}
 
-	if (Pad::IsTrigger(PAD_INPUT_10)) // Spaceでジャンプ
+	// Spaceでジャンプ
+	if (Pad::IsTrigger(PAD_INPUT_10))
 	{
 		if (!m_isJumpFlag && m_jumpFrame <= 0)
 		{
@@ -82,10 +86,25 @@ void Player::Update()
 		}
 	}
 
+	// Zキーでバスター発射
 	if(Pad::IsTrigger(PAD_INPUT_1))
 	{
 		ShotBuster* pShot = new ShotBuster;
 		
+		// 新しい弾を生成する
+		pShot->Init();
+		pShot->SetMain(m_pMain);
+		pShot->SetPlayer(this);
+		pShot->Start(GetPos());
+		// 以降更新やメモリの解放はSceneMainに任せる
+		m_pMain->AddShot(pShot);
+	}
+
+	// Xキーでバスター発射
+	if (Pad::IsTrigger(PAD_INPUT_2))
+	{
+		ShotMetal* pShot = new ShotMetal;
+
 		// 新しい弾を生成する
 		pShot->Init();
 		pShot->SetMain(m_pMain);

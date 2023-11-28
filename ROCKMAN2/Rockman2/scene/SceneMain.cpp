@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "Pad.h"
 #include "Rect.h"
+#include "Bg.h"
 #include "Player.h"
 #include "ShotBuster.h"
 #include <cassert>
@@ -17,7 +18,13 @@ SceneMain::SceneMain()
 	// プレイヤーのグラフィックロード
 	m_playerHandle = LoadGraph("data/image/player.png");
 	assert(m_playerHandle != -1);
+	m_bgHandle = LoadGraph("data/image/backGround.png");
+	assert(m_bgHandle != -1);
 
+
+	// 背景のメモリ確保
+	m_pBg = new Bg;
+	m_pBg->SetHandle(m_bgHandle);
 
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
@@ -36,11 +43,14 @@ SceneMain::~SceneMain()
 {
 	// メモリからグラフィックを削除
 	DeleteGraph(m_playerHandle);
-	DeleteGraph(m_shotBusterHandle);
 
 	// プレイヤーのメモリ解放
 	delete m_pPlayer;
 	m_pPlayer = nullptr;
+
+	// 背景のメモリ解放
+	delete m_pBg;
+	m_pBg = nullptr;
 
 	// ショットのメモリ解放
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -59,6 +69,9 @@ void SceneMain::Init()
 	// プレイヤーの初期化
 	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
 	m_pPlayer->Init();
+
+	// 背景の初期化
+	m_pBg->Init();
 }
 
 void SceneMain::End()
@@ -67,6 +80,9 @@ void SceneMain::End()
 
 void SceneMain::Update()
 {
+	// 背景の更新
+	m_pBg->Update();
+
 	// プレイヤーの更新
 	m_pPlayer->Update();
 
@@ -91,6 +107,9 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	// 背景の描画
+	m_pBg->Draw();
+
 	// プレイヤーの描画
 	m_pPlayer->Draw();
 
