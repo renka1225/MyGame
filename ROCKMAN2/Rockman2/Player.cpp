@@ -40,7 +40,7 @@ Player::Player(SceneMain* pMain) :
 	m_life(2),
 	m_metalEnergy(28),
 	m_fireEnergy(28),
-	m_fireHoldFrame(0)
+	m_pressTime(0)
 {
 }
 
@@ -129,18 +129,28 @@ void Player::Update()
 	}
 
 	// Cキーでファイヤー発射
-	if (Pad::IsRelase(PAD_INPUT_3))
+	// Cキーが押された瞬間を取得
+	if (Pad::IsTrigger(PAD_INPUT_3))
 	{
-		m_fireHoldFrame++;
-		if (m_fireEnergy > 0)
+		m_pressTime = GetNowCount();
+	}
+	// cキーが押されているか判定
+	if (Pad::IsPress(PAD_INPUT_3))
+	{
+		m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
+	}
+	// cキーが離された瞬間を判定
+	if (Pad::IsRelease(PAD_INPUT_3))
+	{
+		if (m_fireEnergy > 0) // 弾エネルギーが0以上
 		{
-			if (m_fireHoldFrame < 2) // 長押し時間が2秒以下
+			if (m_nowPressTime < 2000) // 長押し時間が2秒以下
 			{
 				m_fireEnergy--; // 弾エネルギーを1減らす
 			}
-			else if (m_fireHoldFrame < 5) // 長押し時間が5秒以下
+			else if (m_nowPressTime < 5000) // 長押し時間が5秒以下
 			{
-				if (m_fireEnergy - 6 < 0) // 弾エネルギーが足りない場合は消費1の弾を出す
+				if (m_fireEnergy - 6 < 0) // 弾エネルギーが足りない場合
 				{
 					m_fireEnergy--; // 弾エネルギーを1減らす
 				}
@@ -151,7 +161,7 @@ void Player::Update()
 			}
 			else // 長押し時間が5秒以上
 			{
-				if (m_fireEnergy - 10 < 0) // 弾エネルギーが足りない場合は消費1の弾を出す
+				if (m_fireEnergy - 10 < 0) // 弾エネルギーが足りない場合
 				{
 					m_fireEnergy--; // 弾エネルギーを1減らす
 				}
@@ -161,9 +171,8 @@ void Player::Update()
 				}
 			}
 
-			ShotFire* pShot = new ShotFire;
-
 			// 新しい弾を生成する
+			ShotFire* pShot = new ShotFire;
 			pShot->Init();
 			pShot->SetMain(m_pMain);
 			pShot->SetPlayer(this);
@@ -171,9 +180,9 @@ void Player::Update()
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
 		}
-		else
+		else // 弾エネルギーが0以下
 		{
-			m_fireEnergy = 0;
+			m_fireEnergy = 0; // 現在の弾エネルギーを0にする
 		}
 	}
 
@@ -206,5 +215,7 @@ void Player::Draw()
 #ifdef _DEBUG
 	// 当たり判定の表示
 	m_colRect.Draw(0x0000ff, false);
+	// 長押し時間の表示
+	DrawFormatString(8, 50, 0xffffff, "長押し時間:%d", m_nowPressTime);
 #endif
 }

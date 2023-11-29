@@ -11,6 +11,6 @@ namespace Pad
 	// ‰Ÿ‚³‚ê‚½uŠÔ‚ğæ“¾
 	bool IsTrigger(int key);
 	// —£‚µ‚½uŠÔ‚ğæ“¾
-	bool IsRelase(int key);
+	bool IsRelease(int key);
 };
 

@@ -36,7 +36,7 @@ namespace Pad
 		return false;
 	}
 
-	bool IsRelase(int key)
+	bool IsRelease(int key)
 	{
 		bool isNow = (nowPad & key);	// このフレーム
 		bool isLast = (lastPad & key);	// 前のフレーム

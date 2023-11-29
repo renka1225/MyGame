@@ -53,7 +53,12 @@ private:
 	float m_metalEnergy;
 	// ファイヤーの弾エネルギー数
 	float m_fireEnergy;
-	// ファイヤーのボタンの長押し時間
-	int m_fireHoldFrame;
+
+	// ボタンの状態を取得する
+	int m_keyState;
+	// ボタンが長押しされた時間
+	int m_pressTime;
+	// ボタンを押して離すまでの時間を取得する
+	int m_nowPressTime;
 };
 
