@@ -143,6 +143,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pad.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="shot\ShotLineMove.cpp" />
     <ClCompile Include="shot\ShotFire.cpp" />
     <ClCompile Include="shot\ShotMetal.cpp" />
     <ClCompile Include="shot\ShotBuster.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Pad.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="shot\ShotLineMove.h" />
     <ClInclude Include="shot\ShotFire.h" />
     <ClInclude Include="shot\ShotMetal.h" />
     <ClInclude Include="shot\ShotBuster.h" />

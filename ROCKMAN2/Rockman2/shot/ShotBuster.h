@@ -15,9 +15,6 @@ public:
 	// 弾をスタートさせる
 	virtual void Start(Vec2 pos) override;
 
-	// メンバー変数にアクセスする
-	void SetHandle(int handle) { m_handle = handle; }
-
 private:
 	// グラフィックのハンドル
 	int m_handle;

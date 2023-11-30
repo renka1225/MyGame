@@ -6,6 +6,7 @@
 #include "ShotBuster.h"
 #include "ShotMetal.h"
 #include "ShotFire.h"
+#include "ShotLineMove.h"
 #include <cassert>
 
 // Playerで使用する定数
@@ -40,6 +41,7 @@ Player::Player(SceneMain* pMain) :
 	m_life(2),
 	m_metalEnergy(28),
 	m_fireEnergy(28),
+	m_lineEnergy(28),
 	m_pressTime(0)
 {
 }
@@ -186,6 +188,28 @@ void Player::Update()
 		}
 	}
 
+	// Aキーでアイテム2号発射
+	if (Pad::IsTrigger(PAD_INPUT_4))
+	{
+		if (m_lineEnergy > 0)
+		{
+
+			ShotLineMove* pShot = new ShotLineMove;
+
+			// 新しい弾を生成する
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(GetPos());
+			// 以降更新やメモリの解放はSceneMainに任せる
+			m_pMain->AddShot(pShot);
+		}
+		else
+		{
+			m_lineEnergy = 0;
+		}
+	}
+
 	if (kFloorHeight < m_pos.y) // 床より下に移動したら床上に戻す
 	{
 		m_pos.y = kFloorHeight;
@@ -215,7 +239,5 @@ void Player::Draw()
 #ifdef _DEBUG
 	// 当たり判定の表示
 	m_colRect.Draw(0x0000ff, false);
-	// 長押し時間の表示
-	DrawFormatString(8, 50, 0xffffff, "長押し時間:%d", m_nowPressTime);
 #endif
 }

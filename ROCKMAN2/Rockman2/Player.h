@@ -25,6 +25,7 @@ public:
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }
 	float GetFireEnergy() const { return m_fireEnergy; }
+	float GetLineEnergy() const { return m_lineEnergy; }
 
 	// ボタンを押して離すまでの時間を取得する
 	int GetPressTime() const { return m_nowPressTime; }
@@ -56,6 +57,8 @@ private:
 	float m_metalEnergy;
 	// ファイヤーの弾エネルギー数
 	float m_fireEnergy;
+	// アイテム2号の弾エネルギー数
+	float m_lineEnergy;
 
 	// ボタンの状態を取得する
 	int m_keyState;

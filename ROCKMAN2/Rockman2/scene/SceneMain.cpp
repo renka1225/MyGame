@@ -123,6 +123,9 @@ void SceneMain::Draw()
 	// 現在の弾エネルギー数を表示
 	DrawFormatString(8, 8, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
 	DrawFormatString(8, 28, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
+	DrawFormatString(8, 48, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
+	// 長押し時間を表示
+	DrawFormatString(8, 68, 0xffffff, "長押し時間:%d", m_pPlayer->GetPressTime());
 }
 
 bool SceneMain::AddShot(ShotBase* pShot)
