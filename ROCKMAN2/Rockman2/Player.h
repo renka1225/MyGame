@@ -26,6 +26,9 @@ public:
 	float GetMetalEnergy() const { return m_metalEnergy; }
 	float GetFireEnergy() const { return m_fireEnergy; }
 
+	// ボタンを押して離すまでの時間を取得する
+	int GetPressTime() const { return m_nowPressTime; }
+
 private:
 	SceneMain* m_pMain;
 
@@ -58,7 +61,7 @@ private:
 	int m_keyState;
 	// ボタンが長押しされた時間
 	int m_pressTime;
-	// ボタンを押して離すまでの時間を取得する
+	// ボタンを押して離すまでの時間
 	int m_nowPressTime;
 };
 

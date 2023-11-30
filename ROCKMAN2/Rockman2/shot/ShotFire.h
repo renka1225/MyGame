@@ -15,11 +15,10 @@ public:
 	// 弾をスタートさせる
 	virtual void Start(Vec2 pos) override;
 
-	// メンバー変数にアクセスする
-	void SetHandle(int handle) { m_handle = handle; }
-
 private:
 	// グラフィックのハンドル
-	int m_handle;
+	int m_handle;		// チャージなしの弾
+	int m_mediumHandle;	// 中チャージの弾
+	int m_fullHandle;	// フルチャージの弾
 };
 

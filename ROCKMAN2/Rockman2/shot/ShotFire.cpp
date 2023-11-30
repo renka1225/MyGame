@@ -20,6 +20,8 @@ ShotFire::ShotFire()
 {
 	// ’e‚ÌƒOƒ‰ƒtƒBƒbƒNƒ[ƒh
 	m_handle = LoadGraph("data/image/shotFire.png");
+	m_mediumHandle = LoadGraph("data/image/shotFire2.png");
+	m_fullHandle = LoadGraph("data/image/shotFire3.png");
 }
 
 ShotFire::~ShotFire()
@@ -67,7 +69,32 @@ void ShotFire::Draw()
 {
 	if (!m_isExist) return;
 
-	DrawGraph(m_pos.x, m_pos.y, m_handle, true);
+	if (m_pPlayer->GetPressTime() < 1000) // ’·‰Ÿ‚µŽžŠÔ‚ª2•bˆÈ‰º
+	{
+		DrawGraph(m_pos.x, m_pos.y, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
+	}
+	else if (m_pPlayer->GetPressTime() < 3000) // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈ‰º
+	{
+		if (m_pPlayer->GetFireEnergy() - 6 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
+		{
+			DrawGraph(m_pos.x, m_pos.y, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
+		}
+		else
+		{
+			DrawGraph(m_pos.x, m_pos.y, m_mediumHandle, true); // ’†ƒTƒCƒY‚Ì’e‚ð•`‰æ
+		}
+	}
+	else // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈã
+	{
+		if (m_pPlayer->GetFireEnergy() - 10 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
+		{
+			DrawGraph(m_pos.x, m_pos.y, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
+		}
+		else
+		{
+			DrawGraph(m_pos.x, m_pos.y, m_fullHandle, true); //‘åƒTƒCƒY‚Ì’e‚ð•`‰æ
+		}
+	}
 
 #ifdef _DEBUG
 	// ’e‚Ì“–‚½‚è”»’èƒfƒoƒbƒO•\Ž¦
