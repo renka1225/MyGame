@@ -64,7 +64,7 @@ void Player::Update()
 	// ©‚ğ‰Ÿ‚µ‚½‚ç¶‚ÉˆÚ“®
 	if (pad & PAD_INPUT_LEFT)
 	{
-		//move.x -= kSpeed;
+		move.x -= kSpeed;
 		m_isRight = false;
 
 	}
@@ -72,7 +72,7 @@ void Player::Update()
 	// ¨‚ğ‰Ÿ‚µ‚½‚ç‰E‚ÉˆÚ“®
 	if (pad & PAD_INPUT_RIGHT)
 	{
-		//move.x += kSpeed;
+		move.x += kSpeed;
 		m_isRight = true;
 	}
 
