@@ -43,10 +43,10 @@ private:
 
 	// 向いている方向
 	bool m_isRight;
-	// ジャンプのフレーム数
-	int m_jumpFrame;
 	// ジャンプ中かどうか
-	bool m_isJumpFlag;
+	bool m_isJumpFlag;	// true:ジャンプ中
+	// 初速度
+	float m_velocity;
 
 	// HP
 	int m_hp;
