@@ -5,6 +5,9 @@
 class SceneMain;
 class Player;
 
+/// <summary>
+/// ’e‚ÌŠî’êƒNƒ‰ƒX
+/// </summary>
 class ShotBase
 {
 public:

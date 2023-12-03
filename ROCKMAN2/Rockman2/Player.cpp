@@ -57,7 +57,7 @@ void Player::Update()
 	// パッドの十字キーを使用してプレイヤーを移動させる
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	Vec2 move{ 0.0f, kGravity }; // 移動量
+	Vec2 move{ 0.0f, 0.0f }; // 移動量
 
 	/*←を押したら左に移動*/
 	if (pad & PAD_INPUT_LEFT)
@@ -75,28 +75,11 @@ void Player::Update()
 	}
 
 	/*Spaceでジャンプ*/
-	// ボタンを押した瞬間
-    if (Pad::IsTrigger(PAD_INPUT_10))
-	{
-      m_pressTime = GetNowCount(); // ボタンを押した時間
-	}
-	// 長押しの時間によってジャンプの高さを変える
  	if (Pad::IsTrigger(PAD_INPUT_10) && !m_isJumpFlag)
 	{
 		m_isJumpFlag = true;
-
-		if (m_pressTime < 450000000)
-		{
-			m_velocity = kVelocity;	// 初速度を設定する
-		}
-		else if (m_pressTime < 500000000)
-		{
-			m_velocity = kVelocity + kVelocity * 0.5f;	// 初速度を設定する
-		}
-		else
-		{
-			m_velocity = kVelocity + kVelocity * 1.0f;	// 初速度を設定する
-		}
+		m_velocity = kVelocity;	// 初速度を設定する
+		
 	}
 
 	// ジャンプ中の場合
@@ -112,7 +95,7 @@ void Player::Update()
 		m_pos.y = kFloorHeight;
 		m_isJumpFlag = false;
 		m_velocity = 0;		// 初速度を0に戻す
-		m_nowPressTime = 0; // 長押し時間をリセットする
+
 	}
 
 	// 画面外に出たら画面内に戻す
@@ -247,11 +230,11 @@ void Player::Draw()
 {
 	if (m_isRight) // 右を向いている場合
 	{
-		DrawGraph(m_pos.x, m_pos.y, m_handle, false);
+		DrawGraph(static_cast<float>(m_pos.x), static_cast<float>(m_pos.y), m_handle, false);
 	}
 	else // 左を向いている場合
 	{
-		DrawTurnGraph(m_pos.x, m_pos.y, m_handle, false);
+		DrawTurnGraph(static_cast<float>(m_pos.x), static_cast<float>(m_pos.y), m_handle, false);
 	}
 
 #ifdef _DEBUG

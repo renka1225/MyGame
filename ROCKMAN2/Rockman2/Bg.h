@@ -2,6 +2,9 @@
 #include "Vec2.h"
 #include "Game.h"
 
+/// <summary>
+/// ”wŒiƒNƒ‰ƒX
+/// </summary>
 class Bg
 {
 public:

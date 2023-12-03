@@ -1,7 +1,9 @@
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Bg.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Bg.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\main.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\main.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Pad.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Pad.obj
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\PauseScene.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\PauseScene.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Player.obj
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\Scene.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Scene.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotLineMove.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ShotLineMove.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ShotFire.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotMetal.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ShotMetal.obj

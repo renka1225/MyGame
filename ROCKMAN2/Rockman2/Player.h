@@ -3,6 +3,10 @@
 #include "Rect.h"
 
 class SceneMain;
+
+/// <summary>
+/// プレイヤークラス
+/// </summary>
 class Player
 {
 public:
