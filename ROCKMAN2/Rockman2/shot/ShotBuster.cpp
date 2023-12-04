@@ -56,10 +56,10 @@ void ShotBuster::Update()
 	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
 	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
 
-	// チェック中の座標が画面内ならここで終了
+	// 画面内ならここで終了
 	if (!isOut) return;
 
-	// ここに来たということは画面外にいる
+	// 画面外に出た
 	m_isExist = false;
 
 }

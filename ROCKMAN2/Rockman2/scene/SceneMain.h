@@ -3,8 +3,9 @@
 #include "Vec2.h"
 
 class Player;
-class Bg;
 class ShotBase;
+class EnemyBase;
+class Bg;
 class SceneMain
 {
 public:
@@ -20,11 +21,15 @@ public:
 	// 登録できなかった場合はfalseを返す、内部でpShotを解放する
 	bool AddShot(ShotBase* pShot);
 
+private:
+	// 敵キャラクターの生成
+	void CreateMatasaburo(); // またさぶろうの生成
 
 private:
 	// グラフィックのハンドル
 	int m_bgHandle;			// 背景
 	int m_playerHandle;		// プレイヤー
+	int m_enemyHandle;		// 敵
 
 	// 背景
 	Bg* m_pBg;
@@ -32,6 +37,8 @@ private:
 	Player* m_pPlayer;
 	// ショット
 	std::vector<ShotBase*> m_pShot;
+	// 敵
+	std::vector<EnemyBase*> m_pEnemy;
 
 };
 

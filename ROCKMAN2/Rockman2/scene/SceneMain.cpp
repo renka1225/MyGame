@@ -4,13 +4,18 @@
 #include "Rect.h"
 #include "Bg.h"
 #include "Player.h"
-#include "ShotBuster.h"
+
+#include "ShotBase.h"
+
+#include "Matasaburo.h"
 #include <cassert>
 
 namespace
 {
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
+	// 1度に登場できる敵数
+	constexpr int kEnemyMax = 32;
 }
 
 SceneMain::SceneMain()
@@ -19,6 +24,8 @@ SceneMain::SceneMain()
 	m_playerHandle = LoadGraph("data/image/player.png");
 	assert(m_playerHandle != -1);
 	m_bgHandle = LoadGraph("data/image/backGround.png");
+	assert(m_bgHandle != -1);
+	m_enemyHandle = LoadGraph("data/image/Enemy/matasaburo.png");
 	assert(m_bgHandle != -1);
 
 	// 背景のメモリ確保
@@ -29,12 +36,18 @@ SceneMain::SceneMain()
 	m_pPlayer = new Player{ this };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
-	// ショットの準備
+	// ショットのメモリ確保
 	m_pShot.resize(kShotMax);
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		m_pShot[i] = nullptr; // 未使用状態にする
+	}
 
+	// 敵のメモリ確保
+	m_pEnemy.resize(kEnemyMax);
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		m_pEnemy[i] = nullptr; // 未使用状態にする
 	}
 }
 
@@ -61,6 +74,17 @@ SceneMain::~SceneMain()
 			m_pShot[i] = nullptr;
 		}
 	}
+
+	// 敵のメモリ解放
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (m_pEnemy[i])
+		{
+			// nullptrでない場合、nullptrを入れる
+			delete m_pEnemy[i];
+			m_pEnemy[i] = nullptr;
+		}
+	}
 }
 
 void SceneMain::Init()
@@ -84,8 +108,7 @@ void SceneMain::Update()
 
 	// プレイヤーの更新
 	m_pPlayer->Update();
-
-	Rect playerRect = m_pPlayer->GetColRect();
+	Rect playerRect = m_pPlayer->GetColRect(); // プレイヤーの当たり判定
 
 	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -100,6 +123,38 @@ void SceneMain::Update()
 		{
 			delete m_pShot[i];
 			m_pShot[i] = nullptr;
+		}
+	}
+
+	// 敵の更新
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (m_pEnemy[i])	// nullptrではないチェック
+		{
+			m_pEnemy[i]->Update();
+
+			// 使用済みの敵キャラクターを削除
+			if (!m_pEnemy[i]->IsExist())
+			{
+				// メモリを解放する
+				delete m_pEnemy[i];
+				m_pEnemy[i] = nullptr;	// nullptrを入れる
+			}
+			else
+			{
+				// 敵とプレイヤーの当たり判定
+				Rect enemyRect = m_pEnemy[i]->GetColRect();
+				if (playerRect.IsCollision(enemyRect))
+				{
+					m_pPlayer->OnDamage();
+				}
+				// 敵と弾の当たり判定
+				//Rect shotRect = m_pShot[i]->GetColRect(); // 弾の当たり判定
+				//if (shotRect.IsCollision(enemyRect))
+				//{
+				//	!m_pEnemy[i]->IsExist(); // 敵を削除する
+				//}
+			}
 		}
 	}
 }
@@ -120,12 +175,25 @@ void SceneMain::Draw()
 		m_pShot[i]->Draw();
 	}
 
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (m_pEnemy[i])	// nullptrではないチェック
+		{
+			m_pEnemy[i]->Draw();
+		}
+	}
+
+	// 敵の描画
+	CreateMatasaburo();
+
+	// 現在のHPを表示
+	DrawFormatString(8, 8, 0xffffff, "HP:%.2f", m_pPlayer->GetHp());
 	// 現在の弾エネルギー数を表示
-	DrawFormatString(8, 8, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
-	DrawFormatString(8, 28, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
-	DrawFormatString(8, 48, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
+	DrawFormatString(8, 28, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
+	DrawFormatString(8, 48, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
+	DrawFormatString(8, 68, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
 	// 長押し時間を表示
-	DrawFormatString(8, 68, 0xffffff, "長押し時間:%d", m_pPlayer->GetPressTime());
+	DrawFormatString(8, 88, 0xffffff, "長押し時間:%d", m_pPlayer->GetPressTime());
 }
 
 bool SceneMain::AddShot(ShotBase* pShot)
@@ -147,4 +215,20 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	// m_pShotにポインタを登録できなかった
 	delete pShot;
 	return false;
+}
+
+void SceneMain::CreateMatasaburo()
+{
+	//使われていない場所にアドレスを保存する
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (!m_pEnemy[i])	// nullptrであることをチェックする
+		{
+			m_pEnemy[i] = new Matasaburo;
+			m_pEnemy[i]->Init();
+			m_pEnemy[i]->SetHandle(m_enemyHandle);
+			m_pEnemy[i]->Start();
+			return;	// 1体分メモリを確保できたらその時点で終了
+		}
+	}
 }

@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bg.cpp" />
+    <ClCompile Include="enemy\EnemyBase.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="enemy\Matasaburo.cpp" />
     <ClCompile Include="Pad.cpp" />
     <ClCompile Include="scene\PauseScene.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -157,7 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bg.h" />
+    <ClInclude Include="enemy\EnemyBase.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="enemy\Matasaburo.h" />
     <ClInclude Include="Pad.h" />
     <ClInclude Include="scene\PauseScene.h" />
     <ClInclude Include="Player.h" />

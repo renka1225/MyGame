@@ -26,6 +26,12 @@ public:
 	// プレイヤーの当たり判定を取得する
 	Rect GetColRect() const { return m_colRect; }
 
+	// プレイヤーがダメージを受けた時の処理
+	void OnDamage();
+
+	// 現在のHPを取得する
+	float GetHp() const { return m_hp; }
+
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }
 	float GetFireEnergy() const { return m_fireEnergy; }
@@ -51,11 +57,16 @@ private:
 	bool m_isJumpFlag;	// true:ジャンプ中
 	// 初速度
 	float m_velocity;
+	// ジャンプ中のフレーム数
+	int m_jumpFrame;
 
 	// HP
 	int m_hp;
 	// 残機
 	int m_life;
+
+	// ダメージを受けてからのフレーム数
+	int m_damageFrame;
 
 	// メタルの弾エネルギー数
 	float m_metalEnergy;

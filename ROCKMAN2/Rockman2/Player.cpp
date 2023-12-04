@@ -23,6 +23,9 @@ namespace
 	constexpr int kWidth = 32;
 	constexpr int kHeight = 64;
 
+	// ダメージ演出のフレーム数
+	constexpr int kDamageFrame = 60;
+
 	// 床の高さ
 	constexpr int kFloorHeight = 500;
 }
@@ -35,12 +38,16 @@ Player::Player(SceneMain* pMain) :
 	m_isRight(true),
 	m_isJumpFlag(false),
 	m_velocity(0),
+	m_jumpFrame(0),
 	m_hp(28),
 	m_life(2),
+	m_damageFrame(0),
 	m_metalEnergy(28),
 	m_fireEnergy(28),
 	m_lineEnergy(28),
-	m_pressTime(0)
+	m_keyState(0),
+	m_pressTime(0),
+	m_nowPressTime(0)
 {
 }
 
@@ -54,17 +61,24 @@ void Player::Init()
 
 void Player::Update()
 {
-	// パッドの十字キーを使用してプレイヤーを移動させる
+	// ダメージ演出
+	m_damageFrame--;
+	if (m_damageFrame < 0)
+	{
+		m_damageFrame = 0;
+	}
+
+	// パッドを使用する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	Vec2 move{ 0.0f, 0.0f }; // 移動量
+	// 移動量
+	Vec2 move{ 0.0f, 0.0f };
 
 	/*←を押したら左に移動*/
 	if (pad & PAD_INPUT_LEFT)
 	{
 		move.x -= kSpeed;
 		m_isRight = false;
-
 	}
 
 	/*→を押したら右に移動*/
@@ -75,18 +89,17 @@ void Player::Update()
 	}
 
 	/*Spaceでジャンプ*/
- 	if (Pad::IsTrigger(PAD_INPUT_10) && !m_isJumpFlag)
+   	if (Pad::IsTrigger(PAD_INPUT_10) && !m_isJumpFlag)
 	{
 		m_isJumpFlag = true;
-		m_velocity = kVelocity;	// 初速度を設定する
-		
+		m_velocity = kVelocity; // 初速度を設定する
 	}
 
 	// ジャンプ中の場合
 	if (m_isJumpFlag)
 	{
-		m_velocity += kGravity;
-		m_pos.y += m_velocity;
+		m_pos.y += m_velocity;	// 現在位置の更新
+		m_velocity += kGravity; // 初速度に重力を足す
 	}
 
 	// 地面に着地したらジャンプを終了する
@@ -94,8 +107,6 @@ void Player::Update()
 	{
 		m_pos.y = kFloorHeight;
 		m_isJumpFlag = false;
-		m_velocity = 0;		// 初速度を0に戻す
-
 	}
 
 	// 画面外に出たら画面内に戻す
@@ -237,8 +248,28 @@ void Player::Draw()
 		DrawTurnGraph(static_cast<float>(m_pos.x), static_cast<float>(m_pos.y), m_handle, false);
 	}
 
+	// ダメージ演出
+	// 2フレーム間隔で表示非表示を切り替える
+	if (m_damageFrame % 4 >= 2) return;
+
 #ifdef _DEBUG
 	// 当たり判定の表示
 	m_colRect.Draw(0x0000ff, false);
 #endif
+}
+
+void Player::OnDamage()
+{
+	// ダメージ演出中は無敵状態になる
+	if (m_damageFrame > 0) return;
+
+	// 演出フレーム数を設定する
+	m_damageFrame = kDamageFrame;
+
+	// HPを減らす
+	m_hp--;
+	if (m_hp < 0)
+	{
+		m_hp = 0;
+	}
 }
