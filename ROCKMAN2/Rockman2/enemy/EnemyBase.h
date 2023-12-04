@@ -1,6 +1,9 @@
 #pragma once
 #include "Vec2.h"
 #include "Rect.h"
+#include <vector>
+
+class ShotBase;
 
 /// <summary>
 /// 敵の基底クラス
@@ -11,9 +14,8 @@ public:
 	EnemyBase();
 	virtual ~EnemyBase();
 
-	virtual void Init();
-	virtual void Update();
-	virtual void Draw();
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
 
 	// メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
@@ -32,9 +34,11 @@ protected:
 	virtual void UpdateCollision();
 
 protected:
-	int m_handle;	// グラフィックのハンドル
+	// ショット
+	std::vector<ShotBase*> m_pShot;
 
-	bool m_isExist;	// 存在するかフラグ(使用中かどうか)
+	int m_handle;	// グラフィックのハンドル
+	bool m_isExist;	// 存在するかフラグ true:存在する
 
 	// 表示位置
 	Vec2 m_pos;

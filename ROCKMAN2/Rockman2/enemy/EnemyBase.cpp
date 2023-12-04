@@ -13,10 +13,6 @@ EnemyBase::~EnemyBase()
 {
 }
 
-void EnemyBase::Init()
-{
-}
-
 void EnemyBase::Update()
 {
 	// 存在しない敵の処理はしない
@@ -24,17 +20,6 @@ void EnemyBase::Update()
 
 	// グラフィックが設定されていなければ止まる
 	assert(m_handle != -1);
-}
-
-void EnemyBase::Draw()
-{
-	// 中心位置を基準として描画する
-	DrawRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 1.0, 0.0, m_handle, true, false);
-
-#ifdef _DEBUG
-	// 当たり判定の表示
-	m_colRect.Draw(0x00ff00, false);
-#endif
 }
 
 void EnemyBase::Start()

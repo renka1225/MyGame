@@ -148,12 +148,21 @@ void SceneMain::Update()
 				{
 					m_pPlayer->OnDamage();
 				}
-				// 敵と弾の当たり判定
-				//Rect shotRect = m_pShot[i]->GetColRect(); // 弾の当たり判定
-				//if (shotRect.IsCollision(enemyRect))
-				//{
-				//	!m_pEnemy[i]->IsExist(); // 敵を削除する
-				//}
+
+				for (int j = 0; j < m_pShot.size(); j++)
+				{
+					// nullptrなら処理は行わない
+					if (!m_pShot[j]) continue;
+
+					// 敵と弾の当たり判定
+					Rect shotRect = m_pShot[j]->GetColRect(); // 弾の当たり判定
+					if (shotRect.IsCollision(enemyRect))
+					{
+						// 弾を削除
+						delete m_pShot[j];
+						m_pShot[j] = nullptr;
+					}
+				}
 			}
 		}
 	}
@@ -225,7 +234,6 @@ void SceneMain::CreateMatasaburo()
 		if (!m_pEnemy[i])	// nullptrであることをチェックする
 		{
 			m_pEnemy[i] = new Matasaburo;
-			m_pEnemy[i]->Init();
 			m_pEnemy[i]->SetHandle(m_enemyHandle);
 			m_pEnemy[i]->Start();
 			return;	// 1体分メモリを確保できたらその時点で終了

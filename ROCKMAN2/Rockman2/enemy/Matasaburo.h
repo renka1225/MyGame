@@ -12,9 +12,11 @@ public:
 	virtual ~Matasaburo();
 
 	virtual void Update() override;
+	virtual void Draw() override;
 	virtual void Start() override;
 
 private:
 	int m_handle;
+	int m_hp;
 };
 

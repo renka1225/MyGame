@@ -1,9 +1,11 @@
 #include "Matasaburo.h"
+#include "ShotBase.h"
 #include "Game.h"
 #include "DxLib.h"
 
-Matasaburo::Matasaburo():
-	EnemyBase()
+Matasaburo::Matasaburo() :
+	EnemyBase(),
+	m_hp(3)
 {
 	m_handle = LoadGraph("data/image/Enemy/matasaburo.png");
 }
@@ -32,7 +34,39 @@ void Matasaburo::Update()
 	{
 		m_isExist = false;
 	}
+
+	// ’e‚Æ‚Ì“–‚½‚è”»’è
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		if (m_pShot[i])
+		{
+			Rect shotRect = m_pShot[i]->GetColRect();
+			if (shotRect.IsCollision(m_colRect))
+			{
+				// ’e‚ª“–‚½‚Á‚½‚çHP‚ğŒ¸‚ç‚·
+				m_hp--;
+
+				// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç“G‚ğíœ
+				if (m_hp <= 0)
+				{
+					m_isExist = false;
+				}
+			}
+		}
+	}
 }
+
+void Matasaburo::Draw()
+{
+	// ’†SˆÊ’u‚ğŠî€‚Æ‚µ‚Ä•`‰æ‚·‚é
+	DrawRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 1.0, 0.0, m_handle, true, false);
+
+#ifdef _DEBUG
+	// “–‚½‚è”»’è‚Ì•\¦
+	m_colRect.Draw(0x00ff00, false);
+#endif
+}
+
 
 void Matasaburo::Start()
 {
