@@ -112,6 +112,8 @@ void SceneMain::Update()
 	m_pPlayer->Update();
 	Rect playerRect = m_pPlayer->GetColRect(); // プレイヤーの当たり判定
 
+	// 敵の更新
+	CreateMatasaburo();
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		if (m_pEnemy[i])	// nullptrでない場合
@@ -167,9 +169,6 @@ void SceneMain::Update()
 			m_pShot[i] = nullptr;
 		}
 	}
-
-	// 敵の更新
-	CreateMatasaburo();
 }
 
 void SceneMain::Draw()
