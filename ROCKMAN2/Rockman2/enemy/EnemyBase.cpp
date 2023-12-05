@@ -5,7 +5,8 @@
 
 EnemyBase::EnemyBase():
 	m_handle(-1),
-	m_isExist(false)
+	m_isExist(false),
+	m_hp(0)
 {
 }
 
@@ -25,6 +26,14 @@ void EnemyBase::Update()
 void EnemyBase::Start()
 {
 	m_isExist = false;
+}
+
+void EnemyBase::OnDamage(int damage)
+{
+	if (m_hp <= 0)
+	{
+		m_isExist = false;
+	}
 }
 
 void EnemyBase::UpdateCollision()

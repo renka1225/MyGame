@@ -37,6 +37,8 @@ protected:
 	// ショットを撃ったプレイヤーのポインタを覚えておく
 	Player* m_pPlayer;
 
+	// グラフィックのハンドル
+	int m_handle;
 	// 弾が存在するかフラグ(使用中かどうか)
 	bool m_isExist;
 
