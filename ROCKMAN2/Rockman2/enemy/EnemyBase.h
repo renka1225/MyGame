@@ -14,8 +14,9 @@ public:
 	EnemyBase();
 	virtual ~EnemyBase();
 
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Init();
+	virtual void Update();
+	virtual void Draw();
 
 	// メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
@@ -29,6 +30,9 @@ public:
 	// 敵キャラクターをスタートさせる
 	virtual void Start() = 0;
 
+	// 敵がダメージを受けた時の処理
+	virtual void OnDamage() = 0;
+
 protected:
 	// m_posを左上に、m_handleのグラフィックサイズを幅高さにした当たり判定を設定する
 	virtual void UpdateCollision();
@@ -37,8 +41,12 @@ protected:
 	// ショット
 	std::vector<ShotBase*> m_pShot;
 
-	int m_handle;	// グラフィックのハンドル
-	bool m_isExist;	// 存在するかフラグ true:存在する
+	// グラフィックのハンドル
+	int m_handle;
+	// 存在するかフラグ true:存在する
+	bool m_isExist;	
+	// 敵のHP
+	int m_hp;	
 
 	// 表示位置
 	Vec2 m_pos;

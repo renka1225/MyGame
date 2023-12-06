@@ -1,16 +1,23 @@
 #include "EnemyBase.h"
+#include  "ShotBase.h"
 #include "DxLib.h"
 #include "Game.h"
 #include <cassert>
 
 EnemyBase::EnemyBase():
 	m_handle(-1),
-	m_isExist(false)
+	m_isExist(false),
+	m_hp(0)
 {
 }
 
 EnemyBase::~EnemyBase()
 {
+}
+
+void EnemyBase::Init()
+{
+
 }
 
 void EnemyBase::Update()
@@ -22,9 +29,25 @@ void EnemyBase::Update()
 	assert(m_handle != -1);
 }
 
+void EnemyBase::Draw()
+{
+}
+
 void EnemyBase::Start()
 {
 	m_isExist = false;
+}
+
+void EnemyBase::OnDamage()
+{
+	// Œ»İ‚ÌHP‚ğŒ¸‚ç‚·
+	m_hp--;
+
+	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç‘¶İ‚ğÁ‚·
+	if (m_hp <= 0)
+	{
+		m_isExist = false;
+	}
 }
 
 void EnemyBase::UpdateCollision()

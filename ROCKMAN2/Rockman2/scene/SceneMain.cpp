@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "Pad.h"
 #include "Rect.h"
+#include "Game.h"
 #include "Bg.h"
 #include "Player.h"
 
@@ -15,7 +16,7 @@ namespace
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
 	// 1度に登場できる敵数
-	constexpr int kEnemyMax = 32;
+	constexpr int kEnemyMax = 3;
 }
 
 SceneMain::SceneMain()
@@ -110,6 +111,14 @@ void SceneMain::Update()
 	m_pPlayer->Update();
 	Rect playerRect = m_pPlayer->GetColRect(); // プレイヤーの当たり判定
 
+	Vec2 playerPos = m_pPlayer->GetPos(); // プレイヤーの現在地を取得
+
+	// プレイヤーが画面中央より右に移動したら敵を登場させる
+	if (playerPos.x > Game::kScreenWidth / 2)
+	{
+		CreateMatasaburo();
+	}
+
 	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
@@ -129,39 +138,42 @@ void SceneMain::Update()
 	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		if (m_pEnemy[i])	// nullptrではないチェック
+		// nullptrなら処理は行わない
+		if (!m_pEnemy[i]) continue;
+		m_pEnemy[i]->Update();
+
+		// 使用済みの敵キャラクターを削除
+		if (!m_pEnemy[i]->IsExist())
 		{
-			m_pEnemy[i]->Update();
-
-			// 使用済みの敵キャラクターを削除
-			if (!m_pEnemy[i]->IsExist())
+			// メモリを解放する
+			delete m_pEnemy[i];
+			m_pEnemy[i] = nullptr;	// nullptrを入れる
+		}
+		else
+		{
+			// 敵とプレイヤーの当たり判定
+			Rect enemyRect = m_pEnemy[i]->GetColRect();
+			if (playerRect.IsCollision(enemyRect))
 			{
-				// メモリを解放する
-				delete m_pEnemy[i];
-				m_pEnemy[i] = nullptr;	// nullptrを入れる
+				m_pPlayer->OnDamage();
 			}
-			else
+
+			for (int j = 0; j < m_pShot.size(); j++)
 			{
-				// 敵とプレイヤーの当たり判定
-				Rect enemyRect = m_pEnemy[i]->GetColRect();
-				if (playerRect.IsCollision(enemyRect))
+				// nullptrなら処理は行わない
+				if (!m_pShot[j]) continue;
+
+				// 敵と弾の当たり判定
+				Rect shotRect = m_pShot[j]->GetColRect(); // 弾の当たり判定
+				if (shotRect.IsCollision(enemyRect))
 				{
-					m_pPlayer->OnDamage();
+					m_pEnemy[i]->OnDamage();
 				}
-
-				for (int j = 0; j < m_pShot.size(); j++)
+				if (enemyRect.IsCollision(shotRect))
 				{
-					// nullptrなら処理は行わない
-					if (!m_pShot[j]) continue;
-
-					// 敵と弾の当たり判定
-					Rect shotRect = m_pShot[j]->GetColRect(); // 弾の当たり判定
-					if (shotRect.IsCollision(enemyRect))
-					{
-						// 弾を削除
-						delete m_pShot[j];
-						m_pShot[j] = nullptr;
-					}
+					// 弾を削除
+					delete m_pShot[j];
+					m_pShot[j] = nullptr;
 				}
 			}
 		}
@@ -184,16 +196,13 @@ void SceneMain::Draw()
 		m_pShot[i]->Draw();
 	}
 
+	// 敵の描画
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		if (m_pEnemy[i])	// nullptrではないチェック
-		{
-			m_pEnemy[i]->Draw();
-		}
+		// nullptrなら処理は行わない
+		if (!m_pEnemy[i])continue;
+		m_pEnemy[i]->Draw();
 	}
-
-	// 敵の描画
-	CreateMatasaburo();
 
 	// 現在のHPを表示
 	DrawFormatString(8, 8, 0xffffff, "HP:%.2f", m_pPlayer->GetHp());
@@ -234,6 +243,7 @@ void SceneMain::CreateMatasaburo()
 		if (!m_pEnemy[i])	// nullptrであることをチェックする
 		{
 			m_pEnemy[i] = new Matasaburo;
+			m_pEnemy[i]->Init();
 			m_pEnemy[i]->SetHandle(m_enemyHandle);
 			m_pEnemy[i]->Start();
 			return;	// 1体分メモリを確保できたらその時点で終了

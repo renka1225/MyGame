@@ -33,7 +33,7 @@ namespace
 
 Player::Player(SceneMain* pMain) :
 	m_pMain(pMain),
-	m_pos(Game::kScreenWidth / 2, kFloorHeight),
+	m_pos(Game::kScreenWidth / 4, kFloorHeight),
 	m_handle(-1),
 	m_isRight(true),
 	m_isJumpFlag(false),

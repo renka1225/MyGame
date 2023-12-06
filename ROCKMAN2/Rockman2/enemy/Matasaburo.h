@@ -15,6 +15,9 @@ public:
 	virtual void Draw() override;
 	virtual void Start() override;
 
+	// UŒ‚‚ğó‚¯‚½‚Æ‚«
+	virtual void OnDamage()override;
+
 private:
 	int m_handle;
 	int m_hp;

@@ -34,26 +34,6 @@ void Matasaburo::Update()
 	{
 		m_isExist = false;
 	}
-
-	// ’e‚Æ‚Ì“–‚½‚è”»’è
-	for (int i = 0; i < m_pShot.size(); i++)
-	{
-		if (m_pShot[i])
-		{
-			Rect shotRect = m_pShot[i]->GetColRect();
-			if (shotRect.IsCollision(m_colRect))
-			{
-				// ’e‚ª“–‚½‚Á‚½‚çHP‚ğŒ¸‚ç‚·
-				m_hp--;
-
-				// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç“G‚ğíœ
-				if (m_hp <= 0)
-				{
-					m_isExist = false;
-				}
-			}
-		}
-	}
 }
 
 void Matasaburo::Draw()
@@ -79,6 +59,20 @@ void Matasaburo::Start()
 	GetGraphSize(m_handle, &width, &height);
 
 	// Œ»İˆÊ’u
-	m_pos.x = static_cast<float>(800);
+	m_pos.x = static_cast<float>(900);
 	m_pos.y = static_cast<float>(500);
+
+	m_vec.x -= 5;
+}
+
+void Matasaburo::OnDamage()
+{
+	// ’e‚ª“–‚½‚Á‚½‚çHP‚ğŒ¸‚ç‚·
+	m_hp--;
+
+	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç‘¶İ‚ğÁ‚·
+	if (m_hp <= 0)
+	{
+		m_isExist = false;
+	}
 }
