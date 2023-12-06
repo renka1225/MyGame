@@ -1,11 +1,15 @@
 #include "Matasaburo.h"
-#include "ShotBase.h"
 #include "Game.h"
 #include "DxLib.h"
 
+namespace
+{
+	constexpr float kSpeed = 4.0f;
+}
+
 Matasaburo::Matasaburo() :
 	EnemyBase(),
-	m_hp(3)
+	m_hp(1)
 {
 	m_handle = LoadGraph("data/image/Enemy/matasaburo.png");
 }
@@ -16,11 +20,9 @@ Matasaburo::~Matasaburo()
 
 void Matasaburo::Update()
 {
+
 	// 存在しない敵の処理はしない
 	if (!m_isExist) return;
-
-	// 現在位置の更新
-	m_pos += m_vec;
 
 	// 当たり判定の更新
 	UpdateCollision();
@@ -62,6 +64,7 @@ void Matasaburo::Start()
 	m_pos.x = static_cast<float>(900);
 	m_pos.y = static_cast<float>(500);
 
+<<<<<<< HEAD
 	m_vec.x -= 5;
 }
 
@@ -71,6 +74,17 @@ void Matasaburo::OnDamage()
 	m_hp--;
 
 	// HPが0以下になったら存在を消す
+=======
+	// 1フレームあたりの移動ベクトルを決定する
+	m_vec.x = -kSpeed;
+}
+
+void Matasaburo::OnDamage(int damage)
+{
+	// HPを減らす
+	m_hp -= damage;
+
+>>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
 	if (m_hp <= 0)
 	{
 		m_isExist = false;
