@@ -20,6 +20,7 @@ Matasaburo::~Matasaburo()
 
 void Matasaburo::Update()
 {
+	m_pos += m_vec;
 
 	// 存在しない敵の処理はしない
 	if (!m_isExist) return;
@@ -64,7 +65,6 @@ void Matasaburo::Start()
 	m_pos.x = static_cast<float>(900);
 	m_pos.y = static_cast<float>(500);
 
-<<<<<<< HEAD
 	m_vec.x -= 5;
 }
 
@@ -74,17 +74,6 @@ void Matasaburo::OnDamage()
 	m_hp--;
 
 	// HPが0以下になったら存在を消す
-=======
-	// 1フレームあたりの移動ベクトルを決定する
-	m_vec.x = -kSpeed;
-}
-
-void Matasaburo::OnDamage(int damage)
-{
-	// HPを減らす
-	m_hp -= damage;
-
->>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
 	if (m_hp <= 0)
 	{
 		m_isExist = false;

@@ -33,11 +33,8 @@ public:
 	virtual void Start() = 0;
 
 	// 敵がダメージを受けた時の処理
-<<<<<<< HEAD
 	virtual void OnDamage() = 0;
-=======
-	virtual void OnDamage(int damage) = 0;
->>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
+
 
 protected:
 	// 当たり判定を設定する
@@ -47,18 +44,13 @@ protected:
 	// ショット
 	std::vector<ShotBase*> m_pShot;
 
-<<<<<<< HEAD
 	// グラフィックのハンドル
 	int m_handle;
 	// 存在するかフラグ true:存在する
 	bool m_isExist;	
 	// 敵のHP
 	int m_hp;	
-=======
-	int m_handle;	// グラフィックのハンドル
-	bool m_isExist;	// 存在するかフラグ true:存在する
-	int m_hp;		// 敵のHP
->>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
+
 
 	// 表示位置
 	Vec2 m_pos;

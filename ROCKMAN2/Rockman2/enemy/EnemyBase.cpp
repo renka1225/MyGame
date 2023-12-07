@@ -38,17 +38,12 @@ void EnemyBase::Start()
 	m_isExist = false;
 }
 
-<<<<<<< HEAD
 void EnemyBase::OnDamage()
 {
 	// Œ»Ý‚ÌHP‚ðŒ¸‚ç‚·
 	m_hp--;
 
 	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç‘¶Ý‚ðÁ‚·
-=======
-void EnemyBase::OnDamage(int damage)
-{
->>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
 	if (m_hp <= 0)
 	{
 		m_isExist = false;

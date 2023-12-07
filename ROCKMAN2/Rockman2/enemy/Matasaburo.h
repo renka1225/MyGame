@@ -14,10 +14,7 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 	virtual void Start() override;
-	virtual void OnDamage(int damage) override;
-
-	// UŒ‚‚ğó‚¯‚½‚Æ‚«
-	virtual void OnDamage()override;
+	virtual void OnDamage() override;
 
 private:
 	int m_handle;
