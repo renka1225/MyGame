@@ -17,7 +17,7 @@ EnemyBase::~EnemyBase()
 
 void EnemyBase::Init()
 {
-
+	m_hp = 0;
 }
 
 void EnemyBase::Update()

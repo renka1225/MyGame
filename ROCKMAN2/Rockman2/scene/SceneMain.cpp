@@ -19,7 +19,8 @@ namespace
 	constexpr int kEnemyMax = 3;
 }
 
-SceneMain::SceneMain()
+SceneMain::SceneMain():
+	m_isSceneEnd(false)
 {
 	// プレイヤーのグラフィックロード
 	m_playerHandle = LoadGraph("data/image/player.png");
@@ -98,6 +99,18 @@ void SceneMain::Init()
 
 	// 背景の初期化
 	m_pBg->Init();
+
+	// 画面遷移の初期化
+	m_isSceneEnd = false;
+
+	// 敵の初期化
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (m_pEnemy[i])
+		{
+			m_pEnemy[i]->Init();
+		}
+	}
 }
 
 void SceneMain::End()
@@ -106,6 +119,12 @@ void SceneMain::End()
 
 void SceneMain::Update()
 {
+	// プレイヤーのHPが0以下だったらゲームオーバー画面に遷移
+	if (m_pPlayer->GetHp() <= 0)
+	{
+		m_isSceneEnd = true;
+	}
+
 	// 背景の更新
 	m_pBg->Update();
 
@@ -115,8 +134,8 @@ void SceneMain::Update()
 
 	Vec2 playerPos = m_pPlayer->GetPos(); // プレイヤーの現在地を取得
 
-	// プレイヤーが画面中央より右に移動したら敵を登場させる
-	if (playerPos.x > Game::kScreenWidth / 2)
+	// プレイヤーが画面中央に移動したら敵を登場させる
+	if (playerPos.x == Game::kScreenWidth / 2)
 	{
 		CreateMatasaburo();
 	}
@@ -137,6 +156,7 @@ void SceneMain::Update()
 		}
 	}
 
+	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		// nullptrなら処理は行わない

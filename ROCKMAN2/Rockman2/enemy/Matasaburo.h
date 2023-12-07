@@ -11,6 +11,7 @@ public:
 	Matasaburo();
 	virtual ~Matasaburo();
 
+	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Draw() override;
 	virtual void Start() override;

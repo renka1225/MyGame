@@ -144,7 +144,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="enemy\Matasaburo.cpp" />
     <ClCompile Include="Pad.cpp" />
-    <ClCompile Include="scene\PauseScene.cpp" />
+    <ClCompile Include="scene\SceneGameOver.cpp" />
+    <ClCompile Include="scene\SceneTitle.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\Scene.cpp" />
     <ClCompile Include="shot\ShotLineMove.cpp" />
@@ -163,7 +164,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="enemy\Matasaburo.h" />
     <ClInclude Include="Pad.h" />
-    <ClInclude Include="scene\PauseScene.h" />
+    <ClInclude Include="scene\SceneGameOver.h" />
+    <ClInclude Include="scene\SceneTitle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shot\ShotLineMove.h" />

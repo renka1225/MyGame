@@ -28,19 +28,29 @@ namespace
 
 	// 床の高さ
 	constexpr int kFloorHeight = 500;
+
+	// プレイヤーの現在位置
+	constexpr float kPosX = 500;
+	constexpr float kPosY = 500;
+
+	// プレイヤーのHP
+	constexpr float kHp = 1;
+
+	// 残機
+	constexpr int kLife = 2;
 }
 
 
 Player::Player(SceneMain* pMain) :
 	m_pMain(pMain),
-	m_pos(Game::kScreenWidth / 4, kFloorHeight),
+	m_pos(kPosX, kPosY),
 	m_handle(-1),
 	m_isRight(true),
 	m_isJumpFlag(false),
 	m_velocity(0),
 	m_jumpFrame(0),
-	m_hp(28),
-	m_life(2),
+	m_hp(kHp),
+	m_life(kLife),
 	m_damageFrame(0),
 	m_metalEnergy(28),
 	m_fireEnergy(28),
@@ -55,8 +65,20 @@ Player::~Player()
 {
 }
 
+// 初期化処理
 void Player::Init()
 {
+	// 現在位置
+	m_pos.x = kPosX;
+	m_pos.y = kPosY;
+	// 向き
+	m_isRight = true;
+	// ジャンプフラグ
+	m_isJumpFlag = false;
+	// HP
+	m_hp = kHp;
+	// ダメージのフレーム数
+	m_damageFrame = 0;
 }
 
 void Player::Update()
@@ -268,8 +290,4 @@ void Player::OnDamage()
 
 	// HPを減らす
 	m_hp--;
-	if (m_hp < 0)
-	{
-		m_hp = 0;
-	}
 }

@@ -4,18 +4,37 @@
 
 namespace
 {
+	// 移動速度
 	constexpr float kSpeed = 4.0f;
+
+	// HP
+	constexpr int kHp = 1;
+
+	// 初期位置
+	constexpr float kPosX = 900;
+	constexpr float kPosY = 500;
 }
 
 Matasaburo::Matasaburo() :
 	EnemyBase(),
-	m_hp(1)
+	m_hp(kHp)
 {
 	m_handle = LoadGraph("data/image/Enemy/matasaburo.png");
 }
 
 Matasaburo::~Matasaburo()
 {
+}
+
+// 初期化
+void Matasaburo::Init()
+{
+	// HP
+	m_hp = kHp;
+
+	// 現在位置
+	m_pos.x = kPosX;
+	m_pos.y = kPosY;
 }
 
 void Matasaburo::Update()
@@ -62,8 +81,8 @@ void Matasaburo::Start()
 	GetGraphSize(m_handle, &width, &height);
 
 	// 現在位置
-	m_pos.x = static_cast<float>(900);
-	m_pos.y = static_cast<float>(500);
+	m_pos.x = kPosX;
+	m_pos.y = kPosY;
 
 	m_vec.x -= 5;
 }

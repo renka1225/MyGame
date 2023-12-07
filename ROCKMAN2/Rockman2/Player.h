@@ -31,6 +31,8 @@ public:
 
 	// 現在のHPを取得する
 	float GetHp() const { return m_hp; }
+	// 現在の残機数を取得する
+	int GetLife() const { return m_life; }
 
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }

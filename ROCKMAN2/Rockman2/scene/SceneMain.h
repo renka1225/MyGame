@@ -6,6 +6,10 @@ class Player;
 class ShotBase;
 class EnemyBase;
 class Bg;
+
+/// <summary>
+/// ゲーム画面のクラス
+/// </summary>
 class SceneMain
 {
 public:
@@ -21,6 +25,9 @@ public:
 	// 登録できなかった場合はfalseを返す、内部でpShotを解放する
 	bool AddShot(ShotBase* pShot);
 
+	// シーンを終了させるか
+	bool IsSceneEnd() const { return m_isSceneEnd; }
+
 private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
@@ -30,6 +37,9 @@ private:
 	int m_bgHandle;			// 背景
 	int m_playerHandle;		// プレイヤー
 	int m_enemyHandle;		// 敵
+
+	// シーンを終了させるフラグ true:終了
+	bool m_isSceneEnd;
 
 	// 背景
 	Bg* m_pBg;
