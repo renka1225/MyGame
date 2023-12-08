@@ -17,7 +17,7 @@ namespace
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
-	constexpr float kVelocity = -10.0f;
+	constexpr float kVelocity = -16.0f;
 
 	// プレイヤーのサイズ
 	constexpr int kWidth = 32;
@@ -114,21 +114,42 @@ void Player::Update()
    	if (Pad::IsTrigger(PAD_INPUT_10) && !m_isJumpFlag)
 	{
 		m_isJumpFlag = true;
-		m_velocity = kVelocity; // 初速度を設定する
+		m_velocity = kVelocity; // 初速度を設定
 	}
 
-	// ジャンプ中の場合
+	// ジャンプ中
 	if (m_isJumpFlag)
-	{
-		m_pos.y += m_velocity;	// 現在位置の更新
-		m_velocity += kGravity; // 初速度に重力を足す
-	}
+	{		
+		m_jumpFrame++;	// ジャンプフレームの更新
+		
+		// ボタンを離した瞬間にジャンプする
+		if (Pad::IsRelease(PAD_INPUT_10))
+		{
+			// 初速度の更新
+			if (m_jumpFrame < 10) // 長押し時間10フレーム以下
+			{
+				m_velocity = kVelocity * 0.5f; 
+			}
+			else if (m_jumpFrame < 30) // 長押し時間30フレーム以下
+			{
+				m_velocity = kVelocity * 0.8f;  // 初速度を設定する
+			}
+			else
+			{
+				m_velocity = kVelocity;  // 初速度を設定する
+			}
+		}
 
-	// 地面に着地したらジャンプを終了する
-	if (m_pos.y >= kFloorHeight)
-	{
-		m_pos.y = kFloorHeight;
-		m_isJumpFlag = false;
+		m_velocity += kGravity; // 初速度に重力を足す
+		m_pos.y += m_velocity;	// 現在位置の更新
+
+		// 地面に着地したらジャンプを終了する
+		if (m_pos.y >= kFloorHeight)
+		{
+			m_pos.y = kFloorHeight;
+			m_isJumpFlag = false;	// ジャンプフラグを初期化
+			m_jumpFrame = 0;		// ジャンプフレームを初期化
+		}
 	}
 
 	// 画面外に出たら画面内に戻す
