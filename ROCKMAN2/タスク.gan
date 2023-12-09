@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2023-11-17" view-index="0" gantt-divider-location="392" resource-divider-location="300" version="3.2.3247" locale="ja_JP">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2023-11-29" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.2.3247" locale="ja_JP">
     <description/>
     <view zooming-state="default:3" id="gantt-chart">
-        <field id="tpd3" name="名前" width="214" order="0"/>
-        <field id="tpd4" name="開始日" width="81" order="1"/>
-        <field id="tpd5" name="終了日" width="81" order="2"/>
+        <field id="tpd3" name="名前" width="200" order="0"/>
+        <field id="tpd4" name="開始日" width="75" order="1"/>
+        <field id="tpd5" name="終了日" width="75" order="2"/>
         <option id="filter.completedTasks" value="false"/>
         <option id="color.recent">
-            <![CDATA[#00ffcc #00cc66 #000000 #ff9999 #009999]]>
+            <![CDATA[#66ff99 #ff6600 #cc0000 #0099cc]]>
         </option>
     </view>
     <view id="resource-table">
@@ -37,140 +37,133 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-<<<<<<< HEAD
-        <task id="0" name="プロトタイプ" color="#009999" meeting="false" start="2023-12-01" duration="8" complete="48" thirdDate="2023-12-01" thirdDate-constraint="0" expand="true">
-=======
-        <task id="0" name="プロトタイプ" color="#009999" meeting="false" start="2023-12-01" duration="8" complete="39" thirdDate="2023-12-01" thirdDate-constraint="0" expand="true">
->>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
-            <task id="8" name="プレイヤー" color="#000000" meeting="false" start="2023-12-01" duration="4" complete="53" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true">
-                <task id="1" name="移動" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="2" name="ジャンプ" color="#8cb6ce" meeting="false" start="2023-12-01" duration="3" complete="80" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="3" name="弾発射" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="4" name="当たり判定" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="5" name="HP" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="23" name="摩擦" color="#8cb6ce" meeting="false" start="2023-12-04" duration="2" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="6" name="弾切り替え(2種類)" color="#8cb6ce" meeting="false" start="2023-12-04" duration="3" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
+        <task id="0" name="プロトタイプ" color="#0099cc" meeting="false" start="2023-12-01" duration="12" complete="57" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true">
+            <task id="4" name="プレイヤー" meeting="false" start="2023-12-04" duration="7" complete="58" expand="true">
+                <task id="5" name="移動" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="20" name="HP" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="21" name="残機" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="9" name="弾発射" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="6" name="ジャンプ" color="#8cb6ce" meeting="false" start="2023-12-04" duration="3" complete="80" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="7" name="摩擦" color="#8cb6ce" meeting="false" start="2023-12-11" duration="2" complete="0" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="10" name="弾切替" color="#8cb6ce" meeting="false" start="2023-12-11" duration="2" complete="0" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="7" name="弾" color="#000000" meeting="false" start="2023-12-01" duration="2" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="false">
-                <task id="9" name="移動" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="10" name="発射" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="11" name="弾数管理" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
+            <task id="11" name="弾" meeting="false" start="2023-12-01" duration="1" complete="100" expand="false">
+                <task id="12" name="移動" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="13" name="発射" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="14" name="当たり判定" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="15" name="弾数管理" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
             </task>
-<<<<<<< HEAD
-            <task id="12" name="敵(仮)" color="#000000" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="false">
-                <task id="13" name="移動" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="14" name="当たり判定" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="15" name="HP" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="16" name="攻撃" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-=======
-            <task id="12" name="敵(仮)" color="#000000" meeting="false" start="2023-12-04" duration="1" complete="35" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true">
-                <task id="13" name="移動" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="14" name="当たり判定" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="15" name="HP" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="40" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="16" name="攻撃" color="#8cb6ce" meeting="false" start="2023-12-04" duration="1" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
->>>>>>> b7e625657adb768e3ac97a47834cb71cb76e3f7e
+            <task id="16" name="敵(仮)" meeting="false" start="2023-12-06" duration="1" complete="100" expand="false">
+                <task id="17" name="移動" color="#8cb6ce" meeting="false" start="2023-12-06" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="18" name="当たり判定" color="#8cb6ce" meeting="false" start="2023-12-06" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="22" name="攻撃" color="#8cb6ce" meeting="false" start="2023-12-06" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="19" name="HP" color="#8cb6ce" meeting="false" start="2023-12-06" duration="1" complete="100" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="94" name="アイテム" meeting="false" start="2023-12-06" duration="4" complete="0" expand="true">
-                <task id="95" name="残機回復" color="#8cb6ce" meeting="false" start="2023-12-06" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
-                <task id="96" name="E缶" color="#8cb6ce" meeting="false" start="2023-12-08" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
-                <task id="102" name="HP回復" color="#8cb6ce" meeting="false" start="2023-12-11" duration="1" complete="0" thirdDate="2023-11-17" thirdDate-constraint="0" expand="true"/>
-                <task id="103" name="弾エネルギー回復" color="#8cb6ce" meeting="false" start="2023-12-11" duration="1" complete="0" thirdDate="2023-11-17" thirdDate-constraint="0" expand="true"/>
+            <task id="23" name="アイテム" meeting="false" start="2023-12-11" duration="1" complete="0" expand="false">
+                <task id="24" name="E缶" color="#8cb6ce" meeting="false" start="2023-12-11" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                <task id="25" name="HP回復" color="#8cb6ce" meeting="false" start="2023-12-11" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                <task id="26" name="弾エネルギー回復" color="#8cb6ce" meeting="false" start="2023-12-11" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="17" name="ゲーム画面" color="#000000" meeting="false" start="2023-12-01" duration="8" complete="14" thirdDate="2023-12-01" thirdDate-constraint="0" expand="true">
-                <task id="19" name="画面スクロール" color="#8cb6ce" meeting="false" start="2023-12-01" duration="1" complete="100" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="18" name="床" color="#8cb6ce" meeting="false" start="2023-12-07" duration="1" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="22" name="ポーズ画面" color="#8cb6ce" meeting="false" start="2023-12-07" duration="2" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="20" name="タイトル画面" color="#8cb6ce" meeting="false" start="2023-12-11" duration="1" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="21" name="ゲームオーバー画面" color="#8cb6ce" meeting="false" start="2023-12-12" duration="1" complete="0" thirdDate="2023-12-04" thirdDate-constraint="0" expand="true"/>
-                <task id="24" name="クリア画面" color="#8cb6ce" meeting="false" start="2023-12-12" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+            <task id="28" name="画面" color="#000000" meeting="false" start="2023-12-05" duration="10" complete="40" thirdDate="2023-12-05" thirdDate-constraint="0" expand="false">
+                <task id="27" name="ゲーム画面" meeting="false" start="2023-12-05" duration="8" complete="40" expand="false">
+                    <task id="34" name="画面スクロール" color="#8cb6ce" meeting="false" start="2023-12-05" duration="1" complete="100" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                    <task id="33" name="敵配置" color="#8cb6ce" meeting="false" start="2023-12-07" duration="1" complete="100" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                    <task id="35" name="マップチップ" color="#8cb6ce" meeting="false" start="2023-12-13" duration="2" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                    <task id="32" name="床" color="#8cb6ce" meeting="false" start="2023-12-13" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="29" name="タイトル画面" color="#8cb6ce" meeting="false" start="2023-12-07" duration="1" complete="100" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                <task id="30" name="ゲームオーバー画面" color="#8cb6ce" meeting="false" start="2023-12-07" duration="1" complete="100" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                <task id="31" name="クリア画面" color="#8cb6ce" meeting="false" start="2023-12-14" duration="1" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                <task id="36" name="ポーズ画面" color="#8cb6ce" meeting="false" start="2023-12-15" duration="2" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
             </task>
         </task>
-        <task id="25" name="α" color="#ff9999" meeting="false" start="2023-12-15" duration="30" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true">
-            <task id="26" name="プレイヤー" color="#000000" meeting="false" start="2023-12-15" duration="3" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="false">
-                <task id="27" name="移動アニメーション" color="#8cb6ce" meeting="false" start="2023-12-15" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="false"/>
-                <task id="28" name="ジャンプアニメーション" color="#8cb6ce" meeting="false" start="2023-12-15" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                <task id="29" name="弾発射アニメーション" color="#8cb6ce" meeting="false" start="2023-12-15" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                <task id="30" name="当たりアニメーション" color="#8cb6ce" meeting="false" start="2023-12-15" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                <task id="31" name="弾切り替え(2種類)" color="#8cb6ce" meeting="false" start="2023-12-18" duration="2" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+        <task id="1" name="α" color="#ff6600" meeting="false" start="2023-12-20" duration="20" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="false">
+            <task id="39" name="プレイヤー" color="#000000" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="false">
+                <task id="40" name="移動アニメーション" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                <task id="41" name="ジャンプアニメーション" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                <task id="42" name="弾発射アニメーション" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                <task id="43" name="当たりアニメーション" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                <task id="44" name="ゲームオーバーアニメーション" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="32" name="弾" meeting="false" start="2023-12-18" duration="2" complete="0" expand="false">
-                <task id="33" name="画像切り替え" color="#8cb6ce" meeting="false" start="2023-12-18" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                <task id="34" name="アイテム2号実装" color="#8cb6ce" meeting="false" start="2023-12-18" duration="2" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+            <task id="46" name="弾" color="#000000" meeting="false" start="2023-12-21" duration="2" complete="0" thirdDate="2023-12-19" thirdDate-constraint="0" expand="false">
+                <task id="47" name="画像切替" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                <task id="48" name="アイテム2号実装" color="#8cb6ce" meeting="false" start="2023-12-21" duration="2" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="35" name="敵" color="#000000" meeting="false" start="2023-12-19" duration="8" complete="0" thirdDate="2023-12-19" thirdDate-constraint="0" expand="true">
-                <task id="37" name="ステージ1" color="#000000" meeting="false" start="2023-12-19" duration="1" complete="0" thirdDate="2023-12-19" thirdDate-constraint="0" expand="true">
-                    <task id="104" name="ピピ" color="#8cb6ce" meeting="false" start="2023-12-19" duration="1" complete="0" thirdDate="2023-11-17" thirdDate-constraint="0" expand="true"/>
-                    <task id="36" name="ゴブリン" color="#8cb6ce" meeting="false" start="2023-12-19" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="38" name="またさぶろう" color="#8cb6ce" meeting="false" start="2023-12-19" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+            <task id="45" name="敵" color="#000000" meeting="false" start="2023-12-21" duration="8" complete="0" thirdDate="2023-12-21" thirdDate-constraint="0" expand="false">
+                <task id="49" name="ステージ1" color="#000000" meeting="false" start="2023-12-21" duration="2" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="false">
+                    <task id="54" name="またさぶろう" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                    <task id="53" name="ゴブリン" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
+                    <task id="52" name="ピピ" color="#8cb6ce" meeting="false" start="2023-12-21" duration="2" complete="0" thirdDate="2023-12-18" thirdDate-constraint="0" expand="true"/>
                 </task>
-                <task id="39" name="ステージ２" meeting="false" start="2023-12-20" duration="2" complete="0" expand="true">
-                    <task id="40" name="モール" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="41" name="ピエロボット" color="#8cb6ce" meeting="false" start="2023-12-20" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="42" name="ブロッキー" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+                <task id="50" name="ステージ2" meeting="false" start="2023-12-21" duration="1" complete="0" expand="false">
+                    <task id="55" name="モール" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-12-21" thirdDate-constraint="0" expand="true"/>
+                    <task id="56" name="ピエロボット" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-12-21" thirdDate-constraint="0" expand="true"/>
+                    <task id="57" name="ブロッキー" meeting="false" start="2023-12-21" duration="1" complete="0" expand="true"/>
                 </task>
-                <task id="43" name="ステージ3" meeting="false" start="2023-12-21" duration="2" complete="0" expand="true">
-                    <task id="44" name="フライボーイ" color="#8cb6ce" meeting="false" start="2023-12-21" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="45" name="テリー" color="#8cb6ce" meeting="false" start="2023-12-22" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="46" name="スプリンガー" color="#8cb6ce" meeting="false" start="2023-12-22" duration="1" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+                <task id="51" name="ステージ3" meeting="false" start="2023-12-22" duration="1" complete="0" expand="false">
+                    <task id="58" name="フライボーイ" color="#8cb6ce" meeting="false" start="2023-12-22" duration="1" complete="0" thirdDate="2023-12-21" thirdDate-constraint="0" expand="true"/>
+                    <task id="59" name="テリー" color="#8cb6ce" meeting="false" start="2023-12-22" duration="1" complete="0" thirdDate="2023-12-21" thirdDate-constraint="0" expand="true"/>
+                    <task id="60" name="スプリンガー" color="#8cb6ce" meeting="false" start="2023-12-22" duration="1" complete="0" thirdDate="2023-12-21" thirdDate-constraint="0" expand="true"/>
                 </task>
-                <task id="47" name="ボス" meeting="false" start="2023-12-25" duration="4" complete="0" expand="true">
-                    <task id="48" name="エアーマン" color="#8cb6ce" meeting="false" start="2023-12-25" duration="2" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="49" name="メタルマン" color="#8cb6ce" meeting="false" start="2023-12-25" duration="2" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
-                    <task id="50" name="ヒートマン" color="#8cb6ce" meeting="false" start="2023-12-27" duration="2" complete="0" thirdDate="2023-11-22" thirdDate-constraint="0" expand="true"/>
+                <task id="61" name="ボス" meeting="false" start="2023-12-25" duration="6" complete="0" expand="false">
+                    <task id="62" name="エアーマン" color="#8cb6ce" meeting="false" start="2023-12-25" duration="2" complete="0" thirdDate="2023-12-15" thirdDate-constraint="0" expand="true"/>
+                    <task id="63" name="メタルマン" color="#8cb6ce" meeting="false" start="2023-12-27" duration="2" complete="0" thirdDate="2023-12-15" thirdDate-constraint="0" expand="true"/>
+                    <task id="64" name="ヒートマン" color="#8cb6ce" meeting="false" start="2023-12-29" duration="2" complete="0" thirdDate="2023-12-15" thirdDate-constraint="0" expand="true"/>
                 </task>
             </task>
-            <task id="58" name="画面" meeting="false" start="2024-01-10" duration="3" complete="0" expand="false">
-                <task id="59" name="タイトル" color="#8cb6ce" meeting="false" start="2024-01-10" duration="1" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="60" name="ステージ選択" color="#8cb6ce" meeting="false" start="2024-01-10" duration="1" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="63" name="ポーズ" color="#8cb6ce" meeting="false" start="2024-01-11" duration="1" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="64" name="ゲームオーバー画面" color="#8cb6ce" meeting="false" start="2024-01-12" duration="1" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="65" name="ゲームクリア画面" color="#8cb6ce" meeting="false" start="2024-01-12" duration="1" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
+            <task id="65" name="画面" meeting="false" start="2024-01-03" duration="4" complete="0" expand="false">
+                <task id="66" name="タイトル" color="#8cb6ce" meeting="false" start="2024-01-03" duration="1" complete="0" thirdDate="2023-12-22" thirdDate-constraint="0" expand="true"/>
+                <task id="67" name="ステージ選択" color="#8cb6ce" meeting="false" start="2024-01-03" duration="2" complete="0" thirdDate="2023-12-22" thirdDate-constraint="0" expand="true"/>
+                <task id="68" name="ポーズ" color="#8cb6ce" meeting="false" start="2024-01-05" duration="2" complete="0" thirdDate="2023-12-22" thirdDate-constraint="0" expand="true"/>
+                <task id="69" name="ゲームオーバー" color="#8cb6ce" meeting="false" start="2024-01-08" duration="1" complete="0" thirdDate="2023-12-22" thirdDate-constraint="0" expand="true"/>
+                <task id="70" name="クリア" color="#8cb6ce" meeting="false" start="2024-01-08" duration="1" complete="0" thirdDate="2023-12-22" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="62" name="ステージ制作" color="#000000" meeting="false" start="2024-01-02" duration="18" complete="0" thirdDate="2024-01-02" thirdDate-constraint="0" expand="false">
-                <task id="51" name="ギミック" color="#000000" meeting="false" start="2024-01-02" duration="6" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="false">
-                    <task id="52" name="でかゴブリン" color="#8cb6ce" meeting="false" start="2024-01-02" duration="1" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="true"/>
-                    <task id="53" name="回転する足場" color="#8cb6ce" meeting="false" start="2024-01-03" duration="1" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="true"/>
-                    <task id="54" name="上下移動エレベーター" color="#8cb6ce" meeting="false" start="2024-01-03" duration="1" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="true"/>
-                    <task id="55" name="左右移動コンベア" color="#8cb6ce" meeting="false" start="2024-01-04" duration="1" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="true"/>
-                    <task id="56" name="上から落下するやつ" color="#8cb6ce" meeting="false" start="2024-01-05" duration="1" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="true"/>
-                    <task id="57" name="消える足場" color="#8cb6ce" meeting="false" start="2024-01-08" duration="2" complete="0" thirdDate="2023-11-15" thirdDate-constraint="0" expand="true"/>
+            <task id="71" name="ステージ制作" color="#000000" meeting="false" start="2024-01-09" duration="5" complete="0" thirdDate="2024-01-09" thirdDate-constraint="0" expand="false">
+                <task id="73" name="ステージ1" color="#000000" meeting="false" start="2024-01-09" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="false">
+                    <task id="74" name="でかゴブリン" color="#8cb6ce" meeting="false" start="2024-01-09" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
+                    <task id="72" name="回転足場" color="#8cb6ce" meeting="false" start="2024-01-09" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
+                    <task id="75" name="上下移動エレベーター" color="#8cb6ce" meeting="false" start="2024-01-09" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
                 </task>
-                <task id="61" name="ステージ1" color="#8cb6ce" meeting="false" start="2024-01-15" duration="3" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="66" name="ステージ2" color="#8cb6ce" meeting="false" start="2024-01-18" duration="3" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="67" name="ステージ3" color="#8cb6ce" meeting="false" start="2024-01-22" duration="3" complete="0" thirdDate="2023-12-08" thirdDate-constraint="0" expand="true"/>
-                <task id="100" name="アイテム管理" color="#8cb6ce" meeting="false" start="2024-01-24" duration="2" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+                <task id="76" name="ステージ2" meeting="false" start="2024-01-10" duration="2" complete="0" expand="false">
+                    <task id="77" name="左右移動コンベア" color="#8cb6ce" meeting="false" start="2024-01-10" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
+                    <task id="78" name="上から落下" color="#8cb6ce" meeting="false" start="2024-01-11" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="79" name="ステージ3" meeting="false" start="2024-01-11" duration="3" complete="0" expand="false">
+                    <task id="80" name="消える足場" color="#8cb6ce" meeting="false" start="2024-01-11" duration="3" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
+                </task>
             </task>
+            <task id="81" name="アイテム管理" color="#8cb6ce" meeting="false" start="2024-01-15" duration="2" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="68" name="β" color="#00ffcc" meeting="false" start="2024-01-25" duration="6" complete="0" thirdDate="2024-01-25" thirdDate-constraint="0" expand="true">
-            <task id="92" name="エフェクト" meeting="false" start="2024-01-25" duration="4" complete="0" expand="true">
-                <task id="69" name="プレイヤー" color="#000000" meeting="false" start="2024-01-25" duration="1" complete="0" thirdDate="2024-01-25" thirdDate-constraint="0" expand="false">
-                    <task id="70" name="攻撃エフェクト" color="#8cb6ce" meeting="false" start="2024-01-25" duration="1" complete="0" thirdDate="2023-12-28" thirdDate-constraint="0" expand="true"/>
-                    <task id="71" name="ダメージエフェクト" color="#8cb6ce" meeting="false" start="2024-01-25" duration="1" complete="0" thirdDate="2023-12-28" thirdDate-constraint="0" expand="true"/>
-                    <task id="101" name="アイテム取得" color="#8cb6ce" meeting="false" start="2024-01-25" duration="1" complete="0" thirdDate="2023-11-16" thirdDate-constraint="0" expand="true"/>
+        <task id="2" name="β" color="#66ff99" meeting="false" start="2024-01-17" duration="9" complete="0" thirdDate="2024-01-17" thirdDate-constraint="0" expand="false">
+            <task id="82" name="エフェクト" color="#000000" meeting="false" start="2024-01-17" duration="4" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="false">
+                <task id="85" name="プレイヤー" meeting="false" start="2024-01-17" duration="1" complete="0" expand="false">
+                    <task id="86" name="攻撃" color="#8cb6ce" meeting="false" start="2024-01-17" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                    <task id="87" name="ダメージ" color="#8cb6ce" meeting="false" start="2024-01-17" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
                 </task>
-                <task id="90" name="弾" color="#8cb6ce" meeting="false" start="2024-01-26" duration="1" complete="0" thirdDate="2024-01-26" thirdDate-constraint="0" expand="true"/>
-                <task id="93" name="敵" color="#8cb6ce" meeting="false" start="2024-01-29" duration="2" complete="0" thirdDate="2023-12-11" thirdDate-constraint="0" expand="true"/>
+                <task id="88" name="アイテム取得" color="#8cb6ce" meeting="false" start="2024-01-18" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="89" name="敵" color="#8cb6ce" meeting="false" start="2024-01-18" duration="3" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="72" name="サウンド" meeting="false" start="2024-01-29" duration="2" complete="0" expand="false">
-                <task id="82" name="プレイヤーSE" color="#000000" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true">
-                    <task id="81" name="弾発射" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                    <task id="83" name="ダメージ" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                    <task id="84" name="ジャンプ" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                    <task id="86" name="ゲームオーバー" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
+            <task id="83" name="サウンド" meeting="false" start="2024-01-23" duration="5" complete="0" expand="true">
+                <task id="90" name="プレイヤーSE" meeting="false" start="2024-01-23" duration="1" complete="0" expand="false">
+                    <task id="91" name="弾発射" color="#8cb6ce" meeting="false" start="2024-01-23" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                    <task id="92" name="ダメージ" color="#8cb6ce" meeting="false" start="2024-01-23" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                    <task id="93" name="ジャンプ" color="#8cb6ce" meeting="false" start="2024-01-23" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                    <task id="94" name="ゲームオーバー" color="#8cb6ce" meeting="false" start="2024-01-23" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
                 </task>
-                <task id="73" name="タイトル" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                <task id="74" name="ステージ選択" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                <task id="75" name="ステージ1" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                <task id="76" name="ステージ2" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                <task id="77" name="ステージ3" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                <task id="78" name="ゲームオーバー" color="#8cb6ce" meeting="false" start="2024-01-30" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-                <task id="79" name="ゲームクリア" color="#8cb6ce" meeting="false" start="2024-01-30" duration="1" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
+                <task id="95" name="タイトル" color="#8cb6ce" meeting="false" start="2024-01-24" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="96" name="ステージ選択" color="#8cb6ce" meeting="false" start="2024-01-24" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="97" name="ステージ1" color="#8cb6ce" meeting="false" start="2024-01-25" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="98" name="ステージ2" color="#8cb6ce" meeting="false" start="2024-01-25" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="99" name="ステージ3" color="#8cb6ce" meeting="false" start="2024-01-26" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="100" name="ゲームオーバー" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="101" name="ゲームクリア" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
+                <task id="102" name="選択SE" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-26" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="80" name="画面調整" color="#8cb6ce" meeting="false" start="2024-01-31" duration="2" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
+            <task id="84" name="画面調整" color="#8cb6ce" meeting="false" start="2024-01-29" duration="1" complete="0" thirdDate="2023-12-29" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="87" name="マスタ" color="#00cc66" meeting="false" start="2024-02-06" duration="4" complete="0" thirdDate="2024-02-06" thirdDate-constraint="0" expand="false">
-            <task id="88" name="バグ修正" color="#8cb6ce" meeting="false" start="2024-02-06" duration="4" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
-            <task id="89" name="細かい調整" color="#8cb6ce" meeting="false" start="2024-02-06" duration="4" complete="0" thirdDate="2023-12-13" thirdDate-constraint="0" expand="true"/>
+        <task id="3" name="マスタ" color="#cc0000" meeting="false" start="2024-02-05" duration="5" complete="0" thirdDate="2024-02-05" thirdDate-constraint="0" expand="false">
+            <task id="37" name="バグ修正" color="#8cb6ce" meeting="false" start="2024-02-05" duration="3" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
+            <task id="38" name="細かい調整" color="#8cb6ce" meeting="false" start="2024-02-07" duration="3" complete="0" thirdDate="2023-11-29" thirdDate-constraint="0" expand="true"/>
         </task>
     </tasks>
     <resources/>
