@@ -4,6 +4,10 @@
 #include "Rect.h"
 #include "Game.h"
 #include "Bg.h"
+
+#include "RecoveryBase.h"
+#include "RecoveryHp.h"
+
 #include "Player.h"
 
 #include "ShotBase.h"
@@ -38,6 +42,9 @@ SceneMain::SceneMain():
 	m_pPlayer = new Player{ this };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
+	// 回復アイテムのメモリ確保
+	m_pRecovery = new RecoveryBase;
+
 	// ショットのメモリ確保
 	m_pShot.resize(kShotMax);
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -60,13 +67,17 @@ SceneMain::~SceneMain()
 	DeleteGraph(m_bgHandle);
 	DeleteGraph(m_enemyHandle);
 
-	// プレイヤーのメモリ解放
-	delete m_pPlayer;
-	m_pPlayer = nullptr;
-
 	// 背景のメモリ解放
 	delete m_pBg;
 	m_pBg = nullptr;
+
+	// 回復アイテムのメモリ解放
+	delete m_pRecovery;
+	m_pRecovery = nullptr;
+
+	// プレイヤーのメモリ解放
+	delete m_pPlayer;
+	m_pPlayer = nullptr;
 
 	// ショットのメモリ解放
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -93,15 +104,19 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// プレイヤーの初期化
-	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
-	m_pPlayer->Init();
+	// 画面遷移の初期化
+	m_isSceneEnd = false;
 
 	// 背景の初期化
 	m_pBg->Init();
 
-	// 画面遷移の初期化
-	m_isSceneEnd = false;
+	// 回復アイテムの初期化
+	m_pRecovery->Init();
+
+	// プレイヤーの初期化
+	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
+	m_pPlayer->Init();
+	
 
 	// 敵の初期化
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -119,25 +134,35 @@ void SceneMain::End()
 
 void SceneMain::Update()
 {
-	// プレイヤーのHPが0以下だったらゲームオーバー画面に遷移
-	if (m_pPlayer->GetHp() <= 0)
+	// プレイヤーの残機が0未満の場合
+	if (m_pPlayer->GetLife() < 0)
 	{
-		m_isSceneEnd = true;
+		m_isSceneEnd = true; // ゲームオーバー画面に遷移
 	}
 
 	// 背景の更新
 	m_pBg->Update();
 
+	// 回復アイテムの更新
+	m_pRecovery->Update();
+
 	// プレイヤーの更新
 	m_pPlayer->Update();
-	Rect playerRect = m_pPlayer->GetColRect(); // プレイヤーの当たり判定
-
+	Rect playerRect = m_pPlayer->GetColRect();		// プレイヤーの当たり判定
+	Rect recoveryRect = m_pRecovery->GetColRect();	// 回復アイテムの当たり判定
 	Vec2 playerPos = m_pPlayer->GetPos(); // プレイヤーの現在地を取得
+
+	// プレイヤーと回復アイテムの当たり判定
+	if (playerRect.IsCollision(recoveryRect))
+	{
+		m_pPlayer->OnDamage();
+	}
 
 	// プレイヤーが画面中央に移動したら敵を登場させる
 	if (playerPos.x == Game::kScreenWidth / 2)
 	{
 		CreateMatasaburo();
+		CreateHpRecovery();
 	}
 
 	// 弾の更新
@@ -230,14 +255,16 @@ void SceneMain::Draw()
 
 	// 現在のHPを表示
 	DrawFormatString(8, 8, 0xffffff, "HP:%.2f", m_pPlayer->GetHp());
+	// 現在の残機数を表示
+	DrawFormatString(8, 28, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
 	// 現在の弾エネルギー数を表示
-	DrawFormatString(8, 28, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
-	DrawFormatString(8, 48, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
-	DrawFormatString(8, 68, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
-	// 長押し時間を表示
-	DrawFormatString(8, 88, 0xffffff, "長押し時間:%d", m_pPlayer->GetPressTime());
+	DrawFormatString(8, 48, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
+	DrawFormatString(8, 68, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
+	DrawFormatString(8, 88, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
+
 }
 
+// 弾の生成
 bool SceneMain::AddShot(ShotBase* pShot)
 {
 	// nullptrを渡されたら止まる
@@ -259,6 +286,7 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
+// 敵の生成
 void SceneMain::CreateMatasaburo()
 {
 	//使われていない場所にアドレスを保存する
@@ -273,4 +301,12 @@ void SceneMain::CreateMatasaburo()
 			return;	// 1体分メモリを確保できたらその時点で終了
 		}
 	}
+}
+
+// 回復アイテムの生成
+void SceneMain::CreateHpRecovery()
+{
+	m_pRecovery = new RecoveryHp();
+	m_pRecovery->Start();
+	return;
 }

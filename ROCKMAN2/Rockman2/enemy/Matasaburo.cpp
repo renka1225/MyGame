@@ -39,10 +39,11 @@ void Matasaburo::Init()
 
 void Matasaburo::Update()
 {
-	m_pos += m_vec;
-
 	// 存在しない敵の処理はしない
 	if (!m_isExist) return;
+
+	// 現在位置の更新
+	m_pos += m_vec;
 
 	// 当たり判定の更新
 	UpdateCollision();

@@ -37,6 +37,12 @@
     <Filter Include="ヘッダー ファイル\shot">
       <UniqueIdentifier>{506926ce-805f-4124-b25d-685009f7fb31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\recovery">
+      <UniqueIdentifier>{630c2136-62db-450c-829a-13378dcc3961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\recovery">
+      <UniqueIdentifier>{cd46a808-8161-48fc-87f9-2df7768dd47b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -93,6 +99,18 @@
     <ClCompile Include="scene\SceneGameOver.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="recovery\RecoveryBase.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryShot.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryHp.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryLife.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -148,6 +166,18 @@
     </ClInclude>
     <ClInclude Include="scene\SceneGameOver.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryBase.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryShot.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryHp.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryLife.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

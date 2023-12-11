@@ -2,10 +2,11 @@
 #include <vector>
 #include "Vec2.h"
 
+class Bg;
+class RecoveryBase;
 class Player;
 class ShotBase;
 class EnemyBase;
-class Bg;
 
 /// <summary>
 /// ゲーム画面のクラス
@@ -32,6 +33,9 @@ private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
 
+	// 回復アイテムの生成
+	void CreateHpRecovery(); // HP回復
+
 private:
 	// グラフィックのハンドル
 	int m_bgHandle;			// 背景
@@ -43,6 +47,8 @@ private:
 
 	// 背景
 	Bg* m_pBg;
+	// 回復アイテム
+	RecoveryBase* m_pRecovery;
 	// プレイヤー
 	Player* m_pPlayer;
 	// ショット

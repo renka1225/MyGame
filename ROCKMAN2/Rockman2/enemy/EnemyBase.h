@@ -35,7 +35,6 @@ public:
 	// 敵がダメージを受けた時の処理
 	virtual void OnDamage() = 0;
 
-
 protected:
 	// 当たり判定を設定する
 	virtual void UpdateCollision();
@@ -50,7 +49,6 @@ protected:
 	bool m_isExist;	
 	// 敵のHP
 	int m_hp;	
-
 
 	// 表示位置
 	Vec2 m_pos;

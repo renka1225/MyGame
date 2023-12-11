@@ -28,6 +28,8 @@ public:
 
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
+	// プレイヤーの回復処理
+	void Recovery();
 
 	// 現在のHPを取得する
 	float GetHp() const { return m_hp; }

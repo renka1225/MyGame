@@ -29,13 +29,12 @@ namespace
 	// 床の高さ
 	constexpr int kFloorHeight = 500;
 
-	// プレイヤーの現在位置
+	// プレイヤーの初期位置
 	constexpr float kPosX = 500;
 	constexpr float kPosY = 500;
 
 	// プレイヤーのHP
 	constexpr float kHp = 1;
-
 	// 残機
 	constexpr int kLife = 2;
 }
@@ -77,6 +76,8 @@ void Player::Init()
 	m_isJumpFlag = false;
 	// HP
 	m_hp = kHp;
+	// 残機数
+	m_life = kLife;
 	// ダメージのフレーム数
 	m_damageFrame = 0;
 }
@@ -114,6 +115,7 @@ void Player::Update()
    	if (Pad::IsTrigger(PAD_INPUT_10) && !m_isJumpFlag)
 	{
 		m_isJumpFlag = true;
+		m_velocity = kVelocity;
 	}
 
 	// ジャンプ中
@@ -129,19 +131,18 @@ void Player::Update()
 			
 			if (m_jumpFrame < 10) // 長押し時間10フレーム以下
 			{
-				jumpHeight = 0.5f;
+  				jumpHeight = 0.5f;
 			}
-			else // 長押し時間30フレーム以下
+			else if(m_jumpFrame < 30) // 30フレーム以下
 			{
-				jumpHeight = 0.8f;
+ 				jumpHeight = 0.8f;
+			}
+			else	// 30フレーム以上
+			{
+				jumpHeight = 1.0f;
 			}
 
 			m_velocity = kVelocity * jumpHeight;
-			m_jumpFrame = 0;
-		}
-		else if(Pad::IsTrigger(PAD_INPUT_10))
-		{
-			m_velocity = kVelocity;
 		}
 
 		m_velocity += kGravity; // 初速度に重力を足す
@@ -316,4 +317,23 @@ void Player::OnDamage()
 
 	// HPを減らす
 	m_hp--;
+
+	if (m_hp <= 0)
+	{
+		m_life--;
+		m_hp = kHp;
+	}
+}
+
+void Player::Recovery()
+{
+	if (m_hp)
+	{
+		m_hp += kHp; // HP全回復
+
+		if (m_hp > kHp) // 最大HPを超えた場合
+		{
+			m_hp = kHp;
+		}
+	}
 }

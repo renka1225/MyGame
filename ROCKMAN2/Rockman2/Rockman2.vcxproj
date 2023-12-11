@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)scene;$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)shot</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)scene;$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)shot;$(ProjectDir)recovery</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -144,6 +144,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="enemy\Matasaburo.cpp" />
     <ClCompile Include="Pad.cpp" />
+    <ClCompile Include="recovery\RecoveryLife.cpp" />
+    <ClCompile Include="recovery\RecoveryShot.cpp" />
+    <ClCompile Include="recovery\RecoveryHp.cpp" />
+    <ClCompile Include="recovery\RecoveryBase.cpp" />
     <ClCompile Include="scene\SceneGameOver.cpp" />
     <ClCompile Include="scene\SceneTitle.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -164,6 +168,10 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="enemy\Matasaburo.h" />
     <ClInclude Include="Pad.h" />
+    <ClInclude Include="recovery\RecoveryLife.h" />
+    <ClInclude Include="recovery\RecoveryShot.h" />
+    <ClInclude Include="recovery\RecoveryHp.h" />
+    <ClInclude Include="recovery\RecoveryBase.h" />
     <ClInclude Include="scene\SceneGameOver.h" />
     <ClInclude Include="scene\SceneTitle.h" />
     <ClInclude Include="Player.h" />
