@@ -18,6 +18,10 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	// 弾をスタートさせる
+	// 発射位置を引数として指定する
+	virtual void Start(Vec2 pos) = 0;
+
 	// メンバー変数にアクセスする
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
@@ -26,10 +30,6 @@ public:
 	bool IsExist() const { return m_isExist; }
 	// 当たり判定の矩形を取得する
 	Rect GetColRect() const { return m_colRect; }
-
-	// 弾をスタートさせる
-	// 発射位置を引数として指定する
-	virtual void Start(Vec2 pos) = 0;
 
 protected:
 	// SceneMainの関数を呼び出すためにポインタを覚えておく

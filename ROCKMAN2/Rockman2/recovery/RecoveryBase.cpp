@@ -24,7 +24,3 @@ void RecoveryBase::Draw()
 	// ‘¶İ‚µ‚È‚¢ƒAƒCƒeƒ€‚Ì•`‰æ‚Í‚µ‚È‚¢
 	if (!m_isExist) return;
 }
-
-void RecoveryBase::Start()
-{
-}

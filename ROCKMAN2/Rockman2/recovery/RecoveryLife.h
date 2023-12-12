@@ -13,6 +13,8 @@ public:
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Draw() override;
+	// アイテムをドロップする
+	virtual void Start(Vec2 pos) override;
 
 	// 弾が存在しているか
 	bool IsExist() const { return m_isExist; }
@@ -22,9 +24,6 @@ public:
 private:
 	// グラフィックのハンドル
 	int m_lifeRecHandle;
-
-	// 残機回復
-	int m_lifeRecovery;
 
 	// 画面内に存在するか
 	bool m_isExist;

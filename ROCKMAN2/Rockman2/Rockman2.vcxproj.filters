@@ -102,13 +102,22 @@
     <ClCompile Include="recovery\RecoveryBase.cpp">
       <Filter>ソース ファイル\recovery</Filter>
     </ClCompile>
-    <ClCompile Include="recovery\RecoveryShot.cpp">
+    <ClCompile Include="recovery\RecoverySmallShot.cpp">
       <Filter>ソース ファイル\recovery</Filter>
     </ClCompile>
-    <ClCompile Include="recovery\RecoveryHp.cpp">
+    <ClCompile Include="recovery\RecoverySmallHp.cpp">
       <Filter>ソース ファイル\recovery</Filter>
     </ClCompile>
     <ClCompile Include="recovery\RecoveryLife.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryFullHp.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryGreatHp.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryGreatShot.cpp">
       <Filter>ソース ファイル\recovery</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,13 +179,22 @@
     <ClInclude Include="recovery\RecoveryBase.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
     </ClInclude>
-    <ClInclude Include="recovery\RecoveryShot.h">
+    <ClInclude Include="recovery\RecoverySmallShot.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
     </ClInclude>
-    <ClInclude Include="recovery\RecoveryHp.h">
+    <ClInclude Include="recovery\RecoverySmallHp.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
     </ClInclude>
     <ClInclude Include="recovery\RecoveryLife.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryGreatHp.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryFullHp.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryGreatShot.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
     </ClInclude>
   </ItemGroup>

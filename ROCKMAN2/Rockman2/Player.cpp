@@ -33,22 +33,29 @@ namespace
 	constexpr float kPosX = 500;
 	constexpr float kPosY = 500;
 
-	// プレイヤーのHP
-	constexpr float kHp = 1;
+	// プレイヤーの最大HP
+	constexpr float kMaxHp = 1;
+	// 最大弾エネルギー
+	constexpr float kMaxShot = 28;
 	// 残機
 	constexpr int kLife = 2;
+
+	// アイテムの回復量
+	constexpr float kSmallRecovery = 2;		// 小アイテム
+	constexpr float kGreatRecovery = 10;	// 大アイテム
 }
 
 
 Player::Player(SceneMain* pMain) :
 	m_pMain(pMain),
 	m_pos(kPosX, kPosY),
+	m_colRect(),
 	m_handle(-1),
 	m_isRight(true),
 	m_isJumpFlag(false),
 	m_velocity(0),
 	m_jumpFrame(0),
-	m_hp(kHp),
+	m_hp(kMaxHp),
 	m_life(kLife),
 	m_damageFrame(0),
 	m_metalEnergy(28),
@@ -75,7 +82,7 @@ void Player::Init()
 	// ジャンプフラグ
 	m_isJumpFlag = false;
 	// HP
-	m_hp = kHp;
+	m_hp = kMaxHp;
 	// 残機数
 	m_life = kLife;
 	// ダメージのフレーム数
@@ -320,20 +327,61 @@ void Player::OnDamage()
 
 	if (m_hp <= 0)
 	{
-		m_life--;
-		m_hp = kHp;
+		m_life--;		// 残機を1減らす
+		m_hp = kMaxHp;	// HP全回復
 	}
 }
 
-void Player::Recovery()
+void Player::HpSmallRecovery()
 {
-	if (m_hp)
+	m_hp += kSmallRecovery;	// HP小回復
+	if (m_hp > kMaxHp) // 最大HPを超えた場合
 	{
-		m_hp += kHp; // HP全回復
+		m_hp = kMaxHp;
+	}
+}
 
-		if (m_hp > kHp) // 最大HPを超えた場合
-		{
-			m_hp = kHp;
-		}
+void Player::HpGreatRecovery()
+{
+	m_hp += kGreatRecovery;	// HP大回復
+	if (m_hp > kMaxHp) // 最大HPを超えた場合
+	{
+		m_hp = kMaxHp;
+	}
+}
+
+void Player::HpFullRecovery()
+{
+	m_hp += kMaxHp; // HP全回復
+	if (m_hp > kMaxHp) // 最大HPを超えた場合
+	{
+		m_hp = kMaxHp;
+	}
+}
+
+void Player::ShotSmallRecovery()
+{
+	m_metalEnergy += kSmallRecovery; // 弾エネルギー小回復
+	if (m_metalEnergy > kMaxShot) // 最大エネルギーを超えた場合
+	{
+		m_hp = m_metalEnergy;
+	}
+}
+
+void Player::ShotGreatRecovery()
+{
+	m_metalEnergy += kGreatRecovery; // 弾エネルギー大回復
+	if (m_metalEnergy > kMaxShot) // 最大エネルギーを超えた場合
+	{
+		m_hp = m_metalEnergy;
+	}
+}
+
+void Player::LifeRecovery()
+{
+	m_life += 1;	// 残機を1増やす
+	if (m_life > 99)
+	{
+		m_life = 99;
 	}
 }

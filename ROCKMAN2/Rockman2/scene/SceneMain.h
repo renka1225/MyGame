@@ -3,10 +3,10 @@
 #include "Vec2.h"
 
 class Bg;
-class RecoveryBase;
 class Player;
 class ShotBase;
 class EnemyBase;
+class RecoveryBase;
 
 /// <summary>
 /// ゲーム画面のクラス
@@ -26,6 +26,9 @@ public:
 	// 登録できなかった場合はfalseを返す、内部でpShotを解放する
 	bool AddShot(ShotBase* pShot);
 
+	// アイテムの生成
+	bool AddItem(RecoveryBase* pRecovery);
+
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
 
@@ -33,8 +36,6 @@ private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
 
-	// 回復アイテムの生成
-	void CreateHpRecovery(); // HP回復
 
 private:
 	// グラフィックのハンドル
@@ -47,14 +48,13 @@ private:
 
 	// 背景
 	Bg* m_pBg;
-	// 回復アイテム
-	RecoveryBase* m_pRecovery;
 	// プレイヤー
 	Player* m_pPlayer;
 	// ショット
 	std::vector<ShotBase*> m_pShot;
 	// 敵
 	std::vector<EnemyBase*> m_pEnemy;
-
+	// 回復アイテム
+	std::vector<RecoveryBase*> m_pRecovery;
 };
 

@@ -6,7 +6,12 @@
 #include "Bg.h"
 
 #include "RecoveryBase.h"
-#include "RecoveryHp.h"
+#include "RecoverySmallHp.h"
+#include "RecoveryGreatHp.h"
+#include "RecoveryFullHp.h"
+#include "RecoverySmallShot.h"
+#include "RecoveryGreatShot.h"
+#include "RecoveryLife.h"
 
 #include "Player.h"
 
@@ -20,7 +25,9 @@ namespace
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
 	// 1度に登場できる敵数
-	constexpr int kEnemyMax = 3;
+	constexpr int kEnemyMax = 10;
+	// 画面内に1度に出せる回復アイテム数
+	constexpr int kRecoveryMax = 20;
 }
 
 SceneMain::SceneMain():
@@ -42,21 +49,25 @@ SceneMain::SceneMain():
 	m_pPlayer = new Player{ this };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
-	// 回復アイテムのメモリ確保
-	m_pRecovery = new RecoveryBase;
-
-	// ショットのメモリ確保
+	// ショットの初期化
 	m_pShot.resize(kShotMax);
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		m_pShot[i] = nullptr; // 未使用状態にする
 	}
 
-	// 敵のメモリ確保
+	// 敵の初期化
 	m_pEnemy.resize(kEnemyMax);
-	for (int i = 0; i < m_pShot.size(); i++)
+	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		m_pEnemy[i] = nullptr; // 未使用状態にする
+	}
+
+	// 回復アイテムの初期化
+	m_pRecovery.resize(kRecoveryMax);
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		m_pRecovery[i] = nullptr; // 未使用状態にする
 	}
 }
 
@@ -70,10 +81,6 @@ SceneMain::~SceneMain()
 	// 背景のメモリ解放
 	delete m_pBg;
 	m_pBg = nullptr;
-
-	// 回復アイテムのメモリ解放
-	delete m_pRecovery;
-	m_pRecovery = nullptr;
 
 	// プレイヤーのメモリ解放
 	delete m_pPlayer;
@@ -100,6 +107,17 @@ SceneMain::~SceneMain()
 			m_pEnemy[i] = nullptr;
 		}
 	}
+
+	// 回復アイテムのメモリ解放
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (m_pRecovery[i])
+		{
+			// nullptrでない場合、nullptrを入れる
+			delete m_pRecovery[i];
+			m_pRecovery[i] = nullptr;
+		}
+	}
 }
 
 void SceneMain::Init()
@@ -109,9 +127,6 @@ void SceneMain::Init()
 
 	// 背景の初期化
 	m_pBg->Init();
-
-	// 回復アイテムの初期化
-	m_pRecovery->Init();
 
 	// プレイヤーの初期化
 	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
@@ -124,6 +139,15 @@ void SceneMain::Init()
 		if (m_pEnemy[i])
 		{
 			m_pEnemy[i]->Init();
+		}
+	}
+
+	// 回復アイテムの初期化
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (m_pRecovery[i])
+		{
+			m_pRecovery[i]->Init();
 		}
 	}
 }
@@ -143,26 +167,16 @@ void SceneMain::Update()
 	// 背景の更新
 	m_pBg->Update();
 
-	// 回復アイテムの更新
-	m_pRecovery->Update();
-
 	// プレイヤーの更新
 	m_pPlayer->Update();
-	Rect playerRect = m_pPlayer->GetColRect();		// プレイヤーの当たり判定
-	Rect recoveryRect = m_pRecovery->GetColRect();	// 回復アイテムの当たり判定
-	Vec2 playerPos = m_pPlayer->GetPos(); // プレイヤーの現在地を取得
 
-	// プレイヤーと回復アイテムの当たり判定
-	if (playerRect.IsCollision(recoveryRect))
-	{
-		m_pPlayer->OnDamage();
-	}
+	Rect playerRect = m_pPlayer->GetColRect();		// プレイヤーの当たり判定
+	Vec2 playerPos = m_pPlayer->GetPos(); // プレイヤーの現在地を取得
 
 	// プレイヤーが画面中央に移動したら敵を登場させる
 	if (playerPos.x == Game::kScreenWidth / 2)
 	{
 		CreateMatasaburo();
-		CreateHpRecovery();
 	}
 
 	// 弾の更新
@@ -224,6 +238,22 @@ void SceneMain::Update()
 			}
 		}
 	}
+
+	// 回復アイテムの更新
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		// nullptrなら処理は行わない
+		if (!m_pRecovery[i]) continue;
+
+		m_pRecovery[i]->Update();
+
+		// 画面外に出たらメモリを解放する
+		if (!m_pRecovery[i]->IsExist())
+		{
+			delete m_pRecovery[i];
+			m_pRecovery[i] = nullptr;
+		}
+	}
 }
 
 void SceneMain::Draw()
@@ -251,6 +281,14 @@ void SceneMain::Draw()
 		// nullptrなら処理は行わない
 		if (!m_pEnemy[i])continue;
 		m_pEnemy[i]->Draw();
+	}
+
+	// 回復アイテムの描画
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		// nullptrなら処理は行わない
+		if (!m_pRecovery[i])continue;
+		m_pRecovery[i]->Draw();
 	}
 
 	// 現在のHPを表示
@@ -286,6 +324,23 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
+bool SceneMain::AddItem(RecoveryBase* pRecovery)
+{
+	// nullptrを渡されたら止まる
+	assert(pRecovery);
+
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		// 使用中なら次のチェックを行う
+		if (m_pRecovery[i]) continue;
+
+		// m_pRecovery[i] == nullptrなので新しく登録する
+		m_pRecovery[i] = pRecovery;
+		// 登録したら終了
+		return true;
+	}
+}
+
 // 敵の生成
 void SceneMain::CreateMatasaburo()
 {
@@ -301,12 +356,4 @@ void SceneMain::CreateMatasaburo()
 			return;	// 1体分メモリを確保できたらその時点で終了
 		}
 	}
-}
-
-// 回復アイテムの生成
-void SceneMain::CreateHpRecovery()
-{
-	m_pRecovery = new RecoveryHp();
-	m_pRecovery->Start();
-	return;
 }

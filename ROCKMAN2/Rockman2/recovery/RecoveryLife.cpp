@@ -7,10 +7,13 @@ namespace
 	// アイテムのサイズ
 	constexpr int kWidth = 32;
 	constexpr int kHeight = 32;
+
+	// 初期位置
+	constexpr int kPosX = 50;
+	constexpr int kPosY = 500;
 }
 
-RecoveryLife::RecoveryLife():
-	m_lifeRecovery(1)
+RecoveryLife::RecoveryLife()
 {
 	m_lifeRecHandle = LoadGraph("data/image/Recovery/life");
 }
@@ -41,14 +44,21 @@ void RecoveryLife::Update()
 
 	// 画面外に出た
 	m_isExist = false;
-
-	DrawGraph(m_pos.x, m_pos.y, m_lifeRecHandle, true);
 }
 
 void RecoveryLife::Draw()
 {
+	DrawGraph(m_pos.x, m_pos.y, m_lifeRecHandle, true);
 #ifdef _DEBUG
 	// 弾の当たり判定デバッグ表示
 	m_colRect.Draw(0xff0000, false);
 #endif
+}
+
+void RecoveryLife::Start(Vec2 pos)
+{
+	m_isExist = true;
+
+	// 初期位置の設定
+	m_pos = pos;
 }

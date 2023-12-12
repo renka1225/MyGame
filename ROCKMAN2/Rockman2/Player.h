@@ -26,11 +26,6 @@ public:
 	// プレイヤーの当たり判定を取得する
 	Rect GetColRect() const { return m_colRect; }
 
-	// プレイヤーがダメージを受けた時の処理
-	void OnDamage();
-	// プレイヤーの回復処理
-	void Recovery();
-
 	// 現在のHPを取得する
 	float GetHp() const { return m_hp; }
 	// 現在の残機数を取得する
@@ -43,6 +38,17 @@ public:
 
 	// ボタンを押して離すまでの時間を取得する
 	int GetPressTime() const { return m_nowPressTime; }
+
+public:
+	// プレイヤーがダメージを受けた時の処理
+	void OnDamage();
+	// プレイヤーの回復処理
+	void HpSmallRecovery();		// HP小回復
+	void HpGreatRecovery();		// HP大回復
+	void HpFullRecovery();		// HP全回復
+	void ShotSmallRecovery();	// 弾小回復
+	void ShotGreatRecovery();	// 弾大回復
+	void LifeRecovery();		// 残機回復
 
 private:
 	SceneMain* m_pMain;

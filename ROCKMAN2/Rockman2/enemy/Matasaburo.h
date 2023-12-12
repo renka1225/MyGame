@@ -16,8 +16,12 @@ public:
 	virtual void Draw() override;
 	virtual void Start() override;
 	virtual void OnDamage() override;
+	//virtual void DropItem() override;
 
 private:
+	// メインシーンのポインタ
+	SceneMain* m_pMain;
+
 	int m_handle;
 	int m_hp;
 };
