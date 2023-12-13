@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "Game.h"
 #include "Pad.h"
+#include "Bg.h"
 #include "SceneMain.h"
 #include "ShotBuster.h"
 #include "ShotMetal.h"
@@ -27,7 +28,7 @@ namespace
 	constexpr int kDamageFrame = 60;
 
 	// 床の高さ
-	constexpr int kFloorHeight = 500;
+	constexpr int kFloorHeight = 570;
 
 	// プレイヤーの初期位置
 	constexpr float kPosX = 500;
@@ -46,13 +47,14 @@ namespace
 }
 
 
-Player::Player(SceneMain* pMain) :
+Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_pMain(pMain),
+	m_pBg(pBg),
 	m_pos(kPosX, kPosY),
 	m_colRect(),
 	m_handle(-1),
 	m_isRight(true),
-	m_isJumpFlag(false),
+	m_isGround(false),
 	m_velocity(0),
 	m_jumpFrame(0),
 	m_hp(kMaxHp),
@@ -80,7 +82,7 @@ void Player::Init()
 	// 向き
 	m_isRight = true;
 	// ジャンプフラグ
-	m_isJumpFlag = false;
+	m_isGround = false;
 	// HP
 	m_hp = kMaxHp;
 	// 残機数
@@ -102,7 +104,7 @@ void Player::Update()
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	// 移動量
-	Vec2 move{ 0.0f, kGravity };
+	Vec2 move{ 0.0f, 0.0f };
 
 	/*←を押したら左に移動*/
 	if (pad & PAD_INPUT_LEFT)
@@ -119,30 +121,30 @@ void Player::Update()
 	}
 
 	/*Spaceでジャンプ*/
-   	if (Pad::IsTrigger(PAD_INPUT_10) && !m_isJumpFlag)
+	if (Pad::IsTrigger(PAD_INPUT_10) && m_isGround)
 	{
-		m_isJumpFlag = true;
+		m_isGround = false;
 		m_velocity = kVelocity;
 	}
 
 	// ジャンプ中
-	if (m_isJumpFlag)
-	{		
+	if (!m_isGround)
+	{
 		m_jumpFrame++;	// ジャンプフレームの更新
-		
+
 		// ボタンを離した瞬間にジャンプする
 		if (Pad::IsRelease(PAD_INPUT_10))
 		{
 			// ジャンプの高さを決める
 			float jumpHeight;
-			
+
 			if (m_jumpFrame < 10) // 長押し時間10フレーム以下
 			{
-  				jumpHeight = 0.5f;
+				jumpHeight = 0.5f;
 			}
-			else if(m_jumpFrame < 30) // 30フレーム以下
+			else if (m_jumpFrame < 30) // 30フレーム以下
 			{
- 				jumpHeight = 0.8f;
+				jumpHeight = 0.8f;
 			}
 			else	// 30フレーム以上
 			{
@@ -154,13 +156,31 @@ void Player::Update()
 
 		m_velocity += kGravity; // 初速度に重力を足す
 		m_pos.y += m_velocity;	// 現在位置の更新
+
+		if (m_pos.y > kFloorHeight)
+		{
+			m_isGround = true;
+		}
+	}
+
+	int mapChipNo = m_pBg->GetChipData();	// マップチップの情報
+	Rect mapRect = m_pBg->GetColRect();		// マップチップの当たり判定
+
+	switch (mapChipNo)
+	{
+	case 0:
+		// プレイヤーの現在地を地面より上にする
+		m_pos.y -= 32;
+		m_isGround = true;
+		break;
+	case 30:
+		m_isGround = false;
+		break;
 	}
 
 	// 地面に着地したらジャンプを終了する
-	if (m_pos.y >= kFloorHeight)
+	if (m_isGround)
 	{
-		m_pos.y = kFloorHeight;
-		m_isJumpFlag = false;	// ジャンプフラグを初期化
 		m_jumpFrame = 0;		// ジャンプフレームを初期化
 		m_velocity = 0;
 	}

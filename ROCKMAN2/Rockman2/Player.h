@@ -3,6 +3,7 @@
 #include "Rect.h"
 
 class SceneMain;
+class Bg;
 
 /// <summary>
 /// プレイヤークラス
@@ -10,7 +11,7 @@ class SceneMain;
 class Player
 {
 public:
-	Player(SceneMain* pMain);
+	Player(SceneMain* pMain, Bg* pBg);
 	~Player();
 
 	void Init();
@@ -19,6 +20,8 @@ public:
 
 	// メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
+	// 現在位置を更新する
+	void SetPos(Vec2 pos) { m_pos = pos; }
 	// プレイヤーの現在の向きを取得する
 	bool GetDir() const { return m_isRight; }
 	// プレイヤーの現在座標を取得する
@@ -30,6 +33,9 @@ public:
 	float GetHp() const { return m_hp; }
 	// 現在の残機数を取得する
 	int GetLife() const { return m_life; }
+
+	// 地面に接しているか取得する
+	bool GetGround() const { return m_isGround; }
 
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }
@@ -52,6 +58,7 @@ public:
 
 private:
 	SceneMain* m_pMain;
+	Bg* m_pBg;
 
 	// 表示位置
 	Vec2 m_pos;
@@ -63,8 +70,8 @@ private:
 
 	// 向いている方向
 	bool m_isRight;
-	// ジャンプ中かどうか
-	bool m_isJumpFlag;	// true:ジャンプ中
+	// 地面と接しているか
+	bool m_isGround;	// true:接している
 	// 初速度
 	float m_velocity;
 	// ジャンプ中のフレーム数

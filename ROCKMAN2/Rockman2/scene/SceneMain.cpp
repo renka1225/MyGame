@@ -25,7 +25,7 @@ namespace
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
 	// 1度に登場できる敵数
-	constexpr int kEnemyMax = 10;
+	constexpr int kEnemyMax = 3;
 	// 画面内に1度に出せる回復アイテム数
 	constexpr int kRecoveryMax = 20;
 }
@@ -38,15 +38,18 @@ SceneMain::SceneMain():
 	assert(m_playerHandle != -1);
 	m_bgHandle = LoadGraph("data/image/backGround.png");
 	assert(m_bgHandle != -1);
+	m_mapHandle = LoadGraph("data/image/map.png");
+	assert(m_mapHandle != -1);
 	m_enemyHandle = LoadGraph("data/image/Enemy/matasaburo.png");
 	assert(m_bgHandle != -1);
 
 	// 背景のメモリ確保
 	m_pBg = new Bg;
 	m_pBg->SetHandle(m_bgHandle);
+	m_pBg->SetMapHandle(m_mapHandle);
 
 	// プレイヤーのメモリ確保
-	m_pPlayer = new Player{ this };
+	m_pPlayer = new Player{ this, m_pBg };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
 	// ショットの初期化
@@ -170,8 +173,8 @@ void SceneMain::Update()
 	// プレイヤーの更新
 	m_pPlayer->Update();
 
-	Rect playerRect = m_pPlayer->GetColRect();		// プレイヤーの当たり判定
-	Vec2 playerPos = m_pPlayer->GetPos(); // プレイヤーの現在地を取得
+	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
+	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 
 	// プレイヤーが画面中央に移動したら敵を登場させる
 	if (playerPos.x == Game::kScreenWidth / 2)
