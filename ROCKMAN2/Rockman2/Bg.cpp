@@ -116,7 +116,6 @@ void Bg::Update()
 			{
 				// 当たり判定を設定
 				m_colRect[y][x].SetLT(x * kChipWidth, y * kChipHeight, kChipWidth, kChipHeight);
-
 			}
 		}
 	}
@@ -153,7 +152,7 @@ int Bg::GetChipData()
 	{
 		for (int x = 0; x < kChipNumX; x++)
 		{
-			// 設置するチップ
+			// 現在のチップ番号を返す
 			return m_chipData[y][x];
 		}
 	}
