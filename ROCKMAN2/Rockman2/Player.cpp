@@ -21,14 +21,15 @@ namespace
 	constexpr float kVelocity = -10.0f;
 
 	// プレイヤーのサイズ
-	constexpr int kWidth = 32;
-	constexpr int kHeight = 64;
+	constexpr int kPlayerWidth = 32;
+	constexpr int kPlayerHeight = 64;
+
+	// マップチップのサイズ
+	constexpr int kMapWidth = 32;
+	constexpr int kMapHeight = 32;
 
 	// ダメージ演出のフレーム数
 	constexpr int kDamageFrame = 60;
-
-	// 床の高さ
-	constexpr int kFloorHeight = 570;
 
 	// プレイヤーの初期位置
 	constexpr float kPosX = 500;
@@ -73,7 +74,7 @@ Player::~Player()
 {
 }
 
-// 初期化処理
+/*初期化処理*/
 void Player::Init()
 {
 	// 現在位置
@@ -91,6 +92,7 @@ void Player::Init()
 	m_damageFrame = 0;
 }
 
+/*プレイヤーの更新*/
 void Player::Update()
 {
 	// ダメージ演出
@@ -127,7 +129,7 @@ void Player::Update()
 		m_velocity = kVelocity;
 	}
 
-	// ジャンプ中
+	/*ジャンプ中*/
 	if (!m_isGround)
 	{
 		m_jumpFrame++;	// ジャンプフレームの更新
@@ -156,39 +158,49 @@ void Player::Update()
 
 		m_velocity += kGravity; // 初速度に重力を足す
 		m_pos.y += m_velocity;	// 現在位置の更新
-
-		if (m_pos.y > kFloorHeight)
-		{
-			m_isGround = true;
-		}
 	}
 
-	int mapChipNo = m_pBg->GetChipData();	// マップチップの情報
-	Rect mapRect = m_pBg->GetColRect();		// マップチップの当たり判定
+	// プレイヤーの現在地(左下座標)のマップチップ番号を取得する
+	// プレイヤーの現在地 / マップチップのサイズ
+	int mapChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);
 
 	switch (mapChipNo)
 	{
-	case 0:
-		// プレイヤーの現在地を地面より上にする
-		m_pos.y -= 32;
+	case 0:		// プレイヤーの現在地を地面より上にする
 		m_isGround = true;
 		break;
 	case 30:
 		m_isGround = false;
 		break;
+	default:
+		m_isGround = false;
+		break;
 	}
 
-	// 地面に着地したらジャンプを終了する
+	/*地面に着地したらジャンプを終了する*/
 	if (m_isGround)
 	{
-		m_jumpFrame = 0;		// ジャンプフレームを初期化
-		m_velocity = 0;
+		m_jumpFrame = 0;	// ジャンプフレームを初期化
+		m_velocity = 0;		// 初速度を初期化
 	}
 
-	// 画面外に出たら画面内に戻す
+	/*天井より上に出たら画面内に戻す*/
 	if (m_pos.y < 0)
 	{
 		m_pos.y = 0;
+	}
+
+	/*プレイヤーが穴に落下した場合*/
+	if ((m_pos.y - kPlayerHeight) > Game::kScreenHeight)
+	{
+		// 残機を1減らす
+		m_life--;
+		if (m_life >= 0)
+		{
+			// 残機が0以上だったらプレイヤーを初期位置に戻す
+			m_pos.x = kPosX;
+			m_pos.y = kPosY;
+		}
 	}
 
 	/*Zキーでバスター発射*/
@@ -310,7 +322,7 @@ void Player::Update()
 	}
 
 	m_pos += move; // 現在値の更新
-	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight); // 当たり判定の更新
+	m_colRect.SetLT(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
 }
 
 void Player::Draw()
@@ -334,6 +346,8 @@ void Player::Draw()
 #endif
 }
 
+
+/*プレイヤーのダメージ演出*/
 void Player::OnDamage()
 {
 	// ダメージ演出中は無敵状態になる

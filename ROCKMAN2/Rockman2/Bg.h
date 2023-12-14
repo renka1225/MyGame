@@ -19,12 +19,8 @@ public:
 	// グラフィックの設定
 	void SetHandle(int bgHandle) { m_bgHandle = bgHandle; }
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
-
-	// 当たり判定の取得
-	 Rect GetColRect() const { return m_colRect[kChipNumY - 1][kChipNumX - 1]; }
-
 	// マップチップ番号の取得
-	int GetChipData();
+	int GetChipData(int x, int y);
 
 private:
 	// マップチップの情報
