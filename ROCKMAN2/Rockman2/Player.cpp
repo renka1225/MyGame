@@ -32,8 +32,8 @@ namespace
 	constexpr int kDamageFrame = 60;
 
 	// プレイヤーの初期位置
-	constexpr float kPosX = 500;
-	constexpr float kPosY = 500;
+	constexpr float kPosX = 0.0f;
+	constexpr float kPosY = 500.0f;
 
 	// プレイヤーの最大HP
 	constexpr float kMaxHp = 1;
@@ -134,7 +134,7 @@ void Player::Update()
 	{
 		m_jumpFrame++;	// ジャンプフレームの更新
 
-		// ボタンを離した瞬間にジャンプする
+		//ボタンを離した瞬間にジャンプする
 		if (Pad::IsRelease(PAD_INPUT_10))
 		{
 			// ジャンプの高さを決める
@@ -160,13 +160,13 @@ void Player::Update()
 		m_pos.y += m_velocity;	// 現在位置の更新
 	}
 
-	// プレイヤーの現在地(左下座標)のマップチップ番号を取得する
+	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
-	int mapChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);
+	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
 
 	switch (mapChipNo)
 	{
-	case 0:		// プレイヤーの現在地を地面より上にする
+	case 1:		// 地面に当たった場合
 		m_isGround = true;
 		break;
 	case 30:
@@ -184,7 +184,12 @@ void Player::Update()
 		m_velocity = 0;		// 初速度を初期化
 	}
 
-	/*天井より上に出たら画面内に戻す*/
+
+	/*画面外に出たら画面内に戻す*/
+	if (m_pos.x < 0)
+	{
+		m_pos.x = 0;
+	}
 	if (m_pos.y < 0)
 	{
 		m_pos.y = 0;

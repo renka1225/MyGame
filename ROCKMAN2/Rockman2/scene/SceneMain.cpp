@@ -25,7 +25,7 @@ namespace
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
 	// 1度に登場できる敵数
-	constexpr int kEnemyMax = 3;
+	constexpr int kEnemyMax = 5;
 	// 画面内に1度に出せる回復アイテム数
 	constexpr int kRecoveryMax = 20;
 }
