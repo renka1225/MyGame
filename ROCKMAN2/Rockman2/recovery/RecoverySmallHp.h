@@ -26,6 +26,8 @@ public:
 private:
 	// プレイヤーのポインタ
 	Player* m_pPlayer;
+	// アイテムをドロップする敵のポインタ
+	EnemyBase* m_pEnemy;
 
 	// グラフィックのハンドル
 	int m_hpSmallRecHandle;

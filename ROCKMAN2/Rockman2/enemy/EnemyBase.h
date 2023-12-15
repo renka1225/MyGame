@@ -39,8 +39,6 @@ public:
 	virtual void OnDamage();
 	// 敵キャラクターをスタートさせる
 	virtual void Start() = 0;
-	// アイテムドロップの処理
-	//virtual void DropItem() = 0;
 
 protected:
 	// 当たり判定を設定する

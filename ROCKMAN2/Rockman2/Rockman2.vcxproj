@@ -144,10 +144,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="enemy\Matasaburo.cpp" />
     <ClCompile Include="Pad.cpp" />
-    <ClCompile Include="recovery\RecoveryGreatShot.cpp" />
-    <ClCompile Include="recovery\RecoveryFullHp.cpp" />
-    <ClCompile Include="recovery\RecoveryGreatHp.cpp" />
-    <ClCompile Include="recovery\RecoveryLife.cpp" />
     <ClCompile Include="recovery\RecoverySmallShot.cpp" />
     <ClCompile Include="recovery\RecoverySmallHp.cpp" />
     <ClCompile Include="recovery\RecoveryBase.cpp" />
@@ -171,10 +167,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="enemy\Matasaburo.h" />
     <ClInclude Include="Pad.h" />
-    <ClInclude Include="recovery\RecoveryGreatShot.h" />
-    <ClInclude Include="recovery\RecoveryFullHp.h" />
-    <ClInclude Include="recovery\RecoveryGreatHp.h" />
-    <ClInclude Include="recovery\RecoveryLife.h" />
     <ClInclude Include="recovery\RecoverySmallShot.h" />
     <ClInclude Include="recovery\RecoverySmallHp.h" />
     <ClInclude Include="recovery\RecoveryBase.h" />

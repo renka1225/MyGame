@@ -32,9 +32,9 @@ public:
 	Rect GetColRect() const { return m_colRect; }
 
 protected:
-	// SceneMainの関数を呼び出すためにポインタを覚えておく
+	// SceneMainのポインタ
 	SceneMain* m_pMain;
-	// ショットを撃ったプレイヤーのポインタを覚えておく
+	// ショットを撃ったプレイヤーのポインタ
 	Player* m_pPlayer;
 
 	// グラフィックのハンドル

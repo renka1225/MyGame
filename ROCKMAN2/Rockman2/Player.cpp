@@ -162,20 +162,36 @@ void Player::Update()
 
 	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
-	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
+	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
+	//switch (mapChipNo)
+	//{
+	//case 1:		// 地面に当たった場合
+	//	m_isGround = true;
+	//	break;
+	//case 30:
+	//	m_isGround = false;
+	//	break;
+	//default:
+	//	m_isGround = false;
+	//	break;
+	//}
 
-	switch (mapChipNo)
+	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
+	int ULNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// 左上
+	int URNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);					// 右上
+	int DLNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
+	int DRNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);// 右下
+
+	// プレイヤーの左下または右下が地面に接しているか
+	if (DLNo == 1 || DRNo == 1)
 	{
-	case 1:		// 地面に当たった場合
 		m_isGround = true;
-		break;
-	case 30:
-		m_isGround = false;
-		break;
-	default:
-		m_isGround = false;
-		break;
 	}
+	else
+	{
+		m_isGround = false;
+	}
+
 
 	/*地面に着地したらジャンプを終了する*/
 	if (m_isGround)
@@ -217,7 +233,7 @@ void Player::Update()
 		pShot->Init();
 		pShot->SetMain(m_pMain);
 		pShot->SetPlayer(this);
-		pShot->Start(GetPos());
+		pShot->Start(m_pos);
 		// 以降更新やメモリの解放はSceneMainに任せる
 		m_pMain->AddShot(pShot);
 	}
@@ -236,7 +252,7 @@ void Player::Update()
 			pShot->Init();
 			pShot->SetMain(m_pMain);
 			pShot->SetPlayer(this);
-			pShot->Start(GetPos());
+			pShot->Start(m_pos);
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
 		}
@@ -294,7 +310,7 @@ void Player::Update()
 			pShot->Init();
 			pShot->SetMain(m_pMain);
 			pShot->SetPlayer(this);
-			pShot->Start(GetPos());
+			pShot->Start(m_pos);
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
 		}
@@ -316,7 +332,7 @@ void Player::Update()
 			pShot->Init();
 			pShot->SetMain(m_pMain);
 			pShot->SetPlayer(this);
-			pShot->Start(GetPos());
+			pShot->Start(m_pos);
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
 		}

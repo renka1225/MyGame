@@ -26,16 +26,14 @@ public:
 	// 登録できなかった場合はfalseを返す、内部でpShotを解放する
 	bool AddShot(ShotBase* pShot);
 
-	// アイテムの生成
-	bool AddItem(RecoveryBase* pRecovery);
-
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
 
 private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
-
+	// アイテムの生成
+	void DropItem();
 
 private:
 	// グラフィックのハンドル

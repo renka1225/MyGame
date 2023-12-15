@@ -1,4 +1,5 @@
 #include "RecoverySmallShot.h"
+#include "EnemyBase.h"
 #include "Game.h"
 #include "DxLib.h"
 
@@ -12,7 +13,9 @@ namespace
 	constexpr int kPosY = 500;
 }
 
-RecoverySmallShot::RecoverySmallShot()
+RecoverySmallShot::RecoverySmallShot():
+	m_pEnemy(nullptr),
+	m_isExist(false)
 {
 	m_shotSmallRecHandle = LoadGraph("data/image/Recovery/shotSmall");
 }

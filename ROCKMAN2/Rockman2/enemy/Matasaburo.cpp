@@ -1,10 +1,6 @@
 #include "Matasaburo.h"
 #include "RecoverySmallHp.h"
-#include "RecoveryGreatHp.h"
-#include "RecoveryFullHp.h"
 #include "RecoverySmallShot.h"
-#include "RecoveryGreatShot.h"
-#include "RecoveryLife.h"
 #include "SceneMain.h"
 #include "Game.h"
 #include "DxLib.h"
@@ -104,16 +100,5 @@ void Matasaburo::OnDamage()
 	if (m_hp <= 0)
 	{
 		m_isExist = false;
-
-		//下を実行するとエラーが発生
-		//RecoverySmallHp* pRecovery = new RecoverySmallHp;
-
-		//// 新しい回復アイテムを生成する
-		//pRecovery->Init();
-		//pRecovery->SetMain(m_pMain);
-		//pRecovery->SetEnemy(this);
-		//pRecovery->Start(m_pos);
-		//// 以降更新やメモリの解放はSceneMainに任せる
-		//m_pMain->AddItem(pRecovery);
 	}
 }

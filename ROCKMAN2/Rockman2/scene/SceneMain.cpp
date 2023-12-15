@@ -7,11 +7,8 @@
 
 #include "RecoveryBase.h"
 #include "RecoverySmallHp.h"
-#include "RecoveryGreatHp.h"
-#include "RecoveryFullHp.h"
 #include "RecoverySmallShot.h"
-#include "RecoveryGreatShot.h"
-#include "RecoveryLife.h"
+
 
 #include "Player.h"
 
@@ -177,7 +174,7 @@ void SceneMain::Update()
 	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 
 	// プレイヤーが画面中央に移動したら敵を登場させる
-	if (playerPos.x == Game::kScreenWidth / 2)
+	if (playerPos.x == 30)
 	{
 		CreateMatasaburo();
 	}
@@ -208,6 +205,9 @@ void SceneMain::Update()
 		// 使用済みの敵キャラクターを削除
 		if (!m_pEnemy[i]->IsExist())
 		{
+			// アイテムドロップ
+			DropItem();
+
 			// メモリを解放する
 			delete m_pEnemy[i];
 			m_pEnemy[i] = nullptr;	// nullptrを入れる
@@ -251,11 +251,11 @@ void SceneMain::Update()
 		m_pRecovery[i]->Update();
 
 		// 画面外に出たらメモリを解放する
-		if (!m_pRecovery[i]->IsExist())
+		/*if (!m_pRecovery[i]->IsExist())
 		{
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
-		}
+		}*/
 	}
 }
 
@@ -327,20 +327,18 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
-bool SceneMain::AddItem(RecoveryBase* pRecovery)
+void SceneMain::DropItem()
 {
-	// nullptrを渡されたら止まる
-	assert(pRecovery);
-
+	//使われていない場所にアドレスを保存する
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
-		// 使用中なら次のチェックを行う
-		if (m_pRecovery[i]) continue;
-
-		// m_pRecovery[i] == nullptrなので新しく登録する
-		m_pRecovery[i] = pRecovery;
-		// 登録したら終了
-		return true;
+		if (!m_pRecovery[i])	// nullptrであることをチェックする
+		{
+			m_pRecovery[i] = new RecoverySmallHp;
+			m_pRecovery[i]->Init();						// HP回復(小)を生成する
+			m_pRecovery[i]->Start(m_pEnemy[i]->GetPos());
+			return;
+		}
 	}
 }
 
