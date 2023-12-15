@@ -26,6 +26,8 @@ private:
 	int m_hpSmallRecHandle;
 	// 画面内に存在するか
 	bool m_isExist;
+	// 表示時間のフレーム
+	int m_frame;
 	// 表示位置
 	Vec2 m_pos;
 	// 当たり判定の矩形

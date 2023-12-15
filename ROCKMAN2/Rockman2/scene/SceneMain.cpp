@@ -306,7 +306,6 @@ void SceneMain::Draw()
 	DrawFormatString(8, 48, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
 	DrawFormatString(8, 68, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
 	DrawFormatString(8, 88, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
-
 }
 
 // 弾の生成

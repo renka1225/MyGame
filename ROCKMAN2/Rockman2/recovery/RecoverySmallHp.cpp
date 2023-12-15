@@ -16,7 +16,8 @@ namespace
 }
 
 RecoverySmallHp::RecoverySmallHp():
-	m_isExist(false)
+	m_isExist(false),
+	m_frame(0)
 {
 	m_hpSmallRecHandle = LoadGraph("data/image/Recovery/smallHp.png");
 }
@@ -28,12 +29,21 @@ RecoverySmallHp::~RecoverySmallHp()
 void RecoverySmallHp::Init()
 {
 	m_isExist = false;
+	m_frame = 0;
 }
 
 void RecoverySmallHp::Update()
 {
 	// 存在しないアイテムの処理はしない
 	if (!m_isExist) return;
+
+	m_frame++;
+	// 5秒以上たったらアイテムを消す
+	if (m_frame > 300)
+	{
+		m_frame = 0;
+		m_isExist = false;
+	}
 
 	// 当たり判定の更新
 	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
