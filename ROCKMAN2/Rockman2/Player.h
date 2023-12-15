@@ -4,6 +4,7 @@
 
 class SceneMain;
 class Bg;
+class RecoveryBase;
 
 /// <summary>
 /// プレイヤークラス
@@ -59,6 +60,7 @@ public:
 private:
 	SceneMain* m_pMain;
 	Bg* m_pBg;
+	RecoveryBase* m_pRecovery;
 
 	// 表示位置
 	Vec2 m_pos;

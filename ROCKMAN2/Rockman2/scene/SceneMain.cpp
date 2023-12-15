@@ -9,7 +9,6 @@
 #include "RecoverySmallHp.h"
 #include "RecoverySmallShot.h"
 
-
 #include "Player.h"
 
 #include "ShotBase.h"
@@ -173,7 +172,7 @@ void SceneMain::Update()
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 
-	// プレイヤーが画面中央に移動したら敵を登場させる
+	// プレイヤーが一定座標に到達したら敵を登場させる
 	if (playerPos.x == 30)
 	{
 		CreateMatasaburo();
@@ -250,12 +249,17 @@ void SceneMain::Update()
 
 		m_pRecovery[i]->Update();
 
-		// 画面外に出たらメモリを解放する
-		/*if (!m_pRecovery[i]->IsExist())
+		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// 回復アイテムの当たり判定
+
+		// プレイヤーと回復アイテムの当たり判定
+		if (playerRect.IsCollision(recoveryRect))
 		{
+			m_pPlayer->HpSmallRecovery();
+
+			// 取得したらアイテムを消す
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
-		}*/
+		}
 	}
 }
 
@@ -334,8 +338,9 @@ void SceneMain::DropItem()
 	{
 		if (!m_pRecovery[i])	// nullptrであることをチェックする
 		{
+			// HP回復(小)を生成する
 			m_pRecovery[i] = new RecoverySmallHp;
-			m_pRecovery[i]->Init();						// HP回復(小)を生成する
+			m_pRecovery[i]->Init();
 			m_pRecovery[i]->Start(m_pEnemy[i]->GetPos());
 			return;
 		}

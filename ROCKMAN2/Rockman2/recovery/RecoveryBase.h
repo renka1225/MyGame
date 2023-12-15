@@ -3,7 +3,7 @@
 #include "Rect.h"
 
 class SceneMain;
-class EnemyBase;
+class Player;
 
 /// <summary>
 /// 回復アイテム基底クラス
@@ -21,10 +21,6 @@ public:
 	// 倒した敵の現在地からアイテムをドロップする
 	virtual void Start(Vec2 pos) = 0;
 
-	// メンバ変数にアクセスする
-	//void SetMain(SceneMain* pMain) { m_pMain = pMain; }
-	void SetEnemy(EnemyBase* pEnemy) { m_pEnemy = pEnemy; }
-
 	// アイテムが存在しているか
 	bool IsExist() const { return m_isExist; }
 	// 回復アイテムの当たり判定を取得する
@@ -33,11 +29,6 @@ public:
 	Vec2 GetPos() const { return m_pos; }
 
 private:
-	// SceneMainのポインタ
-	SceneMain* m_pMain;
-	// アイテムをドロップする敵のポインタ
-	EnemyBase* m_pEnemy;
-
 	// 画面内に存在しているか
 	bool m_isExist;
 

@@ -1,5 +1,4 @@
 #include "RecoverySmallHp.h"
-#include "Player.h"
 #include "EnemyBase.h"
 #include "Game.h"
 #include "DxLib.h"
@@ -17,8 +16,6 @@ namespace
 }
 
 RecoverySmallHp::RecoverySmallHp():
-	m_pPlayer(nullptr),
-	m_pEnemy(nullptr),
 	m_isExist(false)
 {
 	m_hpSmallRecHandle = LoadGraph("data/image/Recovery/smallHp.png");
@@ -40,17 +37,6 @@ void RecoverySmallHp::Update()
 
 	// 当たり判定の更新
 	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
-
-	//Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
-
-	//// プレイヤーと回復アイテムの当たり判定
-	//if (playerRect.IsCollision(m_colRect))
-	//{
-	//	m_pPlayer->HpSmallRecovery();
-
-	//	// 取得したらアイテムを消す
-	//	m_isExist = false;
-	//}
 
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ

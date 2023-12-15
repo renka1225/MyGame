@@ -22,8 +22,6 @@ public:
 	Rect GetColRect() const { return m_colRect; }
 
 private:
-	// アイテムをドロップする敵のポインタ
-	EnemyBase* m_pEnemy;
 
 	// グラフィックのハンドル
 	int m_shotSmallRecHandle;	// 弾小回復

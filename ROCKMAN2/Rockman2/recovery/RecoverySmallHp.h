@@ -1,8 +1,6 @@
 #pragma once
 #include "RecoveryBase.h"
 
-class Player;
-
 /// <summary>
 /// HP小回復クラス
 /// </summary>
@@ -24,11 +22,6 @@ public:
 	Rect GetColRect() const { return m_colRect; }
 
 private:
-	// プレイヤーのポインタ
-	Player* m_pPlayer;
-	// アイテムをドロップする敵のポインタ
-	EnemyBase* m_pEnemy;
-
 	// グラフィックのハンドル
 	int m_hpSmallRecHandle;
 	// 画面内に存在するか

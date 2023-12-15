@@ -1,8 +1,7 @@
 #include "RecoveryBase.h"
+#include "Player.h"
 
 RecoveryBase::RecoveryBase():
-	m_pEnemy(nullptr),
-	m_pMain(nullptr),
 	m_isExist(false)
 {
 }

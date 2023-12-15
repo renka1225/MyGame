@@ -64,5 +64,5 @@ void EnemyBase::UpdateCollision()
 	GetGraphSize(m_handle, &width, &height);
 
 	// ’†SÀ•W‚ğw’è‚µ‚Ä“–‚½‚è”»’è‚ÌRect‚ğ¶¬‚·‚é
-	m_colRect.SetCenter(m_pos.x, m_pos.y, width, height);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(width), static_cast<float>(height));
 }

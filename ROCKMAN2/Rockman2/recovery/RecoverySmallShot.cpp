@@ -14,10 +14,9 @@ namespace
 }
 
 RecoverySmallShot::RecoverySmallShot():
-	m_pEnemy(nullptr),
 	m_isExist(false)
 {
-	m_shotSmallRecHandle = LoadGraph("data/image/Recovery/shotSmall");
+	m_shotSmallRecHandle = LoadGraph("data/image/Recovery/shotSmall.png");
 }
 
 RecoverySmallShot::~RecoverySmallShot()

@@ -8,13 +8,14 @@
 #include "ShotMetal.h"
 #include "ShotFire.h"
 #include "ShotLineMove.h"
+#include "RecoveryBase.h"
 #include <cassert>
 
 // Playerで使用する定数
 namespace
 {
 	// 移動速度
-	constexpr float kSpeed = 1.0f;
+	constexpr float kSpeed = 3.0f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
@@ -36,7 +37,7 @@ namespace
 	constexpr float kPosY = 500.0f;
 
 	// プレイヤーの最大HP
-	constexpr float kMaxHp = 1;
+	constexpr float kMaxHp = 10;
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 28;
 	// 残機
@@ -51,6 +52,7 @@ namespace
 Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_pMain(pMain),
 	m_pBg(pBg),
+	m_pRecovery(nullptr),
 	m_pos(kPosX, kPosY),
 	m_colRect(),
 	m_handle(-1),
@@ -95,6 +97,9 @@ void Player::Init()
 /*プレイヤーの更新*/
 void Player::Update()
 {
+	// 移動量
+	Vec2 move{ 0.0f, 0.0f };
+
 	// ダメージ演出
 	m_damageFrame--;
 	if (m_damageFrame < 0)
@@ -104,9 +109,6 @@ void Player::Update()
 
 	// パッドを使用する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-
-	// 移動量
-	Vec2 move{ 0.0f, 0.0f };
 
 	/*←を押したら左に移動*/
 	if (pad & PAD_INPUT_LEFT)
@@ -122,11 +124,18 @@ void Player::Update()
 		m_isRight = true;
 	}
 
-	/*Spaceでジャンプ*/
-	if (Pad::IsTrigger(PAD_INPUT_10) && m_isGround)
+	/*地面に接している間はジャンプしない*/
+	if (m_isGround)
 	{
-		m_isGround = false;
-		m_velocity = kVelocity;
+		m_jumpFrame = 0;	// ジャンプフレームを初期化
+		m_velocity = 0;		// 初速度を初期化
+
+		/*Spaceでジャンプ*/
+		if (Pad::IsTrigger(PAD_INPUT_10))
+		{
+			m_isGround = false;
+			m_velocity = kVelocity;
+		}
 	}
 
 	/*ジャンプ中*/
@@ -152,10 +161,8 @@ void Player::Update()
 			{
 				jumpHeight = 1.0f;
 			}
-
-			m_velocity = kVelocity * jumpHeight;
+			m_velocity *= jumpHeight;
 		}
-
 		m_velocity += kGravity; // 初速度に重力を足す
 		m_pos.y += m_velocity;	// 現在位置の更新
 	}
@@ -163,18 +170,6 @@ void Player::Update()
 	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
 	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
-	//switch (mapChipNo)
-	//{
-	//case 1:		// 地面に当たった場合
-	//	m_isGround = true;
-	//	break;
-	//case 30:
-	//	m_isGround = false;
-	//	break;
-	//default:
-	//	m_isGround = false;
-	//	break;
-	//}
 
 	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
 	int ULNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// 左上
@@ -191,15 +186,6 @@ void Player::Update()
 	{
 		m_isGround = false;
 	}
-
-
-	/*地面に着地したらジャンプを終了する*/
-	if (m_isGround)
-	{
-		m_jumpFrame = 0;	// ジャンプフレームを初期化
-		m_velocity = 0;		// 初速度を初期化
-	}
-
 
 	/*画面外に出たら画面内に戻す*/
 	if (m_pos.x < 0)
