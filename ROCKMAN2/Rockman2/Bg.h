@@ -20,7 +20,9 @@ public:
 	void SetHandle(int bgHandle) { m_bgHandle = bgHandle; }
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 	// マップチップ番号の取得
-	int GetChipData(int x, int y) { return m_chipData[y][x]; }
+	int GetChipData(int x, int y) const { return m_chipData[y][x]; }
+	// 地面の当たり判定を取得する
+	Rect GetColRect(int x, int y) const { return m_colRect[y][x]; }
 
 private:
 	// マップチップの情報

@@ -22,6 +22,9 @@ sample20230707
 ・キャラ素材参考
 https://ansimuz.itch.io/super-grotto-escape-pack
 
+・マップチップの当たり判定参考
+https://yttm-work.jp/collision/collision_0010.html
+
 ロックマン２仕様
 
 ・残基数:2　

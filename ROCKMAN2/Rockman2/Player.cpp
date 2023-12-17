@@ -100,7 +100,51 @@ void Player::Update()
 	// 移動量
 	Vec2 move{ 0.0f, 0.0f };
 
-	// ダメージ演出
+	// プレイヤーの現在地のマップチップ番号を取得する
+	// プレイヤーの現在地 / マップチップのサイズ
+	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
+	int ulNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// 左上	
+	int urNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);					// 右上
+	int dlNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
+	int drNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);// 右下
+
+	// マップの中心の当たり判定を取得する
+	//Rect BgRect = m_pBg->GetColRect((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
+
+	// プレイヤーが地面に接しているか
+	if (dlNo == 1 || drNo == 1)
+	{
+		m_isGround = true;
+	}
+	else
+	{
+		m_isGround = false;
+	}
+
+	/*画面外に出たら画面内に戻す*/
+	if (m_pos.x < 0)
+	{
+		m_pos.x = 0;
+	}
+	if (m_pos.y < 0)
+	{
+		m_pos.y = 0;
+	}
+
+	/*プレイヤーが穴に落下した場合*/
+	if ((m_pos.y - kPlayerHeight) > Game::kScreenHeight)
+	{
+		// 残機を1減らす
+		m_life--;
+		if (m_life >= 0)
+		{
+			// 残機が0以上だったらプレイヤーを初期位置に戻す
+			m_pos.x = kPosX;
+			m_pos.y = kPosY;
+		}
+	}
+
+	/*ダメージ演出*/
 	m_damageFrame--;
 	if (m_damageFrame < 0)
 	{
@@ -113,15 +157,25 @@ void Player::Update()
 	/*←を押したら左に移動*/
 	if (pad & PAD_INPUT_LEFT)
 	{
-		move.x -= kSpeed;
 		m_isRight = false;
+		move.x -= kSpeed;
+		// プレイヤーの左側が壁に接している場合は左に進まないようにする
+		if (ulNo == 1)
+		{
+			move.x = 0;
+		}
 	}
 
 	/*→を押したら右に移動*/
 	if (pad & PAD_INPUT_RIGHT)
 	{
-		move.x += kSpeed;
 		m_isRight = true;
+		move.x += kSpeed;
+		// プレイヤーの右側が壁に接している場合は右に進まないようにする
+		if (urNo == 1)
+		{
+			move.x = 0;
+		}
 	}
 
 	/*地面に接している間はジャンプしない*/
@@ -165,49 +219,6 @@ void Player::Update()
 		}
 		m_velocity += kGravity; // 初速度に重力を足す
 		m_pos.y += m_velocity;	// 現在位置の更新
-	}
-
-	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
-	// プレイヤーの現在地 / マップチップのサイズ
-	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
-
-	// プレイヤーの現在地(中心座標)のマップチップ番号を取得する
-	int ULNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// 左上
-	int URNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);					// 右上
-	int DLNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
-	int DRNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);// 右下
-
-	// プレイヤーの左下または右下が地面に接しているか
-	if (DLNo == 1 || DRNo == 1)
-	{
-		m_isGround = true;
-	}
-	else
-	{
-		m_isGround = false;
-	}
-
-	/*画面外に出たら画面内に戻す*/
-	if (m_pos.x < 0)
-	{
-		m_pos.x = 0;
-	}
-	if (m_pos.y < 0)
-	{
-		m_pos.y = 0;
-	}
-
-	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight) > Game::kScreenHeight)
-	{
-		// 残機を1減らす
-		m_life--;
-		if (m_life >= 0)
-		{
-			// 残機が0以上だったらプレイヤーを初期位置に戻す
-			m_pos.x = kPosX;
-			m_pos.y = kPosY;
-		}
 	}
 
 	/*Zキーでバスター発射*/
