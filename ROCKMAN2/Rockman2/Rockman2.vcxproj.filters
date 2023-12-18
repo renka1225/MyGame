@@ -81,9 +81,6 @@
     <ClCompile Include="shot\ShotLineMove.cpp">
       <Filter>ソース ファイル\shot</Filter>
     </ClCompile>
-    <ClCompile Include="scene\Scene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
     <ClCompile Include="shot\ShotMetal.cpp">
       <Filter>ソース ファイル\util</Filter>
     </ClCompile>
@@ -107,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="recovery\RecoverySmallHp.cpp">
       <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\ScenePause.cpp">
+      <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +149,6 @@
     <ClInclude Include="shot\ShotLineMove.h">
       <Filter>ヘッダー ファイル\shot</Filter>
     </ClInclude>
-    <ClInclude Include="scene\Scene.h">
-      <Filter>ヘッダー ファイル\scene</Filter>
-    </ClInclude>
     <ClInclude Include="enemy\EnemyBase.h">
       <Filter>ヘッダー ファイル\enemy</Filter>
     </ClInclude>
@@ -172,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="recovery\RecoverySmallHp.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\ScenePause.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

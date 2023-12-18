@@ -41,7 +41,7 @@ namespace
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 28;
 	// 残機
-	constexpr int kLife = 2;
+	constexpr int kLife = 10;
 
 	// アイテムの回復量
 	constexpr float kSmallRecovery = 2;		// 小アイテム
@@ -86,6 +86,8 @@ void Player::Init()
 	m_isRight = true;
 	// ジャンプフラグ
 	m_isGround = false;
+	// 加速度
+	m_velocity = 0;
 	// HP
 	m_hp = kMaxHp;
 	// 残機数
@@ -103,22 +105,30 @@ void Player::Update()
 	// プレイヤーの現在地のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
 	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
-	int ulNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// 左上	
-	int urNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);					// 右上
-	int dlNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
-	int drNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);// 右下
+	//int ulNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// 左上	
+	//int urNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);					// 右上
+	//int dlNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
+	//int drNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// 右下
 
-	// マップの中心の当たり判定を取得する
-	//Rect BgRect = m_pBg->GetColRect((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);
+	// マップチップの当たり判定を取得する
+	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);
 
-	// プレイヤーが地面に接しているか
-	if (dlNo == 1 || drNo == 1)
+	// プレイヤーとマップの当たり判定
+	if (m_colRect.IsCollision(mapChipRect))
 	{
-		m_isGround = true;
-	}
-	else
-	{
-		m_isGround = false;
+		int mapChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y +kPlayerHeight) / kMapHeight);
+
+		// プレイヤーが地面に接しているか
+		if (mapChipNo == 1)
+		{
+			m_isGround = true;
+			
+			//m_pos.x += kSpeed; // これを追加するとプレイヤーが自動スクロールがする
+		}
+		else
+		{
+			m_isGround = false;
+		}
 	}
 
 	/*画面外に出たら画面内に戻す*/
@@ -135,7 +145,7 @@ void Player::Update()
 	if ((m_pos.y - kPlayerHeight) > Game::kScreenHeight)
 	{
 		// 残機を1減らす
-		m_life--;
+		//m_life--;
 		if (m_life >= 0)
 		{
 			// 残機が0以上だったらプレイヤーを初期位置に戻す
@@ -160,10 +170,10 @@ void Player::Update()
 		m_isRight = false;
 		move.x -= kSpeed;
 		// プレイヤーの左側が壁に接している場合は左に進まないようにする
-		if (ulNo == 1)
+		/*if (ulNo == 1)
 		{
 			move.x = 0;
-		}
+		}*/
 	}
 
 	/*→を押したら右に移動*/
@@ -172,10 +182,10 @@ void Player::Update()
 		m_isRight = true;
 		move.x += kSpeed;
 		// プレイヤーの右側が壁に接している場合は右に進まないようにする
-		if (urNo == 1)
+		/*if (urNo == 1)
 		{
 			move.x = 0;
-		}
+		}*/
 	}
 
 	/*地面に接している間はジャンプしない*/
@@ -318,26 +328,24 @@ void Player::Update()
 	}
 
 	/*Aキーでアイテム2号発射*/
-	if (Pad::IsTrigger(PAD_INPUT_4))
-	{
-		if (m_lineEnergy > 0)
-		{
-
-			ShotLineMove* pShot = new ShotLineMove;
-
-			// 新しい弾を生成する
-			pShot->Init();
-			pShot->SetMain(m_pMain);
-			pShot->SetPlayer(this);
-			pShot->Start(m_pos);
-			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pMain->AddShot(pShot);
-		}
-		else
-		{
-			m_lineEnergy = 0;
-		}
-	}
+	//if (Pad::IsTrigger(PAD_INPUT_4))
+	//{
+	//	if (m_lineEnergy > 0)
+	//	{
+	//		ShotLineMove* pShot = new ShotLineMove;
+	//		// 新しい弾を生成する
+	//		pShot->Init();
+	//		pShot->SetMain(m_pMain);
+	//		pShot->SetPlayer(this);
+	//		pShot->Start(m_pos);
+	//		// 以降更新やメモリの解放はSceneMainに任せる
+	//		m_pMain->AddShot(pShot);
+	//	}
+	//	else
+	//	{
+	//		m_lineEnergy = 0;
+	//	}
+	//}
 
 	m_pos += move; // 現在値の更新
 	m_colRect.SetLT(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight); // 当たり判定の更新

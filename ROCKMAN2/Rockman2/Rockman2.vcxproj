@@ -147,10 +147,10 @@
     <ClCompile Include="recovery\RecoverySmallShot.cpp" />
     <ClCompile Include="recovery\RecoverySmallHp.cpp" />
     <ClCompile Include="recovery\RecoveryBase.cpp" />
+    <ClCompile Include="scene\ScenePause.cpp" />
     <ClCompile Include="scene\SceneGameOver.cpp" />
     <ClCompile Include="scene\SceneTitle.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="scene\Scene.cpp" />
     <ClCompile Include="shot\ShotLineMove.cpp" />
     <ClCompile Include="shot\ShotFire.cpp" />
     <ClCompile Include="shot\ShotMetal.cpp" />
@@ -170,10 +170,10 @@
     <ClInclude Include="recovery\RecoverySmallShot.h" />
     <ClInclude Include="recovery\RecoverySmallHp.h" />
     <ClInclude Include="recovery\RecoveryBase.h" />
+    <ClInclude Include="scene\ScenePause.h" />
     <ClInclude Include="scene\SceneGameOver.h" />
     <ClInclude Include="scene\SceneTitle.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shot\ShotLineMove.h" />
     <ClInclude Include="shot\ShotFire.h" />
     <ClInclude Include="shot\ShotMetal.h" />

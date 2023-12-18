@@ -3,6 +3,7 @@
 #include "Vec2.h"
 
 class Bg;
+class ScenePause;
 class Player;
 class ShotBase;
 class EnemyBase;
@@ -47,6 +48,8 @@ private:
 
 	// 背景
 	Bg* m_pBg;
+	// ポーズ画面
+	ScenePause* m_pPause;
 	// プレイヤー
 	Player* m_pPlayer;
 	// ショット

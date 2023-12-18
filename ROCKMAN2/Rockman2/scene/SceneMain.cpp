@@ -4,6 +4,7 @@
 #include "Rect.h"
 #include "Game.h"
 #include "Bg.h"
+#include "ScenePause.h"
 
 #include "RecoveryBase.h"
 #include "RecoverySmallHp.h"
@@ -44,6 +45,9 @@ SceneMain::SceneMain():
 	m_pBg->SetHandle(m_bgHandle);
 	m_pBg->SetMapHandle(m_mapHandle);
 
+	// ポーズ画面のメモリ確保
+	m_pPause = new ScenePause;
+
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this, m_pBg };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
@@ -80,6 +84,10 @@ SceneMain::~SceneMain()
 	// 背景のメモリ解放
 	delete m_pBg;
 	m_pBg = nullptr;
+
+	// ポーズ画面のメモリ確保
+	delete m_pPause;
+	m_pPause = nullptr;
 
 	// プレイヤーのメモリ解放
 	delete m_pPlayer;
@@ -127,6 +135,9 @@ void SceneMain::Init()
 	// 背景の初期化
 	m_pBg->Init();
 
+	// ポーズ画面の初期化
+	m_pPause->Init();
+
 	// プレイヤーの初期化
 	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
 	m_pPlayer->Init();
@@ -163,20 +174,31 @@ void SceneMain::Update()
 		m_isSceneEnd = true; // ゲームオーバー画面に遷移
 	}
 
+	// ポーズ画面が表示されている場合画面を止める
+	if (m_pPause->IsExist())
+	{
+		return;
+	}
+
 	// 背景の更新
 	m_pBg->Update();
+
+	// ポーズ画面の更新
+	m_pPause->Update();
 
 	// プレイヤーの更新
 	m_pPlayer->Update();
 
-	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
+	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
+	Rect mapChipRect = m_pBg->GetColRect(playerPos.x / 32, playerPos.y / 32); // マップチップの当たり判定を取得する
+		
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
-	if (playerPos.x == 30)
+	/*if (playerPos.x == 30)
 	{
 		CreateMatasaburo();
-	}
+	}*/
 
 	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -270,6 +292,9 @@ void SceneMain::Draw()
 
 	// 背景の描画
 	m_pBg->Draw();
+
+	// ポーズ画面の表示
+	m_pPause->Draw();
 
 	// プレイヤーの描画
 	m_pPlayer->Draw();
