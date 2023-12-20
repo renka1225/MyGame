@@ -47,6 +47,16 @@ public:
 	int GetPressTime() const { return m_nowPressTime; }
 
 public:
+	// 武器が選択中か取得する
+	bool IstBuster() const { return m_isBuster; }	// バスター
+	bool IsMetal() const { return m_isMetal; }		// メタル
+	bool IsFire() const { return m_isFire; }		// ファイア
+	bool IsLineMove() const { return m_isLineMove; }// 2号
+
+	// 現在の武器選択状態を更新する
+	void ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove);
+
+public:
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
 	// プレイヤーの回復処理
@@ -93,6 +103,12 @@ private:
 	float m_fireEnergy;
 	// アイテム2号の弾エネルギー数
 	float m_lineEnergy;
+
+	// 武器を装備しているか
+	bool m_isBuster; // バスター
+	bool m_isMetal;	 // メタル
+	bool m_isFire;	 // ファイア
+	bool m_isLineMove; // 2号
 
 	// ボタンの状態を取得する
 	int m_keyState;

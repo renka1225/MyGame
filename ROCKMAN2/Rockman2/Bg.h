@@ -41,6 +41,8 @@ private:
 
 	// 背景の表示位置
 	Vec2 m_pos;
+	// マップチップの表示位置
+	Vec2 m_mapChipPos;
 
 	// グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;

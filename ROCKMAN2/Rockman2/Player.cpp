@@ -66,6 +66,10 @@ Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_metalEnergy(28),
 	m_fireEnergy(28),
 	m_lineEnergy(28),
+	m_isBuster(false),
+	m_isMetal(false),
+	m_isFire(false),
+	m_isLineMove(false),
 	m_keyState(0),
 	m_pressTime(0),
 	m_nowPressTime(0)
@@ -94,6 +98,11 @@ void Player::Init()
 	m_life = kLife;
 	// ダメージのフレーム数
 	m_damageFrame = 0;
+	// 開始時はバスターを打てるようにする
+	m_isBuster = true;
+	m_isMetal = false;
+	m_isFire = false;
+	m_isLineMove = false;
 }
 
 /*プレイヤーの更新*/
@@ -247,28 +256,11 @@ void Player::Update()
 	}
 
 	/*Zキーでバスター発射*/
-	if(Pad::IsTrigger(PAD_INPUT_1))
+	if (m_isBuster)
 	{
-		ShotBuster* pShot = new ShotBuster;
-
-		// 新しい弾を生成する
-		pShot->Init();
-		pShot->SetMain(m_pMain);
-		pShot->SetPlayer(this);
-		pShot->Start(m_pos);
-		// 以降更新やメモリの解放はSceneMainに任せる
-		m_pMain->AddShot(pShot);
-	}
-
-	/*Xキーでメタル発射*/
-	if (Pad::IsTrigger(PAD_INPUT_2))
-	{
-		if (m_metalEnergy > 0)
+		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			// 弾エネルギーを0.25減らす
-			m_metalEnergy -= 0.25f;
-
-			ShotMetal* pShot = new ShotMetal;
+			ShotBuster* pShot = new ShotBuster;
 
 			// 新しい弾を生成する
 			pShot->Init();
@@ -278,89 +270,119 @@ void Player::Update()
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
 		}
-		else
+
+	}
+
+	/*メタル発射*/
+	if (m_isMetal)
+	{
+		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			m_metalEnergy = 0;
+			if (m_metalEnergy > 0)
+			{
+				// 弾エネルギーを0.25減らす
+				m_metalEnergy -= 0.25f;
+
+				ShotMetal* pShot = new ShotMetal;
+
+				// 新しい弾を生成する
+				pShot->Init();
+				pShot->SetMain(m_pMain);
+				pShot->SetPlayer(this);
+				pShot->Start(m_pos);
+				// 以降更新やメモリの解放はSceneMainに任せる
+				m_pMain->AddShot(pShot);
+			}
+			else
+			{
+				m_metalEnergy = 0;
+			}
 		}
 	}
 
-	/*Cキーでファイヤー発射*/
+	/*ファイヤー発射*/
+	if (m_isFire)
+	{
 	// Cキーが押された瞬間を取得
-	if (Pad::IsTrigger(PAD_INPUT_3))
-	{
-		m_pressTime = GetNowCount();
-	}
-	// cキーが押されているか判定
-	if (Pad::IsPress(PAD_INPUT_3))
-	{
-		m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
-	}
-	// cキーが離された瞬間を判定
-	if (Pad::IsRelease(PAD_INPUT_3))
-	{
-		if (m_fireEnergy > 0) // 弾エネルギーが0以上
+		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			if (m_nowPressTime < 2000) // 長押し時間が2秒以下
+			m_pressTime = GetNowCount();
+		}
+		// cキーが押されているか判定
+		if (Pad::IsPress(PAD_INPUT_1))
+		{
+			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
+		}
+		// cキーが離された瞬間を判定
+		if (Pad::IsRelease(PAD_INPUT_1))
+		{
+			if (m_fireEnergy > 0) // 弾エネルギーが0以上
 			{
-				m_fireEnergy--; // 弾エネルギーを1減らす
-			}
-			else if (m_nowPressTime < 5000) // 長押し時間が5秒以下
-			{
-				if (m_fireEnergy - 6 < 0) // 弾エネルギーが足りない場合
+				if (m_nowPressTime < 2000) // 長押し時間が2秒以下
 				{
 					m_fireEnergy--; // 弾エネルギーを1減らす
 				}
-				else
+				else if (m_nowPressTime < 5000) // 長押し時間が5秒以下
 				{
-					m_fireEnergy -= 6; // 弾エネルギーを6減らす
+					if (m_fireEnergy - 6 < 0) // 弾エネルギーが足りない場合
+					{
+						m_fireEnergy--; // 弾エネルギーを1減らす
+					}
+					else
+					{
+						m_fireEnergy -= 6; // 弾エネルギーを6減らす
+					}
 				}
-			}
-			else // 長押し時間が5秒以上
-			{
-				if (m_fireEnergy - 10 < 0) // 弾エネルギーが足りない場合
+				else // 長押し時間が5秒以上
 				{
-					m_fireEnergy--; // 弾エネルギーを1減らす
+					if (m_fireEnergy - 10 < 0) // 弾エネルギーが足りない場合
+					{
+						m_fireEnergy--; // 弾エネルギーを1減らす
+					}
+					else
+					{
+						m_fireEnergy -= 10; // 弾エネルギーを10減らす
+					}
 				}
-				else
-				{
-					m_fireEnergy -= 10; // 弾エネルギーを10減らす
-				}
-			}
 
-			// 新しい弾を生成する
-			ShotFire* pShot = new ShotFire;
-			pShot->Init();
-			pShot->SetMain(m_pMain);
-			pShot->SetPlayer(this);
-			pShot->Start(m_pos);
-			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pMain->AddShot(pShot);
-		}
-		else // 弾エネルギーが0以下
-		{
-			m_fireEnergy = 0; // 現在の弾エネルギーを0にする
+				// 新しい弾を生成する
+				ShotFire* pShot = new ShotFire;
+				pShot->Init();
+				pShot->SetMain(m_pMain);
+				pShot->SetPlayer(this);
+				pShot->Start(m_pos);
+				// 以降更新やメモリの解放はSceneMainに任せる
+				m_pMain->AddShot(pShot);
+			}
+			else // 弾エネルギーが0以下
+			{
+				m_fireEnergy = 0; // 現在の弾エネルギーを0にする
+			}
 		}
 	}
-
-	/*Aキーでアイテム2号発射*/
-	//if (Pad::IsTrigger(PAD_INPUT_4))
-	//{
-	//	if (m_lineEnergy > 0)
-	//	{
-	//		ShotLineMove* pShot = new ShotLineMove;
-	//		// 新しい弾を生成する
-	//		pShot->Init();
-	//		pShot->SetMain(m_pMain);
-	//		pShot->SetPlayer(this);
-	//		pShot->Start(m_pos);
-	//		// 以降更新やメモリの解放はSceneMainに任せる
-	//		m_pMain->AddShot(pShot);
-	//	}
-	//	else
-	//	{
-	//		m_lineEnergy = 0;
-	//	}
-	//}
+	
+	/*アイテム2号発射*/
+	if (m_isLineMove)
+	{
+		if (Pad::IsTrigger(PAD_INPUT_1))
+		{
+			if (m_lineEnergy > 0)
+			{
+				ShotLineMove* pShot = new ShotLineMove;
+				// 新しい弾を生成する
+				pShot->Init();
+				pShot->SetMain(m_pMain);
+				pShot->SetPlayer(this);
+				pShot->Start(m_pos);
+				// 以降更新やメモリの解放はSceneMainに任せる
+				m_pMain->AddShot(pShot);
+			}
+			else
+			{
+				m_lineEnergy = 0;
+			}
+		}
+	}
 
 	m_pos += move; // 現在値の更新
 	m_colRect.SetCenter(m_pos.x + kPlayerWidth / 2, m_pos.y + kPlayerHeight / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
@@ -387,6 +409,21 @@ void Player::Draw()
 #endif
 }
 
+
+void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
+{
+	// バスターの状態を更新
+	m_isBuster = isBuster;
+
+	// メタルの状態を更新
+	m_isMetal = isMetal;
+
+	// ファイアの状態を更新
+	m_isFire = isFire;
+
+	// 2号の状態を更新
+	m_isLineMove = isLineMove;
+}
 
 /*プレイヤーのダメージ演出*/
 void Player::OnDamage()

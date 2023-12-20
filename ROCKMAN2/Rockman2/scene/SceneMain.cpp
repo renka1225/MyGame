@@ -62,12 +62,12 @@ SceneMain::SceneMain():
 	m_pBg->SetHandle(m_bgHandle);
 	m_pBg->SetMapHandle(m_mapHandle);
 
-	// ポーズ画面のメモリ確保
-	m_pPause = new ScenePause;
-
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this, m_pBg };
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
+
+	// ポーズ画面のメモリ確保
+	m_pPause = new ScenePause{ m_pPlayer };
 
 	// ショットの初期化
 	m_pShot.resize(kShotMax);
@@ -337,14 +337,34 @@ void SceneMain::Draw()
 		m_pRecovery[i]->Draw();
 	}
 
-	// 現在のHPを表示
-	DrawFormatString(8, 8, 0xffffff, "HP:%.2f", m_pPlayer->GetHp());
-	// 現在の残機数を表示
-	DrawFormatString(8, 28, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
-	// 現在の弾エネルギー数を表示
-	DrawFormatString(8, 48, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
-	DrawFormatString(8, 68, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
-	DrawFormatString(8, 88, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
+	// 現在のHP分だけ四角を描画する
+	for (int i = 0; i < m_pPlayer->GetHp(); i++)
+	{
+		DrawBox(10, 10 + 10 * i, 40, (10 + 10 * i) + 5, 0xeee8aa, true);
+	}
+
+	// 現在選択中の武器の弾数を左上に表示
+	if (m_pPlayer->IsMetal()) // メタル
+	{
+		for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
+		{
+			DrawBox(50, 10 + 10 * i, 80, (10 + 10 * i) + 5, 0xc0c0c0, true);
+		}
+	}
+	if (m_pPlayer->IsFire()) // ファイア
+	{
+		for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
+		{
+			DrawBox(50, 10 + 10 * i, 80, (10 + 10 * i) + 5, 0xff4500, true);
+		}
+	}
+	if (m_pPlayer->IsLineMove()) // 2号
+	{
+		for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
+		{
+			DrawBox(50, 10 + 10 * i, 80, (10 + 10 * i) + 5, 0xb22222, true);
+		}
+	}
 
 	// ポーズ画面の表示
 	m_pPause->Draw();
@@ -352,9 +372,6 @@ void SceneMain::Draw()
 	/*ポーズ画面表示中*/
 	if (m_pPause->IsExist())
 	{
-		// 選択中だとわかるように四角の枠を描画
-		DrawBox(kTextPosX - 5, kDisPosY - 5, kTextPosX + 260, kDisPosY + 25, 0x00bfff, false);
-
 		// 現在のHPを表示
 		DrawFormatString(kTextPosX, kDisPosY, 0xffffff, "P :");
 		for (int i = 0; i < m_pPlayer->GetHp(); i++) // 現在のHP分だけ四角を描画する
