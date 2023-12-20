@@ -25,9 +25,26 @@ namespace
 	constexpr int kEnemyMax = 5;
 	// 画面内に1度に出せる回復アイテム数
 	constexpr int kRecoveryMax = 20;
+
+	// ポーズ画面の文字表示位置
+	constexpr int kTextPosX = 510;
+	// バーの表示位置
+	constexpr int kBarPosX = 540;
+	// バーの表示間隔
+	constexpr int kBarInterval = 8;
+
+	// バーの四角のサイズ
+	constexpr int kBarWidth = 5;
+	constexpr int kBarHeight = 20;
+
+	// Y座標の表示位置の間隔
+	constexpr int kInterval = 60;
+	// 文字、バーの表示位置
+	constexpr int kDisPosY = 200;
 }
 
 SceneMain::SceneMain():
+	m_drawValue(0),
 	m_isSceneEnd(false)
 {
 	// プレイヤーのグラフィックロード
@@ -174,6 +191,9 @@ void SceneMain::Update()
 		m_isSceneEnd = true; // ゲームオーバー画面に遷移
 	}
 
+	// ポーズ画面の更新
+	m_pPause->Update();
+
 	// ポーズ画面が表示されている場合画面を止める
 	if (m_pPause->IsExist())
 	{
@@ -182,9 +202,6 @@ void SceneMain::Update()
 
 	// 背景の更新
 	m_pBg->Update();
-
-	// ポーズ画面の更新
-	m_pPause->Update();
 
 	// プレイヤーの更新
 	m_pPlayer->Update();
@@ -293,9 +310,6 @@ void SceneMain::Draw()
 	// 背景の描画
 	m_pBg->Draw();
 
-	// ポーズ画面の表示
-	m_pPause->Draw();
-
 	// プレイヤーの描画
 	m_pPlayer->Draw();
 
@@ -331,6 +345,48 @@ void SceneMain::Draw()
 	DrawFormatString(8, 48, 0xffffff, "メタル: %.2f", m_pPlayer->GetMetalEnergy());
 	DrawFormatString(8, 68, 0xffffff, "ファイヤー: %.2f", m_pPlayer->GetFireEnergy());
 	DrawFormatString(8, 88, 0xffffff, "アイテム2号: %.2f", m_pPlayer->GetLineEnergy());
+
+	// ポーズ画面の表示
+	m_pPause->Draw();
+
+	/*ポーズ画面表示中*/
+	if (m_pPause->IsExist())
+	{
+		// 選択中だとわかるように四角の枠を描画
+		DrawBox(kTextPosX - 5, kDisPosY - 5, kTextPosX + 260, kDisPosY + 25, 0x00bfff, false);
+
+		// 現在のHPを表示
+		DrawFormatString(kTextPosX, kDisPosY, 0xffffff, "P :");
+		for (int i = 0; i < m_pPlayer->GetHp(); i++) // 現在のHP分だけ四角を描画する
+		{
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kBarHeight, 0xeee8aa, true);
+		}
+
+		// 現在の弾エネルギー数を表示
+		// メタル
+		DrawFormatString(kTextPosX, kDisPosY + kInterval, 0xffffff, "M :");
+		for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
+		{
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval + kBarHeight, 0xeee8aa, true);
+		}
+
+		// ファイアー
+		DrawFormatString(kTextPosX, kDisPosY + kInterval * 2, 0xffffff, "F :");
+		for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
+		{
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 2, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 2 + kBarHeight, 0xeee8aa, true);
+		}
+
+		// アイテム2号
+		DrawFormatString(kTextPosX, kDisPosY + kInterval * 3, 0xffffff, "2 :");
+		for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
+		{
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 3, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 3 + kBarHeight, 0xeee8aa, true);
+		}
+
+		// 現在の残機数を表示
+		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
+	}
 }
 
 // 弾の生成

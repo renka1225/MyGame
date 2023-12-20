@@ -1,6 +1,8 @@
 #pragma once
 #include "Vec2.h"
 
+class Player;
+
 /// <summary>
 /// ポーズシーンクラス
 /// </summary>
@@ -16,6 +18,9 @@ public:
 	bool IsExist() const { return m_isExist; }
 
 private:
+	// プレイヤーのポインタ
+	Player* m_pPlayer;
+
 	// ポーズ画面の表示位置
 	Vec2 m_pos;
 

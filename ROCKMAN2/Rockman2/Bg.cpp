@@ -139,9 +139,10 @@ void Bg::Update()
 
 			// 設定されたチップの値が1番の場合
 			// 当たり判定を設定
-			
-			m_colRect[y][x].SetLT(x * kChipWidth, y * kChipHeight, kChipWidth, kChipHeight);
-			
+			if (chipNo == 1)
+			{
+				m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
+			}
 		}
 	}
 }
@@ -166,7 +167,7 @@ void Bg::Draw()
 			DrawRectGraph(x * kChipWidth, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
 
 			// 当たり判定の表示
-			//m_colRect[y][x].Draw(0xff0000, false);
+			m_colRect[y][x].Draw(0xff0000, false);
 		}
 	}
 }

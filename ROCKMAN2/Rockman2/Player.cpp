@@ -33,11 +33,11 @@ namespace
 	constexpr int kDamageFrame = 60;
 
 	// プレイヤーの初期位置
-	constexpr float kPosX = 0.0f;
+	constexpr float kPosX = 30.0f;
 	constexpr float kPosY = 500.0f;
 
 	// プレイヤーの最大HP
-	constexpr float kMaxHp = 10;
+	constexpr float kMaxHp = 28;
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 28;
 	// 残機
@@ -116,19 +116,34 @@ void Player::Update()
 	// プレイヤーとマップの当たり判定
 	if (m_colRect.IsCollision(mapChipRect))
 	{
-		int mapChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y +kPlayerHeight) / kMapHeight);
+		m_isGround = true;
 
-		// プレイヤーが地面に接しているか
-		if (mapChipNo == 1)
+		if (m_colRect.GetBottom() > mapChipRect.GetTop()) // プレイヤーの上辺が地面の下辺より上に接した場合
 		{
-			m_isGround = true;
-			
-			//m_pos.x += kSpeed; // これを追加するとプレイヤーが自動スクロールがする
+			m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
 		}
-		else
+		else if (m_colRect.GetTop() > mapChipRect.GetBottom())
 		{
-			m_isGround = false;
+			m_pos.y = mapChipRect.GetTop();
 		}
+		//else if (m_colRect.GetLeft() < mapChipRect.GetRight()) // プレイヤーの左辺が地面の右辺より左に接した場合
+		//{
+		//	m_pos.x = mapChipRect.GetRight() + m_colRect.GetWidth() / 2;	// プレイヤーを地面の右に移動
+		//}
+		//else if (m_colRect.GetRight() > mapChipRect.GetLeft()) // プレイヤーの右辺が地面の左辺より右に接した場合
+		//{
+		//	m_pos.x = mapChipRect.GetLeft() - m_colRect.GetWidth() / 2;	// プレイヤーを地面の左に移動
+		//}
+		//int mapChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y +kPlayerHeight) / kMapHeight);
+		//// プレイヤーが地面に接しているか
+		//if (mapChipNo == 1)
+		//{
+		//	m_isGround = true;
+		//}
+	}
+	else
+	{
+		m_isGround = false;
 	}
 
 	/*画面外に出たら画面内に戻す*/
@@ -348,7 +363,7 @@ void Player::Update()
 	//}
 
 	m_pos += move; // 現在値の更新
-	m_colRect.SetLT(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
+	m_colRect.SetCenter(m_pos.x + kPlayerWidth / 2, m_pos.y + kPlayerHeight / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
 }
 
 void Player::Draw()
@@ -392,6 +407,7 @@ void Player::OnDamage()
 	}
 }
 
+/*回復*/
 void Player::HpSmallRecovery()
 {
 	m_hp += kSmallRecovery;	// HP小回復

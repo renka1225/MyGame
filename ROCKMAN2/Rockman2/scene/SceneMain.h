@@ -43,6 +43,8 @@ private:
 	int m_playerHandle;		// プレイヤー
 	int m_enemyHandle;		// 敵
 
+	int m_drawValue; // HPの回復バーの長さ
+
 	// シーンを終了させるフラグ true:終了
 	bool m_isSceneEnd;
 
