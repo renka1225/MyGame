@@ -131,10 +131,10 @@ void Player::Update()
 		{
 			m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
 		}
-		else if (m_colRect.GetTop() > mapChipRect.GetBottom())
+		/*else if (m_colRect.GetTop() > mapChipRect.GetBottom())
 		{
 			m_pos.y = mapChipRect.GetTop();
-		}
+		}*/
 		//else if (m_colRect.GetLeft() < mapChipRect.GetRight()) // プレイヤーの左辺が地面の右辺より左に接した場合
 		//{
 		//	m_pos.x = mapChipRect.GetRight() + m_colRect.GetWidth() / 2;	// プレイヤーを地面の右に移動

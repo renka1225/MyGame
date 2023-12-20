@@ -6,10 +6,10 @@ C:\GitHub\MyGame\ROCKMAN2\Rockman2\Pad.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x6
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoverySmallShot.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\RecoverySmallShot.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoverySmallHp.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\RecoverySmallHp.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryBase.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\RecoveryBase.obj
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\ScenePause.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ScenePause.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneGameOver.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneGameOver.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTitle.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneTitle.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Player.obj
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\Scene.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Scene.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotLineMove.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ShotLineMove.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ShotFire.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotMetal.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\ShotMetal.obj
