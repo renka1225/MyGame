@@ -28,7 +28,13 @@ public:
 	// 現在座標の取得
 	Vec2 GetPos() const { return m_pos; }
 
-private:
+protected:
+	// 当たり判定を設定する
+	virtual void UpdateCollision();
+
+protected:
+	// グラフィックのハンドル
+	int m_handle;
 	// 画面内に存在しているか
 	bool m_isExist;
 

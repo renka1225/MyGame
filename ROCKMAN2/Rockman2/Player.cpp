@@ -119,42 +119,6 @@ void Player::Update()
 	//int dlNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
 	//int drNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// 右下
 
-	// マップチップの当たり判定を取得する
-	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);
-
-	// プレイヤーとマップの当たり判定
-	if (m_colRect.IsCollision(mapChipRect))
-	{
-		m_isGround = true;
-
-		if (m_colRect.GetBottom() > mapChipRect.GetTop()) // プレイヤーの上辺が地面の下辺より上に接した場合
-		{
-			m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
-		}
-		/*else if (m_colRect.GetTop() > mapChipRect.GetBottom())
-		{
-			m_pos.y = mapChipRect.GetTop();
-		}*/
-		//else if (m_colRect.GetLeft() < mapChipRect.GetRight()) // プレイヤーの左辺が地面の右辺より左に接した場合
-		//{
-		//	m_pos.x = mapChipRect.GetRight() + m_colRect.GetWidth() / 2;	// プレイヤーを地面の右に移動
-		//}
-		//else if (m_colRect.GetRight() > mapChipRect.GetLeft()) // プレイヤーの右辺が地面の左辺より右に接した場合
-		//{
-		//	m_pos.x = mapChipRect.GetLeft() - m_colRect.GetWidth() / 2;	// プレイヤーを地面の左に移動
-		//}
-		//int mapChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y +kPlayerHeight) / kMapHeight);
-		//// プレイヤーが地面に接しているか
-		//if (mapChipNo == 1)
-		//{
-		//	m_isGround = true;
-		//}
-	}
-	else
-	{
-		m_isGround = false;
-	}
-
 	/*画面外に出たら画面内に戻す*/
 	if (m_pos.x < 0)
 	{
@@ -385,7 +349,7 @@ void Player::Update()
 	}
 
 	m_pos += move; // 現在値の更新
-	m_colRect.SetCenter(m_pos.x + kPlayerWidth / 2, m_pos.y + kPlayerHeight / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
+	m_colRect.SetCenter(m_pos.x + static_cast<float>(kPlayerWidth) / 2, m_pos.y + static_cast<float>(kPlayerHeight) / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
 }
 
 void Player::Draw()
@@ -423,6 +387,34 @@ void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMov
 
 	// 2号の状態を更新
 	m_isLineMove = isLineMove;
+}
+
+/*地面、壁に当たったときの処理*/
+void Player::HitCollision()
+{
+	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);
+
+	if (m_colRect.GetBottom() - kPlayerHeight > mapChipRect.GetTop()) // プレイヤーが地面より下に移動した場合
+	{
+		m_isGround = true;
+		m_pos.y = mapChipRect.GetTop() - kPlayerHeight;    // プレイヤーを地面の上に移動
+		//return;
+	}
+	//if (m_colRect.GetTop() > mapChipRect.GetBottom()) // プレイヤーが天井より上に移動した場合
+	//{
+	//	m_pos.y = mapChipRect.GetBottom() + kPlayerHeight; // プレイヤーを天井下に移動
+	//	return;
+	//}
+	//if (m_colRect.GetLeft() < m_colRect.GetRight()) // プレイヤーが壁より左に移動した場合
+	//{
+	//	m_pos.x = mapChipRect.GetRight() + kPlayerWidth;	// プレイヤーを壁の右側に移動
+	//	return;
+	//}
+	//if (m_colRect.GetRight() > mapChipRect.GetLeft()) // プレイヤーが壁より右に移動した場合
+	//{
+	//	m_pos.x = mapChipRect.GetLeft() - kPlayerWidth;	// プレイヤーを地面の左に移動
+	//	return;
+	//}
 }
 
 /*プレイヤーのダメージ演出*/

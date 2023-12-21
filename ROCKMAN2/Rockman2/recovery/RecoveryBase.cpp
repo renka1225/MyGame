@@ -1,7 +1,9 @@
 #include "RecoveryBase.h"
 #include "Player.h"
+#include "DxLib.h"
 
 RecoveryBase::RecoveryBase():
+	m_handle(-1),
 	m_isExist(false)
 {
 }
@@ -24,4 +26,14 @@ void RecoveryBase::Draw()
 {
 	// ‘¶İ‚µ‚È‚¢ƒAƒCƒeƒ€‚Ì•`‰æ‚Í‚µ‚È‚¢
 	if (!m_isExist) return;
+}
+
+void RecoveryBase::UpdateCollision()
+{
+	int width = 0;
+	int height = 0;
+	GetGraphSize(m_handle, &width, &height);
+
+	// “–‚½‚è”»’è‚ğ¶¬
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(width), static_cast<float>(height));
 }

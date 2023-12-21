@@ -6,7 +6,6 @@
 #include "Bg.h"
 #include "ScenePause.h"
 
-#include "RecoveryBase.h"
 #include "RecoverySmallHp.h"
 #include "RecoverySmallShot.h"
 
@@ -208,13 +207,20 @@ void SceneMain::Update()
 
 	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
-	Rect mapChipRect = m_pBg->GetColRect(playerPos.x / 32, playerPos.y / 32); // マップチップの当たり判定を取得する
-		
+	Rect mapChipRect = m_pBg->GetColRect(playerPos.x / 32, playerPos.y / 32);	// マップチップの当たり判定を取得
+	int mapChipNo = m_pBg->GetChipData(playerPos.x/ 32, playerPos.y / 32);		// プレイヤーの現在位置のチップ番号を取得する
+
+	// プレイヤーとマップの当たり判定
+	if (playerRect.IsCollision(mapChipRect))
+	{
+		m_pPlayer->HitCollision();
+	}
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
 	/*if (playerPos.x == 30)
 	{
 		CreateMatasaburo();
+		return;
 	}*/
 
 	// 弾の更新
@@ -243,8 +249,30 @@ void SceneMain::Update()
 		// 使用済みの敵キャラクターを削除
 		if (!m_pEnemy[i]->IsExist())
 		{
-			// アイテムドロップ
-			DropItem();
+			// ランダムでアイテムをドロップ
+			switch (GetRand(4))
+			{
+			case 0:
+				DropHpSmallRecovery(); // HP回復(小)
+				break;
+			case 1:
+				// HP回復(大)
+				break;
+			case 2:
+				// 弾エネルギー(小)
+				break;
+			case 3:
+				// 弾エネルギー(大)
+				return;
+			case 4:
+				// 残機
+				return;
+			case 5:
+				// 何もドロップしない
+				return;
+			default:
+				break;
+			}
 
 			// メモリを解放する
 			delete m_pEnemy[i];
@@ -289,17 +317,16 @@ void SceneMain::Update()
 		m_pRecovery[i]->Update();
 
 		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// 回復アイテムの当たり判定
-
 		// プレイヤーと回復アイテムの当たり判定
 		if (playerRect.IsCollision(recoveryRect))
 		{
-			m_pPlayer->HpSmallRecovery();
+ 			m_pPlayer->HpSmallRecovery();
 
 			// 取得したらアイテムを消す
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
 		}
-	}
+	}  
 }
 
 void SceneMain::Draw()
@@ -428,7 +455,8 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
-void SceneMain::DropItem()
+// 回復アイテムドロップ
+void SceneMain::DropHpSmallRecovery()
 {
 	//使われていない場所にアドレスを保存する
 	for (int i = 0; i < m_pRecovery.size(); i++)

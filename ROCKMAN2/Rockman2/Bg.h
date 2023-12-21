@@ -22,7 +22,7 @@ public:
 	// マップチップ番号の取得
 	int GetChipData(int x, int y) const { return m_chipData[y][x]; }
 	// マップの当たり判定を取得する
-	Rect GetColRect(int x, int y) const { return m_colRect[y][x]; }
+ 	Rect GetColRect(int x, int y) const { return m_colRect[y][x]; }
 
 private:
 	// マップチップの情報

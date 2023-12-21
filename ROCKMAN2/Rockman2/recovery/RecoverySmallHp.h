@@ -32,5 +32,7 @@ private:
 	Vec2 m_pos;
 	// “–‚½‚è”»’è‚Ì‹éŒ`
 	Rect m_colRect;
+	// ˆÚ“®—Ê
+	Vec2 m_vec;
 };
 

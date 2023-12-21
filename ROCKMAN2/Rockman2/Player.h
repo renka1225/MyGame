@@ -36,7 +36,7 @@ public:
 	int GetLife() const { return m_life; }
 
 	// 地面に接しているか取得する
-	bool GetGround() const { return m_isGround; }
+	bool IsGround() const { return m_isGround; }
 
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }
@@ -57,6 +57,8 @@ public:
 	void ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove);
 
 public:
+	// プレイヤーが地面、壁に当たった時の処理
+	void HitCollision();
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
 	// プレイヤーの回復処理

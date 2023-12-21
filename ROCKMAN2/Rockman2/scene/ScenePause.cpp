@@ -57,65 +57,68 @@ void ScenePause::Update()
 		}
 	}
 
-	// ↓キーを押したら選択状態を1つ下げる
-	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
+	if (m_isExist)
 	{
-		m_select = (m_select + 1) % kSelectNum;
-		m_selectPos.y += kSelectPosY; // 選択中の四角を下に移動
-
-		// 選択中の四角が一番下にだったら四角を一番上に戻す
-		if (m_selectPos.y > kInitSelectPosY + kSelectPosY * 3)
+		// ↓キーを押したら選択状態を1つ下げる
+		if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 		{
-			m_selectPos.y = kInitSelectPosY;
+			m_select = (m_select + 1) % kSelectNum;
+			m_selectPos.y += kSelectPosY; // 選択中の四角を下に移動
+
+			// 選択中の四角が一番下にだったら四角を一番上に戻す
+			if (m_selectPos.y > kInitSelectPosY + kSelectPosY * 3)
+			{
+				m_selectPos.y = kInitSelectPosY;
+			}
 		}
-	}
-	// ↑キーを押したら選択状態を1つ上げる
-	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
-	{
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;
-		m_selectPos.y -= kSelectPosY;	// 選択中の四角を上に移動
-
-		if (m_selectPos.y < kInitSelectPosY)
+		// ↑キーを押したら選択状態を1つ上げる
+		if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 		{
-			m_selectPos.y = kInitSelectPosY + kSelectPosY * 3;
-		}
-	}
+			m_select = (m_select + (kSelectNum - 1)) % kSelectNum;
+			m_selectPos.y -= kSelectPosY;	// 選択中の四角を上に移動
 
-	// Xキーを押したら現在選択中の武器に変更する
-	if (Pad::IsTrigger(pad & PAD_INPUT_2))
-	{
-		// 選択中の武器を取得
-		bool isBuster = false;
-		bool isMetal = false;
-		bool isFire = false;
-		bool isLineMove = false;
-
-		switch (m_select)
-		{
-		case kBuster:
-			// バスターに切り替える
-			isBuster = true;
-			break;
-		case kMetal:
-			// メタルに切り替える
-			isMetal = true;
-			break;
-		case kFire:
-			// ファイアに切り替える
-			isFire = true;
-			break;
-		case kLine:
-			// 2号に切り替える
-			isLineMove = true;
-			break;
-		default:
-			break;
+			if (m_selectPos.y < kInitSelectPosY)
+			{
+				m_selectPos.y = kInitSelectPosY + kSelectPosY * 3;
+			}
 		}
 
-		// プレイヤーの武器を変更する
-		m_pPlayer->ChangeShot(isBuster, isMetal, isFire, isLineMove);
+		// Xキーを押したら現在選択中の武器に変更する
+		if (Pad::IsTrigger(pad & PAD_INPUT_2))
+		{
+			// 選択中の武器を取得
+			bool isBuster = false;
+			bool isMetal = false;
+			bool isFire = false;
+			bool isLineMove = false;
 
-		m_isExist = false;	// ポーズ画面を閉じる
+			switch (m_select)
+			{
+			case kBuster:
+				// バスターに切り替える
+				isBuster = true;
+				break;
+			case kMetal:
+				// メタルに切り替える
+				isMetal = true;
+				break;
+			case kFire:
+				// ファイアに切り替える
+				isFire = true;
+				break;
+			case kLine:
+				// 2号に切り替える
+				isLineMove = true;
+				break;
+			default:
+				break;
+			}
+
+			// プレイヤーの武器を変更する
+			m_pPlayer->ChangeShot(isBuster, isMetal, isFire, isLineMove);
+
+			m_isExist = false;	// ポーズ画面を閉じる
+		}
 	}
 }
 
@@ -130,7 +133,7 @@ void ScenePause::Draw()
 		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0xffffff, false); // 枠を描画
 		DrawString(kPosX ,150, "ポーズ画面", 0xffffff);
 
-		// 選択中の弾を四角で描画
+		// 選択中の部分を四角で描画
 		DrawBox(505, m_selectPos.y, 770, m_selectPos.y + 30, 0x00bfff, false);
 	}
 }

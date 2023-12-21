@@ -45,8 +45,15 @@ void RecoverySmallHp::Update()
 		m_isExist = false;
 	}
 
+	// 現在位置の更新
+	m_pos += m_vec;
+	if (m_pos.x > 550)
+	{
+		m_pos.x = 550;
+	}
+
 	// 当たり判定の更新
-	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y , kWidth, kHeight);
 
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
@@ -62,7 +69,8 @@ void RecoverySmallHp::Update()
 
 void RecoverySmallHp::Draw()
 {
-	DrawGraph(m_pos.x, m_pos.y, m_hpSmallRecHandle, true);
+	DrawRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 1.0, 0.0, m_hpSmallRecHandle, true, false);
+	//DrawGraph(m_pos.x, m_pos.y, m_hpSmallRecHandle, true);
 
 #ifdef _DEBUG
 	// アイテムの当たり判定デバッグ表示
@@ -77,4 +85,7 @@ void RecoverySmallHp::Start(Vec2 pos)
 	// 初期位置の設定
 	// 倒した敵の現在地を取得する
 	m_pos = pos;
+
+	// アイテムを下に落とす
+	m_vec.y += 5;
 }
