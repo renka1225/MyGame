@@ -43,6 +43,5 @@ private:
 
 	// ポーズ画面が表示されているか true:表示されている
 	bool m_isExist;
-
 };
 

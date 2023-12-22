@@ -53,7 +53,6 @@ void ScenePause::Update()
 		else
 		{
 			m_isExist = false;
-			m_selectPos.y = 195;
 		}
 	}
 

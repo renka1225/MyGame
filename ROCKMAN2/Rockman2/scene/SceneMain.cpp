@@ -21,9 +21,13 @@ namespace
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
 	// 1度に登場できる敵数
-	constexpr int kEnemyMax = 5;
+	constexpr int kEnemyMax = 20;
 	// 画面内に1度に出せる回復アイテム数
 	constexpr int kRecoveryMax = 20;
+
+	// プレイヤーの画像サイズ
+	constexpr int kPlayerWidth = 32;
+	constexpr int kPlayerHeight = 64;
 
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 510;
@@ -207,14 +211,6 @@ void SceneMain::Update()
 
 	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
-	Rect mapChipRect = m_pBg->GetColRect(playerPos.x / 32, playerPos.y / 32);	// マップチップの当たり判定を取得
-	int mapChipNo = m_pBg->GetChipData(playerPos.x/ 32, playerPos.y / 32);		// プレイヤーの現在位置のチップ番号を取得する
-
-	// プレイヤーとマップの当たり判定
-	if (playerRect.IsCollision(mapChipRect))
-	{
-		m_pPlayer->HitCollision();
-	}
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
 	/*if (playerPos.x == 30)
@@ -250,7 +246,7 @@ void SceneMain::Update()
 		if (!m_pEnemy[i]->IsExist())
 		{
 			// ランダムでアイテムをドロップ
-			switch (GetRand(4))
+			switch (GetRand(6))
 			{
 			case 0:
 				DropHpSmallRecovery(); // HP回復(小)

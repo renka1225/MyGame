@@ -19,7 +19,7 @@ namespace
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
-	constexpr float kVelocity = -10.0f;
+	constexpr float kVelocity = -12.0f;
 
 	// プレイヤーのサイズ
 	constexpr int kPlayerWidth = 32;
@@ -53,7 +53,7 @@ Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_pMain(pMain),
 	m_pBg(pBg),
 	m_pRecovery(nullptr),
-	m_pos(kPosX, kPosY),
+	m_pos(0, 0),
 	m_colRect(),
 	m_handle(-1),
 	m_isRight(true),
@@ -109,15 +109,27 @@ void Player::Init()
 void Player::Update()
 {
 	// 移動量
-	Vec2 move{ 0.0f, 0.0f };
+	Vec2 move {0.0f, 0.0f};
 
-	// プレイヤーの現在地のマップチップ番号を取得する
-	// プレイヤーの現在地 / マップチップのサイズ
-	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
-	//int ulNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// 左上	
-	//int urNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);					// 右上
-	//int dlNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);					// 左下
-	//int drNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// 右下
+	// パッドを使用する
+	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+
+	/*←を押したら左に移動*/
+	if (pad & PAD_INPUT_LEFT)
+	{
+		m_isRight = false;
+		move.x -= kSpeed;
+	}
+
+	/*→を押したら右に移動*/
+	if (pad & PAD_INPUT_RIGHT)
+	{
+		m_isRight = true;
+		move.x += kSpeed;
+	}
+
+	/*マップチップに当たった処理*/
+	HitCollision();
 
 	/*画面外に出たら画面内に戻す*/
 	if (m_pos.x < 0)
@@ -147,33 +159,6 @@ void Player::Update()
 	if (m_damageFrame < 0)
 	{
 		m_damageFrame = 0;
-	}
-
-	// パッドを使用する
-	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-
-	/*←を押したら左に移動*/
-	if (pad & PAD_INPUT_LEFT)
-	{
-		m_isRight = false;
-		move.x -= kSpeed;
-		// プレイヤーの左側が壁に接している場合は左に進まないようにする
-		/*if (ulNo == 1)
-		{
-			move.x = 0;
-		}*/
-	}
-
-	/*→を押したら右に移動*/
-	if (pad & PAD_INPUT_RIGHT)
-	{
-		m_isRight = true;
-		move.x += kSpeed;
-		// プレイヤーの右側が壁に接している場合は右に進まないようにする
-		/*if (urNo == 1)
-		{
-			move.x = 0;
-		}*/
 	}
 
 	/*地面に接している間はジャンプしない*/
@@ -373,6 +358,45 @@ void Player::Draw()
 #endif
 }
 
+/*地面、壁に当たったときの処理*/
+void Player::HitCollision()
+{
+	// プレイヤーの現在地のマップチップ番号を取得する
+	// プレイヤーの現在地 / マップチップのサイズ
+	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
+	int TLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// プレイヤーの左上のチップ番号を取得
+	int TRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);						// プレイヤーの右上のチップ番号を取得
+	int BLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);						// プレイヤーの左下のチップ番号を取得
+	int BRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerHeight) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// プレイヤーの右下のチップ番号を取得
+	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// プレイヤーの左上にあるマップチップの当たり判定
+
+	// プレイヤーとマップの当たり判定
+	if (BLChipNo == 1 || BRChipNo == 1) // 地面に接している場合
+	{
+		m_isGround = true;
+		m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
+	}
+	else if (TLChipNo == 1 || BRChipNo == 1) // 天井に接した場合
+	{
+		m_isGround = false;
+		m_pos.y = mapChipRect.GetBottom();
+	}
+	else
+	{
+		m_isGround = false;
+	}
+
+	if ((BLChipNo == 1 || TLChipNo == 1) && !(BRChipNo == 1 || TRChipNo == 1)) // 壁の右側に当たった場合
+	{
+		m_pos.x += kSpeed; // 移動量を0にする
+		m_pos.x = mapChipRect.GetRight() + 1;
+	}
+	else if ((BRChipNo == 1 || TRChipNo == 1) && !(BLChipNo == 1 || TLChipNo == 1)) // 壁の左側に当たった場合
+	{
+		m_pos.x -= kSpeed; // 移動量を0にする
+		m_pos.x = mapChipRect.GetLeft() - 1;
+	}
+}
 
 void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
 {
@@ -387,34 +411,6 @@ void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMov
 
 	// 2号の状態を更新
 	m_isLineMove = isLineMove;
-}
-
-/*地面、壁に当たったときの処理*/
-void Player::HitCollision()
-{
-	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);
-
-	if (m_colRect.GetBottom() - kPlayerHeight > mapChipRect.GetTop()) // プレイヤーが地面より下に移動した場合
-	{
-		m_isGround = true;
-		m_pos.y = mapChipRect.GetTop() - kPlayerHeight;    // プレイヤーを地面の上に移動
-		//return;
-	}
-	//if (m_colRect.GetTop() > mapChipRect.GetBottom()) // プレイヤーが天井より上に移動した場合
-	//{
-	//	m_pos.y = mapChipRect.GetBottom() + kPlayerHeight; // プレイヤーを天井下に移動
-	//	return;
-	//}
-	//if (m_colRect.GetLeft() < m_colRect.GetRight()) // プレイヤーが壁より左に移動した場合
-	//{
-	//	m_pos.x = mapChipRect.GetRight() + kPlayerWidth;	// プレイヤーを壁の右側に移動
-	//	return;
-	//}
-	//if (m_colRect.GetRight() > mapChipRect.GetLeft()) // プレイヤーが壁より右に移動した場合
-	//{
-	//	m_pos.x = mapChipRect.GetLeft() - kPlayerWidth;	// プレイヤーを地面の左に移動
-	//	return;
-	//}
 }
 
 /*プレイヤーのダメージ演出*/
