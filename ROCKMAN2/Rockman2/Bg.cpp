@@ -5,7 +5,7 @@
 namespace
 {
 	// 背景のスクロール速度
-	constexpr int kSpeed = 1;
+	constexpr int kSpeed = 2;
 
 	// 背景画像をループさせる位置
 	constexpr float kLoopPos = 500;
@@ -89,16 +89,6 @@ void Bg::Init()
 
 void Bg::Update()
 {
-	// プレイヤーを中心にカメラ位置を更新
-	//m_cameraPos.x = m_playerPos.x / kChipWidth;
-	//m_cameraPos.y = m_playerPos.y / kChipHeight;
-
-	// カメラの範囲外を半分だけ計算する
-	int startX = m_cameraPos.x - Game::kScreenWidth / 2;
-	int startY = m_cameraPos.y - Game::kScreenWidth / 2;
-	int endX = m_cameraPos.x - Game::kScreenHeight / 2;
-	int endY = m_cameraPos.y + Game::kScreenHeight / 2;
-
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	if (pad & PAD_INPUT_LEFT) // ←を押した
@@ -110,12 +100,8 @@ void Bg::Update()
 			m_bgPos.x = kLoopPos;
 		}
 
-		// マップチップを右に移動
-		m_mapChipPos.x += kSpeed;
-		if (m_mapChipPos.x < 0)
-		{
-			m_mapChipPos.x = 0;
-		}
+		// カメラを左に移動
+		m_cameraPos.x -= kSpeed;
 
 	}
 	if (pad & PAD_INPUT_RIGHT) // →を押した
@@ -127,12 +113,8 @@ void Bg::Update()
 			m_bgPos.x = 0;
 		}
 
-		// マップチップを左に移動
-		m_mapChipPos.x -= kSpeed;
-		if (m_mapChipPos.x > Game::kScreenWidth * 2)
-		{
-			m_mapChipPos.x = 0;
-		}
+		// カメラを右に移動
+		m_cameraPos.x += kSpeed;
 	}
 
 	// マップチップの当たり判定を更新
@@ -148,7 +130,7 @@ void Bg::Update()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumX);
 
 			// 当たり判定を設定
-			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
+			m_colRect[y][x].SetCenter((x * kChipWidth + kChipWidth / 2) - m_cameraPos.x, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
 			
 		}
 	}
@@ -159,10 +141,14 @@ void Bg::Draw()
 	// 背景の描画
 	DrawRectGraph(0, 0, m_bgPos.x, m_bgPos.y, Game::kScreenWidth, Game::kScreenHeight, m_bgHandle, false);
 
-	// マップの描画
+	// マップチップの描画
+	// マップチップの描画範囲を計算する
+	int startDrawX = m_cameraPos.x / kChipWidth;
+	int endDrawX = startDrawX + (Game::kScreenWidth / kChipWidth) + 1;
+
 	for (int y = 0; y < kChipNumY; y++)
 	{
-		for (int x = 0; x < kChipNumX; x++)
+		for (int x = startDrawX; x <= endDrawX; x++)
 		{
 			// 設置するチップ
 			int chipNo = m_chipData[y][x];
@@ -171,7 +157,8 @@ void Bg::Draw()
 			int srcX = kChipWidth * (chipNo % m_graphChipNumX);
 			int srcY = kChipHeight * (chipNo / m_graphChipNumX);
 
-			DrawRectGraph(x * kChipWidth, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
+			// 描画
+			DrawRectGraph(x * kChipWidth - m_cameraPos.x, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
 
 			if (chipNo == 1)
 			{
