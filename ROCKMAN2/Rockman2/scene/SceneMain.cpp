@@ -48,7 +48,8 @@ namespace
 
 SceneMain::SceneMain():
 	m_drawValue(0),
-	m_isSceneEnd(false)
+	m_isSceneEnd(false),
+	m_cameraPos(0, 0)
 {
 	// プレイヤーのグラフィックロード
 	m_playerHandle = LoadGraph("data/image/player.png");
@@ -61,7 +62,7 @@ SceneMain::SceneMain():
 	assert(m_bgHandle != -1);
 
 	// 背景のメモリ確保
-	m_pBg = new Bg;
+	m_pBg = new Bg{ this };
 	m_pBg->SetHandle(m_bgHandle);
 	m_pBg->SetMapHandle(m_mapHandle);
 
@@ -152,6 +153,10 @@ void SceneMain::Init()
 	// 画面遷移の初期化
 	m_isSceneEnd = false;
 
+	// カメラ位置の初期化
+	m_cameraPos.x = 0;
+	m_cameraPos.y = 0;
+
 	// 背景の初期化
 	m_pBg->Init();
 
@@ -211,6 +216,9 @@ void SceneMain::Update()
 
 	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
+
+	// カメラ位置の更新
+	m_cameraPos.x -= (playerPos.x - Game::kScreenWidth / 2);
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
 	/*if (playerPos.x == 30)

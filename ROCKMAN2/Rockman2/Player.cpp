@@ -400,16 +400,16 @@ void Player::HitCollision()
 
 void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
 {
-	// バスターの状態を更新
+	// バスターの選択状態を更新
 	m_isBuster = isBuster;
 
-	// メタルの状態を更新
+	// メタルの選択状態を更新
 	m_isMetal = isMetal;
 
-	// ファイアの状態を更新
+	// ファイアの選択状態を更新
 	m_isFire = isFire;
 
-	// 2号の状態を更新
+	// 2号の選択状態を更新
 	m_isLineMove = isLineMove;
 }
 

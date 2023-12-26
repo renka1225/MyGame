@@ -3,13 +3,14 @@
 #include "Rect.h"
 #include "Game.h"
 
+class SceneMain;
 /// <summary>
 /// 背景クラス
 /// </summary>
 class Bg
 {
 public:
-	Bg();
+	Bg(SceneMain* pMain);
 	~Bg();
 
 	void Init();
@@ -34,6 +35,9 @@ private:
 	static constexpr int kChipNumY = Game::kScreenHeight / kChipHeight;
 
 private:
+	// シーンメインのポインタ
+	SceneMain* m_pMain;
+
 	// 背景のグラフィック
 	int m_bgHandle;
 	// マップチップのグラフィック
@@ -43,8 +47,6 @@ private:
 	Vec2 m_bgPos;
 	// マップチップの表示位置
 	Vec2 m_mapChipPos;
-	// カメラ位置
-	Vec2 m_cameraPos;
 
 	// グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;
