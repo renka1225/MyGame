@@ -29,8 +29,6 @@ public:
 
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
-	// 現在のカメラ位置を取得する
-	Vec2 GetCameraPos() const { return m_cameraPos; }
 
 private:
 	// 敵キャラクターの生成
@@ -49,9 +47,6 @@ private:
 
 	// シーンを終了させるフラグ true:終了
 	bool m_isSceneEnd;
-
-	// カメラ位置
-	Vec2 m_cameraPos;
 
 	// 背景
 	Bg* m_pBg;
