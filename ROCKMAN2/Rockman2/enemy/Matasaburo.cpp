@@ -56,7 +56,13 @@ void Matasaburo::Update()
 	int height = 0;
 	GetGraphSize(m_handle, &width, &height);
 
+	// âÊñ ÇÊÇËâEÇ…èoÇΩ
 	if (m_pos.x > Game::kScreenWidth - width / 2)
+	{
+		m_isExist = false;
+	}
+	// âÊñ ÇÊÇËç∂Ç…èoÇΩ
+	if (m_pos.x < 0 - width / 2)
 	{
 		m_isExist = false;
 	}
