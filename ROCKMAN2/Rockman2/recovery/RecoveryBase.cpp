@@ -1,9 +1,12 @@
 #include "RecoveryBase.h"
 #include "Player.h"
+#include "SceneMain.h"
 #include "DxLib.h"
 
 RecoveryBase::RecoveryBase():
+	m_pMain(nullptr),
 	m_handle(-1),
+	m_frame(0),
 	m_isExist(false)
 {
 }
@@ -24,8 +27,6 @@ void RecoveryBase::Update()
 
 void RecoveryBase::Draw()
 {
-	// ë∂ç›ÇµÇ»Ç¢ÉAÉCÉeÉÄÇÃï`âÊÇÕÇµÇ»Ç¢
-	if (!m_isExist) return;
 }
 
 void RecoveryBase::UpdateCollision()

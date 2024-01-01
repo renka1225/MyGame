@@ -33,8 +33,6 @@ public:
 private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
-	// アイテムの生成
-	void DropHpSmallRecovery();
 
 private:
 	// グラフィックのハンドル

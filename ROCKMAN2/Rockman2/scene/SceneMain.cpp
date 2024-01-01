@@ -23,7 +23,7 @@ namespace
 	// 1度に登場できる敵数
 	constexpr int kEnemyMax = 20;
 	// 画面内に1度に出せる回復アイテム数
-	constexpr int kRecoveryMax = 20;
+	constexpr int kRecoveryMax = 10;
 
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
@@ -213,11 +213,10 @@ void SceneMain::Update()
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
-	/*if (playerPos.x == 30)
+	if (playerPos.x >= 50 && playerPos.x <= 53)
 	{
 		CreateMatasaburo();
-		return;
-	}*/
+	}
 
 	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -245,27 +244,37 @@ void SceneMain::Update()
 		// 使用済みの敵キャラクターを削除
 		if (!m_pEnemy[i]->IsExist())
 		{
-			// ランダムでアイテムをドロップ
-			switch (GetRand(6))
+			// 確率でアイテムをドロップ
+			switch (GetRand(2))
 			{
 			case 0:
-				DropHpSmallRecovery(); // HP回復(小)
+				// HP回復(小)
+				for (int j = 0; j < m_pRecovery.size(); i++)
+				{
+					if (!m_pRecovery[j])
+					{
+						m_pRecovery[j] = new RecoverySmallHp;
+						m_pRecovery[j]->Start(m_pEnemy[i]->GetPos());
+						m_pRecovery[j]->Init();
+						return;
+					}
+				}
 				break;
 			case 1:
 				// HP回復(大)
 				break;
-			case 2:
-				// 弾エネルギー(小)
-				break;
-			case 3:
-				// 弾エネルギー(大)
-				return;
-			case 4:
-				// 残機
-				return;
-			case 5:
-				// 何もドロップしない
-				return;
+			//case 2:
+			//	// 弾エネルギー(小)
+			//	break;
+			//case 3:
+			//	// 弾エネルギー(大)
+			//	return;
+			//case 4:
+			//	// 残機
+			//	return;
+			//case 5:
+			//	// 何もドロップしない
+			//	return;
 			default:
 				break;
 			}
@@ -451,23 +460,6 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
-// 回復アイテムドロップ
-void SceneMain::DropHpSmallRecovery()
-{
-	//使われていない場所にアドレスを保存する
-	for (int i = 0; i < m_pRecovery.size(); i++)
-	{
-		if (!m_pRecovery[i])	// nullptrであることをチェックする
-		{
-			// HP回復(小)を生成する
-			m_pRecovery[i] = new RecoverySmallHp;
-			m_pRecovery[i]->Init();
-			m_pRecovery[i]->Start(m_pEnemy[i]->GetPos());
-			return;
-		}
-	}
-}
-
 // 敵の生成
 void SceneMain::CreateMatasaburo()
 {
@@ -477,9 +469,9 @@ void SceneMain::CreateMatasaburo()
 		if (!m_pEnemy[i])	// nullptrであることをチェックする
 		{
 			m_pEnemy[i] = new Matasaburo;
-			m_pEnemy[i]->Init();
 			m_pEnemy[i]->SetHandle(m_enemyHandle);
 			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Init();
 			return;	// 1体分メモリを確保できたらその時点で終了
 		}
 	}

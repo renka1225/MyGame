@@ -1,12 +1,15 @@
 #include "Matasaburo.h"
 #include "RecoverySmallHp.h"
 #include "RecoverySmallShot.h"
-#include "SceneMain.h"
 #include "Game.h"
 #include "DxLib.h"
 
 namespace
 {
+	// 敵のサイズ
+	constexpr int kWidth = 64;
+	constexpr int kHeight = 64;
+
 	// 移動速度
 	constexpr float kSpeed = 4.0f;
 
@@ -18,8 +21,7 @@ namespace
 	constexpr float kPosY = 500;
 }
 
-Matasaburo::Matasaburo() :
-	EnemyBase(),
+Matasaburo::Matasaburo():
 	m_hp(kHp)
 {
 	m_handle = LoadGraph("data/image/Enemy/matasaburo.png");
@@ -51,15 +53,16 @@ void Matasaburo::Update()
 	// 当たり判定の更新
 	UpdateCollision();
 
-	// 画面外に出たら存在を消す
-	int width = 0;
-	int height = 0;
-	GetGraphSize(m_handle, &width, &height);
+	// 画面外に出た処理
+	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
+	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
+	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
 
-	if (m_pos.x > Game::kScreenWidth - width / 2)
-	{
-		m_isExist = false;
-	}
+	// 画面内ならここで終了
+	if (!isOut) return;
+
+	// 画面外に出たら終了する
+	m_isExist = false;
 }
 
 void Matasaburo::Draw()

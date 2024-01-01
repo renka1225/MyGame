@@ -1,7 +1,7 @@
 #include "EnemyBase.h"
 #include "RecoveryBase.h"
 #include "RecoverySmallHp.h"
-#include  "ShotBase.h"
+#include "ShotBase.h"
 #include "SceneMain.h"
 #include "DxLib.h"
 #include "Game.h"
@@ -13,7 +13,6 @@ EnemyBase::EnemyBase():
 	m_handle(-1),
 	m_isExist(false),
 	m_hp(0),
-	m_dropItem(0),
 	m_pos(0, 0)
 {
 }

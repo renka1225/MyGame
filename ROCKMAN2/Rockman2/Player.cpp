@@ -367,7 +367,7 @@ void Player::HitCollision()
 	int TLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// プレイヤーの左上のチップ番号を取得
 	int TRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);						// プレイヤーの右上のチップ番号を取得
 	int BLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);						// プレイヤーの左下のチップ番号を取得
-	int BRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerHeight) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// プレイヤーの右下のチップ番号を取得
+	int BRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// プレイヤーの右下のチップ番号を取得
 	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// プレイヤーの左上にあるマップチップの当たり判定
 
 	// プレイヤーとマップの当たり判定
@@ -376,7 +376,7 @@ void Player::HitCollision()
 		m_isGround = true;
 		m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
 	}
-	else if (TLChipNo == 1 || BRChipNo == 1) // 天井に接した場合
+	else if (TLChipNo == 1 || TRChipNo == 1) // 天井に接した場合
 	{
 		m_isGround = false;
 		m_pos.y = mapChipRect.GetBottom();
@@ -386,16 +386,16 @@ void Player::HitCollision()
 		m_isGround = false;
 	}
 
-	if ((BLChipNo == 1 || TLChipNo == 1) && !(BRChipNo == 1 || TRChipNo == 1)) // 壁の右側に当たった場合
-	{
-		m_pos.x += kSpeed; // 移動量を0にする
-		m_pos.x = mapChipRect.GetRight() + 1;
-	}
-	else if ((BRChipNo == 1 || TRChipNo == 1) && !(BLChipNo == 1 || TLChipNo == 1)) // 壁の左側に当たった場合
-	{
-		m_pos.x -= kSpeed; // 移動量を0にする
-		m_pos.x = mapChipRect.GetLeft() - 1;
-	}
+	//if ((BLChipNo == 1 || TLChipNo == 1) && !(BRChipNo == 1 || TRChipNo == 1)) // 壁の右側に当たった場合
+	//{
+	//	m_pos.x += kSpeed; // 移動量を0にする
+	//	m_pos.x = mapChipRect.GetRight() + 1;
+	//}
+	//else if ((BRChipNo == 1 || TRChipNo == 1) && !(BLChipNo == 1 || TLChipNo == 1)) // 壁の左側に当たった場合
+	//{
+	//	m_pos.x -= kSpeed; // 移動量を0にする
+	//	m_pos.x = mapChipRect.GetLeft() - 1;
+	//}
 }
 
 void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)

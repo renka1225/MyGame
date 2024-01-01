@@ -20,6 +20,11 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
+	// 敵がダメージを受けた時の処理
+	virtual void OnDamage();
+	// 敵キャラクターをスタートさせる
+	virtual void Start() = 0;
+
 	// メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
@@ -28,17 +33,10 @@ public:
 	bool IsExist() const { return m_isExist; }
 	// HPの取得
 	int GetHp() const { return m_hp; }
-	// アイテムをドロップする確率を取得する
-	float GetDropItem() const { return m_dropItem; }
 	// 現在座標の取得
 	Vec2 GetPos() const { return m_pos; }
 	// 当たり判定を取得する
 	Rect GetColRect() const { return m_colRect; }
-
-	// 敵がダメージを受けた時の処理
-	virtual void OnDamage();
-	// 敵キャラクターをスタートさせる
-	virtual void Start() = 0;
 
 protected:
 	// 当たり判定を設定する
@@ -58,8 +56,6 @@ protected:
 	bool m_isExist;	
 	// 敵のHP
 	int m_hp;
-	// アイテムをドロップする確率
-	float m_dropItem;
 
 	// 表示位置
 	Vec2 m_pos;
@@ -68,4 +64,3 @@ protected:
 	// 移動量
 	Vec2 m_vec;
 };
-
