@@ -20,11 +20,6 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	// 敵がダメージを受けた時の処理
-	virtual void OnDamage();
-	// 敵キャラクターをスタートさせる
-	virtual void Start() = 0;
-
 	// メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
@@ -39,6 +34,11 @@ public:
 	Vec2 GetPos() const { return m_pos; }
 	// 当たり判定を取得する
 	Rect GetColRect() const { return m_colRect; }
+
+	// 敵がダメージを受けた時の処理
+	virtual void OnDamage();
+	// 敵キャラクターをスタートさせる
+	virtual void Start() = 0;
 
 protected:
 	// 当たり判定を設定する

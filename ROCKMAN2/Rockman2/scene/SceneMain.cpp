@@ -29,10 +29,6 @@ namespace
 	constexpr int kPlayerWidth = 32;
 	constexpr int kPlayerHeight = 64;
 
-	// マップチップのサイズ
-	constexpr int kMapChipWidth = 32;
-	constexpr int kMapChipHeight = 32;
-
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 510;
 	// バーの表示位置
@@ -217,10 +213,11 @@ void SceneMain::Update()
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
-	if (playerPos.x >= 50 && playerPos.x <= 55)
+	/*if (playerPos.x == 30)
 	{
 		CreateMatasaburo();
-	}
+		return;
+	}*/
 
 	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -464,8 +461,8 @@ void SceneMain::DropHpSmallRecovery()
 		{
 			// HP回復(小)を生成する
 			m_pRecovery[i] = new RecoverySmallHp;
-			m_pRecovery[i]->Start(m_pEnemy[i]->GetPos());
 			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Start(m_pEnemy[i]->GetPos());
 			return;
 		}
 	}
@@ -480,9 +477,9 @@ void SceneMain::CreateMatasaburo()
 		if (!m_pEnemy[i])	// nullptrであることをチェックする
 		{
 			m_pEnemy[i] = new Matasaburo;
+			m_pEnemy[i]->Init();
 			m_pEnemy[i]->SetHandle(m_enemyHandle);
 			m_pEnemy[i]->Start();
-			m_pEnemy[i]->Init();
 			return;	// 1体分メモリを確保できたらその時点で終了
 		}
 	}

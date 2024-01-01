@@ -1,7 +1,7 @@
 #include "EnemyBase.h"
 #include "RecoveryBase.h"
 #include "RecoverySmallHp.h"
-#include "ShotBase.h"
+#include  "ShotBase.h"
 #include "SceneMain.h"
 #include "DxLib.h"
 #include "Game.h"

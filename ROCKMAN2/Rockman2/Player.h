@@ -31,8 +31,6 @@ public:
 	Vec2 GetPos() const { return m_pos; }
 	// プレイヤーの当たり判定を取得する
 	Rect GetColRect() const { return m_colRect; }
-	// プレイヤーが地面に接しているかどうか
-	bool GetIsGround() const { return m_isGround; }
 
 	// 現在のHPを取得する
 	float GetHp() const { return m_hp; }
