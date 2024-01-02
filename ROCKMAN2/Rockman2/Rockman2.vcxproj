@@ -144,6 +144,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="enemy\Matasaburo.cpp" />
     <ClCompile Include="Pad.cpp" />
+    <ClCompile Include="recovery\RecoveryGreatHp.cpp" />
     <ClCompile Include="recovery\RecoverySmallShot.cpp" />
     <ClCompile Include="recovery\RecoverySmallHp.cpp" />
     <ClCompile Include="recovery\RecoveryBase.cpp" />
@@ -167,9 +168,11 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="enemy\Matasaburo.h" />
     <ClInclude Include="Pad.h" />
+    <ClInclude Include="recovery\RecoveryGreatHp.h" />
     <ClInclude Include="recovery\RecoverySmallShot.h" />
     <ClInclude Include="recovery\RecoverySmallHp.h" />
     <ClInclude Include="recovery\RecoveryBase.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="scene\ScenePause.h" />
     <ClInclude Include="scene\SceneGameOver.h" />
     <ClInclude Include="scene\SceneTitle.h" />
@@ -183,6 +186,9 @@
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="util\Vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Rockman2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

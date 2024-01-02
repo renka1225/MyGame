@@ -462,10 +462,29 @@ void Player::HpFullRecovery()
 
 void Player::ShotSmallRecovery()
 {
-	m_metalEnergy += kSmallRecovery; // 弾エネルギー小回復
-	if (m_metalEnergy > kMaxShot) // 最大エネルギーを超えた場合
+	if (m_isMetal) // メタル
 	{
-		m_hp = m_metalEnergy;
+		m_metalEnergy += kSmallRecovery;
+		if (m_metalEnergy > kMaxShot)
+		{
+			m_metalEnergy = kMaxShot;
+		}
+	}
+	else if (m_isFire) // ファイア
+	{
+		m_fireEnergy += kSmallRecovery;
+		if (m_fireEnergy > kMaxShot)
+		{
+			m_fireEnergy = kMaxShot;
+		}
+	}
+	else if (m_isLineMove) // 2号
+	{
+		m_isLineMove += kSmallRecovery;
+		if (m_isLineMove > kMaxShot)
+		{
+			m_isLineMove = kMaxShot;
+		}
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "ScenePause.h"
 
 #include "RecoverySmallHp.h"
+#include "RecoveryGreatHp.h"
 #include "RecoverySmallShot.h"
 
 #include "Player.h"
@@ -23,7 +24,7 @@ namespace
 	// 1度に登場できる敵数
 	constexpr int kEnemyMax = 20;
 	// 画面内に1度に出せる回復アイテム数
-	constexpr int kRecoveryMax = 10;
+	constexpr int kRecoveryMax = 50;
 
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
@@ -245,27 +246,17 @@ void SceneMain::Update()
 		if (!m_pEnemy[i]->IsExist())
 		{
 			// 確率でアイテムをドロップ
-			switch (GetRand(2))
+			switch (GetRand(3))
 			{
 			case 0:
-				// HP回復(小)
-				for (int j = 0; j < m_pRecovery.size(); i++)
-				{
-					if (!m_pRecovery[j])
-					{
-						m_pRecovery[j] = new RecoverySmallHp;
-						m_pRecovery[j]->Start(m_pEnemy[i]->GetPos());
-						m_pRecovery[j]->Init();
-						return;
-					}
-				}
+				DropHpSmallRecovery(i); // HP回復(小)
 				break;
 			case 1:
-				// HP回復(大)
+				DropHpGreatRecovery(i);	// HP回復(大)
 				break;
-			//case 2:
-			//	// 弾エネルギー(小)
-			//	break;
+			case 2:
+				DropShotSmallRecovery(i); // 弾エネルギー(小)
+				break;
 			//case 3:
 			//	// 弾エネルギー(大)
 			//	return;
@@ -325,7 +316,18 @@ void SceneMain::Update()
 		// プレイヤーと回復アイテムの当たり判定
 		if (playerRect.IsCollision(recoveryRect))
 		{
- 			m_pPlayer->HpSmallRecovery();
+			if (dynamic_cast<RecoverySmallHp*>(m_pRecovery[i])) // HP小回復
+			{
+				m_pPlayer->HpSmallRecovery();
+			}
+			else if (dynamic_cast<RecoveryGreatHp*>(m_pRecovery[i])) // HP大回復
+			{
+				m_pPlayer->HpGreatRecovery();
+			}
+			else if (dynamic_cast<RecoverySmallShot*>(m_pRecovery[i])) // 弾小回復
+			{
+				m_pPlayer->ShotSmallRecovery();
+			}
 
 			// 取得したらアイテムを消す
 			delete m_pRecovery[i];
@@ -438,7 +440,7 @@ void SceneMain::Draw()
 	}
 }
 
-// 弾の生成
+/*弾の生成*/
 bool SceneMain::AddShot(ShotBase* pShot)
 {
 	// nullptrを渡されたら止まる
@@ -460,7 +462,50 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
-// 敵の生成
+/*アイテムドロップ*/
+void SceneMain::DropHpSmallRecovery(int enemyIndex) // HP小回復
+{
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (!m_pRecovery[i])
+		{
+			m_pRecovery[i] = new RecoverySmallHp;
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
+			m_pRecovery[i]->Init();
+			return;
+		}
+	}
+}
+
+void SceneMain::DropHpGreatRecovery(int enemyIndex) // HP大回復
+{
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (!m_pRecovery[i])
+		{
+			m_pRecovery[i] = new RecoveryGreatHp;
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
+			m_pRecovery[i]->Init();
+			return;
+		}
+	}
+}
+
+void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
+{
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (!m_pRecovery[i])
+		{
+			m_pRecovery[i] = new RecoverySmallShot;
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
+			m_pRecovery[i]->Init();
+			return;
+		}
+	}
+}
+
+/*敵の生成*/
 void SceneMain::CreateMatasaburo()
 {
 	//使われていない場所にアドレスを保存する

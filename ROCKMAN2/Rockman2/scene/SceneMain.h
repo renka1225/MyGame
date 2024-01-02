@@ -24,8 +24,12 @@ public:
 	void Draw();
 
 	// ショットの追加
-	// 登録できなかった場合はfalseを返す、内部でpShotを解放する
 	bool AddShot(ShotBase* pShot);
+
+	// アイテムドロップ
+	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
+	void DropHpGreatRecovery(int enemyIndex);	// HP大回復
+	void DropShotSmallRecovery(int enemyIndex);	// 弾小回復
 
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
