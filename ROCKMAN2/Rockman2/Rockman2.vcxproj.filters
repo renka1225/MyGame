@@ -111,6 +111,15 @@
     <ClCompile Include="recovery\RecoveryGreatHp.cpp">
       <Filter>ソース ファイル\recovery</Filter>
     </ClCompile>
+    <ClCompile Include="recovery\RecoveryGreatShot.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryLife.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="recovery\RecoveryFullHp.cpp">
+      <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -180,6 +189,15 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="recovery\RecoveryGreatHp.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryGreatShot.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryLife.h">
+      <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="recovery\RecoveryFullHp.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
     </ClInclude>
   </ItemGroup>

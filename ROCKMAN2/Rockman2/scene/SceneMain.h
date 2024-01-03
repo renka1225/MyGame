@@ -30,6 +30,8 @@ public:
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
 	void DropHpGreatRecovery(int enemyIndex);	// HP大回復
 	void DropShotSmallRecovery(int enemyIndex);	// 弾小回復
+	void DropShotGreatRecovery(int enemyIndex);	// 弾大回復
+	void DropLifeRecovery(int enemyIndex);		// 残機回復
 
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }

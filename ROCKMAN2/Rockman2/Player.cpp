@@ -62,6 +62,7 @@ Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_jumpFrame(0),
 	m_hp(kMaxHp),
 	m_life(kLife),
+	m_FullHpRecovery(0),
 	m_damageFrame(0),
 	m_metalEnergy(28),
 	m_fireEnergy(28),
@@ -252,17 +253,17 @@ void Player::Update()
 	/*ファイヤー発射*/
 	if (m_isFire)
 	{
-	// Cキーが押された瞬間を取得
+	// キーが押された瞬間を取得
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
 			m_pressTime = GetNowCount();
 		}
-		// cキーが押されているか判定
+		// キーが押されているか判定
 		if (Pad::IsPress(PAD_INPUT_1))
 		{
 			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
 		}
-		// cキーが離された瞬間を判定
+		// キーが離された瞬間を判定
 		if (Pad::IsRelease(PAD_INPUT_1))
 		{
 			if (m_fireEnergy > 0) // 弾エネルギーが0以上
@@ -398,6 +399,7 @@ void Player::HitCollision()
 	//}
 }
 
+/*弾の選択状態を更新*/
 void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
 {
 	// バスターの選択状態を更新
@@ -433,34 +435,25 @@ void Player::OnDamage()
 }
 
 /*回復*/
-void Player::HpSmallRecovery()
+void Player::HpSmallRecovery() // HP小回復
 {
-	m_hp += kSmallRecovery;	// HP小回復
+	m_hp += kSmallRecovery;
 	if (m_hp > kMaxHp) // 最大HPを超えた場合
 	{
 		m_hp = kMaxHp;
 	}
 }
 
-void Player::HpGreatRecovery()
+void Player::HpGreatRecovery() // HP大回復
 {
-	m_hp += kGreatRecovery;	// HP大回復
+	m_hp += kGreatRecovery;
 	if (m_hp > kMaxHp) // 最大HPを超えた場合
 	{
 		m_hp = kMaxHp;
 	}
 }
 
-void Player::HpFullRecovery()
-{
-	m_hp += kMaxHp; // HP全回復
-	if (m_hp > kMaxHp) // 最大HPを超えた場合
-	{
-		m_hp = kMaxHp;
-	}
-}
-
-void Player::ShotSmallRecovery()
+void Player::ShotSmallRecovery() // 弾小回復
 {
 	if (m_isMetal) // メタル
 	{
@@ -488,20 +481,48 @@ void Player::ShotSmallRecovery()
 	}
 }
 
-void Player::ShotGreatRecovery()
+void Player::ShotGreatRecovery() // 弾大回復
 {
-	m_metalEnergy += kGreatRecovery; // 弾エネルギー大回復
-	if (m_metalEnergy > kMaxShot) // 最大エネルギーを超えた場合
+	if (m_isMetal) // メタル
 	{
-		m_hp = m_metalEnergy;
+		m_metalEnergy += kGreatRecovery;
+		if (m_metalEnergy > kMaxShot)
+		{
+			m_metalEnergy = kMaxShot;
+		}
+	}
+	else if (m_isFire) // ファイア
+	{
+		m_fireEnergy += kGreatRecovery;
+		if (m_fireEnergy > kMaxShot)
+		{
+			m_fireEnergy = kMaxShot;
+		}
+	}
+	else if (m_isLineMove) // 2号
+	{
+		m_isLineMove += kSmallRecovery;
+		if (m_isLineMove > kMaxShot)
+		{
+			m_isLineMove = kMaxShot;
+		}
 	}
 }
 
-void Player::LifeRecovery()
+void Player::LifeRecovery() // 残機回復
 {
 	m_life += 1;	// 残機を1増やす
 	if (m_life > 99)
 	{
 		m_life = 99;
+	}
+}
+
+void Player::HpFullRecovery() // HP全回復
+{
+	m_hp += kMaxHp;
+	if (m_hp > kMaxHp) // 最大HPを超えた場合
+	{
+		m_hp = kMaxHp;
 	}
 }

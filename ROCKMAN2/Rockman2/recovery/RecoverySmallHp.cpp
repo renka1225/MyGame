@@ -2,7 +2,6 @@
 #include "EnemyBase.h"
 #include "Game.h"
 #include "DxLib.h"
-#include <cassert>
 
 namespace
 {
@@ -43,7 +42,7 @@ void RecoverySmallHp::Update()
 	}
 
 	// 当たり判定の更新
-	UpdateCollision();
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	// 5秒以上たったらアイテムを消す
 	m_frame++;
@@ -54,7 +53,7 @@ void RecoverySmallHp::Update()
 	}
 
 	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
+	bool isOut = false;	// チェック中の座標が画面外かどうか
 	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
 	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
 

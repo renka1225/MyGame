@@ -32,10 +32,6 @@ public:
 	Rect GetColRect() const { return m_colRect; }
 
 protected:
-	// 当たり判定を設定する
-	virtual void UpdateCollision();
-
-protected:
 	// メインシーンのポインタ
 	SceneMain* m_pMain;
 	// グラフィックのハンドル

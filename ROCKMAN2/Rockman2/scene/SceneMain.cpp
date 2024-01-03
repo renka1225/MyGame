@@ -9,6 +9,9 @@
 #include "RecoverySmallHp.h"
 #include "RecoveryGreatHp.h"
 #include "RecoverySmallShot.h"
+#include "RecoveryGreatShot.h"
+#include "RecoveryLife.h"
+#include "RecoveryFullHp.h"
 
 #include "Player.h"
 
@@ -246,7 +249,7 @@ void SceneMain::Update()
 		if (!m_pEnemy[i]->IsExist())
 		{
 			// 確率でアイテムをドロップ
-			switch (GetRand(3))
+			switch (GetRand(5))
 			{
 			case 0:
 				DropHpSmallRecovery(i); // HP回復(小)
@@ -257,15 +260,15 @@ void SceneMain::Update()
 			case 2:
 				DropShotSmallRecovery(i); // 弾エネルギー(小)
 				break;
-			//case 3:
-			//	// 弾エネルギー(大)
-			//	return;
-			//case 4:
-			//	// 残機
-			//	return;
-			//case 5:
-			//	// 何もドロップしない
-			//	return;
+			case 3:
+				DropShotGreatRecovery(i); // 弾エネルギー(大)
+				break;
+			case 4:
+				DropLifeRecovery(i);	// 残機
+				break;
+			case 5:
+				// 何もドロップしない
+				break;
 			default:
 				break;
 			}
@@ -327,6 +330,14 @@ void SceneMain::Update()
 			else if (dynamic_cast<RecoverySmallShot*>(m_pRecovery[i])) // 弾小回復
 			{
 				m_pPlayer->ShotSmallRecovery();
+			}
+			else if (dynamic_cast<RecoveryGreatShot*>(m_pRecovery[i])) // 弾大回復
+			{
+				m_pPlayer->ShotGreatRecovery();
+			}
+			else if (dynamic_cast<RecoveryLife*>(m_pRecovery[i])) // 残機回復
+			{
+				m_pPlayer->LifeRecovery();
 			}
 
 			// 取得したらアイテムを消す
@@ -437,6 +448,9 @@ void SceneMain::Draw()
 
 		// 現在の残機数を表示
 		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
+
+		// 現在のE缶数を表示
+		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "E: %d", m_pPlayer->GetFullHpRecovery());
 	}
 }
 
@@ -453,6 +467,7 @@ bool SceneMain::AddShot(ShotBase* pShot)
 
 		// m_pShot[i] == nullptrなので新しく登録する
 		m_pShot[i] = pShot;
+
 		// 登録したら終了
 		return true;
 	}
@@ -498,6 +513,34 @@ void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoverySmallShot;
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
+			m_pRecovery[i]->Init();
+			return;
+		}
+	}
+}
+
+void SceneMain::DropShotGreatRecovery(int enemyIndex) // 残機回復
+{
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (!m_pRecovery[i])
+		{
+			m_pRecovery[i] = new RecoveryLife;
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
+			m_pRecovery[i]->Init();
+			return;
+		}
+	}
+}
+
+void SceneMain::DropLifeRecovery(int enemyIndex)
+{
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (!m_pRecovery[i])
+		{
+			m_pRecovery[i] = new RecoveryGreatShot;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			m_pRecovery[i]->Init();
 			return;

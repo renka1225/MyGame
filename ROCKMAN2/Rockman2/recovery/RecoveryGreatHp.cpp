@@ -43,7 +43,7 @@ void RecoveryGreatHp::Update()
 	}
 
 	// 当たり判定の更新
-	UpdateCollision();
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	// 5秒以上たったらアイテムを消す
 	m_frame++;

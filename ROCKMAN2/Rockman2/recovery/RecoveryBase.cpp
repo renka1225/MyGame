@@ -28,13 +28,3 @@ void RecoveryBase::Update()
 void RecoveryBase::Draw()
 {
 }
-
-void RecoveryBase::UpdateCollision()
-{
-	int width = 0;
-	int height = 0;
-	GetGraphSize(m_handle, &width, &height);
-
-	// “–‚½‚è”»’è‚ğ¶¬
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(width), static_cast<float>(height));
-}
