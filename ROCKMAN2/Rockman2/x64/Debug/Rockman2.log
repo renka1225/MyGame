@@ -1,24 +1,9 @@
-﻿  RecoveryFullHp.cpp
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(17,7): error C3646: 'GetColRect': 不明なオーバーライド指定子です
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(17,17): error C2059: 構文エラー: '('
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(17,26): error C2334: '{' の前に予期しないトークンがありました。関数の本体は無視されます
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(21,11): error C2143: 構文エラー: ';' が '*' の前にありません。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(21,11): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(21,20): error C2238: ';' の前に無効なトークンがあります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(28,7): error C3646: 'm_pos': 不明なオーバーライド指定子です
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(28,12): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(30,7): error C3646: 'm_colRect': 不明なオーバーライド指定子です
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.h(30,16): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+﻿  Bg.cpp
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(14,2): error C2614: 'RecoveryFullHp': イニシャライズ リスト内のクラス 'm_pMain' が基底クラスでもメンバーでもありません。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(27,2): error C2065: 'm_pos': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(28,2): error C2065: 'm_pos': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(37,2): error C2065: 'm_colRect': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(37,22): error C2065: 'm_pos': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(37,31): error C2065: 'm_pos': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(42,33): error C2065: 'm_pos': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(42,60): error C2065: 'm_pos': 定義されていない識別子です。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryFullHp.cpp(46,2): error C2065: 'm_colRect': 定義されていない識別子です。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Bg.cpp(118,79): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Bg.cpp(118,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Bg.cpp(126,40): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Bg.cpp(126,29): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   Player.cpp
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
@@ -40,18 +25,43 @@ C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(372,68): warning C4244: '引数': 
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(372,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(47,33): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(48,33): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(476,3): warning C4804: '+=': 演算中の 'bool' 型の使用方法が安全ではありません
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(477,7): warning C4804: '>': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(482,3): warning C4804: '+=': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(483,7): warning C4804: '>': 演算中の 'bool' 型の使用方法が安全ではありません
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(42,27): warning C4305: '=': 'const float' から 'bool' へ切り詰めます。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(504,3): warning C4804: '+=': 演算中の 'bool' 型の使用方法が安全ではありません
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(505,7): warning C4804: '>': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(510,3): warning C4804: '+=': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(511,7): warning C4804: '>': 演算中の 'bool' 型の使用方法が安全ではありません
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(40,25): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+  EnemyBase.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  RecoveryBase.cpp
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  SceneMain.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
+  SceneManager.cpp
+  ShotBuster.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotBuster.cpp(71,26): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotBuster.cpp(71,17): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  ShotFire.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(74,27): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(74,18): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(80,28): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(80,19): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(84,28): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(84,19): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(91,28): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(91,19): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(95,28): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotFire.cpp(95,19): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   ShotMetal.cpp
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotMetal.cpp(77,26): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\shot\ShotMetal.cpp(77,17): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  SceneMain.cpp
-C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.h(36,31): warning C4244: 'return': 'const int' から 'float' への変換です。データが失われる可能性があります。
   コードを生成中...
+  Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe

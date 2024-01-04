@@ -10,10 +10,7 @@ namespace
 	constexpr int kHeight = 32;
 }
 
-RecoveryFullHp::RecoveryFullHp():
-	m_pMain(nullptr),
-	m_handle(-1),
-	m_isExist(false)
+RecoveryFullHp::RecoveryFullHp()
 {
 	m_handle = LoadGraph("data/image/Recovery/fullHp.png");
 }
@@ -24,8 +21,6 @@ RecoveryFullHp::~RecoveryFullHp()
 
 void RecoveryFullHp::Init()
 {
-	m_pos.x = 320;
-	m_pos.y = 500;
 }
 
 void RecoveryFullHp::Update()
@@ -45,4 +40,12 @@ void RecoveryFullHp::Draw()
 	// アイテムの当たり判定デバッグ表示
 	m_colRect.Draw(0x00ff00, false);
 #endif
+}
+
+void RecoveryFullHp::Start(Vec2 pos)
+{
+	m_isExist = true;
+
+	// 初期位置の設定
+	m_pos = pos;
 }

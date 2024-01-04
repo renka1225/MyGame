@@ -1,34 +1,23 @@
 #pragma once
-
-class SceneMain;
+#include "RecoveryBase.h"
 
 /// <summary>
 /// HP全回復アイテムクラス
 /// </summary>
-class RecoveryFullHp
+class RecoveryFullHp : public RecoveryBase
 {
 public:
 	RecoveryFullHp();
-	virtual ~RecoveryFullHp();
+	~RecoveryFullHp();
 
-	void Init();
-	void Update();
-	void Draw();
-
-	// 回復アイテムの当たり判定を取得する
-	Rect GetColRect() const { return m_colRect; }
+	virtual void Init() override;
+	virtual void Update() override;
+	virtual void Draw() override;
+	// アイテムをドロップする
+	virtual void Start(Vec2 pos) override;
 
 private:
-	// メインシーンのポインタ
-	SceneMain* m_pMain;
 	// グラフィックのハンドル
 	int m_handle;
-	// 画面内に存在しているか
-	bool m_isExist;
-
-	// 表示位置
-	Vec2 m_pos;
-	// 当たり判定用の矩形
-	Rect m_colRect;
 };
 

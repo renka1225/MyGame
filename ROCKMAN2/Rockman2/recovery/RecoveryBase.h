@@ -18,7 +18,7 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	// 倒した敵の現在地からアイテムをドロップする
+	// アイテムの初期位置
 	virtual void Start(Vec2 pos) = 0;
 
 	// メンバ変数にアクセス

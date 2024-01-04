@@ -37,7 +37,7 @@ public:
 	// 現在の残機数を取得する
 	int GetLife() const { return m_life; }
 	// 現在のE缶数を取得
-	int GetFullHpRecovery() const { return m_FullHpRecovery; }
+	int GetFullHpRecovery() const { return m_fullHpRecovery; }
 
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }
@@ -60,6 +60,8 @@ public:
 public:
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
+	// プレイヤーがE缶を取得したとき
+	void GetHpFullRecovery();
 	// プレイヤーの回復処理
 	void HpSmallRecovery();		// HP小回復
 	void HpGreatRecovery();		// HP大回復
@@ -95,7 +97,7 @@ private:
 	// 残機
 	int m_life;
 	// E缶
-	int m_FullHpRecovery;
+	int m_fullHpRecovery;
 
 	// ダメージを受けてからのフレーム数
 	int m_damageFrame;

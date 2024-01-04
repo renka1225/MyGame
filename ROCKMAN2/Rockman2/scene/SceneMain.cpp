@@ -52,6 +52,7 @@ namespace
 
 SceneMain::SceneMain():
 	m_drawValue(0),
+	m_isGetFullHpRecovery(false),
 	m_isSceneEnd(false)
 {
 	// プレイヤーのグラフィックロード
@@ -222,6 +223,12 @@ void SceneMain::Update()
 		CreateMatasaburo();
 	}
 
+	// プレイヤーが画面内に移動したらE缶を表示する
+	if (playerPos.x >= 100 && !m_isGetFullHpRecovery)
+	{
+		DropFullHpRecovery();
+	}
+
 	// 弾の更新
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
@@ -339,12 +346,20 @@ void SceneMain::Update()
 			{
 				m_pPlayer->LifeRecovery();
 			}
+			else if (dynamic_cast<RecoveryFullHp*>(m_pRecovery[i])) // HP全回復
+			{
+				if (!m_isGetFullHpRecovery)  // E缶を取得してない場合
+				{
+					m_pPlayer->GetHpFullRecovery();
+					m_isGetFullHpRecovery = true;
+				}
+			}
 
 			// 取得したらアイテムを消す
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
 		}
-	}  
+	}
 }
 
 void SceneMain::Draw()
@@ -446,11 +461,11 @@ void SceneMain::Draw()
 			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 3, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 3 + kBarHeight, 0xeee8aa, true);
 		}
 
-		// 現在の残機数を表示
-		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
-
 		// 現在のE缶数を表示
-		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "E: %d", m_pPlayer->GetFullHpRecovery());
+		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
+
+		// 現在の残機数を表示
+		DrawFormatString(kTextPosX, kDisPosY + kInterval * 5, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
 	}
 }
 
@@ -520,7 +535,7 @@ void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
 	}
 }
 
-void SceneMain::DropShotGreatRecovery(int enemyIndex) // 残機回復
+void SceneMain::DropShotGreatRecovery(int enemyIndex) // 弾大回復
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -534,7 +549,7 @@ void SceneMain::DropShotGreatRecovery(int enemyIndex) // 残機回復
 	}
 }
 
-void SceneMain::DropLifeRecovery(int enemyIndex)
+void SceneMain::DropLifeRecovery(int enemyIndex) // 残機回復
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -542,6 +557,20 @@ void SceneMain::DropLifeRecovery(int enemyIndex)
 		{
 			m_pRecovery[i] = new RecoveryGreatShot;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
+			m_pRecovery[i]->Init();
+			return;
+		}
+	}
+}
+
+void SceneMain::DropFullHpRecovery() // HP全回復
+{
+	for (int i = 0; i < m_pRecovery.size(); i++)
+	{
+		if (!m_pRecovery[i])
+		{
+			m_pRecovery[i] = new RecoveryFullHp;
+			m_pRecovery[i]->Start({ 500, 500 }); // アイテムの位置を設定
 			m_pRecovery[i]->Init();
 			return;
 		}

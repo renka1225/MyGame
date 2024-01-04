@@ -62,7 +62,7 @@ Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_jumpFrame(0),
 	m_hp(kMaxHp),
 	m_life(kLife),
-	m_FullHpRecovery(0),
+	m_fullHpRecovery(0),
 	m_damageFrame(0),
 	m_metalEnergy(28),
 	m_fireEnergy(28),
@@ -434,6 +434,12 @@ void Player::OnDamage()
 	}
 }
 
+/*EŠÊŽæ“¾*/
+void Player::GetHpFullRecovery()
+{
+	m_fullHpRecovery += 1;
+}
+
 /*‰ñ•œ*/
 void Player::HpSmallRecovery() // HP¬‰ñ•œ
 {
@@ -520,9 +526,20 @@ void Player::LifeRecovery() // Žc‹@‰ñ•œ
 
 void Player::HpFullRecovery() // HP‘S‰ñ•œ
 {
-	m_hp += kMaxHp;
-	if (m_hp > kMaxHp) // Å‘åHP‚ð’´‚¦‚½ê‡
+	if (m_fullHpRecovery > 0)
 	{
-		m_hp = kMaxHp;
+		if (m_hp < kMaxHp) // Œ»Ý‚ÌHP‚ªÅ‘åHP–¢–ž
+		{
+			m_hp += kMaxHp;	// HP‚ðÅ‘å‚Ü‚Å‰ñ•œ
+			if (m_hp > kMaxHp) // Å‘åHP‚ð’´‚¦‚½ê‡
+			{
+				m_hp = kMaxHp;
+			}
+			m_fullHpRecovery--; // ŠŽ”‚ð1Œ¸‚ç‚·
+		}
+	}
+	else
+	{
+		m_fullHpRecovery = 0;
 	}
 }

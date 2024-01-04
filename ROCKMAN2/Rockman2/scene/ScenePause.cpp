@@ -56,6 +56,7 @@ void ScenePause::Update()
 		}
 	}
 
+	// 表示中
 	if (m_isExist)
 	{
 		// ↓キーを押したら選択状態を1つ下げる
@@ -65,7 +66,7 @@ void ScenePause::Update()
 			m_selectPos.y += kSelectPosY; // 選択中の四角を下に移動
 
 			// 選択中の四角が一番下にだったら四角を一番上に戻す
-			if (m_selectPos.y > kInitSelectPosY + kSelectPosY * 3)
+			if (m_selectPos.y > kInitSelectPosY + kSelectPosY * 4)
 			{
 				m_selectPos.y = kInitSelectPosY;
 			}
@@ -78,7 +79,7 @@ void ScenePause::Update()
 
 			if (m_selectPos.y < kInitSelectPosY)
 			{
-				m_selectPos.y = kInitSelectPosY + kSelectPosY * 3;
+				m_selectPos.y = kInitSelectPosY + kSelectPosY * 4;
 			}
 		}
 
@@ -90,6 +91,8 @@ void ScenePause::Update()
 			bool isMetal = false;
 			bool isFire = false;
 			bool isLineMove = false;
+			// ポーズ画面を閉じるかどうか	true:閉じる
+			bool isClosePause = true; 
 
 			switch (m_select)
 			{
@@ -109,14 +112,28 @@ void ScenePause::Update()
 				// 2号に切り替える
 				isLineMove = true;
 				break;
+			case kFullRecovery:
+				// E缶を1つでも持っていたらHP全回復
+				if (m_pPlayer->GetFullHpRecovery() > 0)
+				{
+					m_pPlayer->HpFullRecovery();
+				}
+				isClosePause = false; // ポーズ画面を閉じないようにする
+				break;
 			default:
 				break;
 			}
 
 			// プレイヤーの武器を変更する
-			m_pPlayer->ChangeShot(isBuster, isMetal, isFire, isLineMove);
-
-			m_isExist = false;	// ポーズ画面を閉じる
+			if (m_select != kFullRecovery)
+			{
+				m_pPlayer->ChangeShot(isBuster, isMetal, isFire, isLineMove);
+			}
+			// ポーズ画面を閉じる
+			if (isClosePause)
+			{
+				m_isExist = false;
+			}
 		}
 	}
 }

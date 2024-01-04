@@ -32,6 +32,7 @@ public:
 	void DropShotSmallRecovery(int enemyIndex);	// 弾小回復
 	void DropShotGreatRecovery(int enemyIndex);	// 弾大回復
 	void DropLifeRecovery(int enemyIndex);		// 残機回復
+	void DropFullHpRecovery();					// HP全回復
 
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
@@ -46,9 +47,11 @@ private:
 	int m_mapHandle;		// マップチップ
 	int m_playerHandle;		// プレイヤー
 	int m_enemyHandle;		// 敵
+	// HPの回復バーの長さ
+	int m_drawValue;
 
-	int m_drawValue; // HPの回復バーの長さ
-
+	// プレイヤーがE缶を取得したか true:取得した
+	bool m_isGetFullHpRecovery;
 	// シーンを終了させるフラグ true:終了
 	bool m_isSceneEnd;
 
