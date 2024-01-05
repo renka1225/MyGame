@@ -205,7 +205,7 @@ void Player::Update()
 		m_pos.y += m_velocity;	// 現在位置の更新
 	}
 
-	/*Zキーでバスター発射*/
+	/*バスター発射*/
 	if (m_isBuster)
 	{
 		if (Pad::IsTrigger(PAD_INPUT_1))
@@ -318,14 +318,19 @@ void Player::Update()
 		{
 			if (m_lineEnergy > 0)
 			{
-				ShotLineMove* pShot = new ShotLineMove;
 				// 新しい弾を生成する
+				ShotLineMove* pShot = new ShotLineMove;
 				pShot->Init();
 				pShot->SetMain(m_pMain);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
 				m_pMain->AddShot(pShot);
+
+				m_lineEnergy = pShot->GetLineMoveEnergy();
+
+				// デバッグ出力
+				printf("m_liftEnergy: %d\n", m_lineEnergy);
 			}
 			else
 			{
