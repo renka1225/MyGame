@@ -46,7 +46,7 @@ void ShotFire::Update()
 	// “–‚½‚è”»’è‚ÌXV
 	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
 
-	// áŠQ•¨‚É“–‚½‚Á‚½‚çÁ‚¦‚é
+	// TODO:áŠQ•¨‚É“–‚½‚Á‚½‚çÁ‚¦‚é
 	//if ()
 	//{
 	//	m_isExist = false;

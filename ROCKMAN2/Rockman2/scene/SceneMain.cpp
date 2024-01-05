@@ -33,6 +33,10 @@ namespace
 	constexpr int kPlayerWidth = 32;
 	constexpr int kPlayerHeight = 64;
 
+	// マップチップのサイズ
+	constexpr int kMapChipWidth = 32;
+	constexpr int kMapChipHeight = 32;
+
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 510;
 	// バーの表示位置
@@ -53,6 +57,7 @@ namespace
 SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
+	m_isExistLineMove(false),
 	m_isSceneEnd(false)
 {
 	// プレイヤーのグラフィックロード

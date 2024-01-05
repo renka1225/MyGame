@@ -364,7 +364,7 @@ void Player::HitCollision()
 {
 	// プレイヤーの現在地のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
-	//int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
+	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
 	int TLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// プレイヤーの左上のチップ番号を取得
 	int TRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);						// プレイヤーの右上のチップ番号を取得
 	int BLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);						// プレイヤーの左下のチップ番号を取得

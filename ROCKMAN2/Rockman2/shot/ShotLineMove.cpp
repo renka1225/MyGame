@@ -16,7 +16,8 @@ namespace
 }
 
 ShotLineMove::ShotLineMove():
-m_energy(28)
+	m_stopFrame(0),
+	m_energy(28)
 {
 	m_handle = LoadGraph("data/image/shotLineMove.png");
 }
@@ -37,16 +38,27 @@ void ShotLineMove::Update()
 	// プレイヤーのポインタが設定されていないとき止まる
 	assert(m_pPlayer);
 
-	// 弾エネルギー数を1減らす
-	m_energy--;
+	// 静止時間を減らす
+	m_stopFrame--;
 
-	// 現在位置の更新
-	m_pos += m_vec;
+	// 静止時間が0になったら動かす
+	if (m_stopFrame < 0)
+	{
+		m_pos += m_vec;		// 現在位置を更新
+		m_energy -= 0.03;	// エネルギーを0.5秒毎に1減らす
+
+		// エネルギーが0になった場合
+		if (m_energy <= 0)
+		{
+			m_isExist = false;
+			return;
+		}
+	}
 
 	// 当たり判定の更新
 	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
 
-	// 障害物に当たったら消える
+	// TODO:障害物に当たったら消える
 	//if ()
 	//{
 	//	m_isExist = false;
@@ -81,19 +93,21 @@ void ShotLineMove::Start(Vec2 pos)
 {
 	m_isExist = true;
 
+	// 初期位置の設定
 	if (m_pPlayer->GetDir()) // プレイヤーが右を向いている場合
 	{
-		// 初期位置の設定
 		m_pos.x = pos.x + 20;
 		// 1フレームあたりの移動ベクトルを決定する
 		m_vec.x = kSpeed;
 	}
 	else // プレイヤーが左を向いている場合
 	{
-		// 初期位置の設定
 		m_pos.x = pos.x - 20;
 		// 1フレームあたりの移動ベクトルを決定する
 		m_vec.x = -kSpeed;
 	}
 	m_pos.y = (pos.y + kHeight / 2);
+
+	// アイテム2号を静止する時間
+	m_stopFrame = 180;
 }
