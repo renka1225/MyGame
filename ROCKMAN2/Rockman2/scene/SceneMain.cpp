@@ -57,7 +57,6 @@ namespace
 SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
-	m_isExistLineMove(false),
 	m_isSceneEnd(false)
 {
 	// プレイヤーのグラフィックロード
@@ -242,6 +241,16 @@ void SceneMain::Update()
 
 		m_pShot[i]->Update();
 
+		// アイテム2号の場合、プレイヤーとの当たり判定を取得
+		if (m_pShot[i]->GetShotType() != ShotType::kShotLineMove)
+		{
+			Rect shotRect = m_pShot[i]->GetColRect(); // 弾の当たり判定
+			if (shotRect.IsCollision(playerRect))
+			{
+				m_pPlayer->HitCollision();
+			}
+		}
+
 		// 画面外に出たらメモリを解放する
 		if (!m_pShot[i]->IsExist())
 		{
@@ -304,16 +313,20 @@ void SceneMain::Update()
 				if (!m_pShot[j]) continue;
 
 				// 敵と弾の当たり判定
-				Rect shotRect = m_pShot[j]->GetColRect(); // 弾の当たり判定
-				if (shotRect.IsCollision(enemyRect))
+				// アイテム２号の場合は敵との当たり判定を無視する
+				if (m_pShot[j]->GetShotType() != ShotType::kShotLineMove)
 				{
-					m_pEnemy[i]->OnDamage();
-				}
-				if (enemyRect.IsCollision(shotRect))
-				{
-					// 弾を削除
-					delete m_pShot[j];
-					m_pShot[j] = nullptr;
+					Rect shotRect = m_pShot[j]->GetColRect(); // 弾の当たり判定
+					if (shotRect.IsCollision(enemyRect))
+					{
+						m_pEnemy[i]->OnDamage();
+					}
+					if (enemyRect.IsCollision(shotRect))
+					{
+						// 弾を削除
+						delete m_pShot[j];
+						m_pShot[j] = nullptr;
+					}
 				}
 			}
 		}

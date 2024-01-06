@@ -71,6 +71,7 @@ Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_isMetal(false),
 	m_isFire(false),
 	m_isLineMove(false),
+	m_isExistLineMove(false),
 	m_keyState(0),
 	m_pressTime(0),
 	m_nowPressTime(0)
@@ -230,11 +231,7 @@ void Player::Update()
 		{
 			if (m_metalEnergy > 0)
 			{
-				// 弾エネルギーを0.25減らす
-				m_metalEnergy -= 0.25f;
-
 				ShotMetal* pShot = new ShotMetal;
-
 				// 新しい弾を生成する
 				pShot->Init();
 				pShot->SetMain(m_pMain);
@@ -242,6 +239,12 @@ void Player::Update()
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
 				m_pMain->AddShot(pShot);
+
+				if (pShot->IsExist())
+				{
+					// 弾エネルギーを0.25減らす
+					m_metalEnergy -= 0.25f;
+				}
 			}
 			else
 			{
@@ -314,27 +317,38 @@ void Player::Update()
 	/*アイテム2号発射*/
 	if (m_isLineMove)
 	{
+		if (m_isExistLineMove)
+		{
+			m_lineEnergy -= 0.03f;
+		}
+
+		// ボタンを押したら発射
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
+			ShotLineMove* pShot = new ShotLineMove;
 			if (m_lineEnergy > 0)
 			{
-				// 新しい弾を生成する
-				ShotLineMove* pShot = new ShotLineMove;
-				pShot->Init();
-				pShot->SetMain(m_pMain);
-				pShot->SetPlayer(this);
-				pShot->Start(m_pos);
-				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pMain->AddShot(pShot);
+				if (!pShot->IsExist())
+				{
+					// 新しい弾を生成する
+					pShot->Init();
+					pShot->SetMain(m_pMain);
+					pShot->SetPlayer(this);
+					pShot->Start(m_pos);
+					// 以降更新やメモリの解放はSceneMainに任せる
+					m_pMain->AddShot(pShot);
 
-				m_lineEnergy = pShot->GetLineMoveEnergy();
-
-				// デバッグ出力
-				printf("m_liftEnergy: %d\n", m_lineEnergy);
+					m_isExistLineMove = true;
+				}
+				else
+				{
+					m_isExistLineMove = false;
+				}
 			}
 			else
 			{
 				m_lineEnergy = 0;
+				m_isExistLineMove = false;
 			}
 		}
 	}
@@ -367,6 +381,34 @@ void Player::Draw()
 /*地面、壁に当たったときの処理*/
 void Player::HitCollision()
 {
+	Rect mapChipRect = m_pBg->GetColRect((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerWidth / 2) / kMapHeight);	// プレイヤーの中心のマップチップの当たり判定
+	
+	// プレイヤーとマップの当たり判定 矩形
+	//if (m_colRect.IsCollision(mapChipRect))
+	//{
+	//	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
+	//	if (mapChipNo == 1)
+	//	{
+	//		if (m_colRect.GetCenter().y >= mapChipRect.GetTop()) // 地面に接している場合
+	//		{
+	//			m_isGround = true;
+	//			m_pos.y = mapChipRect.GetTop();	// プレイヤーを地面の上に移動
+	//		}
+	//	}
+	//	else
+	//	{
+	//		m_isGround = false;
+	//	}
+	//}
+	//if (m_colRect.GetLeft() <= mapChipRect.GetRight()) // 壁よりも左に移動
+	//{
+	//	m_pos.x = mapChipRect.GetRight();
+	//}
+	//else if (m_colRect.GetRight() >= mapChipRect.GetLeft()) // 壁よりも右に移動
+	//{
+	//	m_pos.x = mapChipRect.GetLeft();
+	//}
+
 	// プレイヤーの現在地のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
 	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
@@ -374,8 +416,6 @@ void Player::HitCollision()
 	int TRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);						// プレイヤーの右上のチップ番号を取得
 	int BLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);						// プレイヤーの左下のチップ番号を取得
 	int BRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// プレイヤーの右下のチップ番号を取得
-	Rect mapChipRect = m_pBg->GetColRect(m_pos.x / kMapWidth, m_pos.y / kMapHeight);									// プレイヤーの左上にあるマップチップの当たり判定
-
 	// プレイヤーとマップの当たり判定
 	if (BLChipNo == 1 || BRChipNo == 1) // 地面に接している場合
 	{
@@ -392,16 +432,6 @@ void Player::HitCollision()
 		m_isGround = false;
 	}
 
-	//if ((BLChipNo == 1 || TLChipNo == 1) && !(BRChipNo == 1 || TRChipNo == 1)) // 壁の右側に当たった場合
-	//{
-	//	m_pos.x += kSpeed; // 移動量を0にする
-	//	m_pos.x = mapChipRect.GetRight() + 1;
-	//}
-	//else if ((BRChipNo == 1 || TRChipNo == 1) && !(BLChipNo == 1 || TLChipNo == 1)) // 壁の左側に当たった場合
-	//{
-	//	m_pos.x -= kSpeed; // 移動量を0にする
-	//	m_pos.x = mapChipRect.GetLeft() - 1;
-	//}
 }
 
 /*弾の選択状態を更新*/

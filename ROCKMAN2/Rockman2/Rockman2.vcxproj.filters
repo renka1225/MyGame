@@ -81,9 +81,6 @@
     <ClCompile Include="shot\ShotLineMove.cpp">
       <Filter>ソース ファイル\shot</Filter>
     </ClCompile>
-    <ClCompile Include="shot\ShotMetal.cpp">
-      <Filter>ソース ファイル\util</Filter>
-    </ClCompile>
     <ClCompile Include="enemy\EnemyBase.cpp">
       <Filter>ソース ファイル\enemy</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="recovery\RecoveryFullHp.cpp">
       <Filter>ソース ファイル\recovery</Filter>
+    </ClCompile>
+    <ClCompile Include="shot\ShotMetal.cpp">
+      <Filter>ソース ファイル\shot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

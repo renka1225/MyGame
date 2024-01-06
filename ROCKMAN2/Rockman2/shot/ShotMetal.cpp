@@ -11,7 +11,7 @@
 namespace
 {
 	// 弾の移動速度
-	constexpr float kSpeed = 8.0f;
+	constexpr float kSpeed = 10.0f;
 	// ショットの大きさ
 	constexpr float kWidth = 32.0f;
 	constexpr float kHeight = 32.0f;
@@ -114,21 +114,29 @@ void ShotMetal::Start(Vec2 pos)
 	{
 		m_vec.x = kSpeed;
 		m_vec.y = -kSpeed;
+		m_vec.normalize();
+		m_vec *= kSpeed;
 	}
 	if (Pad::IsPress(PAD_INPUT_RIGHT) && Pad::IsPress(PAD_INPUT_DOWN)) // →+↓同時長押し
 	{
 		m_vec.x = kSpeed;
 		m_vec.y = kSpeed;
+		m_vec.normalize();
+		m_vec *= kSpeed;
 	}
 	if (Pad::IsPress(PAD_INPUT_LEFT) && Pad::IsPress(PAD_INPUT_UP)) // ←+↑同時長押し
 	{
 		m_vec.x = -kSpeed;
 		m_vec.y = -kSpeed;
+		m_vec.normalize();
+		m_vec *= kSpeed;
 	}
 	if (Pad::IsPress(PAD_INPUT_LEFT) && Pad::IsPress(PAD_INPUT_DOWN)) // ←+↓同時長押し
 	{
 		m_vec.x = -kSpeed;
 		m_vec.y = kSpeed;
+		m_vec.normalize();
+		m_vec *= kSpeed;
 	}
 	if (!Pad::IsPress(PAD_INPUT_RIGHT) && !Pad::IsPress(PAD_INPUT_LEFT) &&
 		!Pad::IsPress(PAD_INPUT_UP) && !Pad::IsPress(PAD_INPUT_DOWN)) // 矢印キーが押されていない

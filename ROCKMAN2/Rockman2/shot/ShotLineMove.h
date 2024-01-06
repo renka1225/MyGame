@@ -16,6 +16,9 @@ public:
 	// 現在のエネルギー数を取得する
 	float GetLineMoveEnergy() const { return m_energy; }
 
+	// 弾の種類を取得する
+	virtual ShotType GetShotType() const { return ShotType::kShotLineMove; }
+
 private:
 	// グラフィックのハンドル
 	int m_handle;

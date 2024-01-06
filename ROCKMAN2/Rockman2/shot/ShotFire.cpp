@@ -10,7 +10,7 @@
 namespace
 {
 	// 弾の移動速度
-	constexpr float kSpeed = 8.0f;
+	constexpr float kSpeed = 10.0f;
 	// ショットの大きさ
 	constexpr float kWidth = 32.0f;
 	constexpr float kHeight = 32.0f;

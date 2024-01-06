@@ -114,6 +114,9 @@ void Bg::Update()
 	{
 		for (int x = 0; x < kChipNumX; x++)
 		{
+			// 設置するチップ
+			int chipNo = m_chipData[y][x];
+
 			// 当たり判定を設定
 			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
 		}

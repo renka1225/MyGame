@@ -5,6 +5,16 @@
 class SceneMain;
 class Player;
 
+// 弾の種類の定義
+enum ShotType
+{
+	kShotBase,
+	kShotBuster, // バスター
+	kShotFire,	 // ファイア
+	kShotMetal,	 // メタル
+	kShotLineMove // 2号
+};
+
 /// <summary>
 /// 弾の基底クラス
 /// </summary>
@@ -30,6 +40,9 @@ public:
 	bool IsExist() const { return m_isExist; }
 	// 当たり判定の矩形を取得する
 	Rect GetColRect() const { return m_colRect; }
+
+	// 弾の種類を取得する
+	virtual ShotType GetShotType() const { return ShotType::kShotBase; }
 
 protected:
 	// SceneMainのポインタ

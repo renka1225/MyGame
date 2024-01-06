@@ -34,8 +34,6 @@ public:
 	void DropLifeRecovery(int enemyIndex);		// 残機回復
 	void DropFullHpRecovery();					// HP全回復
 
-	// 画面上にアイテム2号が存在しているか
-	bool IsExistLineMove() const { return m_isExistLineMove; }
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
 
@@ -54,8 +52,6 @@ private:
 
 	// プレイヤーがE缶を取得したか true:取得した
 	bool m_isGetFullHpRecovery;
-	// 画面上にアイテム2号が存在しているか true:存在している
-	bool m_isExistLineMove;
 	// シーンを終了させるフラグ true:終了
 	bool m_isSceneEnd;
 

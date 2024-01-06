@@ -56,7 +56,7 @@ void ShotLineMove::Update()
 	}
 
 	// “–‚½‚è”»’è‚ÌXV
-	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x + kWidth / 2, m_pos.y + kHeight / 2, kWidth, kHeight);
 
 	// TODO:áŠQ•¨‚É“–‚½‚Á‚½‚çÁ‚¦‚é
 	//if ()
