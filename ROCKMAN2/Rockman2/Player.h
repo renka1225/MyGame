@@ -69,6 +69,8 @@ public:
 	void ShotGreatRecovery();	// 弾大回復
 	void LifeRecovery();		// 残機回復
 	void HpFullRecovery();		// HP全回復
+	// アイテム2号に乗った際の処理
+	void RideLineMove(Rect shotRect);
 
 private:
 	SceneMain* m_pMain;

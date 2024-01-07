@@ -15,6 +15,8 @@ public:
 
 	// 現在のエネルギー数を取得する
 	float GetLineMoveEnergy() const { return m_energy; }
+	// 現在の位置を取得する
+	Vec2 GetPos() const { return m_pos; }
 
 	// 弾の種類を取得する
 	virtual ShotType GetShotType() const { return ShotType::kShotLineMove; }

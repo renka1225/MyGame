@@ -28,6 +28,7 @@ ShotLineMove::~ShotLineMove()
 
 void ShotLineMove::Init()
 {
+	m_stopFrame = 60;
 }
 
 void ShotLineMove::Update()

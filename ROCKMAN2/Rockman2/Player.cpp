@@ -46,6 +46,9 @@ namespace
 	// アイテムの回復量
 	constexpr float kSmallRecovery = 2;		// 小アイテム
 	constexpr float kGreatRecovery = 10;	// 大アイテム
+
+	// アイテム2号のサイズ
+	constexpr int kShotWidth = 32;
 }
 
 
@@ -317,18 +320,14 @@ void Player::Update()
 	/*アイテム2号発射*/
 	if (m_isLineMove)
 	{
-		if (m_isExistLineMove)
-		{
-			m_lineEnergy -= 0.03f;
-		}
+		ShotLineMove* pShot = new ShotLineMove;
 
 		// ボタンを押したら発射
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			ShotLineMove* pShot = new ShotLineMove;
-			if (m_lineEnergy > 0)
+			if (!m_isExistLineMove)
 			{
-				if (!pShot->IsExist())
+				if (m_lineEnergy > 0)
 				{
 					// 新しい弾を生成する
 					pShot->Init();
@@ -345,12 +344,21 @@ void Player::Update()
 					m_isExistLineMove = false;
 				}
 			}
-			else
-			{
-				m_lineEnergy = 0;
-				m_isExistLineMove = false;
-			}
 		}
+
+		// 画面外に出た場合
+		if (m_pos.x < 0.0f - kShotWidth / 2 || m_pos.x > Game::kScreenWidth + kShotWidth / 2)
+		{
+			m_isExistLineMove = false;
+		}
+
+		// 画面内にある場合
+		if (m_isExistLineMove)
+		{
+			
+			m_lineEnergy -= 0.03f; // エネルギーを減らす
+		}
+		
 	}
 
 	m_pos += move; // 現在値の更新
@@ -411,25 +419,26 @@ void Player::HitCollision()
 
 	// プレイヤーの現在地のマップチップ番号を取得する
 	// プレイヤーの現在地 / マップチップのサイズ
-	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
+	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);	// プレイヤーの中心
 	int TLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// プレイヤーの左上のチップ番号を取得
 	int TRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);						// プレイヤーの右上のチップ番号を取得
 	int BLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);						// プレイヤーの左下のチップ番号を取得
 	int BRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// プレイヤーの右下のチップ番号を取得
+
 	// プレイヤーとマップの当たり判定
 	if (BLChipNo == 1 || BRChipNo == 1) // 地面に接している場合
 	{
 		m_isGround = true;
 		m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
 	}
-	else if (TLChipNo == 1 || TRChipNo == 1) // 天井に接した場合
-	{
-		m_isGround = false;
-		m_pos.y = mapChipRect.GetBottom();
-	}
 	else
 	{
 		m_isGround = false;
+	}
+
+	if (TLChipNo == 1 || TRChipNo == 1) // 天井に接した場合
+	{
+		m_pos.y = mapChipRect.GetBottom();
 	}
 
 }
@@ -576,5 +585,31 @@ void Player::HpFullRecovery() // HP全回復
 	else
 	{
 		m_fullHpRecovery = 0;
+	}
+}
+
+/*アイテム2号に乗った際の処理*/
+void Player::RideLineMove(Rect shotRect)
+{
+ 	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
+
+	// 上に乗った場合
+	if (m_colRect.GetBottom() >= lineMoveRect.GetTop()) 
+	{
+		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight;
+		m_isGround = true;
+
+		// プレイヤーを横に移動
+		m_pos.x += lineMoveRect.GetCenter().x - m_colRect.GetCenter().x;
+
+		// ジャンプ
+		if (Pad::IsTrigger(PAD_INPUT_10))
+		{
+			m_isGround = false;
+			m_velocity = kVelocity;
+		}
+
+		// 当たり判定の更新
+		m_colRect.SetCenter(m_pos.x + static_cast<float>(kPlayerWidth) / 2, m_pos.y + static_cast<float>(kPlayerHeight) / 2, kPlayerWidth, kPlayerHeight);
 	}
 }

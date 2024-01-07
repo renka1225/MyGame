@@ -75,7 +75,7 @@ SceneMain::SceneMain():
 	m_pBg->SetMapHandle(m_mapHandle);
 
 	// プレイヤーのメモリ確保
-	m_pPlayer = new Player{ this, m_pBg };
+	m_pPlayer = new Player{ this, m_pBg};
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
 	// ポーズ画面のメモリ確保
@@ -242,12 +242,12 @@ void SceneMain::Update()
 		m_pShot[i]->Update();
 
 		// アイテム2号の場合、プレイヤーとの当たり判定を取得
-		if (m_pShot[i]->GetShotType() != ShotType::kShotLineMove)
+		if (m_pShot[i]->GetShotType() == ShotType::kShotLineMove)
 		{
 			Rect shotRect = m_pShot[i]->GetColRect(); // 弾の当たり判定
-			if (shotRect.IsCollision(playerRect))
+			if (playerRect.IsCollision(shotRect))
 			{
-				m_pPlayer->HitCollision();
+				m_pPlayer->RideLineMove(shotRect);
 			}
 		}
 
@@ -270,30 +270,29 @@ void SceneMain::Update()
 		if (!m_pEnemy[i]->IsExist())
 		{
 			// 確率でアイテムをドロップ
-			switch (GetRand(5))
-			{
-			case 0:
-				DropHpSmallRecovery(i); // HP回復(小)
-				break;
-			case 1:
-				DropHpGreatRecovery(i);	// HP回復(大)
-				break;
-			case 2:
-				DropShotSmallRecovery(i); // 弾エネルギー(小)
-				break;
-			case 3:
-				DropShotGreatRecovery(i); // 弾エネルギー(大)
-				break;
-			case 4:
-				DropLifeRecovery(i);	// 残機
-				break;
-			case 5:
-				// 何もドロップしない
-				break;
-			default:
-				break;
-			}
+			int getRandDrop = GetRand(100);
 
+			if (getRandDrop <= 20)
+			{
+				DropHpSmallRecovery(i); // HP回復(小)
+			}
+			else if (getRandDrop <= 30)
+			{
+				DropHpGreatRecovery(i);	// HP回復(大)
+			}
+			else if (getRandDrop <= 50)
+			{
+				DropShotSmallRecovery(i); // 弾エネルギー(小)
+			}
+			else if (getRandDrop <= 60)
+			{
+				DropShotGreatRecovery(i); // 弾エネルギー(大)
+			}
+			else if (getRandDrop <= 65)
+			{
+				DropLifeRecovery(i);	// 残機
+			}
+			
 			// メモリを解放する
 			delete m_pEnemy[i];
 			m_pEnemy[i] = nullptr;	// nullptrを入れる
