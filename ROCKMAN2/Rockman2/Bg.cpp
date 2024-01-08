@@ -119,7 +119,7 @@ void Bg::Update()
 			int chipNo = m_chipData[y][x];
 
 			// ìñÇΩÇËîªíËÇê›íË
-			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
+			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2 - playerPos.x, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
 		}
 	}
 }
