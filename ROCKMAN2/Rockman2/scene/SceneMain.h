@@ -37,6 +37,9 @@ public:
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
 
+	// プレイヤーの現在地を取得
+	Vec2 GetPlayerPos() const { return m_playerPos; }
+
 private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
@@ -67,5 +70,8 @@ private:
 	std::vector<EnemyBase*> m_pEnemy;
 	// 回復アイテム
 	std::vector<RecoveryBase*> m_pRecovery;
+
+	// プレイヤーの現在地
+	Vec2 m_playerPos;
 };
 

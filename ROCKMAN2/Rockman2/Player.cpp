@@ -15,7 +15,7 @@
 namespace
 {
 	// 移動速度
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 2.0f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
@@ -347,7 +347,7 @@ void Player::Update()
 		}
 
 		// 画面外に出た場合
-		if (m_pos.x < 0.0f - kShotWidth / 2 || m_pos.x > Game::kScreenWidth + kShotWidth / 2)
+		if (pShot->GetPos().x < 0.0f - kShotWidth / 2 || pShot->GetPos().x > Game::kScreenWidth + kShotWidth / 2)
 		{
 			m_isExistLineMove = false;
 		}

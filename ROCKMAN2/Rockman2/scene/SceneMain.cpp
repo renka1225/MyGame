@@ -161,15 +161,15 @@ void SceneMain::Init()
 	// ‰æ–Ê‘JˆÚ‚Ì‰Šú‰»
 	m_isSceneEnd = false;
 
-	// ”wŒi‚Ì‰Šú‰»
-	m_pBg->Init();
-
 	// ƒ|[ƒY‰æ–Ê‚Ì‰Šú‰»
 	m_pPause->Init();
 
 	// ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
 	assert(m_pPlayer);	// m_pPlayer == nullptr‚Ìê‡Ž~‚Ü‚é
 	m_pPlayer->Init();
+
+	// ”wŒi‚Ì‰Šú‰»
+	m_pBg->Init();
 	
 
 	// “G‚Ì‰Šú‰»
@@ -377,6 +377,8 @@ void SceneMain::Update()
 			m_pRecovery[i] = nullptr;
 		}
 	}
+
+	m_playerPos = m_pPlayer->GetPos();
 }
 
 void SceneMain::Draw()

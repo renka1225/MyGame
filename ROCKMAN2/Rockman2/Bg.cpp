@@ -1,5 +1,6 @@
 #include "Bg.h"
 #include "SceneMain.h"
+#include "Player.h"
 #include "DxLib.h"
 #include "Game.h"
 
@@ -50,7 +51,6 @@ namespace
 Bg::Bg(SceneMain* pMain):
 	m_pMain(pMain),
 	m_bgPos(0, 0),
-	m_mapChipPos(0, 0),
 	m_bgHandle(-1),
 	m_mapHandle(-1),
 	m_graphChipNumX(0),
@@ -79,8 +79,6 @@ void Bg::Init()
 	// 座標の初期化
 	m_bgPos.x = 0;
 	m_bgPos.y = 0;
-	m_mapChipPos.x = 0;
-	m_mapChipPos.y = 0;
 
 	m_graphChipNumX = graphW / kChipWidth;
 	m_graphChipNumY = graphH / kChipHeight;
@@ -89,6 +87,9 @@ void Bg::Init()
 void Bg::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+
+	// プレイヤーの現在地を取得
+	Vec2 playerPos = m_pMain->GetPlayerPos();
 
 	if (pad & PAD_INPUT_LEFT) // ←を押した
 	{
@@ -128,6 +129,9 @@ void Bg::Draw()
 	// 背景の描画
 	DrawRectGraph(0, 0, m_bgPos.x, m_bgPos.y, Game::kScreenWidth, Game::kScreenHeight, m_bgHandle, false);
 
+	// プレイヤーの現在地
+	Vec2 playerPos = m_pMain->GetPlayerPos();
+
 	// マップチップの描画
 	for (int y = 0; y < kChipNumY; y++)
 	{
@@ -141,7 +145,7 @@ void Bg::Draw()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumX);
 
 			// 描画
-			DrawRectGraph(x * kChipWidth, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
+			DrawRectGraph(x * kChipWidth - playerPos.x, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
 
 
 #ifdef _DEBUG

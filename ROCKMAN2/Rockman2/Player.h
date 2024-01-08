@@ -18,9 +18,28 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+
+	// プレイヤーがダメージを受けた時の処理
+	void OnDamage();
 	// プレイヤーが地面に当たった時の処理
 	void HitCollision();
+	// プレイヤーがE缶を取得したとき
+	void GetHpFullRecovery();
+	// プレイヤーの回復処理
+	void HpSmallRecovery();		// HP小回復
+	void HpGreatRecovery();		// HP大回復
+	void ShotSmallRecovery();	// 弾小回復
+	void ShotGreatRecovery();	// 弾大回復
+	void LifeRecovery();		// 残機回復
+	void HpFullRecovery();		// HP全回復
 
+	// アイテム2号に乗った際の処理
+	void RideLineMove(Rect shotRect);
+
+	// 現在の武器選択状態を更新する
+	void ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove);
+
+public:
 	// メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
 	// 現在位置を更新する
@@ -53,24 +72,6 @@ public:
 	bool IsMetal() const { return m_isMetal; }		// メタル
 	bool IsFire() const { return m_isFire; }		// ファイア
 	bool IsLineMove() const { return m_isLineMove; }// 2号
-
-	// 現在の武器選択状態を更新する
-	void ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove);
-
-public:
-	// プレイヤーがダメージを受けた時の処理
-	void OnDamage();
-	// プレイヤーがE缶を取得したとき
-	void GetHpFullRecovery();
-	// プレイヤーの回復処理
-	void HpSmallRecovery();		// HP小回復
-	void HpGreatRecovery();		// HP大回復
-	void ShotSmallRecovery();	// 弾小回復
-	void ShotGreatRecovery();	// 弾大回復
-	void LifeRecovery();		// 残機回復
-	void HpFullRecovery();		// HP全回復
-	// アイテム2号に乗った際の処理
-	void RideLineMove(Rect shotRect);
 
 private:
 	SceneMain* m_pMain;

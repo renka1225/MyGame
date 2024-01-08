@@ -4,6 +4,7 @@
 #include "Game.h"
 
 class SceneMain;
+
 /// <summary>
 /// 背景クラス
 /// </summary>
@@ -31,7 +32,7 @@ private:
 	static constexpr int kChipHeight = 32;
 
 	// チップを置く数
-	static constexpr int kChipNumX = Game::kScreenWidth / kChipWidth;
+	static constexpr int kChipNumX = (Game::kScreenWidth / kChipWidth) * 2;
 	static constexpr int kChipNumY = Game::kScreenHeight / kChipHeight;
 
 private:
@@ -45,8 +46,6 @@ private:
 
 	// 背景の表示位置
 	Vec2 m_bgPos;
-	// マップチップの表示位置
-	Vec2 m_mapChipPos;
 
 	// グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;
