@@ -46,6 +46,8 @@ private:
 
 	// 背景の表示位置
 	Vec2 m_bgPos;
+	// カメラの表示位置
+	Vec2 m_cameraPos;
 
 	// グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;

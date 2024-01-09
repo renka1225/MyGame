@@ -57,6 +57,7 @@ namespace
 SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
+	m_isExistLineMove(false),
 	m_isSceneEnd(false)
 {
 	// プレイヤーのグラフィックロード
@@ -160,6 +161,7 @@ void SceneMain::Init()
 {
 	// 画面遷移の初期化
 	m_isSceneEnd = false;
+	m_isExistLineMove = false;
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -241,10 +243,21 @@ void SceneMain::Update()
 
 		m_pShot[i]->Update();
 
-		// アイテム2号の場合、プレイヤーとの当たり判定を取得
+		// アイテム2号の場合
 		if (m_pShot[i]->GetShotType() == ShotType::kShotLineMove)
 		{
-			Rect shotRect = m_pShot[i]->GetColRect(); // 弾の当たり判定
+			// 画面上に存在するか
+			if (m_pShot[i]->IsExist())
+			{
+				m_isExistLineMove = true;
+			}
+			else
+			{
+				m_isExistLineMove = false;
+			}
+
+			// 弾の当たり判定
+			Rect shotRect = m_pShot[i]->GetColRect();
 			if (playerRect.IsCollision(shotRect))
 			{
 				m_pPlayer->RideLineMove(shotRect);

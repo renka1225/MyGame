@@ -34,11 +34,12 @@ public:
 	void DropLifeRecovery(int enemyIndex);		// 残機回復
 	void DropFullHpRecovery();					// HP全回復
 
-	// シーンを終了させるか
-	bool IsSceneEnd() const { return m_isSceneEnd; }
-
 	// プレイヤーの現在地を取得
 	Vec2 GetPlayerPos() const { return m_playerPos; }
+	// アイテム2号の表示状態を取得
+	bool GetIsExistLineMove() const {return m_isExistLineMove; }
+	// シーンを終了させるか
+	bool IsSceneEnd() const { return m_isSceneEnd; }
 
 private:
 	// 敵キャラクターの生成
@@ -55,6 +56,8 @@ private:
 
 	// プレイヤーがE缶を取得したか true:取得した
 	bool m_isGetFullHpRecovery;
+	// アイテム2号が画面上に存在するか
+	bool m_isExistLineMove;
 	// シーンを終了させるフラグ true:終了
 	bool m_isSceneEnd;
 

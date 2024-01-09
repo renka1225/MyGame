@@ -46,14 +46,6 @@ void ShotLineMove::Update()
 	if (m_stopFrame < 0)
 	{
 		m_pos += m_vec;		// 現在位置を更新
-		m_energy -= 0.03;	// エネルギーを0.5秒毎に1減らす
-
-		// エネルギーが0になった場合
-		if (m_energy <= 0)
-		{
-			m_isExist = false;
-			return;
-		}
 	}
 
 	// 当たり判定の更新

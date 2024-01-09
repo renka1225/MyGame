@@ -74,7 +74,6 @@ Player::Player(SceneMain* pMain, Bg* pBg) :
 	m_isMetal(false),
 	m_isFire(false),
 	m_isLineMove(false),
-	m_isExistLineMove(false),
 	m_keyState(0),
 	m_pressTime(0),
 	m_nowPressTime(0)
@@ -320,45 +319,27 @@ void Player::Update()
 	/*アイテム2号発射*/
 	if (m_isLineMove)
 	{
-		ShotLineMove* pShot = new ShotLineMove;
-
 		// ボタンを押したら発射
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			if (!m_isExistLineMove)
+			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
 			{
-				if (m_lineEnergy > 0)
-				{
-					// 新しい弾を生成する
-					pShot->Init();
-					pShot->SetMain(m_pMain);
-					pShot->SetPlayer(this);
-					pShot->Start(m_pos);
-					// 以降更新やメモリの解放はSceneMainに任せる
-					m_pMain->AddShot(pShot);
-
-					m_isExistLineMove = true;
-				}
-				else
-				{
-					m_isExistLineMove = false;
-				}
+				ShotLineMove* pShot = new ShotLineMove;
+				// 新しい弾を生成する
+				pShot->Init();
+				pShot->SetMain(m_pMain);
+				pShot->SetPlayer(this);
+				pShot->Start(m_pos);
+				// 以降更新やメモリの解放はSceneMainに任せる
+				m_pMain->AddShot(pShot);
 			}
 		}
 
-		// 画面外に出た場合
-		if (pShot->GetPos().x < 0.0f - kShotWidth / 2 || pShot->GetPos().x > Game::kScreenWidth + kShotWidth / 2)
-		{
-			m_isExistLineMove = false;
-		}
-
 		// 画面内にある場合
-		if (m_isExistLineMove)
+		if (m_pMain->GetIsExistLineMove())
 		{
-			
 			m_lineEnergy -= 0.03f; // エネルギーを減らす
 		}
-		
 	}
 
 	m_pos += move; // 現在値の更新

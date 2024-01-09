@@ -51,6 +51,7 @@ namespace
 Bg::Bg(SceneMain* pMain):
 	m_pMain(pMain),
 	m_bgPos(0, 0),
+	m_cameraPos(0, 0),
 	m_bgHandle(-1),
 	m_mapHandle(-1),
 	m_graphChipNumX(0),
@@ -79,7 +80,8 @@ void Bg::Init()
 	// 座標の初期化
 	m_bgPos.x = 0;
 	m_bgPos.y = 0;
-
+	m_cameraPos.x = m_pMain->GetPlayerPos().x - Game::kScreenWidth / 2;
+	m_cameraPos.y = 0;
 	m_graphChipNumX = graphW / kChipWidth;
 	m_graphChipNumY = graphH / kChipHeight;
 }
@@ -88,8 +90,11 @@ void Bg::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	// プレイヤーの現在地を取得
-	Vec2 playerPos = m_pMain->GetPlayerPos();
+	m_cameraPos += m_pMain->GetPlayerPos();
+	
+	// 当たり判定の位置の更新
+	int startX = m_cameraPos.x / kChipWidth;
+	int endX = startX + Game::kScreenWidth / kChipWidth;
 
 	if (pad & PAD_INPUT_LEFT) // ←を押した
 	{
@@ -119,7 +124,7 @@ void Bg::Update()
 			int chipNo = m_chipData[y][x];
 
 			// 当たり判定を設定
-			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2 - playerPos.x, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
+			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
 		}
 	}
 }
@@ -145,7 +150,7 @@ void Bg::Draw()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumX);
 
 			// 描画
-			DrawRectGraph(x * kChipWidth - playerPos.x, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
+			DrawRectGraph(x * kChipWidth , y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
 
 
 #ifdef _DEBUG

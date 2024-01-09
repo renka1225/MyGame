@@ -116,10 +116,7 @@ private:
 	bool m_isBuster; // バスター
 	bool m_isMetal;	 // メタル
 	bool m_isFire;	 // ファイア
-	bool m_isLineMove; // 2号
-
-	// アイテム2号が発射されているか
-	bool m_isExistLineMove;
+	bool m_isLineMove; // 2号(直線移動する足場)
 
 	// ボタンの状態を取得する
 	int m_keyState;
