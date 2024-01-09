@@ -17,8 +17,12 @@ namespace
 	constexpr int kChipHeight = 32;
 
 	// チップを置く数
-	constexpr int kChipNumX = (Game::kScreenWidth / kChipWidth) * 2;
-	constexpr int kChipNumY = Game::kScreenHeight / kChipHeight;
+	constexpr int kChipNumX = 80;
+	constexpr int kChipNumY = 23;
+
+	// マップの広さ
+	constexpr int kMapWidth = kChipWidth * kChipNumX;
+	constexpr int kMapHeight = kChipHeight * kChipNumY;
 
 	// マップチップの配列情報
 	constexpr int kChipData[kChipNumY][kChipNumX] =
@@ -44,6 +48,7 @@ namespace
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  30, 30,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1, 30, 30,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1, 30, 30,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1},
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  30, 30,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1, 30, 30,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1, 30, 30,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1},
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  30, 30,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1, 30, 30,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1, 30, 30,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1},
+		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  30, 30,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1, 30, 30,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1, 30, 30,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1},
 		{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  30, 30,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1, 30, 30,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1, 30, 30,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   1,  1,  1,  1,  1,  1,  1,  1,  1,  1}
 	};
 }
@@ -51,7 +56,6 @@ namespace
 Bg::Bg(SceneMain* pMain):
 	m_pMain(pMain),
 	m_bgPos(0, 0),
-	m_cameraPos(0, 0),
 	m_bgHandle(-1),
 	m_mapHandle(-1),
 	m_graphChipNumX(0),
@@ -80,8 +84,6 @@ void Bg::Init()
 	// 座標の初期化
 	m_bgPos.x = 0;
 	m_bgPos.y = 0;
-	m_cameraPos.x = m_pMain->GetPlayerPos().x - Game::kScreenWidth / 2;
-	m_cameraPos.y = 0;
 	m_graphChipNumX = graphW / kChipWidth;
 	m_graphChipNumY = graphH / kChipHeight;
 }
@@ -89,12 +91,6 @@ void Bg::Init()
 void Bg::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-
-	m_cameraPos += m_pMain->GetPlayerPos();
-	
-	// 当たり判定の位置の更新
-	int startX = m_cameraPos.x / kChipWidth;
-	int endX = startX + Game::kScreenWidth / kChipWidth;
 
 	if (pad & PAD_INPUT_LEFT) // ←を押した
 	{
@@ -134,14 +130,18 @@ void Bg::Draw()
 	// 背景の描画
 	DrawRectGraph(0, 0, m_bgPos.x, m_bgPos.y, Game::kScreenWidth, Game::kScreenHeight, m_bgHandle, false);
 
-	// プレイヤーの現在地
-	Vec2 playerPos = m_pMain->GetPlayerPos();
+	// プレイヤーの位置に応じたスクロール量を決定する
+	Vec2 scroll = GetScroll();
 
 	// マップチップの描画
 	for (int y = 0; y < kChipNumY; y++)
 	{
 		for (int x = 0; x < kChipNumX; x++)
 		{
+			// マップの表示座標
+			int posX = kChipWidth * x - scroll.x;
+			int posY = kChipHeight * y - scroll.y;
+
 			// 設置するチップ
 			int chipNo = m_chipData[y][x];
 
@@ -150,7 +150,7 @@ void Bg::Draw()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumX);
 
 			// 描画
-			DrawRectGraph(x * kChipWidth , y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
+			DrawRectGraph(posX , posY, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
 
 
 #ifdef _DEBUG
@@ -162,4 +162,31 @@ void Bg::Draw()
 #endif
 		}
 	}
+}
+
+Vec2 Bg::GetScroll()
+{
+	// 描画座標の左上位置
+	float resultX = static_cast<float>(m_pMain->GetPlayerPos().x - Game::kScreenWidth / 2);
+	float resultY = static_cast<float>(m_pMain->GetPlayerPos().y - Game::kScreenHeight / 2);
+
+	if (resultX < 0)
+	{
+		resultX = 0;
+	}
+	if (resultX >kMapWidth - Game::kScreenWidth)
+	{
+		resultX = kMapWidth - Game::kScreenWidth;
+	}
+
+	if (resultY < 0)
+	{
+		resultY = 0;
+	}
+	if (resultY > kMapHeight - Game::kScreenWidth)
+	{
+		resultY = kMapHeight - Game::kScreenHeight;
+	}
+
+	return { resultX, resultY };
 }

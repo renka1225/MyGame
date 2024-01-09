@@ -18,6 +18,9 @@ public:
 	void Update();
 	void Draw();
 
+	// プレイヤーの位置からスクロール量を決定する
+	Vec2 GetScroll();
+
 	// グラフィックの設定
 	void SetHandle(int bgHandle) { m_bgHandle = bgHandle; }
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
@@ -32,8 +35,8 @@ private:
 	static constexpr int kChipHeight = 32;
 
 	// チップを置く数
-	static constexpr int kChipNumX = (Game::kScreenWidth / kChipWidth) * 2;
-	static constexpr int kChipNumY = Game::kScreenHeight / kChipHeight;
+	static constexpr int kChipNumX = 80;
+	static constexpr int kChipNumY = 23;
 
 private:
 	// シーンメインのポインタ
@@ -46,8 +49,6 @@ private:
 
 	// 背景の表示位置
 	Vec2 m_bgPos;
-	// カメラの表示位置
-	Vec2 m_cameraPos;
 
 	// グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;
