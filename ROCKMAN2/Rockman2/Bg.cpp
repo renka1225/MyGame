@@ -183,7 +183,7 @@ Vec2 Bg::GetScroll()
 	{
 		resultY = 0;
 	}
-	if (resultY > kMapHeight - Game::kScreenWidth)
+	if (resultY > kMapHeight - Game::kScreenHeight)
 	{
 		resultY = kMapHeight - Game::kScreenHeight;
 	}

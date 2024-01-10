@@ -349,8 +349,8 @@ void Player::Update()
 void Player::Draw()
 {
 	// スクロール量を反映する
-	m_pos.x -= m_pBg->GetScroll().x;
-	m_pos.y -= m_pBg->GetScroll().y;
+	//m_pos.x -= m_pBg->GetScroll().x;
+	//m_pos.y -= m_pBg->GetScroll().y;
 
 	if (m_isRight) // 右を向いている場合
 	{
