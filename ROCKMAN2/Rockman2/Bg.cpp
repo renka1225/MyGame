@@ -131,7 +131,7 @@ void Bg::Draw()
 	DrawRectGraph(0, 0, m_bgPos.x, m_bgPos.y, Game::kScreenWidth, Game::kScreenHeight, m_bgHandle, false);
 
 	// プレイヤーの位置に応じたスクロール量を決定する
-	Vec2 scroll = GetScroll();
+	//Vec2 scroll = GetScroll();
 
 	// マップチップの描画
 	for (int y = 0; y < kChipNumY; y++)
@@ -139,8 +139,8 @@ void Bg::Draw()
 		for (int x = 0; x < kChipNumX; x++)
 		{
 			// マップの表示座標
-			int posX = kChipWidth * x - scroll.x;
-			int posY = kChipHeight * y - scroll.y;
+			//int posX = kChipWidth * x - scroll.x;
+			//int posY = kChipHeight * y - scroll.y;
 
 			// 設置するチップ
 			int chipNo = m_chipData[y][x];
@@ -150,7 +150,7 @@ void Bg::Draw()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumX);
 
 			// 描画
-			DrawRectGraph(posX , posY, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
+			DrawRectGraph(x * kChipWidth, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
 
 
 #ifdef _DEBUG

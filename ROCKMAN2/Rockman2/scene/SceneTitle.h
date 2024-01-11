@@ -1,4 +1,5 @@
 #pragma once
+#include "Vec2.h"
 
 /// <summary>
 ///  タイトルシーンのクラス
@@ -17,11 +18,25 @@ public:
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
 
+	// 選択項目
+	enum Select
+	{
+		kStart,	 // スタート
+		kOption, // オプション
+		kExit,	 // ゲーム終了
+		kSelectNum // 項目数
+	};
+
+	// 現在の選択状態
+	int m_select;
+
 private:
 	// シーン終了のフラグ true:終了
 	bool m_isSceneEnd;
 
-	// ロゴ
+	// タイトルロゴ
 	int m_logoHandle;
+	// 選択中の四角の表示位置
+	Vec2 m_selectPos;
 };
 

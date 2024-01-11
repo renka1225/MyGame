@@ -220,17 +220,17 @@ void SceneMain::Update()
 	// プレイヤーの更新
 	m_pPlayer->Update();
 
-	Vec2 playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
+	m_playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
-	if (playerPos.x >= 50 && playerPos.x <= 53)
+	if (m_playerPos.x >= 50 && m_playerPos.x <= 53)
 	{
 		CreateMatasaburo();
 	}
 
 	// プレイヤーが画面内に移動したらE缶を表示する
-	if (playerPos.x >= 100 && !m_isGetFullHpRecovery)
+	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)
 	{
 		DropFullHpRecovery();
 	}
@@ -390,8 +390,6 @@ void SceneMain::Update()
 			m_pRecovery[i] = nullptr;
 		}
 	}
-
-	m_playerPos = m_pPlayer->GetPos();
 }
 
 void SceneMain::Draw()
