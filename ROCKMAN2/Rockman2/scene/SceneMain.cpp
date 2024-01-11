@@ -285,23 +285,23 @@ void SceneMain::Update()
 			// 確率でアイテムをドロップ
 			int getRandDrop = GetRand(100);
 
-			if (getRandDrop <= 20)
+			if (getRandDrop <= 10)
 			{
 				DropHpSmallRecovery(i); // HP回復(小)
 			}
-			else if (getRandDrop <= 30)
+			else if (getRandDrop <= 15)
 			{
 				DropHpGreatRecovery(i);	// HP回復(大)
 			}
-			else if (getRandDrop <= 50)
+			else if (getRandDrop <= 25)
 			{
 				DropShotSmallRecovery(i); // 弾エネルギー(小)
 			}
-			else if (getRandDrop <= 60)
+			else if (getRandDrop <= 30)
 			{
 				DropShotGreatRecovery(i); // 弾エネルギー(大)
 			}
-			else if (getRandDrop <= 65)
+			else if (getRandDrop <= 32)
 			{
 				DropLifeRecovery(i);	// 残機
 			}

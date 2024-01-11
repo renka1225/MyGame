@@ -18,6 +18,7 @@ public:
 	// シーンを終了させるか
 	bool IsSceneEnd() const { return m_isSceneEnd; }
 
+private:
 	// 選択項目
 	enum Select
 	{

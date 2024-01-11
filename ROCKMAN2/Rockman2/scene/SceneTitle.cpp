@@ -69,11 +69,10 @@ void SceneTitle::Update()
 		}
 	}
 
-
-	if (Pad::IsTrigger(PAD_INPUT_1)) // Zキーを押したとき
+	// Zキーを押したとき
+	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// 選択状態によって移動先を変える
-
+		// TODO:選択状態によって移動先を変える
 		switch (m_select)
 		{
 		case kStart:

@@ -1,7 +1,9 @@
 #pragma once
 
 class SceneTitle;
+class SceneStageSelect;
 class SceneMain;
+class SceneClear;
 class SceneGameOver;
 
 /// <summary>
@@ -19,21 +21,26 @@ public:
 	void Draw();
 
 private:
-	// ステージ定数の定義
-	enum SceneKind
+	// シーン定数の定義
+	enum SceneSelect
 	{
-		kSceneKindTitle,
-		kSceneKindMain,
-		kSceneKindGameOver
+		kSceneTitle,
+		kSceneOption,
+		kSceneStageSelect,
+		kSceneMain,
+		kSceneClear,
+		kSceneGameOver
 	};
 
 	// 現在進行中のシーン
-	SceneKind m_runScene;
+	SceneSelect m_runScene;
 
 private:
 	// SceneManagerで管理するシーン
 	SceneTitle* m_pTitle;
+	SceneStageSelect* m_pStageSelect;
 	SceneMain* m_pMain;
+	SceneClear* m_pClear;
 	SceneGameOver* m_pGameOver;
 	
 };

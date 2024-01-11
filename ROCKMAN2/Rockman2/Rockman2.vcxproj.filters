@@ -120,6 +120,12 @@
     <ClCompile Include="shot\ShotMetal.cpp">
       <Filter>ソース ファイル\shot</Filter>
     </ClCompile>
+    <ClCompile Include="scene\SceneStageSelect.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneClear.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -199,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="recovery\RecoveryFullHp.h">
       <Filter>ヘッダー ファイル\recovery</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneStageSelect.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneClear.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
