@@ -12,12 +12,12 @@ namespace
 	constexpr int kCharInterval = 50;
 
 	// 選択中四角の初期位置
-	constexpr int kInitSelectPosX = kCharPosX - 15;
+	constexpr int kInitSelectPosX = kCharPosX - 20;
 	constexpr int kInitSelectPosY = kCharPosY - 10;
 	// 選択中四角の移動量
 	constexpr int kSelectmoveY = 50;
 	// 四角の大きさ
-	constexpr int kSelectSizeX = 80;
+	constexpr int kSelectSizeX = 90;
 	constexpr int kSelectSizeY = 30;
 }
 
@@ -84,6 +84,8 @@ void SceneStageSelect::Update()
 			break;
 		case kStage3:
 			break;
+		case kBackTitle:
+			break;
 		default:
 			break;
 		}
@@ -100,6 +102,7 @@ void SceneStageSelect::Draw()
 	DrawString(kCharPosX, kCharPosY, "STAGE1", 0xffffff);
 	DrawString(kCharPosX, kCharPosY + kCharInterval, "STAGE2", 0xffffff);
 	DrawString(kCharPosX, kCharPosY + kCharInterval * 2, "STAGE3", 0xffffff);
+	DrawString(kCharPosX - 15, kCharPosY + kCharInterval * 3, "BACKTITLE", 0xffffff);
 
 	// 選択中の部分を四角で描画
 	DrawBox(m_selectPos.x, m_selectPos.y, m_selectPos.x + kSelectSizeX, m_selectPos.y + kSelectSizeY, 0x00bfff, false);

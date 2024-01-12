@@ -41,21 +41,27 @@ void SceneManager::Init()
 	// 実行するシーンの初期化を行う
 	switch (m_runScene)
 	{
-	case kSceneTitle:		// タイトルシーンの場合
+		// タイトルシーン
+	case kSceneTitle:
 		m_pTitle->Init();
 		break;
-	case kSceneStageSelect: // ステージ選択シーンの場合
+		// ステージ選択シーン
+	case kSceneStageSelect:
 		m_pStageSelect->Init();
 		break;
-	case kSceneMain:		// ゲームシーンの場合
+		// ゲームシーン
+	case kSceneMain:
 		m_pMain->Init();
 		break;
-	case kSceneClear:		// ゲームクリアの場合
+		// ゲームクリア
+	case kSceneClear:
 		m_pClear->Init();
 		break;
-	case kSceneGameOver:	// ゲームオーバーの場合
+		// ゲームオーバー
+	case kSceneGameOver:
 		m_pGameOver->Init();
 		break;
+
 	default:
 		break;
 	}
@@ -66,21 +72,27 @@ void SceneManager::End()
 	// 実行するシーンを終了する
 	switch (m_runScene)
 	{
-	case kSceneTitle: // タイトルシーンの場合
+		// タイトルシーン
+	case kSceneTitle:
 		m_pTitle->End();
 		break;
-	case kSceneStageSelect: // ステージ選択シーンの場合
+		// ステージ選択シーン
+	case kSceneStageSelect: 
 		m_pStageSelect->End();
 		break;
-	case kSceneMain: // ゲームシーンの場合
+		// ゲームシーン
+	case kSceneMain:
 		m_pMain->End();
 		break;
-	case kSceneClear:		// ゲームクリアの場合
+		// ゲームクリア
+	case kSceneClear:
 		m_pClear->End();
 		break;
-	case kSceneGameOver: // ゲームオーバーの場合
+		// ゲームオーバー
+	case kSceneGameOver:
 		m_pGameOver->End();
 		break;
+
 	default:
 		break;
 	}
@@ -93,38 +105,45 @@ void SceneManager::Update()
 	// 実行するシーンの切り替えを行う
 	switch (m_runScene)
 	{
-	case kSceneTitle: // タイトルシーンの場合
-		// タイトル画面が終了されたか
+		// タイトルシーン
+	case kSceneTitle:
 		if (m_pTitle->IsSceneEnd())
 		{
-			m_pTitle->End();					// タイトルの終了処理を行う
-			m_runScene = kSceneStageSelect; // ステージ選択画面に切り替える
-			m_pMain->Init();					// ゲーム画面の初期化
+			m_pTitle->End();
+			m_runScene = kSceneStageSelect;
+			m_pMain->Init();
 		}
 		break;
-	case kSceneStageSelect: // ステージ選択シーンの場合
+		// ステージ選択シーン
+	case kSceneStageSelect:
 		if (m_pStageSelect->IsSceneEnd())
 			m_runScene = kSceneMain;
 		break;
-	case kSceneMain: // ゲームシーンの場合
-		// ゲーム画面が終了されたか
+		// ゲームシーン
+	case kSceneMain:
 		if (m_pMain->IsSceneEnd())
 		{
-			m_pMain->End();					 // ゲームシーンの終了処理を行う
-			m_runScene = kSceneGameOver; // ゲームオーバー画面に切り替える
-			m_pGameOver->Init();			 // ゲームオーバー画面の初期化
+			m_pMain->End();
+			m_runScene = kSceneGameOver;
+			m_pGameOver->Init();
 		}
 		break;
-	case kSceneClear:		// ゲームクリアの場合
-		m_pClear->Init();
+		// ゲームクリア
+	case kSceneClear:
+		if (m_pClear->IsSceneEnd())
+		{
+			m_pClear->End();
+			m_runScene = kSceneStageSelect;
+			m_pStageSelect->Init();
+		}
 		break;
-	case kSceneGameOver: // ゲームオーバーシーンの場合
-		// ゲームオーバー画面が終了されたか
+		// ゲームオーバーシーン
+	case kSceneGameOver:
 		if (m_pGameOver->IsSceneEnd())
 		{
-			m_pGameOver->End();				// ゲームオーバーの終了処理を行う
-			m_runScene = kSceneTitle;	// タイトル画面に切り替える
-			m_pTitle->Init();				// タイトル画面の初期化
+			m_pGameOver->End();
+			m_runScene = kSceneTitle;
+			m_pTitle->Init();
 		}
 		break;
 	}
@@ -132,19 +151,24 @@ void SceneManager::Update()
 	// 実行するシーンの更新を行う
 	switch (m_runScene)
 	{
-	case kSceneTitle: // タイトルシーンの場合
+		// タイトルシーン
+	case kSceneTitle:
 		m_pTitle->Update();
 		break;
-	case kSceneStageSelect: // ステージ選択シーンの場合
+		// ステージ選択シーン
+	case kSceneStageSelect:
 		m_pStageSelect->Update();
 		break;
-	case kSceneMain: // ゲームシーンの場合
+		// ゲームシーン
+	case kSceneMain:
 		m_pMain->Update();
 		break;
-	case kSceneClear:		// ゲームクリアの場合
-		m_pClear->Draw();
+		// ゲームクリア
+	case kSceneClear:
+		m_pClear->Update();
 		break;
-	case kSceneGameOver: // ゲームオーバーの場合
+		// ゲームオーバー
+	case kSceneGameOver:
 		m_pGameOver->Update();
 		break;
 	default:
@@ -157,19 +181,24 @@ void SceneManager::Draw()
 	// 実行するシーンの描画を行う
 	switch (m_runScene)
 	{
-	case kSceneTitle: // タイトルシーンの場合
+		// タイトルシーン
+	case kSceneTitle:
 		m_pTitle->Draw();
 		break;
-	case kSceneStageSelect: // ステージ選択シーンの場合
+		// ステージ選択シーン
+	case kSceneStageSelect:
 		m_pStageSelect->Draw();
 		break;
-	case kSceneMain: // ゲームシーンの場合
+		// ゲームシーン
+	case kSceneMain:
 		m_pMain->Draw();
 		break;
-	case kSceneClear:		// ゲームクリアの場合
+		// ゲームクリア
+	case kSceneClear:
 		m_pClear->Draw();
 		break;
-	case kSceneGameOver: // ゲームオーバーの場合
+		// ゲームオーバー
+	case kSceneGameOver:
 		m_pGameOver->Draw();
 		break;
 	default:

@@ -14,13 +14,16 @@ public:
 	void Update();
 	void Draw();
 
+	// シーンを終了させるか
+	bool IsSceneEnd() const { return m_isSceneEnd; }
+
 private:
 	// 選択項目
 	enum Select
 	{
 		kSelectStage, // ステージ選択
 		kTitle,		  // タイトル
-		kSelectNum	// 項目数
+		kSelectNum	  // 項目数
 	};
 
 	// 現在の選択状態

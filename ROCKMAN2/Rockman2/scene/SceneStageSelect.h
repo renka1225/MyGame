@@ -25,6 +25,7 @@ private:
 		kStage1,	// ステージ1
 		kStage2,	// ステージ2
 		kStage3,	// ステージ3
+		kBackTitle,	// タイトルに戻る
 		kSelectNum	// 項目数
 	};
 
