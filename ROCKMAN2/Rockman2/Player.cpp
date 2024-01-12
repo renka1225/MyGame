@@ -52,11 +52,11 @@ namespace
 }
 
 
-Player::Player(SceneMain* pMain, Bg* pBg) :
+Player::Player(SceneMain* pMain) :
 	m_pMain(pMain),
-	m_pBg(pBg),
 	m_pRecovery(nullptr),
-	m_pos(0, 0),
+	m_pos(0.0f, 0.0f),
+	m_move(0.0f, 0.0f),
 	m_colRect(),
 	m_handle(-1),
 	m_isRight(true),
@@ -112,9 +112,6 @@ void Player::Init()
 /*プレイヤーの更新*/
 void Player::Update()
 {
-	// 移動量
-	Vec2 move {0.0f, 0.0f};
-
 	// パッドを使用する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
@@ -122,14 +119,14 @@ void Player::Update()
 	if (pad & PAD_INPUT_LEFT)
 	{
 		m_isRight = false;
-		move.x -= kSpeed;
+		m_move.x -= kSpeed;
 	}
 
 	/*→を押したら右に移動*/
 	if (pad & PAD_INPUT_RIGHT)
 	{
 		m_isRight = true;
-		move.x += kSpeed;
+		m_move.x += kSpeed;
 	}
 
 	/*マップチップに当たった処理*/
@@ -342,7 +339,7 @@ void Player::Update()
 		}
 	}
 
-	m_pos += move; // 現在値の更新
+	m_pos += m_move; // 現在値の更新
 	m_colRect.SetCenter(m_pos.x + static_cast<float>(kPlayerWidth) / 2, m_pos.y + static_cast<float>(kPlayerHeight) / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
 }
 
@@ -374,57 +371,6 @@ void Player::Draw()
 /*地面、壁に当たったときの処理*/
 void Player::HitCollision()
 {
-	Rect mapChipRect = m_pBg->GetColRect((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerWidth / 2) / kMapHeight);	// プレイヤーの中心のマップチップの当たり判定
-	
-	// プレイヤーとマップの当たり判定 矩形
-	//if (m_colRect.IsCollision(mapChipRect))
-	//{
-	//	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);		// 中心
-	//	if (mapChipNo == 1)
-	//	{
-	//		if (m_colRect.GetCenter().y >= mapChipRect.GetTop()) // 地面に接している場合
-	//		{
-	//			m_isGround = true;
-	//			m_pos.y = mapChipRect.GetTop();	// プレイヤーを地面の上に移動
-	//		}
-	//	}
-	//	else
-	//	{
-	//		m_isGround = false;
-	//	}
-	//}
-	//if (m_colRect.GetLeft() <= mapChipRect.GetRight()) // 壁よりも左に移動
-	//{
-	//	m_pos.x = mapChipRect.GetRight();
-	//}
-	//else if (m_colRect.GetRight() >= mapChipRect.GetLeft()) // 壁よりも右に移動
-	//{
-	//	m_pos.x = mapChipRect.GetLeft();
-	//}
-
-	// プレイヤーの現在地のマップチップ番号を取得する
-	// プレイヤーの現在地 / マップチップのサイズ
-	int mapChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth / 2) / kMapWidth, (m_pos.y + kPlayerHeight / 2) / kMapHeight);	// プレイヤーの中心
-	int TLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, m_pos.y / kMapHeight);										// プレイヤーの左上のチップ番号を取得
-	int TRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, m_pos.y / kMapHeight);						// プレイヤーの右上のチップ番号を取得
-	int BLChipNo = m_pBg->GetChipData(m_pos.x / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);						// プレイヤーの左下のチップ番号を取得
-	int BRChipNo = m_pBg->GetChipData((m_pos.x + kPlayerWidth) / kMapWidth, (m_pos.y + kPlayerHeight) / kMapHeight);	// プレイヤーの右下のチップ番号を取得
-
-	// プレイヤーとマップの当たり判定
-	if (BLChipNo == 1 || BRChipNo == 1) // 地面に接している場合
-	{
-		m_isGround = true;
-		m_pos.y = mapChipRect.GetTop();    // プレイヤーを地面の上に移動
-	}
-	else
-	{
-		m_isGround = false;
-	}
-
-	if (TLChipNo == 1 || TRChipNo == 1) // 天井に接した場合
-	{
-		m_pos.y = mapChipRect.GetBottom();
-	}
 
 }
 

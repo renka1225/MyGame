@@ -3,7 +3,6 @@
 #include "Rect.h"
 
 class SceneMain;
-class Bg;
 class RecoveryBase;
 
 /// <summary>
@@ -12,7 +11,7 @@ class RecoveryBase;
 class Player
 {
 public:
-	Player(SceneMain* pMain, Bg* pBg);
+	Player(SceneMain* pMain);
 	~Player();
 
 	void Init();
@@ -75,11 +74,12 @@ public:
 
 private:
 	SceneMain* m_pMain;
-	Bg* m_pBg;
 	RecoveryBase* m_pRecovery;
 
 	// 表示位置
 	Vec2 m_pos;
+	// 移動量
+	Vec2 m_move;
 	// 当たり判定用の矩形
 	Rect m_colRect;
 

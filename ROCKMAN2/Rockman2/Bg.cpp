@@ -1,18 +1,11 @@
 #include "Bg.h"
-#include "SceneMain.h"
 #include "Player.h"
 #include "DxLib.h"
 #include "Game.h"
 
 namespace
 {
-	// 背景のスクロール速度
-	constexpr int kScrollSpeed = 2;
-
-	// 背景画像をループさせる位置
-	constexpr float kLoopPos = 500;
-
-	// マップチップの情報
+	// マップチップ1つのサイズ
 	constexpr int kChipWidth = 32;
 	constexpr int kChipHeight = 32;
 
@@ -53,21 +46,14 @@ namespace
 	};
 }
 
-Bg::Bg(SceneMain* pMain):
-	m_pMain(pMain),
+Bg::Bg(Player* pPlayer):
+	m_pPlayer(pPlayer),
 	m_bgPos(0, 0),
 	m_bgHandle(-1),
 	m_mapHandle(-1),
 	m_graphChipNumX(0),
 	m_graphChipNumY(0)
 {
-	for (int x = 0; x < kChipNumX; x++)
-	{
-		for (int y = 0; y < kChipNumY; y++)
-		{
-			m_chipData[y][x] = kChipData[y][x];
-		}
-	}
 }
 
 Bg::~Bg()
@@ -90,39 +76,6 @@ void Bg::Init()
 
 void Bg::Update()
 {
-	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-
-	if (pad & PAD_INPUT_LEFT) // ←を押した
-	{
-		// 背景を左に移動
-		m_bgPos.x -= kScrollSpeed;
-		if (m_bgPos.x < 0)
-		{
-			m_bgPos.x = kLoopPos;
-		}
-	}
-	if (pad & PAD_INPUT_RIGHT) // →を押した
-	{
-		// 背景を右に移動
-		m_bgPos.x += kScrollSpeed;
-		if (m_bgPos.x > kLoopPos)
-		{
-			m_bgPos.x = 0;
-		}
-	}
-
-	// マップチップの当たり判定を更新
-	for (int y = 0; y < kChipNumY; y++)
-	{
-		for (int x = 0; x < kChipNumX; x++)
-		{
-			// 設置するチップ
-			int chipNo = m_chipData[y][x];
-
-			// 当たり判定を設定
-			m_colRect[y][x].SetCenter(x * kChipWidth + kChipWidth / 2, y * kChipHeight + kChipHeight / 2, kChipWidth, kChipHeight);
-		}
-	}
 }
 
 void Bg::Draw()
@@ -130,20 +83,13 @@ void Bg::Draw()
 	// 背景の描画
 	DrawRectGraph(0, 0, m_bgPos.x, m_bgPos.y, Game::kScreenWidth, Game::kScreenHeight, m_bgHandle, false);
 
-	// プレイヤーの位置に応じたスクロール量を決定する
-	//Vec2 scroll = GetScroll();
-
 	// マップチップの描画
 	for (int y = 0; y < kChipNumY; y++)
 	{
 		for (int x = 0; x < kChipNumX; x++)
 		{
-			// マップの表示座標
-			//int posX = kChipWidth * x - scroll.x;
-			//int posY = kChipHeight * y - scroll.y;
-
 			// 設置するチップ
-			int chipNo = m_chipData[y][x];
+			int chipNo = kChipData[y][x];
 
 			// マップチップのグラフィック切り出し座標
 			int srcX = kChipWidth * (chipNo % m_graphChipNumX);
@@ -151,42 +97,69 @@ void Bg::Draw()
 
 			// 描画
 			DrawRectGraph(x * kChipWidth, y * kChipHeight, srcX, srcY, kChipWidth, kChipHeight, m_mapHandle, true);
-
-
-#ifdef _DEBUG
-			if (chipNo == 1)
-			{
-				// 当たり判定の表示
-				m_colRect[y][x].Draw(0xb0e0e6, false);
-			}
-#endif
 		}
 	}
 }
 
-Vec2 Bg::GetScroll()
+/*プレイヤーと当たっているか判定*/
+bool Bg::IsColPlayer()
 {
-	// 描画座標の左上位置
-	float resultX = static_cast<float>(m_pMain->GetPlayerPos().x - Game::kScreenWidth / 2);
-	float resultY = static_cast<float>(m_pMain->GetPlayerPos().y - Game::kScreenHeight / 2);
+	float playerLeft = m_pPlayer->GetColRect().GetLeft();
+	float playerRight = m_pPlayer->GetColRect().GetRight();
+	float playerTop = m_pPlayer->GetColRect().GetTop();
+	float playerBottom = m_pPlayer->GetColRect().GetBottom();
 
-	if (resultX < 0)
+	for (int y = 0; y < kChipNumY; y++)
 	{
-		resultX = 0;
-	}
-	if (resultX >kMapWidth - Game::kScreenWidth)
-	{
-		resultX = kMapWidth - Game::kScreenWidth;
-	}
+		for (int x = 0; x < kChipNumX; x++)
+		{
+			// 地面以外は当たらない
+			if (kChipData[y][x] != 1) continue;
 
-	if (resultY < 0)
-	{
-		resultY = 0;
-	}
-	if (resultY > kMapHeight - Game::kScreenHeight)
-	{
-		resultY = kMapHeight - Game::kScreenHeight;
-	}
+			int chipLeft = x * kChipWidth;
+			int chipRight = chipLeft + kChipWidth;
+			int chipTop = y * kChipHeight;
+			int chipBottom = chipTop + kChipHeight;
 
-	return { resultX, resultY };
+			// 絶対に当たらない場合
+			if (chipLeft > playerRight) continue;
+			if (chipTop > playerBottom) continue;
+			if (chipRight < playerRight) continue;
+			if (chipBottom < playerTop) continue;
+
+			// いずれかのチップに当たっていたら終了する
+			return true;
+		}
+	}
+	// 全てのチップをチェックして1つも当たっていなければ当たっていない
+	return false;
+}
+
+/*指定したマップチップの矩形と当たっているか判定*/
+bool Bg::IsCollision(Rect rect, Rect& chipRect)
+{
+	for (int y = 0; y < kChipNumY; y++)
+	{
+		for (int x = 0; x < kChipNumX; x++)
+		{
+			// 地面、壁以外当たらない
+			if (kChipData[y][x] != 1) continue;
+
+			int chipLeft = x * kChipWidth;
+			int chipRight = chipLeft + kChipWidth;
+			int chipTop = y * kChipHeight;
+			int chipBottom = chipTop + kChipHeight;
+
+			// 絶対に当たらない場合
+			if (chipLeft > rect.GetRight()) continue;
+			if (chipTop > rect.GetBottom()) continue;
+			if (chipRight < rect.GetLeft()) continue;
+			if (chipBottom < rect.GetTop()) continue;
+
+			// いずれかのチップに当たっていたら終了する
+			return true;
+		}
+	}
+	// 全てのチップをチェックして1つも当たっていなければ当たっていない
+	return false;
 }

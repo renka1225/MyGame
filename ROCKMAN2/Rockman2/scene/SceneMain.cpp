@@ -70,14 +70,14 @@ SceneMain::SceneMain():
 	m_enemyHandle = LoadGraph("data/image/Enemy/matasaburo.png");
 	assert(m_bgHandle != -1);
 
+	// プレイヤーのメモリ確保
+	m_pPlayer = new Player{ this };
+	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
+
 	// 背景のメモリ確保
-	m_pBg = new Bg{ this };
+	m_pBg = new Bg{ m_pPlayer };
 	m_pBg->SetHandle(m_bgHandle);
 	m_pBg->SetMapHandle(m_mapHandle);
-
-	// プレイヤーのメモリ確保
-	m_pPlayer = new Player{ this, m_pBg};
-	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
 	// ポーズ画面のメモリ確保
 	m_pPause = new ScenePause{ m_pPlayer };
