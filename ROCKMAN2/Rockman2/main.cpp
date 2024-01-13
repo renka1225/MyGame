@@ -2,9 +2,6 @@
 #include "Game.h"
 #include "SceneManager.h"
 
-// ショットの数
-#define SHOT	3
-
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

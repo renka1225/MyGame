@@ -121,11 +121,17 @@ void SceneManager::Update()
 		break;
 		// ゲームシーン
 	case kSceneMain:
-		if (m_pMain->IsSceneEnd())
+		if (m_pMain->IsSceneGameOver())
 		{
 			m_pMain->End();
 			m_runScene = kSceneGameOver;
 			m_pGameOver->Init();
+		}
+		else if (m_pMain->IsSceneClear())
+		{
+			m_pMain->End();
+			m_runScene = kSceneClear;
+			m_pClear->Init();
 		}
 		break;
 		// ゲームクリア

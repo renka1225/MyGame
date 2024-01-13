@@ -58,7 +58,8 @@ SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
 	m_isExistLineMove(false),
-	m_isSceneEnd(false)
+	m_isSceneGameOver(false),
+	m_isSceneClear(false)
 {
 	// プレイヤーのグラフィックロード
 	m_playerHandle = LoadGraph("data/image/player.png");
@@ -78,6 +79,7 @@ SceneMain::SceneMain():
 	m_pBg = new Bg{ m_pPlayer };
 	m_pBg->SetHandle(m_bgHandle);
 	m_pBg->SetMapHandle(m_mapHandle);
+	m_pPlayer->SetBg(m_pBg);
 
 	// ポーズ画面のメモリ確保
 	m_pPause = new ScenePause{ m_pPlayer };
@@ -160,7 +162,8 @@ SceneMain::~SceneMain()
 void SceneMain::Init()
 {
 	// 画面遷移の初期化
-	m_isSceneEnd = false;
+	m_isSceneGameOver = false;
+	m_isSceneClear = false;
 	m_isExistLineMove = false;
 
 	// ポーズ画面の初期化
@@ -202,7 +205,15 @@ void SceneMain::Update()
 	// プレイヤーの残機が0未満の場合
 	if (m_pPlayer->GetLife() < 0)
 	{
-		m_isSceneEnd = true; // ゲームオーバー画面に遷移
+		m_isSceneGameOver = true; // ゲームオーバー画面に遷移
+	}
+
+	// TODO:ボスを倒したらクリア画面に遷移する
+	// Cキーでクリア画面に移動するようにする
+	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	if (pad & PAD_INPUT_3)
+	{
+		m_isSceneClear = true; // クリア画面に遷移
 	}
 
 	// ポーズ画面の更新

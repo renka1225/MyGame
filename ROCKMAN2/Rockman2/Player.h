@@ -3,6 +3,7 @@
 #include "Rect.h"
 
 class SceneMain;
+class Bg;
 class RecoveryBase;
 
 /// <summary>
@@ -14,15 +15,16 @@ public:
 	Player(SceneMain* pMain);
 	~Player();
 
+	// マップのポインタを設定する
+	void SetBg(Bg* pBg) { m_pBg = pBg; }
+
 	void Init();
 	void Update();
 	void Draw();
 
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
-	// プレイヤーが地面に当たった時の処理
-	void HitCollision();
-	// プレイヤーがE缶を取得したとき
+	// プレイヤーがE缶取得処理
 	void GetHpFullRecovery();
 	// プレイヤーの回復処理
 	void HpSmallRecovery();		// HP小回復
@@ -74,6 +76,7 @@ public:
 
 private:
 	SceneMain* m_pMain;
+	Bg* m_pBg;
 	RecoveryBase* m_pRecovery;
 
 	// 表示位置
