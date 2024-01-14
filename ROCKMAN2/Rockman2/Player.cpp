@@ -122,14 +122,10 @@ void Player::Update()
 		m_move.x -= kSpeed;
 	}
 	/*→を押したら右に移動*/
-	else if (pad & PAD_INPUT_RIGHT)
+	if (pad & PAD_INPUT_RIGHT)
 	{
 		m_isRight = true;
 		m_move.x += kSpeed;
-	}
-	else
-	{
-		m_move.x = 0.0f;
 	}
 
 	/*画面外に出たら画面内に戻す*/
@@ -407,6 +403,7 @@ void Player::Update()
 		}
 	}
 
+	// 当たり判定更新
 	m_colRect.SetCenter(m_pos.x + static_cast<float>(kPlayerWidth) / 2, m_pos.y + static_cast<float>(kPlayerHeight) / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
 }
 
