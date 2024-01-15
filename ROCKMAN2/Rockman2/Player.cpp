@@ -132,9 +132,9 @@ void Player::Update()
 	}
 
 	/*画面外に出たら画面内に戻す*/
-	if (m_pos.x < 0.0f)
+	if (m_pos.x < 0.0f + kPlayerWidth * 0.5)
 	{
-		m_pos.x = 0;
+		m_pos.x = 0.0f + kPlayerWidth * 0.5;
 	}
 	if (m_pos.y < 0.0f)
 	{
@@ -175,17 +175,17 @@ void Player::Update()
 
 		// 横から当たったかチェックする
 		m_pos.x += m_move.x;
-		//if (m_pBg->IsCollision(GetColRect(), chipRect))
-		//{
-		//	if (m_move.x > 0.0f) // 右方向に移動
-		//	{
-		//		m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
-		//	}
-		//	else if (m_move.x < 0.0f) // 左方向に移動
-		//	{
-		//		m_pos.x = chipRect.GetRight() + 1;
-		//	}
-		//}
+		if (m_pBg->IsCollision(GetColRect(), chipRect))
+		{
+			if (m_move.x > 0.0f) // 右方向に移動
+			{
+				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
+			}
+			else if (m_move.x < 0.0f) // 左方向に移動
+			{
+				m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
+			}
+		}
 
 		// 縦から当たったかチェックする
 		m_pos.y += m_move.y;
@@ -193,17 +193,18 @@ void Player::Update()
 		{
 			if (m_move.y > 0.0f) // 下方向に移動
 			{
-				m_pos.y = chipRect.GetTop();
+				m_pos.y = static_cast<float>(chipRect.GetTop() + kPlayerHeight * 0.5f - 1);
 			}
 			else if (m_move.y < 0.0f) // 上方向に移動
 			{
-				m_pos.y = chipRect.GetBottom() + 1;
+				m_pos.y = static_cast<float>(chipRect.GetBottom() + kPlayerHeight * 0.5f + 1);
 				m_move.y *= -1.0f;
+				m_isGround = false;
 			}
 		}
 		else // 地面にすらぶつかっていない
 		{
-			//m_isGround = false;
+			m_isGround = false;
 		}
 	}
 	/*ジャンプ中*/
@@ -231,24 +232,23 @@ void Player::Update()
 			}
 			m_move.y *= jumpHeight;
 		}
-
 		m_move.y += kGravity; // 初速度に重力を足す
 
 		Rect chipRect; // 当たったマップチップの矩形
 
 		// 横から当たったかチェックする
 		m_pos.x += m_move.x;
-		//if (m_pBg->IsCollision(GetColRect(), chipRect))
-		//{
-		//	if (m_move.x > 0.0f) // 右方向に移動
-		//	{
-		//		m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
-		//	}
-		//	else if (m_move.x < 0.0f) // 左方向に移動
-		//	{
-		//		m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
-		//	}
-		//}
+		if (m_pBg->IsCollision(GetColRect(), chipRect))
+		{
+			if (m_move.x > 0.0f) // 右方向に移動
+			{
+				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
+			}
+			else if (m_move.x < 0.0f) // 左方向に移動
+			{
+				m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
+			}
+		}
 
 		// 縦から当たったかチェックする
 		m_pos.y += m_move.y;
@@ -256,14 +256,14 @@ void Player::Update()
 		{
 			if (m_move.y > 0.0f) // 下方向に移動
 			{
-				m_pos.y = chipRect.GetTop() - kPlayerHeight - 1;
+				m_pos.y = static_cast<float>(chipRect.GetTop() - kPlayerHeight * 0.5f - 1);
 				m_jumpFrame = 0;
 				m_move.y = 0.0f;
 				m_isGround = true;
 			}
 			else if (m_move.y < 0.0f) // 上方向に移動
 			{
-				m_pos.y = chipRect.GetBottom() + 1;
+				m_pos.y = static_cast<float>(chipRect.GetBottom() + kPlayerHeight * 0.5f + 1);
 				m_move.y *= -1.0f;
 			}
 		}
@@ -404,7 +404,7 @@ void Player::Update()
 	}
 
 	// 当たり判定更新
-	m_colRect.SetCenter(m_pos.x + static_cast<float>(kPlayerWidth) / 2, m_pos.y + static_cast<float>(kPlayerHeight) / 2, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
 }
 
 void Player::Draw()
@@ -415,11 +415,11 @@ void Player::Draw()
 
 	if (m_isRight) // 右を向いている場合
 	{
-		DrawGraph(static_cast<float>(m_pos.x), static_cast<float>(m_pos.y), m_handle, false);
+		DrawGraph(m_pos.x - static_cast<float>(kPlayerWidth) * 0.5f, m_pos.y - static_cast<float>(kPlayerHeight) * 0.5f, m_handle, false);
 	}
 	else // 左を向いている場合
 	{
-		DrawTurnGraph(static_cast<float>(m_pos.x), static_cast<float>(m_pos.y), m_handle, false);
+		DrawTurnGraph(m_pos.x - static_cast<float>(kPlayerWidth) * 0.5f, m_pos.y - static_cast<float>(kPlayerHeight) * 0.5f, m_handle, false);
 	}
 
 	// ダメージ演出
