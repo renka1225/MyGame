@@ -111,13 +111,17 @@ void SceneManager::Update()
 		{
 			m_pTitle->End();
 			m_runScene = kSceneStageSelect;
-			m_pMain->Init();
+			m_pStageSelect->Init();
 		}
 		break;
 		// ステージ選択シーン
 	case kSceneStageSelect:
 		if (m_pStageSelect->IsSceneEnd())
+		{
+			m_pStageSelect->End();
 			m_runScene = kSceneMain;
+			m_pMain->Init();
+		}
 		break;
 		// ゲームシーン
 	case kSceneMain:
@@ -136,7 +140,7 @@ void SceneManager::Update()
 		break;
 		// ゲームクリア
 	case kSceneClear:
-		if (m_pClear->IsSceneEnd())
+		if (m_pClear->IsSceneStageSelect())
 		{
 			m_pClear->End();
 			m_runScene = kSceneStageSelect;

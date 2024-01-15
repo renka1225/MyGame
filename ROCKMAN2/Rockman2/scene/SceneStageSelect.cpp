@@ -71,7 +71,6 @@ void SceneStageSelect::Update()
 	}
 
 	// ZƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
-
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
 		// TODO:‘I‘ğó‘Ô‚É‚æ‚Á‚ÄˆÚ“®æ‚ğ•Ï‚¦‚é

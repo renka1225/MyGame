@@ -19,7 +19,7 @@ ShotLineMove::ShotLineMove():
 	m_stopFrame(0),
 	m_energy(28)
 {
-	m_handle = LoadGraph("data/image/shotLineMove.png");
+	m_handle = LoadGraph("data/image/Shot/shotLineMove.png");
 }
 
 ShotLineMove::~ShotLineMove()

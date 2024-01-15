@@ -19,9 +19,9 @@ namespace
 ShotFire::ShotFire()
 {
 	// 弾のグラフィックロード
-	m_handle = LoadGraph("data/image/shotFire.png");
-	m_mediumHandle = LoadGraph("data/image/shotFire2.png");
-	m_fullHandle = LoadGraph("data/image/shotFire3.png");
+	m_handle = LoadGraph("data/image/Shot/shotFire.png");
+	m_mediumHandle = LoadGraph("data/image/Shot/shotFire2.png");
+	m_fullHandle = LoadGraph("data/image/Shot/shotFire3.png");
 }
 
 ShotFire::~ShotFire()

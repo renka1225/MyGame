@@ -76,9 +76,10 @@ SceneMain::SceneMain():
 	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
 	// 背景のメモリ確保
-	m_pBg = new Bg{ m_pPlayer };
+	m_pBg = new Bg;
 	m_pBg->SetHandle(m_bgHandle);
 	m_pBg->SetMapHandle(m_mapHandle);
+	m_pBg->SetPlayer(m_pPlayer);
 	m_pPlayer->SetBg(m_pBg);
 
 	// ポーズ画面のメモリ確保
@@ -211,7 +212,7 @@ void SceneMain::Update()
 	// TODO:ボスを倒したらクリア画面に遷移する
 	// Cキーでクリア画面に移動するようにする
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (pad & PAD_INPUT_3)
+	if (Pad::IsTrigger(pad & PAD_INPUT_3))
 	{
 		m_isSceneClear = true; // クリア画面に遷移
 	}
@@ -235,10 +236,10 @@ void SceneMain::Update()
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
-	if (m_playerPos.x >= 50 && m_playerPos.x <= 53)
+	/*if (m_playerPos.x >= 50 && m_playerPos.x <= 53)
 	{
 		CreateMatasaburo();
-	}
+	}*/
 
 	// プレイヤーが画面内に移動したらE缶を表示する
 	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)

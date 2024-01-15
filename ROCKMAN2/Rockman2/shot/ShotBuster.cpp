@@ -19,7 +19,7 @@ namespace
 ShotBuster::ShotBuster()
 {
 	// 弾のグラフィックロード
-	m_handle = LoadGraph("data/image/shotBuster.png");
+	m_handle = LoadGraph("data/image/Shot/shotBuster.png");
 }
 
 ShotBuster::~ShotBuster()

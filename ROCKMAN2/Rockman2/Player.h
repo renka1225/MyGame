@@ -4,7 +4,6 @@
 
 class SceneMain;
 class Bg;
-class RecoveryBase;
 
 /// <summary>
 /// プレイヤークラス
@@ -77,7 +76,6 @@ public:
 private:
 	SceneMain* m_pMain;
 	Bg* m_pBg;
-	RecoveryBase* m_pRecovery;
 
 	// 表示位置
 	Vec2 m_pos;
@@ -93,8 +91,6 @@ private:
 	bool m_isRight;
 	// 地面と接しているか
 	bool m_isGround;	// true:接している
-	// 初速度
-	float m_velocity;
 	// ジャンプ中のフレーム数
 	int m_jumpFrame;
 

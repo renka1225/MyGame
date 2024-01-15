@@ -24,7 +24,7 @@ namespace
 
 SceneClear::SceneClear():
 	m_select(kSelectStage),
-	m_isSceneEnd(false)
+	m_isSceneStageSelect(false)
 {
 }
 
@@ -34,7 +34,7 @@ SceneClear::~SceneClear()
 
 void SceneClear::Init()
 {
-	m_isSceneEnd = false;
+	m_isSceneStageSelect = false;
 	m_select = kSelectStage;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
@@ -46,9 +46,15 @@ void SceneClear::End()
 
 void SceneClear::Update()
 {
+	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	if (Pad::IsTrigger(pad & PAD_INPUT_3))
+	{
+		m_isSceneStageSelect = true; // ステージ選択に移動
+	}
 }
 
 void SceneClear::Draw()
 {
 	DrawString(8, 16, "クリア画面", 0xffffff, false);
+	DrawString(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f, "Cキーでステージ選択", 0xffffff, false);
 }

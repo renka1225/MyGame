@@ -4,20 +4,21 @@
 #include "Game.h"
 
 class Player;
-
 /// <summary>
 /// 背景クラス
 /// </summary>
 class Bg
 {
 public:
-	Bg(Player* pPlayer);
+	Bg();
 	~Bg();
 
 	void Init();
 	void Update();
 	void Draw();
 
+	// プレイヤーのポインタを設定
+	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 	// グラフィックの設定
 	void SetHandle(int bgHandle) { m_bgHandle = bgHandle; }
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }

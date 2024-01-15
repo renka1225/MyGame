@@ -21,7 +21,7 @@ ShotMetal::ShotMetal() :
 	m_energy(28)
 {
 	// 弾のグラフィックロード
-	m_handle = LoadGraph("data/image/shotMetal.png");
+	m_handle = LoadGraph("data/image/Shot/shotMetal.png");
 }
 
 ShotMetal::~ShotMetal()

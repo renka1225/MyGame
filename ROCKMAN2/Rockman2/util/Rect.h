@@ -28,7 +28,7 @@ public:
 	// 矩形同士の当たり判定
 	bool IsCollision(const Rect& rect);
 
-private:
+public:
 	float m_left;	// 左上のX座標
 	float m_top;	// 左上のY座標
 	float m_right;	// 右下のX座標

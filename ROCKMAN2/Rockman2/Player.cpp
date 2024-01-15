@@ -15,7 +15,7 @@
 namespace
 {
 	// 移動速度
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 5.0f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
@@ -54,14 +54,13 @@ namespace
 
 Player::Player(SceneMain* pMain) :
 	m_pMain(pMain),
-	m_pRecovery(nullptr),
+	m_pBg(nullptr),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
 	m_colRect(),
 	m_handle(-1),
 	m_isRight(true),
 	m_isGround(false),
-	m_velocity(0),
 	m_jumpFrame(0),
 	m_hp(kMaxHp),
 	m_life(kLife),
@@ -95,7 +94,7 @@ void Player::Init()
 	// ジャンプフラグ
 	m_isGround = false;
 	// 加速度
-	m_velocity = 0.0f;
+	m_move.y = 0.0f;
 	// HP
 	m_hp = kMaxHp;
 	// 残機数
@@ -115,17 +114,21 @@ void Player::Update()
 	// パッドを使用する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	/*←を押したら左に移動*/
-	if (pad & PAD_INPUT_LEFT)
-	{
-		m_isRight = false;
-		m_move.x -= kSpeed;
-	}
 	/*→を押したら右に移動*/
 	if (pad & PAD_INPUT_RIGHT)
 	{
 		m_isRight = true;
-		m_move.x += kSpeed;
+		m_move.x = kSpeed;
+	}
+	/*←を押したら左に移動*/
+	else if (pad & PAD_INPUT_LEFT)
+	{
+		m_isRight = false;
+		m_move.x = -kSpeed;
+	}
+	else
+	{
+		m_move.x = 0;
 	}
 
 	/*画面外に出たら画面内に戻す*/
@@ -161,46 +164,46 @@ void Player::Update()
 	/*地面に接している*/
 	if (m_isGround)
 	{
-		m_jumpFrame = 0;
-		m_velocity = 0;
-		m_move.y = 0;
-
 		/*Spaceでジャンプ*/
 		if (Pad::IsTrigger(PAD_INPUT_10))
 		{
 			m_isGround = false;
-			m_velocity = kVelocity;
+			m_move.y = kVelocity;
 		}
 
 		Rect chipRect; // 当たったマップチップの矩形
 
 		// 横から当たったかチェックする
 		m_pos.x += m_move.x;
-		if (m_pBg->IsCollision(GetColRect(), chipRect))
-		{
-			if (m_move.x > 0.0f) // 右方向に移動
-			{
-				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
-			}
-			else if (m_move.x < 0.0f) // 左方向に移動
-			{
-				m_pos.x = chipRect.GetRight() + kPlayerHeight * 0.5 + 1;
-			}
-		}
+		//if (m_pBg->IsCollision(GetColRect(), chipRect))
+		//{
+		//	if (m_move.x > 0.0f) // 右方向に移動
+		//	{
+		//		m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
+		//	}
+		//	else if (m_move.x < 0.0f) // 左方向に移動
+		//	{
+		//		m_pos.x = chipRect.GetRight() + 1;
+		//	}
+		//}
 
 		// 縦から当たったかチェックする
-		m_pos.y += m_velocity;
+		m_pos.y += m_move.y;
 		if (m_pBg->IsCollision(GetColRect(), chipRect))
 		{
-			if (m_velocity > 0.0f) // 下方向に移動
+			if (m_move.y > 0.0f) // 下方向に移動
 			{
-				m_pos.y = chipRect.GetTop() - 1;
+				m_pos.y = chipRect.GetTop();
 			}
-			else if (m_velocity < 0.0f) // 上方向に移動
+			else if (m_move.y < 0.0f) // 上方向に移動
 			{
 				m_pos.y = chipRect.GetBottom() + 1;
 				m_move.y *= -1.0f;
 			}
+		}
+		else // 地面にすらぶつかっていない
+		{
+			//m_isGround = false;
 		}
 	}
 	/*ジャンプ中*/
@@ -226,46 +229,43 @@ void Player::Update()
 			{
 				jumpHeight = 1.0f;
 			}
-			m_velocity *= jumpHeight;
+			m_move.y *= jumpHeight;
 		}
-		m_velocity += kGravity; // 初速度に重力を足す
+
+		m_move.y += kGravity; // 初速度に重力を足す
 
 		Rect chipRect; // 当たったマップチップの矩形
 
 		// 横から当たったかチェックする
 		m_pos.x += m_move.x;
-		if (m_pBg->IsCollision(GetColRect(), chipRect))
-		{
-			if (m_move.x > 0.0f) // 右方向に移動
-			{
-				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
-			}
-			else if (m_move.x < 0.0f) // 左方向に移動
-			{
-				m_pos.x = chipRect.GetRight() - kPlayerWidth * 0.5 + 1;
-			}
-		}
+		//if (m_pBg->IsCollision(GetColRect(), chipRect))
+		//{
+		//	if (m_move.x > 0.0f) // 右方向に移動
+		//	{
+		//		m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
+		//	}
+		//	else if (m_move.x < 0.0f) // 左方向に移動
+		//	{
+		//		m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
+		//	}
+		//}
 
 		// 縦から当たったかチェックする
-		m_pos.y += m_velocity;
+		m_pos.y += m_move.y;
 		if (m_pBg->IsCollision(GetColRect(), chipRect))
 		{
-			if (m_velocity > 0.0f) // 下方向に移動
+			if (m_move.y > 0.0f) // 下方向に移動
 			{
-				m_isGround = true;
-				m_pos.y = chipRect.GetTop() - 1;
+				m_pos.y = chipRect.GetTop() - kPlayerHeight - 1;
+				m_jumpFrame = 0;
 				m_move.y = 0.0f;
+				m_isGround = true;
 			}
-			else if (m_velocity < 0.0f) // 上方向に移動
+			else if (m_move.y < 0.0f) // 上方向に移動
 			{
 				m_pos.y = chipRect.GetBottom() + 1;
 				m_move.y *= -1.0f;
 			}
-		}
-		else
-		{
-			// 地面にすらぶつかっていない
-			m_isGround = false;
 		}
 	}
 
@@ -595,7 +595,7 @@ void Player::RideLineMove(Rect shotRect)
 		if (Pad::IsTrigger(PAD_INPUT_10))
 		{
 			m_isGround = false;
-			m_velocity = kVelocity;
+			m_move.y = kVelocity;
 		}
 
 		// 当たり判定の更新
