@@ -15,10 +15,10 @@ public:
 	void End();
 
 	// シーンを終了させるか
-	bool IsSceneEnd() const { return m_isSceneEnd; }
+	bool IsSceneSelect() const { return m_isSceneSelect; }
 
 private:
-	// シーンを終了させるフラグ true:終了
-	bool m_isSceneEnd;
+	// シーン選択のフラグ true:シーンに移動
+	bool m_isSceneSelect;
 };
 

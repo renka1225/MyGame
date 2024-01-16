@@ -17,6 +17,10 @@ public:
 	void Update();
 	void Draw();
 
+	// プレイヤーの位置からスクロール量を決定する
+	int GetScrollX();
+	int GetScrollY();
+
 	// プレイヤーのポインタを設定
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 	// グラフィックの設定

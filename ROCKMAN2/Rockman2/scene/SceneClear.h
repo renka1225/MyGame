@@ -15,7 +15,7 @@ public:
 	void Draw();
 
 	// シーンを終了させるか
-	bool IsSceneStageSelect() const { return m_isSceneStageSelect; }
+	bool IsSceneStageSelect() const { return m_isSceneSelectStage; }
 
 private:
 	// 選択項目
@@ -30,8 +30,8 @@ private:
 	int m_select;
 
 private:
-	// シーン終了のフラグ true:終了
-	bool m_isSceneStageSelect;
+	// シーン選択のフラグ true:シーンに移動
+	bool m_isSceneSelectStage;
 
 	// 選択中の四角の表示位置
 	Vec2 m_selectPos;

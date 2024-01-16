@@ -236,10 +236,10 @@ void SceneMain::Update()
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 
 	// プレイヤーが一定座標に到達したら敵を登場させる
-	/*if (m_playerPos.x >= 50 && m_playerPos.x <= 53)
+	if (m_pPlayer->GetPos().x > 100 && m_pPlayer->GetPos().x < 103)
 	{
 		CreateMatasaburo();
-	}*/
+	}
 
 	// プレイヤーが画面内に移動したらE缶を表示する
 	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)

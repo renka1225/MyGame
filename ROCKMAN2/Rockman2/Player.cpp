@@ -15,7 +15,7 @@
 namespace
 {
 	// 移動速度
-	constexpr float kSpeed = 5.0f;
+	constexpr float kSpeed = 4.0f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
@@ -142,10 +142,10 @@ void Player::Update()
 	}
 
 	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight) > Game::kScreenHeight)
+	if ((m_pos.y - kPlayerHeight * 0.5f) > Game::kScreenHeight)
 	{
 		// 残機を1減らす
-		//m_life--;
+		m_life--;
 		if (m_life >= 0)
 		{
 			// 残機が0以上だったらプレイヤーを初期位置に戻す
@@ -164,6 +164,9 @@ void Player::Update()
 	/*地面に接している*/
 	if (m_isGround)
 	{
+		m_jumpFrame = 0;
+		m_move.y = 0.0f;
+
 		/*Spaceでジャンプ*/
 		if (Pad::IsTrigger(PAD_INPUT_10))
 		{
@@ -171,41 +174,7 @@ void Player::Update()
 			m_move.y = kVelocity;
 		}
 
-		Rect chipRect; // 当たったマップチップの矩形
-
-		// 横から当たったかチェックする
-		m_pos.x += m_move.x;
-		if (m_pBg->IsCollision(GetColRect(), chipRect))
-		{
-			if (m_move.x > 0.0f) // 右方向に移動
-			{
-				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
-			}
-			else if (m_move.x < 0.0f) // 左方向に移動
-			{
-				m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
-			}
-		}
-
-		// 縦から当たったかチェックする
-		m_pos.y += m_move.y;
-		if (m_pBg->IsCollision(GetColRect(), chipRect))
-		{
-			if (m_move.y > 0.0f) // 下方向に移動
-			{
-				m_pos.y = static_cast<float>(chipRect.GetTop() + kPlayerHeight * 0.5f - 1);
-			}
-			else if (m_move.y < 0.0f) // 上方向に移動
-			{
-				m_pos.y = static_cast<float>(chipRect.GetBottom() + kPlayerHeight * 0.5f + 1);
-				m_move.y *= -1.0f;
-				m_isGround = false;
-			}
-		}
-		else // 地面にすらぶつかっていない
-		{
-			m_isGround = false;
-		}
+		CheckHitMap();
 	}
 	/*ジャンプ中*/
 	else
@@ -234,39 +203,7 @@ void Player::Update()
 		}
 		m_move.y += kGravity; // 初速度に重力を足す
 
-		Rect chipRect; // 当たったマップチップの矩形
-
-		// 横から当たったかチェックする
-		m_pos.x += m_move.x;
-		if (m_pBg->IsCollision(GetColRect(), chipRect))
-		{
-			if (m_move.x > 0.0f) // 右方向に移動
-			{
-				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5 - 1;
-			}
-			else if (m_move.x < 0.0f) // 左方向に移動
-			{
-				m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
-			}
-		}
-
-		// 縦から当たったかチェックする
-		m_pos.y += m_move.y;
-		if (m_pBg->IsCollision(GetColRect(), chipRect))
-		{
-			if (m_move.y > 0.0f) // 下方向に移動
-			{
-				m_pos.y = static_cast<float>(chipRect.GetTop() - kPlayerHeight * 0.5f - 1);
-				m_jumpFrame = 0;
-				m_move.y = 0.0f;
-				m_isGround = true;
-			}
-			else if (m_move.y < 0.0f) // 上方向に移動
-			{
-				m_pos.y = static_cast<float>(chipRect.GetBottom() + kPlayerHeight * 0.5f + 1);
-				m_move.y *= -1.0f;
-			}
-		}
+		CheckHitMap();
 	}
 
 	/*バスター発射*/
@@ -404,22 +341,31 @@ void Player::Update()
 	}
 
 	// 当たり判定更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight); // 当たり判定の更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight);
+
+	/*if (m_pos.y > 500)
+	{
+		m_pos.y = 500;
+	}*/
 }
 
 void Player::Draw()
 {
+	// 中央座標を左上座標に変換
+	int x = m_pos.x - kPlayerWidth * 0.5f;
+	int y = m_pos.y - kPlayerHeight * 0.5f;
+
 	// スクロール量を反映する
-	//m_pos.x -= m_pBg->GetScroll().x;
-	//m_pos.y -= m_pBg->GetScroll().y;
+	x -= m_pBg->GetScrollX();
+	y -= m_pBg->GetScrollY();
 
 	if (m_isRight) // 右を向いている場合
 	{
-		DrawGraph(m_pos.x - static_cast<float>(kPlayerWidth) * 0.5f, m_pos.y - static_cast<float>(kPlayerHeight) * 0.5f, m_handle, false);
+		DrawGraph(x, y, m_handle, false);
 	}
 	else // 左を向いている場合
 	{
-		DrawTurnGraph(m_pos.x - static_cast<float>(kPlayerWidth) * 0.5f, m_pos.y - static_cast<float>(kPlayerHeight) * 0.5f, m_handle, false);
+		DrawTurnGraph(x, y, m_handle, false);
 	}
 
 	// ダメージ演出
@@ -427,9 +373,52 @@ void Player::Draw()
 	if (m_damageFrame % 4 >= 2) return;
 
 #ifdef _DEBUG
+	// MEMO:スクロールが反映されないためコメントアウト
 	// 当たり判定の表示
-	m_colRect.Draw(0x0000ff, false);
+	//m_colRect.Draw(0x0000ff, false);
 #endif
+}
+
+void Player::CheckHitMap()
+{
+	Rect chipRect; // 当たったマップチップの矩形
+
+	// 横から当たったかチェックする
+	m_pos.x += m_move.x;
+	//if (m_pBg->IsCollision(GetColRect(), chipRect)) // 壁に当たった
+	//{
+	//	if (m_move.x > 0.0f && m_pos.x + m_move.x >= chipRect.GetLeft() - (kPlayerHeight * 0.5f))
+	//	{
+	//		m_move.x = chipRect.GetLeft() - m_pos.y - (kPlayerWidth * 0.5);
+	//		m_pos.x += m_move.x;
+	//	}
+	//	else if (m_move.x < 0.0f) // 左方向に移動
+	//	{
+	//		m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5 + 1;
+	//	}
+	//}
+
+	// 縦から当たったかチェックする
+	m_pos.y += m_move.y;
+	if (m_pBg->IsCollision(GetColRect(), chipRect))
+	{
+		if (m_move.y > 0.0f && m_pos.y + m_move.y >= chipRect.GetTop() - (kPlayerHeight * 0.5f)) // 地面に接地
+		{
+			m_move.y = static_cast<float>(chipRect.GetTop() - (m_pos.y + (kPlayerHeight * 0.5f)));
+			m_pos.y += m_move.y;
+			m_isGround = true;
+		}
+		//else if (m_pos.y + m_move.y <= chipRect.GetBottom() - (kPlayerHeight * 0.5f)) // 上方向に移動
+		//{
+		//	m_move.y = chipRect.GetBottom() - (m_pos.y + (kPlayerHeight * 0.5f));
+		//	m_pos.y -= m_move.y;
+		//	m_move.y *= -1.0f;
+		//}
+	}
+	else // 地面にすらぶつかっていない
+	{
+		m_isGround = false;
+	}
 }
 
 /*弾の選択状態を更新*/

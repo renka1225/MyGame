@@ -32,7 +32,7 @@ private:
 	int m_select;
 
 private:
-	// シーン終了のフラグ true:終了
+	// シーン選択のフラグ true:シーンに移動
 	bool m_isSceneEnd;
 
 	// タイトルロゴ

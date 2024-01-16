@@ -21,6 +21,9 @@ public:
 	void Update();
 	void Draw();
 
+	// マップチップとの当たり判定の処理
+	void CheckHitMap();
+
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
 	// プレイヤーがE缶取得処理
