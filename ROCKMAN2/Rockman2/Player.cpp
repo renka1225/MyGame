@@ -142,17 +142,17 @@ void Player::Update()
 	}
 
 	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight * 0.5f) > Game::kScreenHeight)
-	{
-		// 残機を1減らす
-		m_life--;
-		if (m_life >= 0)
-		{
-			// 残機が0以上だったらプレイヤーを初期位置に戻す
-			m_pos.x = kPosX;
-			m_pos.y = kPosY;
-		}
-	}
+	//if ((m_pos.y - kPlayerHeight * 0.5f) > Game::kScreenHeight)
+	//{
+	//	// 残機を1減らす
+	//	m_life--;
+	//	if (m_life >= 0)
+	//	{
+	//		// 残機が0以上だったらプレイヤーを初期位置に戻す
+	//		m_pos.x = kPosX;
+	//		m_pos.y = kPosY;
+	//	}
+	//}
 
 	/*ダメージ演出*/
 	m_damageFrame--;
