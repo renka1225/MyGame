@@ -104,6 +104,7 @@ SceneMain::SceneMain():
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
 		m_pRecovery[i] = nullptr; // –¢Žg—pó‘Ô‚É‚·‚é
+		m_pRecovery[i]->SetBg(m_pBg);
 	}
 }
 
