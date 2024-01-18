@@ -5,38 +5,44 @@
 
 namespace
 {
-	// 文字表示位置
-	constexpr int kCharPosX = Game::kScreenWidth / 2 - 20;
-	constexpr int kCharPosY = Game::kScreenHeight / 2 + 70;
 	// 文字間隔
 	constexpr int kCharInterval = 50;
 
-	// 選択中四角の初期位置
-	constexpr int kInitSelectPosX = kCharPosX - 20;
-	constexpr int kInitSelectPosY = kCharPosY - 10;
-	// 選択中四角の移動量
-	constexpr int kSelectmoveY = 50;
-	// 四角の大きさ
-	constexpr int kSelectSizeX = 90;
-	constexpr int kSelectSizeY = 30;
+	// 文字表示位置
+	constexpr int kCharPosX = 960;
+	constexpr int kCharPosY = 600;
+
+	// 選択カーソルの初期位置
+	constexpr int kInitSelectPosX = 900;
+	constexpr int kInitSelectPosY = 340;
+	// 選択カーソルの移動量
+	constexpr int kSelectmoveY = 180;
+	// 選択カーソルのサイズ
+	constexpr int kSelectSizeX = 414;
+	constexpr int kSelectSizeY = 700;
 }
 
 SceneStageSelect::SceneStageSelect() :
 	m_select(kStage1),
-	m_isSceneEnd(false),
-	m_logoHandle(-1),
+	m_isSceneStage1(false),
+	m_isSceneTitle(false),
+	m_fadeAlpha(255),
 	m_selectPos(kInitSelectPosX, kInitSelectPosY)
 {
-	m_logoHandle = LoadGraph("data/image/Logo/TitleLogo.png");
+	m_selectHandle = LoadGraph("data/image/select.png");
+	m_charHandle = LoadGraph("data/image/stageSelect.png");
 }
 
 SceneStageSelect::~SceneStageSelect()
 {
+	DeleteGraph(m_selectHandle);
+	DeleteGraph(m_charHandle);
 }
 
 void SceneStageSelect::Init()
 {
-	m_isSceneEnd = false;
+	m_isSceneStage1 = false;
+	m_isSceneTitle = false;
 	m_select = kStage1;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
@@ -77,34 +83,39 @@ void SceneStageSelect::Update()
 		switch (m_select)
 		{
 		case kStage1:
-			m_isSceneEnd = true;
+			m_isSceneStage1 = true;
 			break;
 		case kStage2:
 			break;
 		case kStage3:
 			break;
 		case kBackTitle:
+			m_isSceneTitle = true;
 			break;
 		default:
 			break;
 		}
 	}
+
+	// フェードイン
+	m_fadeAlpha -= 8;
+	if (m_fadeAlpha < 0)
+	{
+		m_fadeAlpha = 0;
+	}
 }
 
 void SceneStageSelect::Draw()
 {
-	// ロゴ表示
-	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 4, 0.8f, 0.0f, m_logoHandle, true);
+	// フェード描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xe6e6fa, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 
-	// TODO:文字サイズ、フォント変更
-	DrawString(8, 16, "ステージ選択画面", 0xffffff, false);
-	DrawString(kCharPosX, kCharPosY, "STAGE1", 0xffffff);
-	DrawString(kCharPosX, kCharPosY + kCharInterval, "STAGE2", 0xffffff);
-	DrawString(kCharPosX, kCharPosY + kCharInterval * 2, "STAGE3", 0xffffff);
-	DrawString(kCharPosX - 15, kCharPosY + kCharInterval * 3, "BACKTITLE", 0xffffff);
-
-	// 選択中の部分を四角で描画
-	DrawBox(m_selectPos.x, m_selectPos.y, m_selectPos.x + kSelectSizeX, m_selectPos.y + kSelectSizeY, 0x00bfff, false);
+	// 文字表示
+	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
+	// 選択カーソルの表示
+	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
 }
 
 void SceneStageSelect::End()

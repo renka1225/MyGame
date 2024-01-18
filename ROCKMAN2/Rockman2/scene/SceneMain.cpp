@@ -38,9 +38,9 @@ namespace
 	constexpr int kMapChipHeight = 32;
 
 	// ポーズ画面の文字表示位置
-	constexpr int kTextPosX = 510;
+	constexpr int kTextPosX = 840;
 	// バーの表示位置
-	constexpr int kBarPosX = 540;
+	constexpr int kBarPosX = 860;
 	// バーの表示間隔
 	constexpr int kBarInterval = 8;
 
@@ -51,7 +51,7 @@ namespace
 	// Y座標の表示位置の間隔
 	constexpr int kInterval = 60;
 	// 文字、バーの表示位置
-	constexpr int kDisPosY = 200;
+	constexpr int kDisPosY = 400;
 }
 
 SceneMain::SceneMain():
@@ -59,7 +59,8 @@ SceneMain::SceneMain():
 	m_isGetFullHpRecovery(false),
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
-	m_isSceneClear(false)
+	m_isSceneClear(false),
+	m_fadeAlpha(255)
 {
 	// プレイヤーのグラフィックロード
 	m_playerHandle = LoadGraph("data/image/player.png");
@@ -104,7 +105,6 @@ SceneMain::SceneMain():
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
 		m_pRecovery[i] = nullptr; // 未使用状態にする
-		m_pRecovery[i]->SetBg(m_pBg);
 	}
 }
 
@@ -210,13 +210,8 @@ void SceneMain::Update()
 		m_isSceneGameOver = true; // ゲームオーバー画面に遷移
 	}
 
-	// TODO:ボスを倒したらクリア画面に遷移する
-	// Cキーでクリア画面に移動するようにする
+	// TODO:敵をすべて倒したらクリア画面に遷移する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (Pad::IsTrigger(pad & PAD_INPUT_3))
-	{
-		m_isSceneClear = true; // クリア画面に遷移
-	}
 
 	// ポーズ画面の更新
 	m_pPause->Update();
@@ -403,6 +398,15 @@ void SceneMain::Update()
 			m_pRecovery[i] = nullptr;
 		}
 	}
+
+#ifdef _DEBUG
+	// Cキーでクリア画面に移動するようにする
+	if (Pad::IsTrigger(pad & PAD_INPUT_3))
+	{
+		m_isSceneClear = true; // クリア画面に遷移
+	}
+#endif
+
 }
 
 void SceneMain::Draw()
@@ -487,21 +491,21 @@ void SceneMain::Draw()
 		DrawFormatString(kTextPosX, kDisPosY + kInterval, 0xffffff, "M :");
 		for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval + kBarHeight, 0xeee8aa, true);
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval + kBarHeight, 0xc0c0c0, true);
 		}
 
 		// ファイアー
 		DrawFormatString(kTextPosX, kDisPosY + kInterval * 2, 0xffffff, "F :");
 		for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 2, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 2 + kBarHeight, 0xeee8aa, true);
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 2, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 2 + kBarHeight, 0xff4500, true);
 		}
 
 		// アイテム2号
 		DrawFormatString(kTextPosX, kDisPosY + kInterval * 3, 0xffffff, "2 :");
 		for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 3, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 3 + kBarHeight, 0xeee8aa, true);
+			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 3, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 3 + kBarHeight, 0xb22222, true);
 		}
 
 		// 現在のE缶数を表示

@@ -16,7 +16,8 @@ public:
 	void End();
 
 	// シーンを終了させるか
-	bool IsSceneEnd() const { return m_isSceneEnd; }
+	bool IsSceneStage1() const { return m_isSceneStage1; }
+	bool IsSceneTitle() const { return m_isSceneTitle; }
 
 private:
 	// 選択項目
@@ -34,11 +35,15 @@ private:
 
 private:
 	// シーン選択のフラグ true:シーンに移動
-	bool m_isSceneEnd;
-
-	// タイトルロゴ
-	int m_logoHandle;
-	// 選択中の四角の表示位置
+	bool m_isSceneStage1;
+	bool m_isSceneTitle;
+	// 選択カーソルの表示位置
 	Vec2 m_selectPos;
+	// フェードイン、アウト
+	int m_fadeAlpha;
+
+	// 画像
+	int m_selectHandle; // 選択カーソル
+	int m_charHandle;	// 文字
 };
 

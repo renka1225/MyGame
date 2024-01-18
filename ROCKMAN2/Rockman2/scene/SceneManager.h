@@ -1,6 +1,7 @@
 #pragma once
 
 class SceneTitle;
+class SceneOption;
 class SceneStageSelect;
 class SceneMain;
 class SceneClear;
@@ -38,6 +39,7 @@ private:
 private:
 	// SceneManager‚ÅŠÇ—‚·‚éƒV[ƒ“
 	SceneTitle* m_pTitle;
+	SceneOption* m_pOption;
 	SceneStageSelect* m_pStageSelect;
 	SceneMain* m_pMain;
 	SceneClear* m_pClear;

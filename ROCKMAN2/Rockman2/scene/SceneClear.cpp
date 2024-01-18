@@ -89,6 +89,8 @@ void SceneClear::Update()
 
 void SceneClear::Draw()
 {
+#ifdef _DEBUG
 	DrawString(8, 16, "クリア画面", 0xffffff, false);
-	//DrawString(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f, "Cキーでステージ選択", 0xffffff, false);
+#endif
+
 }

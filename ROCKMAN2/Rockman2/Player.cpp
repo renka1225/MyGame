@@ -41,7 +41,7 @@ namespace
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 28;
 	// 残機
-	constexpr int kLife = 10;
+	constexpr int kLife = 3;
 
 	// アイテムの回復量
 	constexpr float kSmallRecovery = 2;		// 小アイテム
@@ -174,8 +174,41 @@ void Player::Update()
 			m_move.y = kVelocity;
 		}
 
-		// マップチップとの当たり判定
-		CheckHitMap();
+		/*マップチップとの当たり判定*/
+		Rect chipRect; // 当たったマップチップの矩形
+		// 横から当たったかチェックする
+		m_pos.x += m_move.x;
+	/*	if (m_pBg->IsCollision(m_colRect, chipRect))
+		{
+			if (m_move.x > 0.0f)
+			{
+				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5f - 1;
+			}
+			else if (m_move.x < 0.0f)
+			{
+				m_pos.x = chipRect.GetRight() - kPlayerWidth * 0.5f + 1;
+			}
+		}*/
+
+		// 縦から当たったかチェックする
+		m_pos.y += m_move.y;
+		if (m_pBg->IsCollision(m_colRect, chipRect))
+		{
+			if (m_move.y > 0.0f)
+			{
+				m_pos.y = chipRect.GetTop() - kPlayerHeight * 0.5f - 1;
+			}
+			else if (m_move.y < 0.0f)
+			{
+				m_pos.y = chipRect.GetBottom() + kPlayerHeight * 0.5f + 1;
+				m_move.y *= -1.0f;
+			}
+		}
+		else
+		{
+			// 地面にすらぶつかっていない
+			m_isGround = false;
+		}
 	}
 	/*ジャンプ中*/
 	else
@@ -204,8 +237,37 @@ void Player::Update()
 		}
 		m_move.y += kGravity; // 初速度に重力を足す
 
-		// マップチップとの当たり判定
-		CheckHitMap();
+		/*マップチップとの当たり判定*/
+		Rect chipRect; // 当たったマップチップの矩形
+		// 横から当たったかチェックする
+		m_pos.x += m_move.x;
+	/*	if (m_pBg->IsCollision(m_colRect, chipRect))
+		{
+			if (m_move.x > 0.0f)
+			{
+				m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5f - 1;
+			}
+			else if (m_move.x < 0.0f)
+			{
+				m_pos.x = chipRect.GetRight() - kPlayerWidth * 0.5f + 1;
+			}
+		}*/
+
+		// 縦から当たったかチェックする
+		m_pos.y += m_move.y;
+		if (m_pBg->IsCollision(m_colRect, chipRect))
+		{
+			if (m_move.y > 0.0f)
+			{
+				m_pos.y = chipRect.GetTop() - kPlayerHeight * 0.5f - 1;
+				m_isGround = true;
+			}
+			else if (m_move.y < 0.0f)
+			{
+				m_pos.y = chipRect.GetBottom() + kPlayerHeight * 0.5f + 1;
+				m_move.y *= -1.0f;
+			}
+		}
 	}
 
 	/*バスター発射*/
@@ -344,11 +406,6 @@ void Player::Update()
 
 	// 当たり判定更新
 	m_colRect.SetCenter(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight);
-
-	/*if (m_pos.y > 500)
-	{
-		m_pos.y = 500;
-	}*/
 }
 
 void Player::Draw()
@@ -410,16 +467,11 @@ void Player::CheckHitMap()
 			m_pos.y += m_move.y;
 			m_isGround = true;
 		}
-		//else if (m_pos.y + m_move.y <= chipRect.GetBottom() - (kPlayerHeight * 0.5f)) // 上方向に移動
-		//{
-		//	m_move.y = chipRect.GetBottom() - (m_pos.y + (kPlayerHeight * 0.5f));
-		//	m_pos.y -= m_move.y;
-		//	m_move.y *= -1.0f;
-		//}
-	}
-	else // 地面にすらぶつかっていない
-	{
-		m_isGround = false;
+		else if (m_move.y < 0.0f) // 上方向に移動している
+		{
+			m_pos.y = chipRect.GetBottom() + kPlayerHeight + 1;		// めり込まない位置に戻す
+			m_move.y *= -1.0f;	// 上方向への加速を下方向に変換
+		}
 	}
 }
 

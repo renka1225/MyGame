@@ -78,5 +78,8 @@ private:
 
 	// プレイヤーの現在地
 	Vec2 m_playerPos;
+
+	// フェードイン、アウト
+	int m_fadeAlpha;
 };
 

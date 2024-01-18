@@ -11,11 +11,11 @@ namespace
 	constexpr int kHeight = 480;
 
 	// ポーズ画面の位置
-	constexpr int kPosX = (Game::kScreenWidth - kWidth) / 2;
-	constexpr int kPosY = Game::kScreenHeight / 6;
+	constexpr int kPosX = 830;
+	constexpr int kPosY = 300;
 
 	// 選択中の四角のY座標の初期位置
-	constexpr int kInitSelectPosY = 195;
+	constexpr int kInitSelectPosY = 395;
 	// 四角の描画の間隔
 	constexpr int kSelectPosY = 60;
 }
@@ -142,14 +142,14 @@ void ScenePause::Draw()
 {
 	if (m_isExist)
 	{
-		// ポーズ画面の四角を表示
+		// ポーズ画面表示
 		SetDrawBlendMode(DX_BLENDMODE_MULA, 200);
 		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0x000000, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);// 表示モードを元に戻す
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
 		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0xffffff, false); // 枠を描画
-		DrawString(kPosX ,150, "ポーズ画面", 0xffffff);
+		DrawString(kPosX ,350, "ポーズ画面", 0xffffff);
 
 		// 選択中の部分を四角で描画
-		DrawBox(505, m_selectPos.y, 770, m_selectPos.y + 30, 0x00bfff, false);
+		DrawBox(kPosX + 5, m_selectPos.y, kPosX + 255, m_selectPos.y + 30, 0x00bfff, false);
 	}
 }

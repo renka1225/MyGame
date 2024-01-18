@@ -36,14 +36,14 @@ void RecoveryFullHp::Update()
 void RecoveryFullHp::Draw()
 {
 	// 中央座標を左上座標に変換
-	int x = m_pos.x - kWidth * 0.5f;
-	int y = m_pos.y - kHeight * 0.5f;
+	//int x = m_pos.x - kWidth * 0.5f;
+	//int y = m_pos.y - kHeight * 0.5f;
 
 	// スクロール量を反映する
-	x -= m_pBg->GetScrollX();
-	y -= m_pBg->GetScrollY();
+	//x -= m_pBg->GetScrollX();
+	//y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 1.0, 0.0, m_handle, true, false);
+	DrawRotaGraph(m_pos.x, m_pos.y, 1.0, 0.0, m_handle, true, false);
 
 #ifdef _DEBUG
 	// アイテムの当たり判定デバッグ表示

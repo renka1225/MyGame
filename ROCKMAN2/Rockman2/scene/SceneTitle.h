@@ -15,8 +15,9 @@ public:
 	void Draw();
 	void End();
 
-	// シーンを終了させるか
-	bool IsSceneEnd() const { return m_isSceneEnd; }
+	// シーン遷移のフラグ
+	bool IsSceneStart() const { return m_isSceneStart; }
+	bool IsSceneOption() const { return m_isSceneOption; }
 
 private:
 	// 選択項目
@@ -33,11 +34,22 @@ private:
 
 private:
 	// シーン選択のフラグ true:シーンに移動
-	bool m_isSceneEnd;
+	bool m_isSceneStart;
+	bool m_isSceneOption;
 
-	// タイトルロゴ
-	int m_logoHandle;
-	// 選択中の四角の表示位置
+	// 選択カーソルの表示位置
 	Vec2 m_selectPos;
+	// 背景の表示位置
+	Vec2 m_bgPos;
+	// 背景の移動量
+	Vec2 m_bgMove;
+
+	// フェードイン、アウト
+	int m_fadeAlpha;
+	// 画像
+	int m_logoHandle; 	// タイトルロゴ
+	int m_selectHandle; // 選択カーソル
+	int m_charHandle;	// 文字
+	int m_bg;			// 背景
 };
 
