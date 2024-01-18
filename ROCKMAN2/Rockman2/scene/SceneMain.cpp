@@ -249,6 +249,7 @@ void SceneMain::Update()
 		// nullptrなら処理は行わない
 		if (!m_pShot[i]) continue;
 
+		m_pShot[i]->SetBg(m_pBg);
 		m_pShot[i]->Update();
 
 		// アイテム2号の場合

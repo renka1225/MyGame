@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "SceneMain.h"
 #include "Player.h"
+#include "Bg.h"
 #include "Game.h"
 #include <cassert>
 
@@ -10,7 +11,7 @@
 namespace
 {
 	// 弾の移動速度
-	constexpr float kSpeed = 10.0f;
+	constexpr float kSpeed = 15.0f;
 	// ショットの大きさ
 	constexpr float kWidth = 32.0f;
 	constexpr float kHeight = 32.0f;
@@ -24,6 +25,7 @@ ShotBuster::ShotBuster()
 
 ShotBuster::~ShotBuster()
 {
+	DeleteGraph(m_handle);
 }
 
 void ShotBuster::Init()
@@ -42,14 +44,7 @@ void ShotBuster::Update()
 	m_pos += m_vec;
 
 	// 当たり判定の更新
-	m_colRect.SetLT(m_pos.x, m_pos.y, kWidth, kHeight);
-
-	// 障害物に当たったら消える
-	//if ()
-	//{
-	//	m_isExist = false;
-	//	return;	// 終了が確定したら以降の処理は行わない
-	//}
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
@@ -68,11 +63,22 @@ void ShotBuster::Draw()
 {
 	if (!m_isExist) return;
 
-	DrawGraph(m_pos.x, m_pos.y, m_handle, true);
+	//TODO:画面右端に行くと、弾が消えるので調節
+	// 
+	// 中央座標を左上座標に変換
+	int x = m_pos.x - kWidth * 0.5f;
+	int y = m_pos.y - kHeight * 0.5f;
+
+	// スクロール量を反映する
+	x -= m_pBg->GetScrollX();
+	y -= m_pBg->GetScrollY();
+
+	DrawGraph(x, y, m_handle, true);
 
 #ifdef _DEBUG
+	// MEMO:スクロールが反映されないためコメントアウト
 	// 弾の当たり判定デバッグ表示
-	m_colRect.Draw(0xff0000, false);
+	//m_colRect.Draw(0xff0000, false);
 #endif
 }
 

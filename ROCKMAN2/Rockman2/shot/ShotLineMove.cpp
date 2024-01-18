@@ -1,5 +1,6 @@
 #include "ShotLineMove.h"
 #include "Player.h"
+#include "Bg.h"
 #include "DxLib.h"
 #include "Game.h"
 #include <cassert>
@@ -74,11 +75,20 @@ void ShotLineMove::Draw()
 {
 	if (!m_isExist) return;
 
-	DrawGraph(m_pos.x, m_pos.y, m_handle, true);
+	// 中央座標を左上座標に変換
+	int x = m_pos.x - kWidth * 0.5f;
+	int y = m_pos.y - kHeight * 0.5f;
+
+	// スクロール量を反映する
+	x -= m_pBg->GetScrollX();
+	y -= m_pBg->GetScrollY();
+
+	DrawGraph(x, y, m_handle, true);
 
 #ifdef _DEBUG
+	// MEMO:スクロールが反映されないためコメントアウト
 	// 弾の当たり判定デバッグ表示
-	m_colRect.Draw(0xff0000, false);
+	//m_colRect.Draw(0xff0000, false);
 #endif
 }
 

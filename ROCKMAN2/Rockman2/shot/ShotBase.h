@@ -4,6 +4,7 @@
 
 class SceneMain;
 class Player;
+class Bg;
 
 // 弾の種類の定義
 enum ShotType
@@ -35,6 +36,7 @@ public:
 	// メンバー変数にアクセスする
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
+	void SetBg(Bg* pBg) { m_pBg = pBg; }
 
 	// 弾が存在しているか
 	bool IsExist() const { return m_isExist; }
@@ -49,6 +51,8 @@ protected:
 	SceneMain* m_pMain;
 	// ショットを撃ったプレイヤーのポインタ
 	Player* m_pPlayer;
+	// 背景クラスのポインタ
+	Bg* m_pBg;
 
 	// グラフィックのハンドル
 	int m_handle;

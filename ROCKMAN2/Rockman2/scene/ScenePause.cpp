@@ -142,6 +142,9 @@ void ScenePause::Draw()
 {
 	if (m_isExist)
 	{
+		// フェードインアウト
+		
+
 		// ポーズ画面表示
 		SetDrawBlendMode(DX_BLENDMODE_MULA, 200);
 		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0x000000, true);

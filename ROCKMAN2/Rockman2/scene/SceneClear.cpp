@@ -89,8 +89,9 @@ void SceneClear::Update()
 
 void SceneClear::Draw()
 {
+	DrawString(600, 400, "Clear!", 0xffffff);
+
 #ifdef _DEBUG
 	DrawString(8, 16, "ƒNƒŠƒA‰æ–Ê", 0xffffff, false);
 #endif
-
 }
