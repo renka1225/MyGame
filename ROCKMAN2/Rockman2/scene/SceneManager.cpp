@@ -134,9 +134,9 @@ void SceneManager::Update()
 
 		// オプションシーン
 	case kSceneOption:
+		m_pOption->End();
 		if (m_pOption->IsSceneTitle())
 		{
-			m_pOption->End();
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
 		}
@@ -195,6 +195,9 @@ void SceneManager::Update()
 			m_runScene = kSceneStageSelect;
 			m_pTitle->Init();
 		}
+		break;
+
+	default:
 		break;
 	}
 

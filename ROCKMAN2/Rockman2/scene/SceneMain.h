@@ -16,12 +16,12 @@ class SceneMain
 {
 public:
 	SceneMain();
-	~SceneMain();
+	virtual ~SceneMain();
 
-	void Init();
-	void End();
-	void Update();
-	void Draw();
+	virtual void Init();
+	virtual void End();
+	virtual void Update();
+	virtual void Draw();
 
 	// ƒVƒ‡ƒbƒg‚Ì’Ç‰Á
 	bool AddShot(ShotBase* pShot);
