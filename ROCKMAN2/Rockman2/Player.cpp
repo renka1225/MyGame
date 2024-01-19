@@ -15,7 +15,7 @@
 namespace
 {
 	// ˆÚ“®‘¬“x
-	constexpr float kSpeed = 4.0f;
+	constexpr float kSpeed = 10.0f;
 	// d—Í
 	constexpr float kGravity = 0.5f;
 	// ‰‘¬“x

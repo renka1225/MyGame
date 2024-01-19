@@ -64,7 +64,7 @@ void ShotBuster::Draw()
 	if (!m_isExist) return;
 
 	//TODO:画面右端に行くと、弾が消えるので調節
-	// 
+	
 	// 中央座標を左上座標に変換
 	int x = m_pos.x - kWidth * 0.5f;
 	int y = m_pos.y - kHeight * 0.5f;

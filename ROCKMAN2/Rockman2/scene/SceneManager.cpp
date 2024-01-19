@@ -119,69 +119,75 @@ void SceneManager::Update()
 	{
 		// タイトルシーン
 	case kSceneTitle:
+		m_pTitle->End();
 		if (m_pTitle->IsSceneStart())
 		{
-			m_pTitle->End();
 			m_runScene = kSceneStageSelect;
 			m_pStageSelect->Init();
 		}
 		else if (m_pTitle->IsSceneOption())
 		{
-			m_pTitle->End();
 			m_runScene = kSceneOption;
 			m_pOption->Init();
 		}
 		break;
+
 		// オプションシーン
 	case kSceneOption:
-	{
 		if (m_pOption->IsSceneTitle())
 		{
 			m_pOption->End();
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
 		}
-	}
+		break;
+
 		// ステージ選択シーン
 	case kSceneStageSelect:
+		m_pStageSelect->End();
 		if (m_pStageSelect->IsSceneStage1())
 		{
-			m_pStageSelect->End();
 			m_runScene = kSceneMain;
 			m_pMain->Init();
 		}
 		else if (m_pStageSelect->IsSceneTitle())
 		{
-			m_pStageSelect->End();
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
 		}
 		break;
+
 		// ゲームシーン
 	case kSceneMain:
+		m_pMain->End();
 		if (m_pMain->IsSceneGameOver())
 		{
-			m_pMain->End();
 			m_runScene = kSceneGameOver;
 			m_pGameOver->Init();
 		}
 		else if (m_pMain->IsSceneClear())
 		{
-			m_pMain->End();
 			m_runScene = kSceneClear;
 			m_pClear->Init();
 		}
 		break;
+
 		// ゲームクリア
 	case kSceneClear:
+		m_pClear->End();
 		if (m_pClear->IsSceneStageSelect())
 		{
-			m_pClear->End();
 			m_runScene = kSceneStageSelect;
 			m_pStageSelect->Init();
 		}
+		else if (m_pClear->IsSceneTitle())
+		{
+			m_runScene = kSceneTitle;
+			m_pTitle->Init();
+		}
 		break;
-		// ゲームオーバーシーン
+
+		// ゲームオーバー
 	case kSceneGameOver:
 		if (m_pGameOver->IsSceneSelect())
 		{

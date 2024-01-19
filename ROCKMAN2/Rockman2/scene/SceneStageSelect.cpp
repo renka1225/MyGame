@@ -13,12 +13,12 @@ namespace
 	constexpr int kCharPosY = 600;
 
 	// 選択カーソルの初期位置
-	constexpr int kInitSelectPosX = 900;
+	constexpr int kInitSelectPosX = 920;
 	constexpr int kInitSelectPosY = 340;
 	// 選択カーソルの移動量
 	constexpr int kSelectmoveY = 180;
 	// 選択カーソルのサイズ
-	constexpr int kSelectSizeX = 414;
+	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
 }
 
