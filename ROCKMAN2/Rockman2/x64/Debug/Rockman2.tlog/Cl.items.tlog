@@ -10,6 +10,8 @@ C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryGreatHp.cpp;C:\GitHub\MyGame
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoverySmallShot.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\RecoverySmallShot.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoverySmallHp.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\RecoverySmallHp.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\recovery\RecoveryBase.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\RecoveryBase.obj
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\SceneStage3.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneStage3.obj
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage2.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneStage2.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneOption.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneOption.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneClear.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneClear.obj
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStageSelect.cpp;C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\SceneStageSelect.obj

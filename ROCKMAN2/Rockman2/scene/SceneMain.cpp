@@ -451,6 +451,10 @@ void SceneMain::Draw()
 		DrawBox(10, 10 + 10 * i, 40, (10 + 10 * i) + 5, 0xeee8aa, true);
 	}
 
+	// TODO:画面端に黒い四角を描画
+	DrawBox(0, 0, 200, Game::kScreenHeight, 0x000000, true); // 左側
+	DrawBox(Game::kScreenWidth - 200, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true); // 右側
+
 	// 現在選択中の武器の弾数を左上に表示
 	if (m_pPlayer->IsMetal()) // メタル
 	{
