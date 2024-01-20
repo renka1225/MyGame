@@ -47,9 +47,6 @@ private:
 
 private:
 	// グラフィックのハンドル
-	int m_bgHandle;			// 背景
-	int m_mapHandle;		// マップチップ
-	int m_playerHandle;		// プレイヤー
 	int m_enemyHandle;		// 敵
 	// HPの回復バーの長さ
 	int m_drawValue;

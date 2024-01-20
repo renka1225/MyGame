@@ -37,7 +37,7 @@ namespace
 	constexpr float kPosY = 500.0f;
 
 	// プレイヤーの最大HP
-	constexpr float kMaxHp = 28;
+	constexpr float kMaxHp = 20;
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 28;
 	// 残機
@@ -57,8 +57,6 @@ Player::Player(SceneMain* pMain) :
 	m_pBg(nullptr),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
-	m_colRect(),
-	m_handle(-1),
 	m_isRight(true),
 	m_isGround(false),
 	m_jumpFrame(0),
@@ -66,9 +64,9 @@ Player::Player(SceneMain* pMain) :
 	m_life(kLife),
 	m_fullHpRecovery(0),
 	m_damageFrame(0),
-	m_metalEnergy(28),
-	m_fireEnergy(28),
-	m_lineEnergy(28),
+	m_metalEnergy(kMaxShot),
+	m_fireEnergy(kMaxShot),
+	m_lineEnergy(kMaxShot),
 	m_isBuster(false),
 	m_isMetal(false),
 	m_isFire(false),
@@ -77,10 +75,13 @@ Player::Player(SceneMain* pMain) :
 	m_pressTime(0),
 	m_nowPressTime(0)
 {
+	// プレイヤーのグラフィックロード
+	m_handle = LoadGraph("data/image/player.png");
 }
 
 Player::~Player()
 {
+	DeleteGraph(m_handle);
 }
 
 /*初期化処理*/

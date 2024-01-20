@@ -43,8 +43,6 @@ public:
 	void ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove);
 
 public:
-	// メンバー変数にアクセスする
-	void SetHandle(int handle) { m_handle = handle; }
 	// 現在位置を更新する
 	void SetPos(Vec2 pos) { m_pos = pos; }
 	// プレイヤーの現在の向きを取得する

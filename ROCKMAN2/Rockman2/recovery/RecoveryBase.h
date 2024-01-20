@@ -4,6 +4,7 @@
 
 class Player;
 class SceneMain;
+class Bg;
 
 /// <summary>
 /// 回復アイテム基底クラス
@@ -23,6 +24,7 @@ public:
 
 	// メンバ変数にアクセス
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
+	void SetBg(Bg* pBg) { m_pBg = pBg; }
 
 	// アイテムが存在しているか
 	bool IsExist() const { return m_isExist; }
@@ -34,6 +36,8 @@ public:
 protected:
 	// メインシーンのポインタ
 	SceneMain* m_pMain;
+	// 背景クラスのポインタ
+	Bg* m_pBg;
 
 	// グラフィックのハンドル
 	int m_handle;

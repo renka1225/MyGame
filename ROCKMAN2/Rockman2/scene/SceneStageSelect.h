@@ -17,6 +17,8 @@ public:
 
 	// シーンを終了させるか
 	bool IsSceneStage1() const { return m_isSceneStage1; }
+	bool IsSceneStage2() const { return m_isSceneStage2; }
+	bool IsSceneStage3() const { return m_isSceneStage3; }
 	bool IsSceneTitle() const { return m_isSceneTitle; }
 
 private:
@@ -36,6 +38,8 @@ private:
 private:
 	// シーン選択のフラグ true:シーンに移動
 	bool m_isSceneStage1;
+	bool m_isSceneStage2;
+	bool m_isSceneStage3;
 	bool m_isSceneTitle;
 	// 選択カーソルの表示位置
 	Vec2 m_selectPos;

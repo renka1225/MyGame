@@ -63,15 +63,17 @@ namespace
 Bg::Bg():
 	m_pPlayer(nullptr),
 	m_bgPos(0, 0),
-	m_bgHandle(-1),
-	m_mapHandle(-1),
 	m_graphChipNumX(0),
 	m_graphChipNumY(0)
 {
+	m_bgHandle = LoadGraph("data/image/backGround.png");
+	m_mapHandle = LoadGraph("data/image/map.png");
 }
 
 Bg::~Bg()
 {
+	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_mapHandle);
 }
 
 void Bg::Init()

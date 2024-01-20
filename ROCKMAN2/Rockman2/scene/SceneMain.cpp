@@ -37,6 +37,11 @@ namespace
 	constexpr int kMapChipWidth = 32;
 	constexpr int kMapChipHeight = 32;
 
+	// 現在のエネルギー表示位置
+	constexpr int kEnergyBarPosY = 300;
+	// エネルギー表示位置の間隔
+	constexpr int kEnergyInterval = 100;
+
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 840;
 	// バーの表示位置
@@ -62,24 +67,13 @@ SceneMain::SceneMain():
 	m_isSceneClear(false),
 	m_fadeAlpha(255)
 {
-	// プレイヤーのグラフィックロード
-	m_playerHandle = LoadGraph("data/image/player.png");
-	assert(m_playerHandle != -1);
-	m_bgHandle = LoadGraph("data/image/backGround.png");
-	assert(m_bgHandle != -1);
-	m_mapHandle = LoadGraph("data/image/map.png");
-	assert(m_mapHandle != -1);
 	m_enemyHandle = LoadGraph("data/image/Enemy/matasaburo.png");
-	assert(m_bgHandle != -1);
 
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
-	m_pPlayer->SetHandle(m_playerHandle);	// Playerにグラフィックのハンドルを渡す
 
 	// 背景のメモリ確保
 	m_pBg = new Bg;
-	m_pBg->SetHandle(m_bgHandle);
-	m_pBg->SetMapHandle(m_mapHandle);
 	m_pBg->SetPlayer(m_pPlayer);
 	m_pPlayer->SetBg(m_pBg);
 
@@ -110,11 +104,6 @@ SceneMain::SceneMain():
 
 SceneMain::~SceneMain()
 {
-	// メモリからグラフィックを削除
-	DeleteGraph(m_playerHandle);
-	DeleteGraph(m_bgHandle);
-	DeleteGraph(m_enemyHandle);
-
 	// 背景のメモリ解放
 	delete m_pBg;
 	m_pBg = nullptr;
@@ -359,6 +348,7 @@ void SceneMain::Update()
 		// nullptrなら処理は行わない
 		if (!m_pRecovery[i]) continue;
 
+		m_pRecovery[i]->SetBg(m_pBg);
 		m_pRecovery[i]->Update();
 
 		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// 回復アイテムの当たり判定
@@ -445,39 +435,62 @@ void SceneMain::Draw()
 		m_pRecovery[i]->Draw();
 	}
 
-	// 現在のHP分だけ四角を描画する
-	for (int i = 0; i < m_pPlayer->GetHp(); i++)
-	{
-		DrawBox(10, 10 + 10 * i, 40, (10 + 10 * i) + 5, 0xeee8aa, true);
-	}
-
 	// TODO:画面端に黒い四角を描画
 	DrawBox(0, 0, 200, Game::kScreenHeight, 0x000000, true); // 左側
 	DrawBox(Game::kScreenWidth - 200, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true); // 右側
 
-	// 現在選択中の武器の弾数を左上に表示
-	if (m_pPlayer->IsMetal()) // メタル
+	/*残機、E缶数、残り敵数を左側に表示*/
+	// E缶数表示
+	DrawFormatString(10, kDisPosY + kInterval * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
+	// 残機数表示
+	DrawFormatString(10, kDisPosY + kInterval * 5, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
+
+	/*HP、武器の弾数を右側に表示*/
+	// HP
+	DrawFormatString(10, kEnergyBarPosY - 20, 0xffffff, "HP :");
+	// 現在のHP分だけ四角を描画する
+	for (int i = 0; i < m_pPlayer->GetHp(); i++)
 	{
-		for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
-		{
-			DrawBox(50, 10 + 10 * i, 80, (10 + 10 * i) + 5, 0xc0c0c0, true);
-		}
-	}
-	if (m_pPlayer->IsFire()) // ファイア
-	{
-		for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
-		{
-			DrawBox(50, 10 + 10 * i, 80, (10 + 10 * i) + 5, 0xff4500, true);
-		}
-	}
-	if (m_pPlayer->IsLineMove()) // 2号
-	{
-		for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
-		{
-			DrawBox(50, 10 + 10 * i, 80, (10 + 10 * i) + 5, 0xb22222, true);
-		}
+		DrawBox(10 + 10 * i, 
+			kEnergyBarPosY,
+			(10 + 10 * i) + kBarWidth,
+			kEnergyBarPosY + kBarHeight,
+			0xeee8aa, true);
 	}
 
+	// メタル
+	DrawFormatString(10, kEnergyBarPosY + kEnergyInterval - 20, 0xffffff, "M :");
+	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
+	{
+		DrawBox(10 + 10 * i,
+			kEnergyBarPosY + kEnergyInterval,
+			(10 + 10 * i) + kBarWidth,
+			kEnergyBarPosY + kEnergyInterval + kBarHeight,
+			0xc0c0c0, true);
+	}
+
+	// ファイア
+	DrawFormatString(10, kEnergyBarPosY + kEnergyInterval * 2 - 20, 0xffffff, "F :");
+	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
+	{
+		DrawBox(10 + 10 * i,
+			kEnergyBarPosY + kEnergyInterval * 2,
+			(10 + 10 * i) + kBarWidth,
+			kEnergyBarPosY + kEnergyInterval * 2 + kBarHeight,
+			0xff4500, true);
+	}
+
+	// 2号
+	DrawFormatString(10, kEnergyBarPosY + kEnergyInterval * 3 - 20, 0xffffff, "2 :");
+	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
+	{
+		DrawBox(10 + 10 * i,
+			kEnergyBarPosY + kEnergyInterval * 3,
+			(10 + 10 * i) + kBarWidth,
+			kEnergyBarPosY + kEnergyInterval * 3 + kBarHeight,
+			0xb22222, true);
+	}
+	
 	// ポーズ画面の表示
 	m_pPause->Draw();
 

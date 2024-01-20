@@ -23,9 +23,6 @@ public:
 
 	// プレイヤーのポインタを設定
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
-	// グラフィックの設定
-	void SetHandle(int bgHandle) { m_bgHandle = bgHandle; }
-	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 
 	// プレイヤーと当たっているか判定する
 	bool IsColPlayer();
