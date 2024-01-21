@@ -1,6 +1,4 @@
 #include "Matasaburo.h"
-#include "RecoverySmallHp.h"
-#include "RecoverySmallShot.h"
 #include "Game.h"
 #include "DxLib.h"
 

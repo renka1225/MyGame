@@ -18,6 +18,7 @@
 #include "ShotBase.h"
 
 #include "Matasaburo.h"
+#include "EnemyCat.h"
 #include <cassert>
 
 namespace
@@ -67,8 +68,6 @@ SceneMain::SceneMain():
 	m_isSceneClear(false),
 	m_fadeAlpha(255)
 {
-	m_enemyHandle = LoadGraph("data/image/Enemy/matasaburo.png");
-
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
 
@@ -220,12 +219,6 @@ void SceneMain::Update()
 	m_playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
 	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
 
-	// プレイヤーが一定座標に到達したら敵を登場させる
-	if (m_pPlayer->GetPos().x > 100 && m_pPlayer->GetPos().x < 103)
-	{
-		CreateMatasaburo();
-	}
-
 	// プレイヤーが画面内に移動したらE缶を表示する
 	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)
 	{
@@ -273,6 +266,10 @@ void SceneMain::Update()
 	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
+		// 敵を登場させる
+		CreateMatasaburo();
+		CreateEnemyCat();
+
 		// nullptrなら処理は行わない
 		if (!m_pEnemy[i]) continue;
 		m_pEnemy[i]->Update();
@@ -653,7 +650,22 @@ void SceneMain::CreateMatasaburo()
 		if (!m_pEnemy[i])	// nullptrであることをチェックする
 		{
 			m_pEnemy[i] = new Matasaburo;
-			m_pEnemy[i]->SetHandle(m_enemyHandle);
+			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Init();
+			return;	// 1体分メモリを確保できたらその時点で終了
+		}
+	}
+}
+
+// 猫
+void SceneMain::CreateEnemyCat()
+{
+	//使われていない場所にアドレスを保存する
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (!m_pEnemy[i])	// nullptrであることをチェックする
+		{
+			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start();
 			m_pEnemy[i]->Init();
 			return;	// 1体分メモリを確保できたらその時点で終了

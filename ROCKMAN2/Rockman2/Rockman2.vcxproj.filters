@@ -147,6 +147,9 @@
     <ClCompile Include="bg\BgStage3.cpp">
       <Filter>ソース ファイル\bg</Filter>
     </ClCompile>
+    <ClCompile Include="enemy\EnemyCat.cpp">
+      <Filter>ソース ファイル\enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="bg\BgStage3.h">
       <Filter>ヘッダー ファイル\bg</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy\EnemyCat.h">
+      <Filter>ヘッダー ファイル\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

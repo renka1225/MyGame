@@ -44,10 +44,9 @@ public:
 private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
+	void CreateEnemyCat(); // 猫の生成
 
 protected:
-	// グラフィックのハンドル
-	int m_enemyHandle;		// 敵
 	// HPの回復バーの長さ
 	int m_drawValue;
 

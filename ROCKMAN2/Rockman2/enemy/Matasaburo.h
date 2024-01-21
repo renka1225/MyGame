@@ -18,7 +18,6 @@ public:
 	virtual void OnDamage() override;
 
 private:
-	int m_handle;
 	int m_hp;
 };
 

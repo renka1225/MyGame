@@ -406,7 +406,7 @@ void Player::Update()
 	}
 
 	// “–‚½‚è”»’èXV
-	m_colRect.SetCenter(m_pos.x, m_pos.y, kPlayerWidth, kPlayerHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>( kPlayerWidth), static_cast<float>(kPlayerHeight));
 }
 
 void Player::Draw()
