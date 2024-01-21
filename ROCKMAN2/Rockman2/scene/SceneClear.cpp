@@ -48,6 +48,7 @@ SceneClear::~SceneClear()
 void SceneClear::Init()
 {
 	m_isSceneSelectStage = false;
+	m_isSceneTitle = false;
 	m_select = kSelectStage;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;

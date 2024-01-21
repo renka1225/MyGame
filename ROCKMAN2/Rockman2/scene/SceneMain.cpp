@@ -444,6 +444,8 @@ void SceneMain::Draw()
 	DrawFormatString(10, kDisPosY + kInterval * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
 	// 残機数表示
 	DrawFormatString(10, kDisPosY + kInterval * 5, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
+	// 敵数表示
+	DrawFormatString(10, kDisPosY + kInterval * 6, 0xffffff, "敵数:%d / %d", m_pPlayer->GetLife(), kEnemyMax);
 
 	/*HP、武器の弾数を右側に表示*/
 	// HP

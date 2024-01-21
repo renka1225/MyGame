@@ -45,7 +45,7 @@ private:
 	// 敵キャラクターの生成
 	void CreateMatasaburo(); // またさぶろうの生成
 
-private:
+protected:
 	// グラフィックのハンドル
 	int m_enemyHandle;		// 敵
 	// HPの回復バーの長さ

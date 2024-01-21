@@ -181,16 +181,16 @@ void SceneManager::Update()
 			m_runScene = kSceneStage2;
 			m_pStage2->Init();
 		}
+		else if (m_pStageSelect->IsSceneStage3())
+		{
+			m_runScene = kSceneStage3;
+			m_pStage3->Init();
+		}
 		else if (m_pStageSelect->IsSceneTitle())
 		{
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
 		}
-		break;
-
-		// ステージ2
-	case kSceneStage2:
-		m_pStage2->End();
 		break;
 
 		// ゲームシーン
@@ -208,9 +208,34 @@ void SceneManager::Update()
 		}
 		break;
 
+		// ステージ2
+	case kSceneStage2:
+		m_pStage2->End();
+		if (m_pStage2->IsSceneGameOver())
+		{
+			m_runScene = kSceneGameOver;
+			m_pGameOver->Init();
+		}
+		else if (m_pStage2->IsSceneClear())
+		{
+			m_runScene = kSceneClear;
+			m_pClear->Init();
+		}
+		break;
+
 		// ステージ3
 	case kSceneStage3:
 		m_pStage3->End();
+		if (m_pStage3->IsSceneGameOver())
+		{
+			m_runScene = kSceneGameOver;
+			m_pGameOver->Init();
+		}
+		else if (m_pStage3->IsSceneClear())
+		{
+			m_runScene = kSceneClear;
+			m_pClear->Init();
+		}
 		break;
 
 		// ゲームクリア

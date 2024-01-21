@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)scene;$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)shot;$(ProjectDir)recovery</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)scene;$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)shot;$(ProjectDir)recovery;$(ProjectDir)bg</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -139,7 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bg.cpp" />
+    <ClCompile Include="bg\BgStage3.cpp" />
+    <ClCompile Include="bg\Bg.cpp" />
+    <ClCompile Include="bg\BgStage2.cpp" />
     <ClCompile Include="enemy\EnemyBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="enemy\Matasaburo.cpp" />
@@ -151,7 +153,7 @@
     <ClCompile Include="recovery\RecoverySmallShot.cpp" />
     <ClCompile Include="recovery\RecoverySmallHp.cpp" />
     <ClCompile Include="recovery\RecoveryBase.cpp" />
-    <ClCompile Include="SceneStage3.cpp" />
+    <ClCompile Include="scene\SceneStage3.cpp" />
     <ClCompile Include="scene\SceneStage2.cpp" />
     <ClCompile Include="scene\SceneOption.cpp" />
     <ClCompile Include="scene\SceneClear.cpp" />
@@ -171,7 +173,9 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bg.h" />
+    <ClInclude Include="bg\BgStage3.h" />
+    <ClInclude Include="bg\Bg.h" />
+    <ClInclude Include="bg\BgStage2.h" />
     <ClInclude Include="enemy\EnemyBase.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="enemy\Matasaburo.h" />
@@ -184,7 +188,7 @@
     <ClInclude Include="recovery\RecoverySmallHp.h" />
     <ClInclude Include="recovery\RecoveryBase.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SceneStage3.h" />
+    <ClInclude Include="scene\SceneStage3.h" />
     <ClInclude Include="scene\SceneStage2.h" />
     <ClInclude Include="scene\SceneOption.h" />
     <ClInclude Include="scene\SceneClear.h" />

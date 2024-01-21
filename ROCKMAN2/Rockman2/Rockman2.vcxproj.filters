@@ -43,6 +43,12 @@
     <Filter Include="ヘッダー ファイル\recovery">
       <UniqueIdentifier>{cd46a808-8161-48fc-87f9-2df7768dd47b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\bg">
+      <UniqueIdentifier>{90db9732-94f8-488d-8955-25cb12771660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\bg">
+      <UniqueIdentifier>{6ba38bb6-0881-413e-9e09-db5df1125e83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="shot\ShotBuster.cpp">
       <Filter>ソース ファイル\shot</Filter>
-    </ClCompile>
-    <ClCompile Include="Bg.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="shot\ShotFire.cpp">
       <Filter>ソース ファイル\shot</Filter>
@@ -132,8 +135,17 @@
     <ClCompile Include="scene\SceneStage2.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneStage3.cpp">
+    <ClCompile Include="scene\SceneStage3.cpp">
       <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bg\BgStage2.cpp">
+      <Filter>ソース ファイル\bg</Filter>
+    </ClCompile>
+    <ClCompile Include="bg\Bg.cpp">
+      <Filter>ソース ファイル\bg</Filter>
+    </ClCompile>
+    <ClCompile Include="bg\BgStage3.cpp">
+      <Filter>ソース ファイル\bg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,9 +175,6 @@
     </ClInclude>
     <ClInclude Include="shot\ShotBuster.h">
       <Filter>ヘッダー ファイル\shot</Filter>
-    </ClInclude>
-    <ClInclude Include="Bg.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="shot\ShotMetal.h">
       <Filter>ヘッダー ファイル\shot</Filter>
@@ -224,11 +233,20 @@
     <ClInclude Include="scene\SceneOption.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneStage3.h">
+    <ClInclude Include="scene\SceneStage3.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="scene\SceneStage2.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bg\BgStage2.h">
+      <Filter>ヘッダー ファイル\bg</Filter>
+    </ClInclude>
+    <ClInclude Include="bg\Bg.h">
+      <Filter>ヘッダー ファイル\bg</Filter>
+    </ClInclude>
+    <ClInclude Include="bg\BgStage3.h">
+      <Filter>ヘッダー ファイル\bg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

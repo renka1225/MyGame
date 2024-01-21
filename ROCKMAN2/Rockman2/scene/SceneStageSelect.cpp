@@ -26,7 +26,7 @@ SceneStageSelect::SceneStageSelect() :
 	m_select(kStage1),
 	m_isSceneStage1(false),
 	m_isSceneStage2(false),
-	//m_isSceneStage3(false),
+	m_isSceneStage3(false),
 	m_isSceneTitle(false),
 	m_fadeAlpha(255),
 	m_selectPos(kInitSelectPosX, kInitSelectPosY)
@@ -45,7 +45,7 @@ void SceneStageSelect::Init()
 {
 	m_isSceneStage1 = false;
 	m_isSceneStage2 = false;
-	//m_isSceneStage3 = false;
+	m_isSceneStage3 = false;
 	m_isSceneTitle = false;
 	m_select = kStage1;
 	m_selectPos.x = kInitSelectPosX;
@@ -93,7 +93,7 @@ void SceneStageSelect::Update()
 			m_isSceneStage2 = true;
 			break;
 		case kStage3:
-			//m_isSceneStage3 = true;
+			m_isSceneStage3 = true;
 			break;
 		case kBackTitle:
 			m_isSceneTitle = true;
