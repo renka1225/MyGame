@@ -52,10 +52,10 @@ void ShotMetal::Update()
 
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうか		true:画面外、false:画面内
-	if (m_pos.x < 0.0f - kWidth / 2) isOut = true;					// 画面左端
-	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true;	// 画面右端
-	if (m_pos.y < 0.0f - kWidth) isOut = true;						// 画面上
-	if (m_pos.y > Game::kScreenHeight) isOut = true;				// 画面下
+	if (m_pos.x < 0.0f - kWidth / 2) isOut = true;				// 画面左端
+	if (m_pos.x > Stage::kMapWidth) isOut = true;				// 画面右端
+	if (m_pos.y < 0.0f - kWidth) isOut = true;					// 画面上
+	if (m_pos.y > Game::kScreenHeight) isOut = true;			// 画面下
 
 	// チェック中の座標が画面内ならここで終了
 	if (!isOut) return;
@@ -69,8 +69,8 @@ void ShotMetal::Draw()
 	if (!m_isExist) return;
 
 	// 中央座標を左上座標に変換
-	int x = m_pos.x - kWidth * 0.5f;
-	int y = m_pos.y - kHeight * 0.5f;
+	int x = static_cast<int>(m_pos.x - kWidth * 0.5f);
+	int y = static_cast<int>(m_pos.y - kHeight * 0.5f);
 
 	// スクロール量を反映する
 	x -= m_pBg->GetScrollX();

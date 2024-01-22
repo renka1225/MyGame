@@ -39,7 +39,7 @@ namespace
 	// プレイヤーの最大HP
 	constexpr float kMaxHp = 20;
 	// 最大弾エネルギー
-	constexpr float kMaxShot = 28;
+	constexpr float kMaxShot = 20;
 	// 残機
 	constexpr int kLife = 3;
 
@@ -132,6 +132,7 @@ void Player::Update()
 		m_move.x = 0;
 	}
 
+	// TODO:黒枠の外にでないようにする
 	/*画面外に出たら画面内に戻す*/
 	if (m_pos.x < 0.0f + kPlayerWidth * 0.5)
 	{
@@ -271,6 +272,9 @@ void Player::Update()
 		}
 	}
 
+	// 当たり判定更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerWidth), static_cast<float>(kPlayerHeight));
+
 	/*バスター発射*/
 	if (m_isBuster)
 	{
@@ -404,9 +408,6 @@ void Player::Update()
 			m_lineEnergy -= 0.03f; // エネルギーを減らす
 		}
 	}
-
-	// 当たり判定更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>( kPlayerWidth), static_cast<float>(kPlayerHeight));
 }
 
 void Player::Draw()

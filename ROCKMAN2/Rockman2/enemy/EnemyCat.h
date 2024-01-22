@@ -15,5 +15,9 @@ public:
 	virtual void Draw() override;
 	virtual void Start() override;
 	virtual void OnDamage() override;
+
+private:
+	// 歩きアニメーション
+	int m_walkAnimFrame;
 };
 

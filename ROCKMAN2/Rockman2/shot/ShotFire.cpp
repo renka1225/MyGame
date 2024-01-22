@@ -50,7 +50,7 @@ void ShotFire::Update()
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
 	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
-	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
+	if (m_pos.x > Stage::kMapWidth) isOut = true; // 画面右端
 
 	// チェック中の座標が画面内ならここで終了
 	if (!isOut) return;

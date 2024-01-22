@@ -6,6 +6,7 @@
 
 RecoveryBase::RecoveryBase():
 	m_pMain(nullptr),
+	m_pBg(nullptr),
 	m_handle(-1),
 	m_frame(0),
 	m_isExist(false)

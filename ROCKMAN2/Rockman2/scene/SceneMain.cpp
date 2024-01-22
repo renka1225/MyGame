@@ -14,21 +14,22 @@
 #include "RecoveryFullHp.h"
 
 #include "Player.h"
-
 #include "ShotBase.h"
 
 #include "Matasaburo.h"
 #include "EnemyCat.h"
+#include "EnemyBird.h"
+#include "EnemyBear.h"
 #include <cassert>
 
 namespace
 {
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
-	// 1度に登場できる敵数
+	// 1度に登場する敵数
 	constexpr int kEnemyMax = 20;
 	// 画面内に1度に出せる回復アイテム数
-	constexpr int kRecoveryMax = 50;
+	constexpr int kRecoveryMax = 10;
 
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
@@ -38,31 +39,42 @@ namespace
 	constexpr int kMapChipWidth = 32;
 	constexpr int kMapChipHeight = 32;
 
-	// 現在のエネルギー表示位置
-	constexpr int kEnergyBarPosY = 300;
-	// エネルギー表示位置の間隔
-	constexpr int kEnergyInterval = 100;
-
+	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 840;
-	// バーの表示位置
+	constexpr int kTextPosY = 400;
+	// 弾数表示位置
 	constexpr int kBarPosX = 860;
-	// バーの表示間隔
+	constexpr int kBarPosY = 400;
+	// 弾数表示間隔
 	constexpr int kBarInterval = 8;
+	// 弾数表示サイズ
+	constexpr int kPauseShotNumWidth = 5;
+	constexpr int kPauseShotNumHeightt = 20;
+	// 弾数表示間隔
+	constexpr int kIntervalY = 70;
 
-	// バーの四角のサイズ
-	constexpr int kBarWidth = 5;
-	constexpr int kBarHeight = 20;
-
-	// Y座標の表示位置の間隔
-	constexpr int kInterval = 60;
-	// 文字、バーの表示位置
-	constexpr int kDisPosY = 400;
+	/*ゲーム内*/
+	// 黒枠のサイズ
+	constexpr int kFrameSize = 200;
+	// 残機、敵数表示位置
+	constexpr int kInfoTextPosX = 30;	// 横
+	constexpr int kInfoTextPosY = 300;	// 縦
+	// 弾数表示位置
+	constexpr int kShotNumDisPosX = Game::kScreenWidth - kFrameSize + 10;	// 横
+	constexpr int kShotNumDisPosY = 300;									// 縦
+	// 弾数表示間隔
+	constexpr int kShotNumIntervalX = 8;	// 横
+	constexpr int kShotNumIntervalY = 100;	// 縦
+	// 弾数表示サイズ
+	constexpr int kShotDisWidth = 3;	// 横
+	constexpr int kShotDisHeight = 20;	// 縦
 }
 
 SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
+	m_enemyNum(kEnemyMax),
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
@@ -198,7 +210,12 @@ void SceneMain::Update()
 		m_isSceneGameOver = true; // ゲームオーバー画面に遷移
 	}
 
-	// TODO:敵をすべて倒したらクリア画面に遷移する
+	// TODO:敵をすべて倒したらクリア画面に遷移
+	if (m_enemyNum <= 0)
+	{
+		m_isSceneClear = true;
+	}
+
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	// ポーズ画面の更新
@@ -216,8 +233,10 @@ void SceneMain::Update()
 	// プレイヤーの更新
 	m_pPlayer->Update();
 
-	m_playerPos = m_pPlayer->GetPos();		// プレイヤーの現在地を取得
-	Rect playerRect = m_pPlayer->GetColRect();	// プレイヤーの当たり判定
+	// プレイヤーの現在地を取得
+	m_playerPos = m_pPlayer->GetPos();
+	// プレイヤーの当たり判定
+	Rect playerRect = m_pPlayer->GetColRect();
 
 	// プレイヤーが画面内に移動したらE缶を表示する
 	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)
@@ -267,11 +286,14 @@ void SceneMain::Update()
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		// 敵を登場させる
-		CreateMatasaburo();
 		CreateEnemyCat();
+		CreateEnemyBird();
+		CreateEnemyBear();
 
 		// nullptrなら処理は行わない
 		if (!m_pEnemy[i]) continue;
+
+		m_pEnemy[i]->SetBg(m_pBg);
 		m_pEnemy[i]->Update();
 
 		// 使用済みの敵キャラクターを削除
@@ -432,63 +454,8 @@ void SceneMain::Draw()
 		m_pRecovery[i]->Draw();
 	}
 
-	// TODO:画面端に黒い四角を描画
-	DrawBox(0, 0, 200, Game::kScreenHeight, 0x000000, true); // 左側
-	DrawBox(Game::kScreenWidth - 200, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true); // 右側
-
-	/*残機、E缶数、残り敵数を左側に表示*/
-	// E缶数表示
-	DrawFormatString(10, kDisPosY + kInterval * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
-	// 残機数表示
-	DrawFormatString(10, kDisPosY + kInterval * 5, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
-	// 敵数表示
-	DrawFormatString(10, kDisPosY + kInterval * 6, 0xffffff, "敵数:%d / %d", m_pPlayer->GetLife(), kEnemyMax);
-
-	/*HP、武器の弾数を右側に表示*/
-	// HP
-	DrawFormatString(10, kEnergyBarPosY - 20, 0xffffff, "HP :");
-	// 現在のHP分だけ四角を描画する
-	for (int i = 0; i < m_pPlayer->GetHp(); i++)
-	{
-		DrawBox(10 + 10 * i, 
-			kEnergyBarPosY,
-			(10 + 10 * i) + kBarWidth,
-			kEnergyBarPosY + kBarHeight,
-			0xeee8aa, true);
-	}
-
-	// メタル
-	DrawFormatString(10, kEnergyBarPosY + kEnergyInterval - 20, 0xffffff, "M :");
-	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
-	{
-		DrawBox(10 + 10 * i,
-			kEnergyBarPosY + kEnergyInterval,
-			(10 + 10 * i) + kBarWidth,
-			kEnergyBarPosY + kEnergyInterval + kBarHeight,
-			0xc0c0c0, true);
-	}
-
-	// ファイア
-	DrawFormatString(10, kEnergyBarPosY + kEnergyInterval * 2 - 20, 0xffffff, "F :");
-	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
-	{
-		DrawBox(10 + 10 * i,
-			kEnergyBarPosY + kEnergyInterval * 2,
-			(10 + 10 * i) + kBarWidth,
-			kEnergyBarPosY + kEnergyInterval * 2 + kBarHeight,
-			0xff4500, true);
-	}
-
-	// 2号
-	DrawFormatString(10, kEnergyBarPosY + kEnergyInterval * 3 - 20, 0xffffff, "2 :");
-	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
-	{
-		DrawBox(10 + 10 * i,
-			kEnergyBarPosY + kEnergyInterval * 3,
-			(10 + 10 * i) + kBarWidth,
-			kEnergyBarPosY + kEnergyInterval * 3 + kBarHeight,
-			0xb22222, true);
-	}
+	/*画面横に情報表示*/
+	DrawInfo();
 	
 	// ポーズ画面の表示
 	m_pPause->Draw();
@@ -496,40 +463,7 @@ void SceneMain::Draw()
 	/*ポーズ画面表示中*/
 	if (m_pPause->IsExist())
 	{
-		// 現在のHPを表示
-		DrawFormatString(kTextPosX, kDisPosY, 0xffffff, "P :");
-		for (int i = 0; i < m_pPlayer->GetHp(); i++) // 現在のHP分だけ四角を描画する
-		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kBarHeight, 0xeee8aa, true);
-		}
-
-		// 現在の弾エネルギー数を表示
-		// メタル
-		DrawFormatString(kTextPosX, kDisPosY + kInterval, 0xffffff, "M :");
-		for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
-		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval + kBarHeight, 0xc0c0c0, true);
-		}
-
-		// ファイアー
-		DrawFormatString(kTextPosX, kDisPosY + kInterval * 2, 0xffffff, "F :");
-		for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
-		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 2, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 2 + kBarHeight, 0xff4500, true);
-		}
-
-		// アイテム2号
-		DrawFormatString(kTextPosX, kDisPosY + kInterval * 3, 0xffffff, "2 :");
-		for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
-		{
-			DrawBox(kBarPosX + kBarInterval * i, kDisPosY + kInterval * 3, (kBarPosX + kBarInterval * i) + kBarWidth, kDisPosY + kInterval * 3 + kBarHeight, 0xb22222, true);
-		}
-
-		// 現在のE缶数を表示
-		DrawFormatString(kTextPosX, kDisPosY + kInterval * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
-
-		// 現在の残機数を表示
-		DrawFormatString(kTextPosX, kDisPosY + kInterval * 5, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
+		DrawPause();
 	}
 }
 
@@ -671,4 +605,148 @@ void SceneMain::CreateEnemyCat()
 			return;	// 1体分メモリを確保できたらその時点で終了
 		}
 	}
+}
+
+void SceneMain::CreateEnemyBird()
+{
+	//使われていない場所にアドレスを保存する
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (!m_pEnemy[i])	// nullptrであることをチェックする
+		{
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Init();
+			return;	// 1体分メモリを確保できたらその時点で終了
+		}
+	}
+}
+
+void SceneMain::CreateEnemyBear()
+{
+	//使われていない場所にアドレスを保存する
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		if (!m_pEnemy[i])	// nullptrであることをチェックする
+		{
+			m_pEnemy[i] = new EnemyBear;
+			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Init();
+			return;	// 1体分メモリを確保できたらその時点で終了
+		}
+	}
+}
+
+/*弾数、敵数表示*/
+void SceneMain::DrawInfo()
+{
+	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x000000, true); // 左側
+	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true); // 右側
+
+	/*残機、E缶数、残り敵数を左側に表示*/
+	// E缶数表示
+	DrawFormatString(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
+	// 残機数表示
+	DrawFormatString(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
+	// 敵数表示
+	DrawFormatString(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3, 0xffffff, "敵数:%d / %d", m_enemyNum, kEnemyMax);
+
+	/*HP、武器の弾数を右側に表示*/
+	// HP
+	DrawFormatString(kShotNumDisPosX, kShotNumDisPosY - 20, 0xffffff, "HP :");
+	// 現在のHP分だけ四角を描画する
+	for (int i = 0; i < m_pPlayer->GetHp(); i++)
+	{
+		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
+			kShotNumDisPosY,
+			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
+			kShotNumDisPosY + kPauseShotNumHeightt,
+			0xeee8aa, true);
+	}
+
+	// TODO:選択中の武器が分かるようにする
+
+	// メタル
+	DrawFormatString(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 20, 0xffffff, "M :");
+	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
+	{
+		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
+			kShotNumDisPosY + kShotNumIntervalY,
+			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
+			kShotNumDisPosY + kShotNumIntervalY + kPauseShotNumHeightt,
+			0xc0c0c0, true);
+	}
+
+	// ファイア
+	DrawFormatString(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 20, 0xffffff, "F :");
+	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
+	{
+		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
+			kShotNumDisPosY + kShotNumIntervalY * 2,
+			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
+			kShotNumDisPosY + kShotNumIntervalY * 2 + kPauseShotNumHeightt,
+			0xff4500, true);
+	}
+
+	// 2号
+	DrawFormatString(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 20, 0xffffff, "L :");
+	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
+	{
+		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
+			kShotNumDisPosY + kShotNumIntervalY * 3,
+			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
+			kShotNumDisPosY + kShotNumIntervalY * 3 + kPauseShotNumHeightt,
+			0xb22222, true);
+	}
+}
+
+void SceneMain::DrawPause()
+{
+	// 現在のHPを表示
+	DrawFormatString(kTextPosX, kTextPosY, 0xffffff, "P :");
+	for (int i = 0; i < m_pPlayer->GetHp(); i++) // 現在のHP分だけ四角を描画する
+	{
+		DrawBox(kBarPosX + kBarInterval * i,
+			kBarPosY,
+			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
+			kBarPosY + kPauseShotNumHeightt,
+			0xeee8aa, true);
+	}
+
+	// 現在の弾エネルギー数を表示
+	// メタル
+	DrawFormatString(kTextPosX, kTextPosY + kIntervalY, 0xffffff, "M :");
+	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
+	{
+		DrawBox(kBarPosX + kBarInterval * i,
+			kBarPosY + kIntervalY,
+			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
+			kBarPosY + kIntervalY + kPauseShotNumHeightt,
+			0xc0c0c0, true);
+	}
+
+	// ファイアー
+	DrawFormatString(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, "F :");
+	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
+	{
+		DrawBox(kBarPosX + kBarInterval * i,
+			kBarPosY + kIntervalY * 2,
+			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
+			kBarPosY + kIntervalY * 2 + kPauseShotNumHeightt,
+			0xff4500, true);
+	}
+
+	// アイテム2号
+	DrawFormatString(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, "L :");
+	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
+	{
+		DrawBox(kBarPosX + kBarInterval * i,
+			kBarPosY + kIntervalY * 3,
+			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
+			kBarPosY + kIntervalY * 3 + kPauseShotNumHeightt,
+			0xb22222, true);
+	}
+
+	// 現在のE缶数を表示
+	DrawFormatString(kTextPosX, kTextPosY + kIntervalY * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
 }

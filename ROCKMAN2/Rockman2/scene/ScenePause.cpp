@@ -15,9 +15,9 @@ namespace
 	constexpr int kPosY = 300;
 
 	// 選択中の四角のY座標の初期位置
-	constexpr int kInitSelectPosY = 395;
+	constexpr int kInitSelectPosY = 394;
 	// 四角の描画の間隔
-	constexpr int kSelectPosY = 60;
+	constexpr int kSelectPosY = 70;
 }
 
 ScenePause::ScenePause(Player* pPlayer):
@@ -142,9 +142,8 @@ void ScenePause::Draw()
 {
 	if (m_isExist)
 	{
-		// フェードインアウト
+		// TODO:フェードインアウト
 		
-
 		// ポーズ画面表示
 		SetDrawBlendMode(DX_BLENDMODE_MULA, 200);
 		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0x000000, true);

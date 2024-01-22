@@ -53,7 +53,7 @@ public:
 	Rect GetColRect() const { return m_colRect; }
 
 	// Œ»İ‚ÌHP‚ğæ“¾‚·‚é
-	float GetHp() const { return m_hp; }
+	int GetHp() const { return m_hp; }
 	// Œ»İ‚Ìc‹@”‚ğæ“¾‚·‚é
 	int GetLife() const { return m_life; }
 	// Œ»İ‚ÌEŠÊ”‚ğæ“¾

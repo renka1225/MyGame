@@ -150,6 +150,12 @@
     <ClCompile Include="enemy\EnemyCat.cpp">
       <Filter>ソース ファイル\enemy</Filter>
     </ClCompile>
+    <ClCompile Include="enemy\EnemyBird.cpp">
+      <Filter>ソース ファイル\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy\EnemyBear.cpp">
+      <Filter>ソース ファイル\enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -252,6 +258,12 @@
       <Filter>ヘッダー ファイル\bg</Filter>
     </ClInclude>
     <ClInclude Include="enemy\EnemyCat.h">
+      <Filter>ヘッダー ファイル\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy\EnemyBird.h">
+      <Filter>ヘッダー ファイル\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy\EnemyBear.h">
       <Filter>ヘッダー ファイル\enemy</Filter>
     </ClInclude>
   </ItemGroup>

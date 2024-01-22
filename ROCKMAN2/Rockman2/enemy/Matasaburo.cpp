@@ -16,7 +16,7 @@ namespace
 
 	// 初期位置
 	constexpr float kPosX = 900;
-	constexpr float kPosY = 500;
+	constexpr float kPosY = 600;
 }
 
 Matasaburo::Matasaburo():
@@ -48,8 +48,8 @@ void Matasaburo::Update()
 	// 現在位置の更新
 	m_pos += m_vec;
 
-	// 当たり判定の更新
-	UpdateCollision();
+	// 当たり判定
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ

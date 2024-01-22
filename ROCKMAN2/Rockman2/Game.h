@@ -7,3 +7,10 @@ namespace Game
 	constexpr int kScreenHeight = 1080;	// 画面の縦幅
 	constexpr int kColorDepth = 32;
 }
+
+// ステージ1のマップの広さ
+namespace Stage
+{
+	constexpr int kMapWidth = 2560;
+	constexpr int kMapHeight = 1088;
+}

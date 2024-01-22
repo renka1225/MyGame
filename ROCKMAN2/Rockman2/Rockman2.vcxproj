@@ -142,6 +142,8 @@
     <ClCompile Include="bg\BgStage3.cpp" />
     <ClCompile Include="bg\Bg.cpp" />
     <ClCompile Include="bg\BgStage2.cpp" />
+    <ClCompile Include="enemy\EnemyBear.cpp" />
+    <ClCompile Include="enemy\EnemyBird.cpp" />
     <ClCompile Include="enemy\EnemyCat.cpp" />
     <ClCompile Include="enemy\EnemyBase.cpp" />
     <ClCompile Include="main.cpp" />
@@ -177,6 +179,8 @@
     <ClInclude Include="bg\BgStage3.h" />
     <ClInclude Include="bg\Bg.h" />
     <ClInclude Include="bg\BgStage2.h" />
+    <ClInclude Include="enemy\EnemyBear.h" />
+    <ClInclude Include="enemy\EnemyBird.h" />
     <ClInclude Include="enemy\EnemyCat.h" />
     <ClInclude Include="enemy\EnemyBase.h" />
     <ClInclude Include="Game.h" />

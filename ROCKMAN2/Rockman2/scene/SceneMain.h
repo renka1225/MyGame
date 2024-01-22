@@ -43,22 +43,19 @@ public:
 
 private:
 	// 敵キャラクターの生成
-	void CreateMatasaburo(); // またさぶろうの生成
-	void CreateEnemyCat(); // 猫の生成
+	void CreateMatasaburo();	// またさぶろうの生成
+	void CreateEnemyCat();		// 猫の生成
+	void CreateEnemyBird();		// 鳥の生成
+	void CreateEnemyBear();		// 熊の生成
+
+private:
+	// 弾数、敵数等の表示
+	void DrawInfo();
+	// ポーズ画面の表示
+	void DrawPause();
 
 protected:
-	// HPの回復バーの長さ
-	int m_drawValue;
-
-	// プレイヤーがE缶を取得したか true:取得した
-	bool m_isGetFullHpRecovery;
-	// アイテム2号が画面上に存在するか
-	bool m_isExistLineMove;
-
-	// シーン移動するか true:シーン移動する
-	bool m_isSceneGameOver;	// ゲームオーバー画面に移動
-	bool m_isSceneClear;	// クリア画面に移動
-
+	/*ポインタを取得*/
 	// 背景
 	Bg* m_pBg;
 	// ポーズ画面
@@ -74,6 +71,20 @@ protected:
 
 	// プレイヤーの現在地
 	Vec2 m_playerPos;
+	// プレイヤーがE缶を取得したか true:取得した
+	bool m_isGetFullHpRecovery;
+
+	// 現在の敵数
+	int m_enemyNum;
+	// アイテム2号が画面上に存在するか
+	bool m_isExistLineMove;
+
+	// HPの回復バーの長さ
+	int m_drawValue;
+
+	// シーン移動するか true:シーン移動する
+	bool m_isSceneGameOver;	// ゲームオーバー画面に移動
+	bool m_isSceneClear;	// クリア画面に移動
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
