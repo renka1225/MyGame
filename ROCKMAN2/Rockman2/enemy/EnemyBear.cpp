@@ -6,7 +6,7 @@
 namespace
 {
 	// “G‚ÌƒTƒCƒY
-	constexpr int kWidth = 31;
+	constexpr int kWidth = 32;
 	constexpr int kHeight = 14;
 	// Šg‘å—¦
 	constexpr float kEnlarge = 5.0f;

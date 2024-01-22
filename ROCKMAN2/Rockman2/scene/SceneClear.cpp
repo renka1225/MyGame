@@ -33,9 +33,9 @@ SceneClear::SceneClear():
 	m_isSceneSelectStage(false),
 	m_isSceneTitle(false)
 {
-	m_clearHandle = LoadGraph("data/image/clear.png");
-	m_charHandle = LoadGraph("data/image/clearSelect.png");
-	m_selectHandle = LoadGraph("data/image/select.png");
+	m_clearHandle = LoadGraph("data/image/UI/clear.png");
+	m_charHandle = LoadGraph("data/image/UI/clearSelect.png");
+	m_selectHandle = LoadGraph("data/image/UI/select.png");
 }
 
 SceneClear::~SceneClear()

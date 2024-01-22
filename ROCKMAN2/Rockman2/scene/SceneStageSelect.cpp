@@ -31,8 +31,8 @@ SceneStageSelect::SceneStageSelect() :
 	m_fadeAlpha(255),
 	m_selectPos(kInitSelectPosX, kInitSelectPosY)
 {
-	m_selectHandle = LoadGraph("data/image/select.png");
-	m_charHandle = LoadGraph("data/image/stageSelect.png");
+	m_selectHandle = LoadGraph("data/image/UI/select.png");
+	m_charHandle = LoadGraph("data/image/UI/stageSelect.png");
 }
 
 SceneStageSelect::~SceneStageSelect()

@@ -9,6 +9,10 @@ namespace
 	constexpr int kCharPosX = 960;
 	constexpr int kCharPosY = 700;
 
+	// 背景のサイズ
+	constexpr int kBgWidth = 1024;
+	constexpr int kBgHeight = 768;
+
 	// 選択カーソルの初期位置
 	constexpr int kInitSelectPosX = 960;
 	constexpr int kInitSelectPosY = 580;
@@ -19,7 +23,7 @@ namespace
 	constexpr int kSelectSizeY = 700;
 
 	// 背景画像の移動量
-	constexpr int kBgMove = -4;
+	constexpr int kBgMove = -3;
 }
 
 SceneTitle::SceneTitle():
@@ -29,9 +33,9 @@ SceneTitle::SceneTitle():
 	m_fadeAlpha(80)
 {
 	m_logoHandle = LoadGraph("data/image/Title/TitleLogo.png");
-	m_selectHandle = LoadGraph("data/image/select.png");
 	m_charHandle = LoadGraph("data/image/Title/titleChar.png");
-	m_bg = LoadGraph("data/image/Title/bg.jpg");
+	m_selectHandle = LoadGraph("data/image/UI/select.png");
+	m_bgHandle = LoadGraph("data/image/Title/bg.png");
 }
 
 SceneTitle::~SceneTitle()
@@ -39,6 +43,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_logoHandle);
 	DeleteGraph(m_selectHandle);
 	DeleteGraph(m_charHandle);
+	DeleteGraph(m_bgHandle);
 }
 
 void SceneTitle::Init()
@@ -47,6 +52,7 @@ void SceneTitle::Init()
 	m_isSceneOption = false;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
+	m_bgPos = { 0,0 };
 	m_bgMove = { kBgMove, 0 };
 }
 
@@ -78,7 +84,7 @@ void SceneTitle::Update()
 		}
 	}
 
-	// Zキーを押したとき
+	// Zキーを押したら遷移
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
 		// TODO:選択状態によって移動先を変える
@@ -117,6 +123,11 @@ void SceneTitle::Update()
 
 	// 背景の表示位置の更新
 	m_bgPos += m_bgMove;
+	// 背景のループ
+	if (m_bgPos.x - kBgWidth * 0.5f <= 0.0f)
+	{
+		m_bgPos.x = Game::kScreenWidth - kBgWidth;
+	}
 }
 
 void SceneTitle::Draw()
@@ -126,9 +137,9 @@ void SceneTitle::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xe6e6fa, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 
-	// 背景表示 TODO:背景画像変更、背景動くように
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 30);
-	DrawGraph(m_bgPos.x, 0, m_bg, false);
+	// 背景表示
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawRectRotaGraph(m_bgPos.x, m_bgPos.y, 0, 0, kBgWidth, kBgHeight, 2.5f, 0.0f, m_bgHandle, true, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
 	
 	// ロゴ表示
@@ -137,7 +148,6 @@ void SceneTitle::Draw()
 	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
 	// 選択カーソルの表示
 	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
-
 }
 
 void SceneTitle::End()

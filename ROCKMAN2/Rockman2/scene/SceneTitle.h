@@ -50,6 +50,6 @@ private:
 	int m_logoHandle; 	// ƒ^ƒCƒgƒ‹ƒƒS
 	int m_selectHandle; // ‘I‘ğƒJ[ƒ\ƒ‹
 	int m_charHandle;	// •¶š
-	int m_bg;			// ”wŒi
+	int m_bgHandle;			// ”wŒi
 };
 

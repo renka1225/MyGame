@@ -22,8 +22,8 @@ namespace
 	constexpr float kVelocity = -12.0f;
 
 	// プレイヤーのサイズ
-	constexpr int kPlayerWidth = 32;
-	constexpr int kPlayerHeight = 64;
+	constexpr int kPlayerWidth = 50;
+	constexpr int kPlayerHeight = 122;
 
 	// マップチップのサイズ
 	constexpr int kMapWidth = 32;
@@ -33,7 +33,7 @@ namespace
 	constexpr int kDamageFrame = 60;
 
 	// プレイヤーの初期位置
-	constexpr float kPosX = 30.0f;
+	constexpr float kPosX = 50.0f;
 	constexpr float kPosY = 500.0f;
 
 	// プレイヤーの最大HP
@@ -138,6 +138,10 @@ void Player::Update()
 	{
 		m_pos.x = 0.0f + kPlayerWidth * 0.5;
 	}
+	else if (m_pos.x > Stage::kMapWidth - 20)
+	{
+		m_pos.x = Stage::kMapWidth - 20;
+	}
 	if (m_pos.y < 0.0f)
 	{
 		m_pos.y = 0.0f;
@@ -147,8 +151,8 @@ void Player::Update()
 	if ((m_pos.y - kPlayerHeight * 0.5f) > Game::kScreenHeight)
 	{
 		// 残機を1減らす
-		//m_life--;
-		if (m_life >= 0)
+		m_life--;
+		if (m_life > 0)
 		{
 			// 残機が0以上だったらプレイヤーを初期位置に戻す
 			m_pos.x = kPosX;
@@ -422,11 +426,11 @@ void Player::Draw()
 
 	if (m_isRight) // 右を向いている場合
 	{
-		DrawGraph(x, y, m_handle, false);
+		DrawGraph(x, y, m_handle, true);
 	}
 	else // 左を向いている場合
 	{
-		DrawTurnGraph(x, y, m_handle, false);
+		DrawTurnGraph(x, y, m_handle, true);
 	}
 
 	// ダメージ演出
