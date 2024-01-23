@@ -70,17 +70,6 @@ void EnemyCat::Update()
 	{
 		m_walkAnimFrame = 0;
 	}
-
-	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
-	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
-	if (m_pos.x > Stage::kMapWidth) isOut = true; // 画面右端
-
-	// 画面内ならここで終了
-	if (!isOut) return;
-
-	// 画面外に出たら終了する
-	m_isExist = false;
 }
 
 void EnemyCat::Draw()
@@ -112,7 +101,7 @@ void EnemyCat::Start()
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
-	m_pos = { 1000, 700 };
+	m_pos = { 1000, 600 };
 	m_vec.x -= kSpeed;
 }
 

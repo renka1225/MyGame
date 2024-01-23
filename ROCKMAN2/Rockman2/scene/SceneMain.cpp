@@ -26,10 +26,14 @@ namespace
 {
 	// 画面内に1度に出せる弾数
 	constexpr int kShotMax = 3;
-	// 1度に登場する敵数
-	constexpr int kEnemyMax = 20;
 	// 画面内に1度に出せる回復アイテム数
-	constexpr int kRecoveryMax = 10;
+	constexpr int kRecoveryMax = 5;
+
+	// 登場する敵数
+	constexpr int kCatNum = 3;
+	constexpr int kBearNum = 1;
+	constexpr int kBirdNum = 4;
+	constexpr int kEnemyMax = kCatNum + kBearNum + kBirdNum;
 
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
@@ -74,7 +78,11 @@ namespace
 SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
-	m_enemyNum(kEnemyMax),
+	m_enemyTotalNum(kEnemyMax),
+	m_catNum(kCatNum),
+	m_bearNum(kBearNum),
+	m_birdNum(kBirdNum),
+	m_enemyKind(kEnemyCat),
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
@@ -211,7 +219,7 @@ void SceneMain::Update()
 	}
 
 	// TODO:敵をすべて倒したらクリア画面に遷移
-	if (m_enemyNum <= 0)
+	if (m_enemyTotalNum <= 0)
 	{
 		m_isSceneClear = true;
 	}
@@ -285,16 +293,34 @@ void SceneMain::Update()
 	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		// 敵を登場させる
-		CreateEnemyCat();
-		CreateEnemyBird();
-		CreateEnemyBear();
+		// 敵の出現
+		if (!m_pEnemy[i])
+		{
+			switch (m_enemyTotalNum)
+			{
+			case 1:
+				m_pEnemy[i] = new EnemyCat;
+				break;
+			case 2:
+				m_pEnemy[i] = new EnemyCat;
+				break;
+			case 3:
+				m_pEnemy[i] = new EnemyBear;
+				break;
+			case 4:
+				m_pEnemy[i] = new EnemyBird;
+				break;
+			}
 
-		// nullptrなら処理は行わない
-		if (!m_pEnemy[i]) continue;
-
-		m_pEnemy[i]->SetBg(m_pBg);
-		m_pEnemy[i]->Update();
+			// 敵の初期化
+			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Init();
+		}
+		else
+		{
+			m_pEnemy[i]->SetBg(m_pBg);
+			m_pEnemy[i]->Update();
+		}
 
 		// 使用済みの敵キャラクターを削除
 		if (!m_pEnemy[i]->IsExist())
@@ -649,7 +675,7 @@ void SceneMain::DrawInfo()
 	// 残機数表示
 	DrawFormatString(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2, 0xffffff, "残機数:%d", m_pPlayer->GetLife());
 	// 敵数表示
-	DrawFormatString(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3, 0xffffff, "敵数:%d / %d", m_enemyNum, kEnemyMax);
+	DrawFormatString(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3, 0xffffff, "敵数:%d / %d", m_enemyTotalNum, kEnemyMax);
 
 	/*HP、武器の弾数を右側に表示*/
 	// HP

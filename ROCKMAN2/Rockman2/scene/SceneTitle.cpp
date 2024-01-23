@@ -138,8 +138,8 @@ void SceneTitle::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 
 	// 背景表示
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-	DrawRectRotaGraph(m_bgPos.x, m_bgPos.y, 0, 0, kBgWidth, kBgHeight, 2.5f, 0.0f, m_bgHandle, true, false);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+	DrawRectRotaGraph(m_bgPos.x, m_bgPos.y, 0, 0, kBgWidth, kBgHeight, 2.8f, 0.0f, m_bgHandle, true, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
 	
 	// ロゴ表示

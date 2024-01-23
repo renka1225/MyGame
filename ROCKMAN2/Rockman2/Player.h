@@ -22,7 +22,7 @@ public:
 	void Draw();
 
 	// マップチップとの当たり判定の処理
-	void CheckHitMap();
+	void CheckHitMap(Rect chipRect);
 
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
@@ -92,6 +92,8 @@ private:
 	bool m_isRight;
 	// 地面と接しているか
 	bool m_isGround;	// true:接している
+	// ジャンプ中か
+	bool m_isJump;
 	// ジャンプ中のフレーム数
 	int m_jumpFrame;
 

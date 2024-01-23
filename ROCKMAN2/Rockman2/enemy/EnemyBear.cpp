@@ -111,7 +111,7 @@ void EnemyBear::Start()
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
-	m_pos = { 1500, 700 };
+	m_pos = { 1500, 650 };
 	m_vec.x -= kSpeed;
 }
 

@@ -75,9 +75,22 @@ protected:
 	bool m_isGetFullHpRecovery;
 
 	// Œ»İ‚Ì“G”
-	int m_enemyNum;
+	int m_enemyTotalNum; // Œ»İ‚Ì‡Œv”
+	int m_catNum;	// ”L‚Ì”
+	int m_bearNum;	// ŒF‚Ì”
+	int m_birdNum;	// ’¹‚Ì”
+
 	// ƒAƒCƒeƒ€2†‚ª‰æ–Êã‚É‘¶İ‚·‚é‚©
 	bool m_isExistLineMove;
+
+	// “G‚Ìí—Ş
+	enum EnemyKind
+	{
+		kEnemyCat,	// ”L
+		kEnemyBear,	// ŒF
+		kEnemyBird	// ’¹
+	};
+	EnemyKind m_enemyKind;
 
 	// HP‚Ì‰ñ•œƒo[‚Ì’·‚³
 	int m_drawValue;
