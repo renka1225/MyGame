@@ -75,7 +75,7 @@ void Matasaburo::Draw()
 }
 
 
-void Matasaburo::Start()
+void Matasaburo::Start(float posX, float posY)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;

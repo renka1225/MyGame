@@ -12,9 +12,9 @@ namespace
 	constexpr float kEnlarge = 3.0f;
 
 	// 移動速度
-	constexpr float kSpeed = 7.0f;
+	constexpr float kSpeed = 3.0f;
 	// 最大HP
-	constexpr int kHp = 3;
+	constexpr int kHp = 1;
 
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };
@@ -38,6 +38,7 @@ EnemyBird::~EnemyBird()
 
 void EnemyBird::Init()
 {
+	m_isDead = false;
 }
 
 void EnemyBird::Update()
@@ -46,12 +47,12 @@ void EnemyBird::Update()
 		if (!m_isExist) return;
 
 	// TODO:敵を左右に移動させる
-	if (m_pos.x < 1200)
+	if (m_pos.x < 200.0f)
 	{
 		m_vec.x *= -1; // 右に移動
 		m_dir = kDirRight;
 	}
-	else if (m_pos.x > 2000)
+	else if (m_pos.x > 2500.0f)
 	{
 		m_vec.x *= -1; // 左に移動
 		m_dir = kDirLeft;
@@ -106,12 +107,12 @@ void EnemyBird::Draw()
 #endif
 }
 
-void EnemyBird::Start()
+void EnemyBird::Start(float posX, float posY)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
-	m_pos = { 2000, 300 };
+	m_pos = { posX, posY };
 	m_vec.x -= kSpeed;
 }
 
@@ -124,5 +125,6 @@ void EnemyBird::OnDamage()
 	if (m_hp <= 0)
 	{
 		m_isExist = false;
+		m_isDead = true;
 	}
 }

@@ -13,6 +13,7 @@ EnemyBase::EnemyBase():
 	m_pRecovery(nullptr),
 	m_handle(-1),
 	m_isExist(false),
+	m_isDead(false),
 	m_hp(0),
 	m_dir(kDirLeft)
 {
@@ -24,6 +25,7 @@ EnemyBase::~EnemyBase()
 
 void EnemyBase::Init()
 {
+	m_isDead = false;
 }
 
 void EnemyBase::Update()
@@ -36,9 +38,9 @@ void EnemyBase::Draw()
 {
 }
 
-void EnemyBase::Start()
+void EnemyBase::Start(float posX, float posY)
 {
-	m_isExist = false;
+	m_isExist = true;
 }
 
 void EnemyBase::OnDamage()
@@ -50,5 +52,6 @@ void EnemyBase::OnDamage()
 	if (m_hp <= 0)
 	{
 		m_isExist = false;
+		m_isDead = true;
 	}
 }

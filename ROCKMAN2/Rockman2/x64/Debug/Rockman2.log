@@ -1,2 +1,10 @@
-﻿  SceneMain.cpp
+﻿  Bg.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(100,40): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(100,29): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(136,13): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(152,13): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(221,22): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(222,23): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(223,21): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\bg\Bg.cpp(224,24): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
   Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe

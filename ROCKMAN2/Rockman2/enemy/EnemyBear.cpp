@@ -12,9 +12,9 @@ namespace
 	constexpr float kEnlarge = 5.0f;
 
 	// 移動速度
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 0.8f;
 	// 最大HP
-	constexpr int kHp = 3;
+	constexpr int kHp = 5;
 
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3, 4, 5, 4, 3, 2, 1 };
@@ -38,6 +38,8 @@ EnemyBear::~EnemyBear()
 
 void EnemyBear::Init()
 {
+	m_hp = kHp;
+	m_isDead = false;
 }
 
 void EnemyBear::Update()
@@ -106,12 +108,12 @@ void EnemyBear::Draw()
 #endif
 }
 
-void EnemyBear::Start()
+void EnemyBear::Start(float posX, float posY)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
-	m_pos = { 1500, 650 };
+	m_pos = { posX, posY };
 	m_vec.x -= kSpeed;
 }
 
@@ -124,5 +126,6 @@ void EnemyBear::OnDamage()
 	if (m_hp <= 0)
 	{
 		m_isExist = false;
+		m_isDead = true;
 	}
 }

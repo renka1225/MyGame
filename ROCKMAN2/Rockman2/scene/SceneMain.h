@@ -42,13 +42,9 @@ public:
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
 
 private:
-	// 敵キャラクターの生成
-	void CreateMatasaburo();	// またさぶろうの生成
-	void CreateEnemyCat();		// 猫の生成
-	void CreateEnemyBird();		// 鳥の生成
-	void CreateEnemyBear();		// 熊の生成
+	//　敵の生成
+	void CreateEnemy();
 
-private:
 	// 弾数、敵数等の表示
 	void DrawInfo();
 	// ポーズ画面の表示
@@ -76,21 +72,9 @@ protected:
 
 	// 現在の敵数
 	int m_enemyTotalNum; // 現在の合計数
-	int m_catNum;	// 猫の数
-	int m_bearNum;	// 熊の数
-	int m_birdNum;	// 鳥の数
 
 	// アイテム2号が画面上に存在するか
 	bool m_isExistLineMove;
-
-	// 敵の種類
-	enum EnemyKind
-	{
-		kEnemyCat,	// 猫
-		kEnemyBear,	// 熊
-		kEnemyBird	// 鳥
-	};
-	EnemyKind m_enemyKind;
 
 	// HPの回復バーの長さ
 	int m_drawValue;

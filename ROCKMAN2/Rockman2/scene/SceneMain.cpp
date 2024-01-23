@@ -30,10 +30,7 @@ namespace
 	constexpr int kRecoveryMax = 5;
 
 	// 登場する敵数
-	constexpr int kCatNum = 3;
-	constexpr int kBearNum = 1;
-	constexpr int kBirdNum = 4;
-	constexpr int kEnemyMax = kCatNum + kBearNum + kBirdNum;
+	constexpr int kEnemyMax = 8;
 
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
@@ -79,10 +76,6 @@ SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
 	m_enemyTotalNum(kEnemyMax),
-	m_catNum(kCatNum),
-	m_bearNum(kBearNum),
-	m_birdNum(kBirdNum),
-	m_enemyKind(kEnemyCat),
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
@@ -108,10 +101,7 @@ SceneMain::SceneMain():
 
 	// 敵の初期化
 	m_pEnemy.resize(kEnemyMax);
-	for (int i = 0; i < m_pEnemy.size(); i++)
-	{
-		m_pEnemy[i] = nullptr; // 未使用状態にする
-	}
+	CreateEnemy();
 
 	// 回復アイテムの初期化
 	m_pRecovery.resize(kRecoveryMax);
@@ -176,6 +166,8 @@ void SceneMain::Init()
 	m_isSceneClear = false;
 	m_isExistLineMove = false;
 
+	m_enemyTotalNum = kEnemyMax;
+
 	// ポーズ画面の初期化
 	m_pPause->Init();
 
@@ -204,6 +196,7 @@ void SceneMain::Init()
 			m_pRecovery[i]->Init();
 		}
 	}
+	m_isGetFullHpRecovery = false;
 }
 
 void SceneMain::End()
@@ -293,61 +286,39 @@ void SceneMain::Update()
 	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		// 敵の出現
-		if (!m_pEnemy[i])
-		{
-			switch (m_enemyTotalNum)
-			{
-			case 1:
-				m_pEnemy[i] = new EnemyCat;
-				break;
-			case 2:
-				m_pEnemy[i] = new EnemyCat;
-				break;
-			case 3:
-				m_pEnemy[i] = new EnemyBear;
-				break;
-			case 4:
-				m_pEnemy[i] = new EnemyBird;
-				break;
-			}
-
-			// 敵の初期化
-			m_pEnemy[i]->Start();
-			m_pEnemy[i]->Init();
-		}
-		else
-		{
-			m_pEnemy[i]->SetBg(m_pBg);
-			m_pEnemy[i]->Update();
-		}
+		if (!m_pEnemy[i]) continue;
+		m_pEnemy[i]->SetBg(m_pBg);
+		m_pEnemy[i]->Update();
 
 		// 使用済みの敵キャラクターを削除
 		if (!m_pEnemy[i]->IsExist())
 		{
+			// 敵の合計数を減らす
+			m_enemyTotalNum--;
+
 			// 確率でアイテムをドロップ
 			int getRandDrop = GetRand(100);
 
-			if (getRandDrop <= 10)
-			{
-				DropHpSmallRecovery(i); // HP回復(小)
-			}
-			else if (getRandDrop <= 15)
-			{
-				DropHpGreatRecovery(i);	// HP回復(大)
-			}
-			else if (getRandDrop <= 25)
-			{
-				DropShotSmallRecovery(i); // 弾エネルギー(小)
-			}
-			else if (getRandDrop <= 30)
-			{
-				DropShotGreatRecovery(i); // 弾エネルギー(大)
-			}
-			else if (getRandDrop <= 32)
-			{
-				DropLifeRecovery(i);	// 残機
-			}
+			//if (getRandDrop <= 5)
+			//{
+			//	DropHpSmallRecovery(i); // HP回復(小)
+			//}
+			//else if (getRandDrop <= 8)
+			//{
+			//	DropHpGreatRecovery(i);	// HP回復(大)
+			//}
+			//else if (getRandDrop <= 13)
+			//{
+			//	DropShotSmallRecovery(i); // 弾エネルギー(小)
+			//}
+			//else if (getRandDrop <= 16)
+			//{
+			//	DropShotGreatRecovery(i); // 弾エネルギー(大)
+			//}
+			//else if (getRandDrop <= 19)
+			//{
+			//	DropLifeRecovery(i);	// 残機
+			//}
 			
 			// メモリを解放する
 			delete m_pEnemy[i];
@@ -602,63 +573,59 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 }
 
 /*敵の生成*/
-void SceneMain::CreateMatasaburo()
+void SceneMain::CreateEnemy()
 {
-	//使われていない場所にアドレスを保存する
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		if (!m_pEnemy[i])	// nullptrであることをチェックする
+		switch (i)
 		{
-			m_pEnemy[i] = new Matasaburo;
-			m_pEnemy[i]->Start();
-			m_pEnemy[i]->Init();
-			return;	// 1体分メモリを確保できたらその時点で終了
-		}
-	}
-}
-
-// 猫
-void SceneMain::CreateEnemyCat()
-{
-	//使われていない場所にアドレスを保存する
-	for (int i = 0; i < m_pEnemy.size(); i++)
-	{
-		if (!m_pEnemy[i])	// nullptrであることをチェックする
-		{
+		case 0:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Start(300.0f, 600.0f);
 			m_pEnemy[i]->Init();
-			return;	// 1体分メモリを確保できたらその時点で終了
-		}
-	}
-}
-
-void SceneMain::CreateEnemyBird()
-{
-	//使われていない場所にアドレスを保存する
-	for (int i = 0; i < m_pEnemy.size(); i++)
-	{
-		if (!m_pEnemy[i])	// nullptrであることをチェックする
-		{
+			break;
+		case 1:
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(500.0f, 600.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 2:
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(1000.0f, 600.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 3:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Start(400.0f, 600.0f);
 			m_pEnemy[i]->Init();
-			return;	// 1体分メモリを確保できたらその時点で終了
-		}
-	}
-}
-
-void SceneMain::CreateEnemyBear()
-{
-	//使われていない場所にアドレスを保存する
-	for (int i = 0; i < m_pEnemy.size(); i++)
-	{
-		if (!m_pEnemy[i])	// nullptrであることをチェックする
-		{
+			break;
+		case 4:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2000.0f, 600.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 5:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(800.0f, 200.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 6:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(1500.0f, 400.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 7:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2400.0f, 100.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 8:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start();
+			m_pEnemy[i]->Start(2300.0f, 300.0f);
 			m_pEnemy[i]->Init();
-			return;	// 1体分メモリを確保できたらその時点で終了
+			break;
+		default:
+			break;
 		}
 	}
 }

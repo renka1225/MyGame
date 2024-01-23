@@ -112,6 +112,8 @@ void Player::Init()
 		m_hp = kMaxHp;
 		// écã@êî
 		m_life = kLife;
+		// Eä êî
+		m_fullHpRecovery = 0;
 	}
 }
 

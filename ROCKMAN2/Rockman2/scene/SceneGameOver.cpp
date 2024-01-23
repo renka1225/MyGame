@@ -4,7 +4,9 @@
 #include "Pad.h"
 
 SceneGameOver::SceneGameOver():
-	m_isSceneSelect(false)
+	m_isSceneRetry(false),
+	m_isSceneSelect(false),
+	m_isSceneTitle(false)
 {
 }
 
@@ -14,16 +16,23 @@ SceneGameOver::~SceneGameOver()
 
 void SceneGameOver::Init()
 {
+	m_isSceneRetry = false;
 	m_isSceneSelect = false;
+	m_isSceneTitle = false;
 }
 
 void SceneGameOver::Update()
 {
-	if (Pad::IsTrigger(PAD_INPUT_3)) // Cキーを押したとき
+	// TODO:リトライできるようにする
+
+#ifdef _DEBUG
+	// Cキーを押したらステージ選択画面に移動する
+	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// ステージ選択画面に移動する
 		m_isSceneSelect = true;
 	}
+#endif
+
 }
 
 void SceneGameOver::Draw()

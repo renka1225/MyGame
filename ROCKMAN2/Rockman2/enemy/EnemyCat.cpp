@@ -12,9 +12,9 @@ namespace
 	constexpr float kEnlarge = 2.0f;
 
 	// 移動速度
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 4.0f;
 	// 最大HP
-	constexpr int kHp = 5;
+	constexpr int kHp = 3;
 
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };
@@ -39,6 +39,7 @@ EnemyCat::~EnemyCat()
 void EnemyCat::Init()
 {
 	m_hp = kHp;
+	m_isDead = false;
 }
 
 void EnemyCat::Update()
@@ -47,12 +48,12 @@ void EnemyCat::Update()
 	if (!m_isExist) return;
 
 	// TODO:敵を左右に移動させる
-	if (m_pos.x < 500)
+	if (m_pos.x < 300.0f)
 	{
 		m_vec.x *= -1; // 右に移動
 		m_dir = kDirRight;
 	}
-	else if (m_pos.x > 1000)
+	else if (m_pos.x > 2000.0f)
 	{
 		m_vec.x *= -1; // 左に移動
 		m_dir = kDirLeft;
@@ -96,12 +97,12 @@ void EnemyCat::Draw()
 #endif
 }
 
-void EnemyCat::Start()
+void EnemyCat::Start(float posX, float posY)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
-	m_pos = { 1000, 600 };
+	m_pos = { posX, posY };
 	m_vec.x -= kSpeed;
 }
 
@@ -114,5 +115,6 @@ void EnemyCat::OnDamage()
 	if (m_hp <= 0)
 	{
 		m_isExist = false;
+		m_isDead = true;
 	}
 }

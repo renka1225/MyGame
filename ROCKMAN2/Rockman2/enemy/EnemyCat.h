@@ -13,7 +13,7 @@ public:
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Draw() override;
-	virtual void Start() override;
+	virtual void Start(float posX, float posY) override;
 	virtual void OnDamage() override;
 
 private:

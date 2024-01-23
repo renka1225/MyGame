@@ -255,10 +255,15 @@ void SceneManager::Update()
 
 		// ゲームオーバー
 	case kSceneGameOver:
+		m_pGameOver->End();
 		if (m_pGameOver->IsSceneSelect())
 		{
-			m_pGameOver->End();
 			m_runScene = kSceneStageSelect;
+			m_pStageSelect->Init();
+		}
+		else if (m_pGameOver->IsSceneTitle())
+		{
+			m_runScene = kSceneTitle;
 			m_pTitle->Init();
 		}
 		break;

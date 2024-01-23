@@ -24,7 +24,7 @@ public:
 	// 敵がダメージを受けた時の処理
 	virtual void OnDamage();
 	// 敵キャラクターをスタートさせる
-	virtual void Start() = 0;
+	virtual void Start(float posX, float posY ) = 0;
 
 	// メンバー変数にアクセスする
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
@@ -32,6 +32,8 @@ public:
 
 	// 存在しているかの判定		true:存在している
 	bool IsExist() const { return m_isExist; }
+	// 敵が倒されたか取得
+	bool IsDead() const { return m_isDead; }
 	// HPの取得
 	int GetHp() const { return m_hp; }
 	// 現在座標の取得
@@ -55,6 +57,8 @@ protected:
 	bool m_isExist;	
 	// 敵のHP
 	int m_hp;
+	// 敵が倒されたかどうか // true:倒された
+	bool m_isDead;
 
 	// 表示位置
 	Vec2 m_pos;
