@@ -106,10 +106,15 @@ void Player::Init()
 	m_isFire = false;
 	m_isLineMove = false;
 
-	if (m_life < 0)
+	// 再プレイ時
+	if (m_life < 0 || m_pMain->IsSceneClear())
 	{
 		// HP
 		m_hp = kMaxHp;
+		// 弾エネルギー
+		m_metalEnergy = kMaxShot;
+		m_fireEnergy = kMaxShot;
+		m_lineEnergy = kMaxShot;
 		// 残機数
 		m_life = kLife;
 		// E缶数
@@ -588,23 +593,14 @@ void Player::RideLineMove(Rect shotRect)
 {
  	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
 
-	// 上に乗った場合
-	if (m_colRect.GetBottom() >= lineMoveRect.GetTop()) 
+	// 当たり判定更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerWidth), static_cast<float>(kPlayerHeight));
+
+	// アイテム2号に乗った場合
+	if (m_colRect.IsCollision(lineMoveRect))
 	{
-		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight;
-		m_isGround = true;
-
-		// プレイヤーを横に移動
 		m_pos.x += lineMoveRect.GetCenter().x - m_colRect.GetCenter().x;
-
-		// ジャンプ
-		if (Pad::IsTrigger(PAD_INPUT_10))
-		{
-			m_isGround = false;
-			m_move.y = kVelocity;
-		}
-
-		// 当たり判定の更新
-		m_colRect.SetCenter(m_pos.x + static_cast<float>(kPlayerWidth) / 2, m_pos.y + static_cast<float>(kPlayerHeight) / 2, kPlayerWidth, kPlayerHeight);
+		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * 0.5f;
+		m_isGround = true;
 	}
 }

@@ -1,4 +1,15 @@
-﻿  SceneGameOver.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneGameOver.cpp(134,46): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneGameOver.cpp(134,31): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
+﻿  Player.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(64,6): warning C4244: '初期化中': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(40,25): warning C4244: '=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(384,8): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(385,8): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(47,33): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(48,33): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(526,3): warning C4804: '+=': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(527,7): warning C4804: '>': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(42,27): warning C4305: '=': 'const float' から 'bool' へ切り詰めます。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(554,3): warning C4804: '+=': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(555,7): warning C4804: '>': 演算中の 'bool' 型の使用方法が安全ではありません
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\Player.cpp(40,25): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+  Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe

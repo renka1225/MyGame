@@ -120,11 +120,7 @@ void SceneGameOver::Update()
 void SceneGameOver::Draw()
 {
 	// 背景表示
-	DrawGraph(0, 0, m_bgHandle, false);
-	//// クリア表示
-	//DrawGraph(400, 200, m_gameoverHandle, true);
-	//// 文字表示
-	//DrawGraph(850, 550, m_charHandle, true);
+	DrawGraph(0, 0, m_bgHandle, true);
 
 	// ゲームオーバー表示
 	DrawRectRotaGraph(kGameOverPosX, kGameOverPosY, 0, 0,kGameOverSizeX,kGameOverSizeY, 0.8f, 0.0f, m_gameoverHandle, true, false);
@@ -140,5 +136,6 @@ void SceneGameOver::Draw()
 
 void SceneGameOver::End()
 {
+	
 }
 

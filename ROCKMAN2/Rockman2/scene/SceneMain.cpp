@@ -299,26 +299,26 @@ void SceneMain::Update()
 			// 確率でアイテムをドロップ
 			int getRandDrop = GetRand(100);
 
-			//if (getRandDrop <= 5)
-			//{
-			//	DropHpSmallRecovery(i); // HP回復(小)
-			//}
-			//else if (getRandDrop <= 8)
-			//{
-			//	DropHpGreatRecovery(i);	// HP回復(大)
-			//}
-			//else if (getRandDrop <= 13)
-			//{
-			//	DropShotSmallRecovery(i); // 弾エネルギー(小)
-			//}
-			//else if (getRandDrop <= 16)
-			//{
-			//	DropShotGreatRecovery(i); // 弾エネルギー(大)
-			//}
-			//else if (getRandDrop <= 19)
-			//{
-			//	DropLifeRecovery(i);	// 残機
-			//}
+			if (getRandDrop <= 5)
+			{
+				DropHpSmallRecovery(i); // HP回復(小)
+			}
+			else if (getRandDrop <= 8)
+			{
+				DropHpGreatRecovery(i);	// HP回復(大)
+			}
+			else if (getRandDrop <= 13)
+			{
+				DropShotSmallRecovery(i); // 弾エネルギー(小)
+			}
+			else if (getRandDrop <= 16)
+			{
+				DropShotGreatRecovery(i); // 弾エネルギー(大)
+			}
+			else if (getRandDrop <= 19)
+			{
+				DropLifeRecovery(i);	// 残機
+			}
 			
 			// メモリを解放する
 			delete m_pEnemy[i];

@@ -132,7 +132,7 @@ void SceneTitle::Update()
 	// 背景のループ
 	if (m_bgPos.x - kBgWidth * 0.5f <= 0.0f)
 	{
-		m_bgPos.x = Game::kScreenWidth - kBgWidth;
+		m_bgPos.x = Game::kScreenWidth;
 	}
 }
 
@@ -144,9 +144,9 @@ void SceneTitle::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 
 	// 背景表示
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-	DrawGraph(m_bgPos.x, 0, m_bgHandle, false);
 	// TODO:背景が動くようにする
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawGraph(0, 0, m_bgHandle, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
 	
 	// ロゴ表示
