@@ -41,7 +41,7 @@ namespace
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 20;
 	// 残機
-	constexpr int kLife = 3;
+	constexpr int kLife = 1;
 
 	// アイテムの回復量
 	constexpr float kSmallRecovery = 2;		// 小アイテム

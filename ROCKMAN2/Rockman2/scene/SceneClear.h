@@ -22,7 +22,7 @@ private:
 	// 選択項目
 	enum Select
 	{
-		kSelectStage, // ステージ選択S
+		kSelectStage, // ステージ選択
 		kTitle,		  // タイトル
 		kSelectNum	  // 項目数
 	};
@@ -39,6 +39,7 @@ private:
 	Vec2 m_selectPos;
 
 	// 画像
+	int m_bgHandle;		// 背景
 	int m_clearHandle;	// クリアの文字
 	int m_charHandle;	// 文字
 	int m_selectHandle; // 選択カーソル

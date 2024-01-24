@@ -18,10 +18,10 @@ namespace
 	constexpr int kCharPosY = 700;
 
 	// 選択カーソルの初期位置
-	constexpr int kInitSelectPosX = 920;
-	constexpr int kInitSelectPosY = 630;
+	constexpr int kInitSelectPosX = 910;
+	constexpr int kInitSelectPosY = 610;
 	// 選択カーソルの移動量
-	constexpr int kSelectmoveY = 170;
+	constexpr int kSelectmoveY = 190;
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
@@ -33,6 +33,7 @@ SceneClear::SceneClear():
 	m_isSceneSelectStage(false),
 	m_isSceneTitle(false)
 {
+	m_bgHandle = LoadGraph("data/image/BackGround/clear.png");
 	m_clearHandle = LoadGraph("data/image/UI/clear.png");
 	m_charHandle = LoadGraph("data/image/UI/clearSelect.png");
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
@@ -40,6 +41,7 @@ SceneClear::SceneClear():
 
 SceneClear::~SceneClear()
 {
+	DeleteGraph(m_bgHandle);
 	DeleteGraph(m_clearHandle);
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectHandle);
@@ -105,6 +107,8 @@ void SceneClear::Update()
 
 void SceneClear::Draw()
 {
+	// 背景表示
+	DrawGraph(0, 0, m_bgHandle, false);
 	// クリア表示
 	DrawRectRotaGraph(kClearPosX, kClearPosY, 0, 0, kClearSizeX, kClearSizeY, 0.8f, 0.0f, m_clearHandle, true, false);
 	// 文字表示

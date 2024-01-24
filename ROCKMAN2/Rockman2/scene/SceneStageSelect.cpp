@@ -10,13 +10,13 @@ namespace
 
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
-	constexpr int kCharPosY = 600;
+	constexpr int kCharPosY = 700;
 
 	// 選択カーソルの初期位置
 	constexpr int kInitSelectPosX = 920;
-	constexpr int kInitSelectPosY = 340;
+	constexpr int kInitSelectPosY = 500;
 	// 選択カーソルの移動量
-	constexpr int kSelectmoveY = 180;
+	constexpr int kSelectmoveY = 135;
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
@@ -32,13 +32,17 @@ SceneStageSelect::SceneStageSelect() :
 	m_selectPos(kInitSelectPosX, kInitSelectPosY)
 {
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
+	m_selectCharHandle = LoadGraph("data/image/UI/selectRogo.png");
 	m_charHandle = LoadGraph("data/image/UI/stageSelect.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/stageSelect.png");
 }
 
 SceneStageSelect::~SceneStageSelect()
 {
 	DeleteGraph(m_selectHandle);
 	DeleteGraph(m_charHandle);
+	DeleteGraph(m_selectCharHandle);
+	DeleteGraph(m_bgHandle);
 }
 
 void SceneStageSelect::Init()
@@ -118,7 +122,13 @@ void SceneStageSelect::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xe6e6fa, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 
+	// 背景表示 TODO:背景動かす
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawGraph(0, 0, m_bgHandle, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
+
 	// 文字表示
+	DrawGraph(300, 150, m_selectCharHandle, true);
 	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
 	// 選択カーソルの表示
 	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);

@@ -47,7 +47,9 @@ private:
 	int m_fadeAlpha;
 
 	// 画像
-	int m_selectHandle; // 選択カーソル
-	int m_charHandle;	// 文字
+	int m_selectHandle;			// 選択カーソル
+	int m_charHandle;			// 文字
+	int m_selectCharHandle;		// ステージ選択の文字
+	int m_bgHandle;				// 背景
 };
 
