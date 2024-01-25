@@ -51,5 +51,8 @@ private:
 	int m_charHandle;			// 文字
 	int m_selectCharHandle;		// ステージ選択の文字
 	int m_bgHandle;				// 背景
+
+	// 音
+	int m_selectSE;				// 選択時のSE
 };
 

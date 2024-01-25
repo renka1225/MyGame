@@ -34,10 +34,14 @@ SceneGameOver::SceneGameOver():
 	m_isSceneSelect(false),
 	m_isSceneTitle(false)
 {
+	// 画像読み込み
 	m_bgHandle = LoadGraph("data/image/BackGround/gameover.png");
 	m_gameoverHandle = LoadGraph("data/image/UI/gameover.png");
 	m_charHandle = LoadGraph("data/image/UI/gameoverSelect.png");
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
+
+	// 音読み込み
+	m_selectSE = LoadSoundMem("data/sound/select.wav");
 }
 
 SceneGameOver::~SceneGameOver()
@@ -46,6 +50,7 @@ SceneGameOver::~SceneGameOver()
 	DeleteGraph(m_gameoverHandle);
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectHandle);
+	DeleteSoundMem(m_selectSE);
 }
 
 void SceneGameOver::Init()
@@ -60,8 +65,6 @@ void SceneGameOver::Init()
 
 void SceneGameOver::Update()
 {
-	// TODO:リトライできるようにする
-
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	// ↓キーを押したら選択状態を1つ下げる
@@ -91,6 +94,9 @@ void SceneGameOver::Update()
 	// Zキーを押したとき
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
+
 		// 移動先を決定
 		switch (m_select)
 		{

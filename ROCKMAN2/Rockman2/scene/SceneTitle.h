@@ -54,5 +54,7 @@ private:
 	int m_bg2Handle;	// ”wŒi
 	int m_bg3Handle;	// ”wŒi
 	int m_bg4Handle;	// ”wŒi
+	// ‰¹
+	int m_selectSE;		// ‘I‘ğ‚ÌSE
 };
 

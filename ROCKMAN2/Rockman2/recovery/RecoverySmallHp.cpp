@@ -21,6 +21,7 @@ RecoverySmallHp::RecoverySmallHp()
 
 RecoverySmallHp::~RecoverySmallHp()
 {
+	DeleteGraph(m_handle);
 }
 
 void RecoverySmallHp::Init()

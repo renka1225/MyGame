@@ -47,4 +47,8 @@ private:
 	int m_gameoverHandle;	// ゲームオーバーの文字
 	int m_charHandle;		// 文字
 	int m_selectHandle;		// 選択カーソル
+
+	// 音
+	int m_selectSE;			// 選択時のSE
+
 };

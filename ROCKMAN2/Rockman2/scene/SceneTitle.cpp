@@ -32,6 +32,7 @@ SceneTitle::SceneTitle():
 	m_isSceneOption(false),
 	m_fadeAlpha(80)
 {
+	// ‰æ‘œ“Ç‚İ‚İ
 	m_logoHandle = LoadGraph("data/image/TitleLogo.png");
 	m_charHandle = LoadGraph("data/image/UI/titleChar.png");
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
@@ -39,6 +40,9 @@ SceneTitle::SceneTitle():
 	m_bg2Handle = LoadGraph("data/image/BackGround/Title/bg2.png");
 	m_bg3Handle = LoadGraph("data/image/BackGround/Title/bg3.png");
 	m_bg4Handle = LoadGraph("data/image/BackGround/Title/bg4.png");
+
+	// ‰¹“Ç‚İ‚İ
+	m_selectSE = LoadSoundMem("data/sound/select.wav");
 }
 
 SceneTitle::~SceneTitle()
@@ -50,6 +54,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_bg2Handle);
 	DeleteGraph(m_bg3Handle);
 	DeleteGraph(m_bg4Handle);
+	DeleteSoundMem(m_selectSE);
 }
 
 void SceneTitle::Init()
@@ -93,14 +98,13 @@ void SceneTitle::Update()
 	// ZƒL[‚ğ‰Ÿ‚µ‚½‚ç‘JˆÚ
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// TODO:‘I‘ğó‘Ô‚É‚æ‚Á‚ÄˆÚ“®æ‚ğ•Ï‚¦‚é
+		// SE‚ğ–Â‚ç‚·
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
+
 		switch (m_select)
 		{
 		case kStart:
 			m_isSceneStart = true;
-			break;
-		case kOption:
-			m_isSceneOption = true;
 			break;
 		case kExit:
 			DxLib_End();

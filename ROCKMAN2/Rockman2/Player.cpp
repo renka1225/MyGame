@@ -37,9 +37,11 @@ namespace
 	constexpr float kPosY = 450.0f;
 
 	// プレイヤーの最大HP
-	constexpr float kMaxHp = 20;
+	constexpr float kMaxHp = 10;
 	// 最大弾エネルギー
-	constexpr float kMaxShot = 20;
+	constexpr float kMaxShot = 10;
+	// メタルの最大エネルギー
+	constexpr float kMaxMetalShot = 5;
 	// 残機
 	constexpr int kLife = 1;
 
@@ -65,7 +67,7 @@ Player::Player(SceneMain* pMain) :
 	m_life(kLife),
 	m_fullHpRecovery(0),
 	m_damageFrame(0),
-	m_metalEnergy(kMaxShot),
+	m_metalEnergy(kMaxMetalShot),
 	m_fireEnergy(kMaxShot),
 	m_lineEnergy(kMaxShot),
 	m_isBuster(false),
@@ -112,7 +114,7 @@ void Player::Init()
 		// HP
 		m_hp = kMaxHp;
 		// 弾エネルギー
-		m_metalEnergy = kMaxShot;
+		m_metalEnergy = kMaxMetalShot;
 		m_fireEnergy = kMaxShot;
 		m_lineEnergy = kMaxShot;
 		// 残機数
@@ -380,6 +382,10 @@ void Player::Update()
 
 void Player::Draw()
 {
+// ダメージ演出
+// 2フレーム間隔で表示非表示を切り替える
+	if (m_damageFrame % 10 >= 8) return;
+
 	// 中央座標を左上座標に変換
 	int x = m_pos.x - kPlayerWidth * 0.5f;
 	int y = m_pos.y - kPlayerHeight * 0.5f;
@@ -397,10 +403,6 @@ void Player::Draw()
 		DrawTurnGraph(x, y, m_handle, true);
 	}
 
-	// ダメージ演出
-	// 2フレーム間隔で表示非表示を切り替える
-	if (m_damageFrame % 4 >= 2) return;
-
 #ifdef _DEBUG
 	// MEMO:スクロールが反映されないためコメントアウト
 	// 当たり判定の表示
@@ -408,6 +410,7 @@ void Player::Draw()
 #endif
 }
 
+/*マップチップの当たり判定*/
 void Player::CheckHitMap(Rect chipRect)
 {
 	// 横から当たったかチェックする
@@ -508,17 +511,17 @@ void Player::ShotSmallRecovery() // 弾小回復
 	if (m_isMetal) // メタル
 	{
 		m_metalEnergy += kSmallRecovery;
-		if (m_metalEnergy > kMaxShot)
+		if (m_metalEnergy > kMaxMetalShot)
 		{
-			m_metalEnergy = kMaxShot;
+			m_metalEnergy = kMaxMetalShot;
 		}
 	}
 	else if (m_isFire) // ファイア
 	{
 		m_fireEnergy += kSmallRecovery;
-		if (m_fireEnergy > kMaxShot)
+		if (m_fireEnergy > kMaxMetalShot)
 		{
-			m_fireEnergy = kMaxShot;
+			m_fireEnergy = kMaxMetalShot;
 		}
 	}
 	else if (m_isLineMove) // 2号

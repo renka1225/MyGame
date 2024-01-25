@@ -18,6 +18,7 @@ RecoveryFullHp::RecoveryFullHp()
 
 RecoveryFullHp::~RecoveryFullHp()
 {
+	DeleteGraph(m_handle);
 }
 
 void RecoveryFullHp::Init()

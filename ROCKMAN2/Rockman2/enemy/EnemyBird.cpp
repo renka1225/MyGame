@@ -8,6 +8,11 @@ namespace
 	// 敵のサイズ
 	constexpr int kWidth = 16;
 	constexpr int kHeight = 16;
+
+	// エフェクトのサイズ
+	constexpr int kEffectWidth = 32;
+	constexpr int kEffectHeight = 32;
+
 	// 拡大率
 	constexpr float kEnlarge = 3.0f;
 
@@ -22,6 +27,13 @@ namespace
 	constexpr int kAnimFrameNum = 8;
 	// アニメーション1サイクルのフレーム数
 	constexpr int kAnimFrameCycle = _countof(kUseFrame) * kAnimFrameNum;
+
+	// エフェクト
+	constexpr int kdamageFrame[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	// アニメーション1コマのフレーム数
+	constexpr int kEffectFrameNum = 10;
+	// ダメージ演出フレーム数
+	constexpr int kDamageFrame = 60;
 }
 
 
@@ -44,25 +56,11 @@ void EnemyBird::Init()
 void EnemyBird::Update()
 {
 	// 存在しない敵の処理はしない
-		if (!m_isExist) return;
+	if (!m_isExist) return;
 
-	// TODO:敵を左右に移動させる
-	if (m_pos.x < 200.0f)
-	{
-		m_vec.x *= -1; // 右に移動
-		m_dir = kDirRight;
-	}
-	else if (m_pos.x > 2500.0f)
-	{
-		m_vec.x *= -1; // 左に移動
-		m_dir = kDirLeft;
-	}
-
-	// 現在位置の更新
-	m_pos += m_vec;
-
-	// 当たり判定を生成
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * 3), static_cast<float>(kHeight));
+	// マップチップとの当たり判定
+	Rect chipRect; // 当たったマップチップの矩形
+	HitCollision(chipRect);
 
 	// 移動アニメーション
 	m_flyAnimFrame++;
@@ -70,17 +68,6 @@ void EnemyBird::Update()
 	{
 		m_flyAnimFrame = 0;
 	}
-
-	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
-	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
-	if (m_pos.x > Stage::kMapWidth) isOut = true; // 画面右端
-
-	// 画面内ならここで終了
-	if (!isOut) return;
-
-	// 画面外に出たら終了する
-	m_isExist = false;
 }
 
 void EnemyBird::Draw()
@@ -100,6 +87,16 @@ void EnemyBird::Draw()
 
 	DrawRectRotaGraph(x, y, srcX, srcY, kWidth, kHeight, kEnlarge, 0.0f, m_handle, true, false);
 
+	// ダメージエフェクト表示
+	// 画像の切り出し座標
+	int effectFrame = m_damageFrame / kEffectFrameNum;
+	int effectSrcX = kUseFrame[animFrame] * kEffectWidth;
+	int effectSrcY = kHeight;
+	if (m_damageFrame > 0)
+	{
+		DrawRectRotaGraph(x, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEnlarge, 0.0f, m_damageEffect, true);
+	}
+
 #ifdef _DEBUG
 	// スクロールが反映されないためコメントアウト
 	// 当たり判定の表示
@@ -114,6 +111,40 @@ void EnemyBird::Start(float posX, float posY)
 
 	m_pos = { posX, posY };
 	m_vec.x -= kSpeed;
+}
+
+void EnemyBird::HitCollision(Rect chipRect)
+{
+	// 横から当たったかチェックする
+	m_pos.x += m_vec.x;	// 現在位置の更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth), static_cast<float>(kHeight)); // 当たり判定を生成
+	if (m_pBg->IsCollision(m_colRect, chipRect))
+	{
+		if (m_vec.x > 0.0f) // 右に移動中
+		{
+			m_pos.x = chipRect.GetLeft() - kWidth * 0.5f - 1;
+			m_vec.x *= -1;
+			m_dir = kDirLeft;
+
+		}
+		else if (m_vec.x < 0.0f) // 左に移動中
+		{
+			m_pos.x = chipRect.GetRight() + kWidth * 0.5f + 1;
+			m_vec.x *= -1;
+			m_dir = kDirRight;
+		}
+	}
+
+	// 縦から当たったかチェックする
+	m_pos.y += m_vec.y; 	// 現在位置の更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth), static_cast<float>(kHeight)); // 当たり判定を生成
+	if (m_pBg->IsCollision(m_colRect, chipRect))
+	{
+		if (m_vec.y > 0.0f)
+		{
+			m_pos.y = chipRect.GetTop() - kHeight * 0.5f - 1;
+		}
+	}
 }
 
 void EnemyBird::OnDamage()

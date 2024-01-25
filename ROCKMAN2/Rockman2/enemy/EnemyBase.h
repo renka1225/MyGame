@@ -23,6 +23,8 @@ public:
 
 	// 敵がダメージを受けた時の処理
 	virtual void OnDamage();
+	// マップチップとの当たり判定
+	virtual void HitCollision(Rect chipRect);
 	// 敵キャラクターをスタートさせる
 	virtual void Start(float posX, float posY ) = 0;
 
@@ -53,6 +55,7 @@ protected:
 
 	// グラフィックのハンドル
 	int m_handle;
+
 	// 存在するかフラグ true:存在する
 	bool m_isExist;	
 	// 敵のHP
@@ -73,7 +76,9 @@ protected:
 		kDirLeft,	// 左
 		kDirRight,	// 右
 	};
-
-	// 向いている方向
 	Dir m_dir;
+
+	// ダメージエフェクト
+	int m_damageEffect; // ダメージ時のエフェクト
+	int m_damageFrame;	// エフェクトのアニメーション
 };

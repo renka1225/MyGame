@@ -21,6 +21,7 @@ RecoveryLife::RecoveryLife()
 
 RecoveryLife::~RecoveryLife()
 {
+	DeleteGraph(m_handle);
 }
 
 void RecoveryLife::Init()

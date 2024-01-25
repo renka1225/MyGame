@@ -27,6 +27,7 @@ ShotMetal::ShotMetal() :
 
 ShotMetal::~ShotMetal()
 {
+	DeleteGraph(m_handle);
 }
 
 void ShotMetal::Init()

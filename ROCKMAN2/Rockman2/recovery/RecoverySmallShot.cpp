@@ -21,6 +21,7 @@ RecoverySmallShot::RecoverySmallShot()
 
 RecoverySmallShot::~RecoverySmallShot()
 {
+	DeleteGraph(m_handle);
 }
 
 void RecoverySmallShot::Init()

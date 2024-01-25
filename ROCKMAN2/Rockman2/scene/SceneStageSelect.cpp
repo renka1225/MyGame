@@ -31,10 +31,14 @@ SceneStageSelect::SceneStageSelect() :
 	m_fadeAlpha(255),
 	m_selectPos(kInitSelectPosX, kInitSelectPosY)
 {
+	// ‰æ‘œ“Ç‚İ‚İ
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
 	m_selectCharHandle = LoadGraph("data/image/UI/selectRogo.png");
 	m_charHandle = LoadGraph("data/image/UI/stageSelect.png");
 	m_bgHandle = LoadGraph("data/image/BackGround/stageSelect.png");
+	
+	// ‰¹“Ç‚İ‚İ
+	m_selectSE = LoadSoundMem("data/sound/select.wav");
 }
 
 SceneStageSelect::~SceneStageSelect()
@@ -43,6 +47,7 @@ SceneStageSelect::~SceneStageSelect()
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectCharHandle);
 	DeleteGraph(m_bgHandle);
+	DeleteSoundMem(m_selectSE);
 }
 
 void SceneStageSelect::Init()
@@ -87,7 +92,9 @@ void SceneStageSelect::Update()
 	// ZƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// TODO:‘I‘ğó‘Ô‚É‚æ‚Á‚ÄˆÚ“®æ‚ğ•Ï‚¦‚é
+		// SE‚ğ–Â‚ç‚·
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
+
 		switch (m_select)
 		{
 		case kStage1:

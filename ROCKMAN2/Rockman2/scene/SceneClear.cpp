@@ -33,10 +33,14 @@ SceneClear::SceneClear():
 	m_isSceneSelectStage(false),
 	m_isSceneTitle(false)
 {
+	// ‰æ‘œ“Ç‚İ‚İ
 	m_bgHandle = LoadGraph("data/image/BackGround/clear.png");
 	m_clearHandle = LoadGraph("data/image/UI/clear.png");
 	m_charHandle = LoadGraph("data/image/UI/clearSelect.png");
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
+
+	// ‰¹“Ç‚İ‚İ
+	m_selectSE = LoadSoundMem("data/sound/select.wav");
 }
 
 SceneClear::~SceneClear()
@@ -45,6 +49,7 @@ SceneClear::~SceneClear()
 	DeleteGraph(m_clearHandle);
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectHandle);
+	DeleteSoundMem(m_selectSE);
 }
 
 void SceneClear::Init()
@@ -91,6 +96,9 @@ void SceneClear::Update()
 	// ZƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
+		// SE‚ğ–Â‚ç‚·
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
+
 		// ˆÚ“®æ‚ğŒˆ’è
 		switch (m_select)
 		{

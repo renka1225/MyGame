@@ -21,6 +21,7 @@ RecoveryGreatShot::RecoveryGreatShot()
 
 RecoveryGreatShot::~RecoveryGreatShot()
 {
+	DeleteGraph(m_handle);
 }
 
 void RecoveryGreatShot::Init()

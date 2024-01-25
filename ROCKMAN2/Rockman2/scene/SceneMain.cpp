@@ -177,16 +177,9 @@ void SceneMain::Init()
 
 	// 背景の初期化
 	m_pBg->Init();
-	
 
 	// 敵の初期化
-	for (int i = 0; i < m_pEnemy.size(); i++)
-	{
-		if (m_pEnemy[i])
-		{
-			m_pEnemy[i]->Init();
-		}
-	}
+	CreateEnemy();
 
 	// 回復アイテムの初期化
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -298,7 +291,6 @@ void SceneMain::Update()
 
 			// 確率でアイテムをドロップ
 			int getRandDrop = GetRand(100);
-
 			if (getRandDrop <= 5)
 			{
 				DropHpSmallRecovery(i); // HP回復(小)
@@ -586,12 +578,12 @@ void SceneMain::CreateEnemy()
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(500.0f, 600.0f);
+			m_pEnemy[i]->Start(500.0f, 650.0f);
 			m_pEnemy[i]->Init();
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1000.0f, 600.0f);
+			m_pEnemy[i]->Start(1000.0f, 700.0f);
 			m_pEnemy[i]->Init();
 			break;
 		case 3:
