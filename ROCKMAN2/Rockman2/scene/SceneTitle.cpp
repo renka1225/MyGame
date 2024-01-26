@@ -10,7 +10,7 @@ namespace
 	constexpr int kCharPosY = 700;
 
 	// 背景拡大率
-	constexpr int kBgScale = 2.0f;
+	constexpr float kBgScale = 2.0f;
 
 	// 選択カーソルの初期位置
 	constexpr int kInitSelectPosX = 960;
@@ -185,11 +185,11 @@ void SceneTitle::BgDraw()
 	int scrollBg4 = static_cast<int>(m_bgMove) % static_cast<int>(bg4Size.width * kBgScale);
 
 	// 描画
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 240);
 	DrawGraph(0, 0, m_bgHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	for (int index = -1; index < 3; index++)
+	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
 			scrollBg2 + index * bg2Size.width * kBgScale,
@@ -212,4 +212,8 @@ void SceneTitle::BgDraw()
 			kBgScale, 0.0f,
 			m_bg4Handle, true);
 	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 130);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

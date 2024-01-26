@@ -42,9 +42,12 @@ public:
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
 
 private:
+	// スタート演出
+	void StartStaging();
 	//　敵の生成
 	void CreateEnemy();
-
+	// アイテムの生成
+	void CreateItem(int enemyIndex);
 	// 弾数、敵数等の表示
 	void DrawInfo();
 	// ポーズ画面の表示
@@ -85,5 +88,11 @@ protected:
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
+
+	// スタート演出
+	float m_startDisplayX; // 表示位置
+
+	// 音
+	int m_bgm;		// BGM
 };
 

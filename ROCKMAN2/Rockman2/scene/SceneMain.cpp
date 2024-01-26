@@ -79,7 +79,8 @@ SceneMain::SceneMain():
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
-	m_fadeAlpha(255)
+	m_fadeAlpha(255),
+	m_startDisplayX(0.0f)
 {
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
@@ -109,6 +110,8 @@ SceneMain::SceneMain():
 	{
 		m_pRecovery[i] = nullptr; // 未使用状態にする
 	}
+
+	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
 }
 
 SceneMain::~SceneMain()
@@ -157,6 +160,8 @@ SceneMain::~SceneMain()
 			m_pRecovery[i] = nullptr;
 		}
 	}
+
+	DeleteSoundMem(m_bgm);
 }
 
 void SceneMain::Init()
@@ -167,6 +172,9 @@ void SceneMain::Init()
 	m_isExistLineMove = false;
 
 	m_enemyTotalNum = kEnemyMax;
+
+	// TODO:スタート時の演出
+	//StartStaging();
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -190,6 +198,9 @@ void SceneMain::Init()
 		}
 	}
 	m_isGetFullHpRecovery = false;
+
+	// BGMを鳴らす
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
 void SceneMain::End()
@@ -202,12 +213,14 @@ void SceneMain::Update()
 	if (m_pPlayer->GetLife() < 0)
 	{
 		m_isSceneGameOver = true; // ゲームオーバー画面に遷移
+		StopSoundMem(m_bgm);
 	}
 
-	// TODO:敵をすべて倒したらクリア画面に遷移
+	// 敵をすべて倒したらクリア画面に遷移
 	if (m_enemyTotalNum <= 0)
 	{
 		m_isSceneClear = true;
+		StopSoundMem(m_bgm);
 	}
 
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -232,7 +245,7 @@ void SceneMain::Update()
 	// プレイヤーの当たり判定
 	Rect playerRect = m_pPlayer->GetColRect();
 
-	// プレイヤーが画面内に移動したらE缶を表示する
+	// TODO:決まった位置にE缶を表示する
 	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)
 	{
 		DropFullHpRecovery();
@@ -290,27 +303,7 @@ void SceneMain::Update()
 			m_enemyTotalNum--;
 
 			// 確率でアイテムをドロップ
-			int getRandDrop = GetRand(100);
-			if (getRandDrop <= 5)
-			{
-				DropHpSmallRecovery(i); // HP回復(小)
-			}
-			else if (getRandDrop <= 8)
-			{
-				DropHpGreatRecovery(i);	// HP回復(大)
-			}
-			else if (getRandDrop <= 13)
-			{
-				DropShotSmallRecovery(i); // 弾エネルギー(小)
-			}
-			else if (getRandDrop <= 16)
-			{
-				DropShotGreatRecovery(i); // 弾エネルギー(大)
-			}
-			else if (getRandDrop <= 19)
-			{
-				DropLifeRecovery(i);	// 残機
-			}
+			CreateItem(i);
 			
 			// メモリを解放する
 			delete m_pEnemy[i];
@@ -403,6 +396,7 @@ void SceneMain::Update()
 	if (Pad::IsTrigger(pad & PAD_INPUT_3))
 	{
 		m_isSceneClear = true; // クリア画面に遷移
+		StopSoundMem(m_bgm);
 	}
 #endif
 
@@ -412,6 +406,17 @@ void SceneMain::Draw()
 {
 	// 描画先スクリーンをクリアする
 	ClearDrawScreen();
+
+	// スタート時の描画
+	// 四角を描画
+	DrawBox(m_startDisplayX, Game::kScreenHeight * 0.5 - 10, 
+		m_startDisplayX + 400, Game::kScreenHeight * 0.5 + 10,
+		0xffffff, true);
+
+	// 文字描画
+	DrawFormatString(
+		m_startDisplayX, Game::kScreenHeight * 0.5 - 10,
+		0x000000, "敵を%d体倒せ！", m_enemyTotalNum);
 
 	// 背景の描画
 	m_pBg->Draw();
@@ -564,6 +569,15 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 	}
 }
 
+/*スタート演出*/
+void SceneMain::StartStaging()
+{
+	// スタートの表示を左に移動
+	m_startDisplayX -= 5.0f;
+
+	WaitTimer(3000); // 5秒間待機
+}
+
 /*敵の生成*/
 void SceneMain::CreateEnemy()
 {
@@ -619,6 +633,32 @@ void SceneMain::CreateEnemy()
 		default:
 			break;
 		}
+	}
+}
+
+/*回復アイテムの生成*/
+void SceneMain::CreateItem(int enemyIndex)
+{
+	int getRandDrop = GetRand(100);
+	if (getRandDrop <= 5)
+	{
+		DropHpSmallRecovery(enemyIndex); // HP回復(小)
+	}
+	else if (getRandDrop <= 8)
+	{
+		DropHpGreatRecovery(enemyIndex);	// HP回復(大)
+	}
+	else if (getRandDrop <= 13)
+	{
+		DropShotSmallRecovery(enemyIndex); // 弾エネルギー(小)
+	}
+	else if (getRandDrop <= 16)
+	{
+		DropShotGreatRecovery(enemyIndex); // 弾エネルギー(大)
+	}
+	else if (getRandDrop <= 19)
+	{
+		DropLifeRecovery(enemyIndex);	// 残機
 	}
 }
 
@@ -685,6 +725,7 @@ void SceneMain::DrawInfo()
 	}
 }
 
+/*ポーズ画面表示*/
 void SceneMain::DrawPause()
 {
 	// 現在のHPを表示
