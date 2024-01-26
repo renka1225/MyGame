@@ -38,7 +38,8 @@ SceneStageSelect::SceneStageSelect() :
 	m_bgHandle = LoadGraph("data/image/BackGround/stageSelect.png");
 	
 	// âπì«Ç›çûÇ›
-	m_selectSE = LoadSoundMem("data/sound/select.wav");
+	m_bgm = LoadSoundMem("data/sound/BGM/stageSelect.mp3");
+	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
 }
 
 SceneStageSelect::~SceneStageSelect()
@@ -47,6 +48,7 @@ SceneStageSelect::~SceneStageSelect()
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectCharHandle);
 	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_bgm);
 	DeleteSoundMem(m_selectSE);
 }
 
@@ -59,6 +61,9 @@ void SceneStageSelect::Init()
 	m_select = kStage1;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
+	
+	// BGMÇñ¬ÇÁÇ∑
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
 void SceneStageSelect::Update()
@@ -99,15 +104,19 @@ void SceneStageSelect::Update()
 		{
 		case kStage1:
 			m_isSceneStage1 = true;
+			StopSoundMem(m_bgm);
 			break;
 		case kStage2:
 			m_isSceneStage2 = true;
+			StopSoundMem(m_bgm);
 			break;
 		case kStage3:
 			m_isSceneStage3 = true;
+			StopSoundMem(m_bgm);
 			break;
 		case kBackTitle:
 			m_isSceneTitle = true;
+			StopSoundMem(m_bgm);
 			break;
 		default:
 			break;

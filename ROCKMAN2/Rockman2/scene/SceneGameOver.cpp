@@ -41,7 +41,8 @@ SceneGameOver::SceneGameOver():
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
 
 	// âπì«Ç›çûÇ›
-	m_selectSE = LoadSoundMem("data/sound/select.wav");
+	m_bgm = LoadSoundMem("data/sound/BGM/gameover.mp3");
+	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
 }
 
 SceneGameOver::~SceneGameOver()
@@ -50,6 +51,7 @@ SceneGameOver::~SceneGameOver()
 	DeleteGraph(m_gameoverHandle);
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectHandle);
+	DeleteSoundMem(m_bgm);
 	DeleteSoundMem(m_selectSE);
 }
 
@@ -61,6 +63,9 @@ void SceneGameOver::Init()
 	m_select = kRetry;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
+
+	// BGMÇñ¬ÇÁÇ∑
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
 void SceneGameOver::Update()
@@ -102,12 +107,15 @@ void SceneGameOver::Update()
 		{
 		case kRetry:
 			m_isSceneRetry = true;
+			StopSoundMem(m_bgm);
 			break;
 		case kSelectStage:
 			m_isSceneSelect = true;
+			StopSoundMem(m_bgm);
 			break;
 		case kTitle:
 			m_isSceneTitle = true;
+			StopSoundMem(m_bgm);
 		default:
 			break;
 		}

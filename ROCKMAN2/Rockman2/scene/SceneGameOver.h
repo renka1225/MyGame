@@ -49,6 +49,7 @@ private:
 	int m_selectHandle;		// 選択カーソル
 
 	// 音
+	int m_bgm;				// BGM
 	int m_selectSE;			// 選択時のSE
 
 };

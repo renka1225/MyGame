@@ -14,6 +14,7 @@ public:
 	void Update();
 	void Draw();
 	void End();
+	void BgDraw();
 
 	// シーン遷移のフラグ
 	bool IsSceneStart() const { return m_isSceneStart; }
@@ -42,7 +43,7 @@ private:
 	// 背景の表示位置
 	Vec2 m_bgPos;
 	// 背景の移動量
-	Vec2 m_bgMove;
+	float m_bgMove;
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
@@ -55,6 +56,13 @@ private:
 	int m_bg3Handle;	// 背景
 	int m_bg4Handle;	// 背景
 	// 音
+	int m_bgm;			// BGM
 	int m_selectSE;		// 選択時のSE
+
+	struct Size
+	{
+		int width;
+		int height;
+	};
 };
 

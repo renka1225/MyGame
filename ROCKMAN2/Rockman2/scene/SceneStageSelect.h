@@ -53,6 +53,7 @@ private:
 	int m_bgHandle;				// ”wŒi
 
 	// ‰¹
+	int m_bgm;					// BGM
 	int m_selectSE;				// ‘I‘ğ‚ÌSE
 };
 
