@@ -22,8 +22,8 @@ namespace
 	constexpr float kVelocity = -12.0f;
 
 	// プレイヤーのサイズ
-	constexpr int kPlayerWidth = 50;
-	constexpr int kPlayerHeight = 122;
+	constexpr int kPlayerWidth = 84;
+	constexpr int kPlayerHeight = 148;
 
 	// マップチップのサイズ
 	constexpr int kMapWidth = 32;

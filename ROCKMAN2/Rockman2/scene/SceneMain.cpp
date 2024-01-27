@@ -573,7 +573,8 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 void SceneMain::StartStaging()
 {
 	// スタートの表示を左に移動
-	m_startDisplayX -= 5.0f;
+	m_startDisplayX = Game::kScreenWidth;
+	m_startDisplayX -= 10.0f;
 
 	WaitTimer(3000); // 5秒間待機
 }
