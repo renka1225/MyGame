@@ -2,6 +2,7 @@
 #include <vector>
 #include "Vec2.h"
 
+class FontManager;
 class Bg;
 class ScenePause;
 class Player;
@@ -48,6 +49,8 @@ private:
 	void CreateEnemy();
 	// アイテムの生成
 	void CreateItem(int enemyIndex);
+	// 操作説明の表示
+	void DrawEx();
 	// 弾数、敵数等の表示
 	void DrawInfo();
 	// ポーズ画面の表示
@@ -55,6 +58,8 @@ private:
 
 protected:
 	/*ポインタを取得*/
+	// フォント管理
+	FontManager* m_pFont;
 	// 背景
 	Bg* m_pBg;
 	// ポーズ画面
@@ -94,5 +99,8 @@ protected:
 
 	// 音
 	int m_bgm;		// BGM
+
+	// 操作説明の表示
+	int m_exHandle;
 };
 

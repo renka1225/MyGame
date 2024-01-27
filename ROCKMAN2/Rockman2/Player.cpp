@@ -33,7 +33,7 @@ namespace
 	constexpr int kDamageFrame = 60;
 
 	// プレイヤーの初期位置
-	constexpr float kPosX = 250.0f;
+	constexpr float kPosX = 350.0f;
 	constexpr float kPosY = 450.0f;
 
 	// プレイヤーの最大HP
@@ -147,21 +147,6 @@ void Player::Update()
 		m_move.x = 0;
 	}
 
-	// TODO:黒枠の外にでないようにする
-	/*画面外に出たら画面内に戻す*/
-	if (m_pos.x < 200.0f + kPlayerWidth * 0.5)
-	{
-		m_pos.x = 200.0f + kPlayerWidth * 0.5;
-	}
-	else if (m_pos.x > Stage::kMapWidth - 20)
-	{
-		m_pos.x = Stage::kMapWidth - 20;
-	}
-	if (m_pos.y < 0.0f)
-	{
-		m_pos.y = 0.0f;
-	}
-
 	/*プレイヤーが穴に落下した場合*/
 	if ((m_pos.y - kPlayerHeight * 0.5f) > Game::kScreenHeight)
 	{
@@ -260,7 +245,6 @@ void Player::Update()
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
 		}
-
 	}
 
 	/*メタル発射*/

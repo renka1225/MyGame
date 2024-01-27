@@ -197,17 +197,23 @@ void SceneTitle::BgDraw()
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg2Handle, true);
+	}
 
+	for (int index = 0; index < 2; index++)
+	{
 		DrawRotaGraph2(
 			scrollBg3 + index * bg3Size.width * kBgScale,
 			Game::kScreenHeight - bg3Size.height * kBgScale,
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg3Handle, true);
+	}
 
+	for (int index = 0; index < 2; index++)
+	{
 		DrawRotaGraph2(
 			scrollBg4 + index * bg4Size.width * kBgScale,
-			Game::kScreenHeight - bg4Size.height * kBgScale, 
+			Game::kScreenHeight - bg4Size.height * kBgScale,
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg4Handle, true);

@@ -38,12 +38,6 @@ void RecoveryGreatHp::Update()
 	// 現在位置の更新
 	m_pos += m_vec;
 
-	// TODO:地面の上に着地するようにする
-	/*if (m_pos.y > 550)
-	{
-		m_vec.y = 0;
-	}*/
-
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 	Rect chipRect; // 当たったマップチップの矩形
@@ -51,8 +45,8 @@ void RecoveryGreatHp::Update()
 	{
 		if (m_vec.y > 0.0f)
 		{
+			// 地面に落ちるようにする
 			m_pos.y = chipRect.GetTop() - kHeight * 0.5f - 1;
-			
 		}
 	}
 
