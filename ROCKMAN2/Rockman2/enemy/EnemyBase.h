@@ -78,6 +78,10 @@ protected:
 	};
 	Dir m_dir;
 
+	// 音
+	int m_damageSE;	// ダメージ時のSE
+	int m_deadSE;	// 消滅時のSE
+
 	// ダメージエフェクト
 	int m_damageEffect; // ダメージ時のエフェクト
 	int m_damageFrame;	// エフェクトのアニメーション

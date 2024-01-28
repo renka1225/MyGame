@@ -183,7 +183,7 @@ void SceneMain::Init()
 	m_enemyTotalNum = kEnemyMax;
 
 	// TODO:スタート時の演出
-	//StartStaging();
+	StartStaging();
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -221,6 +221,9 @@ void SceneMain::Update()
 	// プレイヤーの残機が0未満の場合
 	if (m_pPlayer->GetLife() < 0)
 	{
+		// 1秒間待機
+		WaitTimer(1000);
+
 		m_isSceneGameOver = true; // ゲームオーバー画面に遷移
 		StopSoundMem(m_bgm);
 	}
@@ -230,6 +233,9 @@ void SceneMain::Update()
 	{
 		m_isSceneClear = true;
 		StopSoundMem(m_bgm);
+
+		// 1秒後に遷移
+		WaitTimer(1000);
 	}
 
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -584,11 +590,11 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 /*スタート演出*/
 void SceneMain::StartStaging()
 {
-	// スタートの表示を左に移動
-	m_startDisplayX = Game::kScreenWidth;
-	m_startDisplayX -= 10.0f;
+	// TODO:スタートとクリア条件の表示
+	//m_startDisplayX = Game::kScreenWidth;
+	//m_startDisplayX -= 10.0f;
 
-	//WaitTimer(3000); // 5秒間待機
+	WaitTimer(1000); // 1秒間待機
 }
 
 /*敵の生成*/

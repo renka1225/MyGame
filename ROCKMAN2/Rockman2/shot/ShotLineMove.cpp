@@ -10,7 +10,7 @@
 namespace
 {
 	// 弾の移動速度
-	constexpr float kSpeed = 12.0f;
+	constexpr float kSpeed = 10.0f;
 	// ショットの大きさ
 	constexpr float kWidth = 32.0f;
 	constexpr float kHeight = 32.0f;
@@ -52,17 +52,16 @@ void ShotLineMove::Update()
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x , m_pos.y, kWidth, kHeight);
 
-	// TODO:障害物に当たったら消える
-	//if ()
-	//{
-	//	m_isExist = false;
-	//	return;	// 終了が確定したら以降の処理は行わない
-	//}
+	// TODO:乗っている最中にエネルギーがなくなったらアイテム2号を消す
+	if (m_energy < 0)
+	{
+		m_isExist = false;
+	}
 
 	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうか		true:画面外、false:画面内
-	if (m_pos.x < 0.0f - kWidth / 2) isOut = true;					// 画面左端
-	if (m_pos.x > Stage::kMapWidth) isOut = true;	// 画面右端
+	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
+	if (m_pos.x < m_pPlayer->GetPos().x - Game::kScreenWidth * 0.5f) isOut = true; // 画面左端
+	if (m_pos.x > m_pPlayer->GetPos().x + Game::kScreenWidth * 0.5f) isOut = true; // 画面右端
 
 	// チェック中の座標が画面内ならここで終了
 	if (!isOut) return;

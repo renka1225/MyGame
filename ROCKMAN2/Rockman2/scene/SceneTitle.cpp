@@ -44,6 +44,7 @@ SceneTitle::SceneTitle():
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/title.mp3");
 	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
+	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
 SceneTitle::~SceneTitle()
@@ -57,6 +58,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_bg4Handle);
 	DeleteSoundMem(m_bgm);
 	DeleteSoundMem(m_selectSE);
+	DeleteSoundMem(m_cursorSE);
 }
 
 void SceneTitle::Init()
@@ -79,6 +81,9 @@ void SceneTitle::Update()
 	// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_select = (m_select + 1) % kSelectNum;
 		m_selectPos.y += kSelectmoveY; // 選択カーソルを下に移動
 
@@ -91,6 +96,9 @@ void SceneTitle::Update()
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;
 		m_selectPos.y -= kSelectmoveY;	// 選択カーソルを上に移動
 
@@ -104,8 +112,7 @@ void SceneTitle::Update()
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
 		// SEを鳴らす
-		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
-
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_BACK, true);
 
 		// 画面遷移
 		switch (m_select)

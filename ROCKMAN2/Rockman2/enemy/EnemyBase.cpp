@@ -6,6 +6,7 @@
 #include "Bg.h"
 #include "DxLib.h"
 #include "Game.h"
+#include <cassert>
 
 EnemyBase::EnemyBase():
 	m_pMain(nullptr),
@@ -16,14 +17,26 @@ EnemyBase::EnemyBase():
 	m_isDead(false),
 	m_hp(0),
 	m_dir(kDirLeft),
+	m_damageSE(-1),
+	m_deadSE(-1),
 	m_damageEffect(-1),
 	m_damageFrame(0)
 {
-	m_damageEffect = LoadGraph("data/image/Effect/enemyDamage.png");
+	// 音の読み込み
+	m_damageSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
+	assert(m_damageSE != -1);
+	m_deadSE = LoadSoundMem("data/sound/SE/enemyDead.mp3");
+	assert(m_deadSE != -1);
+	// 画像の読み込み
+	m_damageEffect = LoadGraph("data/image/Effect/enemyDead.png");
+	assert(m_damageEffect != -1);
 }
 
 EnemyBase::~EnemyBase()
 {
+	DeleteSoundMem(m_damageSE);
+	DeleteSoundMem(m_deadSE);
+	DeleteGraph(m_damageEffect);
 }
 
 void EnemyBase::Init()
@@ -58,11 +71,11 @@ void EnemyBase::OnDamage()
 	// ダメージ演出中は再度食らわない
 	if (m_damageFrame > 0) return;
 
-	// 演出フレーム数を設定する
-	m_damageFrame = 30;
-
 	// 現在のHPを減らす
 	m_hp--;
+
+	// SEを鳴らす
+	PlaySoundMem(m_damageSE, DX_PLAYTYPE_NORMAL, true);
 
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)

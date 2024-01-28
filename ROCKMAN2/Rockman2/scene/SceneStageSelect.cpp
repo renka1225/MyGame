@@ -40,6 +40,7 @@ SceneStageSelect::SceneStageSelect() :
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stageSelect.mp3");
 	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
+	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
 SceneStageSelect::~SceneStageSelect()
@@ -50,6 +51,7 @@ SceneStageSelect::~SceneStageSelect()
 	DeleteGraph(m_bgHandle);
 	DeleteGraph(m_bgm);
 	DeleteSoundMem(m_selectSE);
+	DeleteSoundMem(m_cursorSE);
 }
 
 void SceneStageSelect::Init()
@@ -73,6 +75,9 @@ void SceneStageSelect::Update()
 	// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_select = (m_select + 1) % kSelectNum;
 		m_selectPos.y += kSelectmoveY; // 選択中の四角を下に移動
 
@@ -85,6 +90,9 @@ void SceneStageSelect::Update()
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;
 		m_selectPos.y -= kSelectmoveY;	// 選択中の四角を上に移動
 

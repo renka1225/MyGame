@@ -15,6 +15,7 @@ namespace
 
 	// 拡大率
 	constexpr float kEnlarge = 3.0f;
+	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度
 	constexpr float kSpeed = 3.0f;
@@ -29,9 +30,9 @@ namespace
 	constexpr int kAnimFrameCycle = _countof(kUseFrame) * kAnimFrameNum;
 
 	// エフェクト
-	constexpr int kdamageFrame[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 10;
+	constexpr int kEffectFrameNum = 8;
 	// ダメージ演出フレーム数
 	constexpr int kDamageFrame = 60;
 }
@@ -80,6 +81,7 @@ void EnemyBird::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
+	// 鳥表示
 	// 画像の切り出し座標
 	int animFrame = m_flyAnimFrame / kAnimFrameNum;
 	int srcX = kUseFrame[animFrame] * kWidth;
@@ -95,6 +97,19 @@ void EnemyBird::Draw()
 	if (m_damageFrame > 0)
 	{
 		DrawRectRotaGraph(x, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEnlarge, 0.0f, m_damageEffect, true);
+	}
+
+	// 消滅時ダメージエフェクト表示
+	if (m_isDead)
+	{
+		// 画像の切り出し座標
+		int effectFrame = m_damageFrame / kEffectFrameNum;
+		int effectSrcX = kUseFrame[effectFrame] * kEffectWidth;
+		int effectSrcY = 0;
+		if (m_damageFrame > 0)
+		{
+			DrawRectRotaGraph(x + 10, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_damageEffect, true);
+		}
 	}
 
 #ifdef _DEBUG
@@ -155,6 +170,10 @@ void EnemyBird::OnDamage()
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)
 	{
+		// 消滅時SEを鳴らす
+		// MEMO:DX_PLAYTYPE_NORMALだと一瞬画面が止まってしまう、DX_PLAYTYPE_BACKだと音が再生されない
+		PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
+
 		m_isExist = false;
 		m_isDead = true;
 	}

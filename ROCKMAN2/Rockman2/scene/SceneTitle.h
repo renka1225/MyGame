@@ -58,6 +58,7 @@ private:
 	// 音
 	int m_bgm;			// BGM
 	int m_selectSE;		// 選択時のSE
+	int m_cursorSE;		// カーソル移動時のSE
 
 	struct Size
 	{

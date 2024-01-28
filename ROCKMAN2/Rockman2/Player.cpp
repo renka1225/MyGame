@@ -43,11 +43,11 @@ namespace
 	// メタルの最大エネルギー
 	constexpr float kMaxMetalShot = 5;
 	// 残機
-	constexpr int kLife = 1;
+	constexpr int kLife = 3;
 
 	// アイテムの回復量
 	constexpr float kSmallRecovery = 2;		// 小アイテム
-	constexpr float kGreatRecovery = 10;	// 大アイテム
+	constexpr float kGreatRecovery = 5;	// 大アイテム
 
 	// アイテム2号のサイズ
 	constexpr int kShotWidth = 32;
@@ -155,6 +155,9 @@ void Player::Update()
 
 		if (m_life > 0)
 		{
+			// 0.5秒間待機
+			WaitTimer(500);
+
 			// 残機が0以上だったら初期化する
 			Init();
 		}

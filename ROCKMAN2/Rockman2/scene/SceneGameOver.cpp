@@ -43,6 +43,7 @@ SceneGameOver::SceneGameOver():
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/gameover.mp3");
 	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
+	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
 SceneGameOver::~SceneGameOver()
@@ -53,6 +54,7 @@ SceneGameOver::~SceneGameOver()
 	DeleteGraph(m_selectHandle);
 	DeleteSoundMem(m_bgm);
 	DeleteSoundMem(m_selectSE);
+	DeleteSoundMem(m_cursorSE);
 }
 
 void SceneGameOver::Init()
@@ -75,6 +77,9 @@ void SceneGameOver::Update()
 	// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_select = (m_select + 1) % kSelectNum;
 		m_selectPos.y += kSelectmoveY; // 選択カーソルを下に移動
 
@@ -87,6 +92,9 @@ void SceneGameOver::Update()
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;
 		m_selectPos.y -= kSelectmoveY;	// 選択カーソルを上に移動
 
