@@ -161,6 +161,11 @@ void SceneManager::Update()
 			m_runScene = kSceneClear;
 			m_pClear->Init();
 		}
+		else if (m_pMain->IsSceneTitle())
+		{
+			m_runScene = kSceneTitle;
+			m_pTitle->Init();
+		}
 		break;
 
 		// ステージ2

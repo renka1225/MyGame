@@ -51,6 +51,7 @@ EnemyBird::~EnemyBird()
 
 void EnemyBird::Init()
 {
+	m_hp = kHp;
 	m_isDead = false;
 }
 
@@ -68,6 +69,13 @@ void EnemyBird::Update()
 	if (m_flyAnimFrame >= kAnimFrameCycle)
 	{
 		m_flyAnimFrame = 0;
+	}
+
+	// ダメージエフェクト
+	m_damageFrame--;
+	if (m_damageFrame < 0)
+	{
+		m_damageFrame = 0;
 	}
 }
 
@@ -108,7 +116,7 @@ void EnemyBird::Draw()
 		int effectSrcY = 0;
 		if (m_damageFrame > 0)
 		{
-			DrawRectRotaGraph(x + 10, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_damageEffect, true);
+			DrawRectRotaGraph(x , y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_damageEffect, true);
 		}
 	}
 
@@ -164,6 +172,9 @@ void EnemyBird::HitCollision(Rect chipRect)
 
 void EnemyBird::OnDamage()
 {
+	// 演出フレーム数を設定する
+	m_damageFrame = kDamageFrame;
+
 	// 弾が当たったらHPを減らす
 	m_hp--;
 

@@ -23,7 +23,7 @@ namespace
 	constexpr int kHp = 5;
 
 	// アニメーション
-	constexpr int kUseFrame[] = { 0, 1, 2, 3, 4, 5, 4, 3, 2, 1 };
+	constexpr int kUseFrame[] = { 0, 1, 2, 3, 4, 5 };
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimFrameNum = 10;
 	// アニメーション1サイクルのフレーム数
@@ -69,6 +69,13 @@ void EnemyBear::Update()
 	if (m_walkAnimFrame >= kAnimFrameCycle)
 	{
 		m_walkAnimFrame = 0;
+	}
+
+	// ダメージエフェクト
+	m_damageFrame--;
+	if (m_damageFrame < 0)
+	{
+		m_damageFrame = 0;
 	}
 }
 
@@ -154,8 +161,16 @@ void EnemyBear::HitCollision(Rect chipRect)
 
 void EnemyBear::OnDamage()
 {
-	// 弾が当たったらHPを減らす
+	// ダメージ演出中は再度食らわない
+	if (m_damageFrame > 0) return;
+	// 演出フレーム数を設定する
+	m_damageFrame = kDamageFrame;
+
+	// 現在のHPを減らす
 	m_hp--;
+
+	// SEを鳴らす
+	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
 
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)

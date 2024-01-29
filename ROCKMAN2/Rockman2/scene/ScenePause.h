@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec2.h"
 
+class FontManager;
 class Player;
 
 /// <summary>
@@ -14,25 +15,50 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	// ポーズ画面が表示されているか取得する
-	bool IsExist() const { return m_isExist; }
+	// 武器切り替えの更新
+	void UpdateChangeShot();
+	// ポーズ画面選択状態更新
+	void UpdatePause();
+
+	// 武器切り替え画面が表示されているか取得
+	bool IsSelectShotExist() const { return  m_isChangeMenuExist; }
+	// ポーズ画面が表示されているか取得
+	bool IsPause() const { return m_isPauseExist; }
+
+	// ポーズ画面の選択状態を取得する
+	bool IsSelectBack() const { return m_isBack; }
+	bool IsSelectRetry() const { return m_isRetry; }
+	bool IsSelectTitle() const { return m_isTitle; }
 
 private:
-	// 選択項目
-	enum Select
+	// 武器切り替え選択項目
+	enum SelectShot
 	{
 		kBuster,// バスター
 		kMetal, // メタル
 		kFire,	// ファイアー
 		kLine,	// 2号
 		kFullRecovery,	// E缶
+		kShotSelectNum // 項目数
+	};
+
+	// ポーズ画面選択項目
+	enum Pause
+	{
+		kBack,	// ゲームに戻る
+		kRetry,	// リトライ
+		kTitle,	// タイトルに戻る
 		kSelectNum // 項目数
 	};
 
-	// 現在の選択状態
-	int m_select;
+	// 現在の武器選択状態
+	int m_shotSelect;
+	// 現在のポーズ選択状態
+	int m_pauseSelect;
 
 private:
+	// フォント管理
+	FontManager* m_pFont;
 	// プレイヤーのポインタ
 	Player* m_pPlayer;
 
@@ -40,7 +66,14 @@ private:
 	Vec2 m_pos;
 	// 選択中の四角の表示位置
 	Vec2 m_selectPos;
-	// ポーズ画面が表示されているか true:表示されている
-	bool m_isExist;
+	// 武器切り替え画面が表示されているか true:表示されている
+	bool m_isChangeMenuExist;
+	// ポーズ画面が表示されているか
+	bool m_isPauseExist;
+
+	// ポーズ画面の選択状態
+	bool m_isBack;	// ゲームに戻る
+	bool m_isRetry;	// リトライ
+	bool m_isTitle;	// タイトルに戻る
 };
 

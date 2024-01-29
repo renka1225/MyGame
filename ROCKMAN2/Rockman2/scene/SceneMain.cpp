@@ -31,7 +31,7 @@ namespace
 	constexpr int kRecoveryMax = 5;
 
 	// 登場する敵数
-	constexpr int kEnemyMax = 8;
+	constexpr int kEnemyMax = 10;
 
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
@@ -51,14 +51,14 @@ namespace
 	// 弾数表示間隔
 	constexpr int kBarInterval = 8;
 	// 弾数表示サイズ
-	constexpr int kPauseShotNumWidth = 5;
+	constexpr int kPauseShotNumWidth = 18;
 	constexpr int kPauseShotNumHeightt = 20;
 	// 弾数表示間隔
 	constexpr int kIntervalY = 70;
 
 	/*ゲーム内*/
 	// 黒枠のサイズ
-	constexpr int kFrameSize = 250;
+	constexpr int kFrameSize = 270;
 	// 残機、敵数表示位置
 	constexpr int kInfoTextPosX = 30;	// 横
 	constexpr int kInfoTextPosY = 300;	// 縦
@@ -238,13 +238,29 @@ void SceneMain::Update()
 		WaitTimer(1000);
 	}
 
+	// パッドの入力状態を取得
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	// ポーズ画面の更新
 	m_pPause->Update();
 
 	// ポーズ画面が表示されている場合画面を止める
-	if (m_pPause->IsExist())
+	if (m_pPause->IsSelectShotExist())
+	{
+		// リトライが選択されたら初期化する
+		if (m_pPause->IsSelectRetry())
+		{
+			Init();
+		}
+		else if (m_pPause->IsSelectTitle())
+		{
+			m_isSceneTitle = true;
+		}
+		return;
+	}
+
+	// 武器切り替え画面が表示されている場合画面を止める
+	if (m_pPause->IsPause())
 	{
 		return;
 	}
@@ -260,8 +276,8 @@ void SceneMain::Update()
 	// プレイヤーの当たり判定
 	Rect playerRect = m_pPlayer->GetColRect();
 
-	// TODO:決まった位置にE缶を表示する
-	if (m_playerPos.x >= 100 && !m_isGetFullHpRecovery)
+	// E缶を表示
+	if (!m_isGetFullHpRecovery)
 	{
 		DropFullHpRecovery();
 	}
@@ -468,15 +484,21 @@ void SceneMain::Draw()
 
 	/*画面横に情報表示*/
 	DrawInfo();
-	
-	// ポーズ画面の表示
+
+	// ポーズ画面、武器切り替え画面の表示
 	m_pPause->Draw();
 
+	/*武器切り替え画面表示中*/
+	if (m_pPause->IsSelectShotExist())
+	{
+		DrawShotChange();
+	}
 	/*ポーズ画面表示中*/
-	if (m_pPause->IsExist())
+	if (m_pPause->IsPause())
 	{
 		DrawPause();
 	}
+
 }
 
 /*弾の生成*/
@@ -580,7 +602,7 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
-			m_pRecovery[i]->Start({ 500, 500 }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ 900, 500 }); // アイテムの位置を設定
 			m_pRecovery[i]->Init();
 			return;
 		}
@@ -645,8 +667,13 @@ void SceneMain::CreateEnemy()
 			m_pEnemy[i]->Init();
 			break;
 		case 8:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2000.0f, 50.0f);
+			m_pEnemy[i]->Init();
+			break;
+		case 9:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(2300.0f, 300.0f);
+			m_pEnemy[i]->Start(2300.0f, 650.0f);
 			m_pEnemy[i]->Init();
 			break;
 		default:
@@ -758,11 +785,11 @@ void SceneMain::DrawInfo()
 	}
 }
 
-/*ポーズ画面表示*/
-void SceneMain::DrawPause()
+/*武器切り替え画面表示*/
+void SceneMain::DrawShotChange()
 {
 	// 現在のHPを表示
-	DrawFormatString(kTextPosX, kTextPosY, 0xffffff, "P :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetFont(), "P :");
 	for (int i = 0; i < m_pPlayer->GetHp(); i++) // 現在のHP分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -774,7 +801,7 @@ void SceneMain::DrawPause()
 
 	// 現在の弾エネルギー数を表示
 	// メタル
-	DrawFormatString(kTextPosX, kTextPosY + kIntervalY, 0xffffff, "M :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "M :");
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -785,7 +812,7 @@ void SceneMain::DrawPause()
 	}
 
 	// ファイアー
-	DrawFormatString(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, "F :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "F :");
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -796,7 +823,7 @@ void SceneMain::DrawPause()
 	}
 
 	// アイテム2号
-	DrawFormatString(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, "L :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "L :");
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -807,5 +834,13 @@ void SceneMain::DrawPause()
 	}
 
 	// 現在のE缶数を表示
-	DrawFormatString(kTextPosX, kTextPosY + kIntervalY * 4, 0xffffff, "E : %d", m_pPlayer->GetFullHpRecovery());
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "E : %d", m_pPlayer->GetFullHpRecovery());
+}
+
+/*ポーズ画面表示*/
+void SceneMain::DrawPause()
+{
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "ゲームに戻る");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "リトライ");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "タイトルに戻る");
 }

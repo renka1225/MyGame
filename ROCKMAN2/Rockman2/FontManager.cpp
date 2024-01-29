@@ -16,7 +16,7 @@ FontManager::FontManager()
 		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
 	}
 
-	m_fontHandle = CreateFontToHandle("851ゴチカクット", 30, -1);
+	m_fontHandle = CreateFontToHandle("851ゴチカクット", 28, -1);
 }
 
 FontManager::~FontManager()

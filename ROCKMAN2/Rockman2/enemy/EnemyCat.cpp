@@ -14,7 +14,7 @@ namespace
 	constexpr int kEffectHeight = 32;
 
 	// Šg‘å—¦
-	constexpr float kEnlarge = 2.0f;
+	constexpr float kEnlarge = 2.5f;
 	constexpr float kEffectScale = 7.0f;
 
 	// ˆÚ“®‘¬“x
@@ -180,8 +180,8 @@ void EnemyCat::OnDamage()
 	if (m_hp <= 0)
 	{
 		// Á–ÅŽžSE‚ð–Â‚ç‚·
-		// MEMO:DX_PLAYTYPE_NORMAL‚¾‚Æˆêu‰æ–Ê‚ªŽ~‚Ü‚Á‚Ä‚µ‚Ü‚¤ADX_PLAYTYPE_BACK‚¾‚Æ‰¹‚ªÄ¶‚³‚ê‚È‚¢
-		PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
+		// MEMO:DX_PLAYTYPE_NORMAL‚¾‚Æˆêu‰æ–Ê‚ªŽ~‚Ü‚Á‚Ä‚µ‚Ü‚¤ADX_PLAYTYPE_BACK‚¾‚Æ‰¹‚ªˆêu‚µ‚©Ä¶‚³‚ê‚È‚¢
+		PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
 
 		m_isDead = true;
 		m_isExist = false;

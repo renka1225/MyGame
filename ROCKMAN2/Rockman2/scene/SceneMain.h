@@ -41,6 +41,7 @@ public:
 	// シーン移動の取得
 	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
+	bool IsSceneTitle() const { return m_isSceneTitle; }		//　タイトル画面
 
 private:
 	// スタート演出
@@ -53,6 +54,8 @@ private:
 	void DrawEx();
 	// 弾数、敵数等の表示
 	void DrawInfo();
+	// 武器切り替え画面表示
+	void DrawShotChange();
 	// ポーズ画面の表示
 	void DrawPause();
 
@@ -90,6 +93,7 @@ protected:
 	// シーン移動するか true:シーン移動する
 	bool m_isSceneGameOver;	// ゲームオーバー画面に移動
 	bool m_isSceneClear;	// クリア画面に移動
+	bool m_isSceneTitle;	// タイトル画面に移動
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
