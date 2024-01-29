@@ -20,7 +20,7 @@ namespace
 	// 移動速度
 	constexpr float kSpeedX = 4.0f;
 	// 最大HP
-	constexpr int kHp = 3;
+	constexpr int kHp = 1;
 
 	// 敵アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };
@@ -179,10 +179,6 @@ void EnemyCat::OnDamage()
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)
 	{
-		// 消滅時SEを鳴らす
-		// MEMO:DX_PLAYTYPE_NORMALだと一瞬画面が止まってしまう、DX_PLAYTYPE_BACKだと音が一瞬しか再生されない
-		PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
-
 		m_isDead = true;
 		m_isExist = false;
 	}

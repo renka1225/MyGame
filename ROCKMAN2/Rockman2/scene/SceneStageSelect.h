@@ -14,6 +14,8 @@ public:
 	void Update();
 	void Draw();
 	void End();
+	// 背景表示
+	void DrawBg();
 
 	// シーンを終了させるか
 	bool IsSceneStage1() const { return m_isSceneStage1; }
@@ -41,8 +43,14 @@ private:
 	bool m_isSceneStage2;
 	bool m_isSceneStage3;
 	bool m_isSceneTitle;
+
 	// 選択カーソルの表示位置
 	Vec2 m_selectPos;
+	// 背景の表示位置
+	Vec2 m_bgPos;
+	// 背景の移動量
+	float m_bgMove;
+
 	// フェードイン、アウト
 	int m_fadeAlpha;
 
@@ -51,10 +59,20 @@ private:
 	int m_charHandle;			// 文字
 	int m_selectCharHandle;		// ステージ選択の文字
 	int m_bgHandle;				// 背景
+	int m_bg2Handle;			// 背景
+	int m_bg3Handle;			// 背景
+	int m_bg4Handle;			// 背景
 
 	// 音
 	int m_bgm;					// BGM
 	int m_selectSE;				// 選択時のSE
 	int m_cursorSE;				// カーソル移動時のSE
+
+	// 画像サイズ
+	struct Size
+	{
+		int width;
+		int height;
+	};
 };
 

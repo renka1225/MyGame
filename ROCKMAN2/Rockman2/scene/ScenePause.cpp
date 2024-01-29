@@ -15,8 +15,10 @@ namespace
 	constexpr float kPosX = 830.0f;
 	constexpr float kPosY = 300.0f;
 
-	// 選択中カーソルのY座標の初期位置
-	constexpr float kInitSelectPosY = 394.0f;
+	// 武器選択中カーソルの初期位置
+	constexpr float kInitSelectShotPosY = 394.0f;
+	// ポーズ画面の選択中カーソルの初期位置
+	constexpr float kPauseInitSelectPosY = 464.0f;
 	// 選択カーソルの描画の間隔
 	constexpr float kSelectPosY = 70.0f;
 }
@@ -27,16 +29,24 @@ ScenePause::ScenePause(Player* pPlayer):
 	m_pPlayer(pPlayer),
 	m_isChangeMenuExist(false),
 	m_isPauseExist(false),
-	m_isBack(false),
 	m_isRetry(false),
 	m_isTitle(false)
 {
 	m_pFont = new FontManager;
+	
+	// 音読み込み
+	m_menuSE = LoadSoundMem("data/sound/SE/menu.mp3");
+	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
+	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
 ScenePause::~ScenePause()
 {
 	delete m_pFont;
+
+	DeleteSoundMem(m_menuSE);
+	DeleteSoundMem(m_selectSE);
+	DeleteSoundMem(m_cursorSE);
 }
 
 void ScenePause::Init()
@@ -44,8 +54,10 @@ void ScenePause::Init()
 	m_isChangeMenuExist = false;
 	m_shotSelect = SelectShot::kBuster;
 	m_pauseSelect = Pause::kBack;
-	m_selectPos.x = 0;
-	m_selectPos.y = kInitSelectPosY;
+	m_selectShotPos.x = 0;
+	m_selectShotPos.y = kInitSelectShotPosY;
+	m_selectPausePos.x = 0;
+	m_selectPausePos.y = kPauseInitSelectPosY;
 }
 
 void ScenePause::Update()
@@ -55,6 +67,9 @@ void ScenePause::Update()
 	/*Aキーを押したらメニューを表示、非表示*/
 	if (Pad::IsTrigger(pad & PAD_INPUT_4))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
+
 		if (!m_isChangeMenuExist)
 		{
 			m_isPauseExist = false;		// ポーズ画面非表示
@@ -69,6 +84,9 @@ void ScenePause::Update()
 	/*ESCキーを押したらポーズ表示*/
 	if (Pad::IsTrigger(pad & PAD_INPUT_9))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
+
 		if (!m_isPauseExist)
 		{
 			m_isPauseExist = true;			// ポーズ画面表示
@@ -109,7 +127,7 @@ void ScenePause::Draw()
 		DrawStringToHandle(kPosX ,350, "MENU", 0xffffff, m_pFont->GetFont());
 
 		// 選択中のカーソルを描画
-		DrawBox(kPosX + 5, m_selectPos.y, kPosX + 255, m_selectPos.y + 30, 0x00bfff, false);
+		DrawBox(kPosX + 5, m_selectShotPos.y, kPosX + 255, m_selectShotPos.y + 30, 0x00bfff, false);
 	}
 
 	// ポーズ画面表示
@@ -122,7 +140,7 @@ void ScenePause::Draw()
 		DrawStringToHandle(kPosX, 350, "PAUSE", 0xffffff,  m_pFont->GetFont());
 
 		// 選択中のカーソルを描画
-		DrawBox(kPosX + 5, m_selectPos.y, kPosX + 255, m_selectPos.y + 30, 0x00bfff, false);
+		DrawBox(kPosX + 5, m_selectPausePos.y, kPosX + 255, m_selectPausePos.y + 30, 0x00bfff, false);
 	}
 }
 
@@ -135,29 +153,32 @@ void ScenePause::UpdateChangeShot()
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
 		m_shotSelect = (m_shotSelect + 1) % SelectShot::kShotSelectNum;
-		m_selectPos.y += kSelectPosY; // 選択中の四角を下に移動
+		m_selectShotPos.y += kSelectPosY; // 選択中の四角を下に移動
 
 		// 選択中の四角が一番下にだったら四角を一番上に戻す
-		if (m_selectPos.y > kInitSelectPosY + kSelectPosY * 4)
+		if (m_selectShotPos.y > kInitSelectShotPosY + kSelectPosY * 4)
 		{
-			m_selectPos.y = kInitSelectPosY;
+			m_selectShotPos.y = kInitSelectShotPosY;
 		}
 	}
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
-		m_shotSelect = (m_shotSelect + (kSelectNum - 1)) % SelectShot::kShotSelectNum;
-		m_selectPos.y -= kSelectPosY;	// 選択中の四角を上に移動
+		m_shotSelect = (m_shotSelect + (SelectShot::kShotSelectNum - 1)) % SelectShot::kShotSelectNum;
+		m_selectShotPos.y -= kSelectPosY;	// 選択中カーソルを上に移動
 
-		if (m_selectPos.y < kInitSelectPosY)
+		if (m_selectShotPos.y < kInitSelectShotPosY)
 		{
-			m_selectPos.y = kInitSelectPosY + kSelectPosY * 4;
+			m_selectShotPos.y = kInitSelectShotPosY + kSelectPosY * (SelectShot::kShotSelectNum - 1);
 		}
 	}
 
 	// Xキーを押したら現在選択中の武器に変更する
 	if (Pad::IsTrigger(pad & PAD_INPUT_2))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
+
 		// 選択中の武器を取得
 		bool isBuster = false;
 		bool isMetal = false;
@@ -217,55 +238,52 @@ void ScenePause::UpdatePause()
 	// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
-		m_pauseSelect = (m_pauseSelect + 1) % Pause::kSelectNum;
-		m_selectPos.y += kSelectPosY; // 選択中の四角を下に移動
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
 
-		// 選択中の四角が一番下にだったら四角を一番上に戻す
-		if (m_selectPos.y > kInitSelectPosY + kSelectPosY * 2)
+		m_pauseSelect = (m_pauseSelect + 1) % Pause::kSelectNum;
+		m_selectPausePos.y += kSelectPosY; // 選択中カーソルを下に移動
+
+		// 選択中カーソルが一番下にだったらカーソルを一番上に戻す
+		if (m_selectPausePos.y > kPauseInitSelectPosY + kSelectPosY * (Pause::kSelectNum - 1))
 		{
-			m_selectPos.y = kInitSelectPosY;
+			m_selectPausePos.y = kPauseInitSelectPosY;
 		}
 	}
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
-		m_pauseSelect = (m_pauseSelect + (Pause::kSelectNum - 1)) % Pause::kSelectNum;
-		m_selectPos.y -= kSelectPosY;	// 選択中の四角を上に移動
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
 
-		if (m_selectPos.y < kInitSelectPosY)
+		m_pauseSelect = (m_pauseSelect + (Pause::kSelectNum - 1)) % Pause::kSelectNum;
+		m_selectPausePos.y -= kSelectPosY;	// 選択中カーソルを上に移動
+
+		if (m_selectPausePos.y < kPauseInitSelectPosY)
 		{
-			m_selectPos.y = kInitSelectPosY + kSelectPosY * 2;
+			m_selectPausePos.y = kPauseInitSelectPosY + kSelectPosY * (Pause::kSelectNum - 1);
 		}
 	}
 
 	// Xキーで決定
-	switch (m_pauseSelect)
+	if (Pad::IsTrigger(pad & PAD_INPUT_2))
 	{
-	case kBack:
-		if (Pad::IsTrigger(pad & PAD_INPUT_2))
-		{
-			m_isBack = true;
-		}
-		break;
-	case kRetry:
-		if (Pad::IsTrigger(pad & PAD_INPUT_2))
-		{
-			m_isRetry = true;
-		}
-		break;
-	case kTitle:
-		if (Pad::IsTrigger(pad & PAD_INPUT_2))
-		{
-			m_isTitle = true;
-		}
-		break;
-	default:
-		break;
-	}
+		// SEを鳴らす
+		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
 
-	// ポーズ画面を閉じる
-	if (m_isBack)
-	{
-		m_isPauseExist = false;
+		switch (m_pauseSelect)
+		{
+		case kBack:
+			m_isPauseExist = false;
+			break;
+		case kRetry:
+			m_isRetry = true;
+			break;
+		case kTitle:
+			m_isTitle = true;
+			break;
+		default:
+			break;
+		}
 	}
 }

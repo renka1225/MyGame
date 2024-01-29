@@ -78,13 +78,22 @@ Player::Player(SceneMain* pMain) :
 	m_pressTime(0),
 	m_nowPressTime(0)
 {
-	// プレイヤーのグラフィックロード
+	// プレイヤー画像読み込み
 	m_handle = LoadGraph("data/image/player.png");
+
+	// 音読み込み
+	m_shotSE = LoadSoundMem("data/sound/SE/shot.mp3");
+	m_jumpSE = LoadSoundMem("data/sound/SE/jump.mp3");;
+	m_damageSE = LoadSoundMem("data/sound/SE/playerDamage.mp3");;
+	m_deadSE = LoadSoundMem("data/sound/SE/playerDead.mp3");;
 }
 
 Player::~Player()
 {
 	DeleteGraph(m_handle);
+	DeleteSoundMem(m_shotSE);
+	DeleteSoundMem(m_damageSE);
+	DeleteSoundMem(m_deadSE);
 }
 
 /*初期化処理*/
@@ -109,7 +118,7 @@ void Player::Init()
 	m_isLineMove = false;
 
 	// 再プレイ時
-	if (m_life < 0 || m_pMain->IsSceneClear())
+	if (m_life < 0 || m_pMain->IsSceneClear() || m_pMain->IsSceneTitle())
 	{
 		// HP
 		m_hp = kMaxHp;
@@ -155,6 +164,9 @@ void Player::Update()
 
 		if (m_life > 0)
 		{
+			// 残機が経るごとにSEを鳴らす
+			PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
+
 			// 0.5秒間待機
 			WaitTimer(500);
 
@@ -182,6 +194,9 @@ void Player::Update()
 			m_isGround = false;
 			m_isJump = true;
 			m_move.y = kVelocity;
+
+			// ジャンプSEを鳴らす
+			PlaySoundMem(m_jumpSE, DX_PLAYTYPE_BACK, true);
 		}
 
 		/*マップチップとの当たり判定*/
@@ -239,7 +254,6 @@ void Player::Update()
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
 			ShotBuster* pShot = new ShotBuster;
-
 			// 新しい弾を生成する
 			pShot->Init();
 			pShot->SetMain(m_pMain);

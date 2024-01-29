@@ -131,7 +131,6 @@ void Bg::Draw()
 #endif
 		}
 	}
-
 }
 
 // â°ÉXÉNÉçÅ[Éã

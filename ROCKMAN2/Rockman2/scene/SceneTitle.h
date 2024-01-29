@@ -14,7 +14,7 @@ public:
 	void Update();
 	void Draw();
 	void End();
-	void BgDraw();
+	void DrawBg();
 
 	// シーン遷移のフラグ
 	bool IsSceneStart() const { return m_isSceneStart; }
@@ -60,6 +60,7 @@ private:
 	int m_selectSE;		// 選択時のSE
 	int m_cursorSE;		// カーソル移動時のSE
 
+	// 画像サイズ
 	struct Size
 	{
 		int width;

@@ -30,7 +30,7 @@ public:
 	bool IsCollision(Rect rect, Rect& chipRect);
 
 protected:
-	// シーンメインのポインタ
+	// プレイヤーのポインタ
 	Player* m_pPlayer;
 
 	// 背景のグラフィック

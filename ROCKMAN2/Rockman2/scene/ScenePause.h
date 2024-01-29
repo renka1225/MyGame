@@ -26,7 +26,6 @@ public:
 	bool IsPause() const { return m_isPauseExist; }
 
 	// ポーズ画面の選択状態を取得する
-	bool IsSelectBack() const { return m_isBack; }
 	bool IsSelectRetry() const { return m_isRetry; }
 	bool IsSelectTitle() const { return m_isTitle; }
 
@@ -64,16 +63,22 @@ private:
 
 	// ポーズ画面の表示位置
 	Vec2 m_pos;
-	// 選択中の四角の表示位置
-	Vec2 m_selectPos;
+	// 武器選択中カーソルの表示位置
+	Vec2 m_selectShotPos;
+	// ポーズ画面選択中のカーソル表示位置
+	Vec2 m_selectPausePos;
 	// 武器切り替え画面が表示されているか true:表示されている
 	bool m_isChangeMenuExist;
 	// ポーズ画面が表示されているか
 	bool m_isPauseExist;
 
 	// ポーズ画面の選択状態
-	bool m_isBack;	// ゲームに戻る
 	bool m_isRetry;	// リトライ
 	bool m_isTitle;	// タイトルに戻る
+
+	// 音
+	int m_menuSE;		// メニュー画面を開いた際のSE
+	int m_selectSE;		// 選択時のSE
+	int m_cursorSE;		// カーソル移動時のSE
 };
 

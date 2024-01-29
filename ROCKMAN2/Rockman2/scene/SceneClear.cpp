@@ -122,6 +122,7 @@ void SceneClear::Update()
 		case kTitle:
 			m_isSceneTitle = true;
 			StopSoundMem(m_bgm);
+			break;
 		default:
 			break;
 		}

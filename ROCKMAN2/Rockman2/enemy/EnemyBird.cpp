@@ -181,10 +181,6 @@ void EnemyBird::OnDamage()
 	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç‘¶İ‚ğÁ‚·
 	if (m_hp <= 0)
 	{
-		// Á–ÅSE‚ğ–Â‚ç‚·
-		// MEMO:DX_PLAYTYPE_NORMAL‚¾‚Æˆêu‰æ–Ê‚ª~‚Ü‚Á‚Ä‚µ‚Ü‚¤ADX_PLAYTYPE_BACK‚¾‚Æ‰¹‚ªÄ¶‚³‚ê‚È‚¢
-		PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
-
 		m_isExist = false;
 		m_isDead = true;
 	}

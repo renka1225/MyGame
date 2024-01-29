@@ -18,15 +18,12 @@ EnemyBase::EnemyBase():
 	m_hp(0),
 	m_dir(kDirLeft),
 	m_damageSE(-1),
-	m_deadSE(-1),
 	m_damageEffect(-1),
 	m_damageFrame(0)
 {
 	// ‰¹‚Ì“Ç‚İ‚İ
 	m_damageSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	assert(m_damageSE != -1);
-	m_deadSE = LoadSoundMem("data/sound/SE/enemyDead.mp3");
-	assert(m_deadSE != -1);
 	// ‰æ‘œ‚Ì“Ç‚İ‚İ
 	m_damageEffect = LoadGraph("data/image/Effect/enemyDead.png");
 	assert(m_damageEffect != -1);
@@ -35,7 +32,6 @@ EnemyBase::EnemyBase():
 EnemyBase::~EnemyBase()
 {
 	DeleteSoundMem(m_damageSE);
-	DeleteSoundMem(m_deadSE);
 	DeleteGraph(m_damageEffect);
 }
 

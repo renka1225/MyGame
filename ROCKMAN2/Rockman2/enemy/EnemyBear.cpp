@@ -89,6 +89,10 @@ void EnemyBear::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
+	// ダメージ演出
+	// 10フレーム間隔で表示非表示を切り替える
+	if (m_damageFrame % 10 >= 7) return;
+
 	// 熊表示
 	// 画像の切り出し座標
 	int animFrame = m_walkAnimFrame / kAnimFrameNum;
@@ -169,16 +173,9 @@ void EnemyBear::OnDamage()
 	// 現在のHPを減らす
 	m_hp--;
 
-	// SEを鳴らす
-	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
-
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)
 	{
-		// 消滅時SEを鳴らす
-		// MEMO:DX_PLAYTYPE_NORMALだと一瞬画面が止まってしまう、DX_PLAYTYPE_BACKだと音が再生されない
-		PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
-
 		m_isExist = false;
 		m_isDead = true;
 	}

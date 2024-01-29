@@ -52,7 +52,7 @@ namespace
 	constexpr int kBarInterval = 8;
 	// 弾数表示サイズ
 	constexpr int kPauseShotNumWidth = 18;
-	constexpr int kPauseShotNumHeightt = 20;
+	constexpr int kPauseShotNumHeight = 20;
 	// 弾数表示間隔
 	constexpr int kIntervalY = 70;
 
@@ -116,8 +116,10 @@ SceneMain::SceneMain():
 		m_pRecovery[i] = nullptr; // 未使用状態にする
 	}
 
-	// BGM読み込み
+	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
+	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
+
 	// 操作説明の画像
 	m_exHandle = LoadGraph("data/image/UI/ex.png");
 }
@@ -170,6 +172,7 @@ SceneMain::~SceneMain()
 	}
 
 	DeleteSoundMem(m_bgm);
+	DeleteSoundMem(m_enemyDeadSE);
 	DeleteGraph(m_exHandle);
 }
 
@@ -178,6 +181,7 @@ void SceneMain::Init()
 	// 画面遷移の初期化
 	m_isSceneGameOver = false;
 	m_isSceneClear = false;
+	m_isSceneTitle = false;
 	m_isExistLineMove = false;
 
 	m_enemyTotalNum = kEnemyMax;
@@ -244,8 +248,14 @@ void SceneMain::Update()
 	// ポーズ画面の更新
 	m_pPause->Update();
 
-	// ポーズ画面が表示されている場合画面を止める
+	// 武器切り替え画面が表示されている場合画面を止める
 	if (m_pPause->IsSelectShotExist())
+	{
+		return;
+	}
+
+	// ポーズ画面が表示されている場合画面を止める
+	if (m_pPause->IsPause())
 	{
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
@@ -254,14 +264,11 @@ void SceneMain::Update()
 		}
 		else if (m_pPause->IsSelectTitle())
 		{
+			// タイトル画面に遷移
 			m_isSceneTitle = true;
+			WaitTimer(500);
+			StopSoundMem(m_bgm);
 		}
-		return;
-	}
-
-	// 武器切り替え画面が表示されている場合画面を止める
-	if (m_pPause->IsPause())
-	{
 		return;
 	}
 
@@ -330,6 +337,9 @@ void SceneMain::Update()
 		// 使用済みの敵キャラクターを削除
 		if (!m_pEnemy[i]->IsExist())
 		{
+			// 消滅時SEを鳴らす
+			PlaySoundMem(m_enemyDeadSE, DX_PLAYTYPE_BACK, true);
+
 			// 敵の合計数を減らす
 			m_enemyTotalNum--;
 
@@ -725,13 +735,13 @@ void SceneMain::DrawEx()
 /*弾数、敵数表示*/
 void SceneMain::DrawInfo()
 {
-	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x000000, true); // 左側
-	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true); // 右側
+	// 画面横に四角を表示
+	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
+	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
 
 	/*残機、E缶数、残り敵数を左側に表示*/
 	// E缶数表示
 	DrawFormatStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, 0xffffff, m_pFont->GetFont(), "E : %d", m_pPlayer->GetFullHpRecovery());
-
 	// 残機数表示
 	DrawFormatStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2, 0xffffff, m_pFont->GetFont(), "残機数:%d", m_pPlayer->GetLife());
 	// 敵数表示
@@ -739,7 +749,18 @@ void SceneMain::DrawInfo()
 
 	/*HP、武器の弾数を右側に表示*/
 	// TODO:選択中の武器が分かるようにする
+	
+
 	// HP
+	if (m_pPlayer->IsBuster())
+	{
+		// 武器選択中の表示
+		DrawBox(Game::kScreenWidth - kFrameSize,
+			kShotNumDisPosY - 10,
+			Game::kScreenWidth,
+			kShotNumDisPosY + 30,
+			0xffd700, false);
+	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :" ,0xffffff, m_pFont->GetFont());
 	// 現在のHP分だけ四角を描画する
 	for (int i = 0; i < m_pPlayer->GetHp(); i++)
@@ -747,40 +768,67 @@ void SceneMain::DrawInfo()
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
 			kShotNumDisPosY,
 			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
-			kShotNumDisPosY + kPauseShotNumHeightt,
+			kShotNumDisPosY + kPauseShotNumHeight,
 			0xeee8aa, true);
 	}
 
 	// メタル
+	if (m_pPlayer->IsMetal())
+	{
+		// 武器選択中の表示
+		DrawBox(Game::kScreenWidth - kFrameSize,
+			kShotNumDisPosY - 10 + kShotNumIntervalY,
+			Game::kScreenWidth,
+			kShotNumDisPosY + 30 + kShotNumIntervalY,
+			0xffd700, false);
+	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont());
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
 			kShotNumDisPosY + kShotNumIntervalY,
 			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
-			kShotNumDisPosY + kShotNumIntervalY + kPauseShotNumHeightt,
+			kShotNumDisPosY + kShotNumIntervalY + kPauseShotNumHeight,
 			0xc0c0c0, true);
 	}
 
 	// ファイア
+	if (m_pPlayer->IsFire())
+	{
+		// 武器選択中の表示
+		DrawBox(Game::kScreenWidth - kFrameSize,
+			kShotNumDisPosY - 10 + kShotNumIntervalY * 2,
+			Game::kScreenWidth,
+			kShotNumDisPosY + 30 + kShotNumIntervalY * 2,
+			0xffd700, false);
+	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40,  "F :", 0xffffff, m_pFont->GetFont());
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
 			kShotNumDisPosY + kShotNumIntervalY * 2,
 			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
-			kShotNumDisPosY + kShotNumIntervalY * 2 + kPauseShotNumHeightt,
+			kShotNumDisPosY + kShotNumIntervalY * 2 + kPauseShotNumHeight,
 			0xff4500, true);
 	}
 
 	// 2号
+	if (m_pPlayer->IsLineMove())
+	{
+		// 武器選択中の表示
+		DrawBox(Game::kScreenWidth - kFrameSize,
+			kShotNumDisPosY - 10 + kShotNumIntervalY * 3,
+			Game::kScreenWidth,
+			kShotNumDisPosY + 30 +  kShotNumIntervalY * 3,
+			0xffd700, false);
+	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont());
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
 			kShotNumDisPosY + kShotNumIntervalY * 3,
 			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
-			kShotNumDisPosY + kShotNumIntervalY * 3 + kPauseShotNumHeightt,
+			kShotNumDisPosY + kShotNumIntervalY * 3 + kPauseShotNumHeight,
 			0xb22222, true);
 	}
 }
@@ -795,7 +843,7 @@ void SceneMain::DrawShotChange()
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY,
 			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
-			kBarPosY + kPauseShotNumHeightt,
+			kBarPosY + kPauseShotNumHeight,
 			0xeee8aa, true);
 	}
 
@@ -807,7 +855,7 @@ void SceneMain::DrawShotChange()
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY + kIntervalY,
 			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
-			kBarPosY + kIntervalY + kPauseShotNumHeightt,
+			kBarPosY + kIntervalY + kPauseShotNumHeight,
 			0xc0c0c0, true);
 	}
 
@@ -818,7 +866,7 @@ void SceneMain::DrawShotChange()
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY + kIntervalY * 2,
 			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
-			kBarPosY + kIntervalY * 2 + kPauseShotNumHeightt,
+			kBarPosY + kIntervalY * 2 + kPauseShotNumHeight,
 			0xff4500, true);
 	}
 
@@ -829,7 +877,7 @@ void SceneMain::DrawShotChange()
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY + kIntervalY * 3,
 			(kBarPosX + kBarInterval * i) + kPauseShotNumWidth,
-			kBarPosY + kIntervalY * 3 + kPauseShotNumHeightt,
+			kBarPosY + kIntervalY * 3 + kPauseShotNumHeight,
 			0xb22222, true);
 	}
 
@@ -840,7 +888,7 @@ void SceneMain::DrawShotChange()
 /*ポーズ画面表示*/
 void SceneMain::DrawPause()
 {
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "ゲームに戻る");
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "リトライ");
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "タイトルに戻る");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "ゲームに戻る");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "リトライ");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "タイトルに戻る");
 }

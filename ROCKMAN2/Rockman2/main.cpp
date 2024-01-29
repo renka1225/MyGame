@@ -39,12 +39,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 画面が切り替わるのを待つ
 		ScreenFlip();
 
-		// escキーでゲーム終了
-		/*if (CheckHitKey(KEY_INPUT_ESCAPE))
-		{
-			break;
-		}*/
-
 		// FPS60に固定する
 		while (GetNowHiPerformanceCount() - start < 16667)
 		{

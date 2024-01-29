@@ -9,9 +9,6 @@ namespace
 	constexpr int kCharPosX = 960;
 	constexpr int kCharPosY = 700;
 
-	// ”wŒiŠg‘å—¦
-	constexpr float kBgScale = 2.0f;
-
 	// ‘I‘ğƒJ[ƒ\ƒ‹‚Ì‰ŠúˆÊ’u
 	constexpr int kInitSelectPosX = 960;
 	constexpr int kInitSelectPosY = 580;
@@ -21,6 +18,8 @@ namespace
 	constexpr int kSelectSizeX = 450;
 	constexpr int kSelectSizeY = 700;
 
+	// ”wŒiŠg‘å—¦
+	constexpr float kBgScale = 2.0f;
 	// ”wŒi‰æ‘œ‚ÌˆÚ“®—Ê
 	constexpr int kBgMove = -3;
 }
@@ -161,7 +160,7 @@ void SceneTitle::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // •s“§–¾‚É–ß‚·
 
 	// ”wŒi•\¦
-	BgDraw();
+	DrawBg();
 	
 	// ƒƒS•\¦
 	DrawRotaGraph(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.25f, 1.0f, 0.0f, m_logoHandle, true);
@@ -176,7 +175,7 @@ void SceneTitle::End()
 }
 
 // ”wŒi•`‰æ
-void SceneTitle::BgDraw()
+void SceneTitle::DrawBg()
 {
 	// ‰æ‘œƒTƒCƒY‚ğæ“¾
 	Size bg2Size;

@@ -69,7 +69,7 @@ public:
 
 public:
 	// 武器が選択中か取得する
-	bool IstBuster() const { return m_isBuster; }	// バスター
+	bool IsBuster() const { return m_isBuster; }	// バスター
 	bool IsMetal() const { return m_isMetal; }		// メタル
 	bool IsFire() const { return m_isFire; }		// ファイア
 	bool IsLineMove() const { return m_isLineMove; }// 2号
@@ -126,5 +126,11 @@ private:
 	int m_pressTime;
 	// ボタンを押して離すまでの時間
 	int m_nowPressTime;
+
+	// 音
+	int m_shotSE;	// ショット時のSE
+	int m_jumpSE;	// ジャンプ時のSE
+	int m_damageSE;	// ダメージ時のSE
+	int m_deadSE;	// 死亡時のSE
 };
 

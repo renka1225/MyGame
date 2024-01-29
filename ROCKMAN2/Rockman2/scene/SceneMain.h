@@ -102,7 +102,8 @@ protected:
 	float m_startDisplayX; // •\¦ˆÊ’u
 
 	// ‰¹
-	int m_bgm;		// BGM
+	int m_bgm;			// BGM
+	int m_enemyDeadSE;	// “G€–S‚ÌSE
 
 	// ‘€ìà–¾‚Ì•\¦
 	int m_exHandle;
