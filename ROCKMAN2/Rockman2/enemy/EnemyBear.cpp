@@ -6,7 +6,7 @@
 namespace
 {
 	// 敵のサイズ
-	constexpr int kWidth = 32;
+	constexpr int kWidth = 28;
 	constexpr int kHeight = 14;
 
 	// エフェクトのサイズ
@@ -25,7 +25,7 @@ namespace
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3, 4, 5 };
 	// アニメーション1コマのフレーム数
-	constexpr int kAnimFrameNum = 10;
+	constexpr int kAnimFrameNum = 12;
 	// アニメーション1サイクルのフレーム数
 	constexpr int kAnimFrameCycle = _countof(kUseFrame) * kAnimFrameNum;
 
@@ -49,9 +49,10 @@ EnemyBear::~EnemyBear()
 	DeleteGraph(m_handle);
 }
 
-void EnemyBear::Init(Bg* pBg)
+void EnemyBear::Init(Bg* pBg, Player* pPlayer)
 {
 	m_pBg = pBg;
+	m_pPlayer = pPlayer;
 	m_hp = kHp;
 	m_isDead = false;
 }

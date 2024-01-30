@@ -41,17 +41,17 @@ namespace
 
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
-	constexpr int kTextPosX = 840;
-	constexpr int kTextPosY = 400;
+	constexpr int kTextPosX = 850;
+	constexpr int kTextPosY = 420;
 	// 弾数表示位置
-	constexpr int kBarPosX = 840;
-	constexpr int kBarPosY = 430;
+	constexpr int kBarPosX = 850;
+	constexpr int kBarPosY = 450;
 	// 弾数表示間隔
-	constexpr int kBarInterval = 10;
+	constexpr int kBarInterval = 23;
 	// 弾数表示サイズ
 	constexpr int kPauseShotNumWidth = 18;
 	constexpr int kPauseShotNumHeight = 20;
-	// 弾数表示間隔
+	// 弾数Y座標表示間隔
 	constexpr int kIntervalY = 70;
 
 	/*ゲーム内*/
@@ -212,8 +212,7 @@ void SceneMain::Init()
 	m_isGetFullHpRecovery = false;
 
 	// BGMを鳴らす
-	// TODO: BGM変更予定
-	//PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
 void SceneMain::End()
@@ -451,15 +450,6 @@ void SceneMain::Draw()
 	ClearDrawScreen();
 
 	// TODO:スタート時の描画
-	//// 四角を描画
-	//DrawBox(m_startDisplayX, Game::kScreenHeight * 0.5 - 10, 
-	//	m_startDisplayX + 400, Game::kScreenHeight * 0.5 + 10,
-	//	0xffffff, true);
-
-	//// 文字描画
-	//DrawFormatString(
-	//	m_startDisplayX, Game::kScreenHeight * 0.5 - 10,
-	//	0x000000, "敵を%d体倒せ！", m_enemyTotalNum);
 
 	// 背景の描画
 	m_pBg->Draw();
@@ -641,52 +631,52 @@ void SceneMain::CreateEnemy()
 		case 0:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(300.0f, 600.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(500.0f, 650.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(1000.0f, 700.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 3:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(400.0f, 600.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 4:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(2000.0f, 600.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 5:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(800.0f, 200.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 6:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(1500.0f, 400.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(2400.0f, 100.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 8:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(2000.0f, 50.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 9:
 			m_pEnemy[i] = new EnemyBear;
 			m_pEnemy[i]->Start(2600.0f, 650.0f);
-			m_pEnemy[i]->Init(m_pBg);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:
 			break;
@@ -743,11 +733,14 @@ void SceneMain::DrawInfo()
 	
 	/*残機、E缶数、残り敵数を左側に表示*/
 	// E缶数表示
-	DrawFormatStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, 0xffffff, m_pFont->GetFont(), "E : %d", m_pPlayer->GetFullHpRecovery());
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "         E :", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY - 5, 0xffffff, m_pFont->GetFont3(), " %d", m_pPlayer->GetFullHpRecovery());
 	// 残機数表示
-	DrawFormatStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2, 0xffffff, m_pFont->GetFont(), "残機数:%d", m_pPlayer->GetLife());
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2, "残機数 :", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY * 2 - 5, 0xffffff, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
 	// 敵数表示
-	DrawFormatStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3, 0xffffff, m_pFont->GetFont(), "残敵数:%d / %d", m_enemyTotalNum, kEnemyMax);
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3, "残敵数 :", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY * 3 - 5, 0xffffff, m_pFont->GetFont3(), " %d / %d", m_enemyTotalNum, kEnemyMax);
 
 	/*HP、武器の弾数を右側に表示*/
 	// TODO:選択中の武器が分かるようにする
@@ -761,7 +754,7 @@ void SceneMain::DrawInfo()
 			kShotNumDisPosY + 30,
 			0xffd700, false);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :" ,0xffffff, m_pFont->GetFont());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :" ,0xffffff, m_pFont->GetFont2());
 	// 現在のHP分だけ四角を描画する
 	for (int i = 0; i < m_pPlayer->GetHp(); i++)
 	{
@@ -782,7 +775,7 @@ void SceneMain::DrawInfo()
 			kShotNumDisPosY + 30 + kShotNumIntervalY,
 			0xffd700, false);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2());
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -802,7 +795,7 @@ void SceneMain::DrawInfo()
 			kShotNumDisPosY + 30 + kShotNumIntervalY * 2,
 			0xffd700, false);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40,  "F :", 0xffffff, m_pFont->GetFont());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40,  "F :", 0xffffff, m_pFont->GetFont2());
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -822,7 +815,7 @@ void SceneMain::DrawInfo()
 			kShotNumDisPosY + 30 +  kShotNumIntervalY * 3,
 			0xffd700, false);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2());
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,

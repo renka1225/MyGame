@@ -61,8 +61,10 @@ private:
 	// プレイヤーのポインタ
 	Player* m_pPlayer;
 
+	// メニュー画面の高さ
+	int m_menuHeight;
 	// ポーズ画面の表示位置
-	Vec2 m_pos;
+	Vec2 m_menuPos;
 	// 武器選択中カーソルの表示位置
 	Vec2 m_selectShotPos;
 	// ポーズ画面選択中のカーソル表示位置

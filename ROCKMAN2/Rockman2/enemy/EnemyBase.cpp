@@ -4,6 +4,7 @@
 #include "ShotBase.h"
 #include "SceneMain.h"
 #include "Bg.h"
+#include "Player.h"
 #include "DxLib.h"
 #include "Game.h"
 #include <cassert>
@@ -12,6 +13,7 @@ EnemyBase::EnemyBase():
 	m_pMain(nullptr),
 	m_pBg(nullptr),
 	m_pRecovery(nullptr),
+	m_pPlayer(nullptr),
 	m_handle(-1),
 	m_isExist(false),
 	m_isDead(false),
@@ -35,9 +37,10 @@ EnemyBase::~EnemyBase()
 	DeleteGraph(m_damageEffect);
 }
 
-void EnemyBase::Init(Bg* pBg)
+void EnemyBase::Init(Bg* pBg, Player* pPlayer)
 {
 	m_pBg = pBg;
+	m_pPlayer = pPlayer;
 	m_isDead = false;
 }
 

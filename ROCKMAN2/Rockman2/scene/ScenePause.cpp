@@ -15,8 +15,11 @@ namespace
 	constexpr float kPosX = Game::kScreenWidth * 0.5f - 400;
 	constexpr float kPosY = 230.0f;
 
+	// メニュー画面の表示移動量
+	constexpr int kMenuMove = 25.0f;
+
 	// 武器選択中カーソルの初期位置
-	constexpr float kInitSelectShotPosY = 425.0f;
+	constexpr float kInitSelectShotPosY = 445.0f;
 	// ポーズ画面の選択中カーソルの初期位置
 	constexpr float kPauseInitSelectPosY = 464.0f;
 
@@ -25,7 +28,8 @@ namespace
 	// 選択カーソルのサイズ
 	constexpr float kCursorSizeX = 255;
 	constexpr float kCursorSizeY = 30;
-	// 選択カーソルの描画の間隔
+
+	// 選択カーソルの移動感覚
 	constexpr float kSelectPosY = 70.0f;
 }
 
@@ -33,6 +37,7 @@ ScenePause::ScenePause(Player* pPlayer):
 	m_shotSelect(SelectShot::kBuster),
 	m_pauseSelect(Pause::kBack),
 	m_pPlayer(pPlayer),
+	m_menuHeight(0),
 	m_isChangeMenuExist(false),
 	m_isPauseExist(false),
 	m_isRetry(false),
@@ -42,7 +47,7 @@ ScenePause::ScenePause(Player* pPlayer):
 
 	// 画像読み込み
 	m_menuBg = LoadGraph("data/image/UI/menuBg.png");
-	
+
 	// 音読み込み
 	m_menuSE = LoadSoundMem("data/sound/SE/menu.mp3");
 	m_selectSE = LoadSoundMem("data/sound/SE/select.wav");
@@ -66,21 +71,22 @@ void ScenePause::Init()
 	m_isTitle = false;
 	m_shotSelect = SelectShot::kBuster;
 	m_pauseSelect = Pause::kBack;
-	m_selectShotPos.x = 0;
-	m_selectShotPos.y = kInitSelectShotPosY;
-	m_selectPausePos.x = 0;
-	m_selectPausePos.y = kPauseInitSelectPosY;
+	m_menuHeight = 0;
+	m_menuPos = { kPosX, Game::kScreenHeight * 0.5f};
+	m_selectShotPos = { kCursorX, kInitSelectShotPosY };
+	m_selectPausePos = { kCursorX, kPauseInitSelectPosY };
 }
 
 void ScenePause::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	/*Aキーを押したらメニューを表示、非表示*/
+	/*Aキーを押したら武器切り替え画面を表示、非表示*/
 	if (Pad::IsTrigger(pad & PAD_INPUT_4))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
+		m_menuHeight = 0;
 
 		if (!m_isChangeMenuExist)
 		{
@@ -90,6 +96,13 @@ void ScenePause::Update()
 		else
 		{
 			m_isChangeMenuExist = false;
+
+			// メニュー非表示演出
+			m_menuHeight -= kMenuMove;
+			if (m_menuHeight < 0)
+			{
+				m_menuHeight = 0;
+			}
 		}
 	}
 
@@ -98,7 +111,9 @@ void ScenePause::Update()
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
+		m_menuHeight = 0;
 
+		// 画面表示非表示切り替え
 		if (!m_isPauseExist)
 		{
 			m_isPauseExist = true;			// ポーズ画面表示
@@ -107,12 +122,26 @@ void ScenePause::Update()
 		else
 		{
 			m_isPauseExist = false;
+
+			// メニュー非表示演出
+			m_menuHeight -= kMenuMove;
+			if (m_menuHeight < 0)
+			{
+				m_menuHeight = 0;
+			}
 		}
 	}
 
 	// 武器切り替え表示中
 	if (m_isChangeMenuExist)
 	{
+		// メニュー表示演出
+		m_menuHeight += kMenuMove;
+		if (m_menuHeight > kHeight * 0.5)
+		{
+			m_menuHeight = kHeight * 0.5;
+		}
+
 		UpdateChangeShot();
 		return;
 	}
@@ -120,6 +149,13 @@ void ScenePause::Update()
 	// ポーズ表示中
 	else if (m_isPauseExist)
 	{
+		// メニュー表示演出
+		m_menuHeight += kMenuMove;
+		if (m_menuHeight > kHeight * 0.5)
+		{
+			m_menuHeight = kHeight * 0.5;
+		}
+
 		UpdatePause();
 		return;
 	}
@@ -130,27 +166,23 @@ void ScenePause::Draw()
 	// 武器切り替え画面表示
 	if (m_isChangeMenuExist)
 	{
-		// TODO:フェードインアウト実装
-		
-		DrawGraph(kPosX, kPosY, m_menuBg, true);
-
-		DrawStringToHandle(kPosX + 180 , kPosY + 80, "MENU", 0xffffff, m_pFont->GetFont());
-
+		// メニュー画面表示演出
+		DrawExtendGraph(m_menuPos.x, m_menuPos.y - m_menuHeight, m_menuPos.x + kWidth, m_menuPos.y + m_menuHeight, m_menuBg, true);
+		// MENUの文字表示
+		DrawStringToHandle(m_menuPos.x + 200 , m_menuPos.y - 150, "MENU", 0xffffff, m_pFont->GetFont2());
 		// 選択中のカーソルを描画
-		DrawBox(kCursorX, m_selectShotPos.y, kCursorX + kCursorSizeX, m_selectShotPos.y + kCursorSizeY, 0xffd700, false);
+		DrawBox(m_selectShotPos.x, m_selectShotPos.y, m_selectShotPos.x + kCursorSizeX, m_selectShotPos.y + kCursorSizeY, 0xffd700, false);
 	}
 
 	// ポーズ画面表示
 	if (m_isPauseExist)
 	{
-		// TODO:フェードインアウト実装
-
-		DrawGraph(kPosX, kPosY, m_menuBg, true);
-
-		DrawStringToHandle(kPosX + 180, kPosY + 80, "PAUSE", 0xffffff,  m_pFont->GetFont());
-
+		// メニュー画面表示演出
+		DrawExtendGraph(m_menuPos.x, m_menuPos.y - m_menuHeight, m_menuPos.x + kWidth, m_menuPos.y + m_menuHeight, m_menuBg, true);
+		// PAUSEの文字表示
+		DrawStringToHandle(m_menuPos.x + 200, m_menuPos.y - 150, "PAUSE", 0xffffff, m_pFont->GetFont2());
 		// 選択中のカーソルを描画
-		DrawBox(kCursorX, m_selectPausePos.y, kCursorX + kCursorSizeX, m_selectPausePos.y + kCursorSizeY, 0xffd700, false);
+		DrawBox(m_selectPausePos.x, m_selectPausePos.y, m_selectPausePos.x + kCursorSizeX, m_selectPausePos.y + kCursorSizeY, 0xffd700, false);
 	}
 }
 

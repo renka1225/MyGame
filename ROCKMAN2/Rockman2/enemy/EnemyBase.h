@@ -6,6 +6,7 @@
 class RecoveryBase;
 class ShotBase;
 class Bg;
+class Player;
 class SceneMain;
 
 /// <summary>
@@ -17,7 +18,7 @@ public:
 	EnemyBase();
 	virtual ~EnemyBase();
 
-	virtual void Init(Bg* pBg);
+	virtual void Init(Bg* pBg, Player* pPlayer);
 	virtual void Update();
 	virtual void Draw();
 
@@ -48,6 +49,8 @@ protected:
 	SceneMain* m_pMain;
 	// 背景クラスのポインタ
 	Bg* m_pBg;
+	// プレイヤーのポインタ
+	Player* m_pPlayer;
 	// 回復アイテムのポインタ
 	RecoveryBase* m_pRecovery;
 	// ショットのポインタ

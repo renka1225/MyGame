@@ -49,9 +49,10 @@ EnemyCat::~EnemyCat()
 	DeleteGraph(m_handle);
 }
 
-void EnemyCat::Init(Bg* pBg)
+void EnemyCat::Init(Bg* pBg, Player* pPlayer)
 {
 	m_pBg = pBg;
+	m_pPlayer = pPlayer;
 	m_hp = kHp;
 	m_isDead = false;
 }

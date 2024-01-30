@@ -19,9 +19,13 @@ FontManager::FontManager()
 
 	//m_fontHandle = CreateFontToHandle("851ゴチカクット", 28, -1);
 	m_fontHandle = CreateFontToHandle("廻想体 ネクスト UP B", 28, -1);
+	m_fontHandle2 = CreateFontToHandle("廻想体 ネクスト UP B", 36, -1);
+	m_fontHandle3 = CreateFontToHandle("廻想体 ネクスト UP B", 45, -1);
 }
 
 FontManager::~FontManager()
 {
 	DeleteFontToHandle(m_fontHandle);
+	DeleteFontToHandle(m_fontHandle2);
+	DeleteFontToHandle(m_fontHandle3);
 }

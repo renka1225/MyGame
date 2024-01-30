@@ -10,7 +10,7 @@ public:
 	EnemyBird();
 	virtual ~EnemyBird();
 
-	virtual void Init(Bg* pBg) override;
+	virtual void Init(Bg* pBg, Player* pPlayer) override;
 	virtual void Update() override;
 	virtual void Draw() override;
 	virtual void Start(float posX, float posY) override;
@@ -20,5 +20,8 @@ public:
 private:
 	// 歩きアニメーション
 	int m_flyAnimFrame;
+
+	// sinでの移動
+	float m_sinCount;
 };
 

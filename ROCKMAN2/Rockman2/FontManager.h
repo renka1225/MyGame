@@ -11,8 +11,12 @@ public:
 
 	// ƒtƒHƒ“ƒg‚ğæ“¾
 	int GetFont() const { return m_fontHandle; }
+	int GetFont2() const { return m_fontHandle2; }
+	int GetFont3() const { return m_fontHandle3; }
 
 private:
 	int m_fontHandle;
+	int m_fontHandle2;
+	int m_fontHandle3;
 };
 

@@ -1,7 +1,9 @@
 #include "EnemyBird.h"
 #include "Bg.h"
+#include "Player.h"
 #include "Game.h"
 #include "DxLib.h"
+#include <cmath>
 
 namespace
 {
@@ -14,11 +16,14 @@ namespace
 	constexpr int kEffectHeight = 32;
 
 	// 拡大率
-	constexpr float kEnlarge = 3.0f;
+	constexpr float kEnlarge = 3.4f;
 	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度
 	constexpr float kSpeed = 3.0f;
+	constexpr float kSinSpeed = 3.0f;
+	constexpr float kAnimationSize = 0.7f;
+
 	// 最大HP
 	constexpr int kHp = 1;
 
@@ -39,7 +44,8 @@ namespace
 
 
 EnemyBird::EnemyBird():
-	m_flyAnimFrame(0)
+	m_flyAnimFrame(0),
+	m_sinCount(0)
 {
 	m_handle = LoadGraph("data/image/Enemy/bird.png");
 }
@@ -49,10 +55,12 @@ EnemyBird::~EnemyBird()
 	DeleteGraph(m_handle);
 }
 
-void EnemyBird::Init(Bg* pBg)
+void EnemyBird::Init(Bg* pBg, Player* pPlayer)
 {
 	m_pBg = pBg;
+	m_pPlayer = pPlayer;
 	m_hp = kHp;
+	m_sinCount = 0;
 	m_isDead = false;
 }
 
@@ -64,6 +72,21 @@ void EnemyBird::Update()
 	// マップチップとの当たり判定
 	Rect chipRect; // 当たったマップチップの矩形
 	HitCollision(chipRect);
+
+	// TODO:sin関数使って移動
+	m_sinCount += kSinSpeed;
+	m_vec.y += sinf(m_sinCount * kAnimationSize);
+
+	if (m_pos.y > Game::kScreenHeight - 60)
+	{
+		m_pos.y = Game::kScreenHeight - 60;
+
+	}
+	// TOOD:プレイヤーが近づいたらプレイヤーに寄るようにする
+	if (m_pos.x < m_pPlayer->GetPos().x + 100.0f || m_pos.x > m_pPlayer->GetPos().x -100.0f)
+	{
+		m_pos.x += m_vec.x;
+	}
 
 	// 移動アニメーション
 	m_flyAnimFrame++;
@@ -135,6 +158,7 @@ void EnemyBird::Start(float posX, float posY)
 
 	m_pos = { posX, posY };
 	m_vec.x -= kSpeed;
+	m_vec.y += kSpeed;
 }
 
 void EnemyBird::HitCollision(Rect chipRect)
@@ -149,7 +173,6 @@ void EnemyBird::HitCollision(Rect chipRect)
 			m_pos.x = chipRect.GetLeft() - kWidth * 0.5f - 1;
 			m_vec.x *= -1;
 			m_dir = kDirLeft;
-
 		}
 		else if (m_vec.x < 0.0f) // 左に移動中
 		{
@@ -167,6 +190,12 @@ void EnemyBird::HitCollision(Rect chipRect)
 		if (m_vec.y > 0.0f)
 		{
 			m_pos.y = chipRect.GetTop() - kHeight * 0.5f - 1;
+			m_vec.y *= -1;
+		}
+		else if (m_vec.y < 0.0f)
+		{
+			m_pos.y = chipRect.GetBottom() + kHeight * 0.5f + 1;
+			m_vec.y *= -1;
 		}
 	}
 }
