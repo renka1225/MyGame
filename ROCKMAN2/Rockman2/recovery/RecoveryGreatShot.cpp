@@ -24,8 +24,9 @@ RecoveryGreatShot::~RecoveryGreatShot()
 	DeleteGraph(m_handle);
 }
 
-void RecoveryGreatShot::Init()
+void RecoveryGreatShot::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_frame = 0;
 }
 

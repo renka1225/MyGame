@@ -24,8 +24,9 @@ RecoveryLife::~RecoveryLife()
 	DeleteGraph(m_handle);
 }
 
-void RecoveryLife::Init()
+void RecoveryLife::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_frame = 0;
 }
 

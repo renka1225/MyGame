@@ -16,8 +16,6 @@
 
 #include "Player.h"
 #include "ShotBase.h"
-
-#include "Matasaburo.h"
 #include "EnemyCat.h"
 #include "EnemyBird.h"
 #include "EnemyBear.h"
@@ -46,10 +44,10 @@ namespace
 	constexpr int kTextPosX = 840;
 	constexpr int kTextPosY = 400;
 	// 弾数表示位置
-	constexpr int kBarPosX = 860;
-	constexpr int kBarPosY = 400;
+	constexpr int kBarPosX = 840;
+	constexpr int kBarPosY = 430;
 	// 弾数表示間隔
-	constexpr int kBarInterval = 8;
+	constexpr int kBarInterval = 10;
 	// 弾数表示サイズ
 	constexpr int kPauseShotNumWidth = 18;
 	constexpr int kPauseShotNumHeight = 20;
@@ -80,10 +78,10 @@ SceneMain::SceneMain():
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
+	m_isSceneEnd(false),
 	m_fadeAlpha(255),
 	m_startDisplayX(0.0f)
 {
-
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
 
@@ -182,6 +180,7 @@ void SceneMain::Init()
 	m_isSceneGameOver = false;
 	m_isSceneClear = false;
 	m_isSceneTitle = false;
+	m_isSceneEnd = false;
 	m_isExistLineMove = false;
 
 	m_enemyTotalNum = kEnemyMax;
@@ -207,13 +206,14 @@ void SceneMain::Init()
 	{
 		if (m_pRecovery[i])
 		{
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 		}
 	}
 	m_isGetFullHpRecovery = false;
 
 	// BGMを鳴らす
-	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+	// TODO: BGM変更予定
+	//PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
 void SceneMain::End()
@@ -260,14 +260,17 @@ void SceneMain::Update()
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
-			Init();
+			m_isSceneEnd = true;
 		}
+		// タイトルに戻るを選択
 		else if (m_pPause->IsSelectTitle())
 		{
 			// タイトル画面に遷移
 			m_isSceneTitle = true;
-			WaitTimer(500);
 			StopSoundMem(m_bgm);
+
+			// 1秒後に遷移
+			WaitTimer(1000);
 		}
 		return;
 	}
@@ -331,7 +334,6 @@ void SceneMain::Update()
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		if (!m_pEnemy[i]) continue;
-		m_pEnemy[i]->SetBg(m_pBg);
 		m_pEnemy[i]->Update();
 
 		// 使用済みの敵キャラクターを削除
@@ -390,7 +392,7 @@ void SceneMain::Update()
 		// nullptrなら処理は行わない
 		if (!m_pRecovery[i]) continue;
 
-		m_pRecovery[i]->SetBg(m_pBg);
+		//m_pRecovery[i]->SetBg(m_pBg);
 		m_pRecovery[i]->Update();
 
 		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// 回復アイテムの当たり判定
@@ -543,7 +545,7 @@ void SceneMain::DropHpSmallRecovery(int enemyIndex) // HP小回復
 		{
 			m_pRecovery[i] = new RecoverySmallHp;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
 	}
@@ -557,7 +559,7 @@ void SceneMain::DropHpGreatRecovery(int enemyIndex) // HP大回復
 		{
 			m_pRecovery[i] = new RecoveryGreatHp;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
 	}
@@ -571,7 +573,7 @@ void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
 		{
 			m_pRecovery[i] = new RecoverySmallShot;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
 	}
@@ -585,7 +587,7 @@ void SceneMain::DropShotGreatRecovery(int enemyIndex) // 弾大回復
 		{
 			m_pRecovery[i] = new RecoveryLife;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
 	}
@@ -599,7 +601,7 @@ void SceneMain::DropLifeRecovery(int enemyIndex) // 残機回復
 		{
 			m_pRecovery[i] = new RecoveryGreatShot;
 			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
 	}
@@ -613,7 +615,7 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
 			m_pRecovery[i]->Start({ 900, 500 }); // アイテムの位置を設定
-			m_pRecovery[i]->Init();
+			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
 	}
@@ -639,52 +641,52 @@ void SceneMain::CreateEnemy()
 		case 0:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(300.0f, 600.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(500.0f, 650.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(1000.0f, 700.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 3:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(400.0f, 600.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 4:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(2000.0f, 600.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 5:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(800.0f, 200.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 6:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(1500.0f, 400.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 7:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(2400.0f, 100.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 8:
 			m_pEnemy[i] = new EnemyBird;
 			m_pEnemy[i]->Start(2000.0f, 50.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		case 9:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(2300.0f, 650.0f);
-			m_pEnemy[i]->Init();
+			m_pEnemy[i]->Start(2600.0f, 650.0f);
+			m_pEnemy[i]->Init(m_pBg);
 			break;
 		default:
 			break;
@@ -738,7 +740,7 @@ void SceneMain::DrawInfo()
 	// 画面横に四角を表示
 	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
 	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
-
+	
 	/*残機、E缶数、残り敵数を左側に表示*/
 	// E缶数表示
 	DrawFormatStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, 0xffffff, m_pFont->GetFont(), "E : %d", m_pPlayer->GetFullHpRecovery());
@@ -749,8 +751,6 @@ void SceneMain::DrawInfo()
 
 	/*HP、武器の弾数を右側に表示*/
 	// TODO:選択中の武器が分かるようにする
-	
-
 	// HP
 	if (m_pPlayer->IsBuster())
 	{
@@ -882,7 +882,8 @@ void SceneMain::DrawShotChange()
 	}
 
 	// 現在のE缶数を表示
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "E : %d", m_pPlayer->GetFullHpRecovery());
+	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont());
+	DrawFormatStringToHandle(kTextPosX, kBarPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "%d", m_pPlayer->GetFullHpRecovery());
 }
 
 /*ポーズ画面表示*/

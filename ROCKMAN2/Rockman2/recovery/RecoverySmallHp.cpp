@@ -24,8 +24,9 @@ RecoverySmallHp::~RecoverySmallHp()
 	DeleteGraph(m_handle);
 }
 
-void RecoverySmallHp::Init()
+void RecoverySmallHp::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_frame = 0;
 }
 

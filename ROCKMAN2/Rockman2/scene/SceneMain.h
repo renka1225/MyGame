@@ -41,7 +41,8 @@ public:
 	// シーン移動の取得
 	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
-	bool IsSceneTitle() const { return m_isSceneTitle; }		//　タイトル画面
+	bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
+	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
 	// スタート演出
@@ -94,6 +95,7 @@ protected:
 	bool m_isSceneGameOver;	// ゲームオーバー画面に移動
 	bool m_isSceneClear;	// クリア画面に移動
 	bool m_isSceneTitle;	// タイトル画面に移動
+	bool m_isSceneEnd;		// ゲーム画面を終了
 
 	// フェードイン、アウト
 	int m_fadeAlpha;

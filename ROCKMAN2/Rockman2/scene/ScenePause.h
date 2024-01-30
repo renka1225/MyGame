@@ -76,6 +76,9 @@ private:
 	bool m_isRetry;	// リトライ
 	bool m_isTitle;	// タイトルに戻る
 
+	// 画像
+	int m_menuBg;		// メニュー画面の背景
+
 	// 音
 	int m_menuSE;		// メニュー画面を開いた際のSE
 	int m_selectSE;		// 選択時のSE

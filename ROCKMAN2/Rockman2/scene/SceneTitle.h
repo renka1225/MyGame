@@ -47,6 +47,7 @@ private:
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
+
 	// 画像
 	int m_logoHandle; 	// タイトルロゴ
 	int m_selectHandle; // 選択カーソル

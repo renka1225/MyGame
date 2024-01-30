@@ -10,7 +10,7 @@ public:
 	RecoveryFullHp();
 	~RecoveryFullHp();
 
-	virtual void Init() override;
+	virtual void Init(Bg* pBg) override;
 	virtual void Update() override;
 	virtual void Draw() override;
 	// アイテムをドロップする

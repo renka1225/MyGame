@@ -35,8 +35,9 @@ EnemyBase::~EnemyBase()
 	DeleteGraph(m_damageEffect);
 }
 
-void EnemyBase::Init()
+void EnemyBase::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_isDead = false;
 }
 

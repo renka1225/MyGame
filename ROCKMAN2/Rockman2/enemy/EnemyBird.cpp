@@ -49,8 +49,9 @@ EnemyBird::~EnemyBird()
 	DeleteGraph(m_handle);
 }
 
-void EnemyBird::Init()
+void EnemyBird::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_hp = kHp;
 	m_isDead = false;
 }

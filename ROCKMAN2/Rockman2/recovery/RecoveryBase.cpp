@@ -17,8 +17,9 @@ RecoveryBase::~RecoveryBase()
 {
 }
 
-void RecoveryBase::Init()
+void RecoveryBase::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 }
 
 void RecoveryBase::Update()

@@ -87,9 +87,6 @@
     <ClCompile Include="enemy\EnemyBase.cpp">
       <Filter>ソース ファイル\enemy</Filter>
     </ClCompile>
-    <ClCompile Include="enemy\Matasaburo.cpp">
-      <Filter>ソース ファイル\enemy</Filter>
-    </ClCompile>
     <ClCompile Include="scene\SceneTitle.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
@@ -198,9 +195,6 @@
       <Filter>ヘッダー ファイル\shot</Filter>
     </ClInclude>
     <ClInclude Include="enemy\EnemyBase.h">
-      <Filter>ヘッダー ファイル\enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy\Matasaburo.h">
       <Filter>ヘッダー ファイル\enemy</Filter>
     </ClInclude>
     <ClInclude Include="scene\SceneTitle.h">

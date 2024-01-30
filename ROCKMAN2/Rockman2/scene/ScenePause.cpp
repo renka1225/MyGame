@@ -8,17 +8,23 @@
 namespace
 {
 	// ポーズ画面のサイズ
-	constexpr int kWidth = 280;
-	constexpr int kHeight = 480;
+	constexpr int kWidth = 782;
+	constexpr int kHeight = 568;
 
 	// メニュー画面の表示位置
-	constexpr float kPosX = 830.0f;
-	constexpr float kPosY = 300.0f;
+	constexpr float kPosX = Game::kScreenWidth * 0.5f - 400;
+	constexpr float kPosY = 230.0f;
 
 	// 武器選択中カーソルの初期位置
-	constexpr float kInitSelectShotPosY = 394.0f;
+	constexpr float kInitSelectShotPosY = 425.0f;
 	// ポーズ画面の選択中カーソルの初期位置
 	constexpr float kPauseInitSelectPosY = 464.0f;
+
+	// 選択カーソルのX座標の位置
+	constexpr float kCursorX = kPosX + 270;
+	// 選択カーソルのサイズ
+	constexpr float kCursorSizeX = 255;
+	constexpr float kCursorSizeY = 30;
 	// 選択カーソルの描画の間隔
 	constexpr float kSelectPosY = 70.0f;
 }
@@ -33,6 +39,9 @@ ScenePause::ScenePause(Player* pPlayer):
 	m_isTitle(false)
 {
 	m_pFont = new FontManager;
+
+	// 画像読み込み
+	m_menuBg = LoadGraph("data/image/UI/menuBg.png");
 	
 	// 音読み込み
 	m_menuSE = LoadSoundMem("data/sound/SE/menu.mp3");
@@ -43,7 +52,7 @@ ScenePause::ScenePause(Player* pPlayer):
 ScenePause::~ScenePause()
 {
 	delete m_pFont;
-
+	DeleteGraph(m_menuBg);
 	DeleteSoundMem(m_menuSE);
 	DeleteSoundMem(m_selectSE);
 	DeleteSoundMem(m_cursorSE);
@@ -52,6 +61,9 @@ ScenePause::~ScenePause()
 void ScenePause::Init()
 {
 	m_isChangeMenuExist = false;
+	m_isPauseExist = false;
+	m_isRetry = false;
+	m_isTitle = false;
 	m_shotSelect = SelectShot::kBuster;
 	m_pauseSelect = Pause::kBack;
 	m_selectShotPos.x = 0;
@@ -118,29 +130,27 @@ void ScenePause::Draw()
 	// 武器切り替え画面表示
 	if (m_isChangeMenuExist)
 	{
-		// TODO:フェードインアウト
+		// TODO:フェードインアウト実装
 		
-		SetDrawBlendMode(DX_BLENDMODE_MULA, 200);
-		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0x000000, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
-		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0xffffff, false); // 枠を描画
-		DrawStringToHandle(kPosX ,350, "MENU", 0xffffff, m_pFont->GetFont());
+		DrawGraph(kPosX, kPosY, m_menuBg, true);
+
+		DrawStringToHandle(kPosX + 180 , kPosY + 80, "MENU", 0xffffff, m_pFont->GetFont());
 
 		// 選択中のカーソルを描画
-		DrawBox(kPosX + 5, m_selectShotPos.y, kPosX + 255, m_selectShotPos.y + 30, 0x00bfff, false);
+		DrawBox(kCursorX, m_selectShotPos.y, kCursorX + kCursorSizeX, m_selectShotPos.y + kCursorSizeY, 0xffd700, false);
 	}
 
 	// ポーズ画面表示
 	if (m_isPauseExist)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_MULA, 200);
-		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0x000000, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
-		DrawBox(kPosX, kPosY, kPosX + kWidth, kPosY + kHeight, 0xffffff, false); // 枠を描画
-		DrawStringToHandle(kPosX, 350, "PAUSE", 0xffffff,  m_pFont->GetFont());
+		// TODO:フェードインアウト実装
+
+		DrawGraph(kPosX, kPosY, m_menuBg, true);
+
+		DrawStringToHandle(kPosX + 180, kPosY + 80, "PAUSE", 0xffffff,  m_pFont->GetFont());
 
 		// 選択中のカーソルを描画
-		DrawBox(kPosX + 5, m_selectPausePos.y, kPosX + 255, m_selectPausePos.y + 30, 0x00bfff, false);
+		DrawBox(kCursorX, m_selectPausePos.y, kCursorX + kCursorSizeX, m_selectPausePos.y + kCursorSizeY, 0xffd700, false);
 	}
 }
 
@@ -152,10 +162,13 @@ void ScenePause::UpdateChangeShot()
 	// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
-		m_shotSelect = (m_shotSelect + 1) % SelectShot::kShotSelectNum;
-		m_selectShotPos.y += kSelectPosY; // 選択中の四角を下に移動
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
 
-		// 選択中の四角が一番下にだったら四角を一番上に戻す
+		m_shotSelect = (m_shotSelect + 1) % SelectShot::kShotSelectNum;
+		m_selectShotPos.y += kSelectPosY; // 選択中カーソルを下に移動
+
+		// 選択カーソルが一番下にだったら四角を一番上に戻す
 		if (m_selectShotPos.y > kInitSelectShotPosY + kSelectPosY * 4)
 		{
 			m_selectShotPos.y = kInitSelectShotPosY;
@@ -164,6 +177,9 @@ void ScenePause::UpdateChangeShot()
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
+		// SEを鳴らす
+		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
+
 		m_shotSelect = (m_shotSelect + (SelectShot::kShotSelectNum - 1)) % SelectShot::kShotSelectNum;
 		m_selectShotPos.y -= kSelectPosY;	// 選択中カーソルを上に移動
 
@@ -265,8 +281,8 @@ void ScenePause::UpdatePause()
 		}
 	}
 
-	// Xキーで決定
-	if (Pad::IsTrigger(pad & PAD_INPUT_2))
+	// Zキーで決定
+	if (Pad::IsTrigger(pad & PAD_INPUT_1))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);

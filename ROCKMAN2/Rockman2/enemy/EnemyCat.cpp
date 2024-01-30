@@ -20,7 +20,7 @@ namespace
 	// 移動速度
 	constexpr float kSpeedX = 4.0f;
 	// 最大HP
-	constexpr int kHp = 1;
+	constexpr int kHp = 3;
 
 	// 敵アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };
@@ -49,8 +49,9 @@ EnemyCat::~EnemyCat()
 	DeleteGraph(m_handle);
 }
 
-void EnemyCat::Init()
+void EnemyCat::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_hp = kHp;
 	m_isDead = false;
 }

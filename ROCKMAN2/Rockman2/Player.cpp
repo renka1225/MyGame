@@ -85,7 +85,7 @@ Player::Player(SceneMain* pMain) :
 	m_shotSE = LoadSoundMem("data/sound/SE/shot.mp3");
 	m_jumpSE = LoadSoundMem("data/sound/SE/jump.mp3");;
 	m_damageSE = LoadSoundMem("data/sound/SE/playerDamage.mp3");;
-	m_deadSE = LoadSoundMem("data/sound/SE/playerDead.mp3");;
+	m_deadSE = LoadSoundMem("data/sound/SE/playerDead.wav");;
 }
 
 Player::~Player()
@@ -164,8 +164,8 @@ void Player::Update()
 
 		if (m_life > 0)
 		{
-			// 残機が経るごとにSEを鳴らす
-			PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
+			// 残機が減るごとにSEを鳴らす
+			PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
 
 			// 0.5秒間待機
 			WaitTimer(500);
@@ -253,6 +253,9 @@ void Player::Update()
 	{
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
 			ShotBuster* pShot = new ShotBuster;
 			// 新しい弾を生成する
 			pShot->Init();
@@ -271,6 +274,9 @@ void Player::Update()
 		{
 			if (m_metalEnergy > 0)
 			{
+				// 弾発射のSEを鳴らす
+				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
 				ShotMetal* pShot = new ShotMetal;
 				// 新しい弾を生成する
 				pShot->Init();
@@ -296,7 +302,7 @@ void Player::Update()
 	/*ファイヤー発射*/
 	if (m_isFire)
 	{
-	// キーが押された瞬間を取得
+		// キーが押された瞬間を取得
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
 			m_pressTime = GetNowCount();
@@ -304,6 +310,8 @@ void Player::Update()
 		// キーが押されているか判定
 		if (Pad::IsPress(PAD_INPUT_1))
 		{
+			// TODO:長押し中SEを流す
+
 			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
 		}
 		// キーが離された瞬間を判定
@@ -311,6 +319,9 @@ void Player::Update()
 		{
 			if (m_fireEnergy > 0) // 弾エネルギーが0以上
 			{
+				// 弾発射のSEを鳴らす
+				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
 				if (m_nowPressTime < 2000) // 長押し時間が2秒以下
 				{
 					m_fireEnergy--; // 弾エネルギーを1減らす
@@ -360,6 +371,9 @@ void Player::Update()
 		// ボタンを押したら発射
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
 			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
 			{
 				ShotLineMove* pShot = new ShotLineMove;

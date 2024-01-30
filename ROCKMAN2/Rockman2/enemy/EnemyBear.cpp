@@ -14,11 +14,11 @@ namespace
 	constexpr int kEffectHeight = 32;
 
 	// Šg‘å—¦
-	constexpr float kEnlarge = 5.0f;
+	constexpr float kEnlarge = 9.0f;
 	constexpr float kEffectScale = 7.0f;
 
 	// ˆÚ“®‘¬“x
-	constexpr float kSpeed = 0.8f;
+	constexpr float kSpeed = 0.4f;
 	// Å‘åHP
 	constexpr int kHp = 5;
 
@@ -49,8 +49,9 @@ EnemyBear::~EnemyBear()
 	DeleteGraph(m_handle);
 }
 
-void EnemyBear::Init()
+void EnemyBear::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_hp = kHp;
 	m_isDead = false;
 }

@@ -24,8 +24,9 @@ RecoverySmallShot::~RecoverySmallShot()
 	DeleteGraph(m_handle);
 }
 
-void RecoverySmallShot::Init()
+void RecoverySmallShot::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 }
 
 void RecoverySmallShot::Update()

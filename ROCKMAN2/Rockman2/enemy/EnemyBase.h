@@ -17,7 +17,7 @@ public:
 	EnemyBase();
 	virtual ~EnemyBase();
 
-	virtual void Init();
+	virtual void Init(Bg* pBg);
 	virtual void Update();
 	virtual void Draw();
 
@@ -30,7 +30,7 @@ public:
 
 	// メンバー変数にアクセスする
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
-	void SetBg(Bg* pBg) { m_pBg = pBg; }
+	//void SetBg(Bg* pBg) { m_pBg = pBg; }
 
 	// 存在しているかの判定		true:存在している
 	bool IsExist() const { return m_isExist; }

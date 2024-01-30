@@ -25,8 +25,9 @@ RecoveryGreatHp::~RecoveryGreatHp()
 	DeleteGraph(m_handle);
 }
 
-void RecoveryGreatHp::Init()
+void RecoveryGreatHp::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	m_frame = 0;
 }
 

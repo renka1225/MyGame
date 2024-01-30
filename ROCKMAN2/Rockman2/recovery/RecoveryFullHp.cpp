@@ -21,8 +21,9 @@ RecoveryFullHp::~RecoveryFullHp()
 	DeleteGraph(m_handle);
 }
 
-void RecoveryFullHp::Init()
+void RecoveryFullHp::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 }
 
 void RecoveryFullHp::Update()

@@ -165,6 +165,12 @@ void SceneManager::Update()
 		{
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
+			m_pMain->Init();
+		}
+		else if (m_pMain->IsSceneEnd())
+		{
+			m_runScene = kSceneMain;
+			m_pMain->Init();
 		}
 		break;
 
@@ -203,7 +209,6 @@ void SceneManager::Update()
 		m_pGameOver->End();
 		if (m_pGameOver->IsSeneRetry()) // リトライ
 		{
-			// TODO:プレイしていたステージにもどれるようにする
 			m_runScene = kSceneMain;
 			m_pMain->Init();
 		}

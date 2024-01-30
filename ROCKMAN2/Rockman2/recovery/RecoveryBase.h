@@ -15,7 +15,7 @@ public:
 	RecoveryBase();
 	virtual ~RecoveryBase();
 
-	virtual void Init();
+	virtual void Init(Bg* pBg);
 	virtual void Update();
 	virtual void Draw();
 
@@ -24,7 +24,7 @@ public:
 
 	// メンバ変数にアクセス
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
-	void SetBg(Bg* pBg) { m_pBg = pBg; }
+	//void SetBg(Bg* pBg) { m_pBg = pBg; }
 
 	// アイテムが存在しているか
 	bool IsExist() const { return m_isExist; }
