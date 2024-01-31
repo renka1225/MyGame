@@ -7,8 +7,8 @@
 namespace
 {
 	// アイテムのサイズ
-	constexpr int kWidth = 32;
-	constexpr int kHeight = 32;
+	constexpr int kWidth = 26;
+	constexpr int kHeight = 30;
 }
 
 RecoveryFullHp::RecoveryFullHp()

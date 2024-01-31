@@ -22,8 +22,8 @@ namespace
 	constexpr float kVelocity = -12.0f;
 
 	// プレイヤーのサイズ
-	constexpr int kPlayerWidth = 84;
-	constexpr int kPlayerHeight = 148;
+	constexpr int kPlayerWidth = 76;
+	constexpr int kPlayerHeight = 112;
 
 	// マップチップのサイズ
 	constexpr int kMapWidth = 32;
@@ -421,11 +421,13 @@ void Player::Draw()
 
 	if (m_isRight) // 右を向いている場合
 	{
-		DrawGraph(x, y, m_handle, true);
+		//DrawGraph(x, y, m_handle, true);
+		DrawExtendGraph(x, y, x + kPlayerWidth, y + kPlayerHeight, m_handle, true);
 	}
 	else // 左を向いている場合
 	{
-		DrawTurnGraph(x, y, m_handle, true);
+		//DrawTurnGraph(x, y, m_handle, true);
+		DrawExtendGraph(x, y, x + kPlayerWidth, y + kPlayerHeight, m_handle, true);
 	}
 
 #ifdef _DEBUG
