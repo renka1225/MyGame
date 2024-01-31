@@ -167,7 +167,7 @@ void SceneManager::Update()
 			m_pTitle->Init();
 			m_pMain->Init();
 		}
-		else if (m_pMain->IsSceneEnd())
+		else if (m_pMain->IsSceneEnd()) // ƒŠƒgƒ‰ƒC
 		{
 			m_runScene = kSceneMain;
 			m_pMain->Init();

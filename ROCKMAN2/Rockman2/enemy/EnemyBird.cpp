@@ -20,7 +20,7 @@ namespace
 	constexpr float kEffectScale = 7.0f;
 
 	// ˆÚ“®‘¬“x
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 1.5f;
 	constexpr float kSinSpeed = 3.0f;
 	constexpr float kAnimationSize = 0.7f;
 

@@ -21,10 +21,10 @@ namespace
 	// 武器選択中カーソルの初期位置
 	constexpr float kInitSelectShotPosY = 445.0f;
 	// ポーズ画面の選択中カーソルの初期位置
-	constexpr float kPauseInitSelectPosY = 464.0f;
+	constexpr float kPauseInitSelectPosY = 490.0f;
 
 	// 選択カーソルのX座標の位置
-	constexpr float kCursorX = kPosX + 270;
+	constexpr float kCursorX = kPosX + 275;
 	// 選択カーソルのサイズ
 	constexpr float kCursorSizeX = 255;
 	constexpr float kCursorSizeY = 30;
@@ -81,32 +81,36 @@ void ScenePause::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	/*Aキーを押したら武器切り替え画面を表示、非表示*/
+	/*Aキーで武器切り替え画面を表示、非表示*/
 	if (Pad::IsTrigger(pad & PAD_INPUT_4))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
+
 		m_menuHeight = 0;
 
+		// 画面表示非表示切り替え
 		if (!m_isChangeMenuExist)
 		{
 			m_isPauseExist = false;		// ポーズ画面非表示
-			m_isChangeMenuExist = true; // メニュー画面表示
+			m_isChangeMenuExist = true; // 武器切り替え画面表示
 		}
 		else
 		{
-			m_isChangeMenuExist = false;
-
 			// メニュー非表示演出
 			m_menuHeight -= kMenuMove;
 			if (m_menuHeight < 0)
 			{
 				m_menuHeight = 0;
 			}
+
+			m_shotSelect = SelectShot::kBuster;
+			m_selectShotPos = { kCursorX, kInitSelectShotPosY };
+			m_isChangeMenuExist = false;
 		}
 	}
 
-	/*ESCキーを押したらポーズ表示*/
+	/*ESCキーでポーズ表示切り替え*/
 	if (Pad::IsTrigger(pad & PAD_INPUT_9))
 	{
 		// SEを鳴らす
@@ -116,19 +120,21 @@ void ScenePause::Update()
 		// 画面表示非表示切り替え
 		if (!m_isPauseExist)
 		{
-			m_isPauseExist = true;			// ポーズ画面表示
+			m_isPauseExist = true;			// 武器切り替え画面表示
 			m_isChangeMenuExist = false;	// メニュー画面非表示
 		}
 		else
 		{
-			m_isPauseExist = false;
-
 			// メニュー非表示演出
 			m_menuHeight -= kMenuMove;
 			if (m_menuHeight < 0)
 			{
 				m_menuHeight = 0;
 			}
+
+			m_shotSelect = Pause::kBack;
+			m_selectShotPos = { kCursorX, kPauseInitSelectPosY };
+			m_isPauseExist = false;
 		}
 	}
 

@@ -18,7 +18,7 @@ namespace
 	constexpr float kEffectScale = 7.0f;
 
 	// ИЏУЃСђУx
-	constexpr float kSpeed = 0.4f;
+	constexpr float kSpeed = 0.0f;
 	// Н≈СеHP
 	constexpr int kHp = 5;
 

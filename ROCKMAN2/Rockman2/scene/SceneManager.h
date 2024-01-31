@@ -45,6 +45,5 @@ private:
 	SceneStage2* m_pStage2;
 	SceneClear* m_pClear;
 	SceneGameOver* m_pGameOver;
-	
 };
 

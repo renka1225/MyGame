@@ -53,7 +53,7 @@ void ShotLineMove::Update()
 	m_colRect.SetCenter(m_pos.x , m_pos.y, kWidth, kHeight);
 
 	// TODO:乗っている最中にエネルギーがなくなったらアイテム2号を消す
-	if (m_energy < 0)
+	if (m_pPlayer->GetLineEnergy() < 0)
 	{
 		m_isExist = false;
 	}

@@ -16,6 +16,7 @@ public:
 	virtual void Init();
 	virtual void Update();
 	virtual void Draw();
+	void DrawBg();
 
 	// プレイヤーの位置からスクロール量を決定する
 	int GetScrollX();
@@ -33,15 +34,28 @@ protected:
 	// プレイヤーのポインタ
 	Player* m_pPlayer;
 
-	// 背景のグラフィック
-	int m_bgHandle;
-	// マップチップのグラフィック
-	int m_mapHandle;
-
 	// 背景の表示位置
 	Vec2 m_bgPos;
+	// 背景の移動量
+	float m_bgMove;
 
 	// グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;
 	int m_graphChipNumY;
+
+	// 背景のグラフィック
+	int m_bgHandle;	
+	int m_bg2Handle;
+	int m_bg3Handle;
+	int m_bg4Handle;
+
+	// マップチップのグラフィック
+	int m_mapHandle;
+
+	// 画像サイズ
+	struct Size
+	{
+		int width;
+		int height;
+	};
 };

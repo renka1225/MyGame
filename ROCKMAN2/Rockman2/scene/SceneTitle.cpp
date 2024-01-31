@@ -21,7 +21,7 @@ namespace
 	// ”wŒiŠg‘å—¦
 	constexpr float kBgScale = 2.0f;
 	// ”wŒi‰æ‘œ‚ÌˆÚ“®—Ê
-	constexpr int kBgMove = -3;
+	constexpr float kBgMove = -3.0f;
 }
 
 SceneTitle::SceneTitle():
@@ -64,6 +64,7 @@ void SceneTitle::Init()
 {
 	m_isSceneStart = false;
 	m_isSceneOption = false;
+	m_fadeAlpha = 80;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
 	m_bgPos = { 0, 0 };

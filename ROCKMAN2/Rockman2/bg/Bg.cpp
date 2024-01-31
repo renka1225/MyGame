@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Game.h"
+#include <cassert>
 
 namespace
 {
@@ -9,7 +10,10 @@ namespace
 	constexpr int kBgWidth = 576;
 	constexpr int kBgHeight = 324;
 	// 背景画像の拡大率
-	constexpr int kBgScale = 10.0f;
+	constexpr float kBgScale = 10.0f;
+	constexpr float kBg2Scale = 2.5f;
+	// 背景画像の移動量
+	constexpr float kBgMove = -1.2f;
 
 	// マップチップ1つのサイズ
 	constexpr int kChipWidth = 18;
@@ -54,16 +58,28 @@ namespace
 Bg::Bg():
 	m_pPlayer(nullptr),
 	m_bgPos(0, 0),
+	m_bgMove(kBgMove),
 	m_graphChipNumX(0),
 	m_graphChipNumY(0)
 {
-	m_bgHandle = LoadGraph("data/image/BackGround/stage1.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/Stage1/1.png");
+	m_bg2Handle = LoadGraph("data/image/BackGround/Stage1/2.png");
+	m_bg3Handle = LoadGraph("data/image/BackGround/Stage1/3.png");
+	m_bg4Handle = LoadGraph("data/image/BackGround/Stage1/4.png");
 	m_mapHandle = LoadGraph("data/image/map.png");
+
+	assert(m_bgHandle != -1);
+	assert(m_bg2Handle != -1);
+	assert(m_bg3Handle != -1);
+	assert(m_bg4Handle != -1);
 }
 
 Bg::~Bg()
 {
 	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_bg2Handle);
+	DeleteGraph(m_bg3Handle);
+	DeleteGraph(m_bg4Handle);
 	DeleteGraph(m_mapHandle);
 }
 
@@ -75,24 +91,22 @@ void Bg::Init()
 	GetGraphSize(m_mapHandle, &graphW, &graphH);
 
 	// 座標の初期化
-	m_bgPos.x = 0;
-	m_bgPos.y = 0;
 	m_graphChipNumX = graphW / kChipWidth;
 	m_graphChipNumY = graphH / kChipHeight;
+	m_bgPos = { 0, 0 };
+	m_bgMove = kBgMove;
 }
 
 void Bg::Update()
 {
+	// 背景の表示位置の更新
+	m_bgMove += kBgMove;
 }
 
 void Bg::Draw()
 {
-	// 背景の描画
-	DrawRectRotaGraph(0, 0, 
-		0, 0, 
-		kBgWidth, kBgHeight, 
-		kBgScale, 0.0f,
-		m_bgHandle, false);
+	// 背景表示
+	DrawBg();
 
 	// プレイヤーの位置に応じたスクロール量を決定する
 	int scrollX = GetScrollX();
@@ -131,6 +145,58 @@ void Bg::Draw()
 #endif
 		}
 	}
+}
+
+/*背景表示*/
+void Bg::DrawBg()
+{
+	// 画像サイズを取得
+	Size bg3Size;
+	Size bg4Size;
+	GetGraphSize(m_bg3Handle, &bg3Size.width, &bg3Size.height);
+	GetGraphSize(m_bg4Handle, &bg4Size.width, &bg4Size.height);
+
+	// スクロール量を計算する
+	int scrollBg3 = static_cast<int>(m_bgMove * 0.1f) % static_cast<int>(bg3Size.width * kBgScale);
+	int scrollBg4 = static_cast<int>(m_bgMove * 0.3f) % static_cast<int>(bg4Size.width * kBgScale);
+
+
+	// 背景描画
+	DrawRectRotaGraph(0, 0,
+		0, 0,
+		kBgWidth, kBgHeight,
+		kBgScale, 0.0f,
+		m_bgHandle, true);
+
+	DrawRectRotaGraph(0, 0,
+		0, 0,
+		kBgWidth, kBgHeight,
+		kBgScale, 0.0f,
+		m_bg2Handle, true);
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg3 + index * bg3Size.width * kBg2Scale,
+			Game::kScreenHeight - bg3Size.height * kBg2Scale,
+			0, 0,
+			kBg2Scale, 0.0f,
+			m_bg3Handle, true);
+	}
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg4 + index * bg4Size.width * kBg2Scale,
+			Game::kScreenHeight - bg4Size.height * kBg2Scale,
+			0, 0,
+			kBg2Scale, 0.0f,
+			m_bg4Handle, true);
+	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 40);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xff674d, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 // 横スクロール

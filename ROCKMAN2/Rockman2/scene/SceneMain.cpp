@@ -176,13 +176,6 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// 画面遷移の初期化
-	m_isSceneGameOver = false;
-	m_isSceneClear = false;
-	m_isSceneTitle = false;
-	m_isSceneEnd = false;
-	m_isExistLineMove = false;
-
 	m_enemyTotalNum = kEnemyMax;
 
 	// TODO:スタート時の演出
@@ -192,7 +185,7 @@ void SceneMain::Init()
 	m_pPause->Init();
 
 	// プレイヤーの初期化
-	assert(m_pPlayer);	// m_pPlayer == nullptrの場合止まる
+	assert(m_pPlayer);
 	m_pPlayer->Init();
 
 	// 背景の初期化
@@ -210,6 +203,13 @@ void SceneMain::Init()
 		}
 	}
 	m_isGetFullHpRecovery = false;
+
+	// 画面遷移の初期化
+	m_isSceneGameOver = false;
+	m_isSceneClear = false;
+	m_isSceneTitle = false;
+	m_isSceneEnd = false;
+	m_isExistLineMove = false;
 
 	// BGMを鳴らす
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
@@ -234,11 +234,8 @@ void SceneMain::Update()
 	// 敵をすべて倒したらクリア画面に遷移
 	if (m_enemyTotalNum <= 0)
 	{
-		m_isSceneClear = true;
-		StopSoundMem(m_bgm);
-
-		// 1秒後に遷移
-		WaitTimer(1000);
+		// TODO:クリア演出
+		ClearStaging();
 	}
 
 	// パッドの入力状態を取得
@@ -247,18 +244,13 @@ void SceneMain::Update()
 	// ポーズ画面の更新
 	m_pPause->Update();
 
-	// 武器切り替え画面が表示されている場合画面を止める
-	if (m_pPause->IsSelectShotExist())
-	{
-		return;
-	}
-
 	// ポーズ画面が表示されている場合画面を止める
 	if (m_pPause->IsPause())
 	{
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
+			m_pPlayer->Init();
 			m_isSceneEnd = true;
 		}
 		// タイトルに戻るを選択
@@ -271,6 +263,12 @@ void SceneMain::Update()
 			// 1秒後に遷移
 			WaitTimer(1000);
 		}
+		return;
+	}
+
+	// 武器切り替え画面が表示されている場合画面を止める
+	if (m_pPause->IsSelectShotExist())
+	{
 		return;
 	}
 
@@ -437,8 +435,7 @@ void SceneMain::Update()
 	// Cキーでクリア画面に移動するようにする
 	if (Pad::IsTrigger(pad & PAD_INPUT_3))
 	{
-		m_isSceneClear = true; // クリア画面に遷移
-		StopSoundMem(m_bgm);
+		ClearStaging();
 	}
 #endif
 
@@ -524,6 +521,19 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	// m_pShotにポインタを登録できなかった
 	delete pShot;
 	return false;
+}
+
+/*クリア演出*/
+void SceneMain::ClearStaging()
+{
+	// クリアの文字を表示
+	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f, "CLEAR!", 0xffd700, m_pFont->GetFont3());
+
+	m_isSceneClear = true;
+	StopSoundMem(m_bgm);
+
+	// 1秒後に遷移
+	WaitTimer(1000);
 }
 
 /*アイテムドロップ*/
@@ -630,52 +640,52 @@ void SceneMain::CreateEnemy()
 		{
 		case 0:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(300.0f, 600.0f);
+			m_pEnemy[i]->Start(500.0f, 600.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(500.0f, 650.0f);
+			m_pEnemy[i]->Start(1800.0f, 650.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1000.0f, 700.0f);
+			m_pEnemy[i]->Start(2000.0f, 700.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 3:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(400.0f, 600.0f);
+			m_pEnemy[i]->Start(1600.0f, 600.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 4:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2000.0f, 600.0f);
+			m_pEnemy[i]->Start(2500.0f, 600.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 5:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(800.0f, 200.0f);
+			m_pEnemy[i]->Start(4000.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 6:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(1500.0f, 400.0f);
+			m_pEnemy[i]->Start(Stage::kMapWidth - 1000.0f, 400.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2400.0f, 100.0f);
+			m_pEnemy[i]->Start(Stage::kMapWidth - 80.0f, 100.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 8:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2000.0f, 50.0f);
+			m_pEnemy[i]->Start(Stage::kMapWidth - 500.0f, 50.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 9:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(2600.0f, 650.0f);
+			m_pEnemy[i]->Start(Stage::kMapWidth - 300.0f, 650.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:

@@ -118,7 +118,7 @@ void Player::Init()
 	m_isLineMove = false;
 
 	// 再プレイ時
-	if (m_life < 0 || m_pMain->IsSceneClear() || m_pMain->IsSceneTitle())
+	if (m_life < 0 || m_pMain->IsSceneClear() || m_pMain->IsSceneTitle() || m_pMain->IsSceneEnd())
 	{
 		// HP
 		m_hp = kMaxHp;
@@ -157,22 +157,30 @@ void Player::Update()
 	}
 
 	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight * 0.5f) > Game::kScreenHeight)
+	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage::kMapHeight)
 	{
-		// 残機を1減らす
-		m_life--;
-
-		if (m_life > 0)
+		// HPを0にする
+		m_hp -= kMaxHp;
+		if (m_hp <= 0)
 		{
-			// 残機が減るごとにSEを鳴らす
-			PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
+			m_hp = 0;
+		}
+	}
 
-			// 0.5秒間待機
-			WaitTimer(500);
+	/*HPが0以下になったら残機を1減らす*/
+	if (m_hp <= 0)
+	{
+		// 残機が減るごとにSEを鳴らす
+		PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
 
-			// 残機が0以上だったら初期化する
+		// 残機が0以上だったら初期化する
+		if (m_life >= 0)
+		{
 			Init();
 		}
+
+		m_life--;
+		m_hp = kMaxHp;	// HP全回復
 	}
 
 	/*ダメージ演出*/
@@ -253,9 +261,6 @@ void Player::Update()
 	{
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			// 弾発射のSEを鳴らす
-			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
 			ShotBuster* pShot = new ShotBuster;
 			// 新しい弾を生成する
 			pShot->Init();
@@ -264,6 +269,9 @@ void Player::Update()
 			pShot->Start(m_pos);
 			// 以降更新やメモリの解放はSceneMainに任せる
 			m_pMain->AddShot(pShot);
+
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 		}
 	}
 
@@ -274,9 +282,6 @@ void Player::Update()
 		{
 			if (m_metalEnergy > 0)
 			{
-				// 弾発射のSEを鳴らす
-				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
 				ShotMetal* pShot = new ShotMetal;
 				// 新しい弾を生成する
 				pShot->Init();
@@ -285,6 +290,9 @@ void Player::Update()
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
 				m_pMain->AddShot(pShot);
+
+				// 弾発射のSEを鳴らす
+				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 
 				if (pShot->IsExist())
 				{
@@ -371,9 +379,6 @@ void Player::Update()
 		// ボタンを押したら発射
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
-			// 弾発射のSEを鳴らす
-			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
 			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
 			{
 				ShotLineMove* pShot = new ShotLineMove;
@@ -384,12 +389,17 @@ void Player::Update()
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
 				m_pMain->AddShot(pShot);
+
+				// 弾発射のSEを鳴らす
+				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 			}
 		}
 
 		// 画面内にある場合
 		if (m_pMain->GetIsExistLineMove())
 		{
+			// TODO:SEを流す
+
 			m_lineEnergy -= 0.03f; // エネルギーを減らす
 		}
 	}

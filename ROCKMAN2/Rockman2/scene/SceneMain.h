@@ -27,6 +27,9 @@ public:
 	// ショットの追加
 	bool AddShot(ShotBase* pShot);
 
+	// クリア時演出
+	void ClearStaging();
+
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
 	void DropHpGreatRecovery(int enemyIndex);	// HP大回復
