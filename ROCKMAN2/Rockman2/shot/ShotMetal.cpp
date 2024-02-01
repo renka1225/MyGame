@@ -16,6 +16,8 @@ namespace
 	// ショットの大きさ
 	constexpr float kWidth = 32.0f;
 	constexpr float kHeight = 32.0f;
+	// 画像の拡大率
+	constexpr float kScale = 1.0f;
 }
 
 ShotMetal::ShotMetal() :
@@ -77,7 +79,7 @@ void ShotMetal::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawGraph(x, y, m_handle, true);
+	DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kScale, 0.0f, m_handle, true);
 
 #ifdef _DEBUG
 	// MEMO:スクロールが反映されないためコメントアウト

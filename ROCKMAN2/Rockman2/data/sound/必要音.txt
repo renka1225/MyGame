@@ -12,19 +12,25 @@
 　ポーズ		〇
 　プレイヤー		
 　　ジャンプ		〇		
-　　ダメージ		
+　　ダメージ		〇
 　　死亡		〇
-　　弾発射
-　　　バスター		〇
-　　　メタル		
-　　　ファイア		
-　　　2号		
+　　回復		〇
+　　弾発射		〇
 　敵
 　　ダメージ		〇
 　　死亡		〇
 
+　クリア　　　　　　　　〇
+
 
 
 ■画像
-メニュー画面、ポーズ画面の透かし背景(犬の形)
 現在選択中の武器がわかるようなカーソル
+
+
+▼音サイト
+https://otologic.jp/free/jing/short1.html
+
+https://www.springin.org/sound-stock/category/bgm-short/
+
+https://iwashiro-sounds.work/

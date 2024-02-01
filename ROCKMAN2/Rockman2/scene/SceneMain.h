@@ -86,7 +86,9 @@ protected:
 	bool m_isGetFullHpRecovery;
 
 	// 現在の敵数
-	int m_enemyTotalNum; // 現在の合計数
+	int m_enemyTotalNum;
+	// 現在のタイム
+	float m_time;
 
 	// アイテム2号が画面上に存在するか
 	bool m_isExistLineMove;
@@ -102,15 +104,18 @@ protected:
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
-
 	// スタート演出
 	float m_startDisplayX; // 表示位置
 
 	// 音
 	int m_bgm;			// BGM
+	int m_clearSE;		// クリア時のSE
 	int m_enemyDeadSE;	// 敵死亡時のSE
+	int m_recoverySE;	// 回復時のSE
+	int m_lineMoveSE;	// アイテム2号が画面内にあるとき
 
-	// 操作説明の表示
-	int m_exHandle;
+	// 画像
+	int m_frameHandle;	// 枠
+	int m_exHandle;		// 操作説明の表示
 };
 

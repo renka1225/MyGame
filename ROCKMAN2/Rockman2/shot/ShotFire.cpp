@@ -15,14 +15,16 @@ namespace
 	// ƒVƒ‡ƒbƒg‚Ì‘å‚«‚³
 	constexpr float kWidth = 32.0f;
 	constexpr float kHeight = 32.0f;
+	// ‰æ‘œ‚ÌŠg‘å—¦
+	constexpr float kSmallScale = 0.5f;
+	constexpr float kMiddleScale = 0.7f;
+	constexpr float kBigScale = 1.0f;
 }
 
 ShotFire::ShotFire()
 {
 	// ’e‚ÌƒOƒ‰ƒtƒBƒbƒNƒ[ƒh
 	m_handle = LoadGraph("data/image/Shot/shotFire.png");
-	m_mediumHandle = LoadGraph("data/image/Shot/shotFire2.png");
-	m_fullHandle = LoadGraph("data/image/Shot/shotFire3.png");
 }
 
 ShotFire::~ShotFire()
@@ -73,28 +75,28 @@ void ShotFire::Draw()
 
 	if (m_pPlayer->GetPressTime() < 2000) // ’·‰Ÿ‚µŽžŠÔ‚ª2•bˆÈ‰º
 	{
-		DrawGraph(x, y, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
+		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true);
 	}
 	else if (m_pPlayer->GetPressTime() < 5000) // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈ‰º
 	{
 		if (m_pPlayer->GetFireEnergy() - 6 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
 		{
-			DrawGraph(x, y, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
+			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true);
 		}
 		else
 		{
-			DrawGraph(x, y, m_mediumHandle, true); // ’†ƒTƒCƒY‚Ì’e‚ð•`‰æ
+			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kMiddleScale, 0.0f, m_handle, true);
 		}
 	}
 	else // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈã
 	{
 		if (m_pPlayer->GetFireEnergy() - 10 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
 		{
-			DrawGraph(x, y, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
+			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
 		}
 		else
 		{
-			DrawGraph(x, y, m_fullHandle, true); //‘åƒTƒCƒY‚Ì’e‚ð•`‰æ
+			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kBigScale, 0.0f, m_handle, true);
 		}
 	}
 

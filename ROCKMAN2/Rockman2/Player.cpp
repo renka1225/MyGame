@@ -21,17 +21,6 @@ namespace
 	// 初速度
 	constexpr float kVelocity = -12.0f;
 
-	// プレイヤーのサイズ
-	constexpr int kPlayerWidth = 76;
-	constexpr int kPlayerHeight = 112;
-
-	// マップチップのサイズ
-	constexpr int kMapWidth = 32;
-	constexpr int kMapHeight = 32;
-
-	// ダメージ演出のフレーム数
-	constexpr int kDamageFrame = 60;
-
 	// プレイヤーの初期位置
 	constexpr float kPosX = 350.0f;
 	constexpr float kPosY = 450.0f;
@@ -46,11 +35,42 @@ namespace
 	constexpr int kLife = 3;
 
 	// アイテムの回復量
-	constexpr float kSmallRecovery = 2;		// 小アイテム
+	constexpr float kSmallRecovery = 2;	// 小アイテム
 	constexpr float kGreatRecovery = 5;	// 大アイテム
 
 	// アイテム2号のサイズ
-	constexpr int kShotWidth = 32;
+	constexpr int kShotWidth = 52;
+
+	// マップチップのサイズ
+	constexpr int kMapWidth = 32;
+	constexpr int kMapHeight = 32;
+
+	// プレイヤーのサイズ
+	constexpr float kScale = 0.4f;
+	constexpr int kPlayerWidth = 200;
+	constexpr int kPlayerHeight = 296;
+
+	// プレイヤーの当たり判定のサイズ
+	constexpr int kPlayerColX = kPlayerWidth * kScale - 40;
+	constexpr int kPlayerColY = kPlayerHeight * kScale;
+
+	// キャラクターのアニメーション
+	constexpr int kUseFrame[] = { 0, 1, 2, 1 };
+	// 待機アニメーション1コマのフレーム数
+	constexpr int kIdleAnimFrameNum = 32;
+	// 待機アニメーション1サイクルのフレーム数
+	constexpr int kIdleAnimFrameCycle = _countof(kUseFrame) * kIdleAnimFrameNum;
+	// 移動アニメーション1コマのフレーム数
+	constexpr int kWalkAnimFrameNum = 8;
+	// 移動アニメーション1サイクルのフレーム数
+	constexpr int kWalkAnimFrameCycle = _countof(kUseFrame) * kWalkAnimFrameNum;
+	// ショットのアニメーション表示時間
+	constexpr int kShotAnimFrame = 30;
+	// ダメージのアニメーション表示時間
+	constexpr int kDamageAnimFrame = 5;
+
+	// ダメージ演出のフレーム数
+	constexpr int kDamageFrame = 60;
 }
 
 
@@ -76,21 +96,34 @@ Player::Player(SceneMain* pMain) :
 	m_isLineMove(false),
 	m_keyState(0),
 	m_pressTime(0),
-	m_nowPressTime(0)
+	m_nowPressTime(0),
+	m_animation(Anim::kIdle),
+	m_idleAnimFrame(0),
+	m_walkAnimFrame(0),
+	m_shotAnimFrame(0),
+	m_damageAnimFrame(0)
 {
-	// プレイヤー画像読み込み
-	m_handle = LoadGraph("data/image/player.png");
+	// 画像読み込み
+	m_idleHandle = LoadGraph("data/image/Player/idle.png");
+	m_walkHandle = LoadGraph("data/image/Player/walk.png");
+	m_shotHandle = LoadGraph("data/image/Player/shot.png");
+	m_jumpHandle = LoadGraph("data/image/Player/jump.png");
+	m_damageHandle = LoadGraph("data/image/Player/damage.png");
 
 	// 音読み込み
 	m_shotSE = LoadSoundMem("data/sound/SE/shot.mp3");
-	m_jumpSE = LoadSoundMem("data/sound/SE/jump.mp3");;
-	m_damageSE = LoadSoundMem("data/sound/SE/playerDamage.mp3");;
-	m_deadSE = LoadSoundMem("data/sound/SE/playerDead.wav");;
+	m_jumpSE = LoadSoundMem("data/sound/SE/jump.mp3");
+	m_damageSE = LoadSoundMem("data/sound/SE/playerDamage.wav");
+	m_deadSE = LoadSoundMem("data/sound/SE/playerDead.wav");
 }
 
 Player::~Player()
 {
-	DeleteGraph(m_handle);
+	DeleteGraph(m_idleHandle);
+	DeleteGraph(m_walkHandle);
+	DeleteGraph(m_shotHandle);
+	DeleteGraph(m_jumpHandle);
+	DeleteGraph(m_damageHandle);
 	DeleteSoundMem(m_shotSE);
 	DeleteSoundMem(m_damageSE);
 	DeleteSoundMem(m_deadSE);
@@ -116,6 +149,12 @@ void Player::Init()
 	m_isMetal = false;
 	m_isFire = false;
 	m_isLineMove = false;
+	// 待機状態にする
+	m_animation = Anim::kIdle;
+	m_idleAnimFrame = 0;
+	m_walkAnimFrame = 0;
+	m_shotAnimFrame = 0;
+	m_damageFrame = 0;
 
 	// 再プレイ時
 	if (m_life < 0 || m_pMain->IsSceneClear() || m_pMain->IsSceneTitle() || m_pMain->IsSceneEnd())
@@ -144,16 +183,19 @@ void Player::Update()
 	{
 		m_isRight = true;
 		m_move.x = kSpeed;
+		m_animation = Anim::kWalk;
 	}
 	/*←を押したら左に移動*/
 	else if (pad & PAD_INPUT_LEFT)
 	{
 		m_isRight = false;
 		m_move.x = -kSpeed;
+		m_animation = Anim::kWalk;
 	}
 	else
 	{
 		m_move.x = 0;
+		m_animation = Anim::kIdle;
 	}
 
 	/*プレイヤーが穴に落下した場合*/
@@ -181,13 +223,6 @@ void Player::Update()
 
 		m_life--;
 		m_hp = kMaxHp;	// HP全回復
-	}
-
-	/*ダメージ演出*/
-	m_damageFrame--;
-	if (m_damageFrame < 0)
-	{
-		m_damageFrame = 0;
 	}
 
 	/*地面に接している*/
@@ -219,6 +254,9 @@ void Player::Update()
 	/*地面に接地していない*/
 	else
 	{
+		// ジャンプ状態にする
+		m_animation = Anim::kJump;
+
 		if (m_isJump)
 		{
 			m_jumpFrame++;	// ジャンプフレームの更新
@@ -261,6 +299,9 @@ void Player::Update()
 	{
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
+			m_animation = Anim::kShot;
+			m_shotAnimFrame = kShotAnimFrame;
+
 			ShotBuster* pShot = new ShotBuster;
 			// 新しい弾を生成する
 			pShot->Init();
@@ -280,6 +321,9 @@ void Player::Update()
 	{
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
+			m_animation = Anim::kShot;
+			m_shotAnimFrame = kShotAnimFrame;
+
 			if (m_metalEnergy > 0)
 			{
 				ShotMetal* pShot = new ShotMetal;
@@ -318,6 +362,9 @@ void Player::Update()
 		// キーが押されているか判定
 		if (Pad::IsPress(PAD_INPUT_1))
 		{
+			m_animation = Anim::kShot;
+			m_shotAnimFrame = kShotAnimFrame;
+
 			// TODO:長押し中SEを流す
 
 			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
@@ -379,6 +426,9 @@ void Player::Update()
 		// ボタンを押したら発射
 		if (Pad::IsTrigger(PAD_INPUT_1))
 		{
+			m_animation = Anim::kShot;
+			m_shotAnimFrame = kShotAnimFrame;
+
 			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
 			{
 				ShotLineMove* pShot = new ShotLineMove;
@@ -398,10 +448,48 @@ void Player::Update()
 		// 画面内にある場合
 		if (m_pMain->GetIsExistLineMove())
 		{
-			// TODO:SEを流す
-
 			m_lineEnergy -= 0.03f; // エネルギーを減らす
 		}
+	}
+
+	/*ダメージ演出*/
+	m_damageFrame--;
+	if (m_damageFrame < 0)
+	{
+		m_damageFrame = 0;
+	}
+
+	/*アニメーション*/
+	//待機状態
+	if(m_animation == Anim::kIdle)
+	{
+		m_idleAnimFrame++;
+		if (m_idleAnimFrame >= kIdleAnimFrameCycle)
+		{
+			m_idleAnimFrame = 0;
+		}
+	}
+	//移動状態
+	else if (m_animation == Anim::kWalk)
+	{
+		m_walkAnimFrame++;
+		if (m_walkAnimFrame >= kWalkAnimFrameCycle)
+		{
+			m_walkAnimFrame = 0;
+		}
+	}
+	// ショット
+	m_shotAnimFrame--;
+	if (m_shotAnimFrame < 0)
+	{
+		m_shotAnimFrame = 0;
+	}
+
+	// ダメージ
+	m_damageAnimFrame--;
+	if (m_damageAnimFrame < 0)
+	{
+		m_damageAnimFrame = 0;
 	}
 }
 
@@ -411,30 +499,120 @@ void Player::Draw()
 // 2フレーム間隔で表示非表示を切り替える
 	if (m_damageFrame % 10 >= 8) return;
 
-	// 中央座標を左上座標に変換
-	int x = m_pos.x - kPlayerWidth * 0.5f;
-	int y = m_pos.y - kPlayerHeight * 0.5f;
-
-	// スクロール量を反映する
-	x -= m_pBg->GetScrollX();
-	y -= m_pBg->GetScrollY();
-
-	if (m_isRight) // 右を向いている場合
-	{
-		//DrawGraph(x, y, m_handle, true);
-		DrawExtendGraph(x, y, x + kPlayerWidth, y + kPlayerHeight, m_handle, true);
-	}
-	else // 左を向いている場合
-	{
-		//DrawTurnGraph(x, y, m_handle, true);
-		DrawExtendGraph(x, y, x + kPlayerWidth, y + kPlayerHeight, m_handle, true);
-	}
+	// プレイヤーの描画
+	DrawPlayer();
 
 #ifdef _DEBUG
 	// MEMO:スクロールが反映されないためコメントアウト
 	// 当たり判定の表示
-	//m_colRect.Draw(0x0000ff, false);
+	// m_colRect.Draw(0x0000ff, false);
 #endif
+}
+
+/*プレイヤーの描画*/
+void Player::DrawPlayer()
+{
+	// スクロール量を反映する
+	int x = m_pos.x;
+	int y = m_pos.y;
+	x -= m_pBg->GetScrollX();
+	y -= m_pBg->GetScrollY();
+
+	// 画像切り出し位置を計算
+	// 待機状態
+	int idleAnimFrame = m_idleAnimFrame / kIdleAnimFrameNum;
+	int idleSrcX = kUseFrame[idleAnimFrame] * kPlayerWidth;
+	int idleSrcY = kPlayerHeight;
+	// 移動状態
+	int walkAnimFrame = m_walkAnimFrame / kWalkAnimFrameNum;
+	int walkSrcX = kUseFrame[walkAnimFrame] * kPlayerWidth;
+	int walkSrcY = kPlayerHeight;
+
+	if (m_isRight)
+	{
+		idleSrcY = kPlayerHeight * 0;
+		walkSrcY = kPlayerHeight * 0;
+	}
+	else
+	{
+		idleSrcY = kPlayerHeight * 1;
+		walkSrcY = kPlayerHeight * 1;
+	}
+
+	// 待機状態
+	if (m_animation == Anim::kIdle && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight) // 右を向いている場合
+		{
+			DrawRectRotaGraph(x, y, idleSrcX, idleSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_idleHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, idleSrcX, idleSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_idleHandle, true);
+		}
+	}
+	// 移動状態
+	else if (m_animation == Anim::kWalk && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight) // 右を向いている場合
+		{
+			DrawRectRotaGraph(x, y, walkSrcX, walkSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_walkHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, walkSrcX, walkSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_walkHandle, true);
+		}
+	}
+	// 弾発射状態
+	else if (m_animation == Anim::kShot || m_shotAnimFrame > 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight) // 右を向いている場合
+		{
+			if (m_isGround) // 接地中
+			{
+				DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x, y, kPlayerWidth, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+		}
+		else
+		{
+			if (m_isGround) // 接地中
+			{
+				DrawRectRotaGraph(x, y, 0, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x, y, kPlayerWidth, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+		}
+	}
+	// ジャンプ状態
+	else if (m_animation == Anim::kJump && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight) // 右を向いている場合
+		{
+			DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_jumpHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, 0, kPlayerHeight + 1, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_jumpHandle, true);
+		}
+	}
+	// ダメージ状態
+	else if (m_animation == Anim::kDamage && m_shotAnimFrame <= 0 && m_damageAnimFrame > 0)
+	{
+		if (m_isRight) // 右を向いている場合
+		{
+			DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_damageHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, 0, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_damageHandle, true);
+		}
+	}
 }
 
 /*マップチップの当たり判定*/
@@ -442,32 +620,32 @@ void Player::CheckHitMap(Rect chipRect)
 {
 	// 横から当たったかチェックする
 	m_pos.x += m_move.x;
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerWidth), static_cast<float>(kPlayerHeight));
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_move.x > 0.0f)
 		{
-			m_pos.x = chipRect.GetLeft() - kPlayerWidth * 0.5f - 1;
+			m_pos.x = chipRect.GetLeft() - kPlayerWidth * kScale * 0.5f + 10 - 1;
 		}
 		else if (m_move.x < 0.0f)
 		{
-			m_pos.x = chipRect.GetRight() + kPlayerWidth * 0.5f + 1;
+			m_pos.x = chipRect.GetRight() + kPlayerWidth * kScale * 0.5f - 10 + 1;
 		}
 	}
 
 	// 縦から当たったかチェックする
 	m_pos.y += m_move.y;
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerWidth), static_cast<float>(kPlayerHeight));
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_move.y > 0.0f)
 		{
-			m_pos.y = chipRect.GetTop() - kPlayerHeight * 0.5f - 1;
+			m_pos.y = chipRect.GetTop() - kPlayerHeight * kScale  * 0.5f - 1 ;
 			m_isGround = true;
 		}
 		else if (m_move.y < 0.0f)
 		{
-			m_pos.y = chipRect.GetBottom() + kPlayerHeight * 0.5f + 1;
+			m_pos.y = chipRect.GetBottom() + kPlayerHeight * kScale * 0.5f + 1;
 			m_move.y *= -1.0f;
 		}
 	}
@@ -497,6 +675,11 @@ void Player::OnDamage()
 
 	// 演出フレーム数を設定する
 	m_damageFrame = kDamageFrame;
+	m_damageAnimFrame = kDamageAnimFrame;
+	m_animation = Anim::kDamage;
+
+	// ダメージSEを鳴らす
+	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
 
 	// HPを減らす
 	m_hp--;
@@ -624,13 +807,15 @@ void Player::RideLineMove(Rect shotRect)
  	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
 
 	// 当たり判定更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerWidth), static_cast<float>(kPlayerHeight));
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
 
 	// アイテム2号に乗った場合
 	if (m_colRect.IsCollision(lineMoveRect))
 	{
 		m_pos.x += lineMoveRect.GetCenter().x - m_colRect.GetCenter().x;
-		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * 0.5f;
+		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;
 		m_isGround = true;
+		m_animation = Anim::kIdle;
 	}
+	
 }

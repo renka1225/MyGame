@@ -21,6 +21,8 @@ public:
 	void Update();
 	void Draw();
 
+	// プレイヤーの表示
+	void DrawPlayer();
 	// マップチップとの当たり判定の処理
 	void CheckHitMap(Rect chipRect);
 
@@ -85,9 +87,6 @@ private:
 	// 当たり判定用の矩形
 	Rect m_colRect;
 
-	// グラフィックのハンドル
-	int m_handle;
-
 	// 向いている方向
 	bool m_isRight;
 	// 地面と接しているか
@@ -132,5 +131,31 @@ private:
 	int m_jumpSE;	// ジャンプ時のSE
 	int m_damageSE;	// ダメージ時のSE
 	int m_deadSE;	// 死亡時のSE
-};
 
+	// 画像
+	int m_idleHandle;	// 待機状態
+	int m_walkHandle;	// 歩き
+	int m_shotHandle;	// 攻撃
+	int m_jumpHandle;	// ジャンプ
+	int m_damageHandle;	// ダメージ
+
+	// 画像のアニメーション
+	enum Anim
+	{
+		kIdle,
+		kWalk,
+		kShot,
+		kJump,
+		kDamage
+	};
+	// 現在のアニメーション状態
+	Anim m_animation;
+	// 待機アニメーション
+	int m_idleAnimFrame;
+	// 移動アニメーション
+	int m_walkAnimFrame;
+	// 弾アニメーション
+	int m_shotAnimFrame;
+	// ダメージアニメーション
+	int m_damageAnimFrame;
+};

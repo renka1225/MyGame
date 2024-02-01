@@ -17,8 +17,6 @@ public:
 
 private:
 	// グラフィックのハンドル
-	int m_handle;		// チャージなしの弾
-	int m_mediumHandle;	// 中チャージの弾
-	int m_fullHandle;	// フルチャージの弾
+	int m_handle;		// 弾
 };
 

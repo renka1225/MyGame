@@ -59,22 +59,25 @@ namespace
 	constexpr int kFrameSize = 270;
 	// 残機、敵数表示位置
 	constexpr int kInfoTextPosX = 30;	// 横
-	constexpr int kInfoTextPosY = 300;	// 縦
+	constexpr int kInfoTextPosY = Game::kScreenHeight * 0.5 - 240;	// 縦
 	// 弾数表示位置
 	constexpr int kShotNumDisPosX = Game::kScreenWidth - kFrameSize + 10;	// 横
-	constexpr int kShotNumDisPosY = 300;									// 縦
+	constexpr int kShotNumDisPosY = Game::kScreenHeight * 0.5 - 140;		// 縦
 	// 弾数表示間隔
 	constexpr int kShotNumIntervalX = 25;	// 横
 	constexpr int kShotNumIntervalY = 100;	// 縦
 	// 弾数表示サイズ
 	constexpr int kShotDisWidth = 18;	// 横
 	constexpr int kShotDisHeight = 20;	// 縦
+	// フレームの表示位置
+	constexpr int kFramePosY = Game::kScreenHeight * 0.5f - 199;
 }
 
 SceneMain::SceneMain():
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
 	m_enemyTotalNum(kEnemyMax),
+	m_time(0.0f),
 	m_isExistLineMove(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
@@ -116,9 +119,13 @@ SceneMain::SceneMain():
 
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
+	m_clearSE = LoadSoundMem("data/sound/SE/clear.mp3");
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
+	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
+	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
 
-	// 操作説明の画像
+	// 画像
+	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_exHandle = LoadGraph("data/image/UI/ex.png");
 }
 
@@ -170,13 +177,18 @@ SceneMain::~SceneMain()
 	}
 
 	DeleteSoundMem(m_bgm);
+	DeleteSoundMem(m_clearSE);
 	DeleteSoundMem(m_enemyDeadSE);
+	DeleteSoundMem(m_recoverySE);
+	DeleteSoundMem(m_lineMoveSE);
+	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_exHandle);
 }
 
 void SceneMain::Init()
 {
 	m_enemyTotalNum = kEnemyMax;
+	m_time = 0.0f;
 
 	// TODO:スタート時の演出
 	StartStaging();
@@ -237,6 +249,9 @@ void SceneMain::Update()
 		// TODO:クリア演出
 		ClearStaging();
 	}
+
+	// タイムカウント
+	m_time++;
 
 	// パッドの入力状態を取得
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -305,10 +320,14 @@ void SceneMain::Update()
 			if (m_pShot[i]->IsExist())
 			{
 				m_isExistLineMove = true;
+
+				// TODO:一回だけアイテム2号のSEを鳴らす
+				PlaySoundMem(m_lineMoveSE, DX_PLAYTYPE_LOOP, true);
 			}
 			else
 			{
 				m_isExistLineMove = false;
+				StopSoundMem(m_lineMoveSE);
 			}
 
 			// 弾の当たり判定
@@ -396,6 +415,9 @@ void SceneMain::Update()
 		// プレイヤーと回復アイテムの当たり判定
 		if (playerRect.IsCollision(recoveryRect))
 		{
+			// SEを鳴らす
+			PlaySoundMem(m_recoverySE, DX_PLAYTYPE_BACK, true);
+
 			if (dynamic_cast<RecoverySmallHp*>(m_pRecovery[i])) // HP小回復
 			{
 				m_pPlayer->HpSmallRecovery();
@@ -529,11 +551,14 @@ void SceneMain::ClearStaging()
 	// クリアの文字を表示
 	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f, "CLEAR!", 0xffd700, m_pFont->GetFont3());
 
-	m_isSceneClear = true;
+	// クリアSEを鳴らす
 	StopSoundMem(m_bgm);
+	PlaySoundMem(m_clearSE, DX_PLAYTYPE_NORMAL, true);
 
-	// 1秒後に遷移
-	WaitTimer(1000);
+	m_isSceneClear = true;
+
+	// 0.5秒後に遷移
+	WaitTimer(500);
 }
 
 /*アイテムドロップ*/
@@ -740,17 +765,27 @@ void SceneMain::DrawInfo()
 	// 画面横に四角を表示
 	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
 	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
+
+	// 枠表示
+	DrawGraph(0, kFramePosY, m_frameHandle, true); // 左側
+	DrawGraph(Game::kScreenWidth - kFrameSize, kFramePosY, m_frameHandle, true); // 右側
 	
-	/*残機、E缶数、残り敵数を左側に表示*/
+	/*残機、E缶数、残り敵数、タイムを左側に表示*/
 	// E缶数表示
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "         E :", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY - 5, 0xffffff, m_pFont->GetFont3(), " %d", m_pPlayer->GetFullHpRecovery());
+
 	// 残機数表示
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2, "残機数 :", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY * 2 - 5, 0xffffff, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
+
 	// 敵数表示
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3, "残敵数 :", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY * 3 - 5, 0xffffff, m_pFont->GetFont3(), " %d / %d", m_enemyTotalNum, kEnemyMax);
+
+	// タイム
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 4, "タイム :", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + 100, kInfoTextPosY + kShotNumIntervalY * 4 - 5, 0xffffff, m_pFont->GetFont3(), " %3f", m_time * 0.01);
 
 	/*HP、武器の弾数を右側に表示*/
 	// TODO:選択中の武器が分かるようにする
