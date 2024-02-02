@@ -14,13 +14,13 @@ namespace
 	constexpr int kEffectHeight = 32;
 
 	// 拡大率
-	constexpr float kEnlarge = 9.0f;
+	constexpr float kEnlarge = 8.0f;
 	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度
-	constexpr float kSpeed = 0.0f;
+	constexpr float kSpeed = 1.2f;
 	// 最大HP
-	constexpr int kHp = 5;
+	constexpr int kHp = 10;
 
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3, 4, 5 };
@@ -129,25 +129,26 @@ void EnemyBear::Start(float posX, float posY)
 
 	m_pos = { posX, posY };
 	m_vec.x -= kSpeed;
+	m_vec.y += kSpeed;
 }
 
 void EnemyBear::HitCollision(Rect chipRect)
 {
 	// 横から当たったかチェックする
 	m_pos.x += m_vec.x;	// 現在位置の更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth), static_cast<float>(kHeight)); // 当たり判定を生成
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * kEnlarge), static_cast<float>(kHeight * kEnlarge)); // 当たり判定を生成
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_vec.x > 0.0f) // 右に移動中
 		{
-			m_pos.x = chipRect.GetLeft() - kWidth * 0.5f - 1;
+			m_pos.x = chipRect.GetLeft() - kWidth * kEnlarge * 0.5f - 1;
 			m_vec.x *= -1;
 			m_dir = kDirLeft;
 
 		}
 		else if (m_vec.x < 0.0f) // 左に移動中
 		{
-			m_pos.x = chipRect.GetRight() + kWidth * 0.5f + 1;
+			m_pos.x = chipRect.GetRight() + kWidth * kEnlarge * 0.5f + 1;
 			m_vec.x *= -1;
 			m_dir = kDirRight;
 		}
@@ -155,12 +156,12 @@ void EnemyBear::HitCollision(Rect chipRect)
 
 	// 縦から当たったかチェックする
 	m_pos.y += m_vec.y; 	// 現在位置の更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth), static_cast<float>(kHeight)); // 当たり判定を生成
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * kEnlarge), static_cast<float>(kHeight * kEnlarge)); // 当たり判定を生成
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_vec.y > 0.0f)
 		{
-			m_pos.y = chipRect.GetTop() - kHeight * 0.5f - 1;
+			m_pos.y = chipRect.GetTop() - kHeight * kEnlarge * 0.5f - 1;
 		}
 	}
 }

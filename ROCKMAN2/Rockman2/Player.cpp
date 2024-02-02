@@ -19,7 +19,7 @@ namespace
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
-	constexpr float kVelocity = -12.0f;
+	constexpr float kVelocity = -12.5f;
 
 	// プレイヤーの初期位置
 	constexpr float kPosX = 350.0f;
@@ -46,7 +46,7 @@ namespace
 	constexpr int kMapHeight = 32;
 
 	// プレイヤーのサイズ
-	constexpr float kScale = 0.4f;
+	constexpr float kScale = 0.3f;
 	constexpr int kPlayerWidth = 200;
 	constexpr int kPlayerHeight = 296;
 

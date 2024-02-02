@@ -17,6 +17,8 @@ public:
 	virtual void Update();
 	virtual void Draw();
 	void DrawBg();
+	// 操作説明の表示
+	void DrawEx(int scrollX, int scrollY);
 
 	// プレイヤーの位置からスクロール量を決定する
 	int GetScrollX();
@@ -51,6 +53,9 @@ protected:
 
 	// マップチップのグラフィック
 	int m_mapHandle;
+
+	// 操作説明の表示
+	int m_exHandle;
 
 	// 画像サイズ
 	struct Size

@@ -54,8 +54,6 @@ private:
 	void CreateEnemy();
 	// アイテムの生成
 	void CreateItem(int enemyIndex);
-	// 操作説明の表示
-	void DrawEx();
 	// 弾数、敵数等の表示
 	void DrawInfo();
 	// 武器切り替え画面表示
@@ -116,6 +114,5 @@ protected:
 
 	// 画像
 	int m_frameHandle;	// 枠
-	int m_exHandle;		// 操作説明の表示
 };
 

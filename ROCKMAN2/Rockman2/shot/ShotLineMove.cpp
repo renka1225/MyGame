@@ -82,7 +82,14 @@ void ShotLineMove::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawGraph(x, y, m_handle, true);
+	if (m_vec.x > 0)
+	{
+		DrawGraph(x, y, m_handle, true);
+	}
+	else
+	{
+		DrawTurnGraph(x, y, m_handle, true);
+	}
 
 #ifdef _DEBUG
 	// MEMO:スクロールが反映されないためコメントアウト

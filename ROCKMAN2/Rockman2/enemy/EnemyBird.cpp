@@ -170,13 +170,13 @@ void EnemyBird::HitCollision(Rect chipRect)
 	{
 		if (m_vec.x > 0.0f) // 右に移動中
 		{
-			m_pos.x = chipRect.GetLeft() - kWidth * 0.5f - 1;
+			m_pos.x = chipRect.GetLeft() - kWidth * kEnlarge * 0.5f - 1;
 			m_vec.x *= -1;
 			m_dir = kDirLeft;
 		}
 		else if (m_vec.x < 0.0f) // 左に移動中
 		{
-			m_pos.x = chipRect.GetRight() + kWidth * 0.5f + 1;
+			m_pos.x = chipRect.GetRight() + kWidth * kEnlarge * 0.5f + 1;
 			m_vec.x *= -1;
 			m_dir = kDirRight;
 		}
@@ -184,17 +184,17 @@ void EnemyBird::HitCollision(Rect chipRect)
 
 	// 縦から当たったかチェックする
 	m_pos.y += m_vec.y; 	// 現在位置の更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth), static_cast<float>(kHeight)); // 当たり判定を生成
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * kEnlarge), static_cast<float>(kHeight * kEnlarge)); // 当たり判定を生成
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_vec.y > 0.0f)
 		{
-			m_pos.y = chipRect.GetTop() - kHeight * 0.5f - 1;
+			m_pos.y = chipRect.GetTop() - kHeight * kEnlarge * 0.5f - 1;
 			m_vec.y *= -1;
 		}
 		else if (m_vec.y < 0.0f)
 		{
-			m_pos.y = chipRect.GetBottom() + kHeight * 0.5f + 1;
+			m_pos.y = chipRect.GetBottom() + kHeight * kEnlarge * 0.5f + 1;
 			m_vec.y *= -1;
 		}
 	}

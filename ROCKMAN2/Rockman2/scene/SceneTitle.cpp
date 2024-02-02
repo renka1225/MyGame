@@ -28,7 +28,7 @@ SceneTitle::SceneTitle():
 	m_select(kStart),
 	m_isSceneStart(false),
 	m_isSceneOption(false),
-	m_fadeAlpha(80),
+	m_fadeAlpha(180),
 	m_bgMove(0.0f)
 {
 	// 画像読み込み
@@ -64,7 +64,7 @@ void SceneTitle::Init()
 {
 	m_isSceneStart = false;
 	m_isSceneOption = false;
-	m_fadeAlpha = 80;
+	m_fadeAlpha = 180;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
 	m_bgPos = { 0, 0 };
@@ -133,7 +133,7 @@ void SceneTitle::Update()
 	// フェードインアウト
 	if (m_isSceneStart)
 	{
-		m_fadeAlpha += 3;
+		m_fadeAlpha += 8;
 		if (m_fadeAlpha > 255)
 		{
 			m_fadeAlpha = 255;
@@ -141,7 +141,7 @@ void SceneTitle::Update()
 	}
 	else
 	{
-		m_fadeAlpha -= 3;
+		m_fadeAlpha -= 8;
 		if (m_fadeAlpha < 0)
 		{
 			m_fadeAlpha = 0;
@@ -155,11 +155,6 @@ void SceneTitle::Update()
 
 void SceneTitle::Draw()
 {
-	// フェード描画
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xe6e6fa, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
-
 	// 背景表示
 	DrawBg();
 	
@@ -169,6 +164,11 @@ void SceneTitle::Draw()
 	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
 	// 選択カーソルの表示
 	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
+
+	// フェード描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x808080, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 }
 
 void SceneTitle::End()
