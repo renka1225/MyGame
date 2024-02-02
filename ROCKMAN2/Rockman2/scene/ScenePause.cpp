@@ -72,17 +72,18 @@ void ScenePause::Init()
 	m_shotSelect = SelectShot::kBuster;
 	m_pauseSelect = Pause::kBack;
 	m_menuHeight = 0;
-	m_menuPos = { kPosX, Game::kScreenHeight * 0.5f};
+	m_menuPos = { kPosX, Game::kScreenHeight * 0.5f };
 	m_selectShotPos = { kCursorX, kInitSelectShotPosY };
 	m_selectPausePos = { kCursorX, kPauseInitSelectPosY };
+	ChangeVolumeSoundMem(255, m_menuSE);
 }
 
 void ScenePause::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	/*Aキーで武器切り替え画面を表示、非表示*/
-	if (Pad::IsTrigger(pad & PAD_INPUT_4))
+	/*SキーorLボタンで武器切り替え画面を表示、非表示*/
+	if (Pad::IsTrigger(pad & PAD_INPUT_Y))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
@@ -110,8 +111,8 @@ void ScenePause::Update()
 		}
 	}
 
-	/*ESCキーでポーズ表示切り替え*/
-	if (Pad::IsTrigger(pad & PAD_INPUT_9))
+	/*パッドの三本線部分でポーズ表示切り替え*/
+	if (Pad::IsTrigger(pad & PAD_INPUT_R))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_menuSE, DX_PLAYTYPE_BACK, true);
@@ -227,8 +228,8 @@ void ScenePause::UpdateChangeShot()
 		}
 	}
 
-	// Xキーを押したら現在選択中の武器に変更する
-	if (Pad::IsTrigger(pad & PAD_INPUT_2))
+	//  ZキーorAボタンで現在選択中の武器に変更する
+	if (Pad::IsTrigger(pad & PAD_INPUT_A))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
@@ -319,8 +320,8 @@ void ScenePause::UpdatePause()
 		}
 	}
 
-	// Zキーで決定
-	if (Pad::IsTrigger(pad & PAD_INPUT_1))
+	// ZキーorAボタンで決定
+	if (Pad::IsTrigger(pad & PAD_INPUT_A))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);

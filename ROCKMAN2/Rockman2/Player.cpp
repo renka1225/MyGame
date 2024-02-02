@@ -26,7 +26,7 @@ namespace
 	constexpr float kPosY = 450.0f;
 
 	// プレイヤーの最大HP
-	constexpr float kMaxHp = 10;
+	constexpr int kMaxHp = 10;
 	// 最大弾エネルギー
 	constexpr float kMaxShot = 10;
 	// メタルの最大エネルギー
@@ -231,8 +231,8 @@ void Player::Update()
 		m_jumpFrame = 0;
 		m_isJump = false;
 
-		/*Spaceでジャンプ*/
-		if (Pad::IsTrigger(PAD_INPUT_10))
+		/*XキーorBボタンでジャンプ*/
+		if (Pad::IsTrigger(PAD_INPUT_B))
 		{
 			m_isGround = false;
 			m_isJump = true;
@@ -262,7 +262,7 @@ void Player::Update()
 			m_jumpFrame++;	// ジャンプフレームの更新
 
 			//ボタンを離した瞬間にジャンプする
-			if (Pad::IsRelease(PAD_INPUT_10))
+			if (Pad::IsRelease(PAD_INPUT_B))
 			{
 				// ジャンプの高さを決める
 				float jumpHeight;
@@ -297,7 +297,7 @@ void Player::Update()
 	/*バスター発射*/
 	if (m_isBuster)
 	{
-		if (Pad::IsTrigger(PAD_INPUT_1))
+		if (Pad::IsTrigger(PAD_INPUT_4))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
@@ -319,7 +319,7 @@ void Player::Update()
 	/*メタル発射*/
 	if (m_isMetal)
 	{
-		if (Pad::IsTrigger(PAD_INPUT_1))
+		if (Pad::IsTrigger(PAD_INPUT_4))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
@@ -355,12 +355,12 @@ void Player::Update()
 	if (m_isFire)
 	{
 		// キーが押された瞬間を取得
-		if (Pad::IsTrigger(PAD_INPUT_1))
+		if (Pad::IsTrigger(PAD_INPUT_4))
 		{
 			m_pressTime = GetNowCount();
 		}
 		// キーが押されているか判定
-		if (Pad::IsPress(PAD_INPUT_1))
+		if (Pad::IsPress(PAD_INPUT_4))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
@@ -370,7 +370,7 @@ void Player::Update()
 			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
 		}
 		// キーが離された瞬間を判定
-		if (Pad::IsRelease(PAD_INPUT_1))
+		if (Pad::IsRelease(PAD_INPUT_4))
 		{
 			if (m_fireEnergy > 0) // 弾エネルギーが0以上
 			{
@@ -424,7 +424,7 @@ void Player::Update()
 	if (m_isLineMove)
 	{
 		// ボタンを押したら発射
-		if (Pad::IsTrigger(PAD_INPUT_1))
+		if (Pad::IsTrigger(PAD_INPUT_4))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;

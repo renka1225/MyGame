@@ -472,13 +472,12 @@ void SceneMain::Update()
 	}
 
 #ifdef _DEBUG
-	// Cキーでクリア画面に移動するようにする
-	if (Pad::IsTrigger(pad & PAD_INPUT_3))
+	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
+	if (Pad::IsTrigger(pad & PAD_INPUT_START))
 	{
 		ClearStaging();
 	}
 #endif
-
 }
 
 void SceneMain::Draw()

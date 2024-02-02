@@ -106,8 +106,8 @@ void SceneGameOver::Update()
 		}
 	}
 
-	// Zキーを押したとき
-	if (Pad::IsTrigger(PAD_INPUT_1))
+	// ZキーorAボタンを押したとき
+	if (Pad::IsTrigger(PAD_INPUT_A))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);
@@ -148,15 +148,6 @@ void SceneGameOver::Update()
 			m_fadeAlpha = 0;
 		}
 	}
-
-#ifdef _DEBUG
-	// Zキーを押したらステージ選択画面に遷移
-	if (Pad::IsTrigger(PAD_INPUT_1))
-	{
-		m_isSceneSelect = true;
-	}
-#endif
-
 }
 
 void SceneGameOver::Draw()

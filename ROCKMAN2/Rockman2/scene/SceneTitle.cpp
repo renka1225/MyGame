@@ -108,8 +108,8 @@ void SceneTitle::Update()
 		}
 	}
 
-	// Zキーを押したら遷移
-	if (Pad::IsTrigger(PAD_INPUT_1))
+	// ZキーorAボタンを押したら遷移
+	if (Pad::IsTrigger(PAD_INPUT_A))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_BACK, true);

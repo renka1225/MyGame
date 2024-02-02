@@ -74,7 +74,7 @@ void SceneOption::Update()
 	}
 
 	// ZƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
-	if (Pad::IsTrigger(PAD_INPUT_1))
+	if (Pad::IsTrigger(PAD_INPUT_B))
 	{
 		// TODO:‘I‘ğó‘Ô‚É‚æ‚Á‚ÄˆÚ“®æ‚ğ•Ï‚¦‚é
 		switch (m_select)
