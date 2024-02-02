@@ -7,7 +7,7 @@
 namespace
 {
 	// アイテムのサイズ
-	constexpr int kWidth = 32;
+	constexpr int kWidth = 35;
 	constexpr int kHeight = 32;
 
 	// 落下速度
@@ -16,7 +16,7 @@ namespace
 
 RecoverySmallShot::RecoverySmallShot()
 {
-	m_handle = LoadGraph("data/image/Recovery/smallShot.png");
+	m_handle = LoadGraph("data/image/Recovery/shot.png");
 }
 
 RecoverySmallShot::~RecoverySmallShot()
@@ -27,6 +27,7 @@ RecoverySmallShot::~RecoverySmallShot()
 void RecoverySmallShot::Init(Bg* pBg)
 {
 	m_pBg = pBg;
+	m_isExist = false;
 }
 
 void RecoverySmallShot::Update()
@@ -79,7 +80,7 @@ void RecoverySmallShot::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 1.0, 0.0, m_handle, true, false);
+	DrawRotaGraph(x, y, 1.0f, 0.0f, m_handle, true, false);
 }
 
 void RecoverySmallShot::Start(Vec2 pos)
@@ -91,6 +92,6 @@ void RecoverySmallShot::Start(Vec2 pos)
 	m_pos = pos;
 
 	// アイテムを下に落とす
-	m_vec.y += kSpeed;
+	m_vec.y = kSpeed;
 }
 

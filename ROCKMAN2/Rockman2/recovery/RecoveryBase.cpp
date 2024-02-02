@@ -20,6 +20,7 @@ RecoveryBase::~RecoveryBase()
 void RecoveryBase::Init(Bg* pBg)
 {
 	m_pBg = pBg;
+	m_isExist = false;
 }
 
 void RecoveryBase::Update()

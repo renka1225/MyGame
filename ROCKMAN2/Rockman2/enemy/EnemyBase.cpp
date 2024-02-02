@@ -61,7 +61,7 @@ void EnemyBase::Draw()
 {
 }
 
-void EnemyBase::Start(float posX, float posY)
+void EnemyBase::Start(float posX, float posY, float moveRangeX)
 {
 	m_isExist = true;
 }

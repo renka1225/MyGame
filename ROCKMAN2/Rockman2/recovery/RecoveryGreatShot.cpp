@@ -7,8 +7,8 @@
 namespace
 {
 	// アイテムのサイズ
-	constexpr int kWidth = 32;
-	constexpr int kHeight = 32;
+	constexpr int kWidth = 70;
+	constexpr int kHeight = 64;
 
 	// 落下速度
 	constexpr int kSpeed = 5;
@@ -16,7 +16,7 @@ namespace
 
 RecoveryGreatShot::RecoveryGreatShot()
 {
-	m_handle = LoadGraph("data/image/Recovery/greatShot.png");
+	m_handle = LoadGraph("data/image/Recovery/shot.png");
 }
 
 RecoveryGreatShot::~RecoveryGreatShot()
@@ -27,7 +27,8 @@ RecoveryGreatShot::~RecoveryGreatShot()
 void RecoveryGreatShot::Init(Bg* pBg)
 {
 	m_pBg = pBg;
-	m_frame = 0;
+	m_frame = 0; 
+	m_isExist = false;
 }
 
 void RecoveryGreatShot::Update()
@@ -82,7 +83,7 @@ void RecoveryGreatShot::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 1.0, 0.0, m_handle, true, false);
+	DrawRotaGraph(x, y, 1.5f, 0.0f, m_handle, true, false);
 }
 
 void RecoveryGreatShot::Start(Vec2 pos)
@@ -94,5 +95,5 @@ void RecoveryGreatShot::Start(Vec2 pos)
 	m_pos = pos;
 
 	// アイテムを下に落とす
-	m_vec.y += kSpeed;
+	m_vec.y = kSpeed;
 }

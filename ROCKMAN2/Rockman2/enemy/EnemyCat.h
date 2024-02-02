@@ -13,7 +13,7 @@ public:
 	virtual void Init(Bg* pBg, Player* pPlayer) override;
 	virtual void Update() override;
 	virtual void Draw() override;
-	virtual void Start(float posX, float posY) override;
+	virtual void Start(float posX, float posY, float moveRangeX) override;
 	virtual void HitCollision(Rect chipRect) override;
 	virtual void OnDamage() override;
 

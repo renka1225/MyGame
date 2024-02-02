@@ -32,7 +32,8 @@ SceneGameOver::SceneGameOver():
 	m_select(kRetry),
 	m_isSceneRetry(false),
 	m_isSceneSelect(false),
-	m_isSceneTitle(false)
+	m_isSceneTitle(false), 
+	m_fadeAlpha(255)
 {
 	// 画像読み込み
 	m_bgHandle = LoadGraph("data/image/BackGround/gameover.png");
@@ -62,6 +63,7 @@ void SceneGameOver::Init()
 	m_isSceneRetry = false;
 	m_isSceneSelect = false;
 	m_isSceneTitle = false;
+	m_fadeAlpha = 255;
 	m_select = kRetry;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
@@ -126,6 +128,24 @@ void SceneGameOver::Update()
 			StopSoundMem(m_bgm);
 		default:
 			break;
+		}
+	}
+
+	// フェードインアウト
+	if (m_isSceneRetry || m_isSceneSelect || m_isSceneTitle)
+	{
+		m_fadeAlpha += 8;
+		if (m_fadeAlpha > 255)
+		{
+			m_fadeAlpha = 255;
+		}
+	}
+	else
+	{
+		m_fadeAlpha -= 8;
+		if (m_fadeAlpha < 0)
+		{
+			m_fadeAlpha = 0;
 		}
 	}
 

@@ -27,11 +27,10 @@ public:
 	// マップチップとの当たり判定
 	virtual void HitCollision(Rect chipRect);
 	// 敵キャラクターをスタートさせる
-	virtual void Start(float posX, float posY ) = 0;
+	virtual void Start(float posX, float posY, float moveRangeX) = 0;
 
 	// メンバー変数にアクセスする
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
-	//void SetBg(Bg* pBg) { m_pBg = pBg; }
 
 	// 存在しているかの判定		true:存在している
 	bool IsExist() const { return m_isExist; }
@@ -80,6 +79,11 @@ protected:
 		kDirRight,	// 右
 	};
 	Dir m_dir;
+
+	// スタート時の敵の座標
+	Vec2 m_startPos;
+	// 横の移動範囲
+	float m_moveRangeX;
 
 	// 音
 	int m_damageSE;	// ダメージ時のSE

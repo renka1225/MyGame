@@ -18,7 +18,8 @@ namespace
 	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度
-	constexpr float kSpeed = 1.2f;
+	constexpr float kSpeedX = 1.2f;
+	constexpr float kSpeedY = 10.0f;
 	// 最大HP
 	constexpr int kHp = 10;
 
@@ -122,14 +123,16 @@ void EnemyBear::Draw()
 #endif
 }
 
-void EnemyBear::Start(float posX, float posY)
+void EnemyBear::Start(float posX, float posY, float moveRangeX)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
 	m_pos = { posX, posY };
-	m_vec.x -= kSpeed;
-	m_vec.y += kSpeed;
+	m_startPos = { posX, posY };
+	m_vec.x = -kSpeedX;
+	m_vec.y = kSpeedY;
+	m_moveRangeX = moveRangeX;
 }
 
 void EnemyBear::HitCollision(Rect chipRect)
@@ -175,6 +178,9 @@ void EnemyBear::OnDamage()
 
 	// 現在のHPを減らす
 	m_hp--;
+
+	// SEを鳴らす
+	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
 
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)

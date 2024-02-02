@@ -20,9 +20,10 @@ namespace
 	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度
-	constexpr float kSpeed = 1.5f;
+	constexpr float kSpeedX = 1.0f;
+	constexpr float kSpeedY = 10.0f;
 	constexpr float kSinSpeed = 3.0f;
-	constexpr float kAnimationSize = 0.7f;
+	constexpr float kAnimationSize = 2.5f;
 
 	// 最大HP
 	constexpr int kHp = 1;
@@ -73,20 +74,22 @@ void EnemyBird::Update()
 	Rect chipRect; // 当たったマップチップの矩形
 	HitCollision(chipRect);
 
-	// TODO:sin関数使って移動
+	// 移動
 	m_sinCount += kSinSpeed;
-	m_vec.y += sinf(m_sinCount * kAnimationSize);
+	m_vec.y = sinf(m_sinCount * kAnimationSize);
 
-	if (m_pos.y > Game::kScreenHeight - 60)
+	// 左右移動するようにする
+	if (m_pos.x > m_startPos.x + m_moveRangeX)
 	{
-		m_pos.y = Game::kScreenHeight - 60;
-
+		m_vec.x *= -1;
+		m_dir = kDirLeft;
 	}
-	// TOOD:プレイヤーが近づいたらプレイヤーに寄るようにする
-	if (m_pos.x < m_pPlayer->GetPos().x + 100.0f || m_pos.x > m_pPlayer->GetPos().x -100.0f)
+	else if (m_pos.x < m_startPos.x - m_moveRangeX)
 	{
-		m_pos.x += m_vec.x;
+		m_vec.x *= -1;
+		m_dir = kDirRight;
 	}
+	
 
 	// 移動アニメーション
 	m_flyAnimFrame++;
@@ -151,14 +154,16 @@ void EnemyBird::Draw()
 #endif
 }
 
-void EnemyBird::Start(float posX, float posY)
+void EnemyBird::Start(float posX, float posY, float moveRangeX)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
 	m_pos = { posX, posY };
-	m_vec.x -= kSpeed;
-	m_vec.y += kSpeed;
+	m_startPos = { posX, posY };
+	m_vec.x = -kSpeedX;
+	m_vec.y = kSpeedY;
+	m_moveRangeX = moveRangeX;
 }
 
 void EnemyBird::HitCollision(Rect chipRect)
@@ -187,12 +192,12 @@ void EnemyBird::HitCollision(Rect chipRect)
 	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * kEnlarge), static_cast<float>(kHeight * kEnlarge)); // 当たり判定を生成
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
-		if (m_vec.y > 0.0f)
+		if (m_vec.y > 0.0f && m_vec.x == 0.0f)
 		{
 			m_pos.y = chipRect.GetTop() - kHeight * kEnlarge * 0.5f - 1;
 			m_vec.y *= -1;
 		}
-		else if (m_vec.y < 0.0f)
+		else if (m_vec.y < 0.0f && m_vec.x == 0.0f)
 		{
 			m_pos.y = chipRect.GetBottom() + kHeight * kEnlarge * 0.5f + 1;
 			m_vec.y *= -1;
@@ -207,6 +212,9 @@ void EnemyBird::OnDamage()
 
 	// 弾が当たったらHPを減らす
 	m_hp--;
+
+	// SEを鳴らす
+	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
 
 	// HPが0以下になったら存在を消す
 	if (m_hp <= 0)

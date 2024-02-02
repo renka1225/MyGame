@@ -18,7 +18,8 @@ namespace
 	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度
-	constexpr float kSpeedX = 4.0f;
+	constexpr float kSpeedX = 3.0f;
+	constexpr float kSpeedY = 10.0f;
 	// 最大HP
 	constexpr int kHp = 3;
 
@@ -65,6 +66,18 @@ void EnemyCat::Update()
 	// マップチップとの当たり判定
 	Rect chipRect; // 当たったマップチップの矩形
 	HitCollision(chipRect);
+
+	// 地面から落ちないようにする
+	if (m_pos.x > m_startPos.x + m_moveRangeX)
+	{
+		m_vec.x *= -1;
+		m_dir = kDirLeft;
+	}
+	else if (m_pos.x < m_startPos.x - m_moveRangeX)
+	{
+		m_vec.x *= -1;
+		m_dir = kDirRight;
+	}
 
 	// 移動アニメーション
 	m_walkAnimFrame++;
@@ -122,13 +135,16 @@ void EnemyCat::Draw()
 #endif
 }
 
-void EnemyCat::Start(float posX, float posY)
+void EnemyCat::Start(float posX, float posY, float moveRangeX)
 {
 	// 敵キャラクターを登場させる
 	m_isExist = true;
 
 	m_pos = { posX, posY };
-	m_vec.x -= kSpeedX;
+	m_startPos = { posX, posY };
+	m_vec.x = -kSpeedX;
+	m_vec.y = kSpeedY;
+	m_moveRangeX = moveRangeX;
 }
 
 void EnemyCat::HitCollision(Rect chipRect)

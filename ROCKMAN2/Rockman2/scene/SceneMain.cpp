@@ -119,7 +119,7 @@ SceneMain::SceneMain():
 
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
-	m_clearSE = LoadSoundMem("data/sound/SE/clear.mp3");
+	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
@@ -222,7 +222,9 @@ void SceneMain::Init()
 	m_isSceneEnd = false;
 
 	// BGMを鳴らす
+	ChangeVolumeSoundMem(m_bgm, 170);
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+
 }
 
 void SceneMain::End()
@@ -586,8 +588,8 @@ void SceneMain::DropHpSmallRecovery(int enemyIndex) // HP小回復
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoverySmallHp;
-			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			m_pRecovery[i]->Init(m_pBg);
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			return;
 		}
 	}
@@ -600,8 +602,8 @@ void SceneMain::DropHpGreatRecovery(int enemyIndex) // HP大回復
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryGreatHp;
-			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			m_pRecovery[i]->Init(m_pBg);
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			return;
 		}
 	}
@@ -614,8 +616,8 @@ void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoverySmallShot;
-			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			m_pRecovery[i]->Init(m_pBg);
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			return;
 		}
 	}
@@ -656,7 +658,7 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
-			m_pRecovery[i]->Start({ 900, 500 }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ 1200, 700 }); // アイテムの位置を設定
 			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
@@ -681,53 +683,53 @@ void SceneMain::CreateEnemy()
 		switch (i)
 		{
 		case 0:
-			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1620.0f, 600.0f);
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(600.0f, 400.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1080.0f, 240.0f);
+			m_pEnemy[i]->Start(1080.0f, 240.0f, 30.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(2000.0f, 700.0f);
+			m_pEnemy[i]->Start(1600.0f, 600.0f, 400.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 3:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(1680.0f, 100.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(2052.0f, 450.0f, 40.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 4:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2500.0f, 600.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(2850.0f, 320.0f, 40.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 5:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(4000.0f, 200.0f);
+			m_pEnemy[i]->Start(3240.0f, 250.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 6:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(Stage::kMapWidth - 1000.0f, 400.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(3800.0f, 600.0f, 250.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(Stage::kMapWidth - 80.0f, 100.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(4050.0f, 250.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 8:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(Stage::kMapWidth - 500.0f, 50.0f);
+			m_pEnemy[i]->Start(4600.0f, 100.0f, 60.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 9:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(Stage::kMapWidth - 400.0f, 900.0f);
+			m_pEnemy[i]->Start(6000.0f, 900.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:
@@ -740,23 +742,23 @@ void SceneMain::CreateEnemy()
 void SceneMain::CreateItem(int enemyIndex)
 {
 	int getRandDrop = GetRand(100);
-	if (getRandDrop <= 5)
+	if (getRandDrop <= 20)
 	{
 		DropHpSmallRecovery(enemyIndex); // HP回復(小)
 	}
-	else if (getRandDrop <= 8)
+	else if (getRandDrop <= 40)
 	{
 		DropHpGreatRecovery(enemyIndex);	// HP回復(大)
 	}
-	else if (getRandDrop <= 13)
+	else if (getRandDrop <= 60)
 	{
 		DropShotSmallRecovery(enemyIndex); // 弾エネルギー(小)
 	}
-	else if (getRandDrop <= 16)
+	else if (getRandDrop <= 80)
 	{
 		DropShotGreatRecovery(enemyIndex); // 弾エネルギー(大)
 	}
-	else if (getRandDrop <= 19)
+	else if (getRandDrop <= 100)
 	{
 		DropLifeRecovery(enemyIndex);	// 残機
 	}

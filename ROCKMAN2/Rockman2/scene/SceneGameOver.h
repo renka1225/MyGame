@@ -32,6 +32,8 @@ private:
 
 	// 現在の選択状態
 	int m_select;
+	// フェードイン、アウト
+	int m_fadeAlpha;
 
 private:
 	// シーン選択のフラグ true:シーンに移動

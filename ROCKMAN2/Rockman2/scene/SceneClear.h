@@ -38,6 +38,9 @@ private:
 	// 選択カーソルの表示位置
 	Vec2 m_selectPos;
 
+	// フェードイン、アウト
+	int m_fadeAlpha;
+
 	// 画像
 	int m_bgHandle;		// 背景
 	int m_clearHandle;	// クリアの文字

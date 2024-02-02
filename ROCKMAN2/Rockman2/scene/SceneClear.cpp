@@ -31,7 +31,8 @@ namespace
 SceneClear::SceneClear():
 	m_select(kSelectStage),
 	m_isSceneSelectStage(false),
-	m_isSceneTitle(false)
+	m_isSceneTitle(false),
+	m_fadeAlpha(255)
 {
 	// 画像読み込み
 	m_bgHandle = LoadGraph("data/image/BackGround/clear.png");
@@ -63,6 +64,7 @@ void SceneClear::Init()
 	m_select = kSelectStage;
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
+	m_fadeAlpha = 255;
 
 	// BGMを鳴らす
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
@@ -125,6 +127,24 @@ void SceneClear::Update()
 			break;
 		default:
 			break;
+		}
+	}
+
+	// フェードインアウト
+	if (m_isSceneSelectStage || m_isSceneTitle)
+	{
+		m_fadeAlpha += 8;
+		if (m_fadeAlpha > 255)
+		{
+			m_fadeAlpha = 255;
+		}
+	}
+	else
+	{
+		m_fadeAlpha -= 8;
+		if (m_fadeAlpha < 0)
+		{
+			m_fadeAlpha = 0;
 		}
 	}
 }
