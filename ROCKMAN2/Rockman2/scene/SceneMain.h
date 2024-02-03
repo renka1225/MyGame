@@ -4,6 +4,7 @@
 
 class FontManager;
 class Bg;
+class SceneStaging;
 class ScenePause;
 class Player;
 class ShotBase;
@@ -66,6 +67,8 @@ protected:
 	FontManager* m_pFont;
 	// 背景
 	Bg* m_pBg;
+	// 演出
+	SceneStaging* m_pStaging;
 	// ポーズ画面
 	ScenePause* m_pPause;
 	// プレイヤー
@@ -108,8 +111,6 @@ protected:
 
 	// 音
 	int m_bgm;			// BGM
-	int m_startSE;		// スタート時のSE
-	int m_clearSE;		// クリア時のSE
 	int m_enemyDeadSE;	// 敵死亡時のSE
 	int m_recoverySE;	// 回復時のSE
 	int m_lineMoveSE;	// アイテム2号が画面内にあるとき

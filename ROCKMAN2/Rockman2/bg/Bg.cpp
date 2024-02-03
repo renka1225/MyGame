@@ -72,7 +72,7 @@ Bg::Bg():
 	m_mapHandle = LoadGraph("data/image/map.png");
 
 	// ‘€ìà–¾‚Ì‰æ‘œ
-	m_exHandle = LoadGraph("data/image/UI/ex.png");
+	m_exHandle = LoadGraph("data/image/UI/ex/exJump.png");
 
 	assert(m_bgHandle != -1);
 	assert(m_bg2Handle != -1);

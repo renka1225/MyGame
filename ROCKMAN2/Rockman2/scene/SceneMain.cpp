@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "FontManager.h"
 #include "Bg.h"
+#include "SceneStaging.h"
 #include "ScenePause.h"
 
 #include "RecoverySmallHp.h"
@@ -88,10 +89,7 @@ SceneMain::SceneMain() :
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
 	m_isSceneEnd(false),
-	m_fadeAlpha(255),
-	m_startStagingTime(kStartTime),
-	m_clearStagingTime(kClearTime),
-	m_gameoverStagingTime(kGameoverTime)
+	m_fadeAlpha(255)
 {
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
@@ -127,8 +125,6 @@ SceneMain::SceneMain() :
 
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
-	m_startSE = LoadSoundMem("data/sound/BGM/start.mp3");
-	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
@@ -185,8 +181,6 @@ SceneMain::~SceneMain()
 	}
 
 	DeleteSoundMem(m_bgm);
-	DeleteSoundMem(m_startSE);
-	DeleteSoundMem(m_clearSE);
 	DeleteSoundMem(m_enemyDeadSE);
 	DeleteSoundMem(m_recoverySE);
 	DeleteSoundMem(m_lineMoveSE);
@@ -197,6 +191,12 @@ void SceneMain::Init()
 {
 	m_enemyTotalNum = kEnemyMax;
 	m_time = 0.0f;
+
+	// TODO:スタート演出
+	/*if (m_pStaging->IsStart())
+	{
+		m_pStaging->Start();
+	}*/
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -237,14 +237,8 @@ void SceneMain::Init()
 	if (m_startStagingTime <= 0)
 	{
 		ChangeVolumeSoundMem(m_bgm, 150);
-		DeleteSoundMem(m_startSE);
 		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 	}
-	else
-	{
-		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
-	}
-
 }
 
 void SceneMain::End()
@@ -271,14 +265,8 @@ void SceneMain::Update()
 		}
 	}
 
-	// スタート演出
-	if (m_startStagingTime >= 0.0f)
-	{
-		m_startStagingTime--;
-		// TODO:ここでreturnすると重くなる
-		// return;
-	}
-	else
+	m_startStagingTime--;
+	if (m_startStagingTime < 0.0f)
 	{
 		m_startStagingTime = 0.0f;
 	}
@@ -300,7 +288,6 @@ void SceneMain::Update()
 		
 		// TODO:クリアSE1回だけを鳴らす
 		StopSoundMem(m_bgm);
-		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
 	}
 	if (m_clearStagingTime <= 0.0f)
 	{
@@ -584,9 +571,9 @@ void SceneMain::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:スタートとクリア条件の表示
-	if (m_startStagingTime > 0.0f)
+	if (m_startStagingTime >= 0.0f)
 	{
-		DrawStartStaging();
+		//DrawStartStaging();
 	}
 
 	// TODO: クリアの演出とタイム表示
