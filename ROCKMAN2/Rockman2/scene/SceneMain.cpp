@@ -41,8 +41,8 @@ namespace
 
 	/*演出時間*/
 	// スタート演出時間
-	constexpr float kStartTime = 60.0f;
-	constexpr float kClearTime = 300.0f;
+	constexpr float kStartTime = 600.0f;
+	constexpr float kClearTime = 180.0f;
 	constexpr float kGameoverTime = 300.0f;
 
 	/*ポーズ画面*/
@@ -234,7 +234,7 @@ void SceneMain::Init()
 	m_gameoverStagingTime = kGameoverTime;
 
 	// TODO:スタートSEを鳴らした後にBGMを鳴らす
-	/*if (m_startStagingTime <= 0)
+	if (m_startStagingTime <= 0)
 	{
 		ChangeVolumeSoundMem(m_bgm, 150);
 		DeleteSoundMem(m_startSE);
@@ -243,7 +243,7 @@ void SceneMain::Init()
 	else
 	{
 		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
-	}*/
+	}
 
 }
 
@@ -275,7 +275,8 @@ void SceneMain::Update()
 	if (m_startStagingTime >= 0.0f)
 	{
 		m_startStagingTime--;
-		return;
+		// TODO:ここでreturnすると重くなる
+		// return;
 	}
 	else
 	{
@@ -293,23 +294,22 @@ void SceneMain::Update()
 	}
 
 	// TODO:敵をすべて倒したらクリア演出を行う
-	//if (m_enemyTotalNum <= 0)
-	//{
-	//	m_clearStagingTime--;
-	//	
-	//	// クリアSEを鳴らす
-	//	StopSoundMem(m_bgm);
-	//	PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
-	//	return;
-	//}
-	//if (m_clearStagingTime < 0.0f)
-	//{
-	//	m_isSceneClear = true;
-	//	m_clearStagingTime = 0.0f;
+	if (m_enemyTotalNum <= 0)
+	{
+		m_clearStagingTime--;
+		
+		// TODO:クリアSE1回だけを鳴らす
+		StopSoundMem(m_bgm);
+		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
+	}
+	if (m_clearStagingTime <= 0.0f)
+	{
+		m_isSceneClear = true;
+		m_clearStagingTime = 0.0f;
 
-	//	// 0.5秒後に遷移
-	//	WaitTimer(500);
-	//}
+		// 0.5秒後に遷移
+		WaitTimer(500);
+	}
 
 	// パッドの入力状態を取得
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -346,7 +346,10 @@ void SceneMain::Update()
 	}
 
 	// タイムカウント
-	m_time++;
+	if (m_enemyTotalNum > 0)
+	{
+		m_time++;
+	}
 
 	// 背景の更新
 	m_pBg->Update();
@@ -514,13 +517,13 @@ void SceneMain::Update()
 		}
 	}
 
-//#ifdef _DEBUG
-//	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
-//	if (Pad::IsTrigger(pad & PAD_INPUT_START))
-//	{
-//		m_enemyTotalNum = 0;
-//	}
-//#endif
+#ifdef _DEBUG
+	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
+	if (Pad::IsTrigger(pad & PAD_INPUT_START))
+	{
+		m_enemyTotalNum = 0;
+	}
+#endif
 }
 
 void SceneMain::Draw()
@@ -581,16 +584,16 @@ void SceneMain::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:スタートとクリア条件の表示
-	/*if (m_startStagingTime > 0.0f)
+	if (m_startStagingTime > 0.0f)
 	{
 		DrawStartStaging();
-	}*/
+	}
 
-	//// TODO: クリアの演出とタイム表示
-	//if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
-	//{
-	//	DrawClearStaging();
-	//}
+	// TODO: クリアの演出とタイム表示
+	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
+	{
+		DrawClearStaging();
+	}
 }
 
 /// <summary>
@@ -993,30 +996,24 @@ void SceneMain::DrawPause()
 /// </summary>
 void SceneMain::DrawStartStaging()
 {
-
 	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
 	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
 	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
-
-#ifdef _DEBUG
-	// MEMO:演出が実行されているか確認
-	// printfDx("スタート演出中\n");
-#endif
 }
 
 /// <summary>
 /// クリア演出の描画
 /// </summary>
-//void SceneMain::DrawClearStaging()
-//{
-//	// タイム
-//	int milliSec = m_time * 1000 / 60;
-//	int sec = (milliSec / 1000) % 60;
-//	int min = (milliSec / 1000) / 60;
-//	milliSec %= 1000;
-//
-//	// クリアの文字を表示
-//	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
-//	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "CLEAR!", 0x4682b4, m_pFont->GetFontStaging());
-//	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
-//}
+void SceneMain::DrawClearStaging()
+{
+	// タイム
+	int milliSec = m_time * 1000 / 60;
+	int sec = (milliSec / 1000) % 60;
+	int min = (milliSec / 1000) / 60;
+	milliSec %= 1000;
+
+	// クリアの文字を表示
+	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
+	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "CLEAR!", 0x4682b4, m_pFont->GetFontStaging());
+	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
+}
