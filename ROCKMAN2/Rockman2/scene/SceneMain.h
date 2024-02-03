@@ -27,9 +27,6 @@ public:
 	// ショットの追加
 	bool AddShot(ShotBase* pShot);
 
-	// クリア時演出
-	void ClearStaging();
-
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
 	void DropHpGreatRecovery(int enemyIndex);	// HP大回復
@@ -48,8 +45,6 @@ public:
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
-	// スタート演出
-	void StartStaging();
 	//　敵の生成
 	void CreateEnemy();
 	// アイテムの生成
@@ -60,6 +55,10 @@ private:
 	void DrawShotChange();
 	// ポーズ画面の表示
 	void DrawPause();
+	// スタート演出の描画
+	void DrawStartStaging();
+	// クリア時演出の描画
+	void DrawClearStaging();
 
 protected:
 	/*ポインタを取得*/
@@ -102,11 +101,14 @@ protected:
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
-	// スタート演出
-	float m_startDisplayX; // 表示位置
+	// 演出
+	float m_startStagingTime;		// スタート演出の時間
+	float m_clearStagingTime;		// クリア演出時間
+	float m_gameoverStagingTime;	// ゲームオーバー演出時間
 
 	// 音
 	int m_bgm;			// BGM
+	int m_startSE;		// スタート時のSE
 	int m_clearSE;		// クリア時のSE
 	int m_enemyDeadSE;	// 敵死亡時のSE
 	int m_recoverySE;	// 回復時のSE

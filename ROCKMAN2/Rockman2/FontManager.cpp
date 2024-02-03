@@ -21,6 +21,7 @@ FontManager::FontManager()
 	m_fontHandle = CreateFontToHandle("廻想体 ネクスト UP B", 28, -1);
 	m_fontHandle2 = CreateFontToHandle("廻想体 ネクスト UP B", 36, -1);
 	m_fontHandle3 = CreateFontToHandle("廻想体 ネクスト UP B", 45, -1);
+	m_fontStaging = CreateFontToHandle("廻想体 ネクスト UP B", 85, -1);
 }
 
 FontManager::~FontManager()
@@ -28,4 +29,5 @@ FontManager::~FontManager()
 	DeleteFontToHandle(m_fontHandle);
 	DeleteFontToHandle(m_fontHandle2);
 	DeleteFontToHandle(m_fontHandle3);
+	DeleteFontToHandle(m_fontStaging);
 }

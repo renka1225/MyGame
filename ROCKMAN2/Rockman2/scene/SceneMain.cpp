@@ -39,6 +39,12 @@ namespace
 	constexpr int kMapChipWidth = 32;
 	constexpr int kMapChipHeight = 32;
 
+	/*演出時間*/
+	// スタート演出時間
+	constexpr float kStartTime = 60.0f;
+	constexpr float kClearTime = 300.0f;
+	constexpr float kGameoverTime = 300.0f;
+
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 850;
@@ -73,7 +79,7 @@ namespace
 	constexpr int kFramePosY = Game::kScreenHeight * 0.5f - 199;
 }
 
-SceneMain::SceneMain():
+SceneMain::SceneMain() :
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
 	m_enemyTotalNum(kEnemyMax),
@@ -83,7 +89,9 @@ SceneMain::SceneMain():
 	m_isSceneClear(false),
 	m_isSceneEnd(false),
 	m_fadeAlpha(255),
-	m_startDisplayX(0.0f)
+	m_startStagingTime(kStartTime),
+	m_clearStagingTime(kClearTime),
+	m_gameoverStagingTime(kGameoverTime)
 {
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
@@ -119,6 +127,7 @@ SceneMain::SceneMain():
 
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
+	m_startSE = LoadSoundMem("data/sound/BGM/start.mp3");
 	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
@@ -176,6 +185,7 @@ SceneMain::~SceneMain()
 	}
 
 	DeleteSoundMem(m_bgm);
+	DeleteSoundMem(m_startSE);
 	DeleteSoundMem(m_clearSE);
 	DeleteSoundMem(m_enemyDeadSE);
 	DeleteSoundMem(m_recoverySE);
@@ -187,9 +197,6 @@ void SceneMain::Init()
 {
 	m_enemyTotalNum = kEnemyMax;
 	m_time = 0.0f;
-
-	// TODO:スタート時の演出
-	StartStaging();
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -221,9 +228,22 @@ void SceneMain::Init()
 	m_isSceneTitle = false;
 	m_isSceneEnd = false;
 
-	// BGMを鳴らす
-	ChangeVolumeSoundMem(m_bgm, 170);
-	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+	// 演出時間の初期化
+	m_startStagingTime = kStartTime;
+	m_clearStagingTime = kClearTime;
+	m_gameoverStagingTime = kGameoverTime;
+
+	// TODO:スタートSEを鳴らした後にBGMを鳴らす
+	/*if (m_startStagingTime <= 0)
+	{
+		ChangeVolumeSoundMem(m_bgm, 150);
+		DeleteSoundMem(m_startSE);
+		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+	}
+	else
+	{
+		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
+	}*/
 
 }
 
@@ -251,6 +271,17 @@ void SceneMain::Update()
 		}
 	}
 
+	// スタート演出
+	if (m_startStagingTime >= 0.0f)
+	{
+		m_startStagingTime--;
+		return;
+	}
+	else
+	{
+		m_startStagingTime = 0.0f;
+	}
+
 	// プレイヤーの残機が0未満の場合
 	if (m_pPlayer->GetLife() < 0)
 	{
@@ -261,12 +292,24 @@ void SceneMain::Update()
 		StopSoundMem(m_bgm);
 	}
 
-	// 敵をすべて倒したらクリア画面に遷移
-	if (m_enemyTotalNum <= 0)
-	{
-		// TODO:クリア演出
-		ClearStaging();
-	}
+	// TODO:敵をすべて倒したらクリア演出を行う
+	//if (m_enemyTotalNum <= 0)
+	//{
+	//	m_clearStagingTime--;
+	//	
+	//	// クリアSEを鳴らす
+	//	StopSoundMem(m_bgm);
+	//	PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
+	//	return;
+	//}
+	//if (m_clearStagingTime < 0.0f)
+	//{
+	//	m_isSceneClear = true;
+	//	m_clearStagingTime = 0.0f;
+
+	//	// 0.5秒後に遷移
+	//	WaitTimer(500);
+	//}
 
 	// パッドの入力状態を取得
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -471,21 +514,19 @@ void SceneMain::Update()
 		}
 	}
 
-#ifdef _DEBUG
-	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
-	if (Pad::IsTrigger(pad & PAD_INPUT_START))
-	{
-		ClearStaging();
-	}
-#endif
+//#ifdef _DEBUG
+//	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
+//	if (Pad::IsTrigger(pad & PAD_INPUT_START))
+//	{
+//		m_enemyTotalNum = 0;
+//	}
+//#endif
 }
 
 void SceneMain::Draw()
 {
 	// 描画先スクリーンをクリアする
 	ClearDrawScreen();
-
-	// TODO:スタート時の描画
 
 	// 背景の描画
 	m_pBg->Draw();
@@ -520,7 +561,7 @@ void SceneMain::Draw()
 	/*画面横に情報表示*/
 	DrawInfo();
 
-	// ポーズ画面、武器切り替え画面の表示
+	/*ポーズ画面、武器切り替え画面の表示*/
 	m_pPause->Draw();
 
 	/*武器切り替え画面表示中*/
@@ -538,9 +579,25 @@ void SceneMain::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x808080, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// TODO:スタートとクリア条件の表示
+	/*if (m_startStagingTime > 0.0f)
+	{
+		DrawStartStaging();
+	}*/
+
+	//// TODO: クリアの演出とタイム表示
+	//if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
+	//{
+	//	DrawClearStaging();
+	//}
 }
 
-/*弾の生成*/
+/// <summary>
+/// 弾の生成
+/// </summary>
+/// <param name="pShot">弾の種類</param>
+/// <returns></returns>
 bool SceneMain::AddShot(ShotBase* pShot)
 {
 	// nullptrを渡されたら止まる
@@ -563,24 +620,13 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
-/*クリア演出*/
-void SceneMain::ClearStaging()
-{
-	// クリアの文字を表示
-	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f, "CLEAR!", 0xffd700, m_pFont->GetFont3());
 
-	// クリアSEを鳴らす
-	StopSoundMem(m_bgm);
-	PlaySoundMem(m_clearSE, DX_PLAYTYPE_NORMAL, true);
-
-	m_isSceneClear = true;
-
-	// 0.5秒後に遷移
-	WaitTimer(500);
-}
-
-/*アイテムドロップ*/
-void SceneMain::DropHpSmallRecovery(int enemyIndex) // HP小回復
+/// <summary>
+/// アイテム生成
+/// </summary>
+/// <param name="enemyIndex">敵</param>
+// HP小回復
+void SceneMain::DropHpSmallRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -593,8 +639,8 @@ void SceneMain::DropHpSmallRecovery(int enemyIndex) // HP小回復
 		}
 	}
 }
-
-void SceneMain::DropHpGreatRecovery(int enemyIndex) // HP大回復
+// HP大回復
+void SceneMain::DropHpGreatRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -607,8 +653,8 @@ void SceneMain::DropHpGreatRecovery(int enemyIndex) // HP大回復
 		}
 	}
 }
-
-void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
+// 弾小回復
+void SceneMain::DropShotSmallRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -621,8 +667,8 @@ void SceneMain::DropShotSmallRecovery(int enemyIndex) // 弾小回復
 		}
 	}
 }
-
-void SceneMain::DropShotGreatRecovery(int enemyIndex) // 弾大回復
+// 弾大回復
+void SceneMain::DropShotGreatRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -635,8 +681,8 @@ void SceneMain::DropShotGreatRecovery(int enemyIndex) // 弾大回復
 		}
 	}
 }
-
-void SceneMain::DropLifeRecovery(int enemyIndex) // 残機回復
+// 残機回復
+void SceneMain::DropLifeRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -649,8 +695,8 @@ void SceneMain::DropLifeRecovery(int enemyIndex) // 残機回復
 		}
 	}
 }
-
-void SceneMain::DropFullHpRecovery() // HP全回復
+// HP全回復
+void SceneMain::DropFullHpRecovery()
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -664,17 +710,9 @@ void SceneMain::DropFullHpRecovery() // HP全回復
 	}
 }
 
-/*スタート演出*/
-void SceneMain::StartStaging()
-{
-	// TODO:スタートとクリア条件の表示
-	//m_startDisplayX = Game::kScreenWidth;
-	//m_startDisplayX -= 10.0f;
-
-	WaitTimer(1000); // 1秒間待機
-}
-
-/*敵の生成*/
+/// <summary>
+/// 敵の生成
+/// </summary>
 void SceneMain::CreateEnemy()
 {
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -737,7 +775,10 @@ void SceneMain::CreateEnemy()
 	}
 }
 
-/*回復アイテムの生成*/
+/// <summary>
+/// 回復アイテムドロップ
+/// </summary>
+/// <param name="enemyIndex">敵</param>
 void SceneMain::CreateItem(int enemyIndex)
 {
 	int getRandDrop = GetRand(100);
@@ -763,7 +804,9 @@ void SceneMain::CreateItem(int enemyIndex)
 	}
 }
 
-/*弾数、敵数表示*/
+/// <summary>
+/// 弾数、敵数表示
+/// </summary>
 void SceneMain::DrawInfo()
 {
 	// 画面横に四角を表示
@@ -793,7 +836,10 @@ void SceneMain::DrawInfo()
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3 + 30, "タイム", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 50, kInfoTextPosY + kShotNumIntervalY * 3 + 70, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
 
-	/*HP、武器の弾数を右側に表示*/
+	
+/// <summary>
+/// HP、武器の弾数を右側に表示
+/// </summary>
 	// TODO:選択中の武器が分かるようにする
 	// HP
 	if (m_pPlayer->IsBuster())
@@ -877,7 +923,9 @@ void SceneMain::DrawInfo()
 	}
 }
 
-/*武器切り替え画面表示*/
+/// <summary>
+/// 武器切り替え画面表示
+/// </summary>
 void SceneMain::DrawShotChange()
 {
 	// 現在のHPを表示
@@ -930,10 +978,45 @@ void SceneMain::DrawShotChange()
 	DrawFormatStringToHandle(kTextPosX, kBarPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "%d", m_pPlayer->GetFullHpRecovery());
 }
 
-/*ポーズ画面表示*/
+/// <summary>
+/// ポーズ画面表示
+/// </summary>
 void SceneMain::DrawPause()
 {
 	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "ゲームに戻る");
 	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "リトライ");
 	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "タイトルに戻る");
 }
+
+/// <summary>
+/// スタート演出の描画
+/// </summary>
+void SceneMain::DrawStartStaging()
+{
+
+	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
+	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
+	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
+
+#ifdef _DEBUG
+	// MEMO:演出が実行されているか確認
+	// printfDx("スタート演出中\n");
+#endif
+}
+
+/// <summary>
+/// クリア演出の描画
+/// </summary>
+//void SceneMain::DrawClearStaging()
+//{
+//	// タイム
+//	int milliSec = m_time * 1000 / 60;
+//	int sec = (milliSec / 1000) % 60;
+//	int min = (milliSec / 1000) / 60;
+//	milliSec %= 1000;
+//
+//	// クリアの文字を表示
+//	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
+//	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "CLEAR!", 0x4682b4, m_pFont->GetFontStaging());
+//	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
+//}
