@@ -15,6 +15,19 @@ namespace
 	// 背景画像の移動量
 	constexpr float kBgMove = -1.2f;
 
+	// 説明画像のサイズ
+	constexpr int kExWidth = 186;
+	constexpr int kExHeight = 126;
+
+	// 説明画像のアニメーション
+	constexpr int kUseFrame[] = { 0, 1 };
+	constexpr int kFireUseFrame[] = { 0, 1, 2 };
+	// 説明画像のアニメーション1コマのフレーム数
+	constexpr int kExAnimFrameNum = 60;
+	// 説明画像のアニメーション1サイクルのフレーム数
+	constexpr int kExAnimFrameCycle = _countof(kUseFrame) * kExAnimFrameNum;
+	constexpr int kExFireAnimFrameCycle = _countof(kFireUseFrame) * kExAnimFrameNum;
+
 	// マップチップ1つのサイズ
 	constexpr int kChipWidth = 18;
 	constexpr int kChipHeight = 18;
@@ -39,11 +52,11 @@ namespace
 		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10},
 		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0, 30,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0, 10, 10,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0, 30,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10},
 		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   30,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  20,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10},
-		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0, 10,   10,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0, 20,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   10, 10, 10, 10, 10,  10, 10, 10, 10, 10,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
-		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   10, 10, 10,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0, 10, 10, 10,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
-		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  20,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
-		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  10, 10,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0, 20,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
-		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0, 10, 10, 10,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  10, 10,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   20,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10, 10,  10, 10, 10, 10, 10,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
+		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0, 10,   10,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0, 20,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   10, 10, 10, 10, 10,  10, 10, 10, 10, 10,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
+		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   10, 10, 10,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0, 10, 10, 10,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
+		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  20,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
+		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  10, 10,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0, 20,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
+		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0, 10, 10, 10,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,  10, 10,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   20,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    10, 10, 10, 10,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
 
 		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0, 10, 10,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0, 20,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   10, 10,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
 		{ 10, 10, 10, 10, 10,  10,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0, 10, 10,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,    0,  0,  0,  0,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0,  0,   0,  0,  0,  0,  0,     0,  0,  0,  0, 10,  10, 10, 10, 10, 10},
@@ -63,7 +76,8 @@ Bg::Bg():
 	m_bgPos(0, 0),
 	m_bgMove(kBgMove),
 	m_graphChipNumX(0),
-	m_graphChipNumY(0)
+	m_graphChipNumY(0),
+	m_exAnimFrame(0)
 {
 	m_bgHandle = LoadGraph("data/image/BackGround/Stage1/1.png");
 	m_bg2Handle = LoadGraph("data/image/BackGround/Stage1/2.png");
@@ -72,12 +86,14 @@ Bg::Bg():
 	m_mapHandle = LoadGraph("data/image/map.png");
 
 	// 操作説明の画像
-	m_exHandle = LoadGraph("data/image/UI/ex/exJump.png");
-
-	assert(m_bgHandle != -1);
-	assert(m_bg2Handle != -1);
-	assert(m_bg3Handle != -1);
-	assert(m_bg4Handle != -1);
+	m_walkHandle = LoadGraph("data/image/UI/ex/exWalk.png");
+	m_jumpHandle = LoadGraph("data/image/UI/ex/exJump.png");
+	m_shotHandle = LoadGraph("data/image/UI/ex/exShot.png");
+	m_metalHandle = LoadGraph("data/image/UI/ex/exMetal.png");
+	m_fireHandle = LoadGraph("data/image/UI/ex/exFire.png");
+	m_lineHandle = LoadGraph("data/image/UI/ex/exLine.png");
+	m_menuHandle = LoadGraph("data/image/UI/ex/exMenu.png");
+	m_recoveryHandle = LoadGraph("data/image/UI/ex/exRecovery.png");
 }
 
 Bg::~Bg()
@@ -87,7 +103,14 @@ Bg::~Bg()
 	DeleteGraph(m_bg3Handle);
 	DeleteGraph(m_bg4Handle);
 	DeleteGraph(m_mapHandle);
-	DeleteGraph(m_exHandle);
+	DeleteGraph(m_walkHandle);
+	DeleteGraph(m_jumpHandle);
+	DeleteGraph(m_shotHandle);
+	DeleteGraph(m_metalHandle);
+	DeleteGraph(m_fireHandle);
+	DeleteGraph(m_lineHandle);
+	DeleteGraph(m_menuHandle);
+	DeleteGraph(m_recoveryHandle);
 }
 
 void Bg::Init()
@@ -102,12 +125,24 @@ void Bg::Init()
 	m_graphChipNumY = graphH / kChipHeight;
 	m_bgPos = { 0, 0 };
 	m_bgMove = kBgMove;
+	m_exAnimFrame = 0;
 }
 
 void Bg::Update()
 {
 	// 背景の表示位置の更新
 	m_bgMove += kBgMove;
+	// 説明画像表示の更新
+	m_exAnimFrame++;
+	if (m_exAnimFrame >= kExAnimFrameCycle)
+	{
+		m_exAnimFrame = 0;
+	}
+	m_exFireAnimFrame++;
+	if (m_exFireAnimFrame >= kExFireAnimFrameCycle)
+	{
+		m_exFireAnimFrame = 0;
+	}
 }
 
 void Bg::Draw()
@@ -157,7 +192,9 @@ void Bg::Draw()
 	}
 }
 
-/*背景表示*/
+/// <summary>
+/// 背景表示
+/// </summary>
 void Bg::DrawBg()
 {
 	// 画像サイズを取得
@@ -209,29 +246,40 @@ void Bg::DrawBg()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
-// TODO:操作説明の表示
+/// <summary>
+/// // 操作説明の表示
+/// </summary>
 void Bg::DrawEx(int scrollX, int scrollY)
 {
+	int animFrame = m_exAnimFrame / kExAnimFrameNum;
+	int fireAnimFrame = m_exFireAnimFrame / kExAnimFrameNum;
+	int srcX = kExWidth * kUseFrame[animFrame];
+	int fireSrcX = kExWidth * kFireUseFrame[fireAnimFrame];
+	int srcY = 0;
+
 	//移動
-	DrawGraph(432 - scrollX , 700 - scrollY, m_exHandle, true);
+	DrawGraph(432 - scrollX , 700 - scrollY, m_walkHandle, true);
 	// ジャンプ
-	DrawGraph(600 - scrollX, 700 - scrollY, m_exHandle, true);
+	DrawGraph(650 - scrollX, 700 - scrollY, m_jumpHandle, true);
 	// バスター
-	DrawGraph(1120 - scrollX, 700 - scrollY, m_exHandle, true);
+	DrawGraph(1120 - scrollX, 700 - scrollY, m_shotHandle, true);
 	// 回復
-	DrawGraph(1400 - scrollX, 700 - scrollY, m_exHandle, true);
+	DrawGraph(1400 - scrollX, 700 - scrollY, m_recoveryHandle, true);
 	// 武器切り替え
-	DrawGraph(2200 - scrollX, 700 - scrollY, m_exHandle, true);
+	DrawGraph(2200 - scrollX, 700 - scrollY, m_menuHandle, true);
 	// メタル
-	DrawGraph(2400 - scrollX, 700 - scrollY, m_exHandle, true);
+	DrawRectGraph(2400 - scrollX, 700 - scrollY, srcX, srcY, kExWidth, kExHeight, m_metalHandle, true);
 	// ファイア
-	DrawGraph(2600 - scrollX, 700 - scrollY, m_exHandle, true);
+	DrawRectGraph(2600 - scrollX, 700 - scrollY, fireSrcX, srcY, kExWidth, kExHeight, m_fireHandle, true);
 	// アイテム2号
-	DrawGraph(4660 - scrollX, 640 - scrollY, m_exHandle, true);
+	DrawRectGraph(4660 - scrollX, 600 - scrollY, srcX, srcY, kExWidth, kExHeight, m_lineHandle, true);
 
 }
 
-// 横スクロール
+/// <summary>
+/// 横スクロール
+/// </summary>
+/// <returns>スクロール量</returns>
 int Bg::GetScrollX()
 {
 	int result = m_pPlayer->GetPos().x - Game::kScreenWidth / 2;
@@ -247,7 +295,10 @@ int Bg::GetScrollX()
 	return result;
 }
 
-// 縦スクロール量
+/// <summary>
+/// 縦スクロール
+/// </summary>
+/// <returns>スクロール量</returns>
 int Bg::GetScrollY()
 {
 	int result = m_pPlayer->GetPos().y;
@@ -263,7 +314,10 @@ int Bg::GetScrollY()
 	return result;
 }
 
-/*プレイヤーと当たっているか判定*/
+/// <summary>
+/// プレイヤーと当たっているか判定
+/// </summary>
+/// <returns></returns>
 bool Bg::IsColPlayer()
 {
 	float playerLeft = m_pPlayer->GetColRect().GetLeft();
@@ -297,7 +351,12 @@ bool Bg::IsColPlayer()
 	return false;
 }
 
-/*指定したマップチップの矩形と当たっているか判定*/
+/// <summary>
+/// 指定したマップチップの矩形と当たっているか判定
+/// </summary>
+/// <param name="rect">プレイヤーの当たり判定</param>
+/// <param name="chipRect">チップのｎ当たり判定</param>
+/// <returns></returns>
 bool Bg::IsCollision(Rect rect, Rect& chipRect)
 {
 	for (int y = 0; y < kChipNumY; y++)

@@ -131,6 +131,7 @@ SceneMain::SceneMain() :
 
 	// 画像
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
+	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 }
 
 SceneMain::~SceneMain()
@@ -185,6 +186,7 @@ SceneMain::~SceneMain()
 	DeleteSoundMem(m_recoverySE);
 	DeleteSoundMem(m_lineMoveSE);
 	DeleteGraph(m_frameHandle);
+	DeleteGraph(m_shotSelectHandle);
 }
 
 void SceneMain::Init()
@@ -610,7 +612,6 @@ bool SceneMain::AddShot(ShotBase* pShot)
 	return false;
 }
 
-
 /// <summary>
 /// アイテム生成
 /// </summary>
@@ -830,16 +831,11 @@ void SceneMain::DrawInfo()
 /// <summary>
 /// HP、武器の弾数を右側に表示
 /// </summary>
-	// TODO:選択中の武器が分かるようにする
 	// HP
 	if (m_pPlayer->IsBuster())
 	{
 		// 武器選択中の表示
-		DrawBox(Game::kScreenWidth - kFrameSize,
-			kShotNumDisPosY - 10,
-			Game::kScreenWidth,
-			kShotNumDisPosY + 30,
-			0xffd700, false);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :" ,0xffffff, m_pFont->GetFont2());
 	// 現在のHP分だけ四角を描画する
@@ -856,11 +852,7 @@ void SceneMain::DrawInfo()
 	if (m_pPlayer->IsMetal())
 	{
 		// 武器選択中の表示
-		DrawBox(Game::kScreenWidth - kFrameSize,
-			kShotNumDisPosY - 10 + kShotNumIntervalY,
-			Game::kScreenWidth,
-			kShotNumDisPosY + 30 + kShotNumIntervalY,
-			0xffd700, false);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2());
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
@@ -876,11 +868,7 @@ void SceneMain::DrawInfo()
 	if (m_pPlayer->IsFire())
 	{
 		// 武器選択中の表示
-		DrawBox(Game::kScreenWidth - kFrameSize,
-			kShotNumDisPosY - 10 + kShotNumIntervalY * 2,
-			Game::kScreenWidth,
-			kShotNumDisPosY + 30 + kShotNumIntervalY * 2,
-			0xffd700, false);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40,  "F :", 0xffffff, m_pFont->GetFont2());
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
@@ -896,11 +884,7 @@ void SceneMain::DrawInfo()
 	if (m_pPlayer->IsLineMove())
 	{
 		// 武器選択中の表示
-		DrawBox(Game::kScreenWidth - kFrameSize,
-			kShotNumDisPosY - 10 + kShotNumIntervalY * 3,
-			Game::kScreenWidth,
-			kShotNumDisPosY + 30 +  kShotNumIntervalY * 3,
-			0xffd700, false);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 3, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2());
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)

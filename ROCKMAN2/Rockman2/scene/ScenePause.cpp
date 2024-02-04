@@ -38,6 +38,7 @@ ScenePause::ScenePause(Player* pPlayer):
 	m_pauseSelect(Pause::kBack),
 	m_pPlayer(pPlayer),
 	m_menuHeight(0),
+	m_selectShotPos({ kCursorX, kInitSelectShotPosY }),
 	m_isChangeMenuExist(false),
 	m_isPauseExist(false),
 	m_isRetry(false),

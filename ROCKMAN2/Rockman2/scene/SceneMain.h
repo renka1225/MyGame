@@ -116,6 +116,7 @@ protected:
 	int m_lineMoveSE;	// アイテム2号が画面内にあるとき
 
 	// 画像
-	int m_frameHandle;	// 枠
+	int m_frameHandle;		// 枠
+	int m_shotSelectHandle;	// 選択中の武器
 };
 

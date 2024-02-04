@@ -54,8 +54,19 @@ protected:
 	// マップチップのグラフィック
 	int m_mapHandle;
 
-	// 操作説明の表示
-	int m_exHandle;
+	// 操作説明の画像
+	int m_walkHandle;		// 移動
+	int m_jumpHandle;		// ジャンプ
+	int m_shotHandle;		// ショット
+	int m_metalHandle;		// メタル
+	int m_fireHandle;		// ファイア
+	int m_lineHandle;		// 2号
+	int m_menuHandle;		// メニュー
+	int m_recoveryHandle;	// 回復アイテム
+
+	// 説明画像のアニメーション
+	int m_exAnimFrame;
+	int m_exFireAnimFrame;
 
 	// 画像サイズ
 	struct Size
