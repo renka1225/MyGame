@@ -6,15 +6,15 @@
 namespace
 {
 	// 敵のサイズ
-	constexpr int kWidth = 32;
-	constexpr int kHeight = 18;
+	constexpr int kWidth = 64;
+	constexpr int kHeight = 38;
 
 	// エフェクトのサイズ
 	constexpr int kEffectWidth = 32;
 	constexpr int kEffectHeight = 32;
 
 	// 拡大率
-	constexpr float kEnlarge = 2.5f;
+	constexpr float kEnlarge = 1.3f;
 	constexpr float kEffectScale = 7.0f;
 
 	// 移動速度

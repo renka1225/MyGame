@@ -6,7 +6,7 @@
 namespace
 {
 	// 敵のサイズ
-	constexpr int kWidth = 28;
+	constexpr int kWidth = 30;
 	constexpr int kHeight = 14;
 
 	// エフェクトのサイズ
