@@ -9,6 +9,7 @@ namespace
 	// アイテムのサイズ
 	constexpr int kWidth = 70;
 	constexpr int kHeight = 64;
+	constexpr int kScale = 1.5f;
 
 	// 落下速度
 	constexpr int kSpeed = 5;
@@ -33,7 +34,6 @@ void RecoveryGreatShot::Init(Bg* pBg)
 
 void RecoveryGreatShot::Update()
 {
-
 	// 存在しないアイテムの処理はしない
 	if (!m_isExist) return;
 
@@ -41,7 +41,7 @@ void RecoveryGreatShot::Update()
 	m_pos += m_vec;
 
 	// 当たり判定の更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth * kScale, kHeight * kScale);
 	Rect chipRect; // 当たったマップチップの矩形
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
@@ -83,7 +83,7 @@ void RecoveryGreatShot::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 1.5f, 0.0f, m_handle, true, false);
+	DrawRotaGraph(x, y, kScale, 0.0f, m_handle, true);
 }
 
 void RecoveryGreatShot::Start(Vec2 pos)

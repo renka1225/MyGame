@@ -4,7 +4,6 @@
 
 class FontManager;
 class Bg;
-class SceneStaging;
 class ScenePause;
 class Player;
 class ShotBase;
@@ -67,8 +66,6 @@ protected:
 	FontManager* m_pFont;
 	// 背景
 	Bg* m_pBg;
-	// 演出
-	SceneStaging* m_pStaging;
 	// ポーズ画面
 	ScenePause* m_pPause;
 	// プレイヤー
@@ -79,6 +76,11 @@ protected:
 	std::vector<EnemyBase*> m_pEnemy;
 	// 回復アイテム
 	std::vector<RecoveryBase*> m_pRecovery;
+
+	// スタート演出の表示位置
+	Vec2 m_startDis;
+	// クリア演出の表示位置
+	Vec2 m_clearDis;
 
 	// プレイヤーの現在地
 	Vec2 m_playerPos;
@@ -118,5 +120,7 @@ protected:
 	// 画像
 	int m_frameHandle;		// 枠
 	int m_shotSelectHandle;	// 選択中の武器
+	int m_startSE;			// スタート時のSE
+	int m_clearSE;			// クリア時のSE
 };
 

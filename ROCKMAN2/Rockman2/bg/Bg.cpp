@@ -266,9 +266,9 @@ void Bg::DrawEx(int scrollX, int scrollY)
 	// 回復
 	DrawGraph(1400 - scrollX, 700 - scrollY, m_recoveryHandle, true);
 	// 武器切り替え
-	DrawGraph(2200 - scrollX, 700 - scrollY, m_menuHandle, true);
+	DrawGraph(2000 - scrollX, 700 - scrollY, m_menuHandle, true);
 	// メタル
-	DrawRectGraph(2400 - scrollX, 700 - scrollY, srcX, srcY, kExWidth, kExHeight, m_metalHandle, true);
+	DrawRectGraph(2300 - scrollX, 700 - scrollY, srcX, srcY, kExWidth, kExHeight, m_metalHandle, true);
 	// ファイア
 	DrawRectGraph(2600 - scrollX, 700 - scrollY, fireSrcX, srcY, kExWidth, kExHeight, m_fireHandle, true);
 	// アイテム2号
@@ -355,7 +355,7 @@ bool Bg::IsColPlayer()
 /// 指定したマップチップの矩形と当たっているか判定
 /// </summary>
 /// <param name="rect">プレイヤーの当たり判定</param>
-/// <param name="chipRect">チップのｎ当たり判定</param>
+/// <param name="chipRect">チップの当たり判定</param>
 /// <returns></returns>
 bool Bg::IsCollision(Rect rect, Rect& chipRect)
 {

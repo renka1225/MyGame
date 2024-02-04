@@ -5,7 +5,6 @@
 #include "Game.h"
 #include "FontManager.h"
 #include "Bg.h"
-#include "SceneStaging.h"
 #include "ScenePause.h"
 
 #include "RecoverySmallHp.h"
@@ -42,8 +41,8 @@ namespace
 
 	/*演出時間*/
 	// スタート演出時間
-	constexpr float kStartTime = 600.0f;
-	constexpr float kClearTime = 180.0f;
+	constexpr float kStartTime = 120.0f;
+	constexpr float kClearTime = 60.0f;
 	constexpr float kGameoverTime = 300.0f;
 
 	/*ポーズ画面*/
@@ -128,6 +127,8 @@ SceneMain::SceneMain() :
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
+	m_startSE = LoadSoundMem("data/sound/BGM/start.wav");
+	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
 
 	// 画像
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
@@ -139,6 +140,10 @@ SceneMain::~SceneMain()
 	// 背景のメモリ解放
 	delete m_pBg;
 	m_pBg = nullptr;
+
+	// フォント
+	delete m_pFont;
+	m_pFont = nullptr;
 
 	// ポーズ画面のメモリ確保
 	delete m_pPause;
@@ -185,6 +190,8 @@ SceneMain::~SceneMain()
 	DeleteSoundMem(m_enemyDeadSE);
 	DeleteSoundMem(m_recoverySE);
 	DeleteSoundMem(m_lineMoveSE);
+	DeleteSoundMem(m_startSE);
+	DeleteSoundMem(m_clearSE);
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_shotSelectHandle);
 }
@@ -193,12 +200,6 @@ void SceneMain::Init()
 {
 	m_enemyTotalNum = kEnemyMax;
 	m_time = 0.0f;
-
-	// TODO:スタート演出
-	/*if (m_pStaging->IsStart())
-	{
-		m_pStaging->Start();
-	}*/
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -235,12 +236,8 @@ void SceneMain::Init()
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
 
-	// TODO:スタートSEを鳴らした後にBGMを鳴らす
-	if (m_startStagingTime <= 0)
-	{
-		ChangeVolumeSoundMem(m_bgm, 150);
-		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
-	}
+	// スタートSE
+	PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
 }
 
 void SceneMain::End()
@@ -267,10 +264,30 @@ void SceneMain::Update()
 		}
 	}
 
-	m_startStagingTime--;
-	if (m_startStagingTime < 0.0f)
+	// スタート演出
+	if (m_startStagingTime > 0.0f)
 	{
-		m_startStagingTime = 0.0f;
+		m_startStagingTime--;
+
+		if (m_startStagingTime > kStartTime - 20.0f)
+		{
+			m_startDis.x -= 8.0f;
+		}
+		else if (m_startStagingTime <= kStartTime - 20.0f && m_startStagingTime >= 100.0f)
+		{
+			m_startDis.x -= 0.5f;
+		}
+		else
+		{
+			m_startDis.x -= 15.0f;
+		}
+		return;
+	}
+
+	// スタートSEを鳴らした後にBGMを鳴らす
+	if(CheckSoundMem(m_startSE) == 0 && CheckSoundMem(m_bgm) == 0)
+	{
+		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 	}
 
 	// プレイヤーの残機が0未満の場合
@@ -288,16 +305,21 @@ void SceneMain::Update()
 	{
 		m_clearStagingTime--;
 		
-		// TODO:クリアSE1回だけを鳴らす
+		// クリアSE1回だけを鳴らす
 		StopSoundMem(m_bgm);
+		if (CheckSoundMem(m_clearSE) == 0)
+		{
+			PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
+
+			return;
+		}
 	}
 	if (m_clearStagingTime <= 0.0f)
 	{
+		// 0.5秒後にクリア画面に遷移
 		m_isSceneClear = true;
-		m_clearStagingTime = 0.0f;
-
-		// 0.5秒後に遷移
 		WaitTimer(500);
+		return;
 	}
 
 	// パッドの入力状態を取得
@@ -309,6 +331,9 @@ void SceneMain::Update()
 	// ポーズ画面が表示されている場合画面を止める
 	if (m_pPause->IsPause())
 	{
+		// BGM一時停止
+		StopSoundMem(m_bgm);
+
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
@@ -374,8 +399,11 @@ void SceneMain::Update()
 			{
 				m_isExistLineMove = true;
 
-				// TODO:一回だけアイテム2号のSEを鳴らす
-				PlaySoundMem(m_lineMoveSE, DX_PLAYTYPE_LOOP, true);
+				// アイテム2号のSEを鳴らす
+				if (CheckSoundMem(m_lineMoveSE) == 0)
+				{
+					PlaySoundMem(m_lineMoveSE, DX_PLAYTYPE_BACK, true);
+				}
 			}
 			else
 			{
@@ -385,6 +413,7 @@ void SceneMain::Update()
 
 			// 弾の当たり判定
 			Rect shotRect = m_pShot[i]->GetColRect();
+			// プレイヤーと弾の当たり判定
 			if (playerRect.IsCollision(shotRect))
 			{
 				m_pPlayer->RideLineMove(shotRect);
@@ -573,9 +602,9 @@ void SceneMain::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:スタートとクリア条件の表示
-	if (m_startStagingTime >= 0.0f)
+	if (m_startStagingTime > 0.0f)
 	{
-		//DrawStartStaging();
+		DrawStartStaging();
 	}
 
 	// TODO: クリアの演出とタイム表示
@@ -694,7 +723,7 @@ void SceneMain::DropFullHpRecovery()
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
-			m_pRecovery[i]->Start({ 1200, 700 }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ 1680, 670 }); // アイテムの位置を設定
 			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
@@ -742,7 +771,7 @@ void SceneMain::CreateEnemy()
 			break;
 		case 6:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(3800.0f, 600.0f, 250.0f);
+			m_pEnemy[i]->Start(4000.0f, 600.0f, 270.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
@@ -967,9 +996,13 @@ void SceneMain::DrawPause()
 /// </summary>
 void SceneMain::DrawStartStaging()
 {
-	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
-	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
-	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
+	DrawBox(m_startDis.x, Game::kScreenHeight * 0.5f - 200, 
+		m_startDis.x + Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 
+		0xdda0dd, true);
+	DrawStringToHandle(m_startDis.x + Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100,
+		"敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
+	DrawFormatStringToHandle(m_startDis.x + Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100,
+		0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
 }
 
 /// <summary>

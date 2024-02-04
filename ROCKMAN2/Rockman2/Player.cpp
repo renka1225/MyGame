@@ -97,6 +97,10 @@ Player::Player(SceneMain* pMain) :
 	m_keyState(0),
 	m_pressTime(0),
 	m_nowPressTime(0),
+	m_isSmallFire(false),
+	m_isMiddleFire(false),
+	m_isBigFire(false),
+	m_lineTime(60),
 	m_animation(Anim::kIdle),
 	m_idleAnimFrame(0),
 	m_walkAnimFrame(0),
@@ -149,6 +153,12 @@ void Player::Init()
 	m_isMetal = false;
 	m_isFire = false;
 	m_isLineMove = false;
+	// ファイアの状態
+	m_isSmallFire = false;
+	m_isMiddleFire = false;
+	m_isBigFire = false;
+	// アイテム2号の待機時間
+	m_lineTime = 60;
 	// 待機状態にする
 	m_animation = Anim::kIdle;
 	m_idleAnimFrame = 0;
@@ -380,27 +390,43 @@ void Player::Update()
 				if (m_nowPressTime < 2000) // 長押し時間が2秒以下
 				{
 					m_fireEnergy--; // 弾エネルギーを1減らす
+					m_isSmallFire = true;
+					m_isMiddleFire = false;
+					m_isBigFire = false;
+					
 				}
 				else if (m_nowPressTime < 5000) // 長押し時間が5秒以下
 				{
-					if (m_fireEnergy - 6 < 0) // 弾エネルギーが足りない場合
+					if (m_fireEnergy - 3 < 0) // 弾エネルギーが足りない場合
 					{
 						m_fireEnergy--; // 弾エネルギーを1減らす
+						m_isSmallFire = true;
+						m_isMiddleFire = false;
+						m_isBigFire = false;
 					}
 					else
 					{
-						m_fireEnergy -= 6; // 弾エネルギーを6減らす
+						m_fireEnergy -= 3; // 弾エネルギーを3減らす
+						m_isSmallFire = false;
+						m_isMiddleFire = true;
+						m_isBigFire = false;
 					}
 				}
 				else // 長押し時間が5秒以上
 				{
-					if (m_fireEnergy - 10 < 0) // 弾エネルギーが足りない場合
+					if (m_fireEnergy - 5 < 0) // 弾エネルギーが足りない場合
 					{
 						m_fireEnergy--; // 弾エネルギーを1減らす
+						m_isSmallFire = true;
+						m_isMiddleFire = false;
+						m_isBigFire = false;
 					}
 					else
 					{
-						m_fireEnergy -= 10; // 弾エネルギーを10減らす
+						m_fireEnergy -= 5; // 弾エネルギーを5減らす
+						m_isSmallFire = false;
+						m_isMiddleFire = false;
+						m_isBigFire = true;
 					}
 				}
 
@@ -442,12 +468,15 @@ void Player::Update()
 
 				// 弾発射のSEを鳴らす
 				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+				m_lineTime = 60;
 			}
 		}
 
 		// 画面内にある場合
 		if (m_pMain->GetIsExistLineMove())
 		{
+			m_lineTime--;
 			m_lineEnergy -= 0.03f; // エネルギーを減らす
 		}
 	}
@@ -812,10 +841,17 @@ void Player::RideLineMove(Rect shotRect)
 	// アイテム2号に乗った場合
 	if (m_colRect.IsCollision(lineMoveRect))
 	{
-		m_pos.x += lineMoveRect.GetCenter().x - m_colRect.GetCenter().x;
+		if (m_lineTime <= 0)
+		{
+			m_pos.x += 10.0f;
+		}
 		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;
 		m_isGround = true;
 		m_animation = Anim::kIdle;
 	}
-	
+	if (!m_pMain->GetIsExistLineMove())
+	{
+		m_isGround = false;
+		m_pos.y -= 10;
+	}
 }

@@ -66,8 +66,10 @@ public:
 	float GetFireEnergy() const { return m_fireEnergy; }
 	float GetLineEnergy() const { return m_lineEnergy; }
 
-	// ボタンを押して離すまでの時間を取得する
-	int GetPressTime() const { return m_nowPressTime; }
+	// ファイアの状態を取得
+	bool IsSmallFire() const { return m_isSmallFire; }
+	bool IsMiddleFire() const { return m_isMiddleFire; }
+	bool IsBigFire() const { return m_isBigFire; }
 
 public:
 	// 武器が選択中か取得する
@@ -125,6 +127,12 @@ private:
 	int m_pressTime;
 	// ボタンを押して離すまでの時間
 	int m_nowPressTime;
+	// ファイアのサイズ
+	bool m_isSmallFire;		// 小
+	bool m_isMiddleFire;	// 中
+	bool m_isBigFire;		// 大
+	// アイテム2号の待機時間
+	int m_lineTime;
 
 	// 音
 	int m_shotSE;	// ショット時のSE

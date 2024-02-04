@@ -73,31 +73,19 @@ void ShotFire::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	if (m_pPlayer->GetPressTime() < 2000) // ’·‰Ÿ‚µŽžŠÔ‚ª2•bˆÈ‰º
+	if (m_pPlayer->IsSmallFire()) // ’·‰Ÿ‚µŽžŠÔ‚ª2•bˆÈ‰º
 	{
 		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true);
 	}
-	else if (m_pPlayer->GetPressTime() < 5000) // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈ‰º
+	else if (m_pPlayer->IsMiddleFire()) // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈ‰º
 	{
-		if (m_pPlayer->GetFireEnergy() - 6 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
-		{
-			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kMiddleScale, 0.0f, m_handle, true);
-		}
+		
+		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kMiddleScale, 0.0f, m_handle, true);
+		
 	}
 	else // ’·‰Ÿ‚µŽžŠÔ‚ª5•bˆÈã
 	{
-		if (m_pPlayer->GetFireEnergy() - 10 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
-		{
-			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true); // ’ÊíƒTƒCƒY‚Ì’e‚ð•`‰æ
-		}
-		else
-		{
-			DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kBigScale, 0.0f, m_handle, true);
-		}
+		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kBigScale, 0.0f, m_handle, true);
 	}
 
 #ifdef _DEBUG

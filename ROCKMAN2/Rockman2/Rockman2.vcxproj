@@ -156,7 +156,6 @@
     <ClCompile Include="recovery\RecoverySmallShot.cpp" />
     <ClCompile Include="recovery\RecoverySmallHp.cpp" />
     <ClCompile Include="recovery\RecoveryBase.cpp" />
-    <ClCompile Include="scene\SceneStaging.cpp" />
     <ClCompile Include="scene\SceneStage3.cpp" />
     <ClCompile Include="scene\SceneStage2.cpp" />
     <ClCompile Include="scene\SceneOption.cpp" />
@@ -195,7 +194,6 @@
     <ClInclude Include="recovery\RecoverySmallHp.h" />
     <ClInclude Include="recovery\RecoveryBase.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="scene\SceneStaging.h" />
     <ClInclude Include="scene\SceneStage3.h" />
     <ClInclude Include="scene\SceneStage2.h" />
     <ClInclude Include="scene\SceneOption.h" />

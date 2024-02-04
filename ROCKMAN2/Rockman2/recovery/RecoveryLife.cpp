@@ -9,6 +9,8 @@ namespace
 	// アイテムのサイズ
 	constexpr int kWidth = 62;
 	constexpr int kHeight = 62;
+	// 拡大率
+	constexpr int kScale = 0.5f;
 
 	// 落下速度
 	constexpr int kSpeed = 5;
@@ -81,7 +83,7 @@ void RecoveryLife::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 0.5f, 0.0f, m_handle, true, false);
+	DrawRotaGraph(x, y, kScale, 0.0f, m_handle, true);
 }
 
 void RecoveryLife::Start(Vec2 pos)

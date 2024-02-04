@@ -52,7 +52,14 @@ void ShotLineMove::Update()
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x , m_pos.y, kWidth, kHeight);
 
-	// TODO:乗っている最中にエネルギーがなくなったらアイテム2号を消す
+	// マップチップに当たったら消す
+	Rect chipRect;	// マップチップの当たり判定
+	if (m_pBg->IsCollision(m_colRect, chipRect))
+	{
+		m_isExist = false;
+	}
+
+	// 乗っている最中にエネルギーがなくなったらアイテム2号を消す
 	if (m_pPlayer->GetLineEnergy() < 0)
 	{
 		m_isExist = false;
