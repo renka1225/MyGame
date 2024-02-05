@@ -16,7 +16,7 @@ namespace
 
 	// 拡大率
 	constexpr float kEnlarge = 1.3f;
-	constexpr float kEffectScale = 7.0f;
+	constexpr float kEffectScale = 5.0f;
 
 	// 移動速度
 	constexpr float kSpeedX = 3.0f;
@@ -34,7 +34,7 @@ namespace
 	// エフェクト
 	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 8;
+	constexpr int kEffectFrameNum = 16;
 	// ダメージ演出フレーム数
 	constexpr int kDamageFrame = 60;
 }

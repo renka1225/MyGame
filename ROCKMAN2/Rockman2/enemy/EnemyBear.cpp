@@ -16,13 +16,13 @@ namespace
 
 	// 拡大率
 	constexpr float kEnlarge = 8.0f;
-	constexpr float kEffectScale = 7.0f;
+	constexpr float kEffectScale = 5.0f;
 
 	// 移動速度
 	constexpr float kSpeedX = 1.2f;
 	constexpr float kSpeedY = 10.0f;
 	// 最大HP
-	constexpr int kHp = 10;
+	constexpr int kHp = 15;
 
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3, 4, 5 };
@@ -34,7 +34,7 @@ namespace
 	// エフェクト
 	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 8;
+	constexpr int kEffectFrameNum = 16;
 	// ダメージ演出フレーム数
 	constexpr int kDamageFrame = 60;
 }
@@ -95,7 +95,7 @@ void EnemyBear::Draw()
 
 	// ダメージ演出
 	// 10フレーム間隔で表示非表示を切り替える
-	if (m_damageFrame % 10 >= 7) return;
+	if (m_damageFrame % 10 >= 5) return;
 
 	// 熊表示
 	// 画像の切り出し座標

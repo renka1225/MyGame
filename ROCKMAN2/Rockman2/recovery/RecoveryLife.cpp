@@ -53,9 +53,9 @@ void RecoveryLife::Update()
 		}
 	}
 
-	// 5秒以上たったらアイテムを消す
+	// 10秒以上たったらアイテムを消す
 	m_frame++;
-	if (m_frame > 300)
+	if (m_frame > 600)
 	{
 		m_isExist = false;
 		m_frame = 0;
@@ -75,6 +75,12 @@ void RecoveryLife::Update()
 
 void RecoveryLife::Draw()
 {
+	// 6秒たったら10フレーム間隔で表示非表示を切り替える
+	if (m_frame > 420)
+	{
+		if (m_frame % 10 >= 7) return;
+	}
+
 	// 中央座標を左上座標に変換
 	int x = m_pos.x - kWidth * 0.5f;
 	int y = m_pos.y - kHeight * 0.5f;
@@ -84,11 +90,6 @@ void RecoveryLife::Draw()
 	y -= m_pBg->GetScrollY();
 
 	DrawRotaGraph(x, y, kScale, 0.0f, m_handle, true);
-
-#ifdef _DEBUG
-	// 当たり判定の表示
-	m_colRect.Draw(0x0000ff, false);
-#endif
 }
 
 void RecoveryLife::Start(Vec2 pos)

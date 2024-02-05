@@ -83,11 +83,6 @@ void RecoveryGreatShot::Draw()
 	y -= m_pBg->GetScrollY();
 
 	DrawRotaGraph(x, y, kScale, 0.0f, m_handle, true);
-
-#ifdef _DEBUG
-	// “–‚½‚è”»’è‚Ì•\Ž¦
-	m_colRect.Draw(0x0000ff, false);
-#endif
 }
 
 void RecoveryGreatShot::Start(Vec2 pos)

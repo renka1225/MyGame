@@ -13,10 +13,10 @@ namespace
 	constexpr int kCharPosY = 700;
 
 	// 選択カーソルの初期位置
-	constexpr int kInitSelectPosX = 920;
-	constexpr int kInitSelectPosY = 500;
+	constexpr int kInitSelectPosX = 930;
+	constexpr int kInitSelectPosY = 520;
 	// 選択カーソルの移動量
-	constexpr int kSelectmoveY = 135;
+	constexpr int kSelectmoveY = 185;
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
@@ -130,10 +130,6 @@ void SceneStageSelect::Update()
 			break;
 		case kStage2:
 			m_isSceneStage2 = true;
-			StopSoundMem(m_bgm);
-			break;
-		case kStage3:
-			m_isSceneStage3 = true;
 			StopSoundMem(m_bgm);
 			break;
 		case kBackTitle:

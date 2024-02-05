@@ -20,7 +20,6 @@ public:
 	// シーンを終了させるか
 	bool IsSceneStage1() const { return m_isSceneStage1; }
 	bool IsSceneStage2() const { return m_isSceneStage2; }
-	bool IsSceneStage3() const { return m_isSceneStage3; }
 	bool IsSceneTitle() const { return m_isSceneTitle; }
 
 private:
@@ -29,7 +28,6 @@ private:
 	{
 		kStage1,	// ステージ1
 		kStage2,	// ステージ2
-		kStage3,	// ステージ3
 		kBackTitle,	// タイトルに戻る
 		kSelectNum	// 項目数
 	};

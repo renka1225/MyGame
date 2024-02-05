@@ -52,9 +52,9 @@ void RecoverySmallHp::Update()
 		}
 	}
 
-	// 5秒以上たったらアイテムを消す
+	// 10秒以上たったらアイテムを消す
 	m_frame++;
-	if (m_frame > 300)
+	if (m_frame > 600)
 	{
 		m_isExist = false;
 		m_frame = 0;
@@ -74,6 +74,12 @@ void RecoverySmallHp::Update()
 
 void RecoverySmallHp::Draw()
 {
+	// 6秒たったら10フレーム間隔で表示非表示を切り替える
+	if (m_frame > 420)
+	{
+		if (m_frame % 10 >= 7) return;
+	}
+
 	// 中央座標を左上座標に変換
 	int x = m_pos.x - kWidth * 0.5f;
 	int y = m_pos.y - kHeight * 0.5f;

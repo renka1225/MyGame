@@ -106,6 +106,8 @@ protected:
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
+	int m_stagingFade; // スタート演出等のフェード
+
 	// 演出
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
