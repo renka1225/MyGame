@@ -9,6 +9,8 @@ namespace
 	// アイテムのサイズ
 	constexpr int kWidth = 26;
 	constexpr int kHeight = 30;
+	// 拡大率
+	constexpr float kScale = 1.2f;
 }
 
 RecoveryFullHp::RecoveryFullHp()
@@ -45,7 +47,7 @@ void RecoveryFullHp::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 1.0, 0.0, m_handle, true, false);
+	DrawRotaGraph(x, y, kScale, 0.0, m_handle, true, false);
 }
 
 void RecoveryFullHp::Start(Vec2 pos)

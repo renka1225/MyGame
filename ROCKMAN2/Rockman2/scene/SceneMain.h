@@ -116,11 +116,12 @@ protected:
 	int m_enemyDeadSE;	// 敵死亡時のSE
 	int m_recoverySE;	// 回復時のSE
 	int m_lineMoveSE;	// アイテム2号が画面内にあるとき
+	int m_startSE;		// スタート時のSE
+	int m_clearSE;		// クリア時のSE
 
 	// 画像
 	int m_frameHandle;		// 枠
 	int m_shotSelectHandle;	// 選択中の武器
-	int m_startSE;			// スタート時のSE
-	int m_clearSE;			// クリア時のSE
+	int m_startHandle;		// スタート演出の画像
 };
 

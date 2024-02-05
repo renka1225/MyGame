@@ -1,5 +1,6 @@
 #include "EnemyCat.h"
 #include "Bg.h"
+#include "Player.h"
 #include "Game.h"
 #include "DxLib.h"
 
@@ -189,7 +190,18 @@ void EnemyCat::OnDamage()
 	m_damageFrame = kDamageFrame;
 
 	// Œ»Ý‚ÌHP‚ðŒ¸‚ç‚·
-	m_hp--;
+	if (m_pPlayer->IsMiddleFire())
+	{
+		m_hp -= 3;
+	}
+	else if (m_pPlayer->IsBigFire())
+	{
+		m_hp -= 5;
+	}
+	else
+	{
+		m_hp--;
+	};
 
 	// SE‚ð–Â‚ç‚·
 	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);

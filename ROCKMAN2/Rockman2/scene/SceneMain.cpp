@@ -51,7 +51,7 @@ namespace
 	constexpr int kTextPosY = 420;
 	// 弾数表示位置
 	constexpr int kBarPosX = 850;
-	constexpr int kBarPosY = 450;
+	constexpr int kBarPosY = 455;
 	// 弾数表示間隔
 	constexpr int kBarInterval = 23;
 	// 弾数表示サイズ
@@ -88,7 +88,7 @@ SceneMain::SceneMain() :
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
 	m_isSceneEnd(false),
-	m_fadeAlpha(255)
+	m_fadeAlpha(240)
 {
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player{ this };
@@ -133,6 +133,7 @@ SceneMain::SceneMain() :
 	// 画像
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
+	m_startHandle = LoadGraph("data/image/UI/start.png");
 }
 
 SceneMain::~SceneMain()
@@ -194,10 +195,24 @@ SceneMain::~SceneMain()
 	DeleteSoundMem(m_clearSE);
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_shotSelectHandle);
+	DeleteGraph(m_startHandle);
 }
 
 void SceneMain::Init()
 {
+	// リトライ時はスタート演出を行わない
+	if (!m_isSceneEnd)
+	{
+		// 演出時間の初期化
+		m_startStagingTime = kStartTime;
+		m_startDis = { 0, 0 };
+		// スタートSE
+		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
+	}
+	// 演出時間の初期化
+	m_clearStagingTime = kClearTime;
+	m_gameoverStagingTime = kGameoverTime;
+
 	m_enemyTotalNum = kEnemyMax;
 	m_time = 0.0f;
 
@@ -230,14 +245,6 @@ void SceneMain::Init()
 	m_isSceneClear = false;
 	m_isSceneTitle = false;
 	m_isSceneEnd = false;
-
-	// 演出時間の初期化
-	m_startStagingTime = kStartTime;
-	m_clearStagingTime = kClearTime;
-	m_gameoverStagingTime = kGameoverTime;
-
-	// スタートSE
-	PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
 }
 
 void SceneMain::End()
@@ -246,6 +253,26 @@ void SceneMain::End()
 
 void SceneMain::Update()
 {
+	// スタート演出
+	if (m_startStagingTime > 0.0f)
+	{
+		m_startStagingTime--;
+
+		if (m_startStagingTime > kStartTime - 3.0f)
+		{
+			m_startDis.x -= 5.0f;
+		}
+		else if (m_startStagingTime <= kStartTime - 2.0f && m_startStagingTime >= 40.0f)
+		{
+			m_startDis.x -= 0.1f;
+		}
+		else
+		{
+			m_startDis.x -= 40.0f;
+		}
+		return;
+	}
+
 	//　フェードインアウト
 	if (m_isSceneGameOver || m_isSceneClear || m_isSceneTitle || m_isSceneEnd)
 	{
@@ -262,26 +289,6 @@ void SceneMain::Update()
 		{
 			m_fadeAlpha = 0;
 		}
-	}
-
-	// スタート演出
-	if (m_startStagingTime > 0.0f)
-	{
-		m_startStagingTime--;
-
-		if (m_startStagingTime > kStartTime - 20.0f)
-		{
-			m_startDis.x -= 8.0f;
-		}
-		else if (m_startStagingTime <= kStartTime - 20.0f && m_startStagingTime >= 100.0f)
-		{
-			m_startDis.x -= 0.5f;
-		}
-		else
-		{
-			m_startDis.x -= 15.0f;
-		}
-		return;
 	}
 
 	// スタートSEを鳴らした後にBGMを鳴らす
@@ -354,10 +361,7 @@ void SceneMain::Update()
 	}
 
 	// 武器切り替え画面が表示されている場合画面を止める
-	if (m_pPause->IsSelectShotExist())
-	{
-		return;
-	}
+	if (m_pPause->IsSelectShotExist()) return;
 
 	// タイムカウント
 	if (m_enemyTotalNum > 0)
@@ -598,16 +602,16 @@ void SceneMain::Draw()
 
 	// フェードインアウト
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x808080, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x0e0918, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// TODO:スタートとクリア条件の表示
+	// スタートとクリア条件の表示
 	if (m_startStagingTime > 0.0f)
 	{
 		DrawStartStaging();
 	}
 
-	// TODO: クリアの演出とタイム表示
+	// クリアの演出とタイム表示
 	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
 	{
 		DrawClearStaging();
@@ -695,8 +699,8 @@ void SceneMain::DropShotGreatRecovery(int enemyIndex)
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryLife;
-			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			m_pRecovery[i]->Init(m_pBg);
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			return;
 		}
 	}
@@ -709,8 +713,8 @@ void SceneMain::DropLifeRecovery(int enemyIndex)
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryGreatShot;
-			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			m_pRecovery[i]->Init(m_pBg);
+			m_pRecovery[i]->Start(m_pEnemy[enemyIndex]->GetPos());
 			return;
 		}
 	}
@@ -723,7 +727,7 @@ void SceneMain::DropFullHpRecovery()
 		if (!m_pRecovery[i])
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
-			m_pRecovery[i]->Start({ 1680, 670 }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ 1680, 700 }); // アイテムの位置を設定
 			m_pRecovery[i]->Init(m_pBg);
 			return;
 		}
@@ -781,7 +785,7 @@ void SceneMain::CreateEnemy()
 			break;
 		case 8:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(4600.0f, 100.0f, 60.0f);
+			m_pEnemy[i]->Start(4800.0f, 100.0f, 100.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 9:
@@ -806,7 +810,7 @@ void SceneMain::CreateItem(int enemyIndex)
 	{
 		DropHpSmallRecovery(enemyIndex); // HP回復(小)
 	}
-	else if (getRandDrop <= 40)
+	else if (getRandDrop <= 35)
 	{
 		DropHpGreatRecovery(enemyIndex);	// HP回復(大)
 	}
@@ -818,7 +822,7 @@ void SceneMain::CreateItem(int enemyIndex)
 	{
 		DropShotGreatRecovery(enemyIndex); // 弾エネルギー(大)
 	}
-	else if (getRandDrop <= 100)
+	else if (getRandDrop <= 90)
 	{
 		DropLifeRecovery(enemyIndex);	// 残機
 	}
@@ -841,7 +845,7 @@ void SceneMain::DrawInfo()
 
 	// 残機数表示
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "残機", 0xffffff, m_pFont->GetFont2());
-	DrawFormatStringToHandle(kInfoTextPosX + 50, kInfoTextPosY + kShotNumIntervalY + 40, 0xffaa00, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
+	DrawFormatStringToHandle(kInfoTextPosX + 80, kInfoTextPosY + kShotNumIntervalY + 40, 0xffaa00, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
 
 	// 敵数表示
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2 + 10, "敵数", 0xffffff, m_pFont->GetFont2());
@@ -854,7 +858,7 @@ void SceneMain::DrawInfo()
 	milliSec %= 1000;
 
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3 + 30, "タイム", 0xffffff, m_pFont->GetFont2());
-	DrawFormatStringToHandle(kInfoTextPosX + 50, kInfoTextPosY + kShotNumIntervalY * 3 + 70, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
+	DrawFormatStringToHandle(kInfoTextPosX + 20, kInfoTextPosY + kShotNumIntervalY * 3 + 70, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
 
 	
 /// <summary>
@@ -996,12 +1000,12 @@ void SceneMain::DrawPause()
 /// </summary>
 void SceneMain::DrawStartStaging()
 {
-	DrawBox(m_startDis.x, Game::kScreenHeight * 0.5f - 200, 
-		m_startDis.x + Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 
-		0xdda0dd, true);
-	DrawStringToHandle(m_startDis.x + Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100,
+	DrawGraph(m_startDis.x, Game::kScreenHeight * 0.5f - 200, m_startHandle, true);
+
+	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 70), Game::kScreenHeight * 0.5 - 100,
 		"敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
-	DrawFormatStringToHandle(m_startDis.x + Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100,
+
+	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5), Game::kScreenHeight * 0.5 + 30,
 		0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
 }
 
@@ -1017,7 +1021,11 @@ void SceneMain::DrawClearStaging()
 	milliSec %= 1000;
 
 	// クリアの文字を表示
-	DrawBox(0, Game::kScreenHeight * 0.5f - 200, Game::kScreenWidth, Game::kScreenHeight * 0.5f + 200, 0xdda0dd, true);
-	DrawStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f - 100, "CLEAR!", 0x4682b4, m_pFont->GetFontStaging());
-	DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.5f + 100, 0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
+	DrawGraph(0, Game::kScreenHeight * 0.5f - 200, m_startHandle, true);
+
+	DrawStringToHandle(Game::kScreenWidth * 0.5 - 70, Game::kScreenHeight * 0.5 - 100,
+		"CLEAR!\n", 0xffe44d, m_pFont->GetFontStaging());
+
+	DrawFormatStringToHandle(Game::kScreenWidth * 0.5 - 70, Game::kScreenHeight * 0.5 + 30,
+		0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
 }

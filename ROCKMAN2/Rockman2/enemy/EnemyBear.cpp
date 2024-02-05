@@ -1,5 +1,6 @@
 #include "EnemyBear.h"
 #include "Bg.h"
+#include "Player.h"
 #include "Game.h"
 #include "DxLib.h"
 
@@ -123,6 +124,12 @@ void EnemyBear::Draw()
 #endif
 }
 
+/// <summary>
+/// 敵出現
+/// </summary>
+/// <param name="posX">現在地</param>
+/// <param name="posY">現在地</param>
+/// <param name="moveRangeX">移動量</param>
 void EnemyBear::Start(float posX, float posY, float moveRangeX)
 {
 	// 敵キャラクターを登場させる
@@ -135,6 +142,10 @@ void EnemyBear::Start(float posX, float posY, float moveRangeX)
 	m_moveRangeX = moveRangeX;
 }
 
+/// <summary>
+/// マップチップとの当たり判定
+/// </summary>
+/// <param name="chipRect"></param>
 void EnemyBear::HitCollision(Rect chipRect)
 {
 	// 横から当たったかチェックする
@@ -169,6 +180,9 @@ void EnemyBear::HitCollision(Rect chipRect)
 	}
 }
 
+/// <summary>
+/// ダメージ時
+/// </summary>
 void EnemyBear::OnDamage()
 {
 	// ダメージ演出中は再度食らわない
@@ -177,7 +191,18 @@ void EnemyBear::OnDamage()
 	m_damageFrame = kDamageFrame;
 
 	// 現在のHPを減らす
-	m_hp--;
+	if (m_pPlayer->IsMiddleFire())
+	{
+		m_hp -= 3;
+	}
+	else if (m_pPlayer->IsBigFire())
+	{
+		m_hp -= 5;
+	}
+	else
+	{
+		m_hp--;
+	}
 
 	// SEを鳴らす
 	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);

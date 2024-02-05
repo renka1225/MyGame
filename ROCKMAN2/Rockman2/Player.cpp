@@ -116,6 +116,7 @@ Player::Player(SceneMain* pMain) :
 
 	// ‰¹“Ç‚Ýž‚Ý
 	m_shotSE = LoadSoundMem("data/sound/SE/shot.mp3");
+	m_shotFireSE = LoadSoundMem("data/sound/SE/shotFire.wav");
 	m_jumpSE = LoadSoundMem("data/sound/SE/jump.mp3");
 	m_damageSE = LoadSoundMem("data/sound/SE/playerDamage.wav");
 	m_deadSE = LoadSoundMem("data/sound/SE/playerDead.wav");
@@ -129,6 +130,7 @@ Player::~Player()
 	DeleteGraph(m_jumpHandle);
 	DeleteGraph(m_damageHandle);
 	DeleteSoundMem(m_shotSE);
+	DeleteSoundMem(m_shotFireSE);
 	DeleteSoundMem(m_damageSE);
 	DeleteSoundMem(m_deadSE);
 }
@@ -375,13 +377,20 @@ void Player::Update()
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
 
-			// TODO:’·‰Ÿ‚µ’†SE‚ð—¬‚·
+			// ’·‰Ÿ‚µ’†SE‚ð—¬‚·
+			if (CheckSoundMem(m_shotFireSE) == 0)
+			{
+				PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
+			}
 
 			m_nowPressTime = GetNowCount() - m_pressTime; // ƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚Ä—£‚·‚Ü‚Å‚ÌŽžŠÔ
 		}
 		// ƒL[‚ª—£‚³‚ê‚½uŠÔ‚ð”»’è
 		if (Pad::IsRelease(PAD_INPUT_4))
 		{
+			// SE’âŽ~
+			StopSoundMem(m_shotFireSE);
+
 			if (m_fireEnergy > 0) // ’eƒGƒlƒ‹ƒM[‚ª0ˆÈã
 			{
 				// ’e”­ŽË‚ÌSE‚ð–Â‚ç‚·
@@ -654,11 +663,11 @@ void Player::CheckHitMap(Rect chipRect)
 	{
 		if (m_move.x > 0.0f)
 		{
-			m_pos.x = chipRect.GetLeft() - kPlayerWidth * kScale * 0.5f + 10 - 1;
+			m_pos.x = chipRect.GetLeft() - kPlayerWidth * kScale * 0.5f + 15 - 1;
 		}
 		else if (m_move.x < 0.0f)
 		{
-			m_pos.x = chipRect.GetRight() + kPlayerWidth * kScale * 0.5f - 10 + 1;
+			m_pos.x = chipRect.GetRight() + kPlayerWidth * kScale * 0.5f - 15 + 1;
 		}
 	}
 
@@ -843,7 +852,14 @@ void Player::RideLineMove(Rect shotRect)
 	{
 		if (m_lineTime <= 0)
 		{
-			m_pos.x += 10.0f;
+			if (m_isRight)
+			{
+				m_pos.x += 10.0f;
+			}
+			else
+			{
+				m_pos.x -= 10.0f;
+			}
 		}
 		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;
 		m_isGround = true;

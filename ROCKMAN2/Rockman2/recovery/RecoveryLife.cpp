@@ -10,7 +10,7 @@ namespace
 	constexpr int kWidth = 62;
 	constexpr int kHeight = 62;
 	// 拡大率
-	constexpr int kScale = 0.5f;
+	constexpr float kScale = 0.5f;
 
 	// 落下速度
 	constexpr int kSpeed = 5;
@@ -62,7 +62,7 @@ void RecoveryLife::Update()
 	}
 
 	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうか
+	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
 	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
 	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
 
@@ -84,6 +84,11 @@ void RecoveryLife::Draw()
 	y -= m_pBg->GetScrollY();
 
 	DrawRotaGraph(x, y, kScale, 0.0f, m_handle, true);
+
+#ifdef _DEBUG
+	// 当たり判定の表示
+	m_colRect.Draw(0x0000ff, false);
+#endif
 }
 
 void RecoveryLife::Start(Vec2 pos)

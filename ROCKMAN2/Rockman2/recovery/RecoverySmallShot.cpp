@@ -27,6 +27,7 @@ RecoverySmallShot::~RecoverySmallShot()
 void RecoverySmallShot::Init(Bg* pBg)
 {
 	m_pBg = pBg;
+	m_frame = 0;
 	m_isExist = false;
 }
 
@@ -59,7 +60,7 @@ void RecoverySmallShot::Update()
 	}
 
 	// 画面外に出た処理
-	bool isOut = false;	// チェック中の座標が画面外かどうかフラグ
+	bool isOut = false;	// チェック中の座標が画面外かどうか
 	if (m_pos.x < 0.0f - kWidth / 2) isOut = true; // 画面左端
 	if (m_pos.x > Game::kScreenWidth + kWidth / 2) isOut = true; // 画面右端
 
@@ -80,7 +81,12 @@ void RecoverySmallShot::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
-	DrawRotaGraph(x, y, 1.0f, 0.0f, m_handle, true, false);
+	DrawRotaGraph(x, y, 1.0f, 0.0f, m_handle, true);
+
+#ifdef _DEBUG
+	// 当たり判定の表示
+	m_colRect.Draw(0x0000ff, false);
+#endif
 }
 
 void RecoverySmallShot::Start(Vec2 pos)

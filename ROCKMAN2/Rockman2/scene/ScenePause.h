@@ -80,6 +80,7 @@ private:
 
 	// 画像
 	int m_menuBg;		// メニュー画面の背景
+	int m_selectHandle; // 選択カーソルの画像
 
 	// 音
 	int m_menuSE;		// メニュー画面を開いた際のSE

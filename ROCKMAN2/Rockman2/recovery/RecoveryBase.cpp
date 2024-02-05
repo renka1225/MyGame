@@ -27,8 +27,21 @@ void RecoveryBase::Update()
 {
 	// 存在しないアイテムの処理はしない
 	if (!m_isExist) return;
+
+	// 5秒以上たったらアイテムを消す
+	m_frame++;
+	if (m_frame > 300)
+	{
+		m_isExist = false;
+		m_frame = 0;
+	}
+
 }
 
 void RecoveryBase::Draw()
 {
+#ifdef _DEBUG
+	// 当たり判定の表示
+	// m_colRect.Draw(0x0000ff, false);
+#endif
 }

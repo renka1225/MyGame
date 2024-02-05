@@ -72,7 +72,18 @@ void EnemyBase::OnDamage()
 	if (m_damageFrame > 0) return;
 
 	// Œ»Ý‚ÌHP‚ðŒ¸‚ç‚·
-	m_hp--;
+	if (m_pPlayer->IsMiddleFire())
+	{
+		m_hp -= 3;
+	}
+	else if (m_pPlayer->IsBigFire())
+	{
+		m_hp -= 5;
+	}
+	else
+	{
+		m_hp--;
+	}
 
 	// SE‚ð–Â‚ç‚·
 	PlaySoundMem(m_damageSE, DX_PLAYTYPE_NORMAL, true);
@@ -87,5 +98,4 @@ void EnemyBase::OnDamage()
 
 void EnemyBase::HitCollision(Rect chipRect)
 {
-
 }

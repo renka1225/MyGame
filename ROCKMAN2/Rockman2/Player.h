@@ -135,10 +135,11 @@ private:
 	int m_lineTime;
 
 	// 音
-	int m_shotSE;	// ショット時のSE
-	int m_jumpSE;	// ジャンプ時のSE
-	int m_damageSE;	// ダメージ時のSE
-	int m_deadSE;	// 死亡時のSE
+	int m_shotSE;		// ショット時のSE
+	int m_shotFireSE;	// ファイア溜め時のSE
+	int m_jumpSE;		// ジャンプ時のSE
+	int m_damageSE;		// ダメージ時のSE
+	int m_deadSE;		// 死亡時のSE
 
 	// 画像
 	int m_idleHandle;	// 待機状態
