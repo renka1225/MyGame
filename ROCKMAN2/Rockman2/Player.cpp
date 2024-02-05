@@ -547,7 +547,9 @@ void Player::Draw()
 #endif
 }
 
-/*プレイヤーの描画*/
+/// <summary>
+/// プレイヤーの描画
+/// </summary>
 void Player::DrawPlayer()
 {
 	// スクロール量を反映する
@@ -653,7 +655,10 @@ void Player::DrawPlayer()
 	}
 }
 
-/*マップチップの当たり判定*/
+/// <summary>
+/// マップチップの当たり判定
+/// </summary>
+/// <param name="chipRect"></param>
 void Player::CheckHitMap(Rect chipRect)
 {
 	// 横から当たったかチェックする
@@ -689,7 +694,13 @@ void Player::CheckHitMap(Rect chipRect)
 	}
 }
 
-/*弾の選択状態を更新*/
+/// <summary>
+/// 弾の選択状態を更新
+/// </summary>
+/// <param name="isBuster"></param>
+/// <param name="isMetal"></param>
+/// <param name="isFire"></param>
+/// <param name="isLineMove"></param>
 void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
 {
 	// バスターの選択状態を更新
@@ -705,7 +716,9 @@ void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMov
 	m_isLineMove = isLineMove;
 }
 
-/*プレイヤーのダメージ演出*/
+/// <summary>
+/// プレイヤーのダメージ演出
+/// </summary>
 void Player::OnDamage()
 {
 	// ダメージ演出中は無敵状態になる
@@ -721,21 +734,35 @@ void Player::OnDamage()
 
 	// HPを減らす
 	m_hp--;
-
 	if (m_hp <= 0)
 	{
 		m_life--;		// 残機を1減らす
 		m_hp = kMaxHp;	// HP全回復
 	}
+
+	// ノックバック
+	m_pos.y -= 50;
+	if (m_isRight)
+	{
+		m_pos.x -= 50;
+	}
+	else
+	{
+		m_pos.x += 50;
+	}
 }
 
-/*E缶取得*/
+/// <summary>
+/// E缶取得
+/// </summary>
 void Player::GetHpFullRecovery()
 {
 	m_fullHpRecovery += 1;
 }
 
-/*回復*/
+/// <summary>
+/// 回復
+/// </summary>
 void Player::HpSmallRecovery() // HP小回復
 {
 	m_hp += kSmallRecovery;
@@ -839,7 +866,10 @@ void Player::HpFullRecovery() // HP全回復
 	}
 }
 
-/*アイテム2号に乗った際の処理*/
+/// <summary>
+/// アイテム2号に乗った際の処理
+/// </summary>
+/// <param name="shotRect">アイテム2号の当たり判定</param>
 void Player::RideLineMove(Rect shotRect)
 {
  	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
