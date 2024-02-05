@@ -116,8 +116,8 @@ void SceneStageSelect::Update()
 		}
 	}
 
-	// Zキーを押したとき
-	if (Pad::IsTrigger(PAD_INPUT_1))
+	// ZキーorAボタンを押したとき
+	if (Pad::IsTrigger(pad & PAD_INPUT_A))
 	{
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_NORMAL, true);

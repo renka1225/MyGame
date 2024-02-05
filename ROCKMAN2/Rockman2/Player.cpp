@@ -243,8 +243,8 @@ void Player::Update()
 		m_jumpFrame = 0;
 		m_isJump = false;
 
-		/*XキーorBボタンでジャンプ*/
-		if (Pad::IsTrigger(PAD_INPUT_B))
+		/*ZキーorAボタンでジャンプ*/
+		if (Pad::IsTrigger(PAD_INPUT_A))
 		{
 			m_isGround = false;
 			m_isJump = true;
@@ -309,7 +309,7 @@ void Player::Update()
 	/*バスター発射*/
 	if (m_isBuster)
 	{
-		if (Pad::IsTrigger(PAD_INPUT_4))
+		if (Pad::IsTrigger(PAD_INPUT_B))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
@@ -331,7 +331,7 @@ void Player::Update()
 	/*メタル発射*/
 	if (m_isMetal)
 	{
-		if (Pad::IsTrigger(PAD_INPUT_4))
+		if (Pad::IsTrigger(PAD_INPUT_B))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
@@ -367,12 +367,12 @@ void Player::Update()
 	if (m_isFire)
 	{
 		// キーが押された瞬間を取得
-		if (Pad::IsTrigger(PAD_INPUT_4))
+		if (Pad::IsTrigger(PAD_INPUT_B))
 		{
 			m_pressTime = GetNowCount();
 		}
 		// キーが押されているか判定
-		if (Pad::IsPress(PAD_INPUT_4))
+		if (Pad::IsPress(PAD_INPUT_B))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
@@ -386,7 +386,7 @@ void Player::Update()
 			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
 		}
 		// キーが離された瞬間を判定
-		if (Pad::IsRelease(PAD_INPUT_4))
+		if (Pad::IsRelease(PAD_INPUT_B))
 		{
 			// SE停止
 			StopSoundMem(m_shotFireSE);
@@ -459,7 +459,7 @@ void Player::Update()
 	if (m_isLineMove)
 	{
 		// ボタンを押したら発射
-		if (Pad::IsTrigger(PAD_INPUT_4))
+		if (Pad::IsTrigger(PAD_INPUT_B))
 		{
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;

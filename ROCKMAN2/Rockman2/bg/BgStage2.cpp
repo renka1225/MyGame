@@ -67,11 +67,13 @@ namespace
 BgStage2::BgStage2()
 {
 	m_bgHandle = LoadGraph("data/image/BackGround/1.png");
+	m_mapHandle = LoadGraph("data/image/map.png");
 }
 
 BgStage2::~BgStage2()
 {
 	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_mapHandle);
 }
 
 void BgStage2::Init()

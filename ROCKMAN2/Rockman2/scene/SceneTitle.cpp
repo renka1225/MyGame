@@ -10,7 +10,7 @@ namespace
 	constexpr int kCharPosY = 700;
 
 	// 選択カーソルの初期位置
-	constexpr int kInitSelectPosX = 960;
+	constexpr int kInitSelectPosX = 950;
 	constexpr int kInitSelectPosY = 580;
 	// 選択カーソルの移動量
 	constexpr int kSelectmoveY = 120;

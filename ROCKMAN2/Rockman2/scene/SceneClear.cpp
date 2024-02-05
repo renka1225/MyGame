@@ -14,11 +14,11 @@ namespace
 	constexpr int kClearSizeY = 174;
 
 	// 文字表示位置
-	constexpr int kCharPosX = Game::kScreenWidth - kClearSizeX + 50;
+	constexpr int kCharPosX = Game::kScreenWidth - kClearSizeX + 80;
 	constexpr int kCharPosY = 700;
 
 	// 選択カーソルの初期位置
-	constexpr int kInitSelectPosX = Game::kScreenWidth - kClearSizeX - 5;
+	constexpr int kInitSelectPosX = Game::kScreenWidth - kClearSizeX + 35;
 	constexpr int kInitSelectPosY = 610;
 	// 選択カーソルの移動量
 	constexpr int kSelectmoveY = 190;
