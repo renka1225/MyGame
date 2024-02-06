@@ -19,13 +19,13 @@ public:
 	SceneMain();
 	virtual ~SceneMain();
 
-	virtual void Init() = 0;
-	virtual void End() = 0;
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Init();
+	virtual void End();
+	virtual void Update();
+	virtual void Draw();
 
 	// ショットの追加
-	virtual bool AddShot(ShotBase* pShot) = 0;
+	virtual bool AddShot(ShotBase* pShot);
 
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復

@@ -2,9 +2,7 @@
 
 class SceneTitle;
 class SceneOption;
-class SceneStageSelect;
 class SceneStage1;
-class SceneStage2;
 class SceneClear;
 class SceneGameOver;
 
@@ -27,9 +25,7 @@ private:
 	enum SceneSelect
 	{
 		kSceneTitle,
-		kSceneStageSelect,
 		kSceneStage1,
-		kSceneStage2,
 		kSceneClear,
 		kSceneGameOver
 	};
@@ -40,9 +36,7 @@ private:
 private:
 	// SceneManagerÇ≈ä«óùÇ∑ÇÈÉVÅ[Éì
 	SceneTitle* m_pTitle;
-	SceneStageSelect* m_pStageSelect;
 	SceneStage1* m_pStage1;
-	SceneStage2* m_pStage2;
 	SceneClear* m_pClear;
 	SceneGameOver* m_pGameOver;
 };

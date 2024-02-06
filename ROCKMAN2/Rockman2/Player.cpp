@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "Pad.h"
 #include "Bg.h"
-#include "SceneMain.h"
+#include "SceneStage1.h"
 #include "ShotBuster.h"
 #include "ShotMetal.h"
 #include "ShotFire.h"
@@ -74,8 +74,8 @@ namespace
 }
 
 
-Player::Player(SceneMain* pMain) :
-	m_pMain(pMain),
+Player::Player() :
+	m_pStage1(nullptr),
 	m_pBg(nullptr),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
@@ -169,7 +169,7 @@ void Player::Init()
 	m_damageFrame = 0;
 
 	// çƒÉvÉåÉCéû
-	if (m_life < 0 || m_pMain->IsSceneClear() || m_pMain->IsSceneTitle() || m_pMain->IsSceneEnd())
+	if (m_life < 0 || m_pStage1->IsSceneClear() || m_pStage1->IsSceneTitle() || m_pStage1->IsSceneEnd())
 	{
 		// HP
 		m_hp = kMaxHp;
@@ -219,6 +219,7 @@ void Player::Update()
 		{
 			m_hp = 0;
 		}
+		StopSoundMem(m_shotFireSE);
 	}
 
 	/*HPÇ™0à»â∫Ç…Ç»Ç¡ÇΩÇÁécã@Ç1å∏ÇÁÇ∑*/
@@ -317,11 +318,11 @@ void Player::Update()
 			ShotBuster* pShot = new ShotBuster;
 			// êVÇµÇ¢íeÇê∂ê¨Ç∑ÇÈ
 			pShot->Init();
-			pShot->SetMain(m_pMain);
+			pShot->SetMain(m_pStage1);
 			pShot->SetPlayer(this);
 			pShot->Start(m_pos);
 			// à»ç~çXêVÇ‚ÉÅÉÇÉäÇÃâï˙ÇÕSceneMainÇ…îCÇπÇÈ
-			m_pMain->AddShot(pShot);
+			m_pStage1->AddShot(pShot);
 
 			// íeî≠éÀÇÃSEÇñ¬ÇÁÇ∑
 			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
@@ -341,11 +342,11 @@ void Player::Update()
 				ShotMetal* pShot = new ShotMetal;
 				// êVÇµÇ¢íeÇê∂ê¨Ç∑ÇÈ
 				pShot->Init();
-				pShot->SetMain(m_pMain);
+				pShot->SetMain(m_pStage1);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// à»ç~çXêVÇ‚ÉÅÉÇÉäÇÃâï˙ÇÕSceneMainÇ…îCÇπÇÈ
-				m_pMain->AddShot(pShot);
+				m_pStage1->AddShot(pShot);
 
 				// íeî≠éÀÇÃSEÇñ¬ÇÁÇ∑
 				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
@@ -377,10 +378,13 @@ void Player::Update()
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
 
-			// í∑âüÇµíÜSEÇó¨Ç∑
-			if (CheckSoundMem(m_shotFireSE) == 0)
+			if (m_fireEnergy >= 0)
 			{
-				PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
+				// í∑âüÇµíÜSEÇó¨Ç∑
+				if (CheckSoundMem(m_shotFireSE) == 0)
+				{
+					PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
+				}
 			}
 
 			m_nowPressTime = GetNowCount() - m_pressTime; // É{É^ÉìÇâüÇµÇƒó£Ç∑Ç‹Ç≈ÇÃéûä‘
@@ -442,11 +446,11 @@ void Player::Update()
 				// êVÇµÇ¢íeÇê∂ê¨Ç∑ÇÈ
 				ShotFire* pShot = new ShotFire;
 				pShot->Init();
-				pShot->SetMain(m_pMain);
+				pShot->SetMain(m_pStage1);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// à»ç~çXêVÇ‚ÉÅÉÇÉäÇÃâï˙ÇÕSceneMainÇ…îCÇπÇÈ
-				m_pMain->AddShot(pShot);
+				m_pStage1->AddShot(pShot);
 			}
 			else // íeÉGÉlÉãÉMÅ[Ç™0à»â∫
 			{
@@ -464,16 +468,16 @@ void Player::Update()
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
 
-			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
+			if (!m_pStage1->GetIsExistLineMove() && m_lineEnergy > 0)
 			{
 				ShotLineMove* pShot = new ShotLineMove;
 				// êVÇµÇ¢íeÇê∂ê¨Ç∑ÇÈ
 				pShot->Init();
-				pShot->SetMain(m_pMain);
+				pShot->SetMain(m_pStage1);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// à»ç~çXêVÇ‚ÉÅÉÇÉäÇÃâï˙ÇÕSceneMainÇ…îCÇπÇÈ
-				m_pMain->AddShot(pShot);
+				m_pStage1->AddShot(pShot);
 
 				// íeî≠éÀÇÃSEÇñ¬ÇÁÇ∑
 				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
@@ -483,7 +487,7 @@ void Player::Update()
 		}
 
 		// âÊñ ì‡Ç…Ç†ÇÈèÍçá
-		if (m_pMain->GetIsExistLineMove())
+		if (m_pStage1->GetIsExistLineMove())
 		{
 			m_lineTime--;
 			m_lineEnergy -= 0.03f; // ÉGÉlÉãÉMÅ[Çå∏ÇÁÇ∑
@@ -814,9 +818,9 @@ void Player::ShotGreatRecovery() // íeëÂâÒïú
 	if (m_isMetal) // ÉÅÉ^Éã
 	{
 		m_metalEnergy += kGreatRecovery;
-		if (m_metalEnergy > kMaxShot)
+		if (m_metalEnergy > kMaxMetalShot)
 		{
-			m_metalEnergy = kMaxShot;
+			m_metalEnergy = kMaxMetalShot;
 		}
 	}
 	else if (m_isFire) // ÉtÉ@ÉCÉA
@@ -894,10 +898,5 @@ void Player::RideLineMove(Rect shotRect)
 		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;
 		m_isGround = true;
 		m_animation = Anim::kIdle;
-	}
-	if (!m_pMain->GetIsExistLineMove())
-	{
-		m_isGround = false;
-		m_pos.y -= 10;
 	}
 }

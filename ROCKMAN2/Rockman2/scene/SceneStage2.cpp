@@ -4,7 +4,7 @@
 #include "Rect.h"
 #include "Game.h"
 #include "FontManager.h"
-#include "Bgstage2.h"
+#include "BgStage2.h"
 #include "ScenePause.h"
 
 #include "RecoverySmallHp.h"
@@ -80,22 +80,22 @@ namespace
 }
 
 SceneStage2::SceneStage2():
-m_drawValue(0),
-m_isGetFullHpRecovery(false),
-m_enemyTotalNum(kEnemyMax),
-m_time(0.0f),
-m_isExistLineMove(false),
-m_isSceneGameOver(false),
-m_isSceneClear(false),
-m_isSceneEnd(false),
-m_fadeAlpha(240),
-m_stagingFade(0),
-m_startStagingTime(kStartTime),
-m_clearStagingTime(kClearTime),
-m_gameoverStagingTime(kGameoverTime)
+	m_drawValue(0),
+	m_isGetFullHpRecovery(false),
+	m_enemyTotalNum(kEnemyMax),
+	m_time(0.0f),
+	m_isExistLineMove(false),
+	m_isSceneGameOver(false),
+	m_isSceneClear(false),
+	m_isSceneEnd(false),
+	m_fadeAlpha(240),
+	m_stagingFade(0),
+	m_startStagingTime(kStartTime),
+	m_clearStagingTime(kClearTime),
+	m_gameoverStagingTime(kGameoverTime)
 {
 	// プレイヤーのメモリ確保
-	m_pPlayer = new Player{ this };
+	m_pPlayer = new Player;
 
 	// 背景のメモリ確保
 	m_pBg = new BgStage2;

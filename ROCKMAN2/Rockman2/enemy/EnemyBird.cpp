@@ -22,8 +22,8 @@ namespace
 	// ˆÚ“®‘¬“x
 	constexpr float kSpeedX = 1.0f;
 	constexpr float kSpeedY = 10.0f;
-	constexpr float kSinSpeed = 3.0f;
-	constexpr float kAnimationSize = 2.5f;
+	constexpr float kSinSpeed = 0.05f;
+	constexpr float kAnimationSize = 3.0f;
 
 	// Å‘åHP
 	constexpr int kHp = 1;
@@ -46,7 +46,7 @@ namespace
 
 EnemyBird::EnemyBird():
 	m_flyAnimFrame(0),
-	m_sinCount(0)
+	m_sinCount(0.0f)
 {
 	m_handle = LoadGraph("data/image/Enemy/bird.png");
 }
@@ -76,7 +76,7 @@ void EnemyBird::Update()
 
 	// ˆÚ“®
 	m_sinCount += kSinSpeed;
-	m_vec.y = sinf(m_sinCount * kAnimationSize);
+	m_vec.y = sinf(m_sinCount) * kAnimationSize;
 
 	// ¶‰EˆÚ“®‚·‚é‚æ‚¤‚É‚·‚é
 	if (m_pos.x > m_startPos.x + m_moveRangeX)
@@ -162,7 +162,7 @@ void EnemyBird::Start(float posX, float posY, float moveRangeX)
 	m_pos = { posX, posY };
 	m_startPos = { posX, posY };
 	m_vec.x = -kSpeedX;
-	m_vec.y = kSpeedY;
+	m_vec.y = 0.0f;
 	m_moveRangeX = moveRangeX;
 }
 

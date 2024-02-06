@@ -237,9 +237,9 @@ void BgStage1::DrawBg()
 			m_bg4Handle, true);
 	}
 
-	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 40);
-	//DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xff674d, true);
-	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 40);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xff674d, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 /// <summary>

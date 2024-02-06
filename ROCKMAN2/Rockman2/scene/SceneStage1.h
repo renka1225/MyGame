@@ -105,6 +105,8 @@ private:
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
+	// 画面揺れ演出
+	int m_shakeFrame;
 
 	// 音
 	int m_bgm;			// BGM
@@ -115,6 +117,7 @@ private:
 	int m_clearSE;		// クリア時のSE
 
 	// 画像
+	int m_gameScreenHandle;	// ゲーム画面
 	int m_frameHandle;		// 枠
 	int m_shotSelectHandle;	// 選択中の武器
 	int m_startHandle;		// スタート演出の画像

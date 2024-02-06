@@ -2,7 +2,7 @@
 #include "Vec2.h"
 #include "Rect.h"
 
-class SceneMain;
+class SceneStage1;
 class Bg;
 
 /// <summary>
@@ -11,11 +11,12 @@ class Bg;
 class Player
 {
 public:
-	Player(SceneMain* pMain);
+	Player();
 	~Player();
 
 	// マップのポインタを設定する
 	void SetBg(Bg* pBg) { m_pBg = pBg; }
+	void SetStage(SceneStage1* pStage1) { m_pStage1 = pStage1; }
 
 	void Init();
 	void Update();
@@ -79,8 +80,9 @@ public:
 	bool IsLineMove() const { return m_isLineMove; }// 2号
 
 private:
-	SceneMain* m_pMain;
+	// 背景
 	Bg* m_pBg;
+	SceneStage1* m_pStage1;
 
 	// 表示位置
 	Vec2 m_pos;

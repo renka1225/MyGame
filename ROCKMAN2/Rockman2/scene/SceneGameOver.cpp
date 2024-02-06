@@ -31,8 +31,7 @@ namespace
 SceneGameOver::SceneGameOver():
 	m_select(kRetry),
 	m_isSceneRetry(false),
-	m_isSceneSelect(false),
-	m_isSceneTitle(false), 
+	m_isSceneTitle(false),
 	m_fadeAlpha(255)
 {
 	// 画像読み込み
@@ -61,7 +60,6 @@ SceneGameOver::~SceneGameOver()
 void SceneGameOver::Init()
 {
 	m_isSceneRetry = false;
-	m_isSceneSelect = false;
 	m_isSceneTitle = false;
 	m_fadeAlpha = 255;
 	m_select = kRetry;
@@ -119,12 +117,12 @@ void SceneGameOver::Update()
 			m_isSceneRetry = true;
 			StopSoundMem(m_bgm);
 			break;
-		case kSelectStage:
-			m_isSceneSelect = true;
-			StopSoundMem(m_bgm);
-			break;
 		case kTitle:
 			m_isSceneTitle = true;
+			StopSoundMem(m_bgm);
+			break;
+		case kEnd:
+			DxLib_End();
 			StopSoundMem(m_bgm);
 		default:
 			break;
@@ -132,7 +130,7 @@ void SceneGameOver::Update()
 	}
 
 	// フェードインアウト
-	if (m_isSceneRetry || m_isSceneSelect || m_isSceneTitle)
+	if (m_isSceneRetry || m_isSceneTitle)
 	{
 		m_fadeAlpha += 8;
 		if (m_fadeAlpha > 255)

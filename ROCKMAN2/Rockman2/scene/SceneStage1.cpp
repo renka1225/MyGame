@@ -1,5 +1,4 @@
 #include "SceneStage1.h"
-#include "SceneMain.h"
 #include "DxLib.h"
 #include "Pad.h"
 #include "Rect.h"
@@ -93,15 +92,20 @@ SceneStage1::SceneStage1():
 	m_stagingFade(0),
 	m_startStagingTime(kStartTime),
 	m_clearStagingTime(kClearTime),
-	m_gameoverStagingTime(kGameoverTime)
+	m_gameoverStagingTime(kGameoverTime),
+	m_shakeFrame(0)
 {
+	// ゲーム画面描画先の生成
+	m_gameScreenHandle = MakeScreen(Stage::kMapWidth, Stage::kMapHeight, true);
+
 	// プレイヤーのメモリ確保
-	m_pPlayer = new Player{ this };
+	m_pPlayer = new Player;
 
 	// 背景のメモリ確保
 	m_pBg = new BgStage1;
 	m_pBg->SetPlayer(m_pPlayer);
 	m_pPlayer->SetBg(m_pBg);
+	m_pPlayer->SetStage(this);
 
 	// フォント
 	m_pFont = new FontManager;
@@ -321,7 +325,7 @@ void SceneStage1::Update()
 	// プレイヤーの残機が0未満の場合
 	if (m_pPlayer->GetLife() < 0)
 	{
-		// 1秒間後にゲームオーバー画面に遷移
+		// 1秒後にゲームオーバー画面に遷移
 		WaitTimer(1000);
 		m_isSceneGameOver = true;
 		StopSoundMem(m_bgm);
@@ -400,6 +404,13 @@ void SceneStage1::Update()
 	m_playerPos = m_pPlayer->GetPos();
 	// プレイヤーの当たり判定
 	Rect playerRect = m_pPlayer->GetColRect();
+
+	// 画面を揺らす
+	m_shakeFrame--;
+	if (m_shakeFrame < 0)
+	{
+		m_shakeFrame = 0;
+	}
 
 	// E缶を表示
 	if (!m_isGetFullHpRecovery)
@@ -482,6 +493,7 @@ void SceneStage1::Update()
 			if (playerRect.IsCollision(enemyRect))
 			{
 				m_pPlayer->OnDamage();
+				m_shakeFrame = 2;
 			}
 
 			for (int j = 0; j < m_pShot.size(); j++)
@@ -576,11 +588,16 @@ void SceneStage1::Update()
 
 void SceneStage1::Draw()
 {
+	// 書き込み
+	SetDrawScreen(m_gameScreenHandle);
 	// 描画先スクリーンをクリアする
 	ClearDrawScreen();
 
 	// 背景の描画
 	m_pBg->Draw();
+
+	// プレイヤーの描画
+	m_pPlayer->Draw();
 
 	// 弾の描画
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -605,9 +622,6 @@ void SceneStage1::Draw()
 		if (!m_pRecovery[i])continue;
 		m_pRecovery[i]->Draw();
 	}
-
-	// プレイヤーの描画
-	m_pPlayer->Draw();
 
 	/*画面横に情報表示*/
 	DrawInfo();
@@ -643,10 +657,19 @@ void SceneStage1::Draw()
 		DrawClearStaging();
 	}
 
-#ifdef _DEBUG
-	printfDx("ステージ1\n");
-#endif // _DEBUG
+	// バックバッファに書き込む設定に戻しておく
+	SetDrawScreen(DX_SCREEN_BACK);
 
+	// ゲーム画面をバックバッファに描画する
+	int screenX = 0;
+	int screenY = 0;
+	if (m_shakeFrame > 0)
+	{
+		// 画面揺れ
+		screenX = GetRand(6) - 4;
+		screenY = GetRand(6) - 4;
+	}
+	DrawRectGraph(screenX, screenY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_gameScreenHandle, true);
 }
 
 /// <summary>
@@ -759,7 +782,7 @@ void SceneStage1::DropFullHpRecovery()
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
 			m_pRecovery[i]->Init(m_pBg);
-			m_pRecovery[i]->Start({ 1680, 700 }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ 1680, 660 }); // アイテムの位置を設定
 			return;
 		}
 	}

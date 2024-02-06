@@ -17,7 +17,6 @@ public:
 
 	// シーンを終了させるか
 	bool IsSeneRetry() const { return m_isSceneRetry; }
-	bool IsSceneSelect() const { return m_isSceneSelect; }
 	bool IsSceneTitle() const { return m_isSceneTitle; }
 
 private:
@@ -25,8 +24,8 @@ private:
 	enum Select
 	{
 		kRetry,		  // リトライ 
-		kSelectStage, // ステージ選択
 		kTitle,		  // タイトル
+		kEnd,		  // ゲーム終了
 		kSelectNum	  // 項目数
 	};
 
@@ -38,7 +37,6 @@ private:
 private:
 	// シーン選択のフラグ true:シーンに移動
 	bool m_isSceneRetry;	// リトライ
-	bool m_isSceneSelect;	// ステージ選択
 	bool m_isSceneTitle;	// タイトル 
 
 	// 選択カーソルの表示位置
