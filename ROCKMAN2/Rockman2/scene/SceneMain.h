@@ -19,13 +19,13 @@ public:
 	SceneMain();
 	virtual ~SceneMain();
 
-	virtual void Init();
-	virtual void End();
-	virtual void Update();
-	virtual void Draw();
+	virtual void Init() = 0;
+	virtual void End() = 0;
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
 
 	// ショットの追加
-	bool AddShot(ShotBase* pShot);
+	virtual bool AddShot(ShotBase* pShot) = 0;
 
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
@@ -44,7 +44,7 @@ public:
 	bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
-private:
+protected:
 	//　敵の生成
 	void CreateEnemy();
 	// アイテムの生成

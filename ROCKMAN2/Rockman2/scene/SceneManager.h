@@ -3,7 +3,7 @@
 class SceneTitle;
 class SceneOption;
 class SceneStageSelect;
-class SceneMain;
+class SceneStage1;
 class SceneStage2;
 class SceneClear;
 class SceneGameOver;
@@ -28,7 +28,7 @@ private:
 	{
 		kSceneTitle,
 		kSceneStageSelect,
-		kSceneMain,
+		kSceneStage1,
 		kSceneStage2,
 		kSceneClear,
 		kSceneGameOver
@@ -41,7 +41,7 @@ private:
 	// SceneManagerÇ≈ä«óùÇ∑ÇÈÉVÅ[Éì
 	SceneTitle* m_pTitle;
 	SceneStageSelect* m_pStageSelect;
-	SceneMain* m_pMain;
+	SceneStage1* m_pStage1;
 	SceneStage2* m_pStage2;
 	SceneClear* m_pClear;
 	SceneGameOver* m_pGameOver;

@@ -740,8 +740,8 @@ void Player::OnDamage()
 		m_hp = kMaxHp;	// HP全回復
 	}
 
-	// ノックバック
-	m_pos.y -= 50;
+	// TODO:ノックバック
+	/*m_pos.y -= 50;
 	if (m_isRight)
 	{
 		m_pos.x -= 50;
@@ -749,7 +749,7 @@ void Player::OnDamage()
 	else
 	{
 		m_pos.x += 50;
-	}
+	}*/
 }
 
 /// <summary>
