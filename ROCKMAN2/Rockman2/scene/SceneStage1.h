@@ -105,6 +105,8 @@ private:
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
+	// Readyの表示カウント
+	int m_readyCount;
 	// 画面揺れ演出
 	int m_shakeFrame;
 

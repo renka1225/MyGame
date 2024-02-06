@@ -100,7 +100,7 @@ Player::Player() :
 	m_isSmallFire(false),
 	m_isMiddleFire(false),
 	m_isBigFire(false),
-	m_lineTime(60),
+	m_lineTime(120),
 	m_animation(Anim::kIdle),
 	m_idleAnimFrame(0),
 	m_walkAnimFrame(0),
@@ -148,8 +148,6 @@ void Player::Init()
 	m_isJump = false;
 	// 加速度
 	m_move.y = 0.0f;
-	// ダメージのフレーム数
-	m_damageFrame = 0;
 	// 開始時はバスターを打てるようにする
 	m_isBuster = true;
 	m_isMetal = false;
@@ -160,7 +158,7 @@ void Player::Init()
 	m_isMiddleFire = false;
 	m_isBigFire = false;
 	// アイテム2号の待機時間
-	m_lineTime = 60;
+	m_lineTime = 120;
 	// 待機状態にする
 	m_animation = Anim::kIdle;
 	m_idleAnimFrame = 0;
@@ -482,7 +480,7 @@ void Player::Update()
 				// 弾発射のSEを鳴らす
 				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 
-				m_lineTime = 60;
+				m_lineTime = 120;
 			}
 		}
 
@@ -490,7 +488,10 @@ void Player::Update()
 		if (m_pStage1->GetIsExistLineMove())
 		{
 			m_lineTime--;
-			m_lineEnergy -= 0.03f; // エネルギーを減らす
+			if (m_lineTime <= 0)
+			{
+				m_lineEnergy -= 0.03f; // エネルギーを減らす
+			}
 		}
 	}
 
@@ -744,16 +745,15 @@ void Player::OnDamage()
 		m_hp = kMaxHp;	// HP全回復
 	}
 
-	// TODO:ノックバック
-	/*m_pos.y -= 50;
+	// ノックバックさせる
 	if (m_isRight)
 	{
-		m_pos.x -= 50;
+		m_pos.x -= 30;
 	}
 	else
 	{
-		m_pos.x += 50;
-	}*/
+		m_pos.x += 30;
+	}
 }
 
 /// <summary>

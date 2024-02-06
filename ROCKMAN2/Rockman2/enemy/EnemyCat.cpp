@@ -7,7 +7,7 @@
 namespace
 {
 	// 敵のサイズ
-	constexpr int kWidth = 64;
+	constexpr int kWidth = 61;
 	constexpr int kHeight = 38;
 
 	// エフェクトのサイズ
@@ -16,7 +16,7 @@ namespace
 
 	// 拡大率
 	constexpr float kEnlarge = 1.3f;
-	constexpr float kEffectScale = 5.0f;
+	constexpr float kEffectScale = 3.0f;
 
 	// 移動速度
 	constexpr float kSpeedX = 3.0f;
@@ -34,9 +34,9 @@ namespace
 	// エフェクト
 	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 16;
+	constexpr int kEffectFrameNum = 32;
 	// ダメージ演出フレーム数
-	constexpr int kDamageFrame = 60;
+	constexpr int kDamageFrame = 120;
 }
 
 

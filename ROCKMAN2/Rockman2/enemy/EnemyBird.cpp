@@ -17,7 +17,7 @@ namespace
 
 	// Šg‘å—¦
 	constexpr float kEnlarge = 3.4f;
-	constexpr float kEffectScale = 5.0f;
+	constexpr float kEffectScale = 3.0f;
 
 	// ˆÚ“®‘¬“x
 	constexpr float kSpeedX = 1.0f;

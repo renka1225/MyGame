@@ -601,13 +601,13 @@ void SceneMain::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x808080, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// TODO:スタートとクリア条件の表示
+	// スタートとクリア条件の表示
 	if (m_startStagingTime > 0.0f)
 	{
 		DrawStartStaging();
 	}
 
-	// TODO: クリアの演出とタイム表示
+	// クリアの演出とタイム表示
 	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
 	{
 		DrawClearStaging();

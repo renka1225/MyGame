@@ -44,6 +44,8 @@ namespace
 	constexpr float kStartTime = 120.0f;
 	constexpr float kClearTime = 60.0f;
 	constexpr float kGameoverTime = 300.0f;
+	// readyカウント演出
+	constexpr int kReadyCount = 60;
 
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
@@ -93,6 +95,7 @@ SceneStage1::SceneStage1():
 	m_startStagingTime(kStartTime),
 	m_clearStagingTime(kClearTime),
 	m_gameoverStagingTime(kGameoverTime),
+	m_readyCount(kReadyCount),
 	m_shakeFrame(0)
 {
 	// ゲーム画面描画先の生成
@@ -223,6 +226,7 @@ void SceneStage1::Init()
 	// 演出時間の初期化
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
+	m_readyCount = kReadyCount;
 
 	m_enemyTotalNum = kEnemyMax;
 	m_time = 0.0f;
@@ -287,7 +291,7 @@ void SceneStage1::Update()
 		}
 		else if (m_startStagingTime <= 0)
 		{
-			// 0.5秒缶待機
+			// 0.5秒間待機
 			WaitTimer(500);
 		}
 		else
@@ -315,6 +319,11 @@ void SceneStage1::Update()
 			m_fadeAlpha = 0;
 		}
 	}
+
+	// カウントダウン演出
+	m_readyCount--;
+	if (m_readyCount >= 0) return;
+	else m_readyCount = 0;
 
 	// スタートSEを鳴らした後にBGMを鳴らす
 	if (CheckSoundMem(m_startSE) == 0 && CheckSoundMem(m_bgm) == 0)
@@ -645,18 +654,6 @@ void SceneStage1::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x0e0918, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// スタートとクリア条件の表示
-	if (m_startStagingTime > 0.0f)
-	{
-		DrawStartStaging();
-	}
-
-	// クリアの演出とタイム表示
-	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
-	{
-		DrawClearStaging();
-	}
-
 	// バックバッファに書き込む設定に戻しておく
 	SetDrawScreen(DX_SCREEN_BACK);
 
@@ -666,10 +663,32 @@ void SceneStage1::Draw()
 	if (m_shakeFrame > 0)
 	{
 		// 画面揺れ
-		screenX = GetRand(6) - 4;
-		screenY = GetRand(6) - 4;
+		screenX = GetRand(4) - 2;
+		screenY = GetRand(4) - 2;
 	}
 	DrawRectGraph(screenX, screenY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_gameScreenHandle, true);
+
+	// スタートとクリア条件の表示
+	if (m_startStagingTime > 0.0f)
+	{
+		DrawStartStaging();
+	}
+	else if (m_startStagingTime <= 0.0f)
+	{
+		if (m_readyCount % 10 >= 8) return;
+
+		if (m_readyCount > 0)
+		{
+			DrawStringToHandle(Game::kScreenWidth * 0.5f - 30, Game::kScreenHeight * 0.5f, "READY", 0xffffff, m_pFont->GetFontStaging());
+		}
+	}
+
+	// クリアの演出とタイム表示
+	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
+	{
+		DrawClearStaging();
+	}
+
 }
 
 /// <summary>

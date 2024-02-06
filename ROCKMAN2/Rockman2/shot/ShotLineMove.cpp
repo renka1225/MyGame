@@ -125,5 +125,5 @@ void ShotLineMove::Start(Vec2 pos)
 	m_pos.y = (pos.y + kHeight / 2);
 
 	// ƒAƒCƒeƒ€2†‚ğÃ~‚·‚éŠÔ
-	m_stopFrame = 60;
+	m_stopFrame = 120;
 }
