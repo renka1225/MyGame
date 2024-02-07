@@ -119,6 +119,7 @@ private:
 	int m_lineMoveSE;	// アイテム2号が画面内にあるとき
 	int m_startSE;		// スタート時のSE
 	int m_clearSE;		// クリア時のSE
+	int m_fireworksSE;	// 花火のSE
 
 	// 画像
 	int m_gameScreenHandle;	// ゲーム画面

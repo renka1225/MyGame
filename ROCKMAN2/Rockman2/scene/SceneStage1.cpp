@@ -40,7 +40,7 @@ namespace
 	/*演出*/
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
-	constexpr float kClearTime = 60.0f;
+	constexpr float kClearTime = 350.0f;
 	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
@@ -141,6 +141,7 @@ SceneStage1::SceneStage1():
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
 	m_startSE = LoadSoundMem("data/sound/BGM/start.wav");
 	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
+	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.mp3");
 
 	// 画像
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
@@ -209,6 +210,7 @@ SceneStage1::~SceneStage1()
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_shotSelectHandle);
 	DeleteGraph(m_startHandle);
+	DeleteGraph(m_fireworksSE);
 }
 
 void SceneStage1::Init()
@@ -346,11 +348,20 @@ void SceneStage1::Update()
 
 		// クリアSE1回だけを鳴らす
 		StopSoundMem(m_bgm);
-		if (CheckSoundMem(m_clearSE) == 0)
+		if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
 		{
 			m_stagingFade = 0;
 			PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
 			return;
+		}
+		// 花火の音を流す
+		else if (m_clearStagingTime <= kClearTime - 60.0f || m_clearStagingTime > 0.0f)
+		{
+			if (CheckSoundMem(m_fireworksSE) == 0)
+			{
+				PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
+				return;
+			}
 		}
 	}
 	if (m_clearStagingTime <= 0.0f)
@@ -405,7 +416,10 @@ void SceneStage1::Update()
 	m_pBg->Update();
 
 	// プレイヤーの更新
-	m_pPlayer->Update();
+	if (m_enemyTotalNum > 0)
+	{
+		m_pPlayer->Update();
+	}
 
 	// プレイヤーの現在地を取得
 	m_playerPos = m_pPlayer->GetPos();
@@ -1130,11 +1144,11 @@ void SceneStage1::DrawClearStaging()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:文字表示後花火をあげる
-	/*if (m_clearStagingTime < 2.0f)
+	if (m_clearStagingTime < 180.0f)
 	{
 		int disX = GetRand(1400) - 1400;
 		int srcX = 0;
 		int srcY = 0;
-		DrawRectRotaGraph(disX, Game::kScreenHeight, srcX, srcY, 64, 64, 1.0f, 0.0f, m_fireworks, true);
-	}*/
+		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 400, srcX, srcY, 64, 64, 1.0f, 0.0f, m_fireworks, true);
+	}
 }
