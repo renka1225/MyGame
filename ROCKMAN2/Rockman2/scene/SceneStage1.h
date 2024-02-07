@@ -109,6 +109,7 @@ private:
 	int m_readyCount;
 	// ‰æ–Ê—h‚ê‰‰o
 	int m_shakeFrame;
+	float m_ampFrame;
 
 	// ‰¹
 	int m_bgm;			// BGM

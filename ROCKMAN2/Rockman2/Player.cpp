@@ -54,6 +54,11 @@ namespace
 	constexpr int kPlayerColX = kPlayerWidth * kScale - 40;
 	constexpr int kPlayerColY = kPlayerHeight * kScale;
 
+	// ファイア溜めパーティクルのサイズ
+	constexpr int kFireParticleSize = 256;
+	// 表示フレーム
+	constexpr int kFireParticleFrame = 30;
+
 	// キャラクターのアニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 1 };
 	// 待機アニメーション1コマのフレーム数
@@ -97,6 +102,7 @@ Player::Player() :
 	m_keyState(0),
 	m_pressTime(0),
 	m_nowPressTime(0),
+	m_fireParticleFrame(0),
 	m_isSmallFire(false),
 	m_isMiddleFire(false),
 	m_isBigFire(false),
@@ -113,6 +119,7 @@ Player::Player() :
 	m_shotHandle = LoadGraph("data/image/Player/shot.png");
 	m_jumpHandle = LoadGraph("data/image/Player/jump.png");
 	m_damageHandle = LoadGraph("data/image/Player/damage.png");
+	m_fireParticle = LoadGraph("data/image/Shot/fire.png");
 
 	// 音読み込み
 	m_shotSE = LoadSoundMem("data/sound/SE/shot.mp3");
@@ -129,6 +136,7 @@ Player::~Player()
 	DeleteGraph(m_shotHandle);
 	DeleteGraph(m_jumpHandle);
 	DeleteGraph(m_damageHandle);
+	DeleteGraph(m_fireParticle);
 	DeleteSoundMem(m_shotSE);
 	DeleteSoundMem(m_shotFireSE);
 	DeleteSoundMem(m_damageSE);
@@ -154,6 +162,8 @@ void Player::Init()
 	m_isFire = false;
 	m_isLineMove = false;
 	// ファイアの状態
+	m_pressTime = 0;
+	m_nowPressTime = 0;
 	m_isSmallFire = false;
 	m_isMiddleFire = false;
 	m_isBigFire = false;
@@ -165,6 +175,7 @@ void Player::Init()
 	m_walkAnimFrame = 0;
 	m_shotAnimFrame = 0;
 	m_damageFrame = 0;
+	m_fireParticleFrame = 0;
 
 	// 再プレイ時
 	if (m_life < 0 || m_pStage1->IsSceneClear() || m_pStage1->IsSceneTitle() || m_pStage1->IsSceneEnd())
@@ -273,7 +284,7 @@ void Player::Update()
 			m_jumpFrame++;	// ジャンプフレームの更新
 
 			//ボタンを離した瞬間にジャンプする
-			if (Pad::IsRelease(PAD_INPUT_B))
+			if (Pad::IsRelease(PAD_INPUT_A))
 			{
 				// ジャンプの高さを決める
 				float jumpHeight;
@@ -376,12 +387,18 @@ void Player::Update()
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
 
-			if (m_fireEnergy >= 0)
+			if (m_fireEnergy > 0)
 			{
 				// 長押し中SEを流す
 				if (CheckSoundMem(m_shotFireSE) == 0)
 				{
 					PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
+				}
+				// パーティクルの表示
+				m_fireParticleFrame += kFireParticleSize;
+				if (m_fireParticleFrame >= kFireParticleSize * 30)
+				{
+					m_fireParticleFrame = 0;
 				}
 			}
 
@@ -449,6 +466,7 @@ void Player::Update()
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
 				m_pStage1->AddShot(pShot);
+				m_nowPressTime = 0;
 			}
 			else // 弾エネルギーが0以下
 			{
@@ -542,8 +560,29 @@ void Player::Draw()
 // 2フレーム間隔で表示非表示を切り替える
 	if (m_damageFrame % 10 >= 8) return;
 
+	// スクロール量を反映する
+	int x = m_pos.x;
+	int y = m_pos.y;
+	x -= m_pBg->GetScrollX();
+	y -= m_pBg->GetScrollY();
+
 	// プレイヤーの描画
-	DrawPlayer();
+	DrawPlayer(x, y);
+
+	// ファイア溜め中パーティクル表示
+	if (m_fireEnergy > 0 && m_nowPressTime > 0)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 200);
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x + 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x - 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
+		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 
 #ifdef _DEBUG
 	// MEMO:スクロールが反映されないためコメントアウト
@@ -555,14 +594,8 @@ void Player::Draw()
 /// <summary>
 /// プレイヤーの描画
 /// </summary>
-void Player::DrawPlayer()
+void Player::DrawPlayer(int x, int y)
 {
-	// スクロール量を反映する
-	int x = m_pos.x;
-	int y = m_pos.y;
-	x -= m_pBg->GetScrollX();
-	y -= m_pBg->GetScrollY();
-
 	// 画像切り出し位置を計算
 	// 待機状態
 	int idleAnimFrame = m_idleAnimFrame / kIdleAnimFrameNum;

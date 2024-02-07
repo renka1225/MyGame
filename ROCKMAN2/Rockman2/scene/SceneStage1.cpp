@@ -6,14 +6,12 @@
 #include "FontManager.h"
 #include "BgStage1.h"
 #include "ScenePause.h"
-
 #include "RecoverySmallHp.h"
 #include "RecoveryGreatHp.h"
 #include "RecoverySmallShot.h"
 #include "RecoveryGreatShot.h"
 #include "RecoveryLife.h"
 #include "RecoveryFullHp.h"
-
 #include "Player.h"
 #include "ShotBase.h"
 #include "EnemyCat.h"
@@ -96,7 +94,8 @@ SceneStage1::SceneStage1():
 	m_clearStagingTime(kClearTime),
 	m_gameoverStagingTime(kGameoverTime),
 	m_readyCount(kReadyCount),
-	m_shakeFrame(0)
+	m_shakeFrame(0),
+	m_ampFrame(0)
 {
 	// ÉQÅ[ÉÄâÊñ ï`âÊêÊÇÃê∂ê¨
 	m_gameScreenHandle = MakeScreen(Stage::kMapWidth, Stage::kMapHeight, true);
@@ -227,6 +226,7 @@ void SceneStage1::Init()
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
 	m_readyCount = kReadyCount;
+	m_ampFrame = 0;
 
 	m_enemyTotalNum = kEnemyMax;
 	m_time = 0.0f;
@@ -416,6 +416,7 @@ void SceneStage1::Update()
 
 	// âÊñ ÇóhÇÁÇ∑
 	m_shakeFrame--;
+	m_ampFrame *= 0.95f;
 	if (m_shakeFrame < 0)
 	{
 		m_shakeFrame = 0;
@@ -503,6 +504,7 @@ void SceneStage1::Update()
 			{
 				m_pPlayer->OnDamage();
 				m_shakeFrame = 2;
+				m_ampFrame = 5;
 			}
 
 			for (int j = 0; j < m_pShot.size(); j++)
@@ -605,9 +607,6 @@ void SceneStage1::Draw()
 	// îwåiÇÃï`âÊ
 	m_pBg->Draw();
 
-	// ÉvÉåÉCÉÑÅ[ÇÃï`âÊ
-	m_pPlayer->Draw();
-
 	// íeÇÃï`âÊ
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
@@ -631,6 +630,9 @@ void SceneStage1::Draw()
 		if (!m_pRecovery[i])continue;
 		m_pRecovery[i]->Draw();
 	}
+
+	// ÉvÉåÉCÉÑÅ[ÇÃï`âÊ
+	m_pPlayer->Draw();
 
 	/*âÊñ â°Ç…èÓïÒï\é¶*/
 	DrawInfo();
@@ -663,8 +665,8 @@ void SceneStage1::Draw()
 	if (m_shakeFrame > 0)
 	{
 		// âÊñ óhÇÍ
-		screenX = GetRand(4) - 2;
-		screenY = GetRand(4) - 2;
+		screenX = GetRand(4) - 2 * m_ampFrame;
+		screenY = GetRand(4) - 2* m_ampFrame;
 	}
 	DrawRectGraph(screenX, screenY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_gameScreenHandle, true);
 
@@ -1106,4 +1108,6 @@ void SceneStage1::DrawClearStaging()
 	DrawFormatStringToHandle(Game::kScreenWidth * 0.5 - 260, Game::kScreenHeight * 0.5 + 30,
 		0xffffff, m_pFont->GetFontStaging(), "ÉNÉäÉAÉ^ÉCÉÄ : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// TODO:â‘âŒÇÇ†Ç∞ÇÈ
 }

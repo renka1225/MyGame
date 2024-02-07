@@ -17,6 +17,8 @@ public:
 
 private:
 	// ƒOƒ‰ƒtƒBƒbƒN‚Ìƒnƒ“ƒhƒ‹
-	int m_handle;		// ’e
+	int m_fire1Handle;	// ’e1
+	int m_fire2Handle;	// ’e2
+	int m_fire3Handle;	// ’e3
 };
 

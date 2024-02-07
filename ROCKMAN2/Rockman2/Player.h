@@ -23,7 +23,7 @@ public:
 	void Draw();
 
 	// プレイヤーの表示
-	void DrawPlayer();
+	void DrawPlayer(int x, int y);
 	// マップチップとの当たり判定の処理
 	void CheckHitMap(Rect chipRect);
 
@@ -129,6 +129,8 @@ private:
 	int m_pressTime;
 	// ボタンを押して離すまでの時間
 	int m_nowPressTime;
+	// ファイアパーティクルの表示フレーム
+	int m_fireParticleFrame;
 	// ファイアのサイズ
 	bool m_isSmallFire;		// 小
 	bool m_isMiddleFire;	// 中
@@ -149,6 +151,7 @@ private:
 	int m_shotHandle;	// 攻撃
 	int m_jumpHandle;	// ジャンプ
 	int m_damageHandle;	// ダメージ
+	int m_fireParticle;	// ファイア溜めのパーティクル
 
 	// 画像のアニメーション
 	enum Anim

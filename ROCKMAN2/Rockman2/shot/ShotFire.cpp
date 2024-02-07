@@ -17,18 +17,23 @@ namespace
 	constexpr float kHeight = 32.0f;
 	// 画像の拡大率
 	constexpr float kSmallScale = 0.5f;
-	constexpr float kMiddleScale = 0.7f;
-	constexpr float kBigScale = 1.0f;
+	constexpr float kMiddleScale = 0.8f;
+	constexpr float kBigScale = 1.2f;
 }
 
 ShotFire::ShotFire()
 {
-	// 弾のグラフィックロード
-	m_handle = LoadGraph("data/image/Shot/shotFire.png");
+	// 画像読み込み
+	m_fire1Handle = LoadGraph("data/image/Shot/shotFire.png");
+	m_fire2Handle = LoadGraph("data/image/Shot/shotFire2.png");
+	m_fire3Handle = LoadGraph("data/image/Shot/shotFire3.png");
 }
 
 ShotFire::~ShotFire()
 {
+	DeleteGraph(m_fire1Handle);
+	DeleteGraph(m_fire2Handle);
+	DeleteGraph(m_fire3Handle);
 }
 
 void ShotFire::Init()
@@ -75,17 +80,17 @@ void ShotFire::Draw()
 
 	if (m_pPlayer->IsSmallFire()) // 長押し時間が2秒以下
 	{
-		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_handle, true);
+		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_fire1Handle, true);
 	}
 	else if (m_pPlayer->IsMiddleFire()) // 長押し時間が5秒以下
 	{
 		
-		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kMiddleScale, 0.0f, m_handle, true);
+		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
 		
 	}
 	else // 長押し時間が5秒以上
 	{
-		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kBigScale, 0.0f, m_handle, true);
+		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kBigScale, 0.0f, m_fire3Handle, true);
 	}
 
 #ifdef _DEBUG
