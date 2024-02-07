@@ -14,6 +14,7 @@ public:
 	void Update();
 	void Draw();
 	void End();
+	void DrawBg();
 
 	// シーンを終了させるか
 	bool IsSeneRetry() const { return m_isSceneRetry; }
@@ -41,9 +42,13 @@ private:
 
 	// 選択カーソルの表示位置
 	Vec2 m_selectPos;
+	// 背景の移動量
+	float m_bgMove;
 
 	// 画像
 	int m_bgHandle;			// 背景
+	int m_bg2Handle;		// 背景
+	int m_bg3Handle;		// 背景
 	int m_gameoverHandle;	// ゲームオーバーの文字
 	int m_charHandle;		// 文字
 	int m_selectHandle;		// 選択カーソル
@@ -53,4 +58,10 @@ private:
 	int m_selectSE;			// 選択時のSE
 	int m_cursorSE;			// カーソル移動時のSE
 
+	// 画像サイズ
+	struct Size
+	{
+		int width;
+		int height;
+	};
 };

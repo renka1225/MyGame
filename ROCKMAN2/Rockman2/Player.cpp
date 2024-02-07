@@ -54,6 +54,19 @@ namespace
 	constexpr int kPlayerColX = kPlayerWidth * kScale - 40;
 	constexpr int kPlayerColY = kPlayerHeight * kScale;
 
+	// エフェクトのサイズ
+	constexpr int kEffectWidth = 32;
+	constexpr int kEffectHeight = 32;
+	// 拡大率
+	constexpr float kEffectScale = 3.0f;
+
+	// ファイアの大きさ
+	constexpr float kFireWidth = 32.0f;
+	constexpr float kFireHeight = 32.0f;
+	// ファイアの拡大率
+	constexpr float kSmallScale = 0.5f;
+	constexpr float kMiddleScale = 0.8f;
+	constexpr float kBigScale = 1.2f;
 	// ファイア溜めパーティクルのサイズ
 	constexpr int kFireParticleSize = 256;
 	// 表示フレーム
@@ -73,11 +86,13 @@ namespace
 	constexpr int kShotAnimFrame = 30;
 	// ダメージのアニメーション表示時間
 	constexpr int kDamageAnimFrame = 5;
-
 	// ダメージ演出のフレーム数
 	constexpr int kDamageFrame = 60;
-}
 
+	// 死亡時
+	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
+	constexpr int kDeadFrame = 60;
+}
 
 Player::Player() :
 	m_pStage1(nullptr),
@@ -92,6 +107,7 @@ Player::Player() :
 	m_life(kLife),
 	m_fullHpRecovery(0),
 	m_damageFrame(0),
+	m_deadFrame(0),
 	m_metalEnergy(kMaxMetalShot),
 	m_fireEnergy(kMaxShot),
 	m_lineEnergy(kMaxShot),
@@ -119,6 +135,10 @@ Player::Player() :
 	m_shotHandle = LoadGraph("data/image/Player/shot.png");
 	m_jumpHandle = LoadGraph("data/image/Player/jump.png");
 	m_damageHandle = LoadGraph("data/image/Player/damage.png");
+	m_deadEffect = LoadGraph("data/image/Effect/playerDead.png");
+	m_fire1Handle = LoadGraph("data/image/Shot/shotFire.png");
+	m_fire2Handle = LoadGraph("data/image/Shot/shotFire2.png");
+	m_fire3Handle = LoadGraph("data/image/Shot/shotFire3.png");
 	m_fireParticle = LoadGraph("data/image/Shot/fire.png");
 
 	// 音読み込み
@@ -136,6 +156,10 @@ Player::~Player()
 	DeleteGraph(m_shotHandle);
 	DeleteGraph(m_jumpHandle);
 	DeleteGraph(m_damageHandle);
+	DeleteGraph(m_deadEffect);
+	DeleteGraph(m_fire1Handle);
+	DeleteGraph(m_fire2Handle);
+	DeleteGraph(m_fire3Handle);
 	DeleteGraph(m_fireParticle);
 	DeleteSoundMem(m_shotSE);
 	DeleteSoundMem(m_shotFireSE);
@@ -146,6 +170,8 @@ Player::~Player()
 /*初期化処理*/
 void Player::Init()
 {
+	// HP
+	m_hp = kMaxHp;
 	// 現在位置
 	m_pos.x = kPosX;
 	m_pos.y = kPosY;
@@ -176,18 +202,17 @@ void Player::Init()
 	m_shotAnimFrame = 0;
 	m_damageFrame = 0;
 	m_fireParticleFrame = 0;
+	m_deadFrame = 0;
 
 	// 再プレイ時
-	if (m_life < 0 || m_pStage1->IsSceneClear() || m_pStage1->IsSceneTitle() || m_pStage1->IsSceneEnd())
+	if (m_life < 0 || m_pStage1->IsSceneGameOver() || m_pStage1->IsSceneClear() || m_pStage1->IsSceneTitle() || m_pStage1->IsSceneEnd())
 	{
-		// HP
-		m_hp = kMaxHp;
+		// 残機数
+		m_life = kLife;
 		// 弾エネルギー
 		m_metalEnergy = kMaxMetalShot;
 		m_fireEnergy = kMaxShot;
 		m_lineEnergy = kMaxShot;
-		// 残機数
-		m_life = kLife;
 		// E缶数
 		m_fullHpRecovery = 0;
 	}
@@ -217,34 +242,6 @@ void Player::Update()
 	{
 		m_move.x = 0;
 		m_animation = Anim::kIdle;
-	}
-
-	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage::kMapHeight)
-	{
-		// HPを0にする
-		m_hp -= kMaxHp;
-		if (m_hp <= 0)
-		{
-			m_hp = 0;
-		}
-		StopSoundMem(m_shotFireSE);
-	}
-
-	/*HPが0以下になったら残機を1減らす*/
-	if (m_hp <= 0)
-	{
-		// 残機が減るごとにSEを鳴らす
-		PlaySoundMem(m_deadSE, DX_PLAYTYPE_NORMAL, true);
-
-		// 残機が0以上だったら初期化する
-		if (m_life >= 0)
-		{
-			Init();
-		}
-
-		m_life--;
-		m_hp = kMaxHp;	// HP全回復
 	}
 
 	/*地面に接している*/
@@ -520,6 +517,29 @@ void Player::Update()
 		m_damageFrame = 0;
 	}
 
+	/*プレイヤーが穴に落下した場合*/
+	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage::kMapHeight)
+	{
+		// HPを0にする
+		m_hp -= kMaxHp;
+		m_life--;
+		
+		// 残機が減るごとにSEを鳴らす
+		PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
+		if (m_hp <= 0)
+		{
+			m_hp = 0;
+		}
+		return;
+	}
+
+	/*死亡時演出*/
+	m_deadFrame--;
+	if(m_deadFrame < 0)
+	{
+		m_deadFrame = 0;
+	}
+
 	/*アニメーション*/
 	//待機状態
 	if(m_animation == Anim::kIdle)
@@ -567,21 +587,22 @@ void Player::Draw()
 	y -= m_pBg->GetScrollY();
 
 	// プレイヤーの描画
-	DrawPlayer(x, y);
-
-	// ファイア溜め中パーティクル表示
-	if (m_fireEnergy > 0 && m_nowPressTime > 0)
+	if (m_deadFrame <= 0)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 200);
-		if (m_isRight)
-		{
-			DrawRectRotaGraph(x + 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x - 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
-		}
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		DrawPlayer(x, y);
+	}
+
+	// ファイア溜め中の表示
+	DrawFire(x, y);
+
+	// 死亡演出
+	// 画像の切り出し座標
+	int effectFrame = m_damageFrame / kIdleAnimFrameNum;
+	int effectSrcX = kUseFrame[effectFrame] * kEffectWidth;
+	int effectSrcY = 0;
+	if (m_deadFrame > 0)
+	{
+		DrawRectRotaGraph(x, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_deadEffect, true);
 	}
 
 #ifdef _DEBUG
@@ -694,6 +715,64 @@ void Player::DrawPlayer(int x, int y)
 }
 
 /// <summary>
+/// ファイア溜めの演出描画
+/// </summary>
+/// <param name="x">x</param>
+/// <param name="y">y</param>
+void Player::DrawFire(int x, int y)
+{
+	if (m_fireEnergy > 0 && m_nowPressTime > 0)
+	{
+		// ファイア
+		if (m_nowPressTime < 2000 || m_fireEnergy < 5)
+		{
+			if (m_isRight)
+			{
+				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
+			}
+		}
+		else if (m_nowPressTime < 5000 && m_fireEnergy >= 5)
+		{
+			if (m_isRight)
+			{
+				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
+			}
+		}
+		else
+		{
+			if (m_isRight)
+			{
+				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
+			}
+		}
+
+		// パーティクル
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 100);
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x + 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x - 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
+		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+}
+
+/// <summary>
 /// マップチップの当たり判定
 /// </summary>
 /// <param name="chipRect"></param>
@@ -772,10 +851,10 @@ void Player::OnDamage()
 
 	// HPを減らす
 	m_hp--;
+	// 死亡演出
 	if (m_hp <= 0)
 	{
-		m_life--;		// 残機を1減らす
-		m_hp = kMaxHp;	// HP全回復
+		OnDead();
 	}
 
 	// ノックバックさせる
@@ -787,6 +866,20 @@ void Player::OnDamage()
 	{
 		m_pos.x += 30;
 	}
+}
+
+/// <summary>
+/// プレイヤーのHPが0以下になった場合
+/// </summary>
+void Player::OnDead()
+{
+	StopSoundMem(m_shotFireSE);
+	StopSoundMem(m_shotSE);
+	// 残機が減るごとにSEを鳴らす
+	PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
+
+	m_life--;
+	m_deadFrame = kDeadFrame;
 }
 
 /// <summary>

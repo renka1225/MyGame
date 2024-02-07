@@ -25,6 +25,11 @@ namespace
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
+
+	// 背景拡大率
+	constexpr float kBgScale = 3.0f;
+	// 背景画像の移動量
+	constexpr float kBgMove = -1.0f;
 }
 
 
@@ -32,10 +37,13 @@ SceneGameOver::SceneGameOver():
 	m_select(kRetry),
 	m_isSceneRetry(false),
 	m_isSceneTitle(false),
-	m_fadeAlpha(255)
+	m_fadeAlpha(255),
+	m_bgMove(0.0f)
 {
 	// 画像読み込み
-	m_bgHandle = LoadGraph("data/image/BackGround/gameover.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/gameover/gameover.png");
+	m_bg2Handle = LoadGraph("data/image/BackGround/gameover/2.png");
+	m_bg3Handle = LoadGraph("data/image/BackGround/gameover/3.png");
 	m_gameoverHandle = LoadGraph("data/image/UI/gameover.png");
 	m_charHandle = LoadGraph("data/image/UI/gameoverSelect.png");
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
@@ -49,6 +57,8 @@ SceneGameOver::SceneGameOver():
 SceneGameOver::~SceneGameOver()
 {
 	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_bg2Handle);
+	DeleteGraph(m_bg3Handle);
 	DeleteGraph(m_gameoverHandle);
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectHandle);
@@ -63,8 +73,8 @@ void SceneGameOver::Init()
 	m_isSceneTitle = false;
 	m_fadeAlpha = 255;
 	m_select = kRetry;
-	m_selectPos.x = kInitSelectPosX;
-	m_selectPos.y = kInitSelectPosY;
+	m_selectPos = { kInitSelectPosX, kInitSelectPosY };
+	m_bgMove = kBgMove;
 
 	// BGMを鳴らす
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
@@ -146,12 +156,15 @@ void SceneGameOver::Update()
 			m_fadeAlpha = 0;
 		}
 	}
+
+	// 背景の表示位置の更新
+	m_bgMove += kBgMove;
 }
 
 void SceneGameOver::Draw()
 {
 	// 背景表示
-	DrawGraph(0, 0, m_bgHandle, true);
+	DrawBg();
 
 	// ゲームオーバー表示
 	DrawRectRotaGraph(kGameOverPosX, kGameOverPosY, 0, 0,kGameOverSizeX,kGameOverSizeY, 0.8f, 0.0f, m_gameoverHandle, true, false);
@@ -168,5 +181,46 @@ void SceneGameOver::Draw()
 void SceneGameOver::End()
 {
 	
+}
+
+// 背景描画
+void SceneGameOver::DrawBg()
+{
+	// 画像サイズを取得
+	Size bg2Size;
+	Size bg3Size;
+	GetGraphSize(m_bg2Handle, &bg2Size.width, &bg2Size.height);
+	GetGraphSize(m_bg3Handle, &bg3Size.width, &bg3Size.height);
+
+	// スクロール量を計算する
+	int scrollBg2 = static_cast<int>(m_bgMove * 0.1f) % static_cast<int>(bg2Size.width * kBgScale);
+	int scrollBg3 = static_cast<int>(m_bgMove * 0.5f) % static_cast<int>(bg3Size.width * kBgScale);
+
+	// 描画
+	DrawGraph(0, 0, m_bgHandle, true);
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg2 + index * bg2Size.width * kBgScale,
+			Game::kScreenHeight - bg2Size.height * kBgScale,
+			0, 0,
+			kBgScale, 0.0f,
+			m_bg2Handle, true);
+	}
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg3 + index * bg3Size.width * kBgScale,
+			Game::kScreenHeight - bg3Size.height * kBgScale,
+			0, 0,
+			kBgScale, 0.0f,
+			m_bg3Handle, true);
+	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 

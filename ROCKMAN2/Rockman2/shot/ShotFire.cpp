@@ -78,6 +78,7 @@ void ShotFire::Draw()
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
+	// ’e‚Ì•\Ž¦
 	if (m_pPlayer->IsSmallFire()) // ’·‰Ÿ‚µŽžŠÔ‚ª2•bˆÈ‰º
 	{
 		DrawRectRotaGraph(x, y, 0, 0, kWidth, kHeight, kSmallScale, 0.0f, m_fire1Handle, true);

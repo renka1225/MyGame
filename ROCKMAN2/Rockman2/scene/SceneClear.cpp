@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Pad.h"
 #include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -25,6 +26,11 @@ namespace
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
+
+	// 背景拡大率
+	constexpr float kBgScale = 4.0f;
+	// 背景画像の移動量
+	constexpr float kBgMove = -1.0f;
 }
 
 
@@ -32,10 +38,14 @@ SceneClear::SceneClear():
 	m_select(kSelectStage),
 	m_isSceneSelectStage(false),
 	m_isSceneTitle(false),
-	m_fadeAlpha(255)
+	m_fadeAlpha(255),
+	m_bgMove(0.0f)
 {
 	// 画像読み込み
-	m_bgHandle = LoadGraph("data/image/BackGround/clear.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/clear/clear.png");
+	m_bg2Handle = LoadGraph("data/image/BackGround/clear/2.png");
+	m_bg3Handle = LoadGraph("data/image/BackGround/clear/3.png");
+	m_bg4Handle = LoadGraph("data/image/BackGround/clear/4.png");
 	m_clearHandle = LoadGraph("data/image/UI/clear.png");
 	m_charHandle = LoadGraph("data/image/UI/clearSelect.png");
 	m_selectHandle = LoadGraph("data/image/UI/select.png");
@@ -49,6 +59,9 @@ SceneClear::SceneClear():
 SceneClear::~SceneClear()
 {
 	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_bg2Handle);
+	DeleteGraph(m_bg3Handle);
+	DeleteGraph(m_bg4Handle);
 	DeleteGraph(m_clearHandle);
 	DeleteGraph(m_charHandle);
 	DeleteGraph(m_selectHandle);
@@ -62,9 +75,9 @@ void SceneClear::Init()
 	m_isSceneSelectStage = false;
 	m_isSceneTitle = false;
 	m_select = kSelectStage;
-	m_selectPos.x = kInitSelectPosX;
-	m_selectPos.y = kInitSelectPosY;
+	m_selectPos = { kInitSelectPosX, kInitSelectPosY };
 	m_fadeAlpha = 255;
+	m_bgMove = kBgMove;
 
 	// BGMを鳴らす
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
@@ -147,12 +160,16 @@ void SceneClear::Update()
 			m_fadeAlpha = 0;
 		}
 	}
+
+	// 背景の表示位置の更新
+	m_bgMove += kBgMove;
+
 }
 
 void SceneClear::Draw()
 {
 	// 背景表示
-	DrawGraph(0, 0, m_bgHandle, false);
+	DrawBg();
 	// クリア表示
 	DrawRectRotaGraph(kClearPosX, kClearPosY, 0, 0, kClearSizeX, kClearSizeY, 0.8f, 0.0f, m_clearHandle, true, false);
 	// 文字表示
@@ -160,7 +177,65 @@ void SceneClear::Draw()
 	// 選択カーソルの表示
 	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
 
+	// フェード描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x335980, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
+
 #ifdef _DEBUG
 	DrawString(8, 16, "クリア画面", 0xffffff, false);
 #endif
+}
+
+void SceneClear::DrawBg()
+{
+	// 画像サイズを取得
+	Size bg2Size;
+	Size bg3Size;
+	Size bg4Size;
+	GetGraphSize(m_bg2Handle, &bg2Size.width, &bg2Size.height);
+	GetGraphSize(m_bg3Handle, &bg3Size.width, &bg3Size.height);
+	GetGraphSize(m_bg4Handle, &bg4Size.width, &bg4Size.height);
+
+	// スクロール量を計算する
+	int scrollBg2 = static_cast<int>(m_bgMove * 0.25f) % static_cast<int>(bg2Size.width * kBgScale);
+	int scrollBg3 = static_cast<int>(m_bgMove * 0.5f) % static_cast<int>(bg3Size.width * kBgScale);
+	int scrollBg4 = static_cast<int>(m_bgMove * 0.8f) % static_cast<int>(bg4Size.width * kBgScale);
+
+	// 描画
+	DrawGraph(0, 0, m_bgHandle, false);
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg2 + index * bg2Size.width * kBgScale,
+			Game::kScreenHeight - bg2Size.height * kBgScale,
+			0, 0,
+			kBgScale, 0.0f,
+			m_bg2Handle, true);
+	}
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg3 + index * bg3Size.width * kBgScale,
+			Game::kScreenHeight - bg3Size.height * kBgScale,
+			0, 0,
+			kBgScale, 0.0f,
+			m_bg3Handle, true);
+	}
+
+	for (int index = 0; index < 2; index++)
+	{
+		DrawRotaGraph2(
+			scrollBg4 + index * bg4Size.width * kBgScale,
+			Game::kScreenHeight - bg4Size.height * kBgScale,
+			0, 0,
+			kBgScale, 0.0f,
+			m_bg4Handle, true);
+	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x335980, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

@@ -40,8 +40,6 @@ private:
 
 	// 選択カーソルの表示位置
 	Vec2 m_selectPos;
-	// 背景の表示位置
-	Vec2 m_bgPos;
 	// 背景の移動量
 	float m_bgMove;
 

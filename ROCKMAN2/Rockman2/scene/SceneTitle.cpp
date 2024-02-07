@@ -67,7 +67,6 @@ void SceneTitle::Init()
 	m_fadeAlpha = 180;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
-	m_bgPos = { 0, 0 };
 	m_bgMove = kBgMove;
 
 	// BGMを鳴らす
@@ -150,7 +149,6 @@ void SceneTitle::Update()
 
 	// 背景の表示位置の更新
 	m_bgMove += kBgMove;
-	
 }
 
 void SceneTitle::Draw()

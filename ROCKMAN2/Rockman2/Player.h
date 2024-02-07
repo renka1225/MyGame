@@ -24,11 +24,16 @@ public:
 
 	// プレイヤーの表示
 	void DrawPlayer(int x, int y);
+	// ファイア溜め演出
+	void DrawFire(int x, int y);
+
 	// マップチップとの当たり判定の処理
 	void CheckHitMap(Rect chipRect);
 
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
+	// プレイヤーのHPが0以下になったときの処理
+	void OnDead();
 	// プレイヤーがE缶取得処理
 	void GetHpFullRecovery();
 	// プレイヤーの回復処理
@@ -61,6 +66,8 @@ public:
 	int GetLife() const { return m_life; }
 	// 現在のE缶数を取得
 	int GetFullHpRecovery() const { return m_fullHpRecovery; }
+	// 現在のDeadFrameを取得
+	int GetDeadFrame() const { return m_deadFrame; }
 
 	// 現在の弾エネルギー数を取得する
 	float GetMetalEnergy() const { return m_metalEnergy; }
@@ -109,6 +116,8 @@ private:
 
 	// ダメージを受けてからのフレーム数
 	int m_damageFrame;
+	// 死亡時のフレーム
+	int m_deadFrame;
 
 	// メタルの弾エネルギー数
 	float m_metalEnergy;
@@ -151,7 +160,12 @@ private:
 	int m_shotHandle;	// 攻撃
 	int m_jumpHandle;	// ジャンプ
 	int m_damageHandle;	// ダメージ
+	int m_deadEffect;	// 死亡時エフェクト
+	// ファイア
 	int m_fireParticle;	// ファイア溜めのパーティクル
+	int m_fire1Handle;	// 弾1
+	int m_fire2Handle;	// 弾2
+	int m_fire3Handle;	// 弾3
 
 	// 画像のアニメーション
 	enum Anim

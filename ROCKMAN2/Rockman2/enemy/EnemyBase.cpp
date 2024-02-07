@@ -21,7 +21,8 @@ EnemyBase::EnemyBase():
 	m_dir(kDirLeft),
 	m_damageSE(-1),
 	m_damageEffect(-1),
-	m_damageFrame(0)
+	m_damageFrame(0),
+	m_moveRangeX(0.0f)
 {
 	// âπÇÃì«Ç›çûÇ›
 	m_damageSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");

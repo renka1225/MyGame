@@ -96,6 +96,7 @@ private:
 	bool m_isSceneClear;	// クリア画面に移動
 	bool m_isSceneTitle;	// タイトル画面に移動
 	bool m_isSceneEnd;		// ゲーム画面を終了
+	bool m_isRetry;			// リトライする
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
@@ -124,5 +125,6 @@ private:
 	int m_frameHandle;		// 枠
 	int m_shotSelectHandle;	// 選択中の武器
 	int m_startHandle;		// スタート演出の画像
+	int m_fireworks;		// 花火
 };
 

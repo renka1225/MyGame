@@ -88,6 +88,7 @@ SceneStage1::SceneStage1():
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
 	m_isSceneEnd(false),
+	m_isRetry(false),
 	m_fadeAlpha(240),
 	m_stagingFade(0),
 	m_startStagingTime(kStartTime),
@@ -145,6 +146,7 @@ SceneStage1::SceneStage1():
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
+	m_fireworks = LoadGraph("data/image/Effect/clear/1.png");
 }
 
 SceneStage1::~SceneStage1()
@@ -212,7 +214,7 @@ SceneStage1::~SceneStage1()
 void SceneStage1::Init()
 {
 	// リトライ時はスタート演出を行わない
-	if (!m_isSceneEnd)
+	if (!(m_isSceneEnd || m_isRetry))
 	{
 		// 演出時間の初期化
 		m_startStagingTime = kStartTime;
@@ -222,14 +224,22 @@ void SceneStage1::Init()
 		// スタートSE
 		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
 	}
+	// HPが0以下になった場合は行わない
+	if (!m_isRetry)
+	{
+		// 敵の初期化
+		CreateEnemy();
+		m_enemyTotalNum = kEnemyMax;
+		m_time = 0.0f;
+
+		m_isGetFullHpRecovery = false;
+	}
 	// 演出時間の初期化
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
+	m_shakeFrame = 0;
 	m_readyCount = kReadyCount;
 	m_ampFrame = 0;
-
-	m_enemyTotalNum = kEnemyMax;
-	m_time = 0.0f;
 
 	// ポーズ画面の初期化
 	m_pPause->Init();
@@ -241,9 +251,6 @@ void SceneStage1::Init()
 	// 背景の初期化
 	m_pBg->Init();
 
-	// 敵の初期化
-	CreateEnemy();
-
 	// 回復アイテムの初期化
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
@@ -254,7 +261,6 @@ void SceneStage1::Init()
 			m_pRecovery[i] = nullptr;
 		}
 	}
-	m_isGetFullHpRecovery = false;
 	m_isExistLineMove = false;
 
 	// 画面遷移の初期化
@@ -262,6 +268,7 @@ void SceneStage1::Init()
 	m_isSceneClear = false;
 	m_isSceneTitle = false;
 	m_isSceneEnd = false;
+	m_isRetry = false;
 }
 
 void SceneStage1::End()
@@ -329,15 +336,6 @@ void SceneStage1::Update()
 	if (CheckSoundMem(m_startSE) == 0 && CheckSoundMem(m_bgm) == 0)
 	{
 		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
-	}
-
-	// プレイヤーの残機が0未満の場合
-	if (m_pPlayer->GetLife() < 0)
-	{
-		// 1秒後にゲームオーバー画面に遷移
-		WaitTimer(1000);
-		m_isSceneGameOver = true;
-		StopSoundMem(m_bgm);
 	}
 
 	// 敵をすべて倒したらクリア演出を行う
@@ -413,14 +411,6 @@ void SceneStage1::Update()
 	m_playerPos = m_pPlayer->GetPos();
 	// プレイヤーの当たり判定
 	Rect playerRect = m_pPlayer->GetColRect();
-
-	// 画面を揺らす
-	m_shakeFrame--;
-	m_ampFrame *= 0.95f;
-	if (m_shakeFrame < 0)
-	{
-		m_shakeFrame = 0;
-	}
 
 	// E缶を表示
 	if (!m_isGetFullHpRecovery)
@@ -588,6 +578,37 @@ void SceneStage1::Update()
 		}
 	}
 
+	// 画面を揺らす
+	m_shakeFrame--;
+	m_ampFrame *= 0.95f;
+	if (m_shakeFrame < 0)
+	{
+		m_shakeFrame = 0;
+	}
+
+	// プレイヤーのHPが0になった場合
+	if (m_pPlayer->GetHp() <= 0)
+	{
+		// プレイヤーの残機が0以下の場合
+		if (m_pPlayer->GetLife() <= 0)
+		{
+			// 1秒後にゲームオーバー画面に遷移
+			WaitTimer(1000);
+			m_isSceneGameOver = true;
+			StopSoundMem(m_bgm);
+			return;
+		}
+		else
+		{
+			// 死亡アニメーション後リトライ
+			if (m_pPlayer->GetDeadFrame() <= 0)
+			{
+				m_isRetry = true;
+				Init();
+			}
+		}
+	}
+
 #ifdef _DEBUG
 	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
 	if (Pad::IsTrigger(pad & PAD_INPUT_START))
@@ -690,7 +711,6 @@ void SceneStage1::Draw()
 	{
 		DrawClearStaging();
 	}
-
 }
 
 /// <summary>
@@ -1109,5 +1129,12 @@ void SceneStage1::DrawClearStaging()
 		0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// TODO:花火をあげる
+	// TODO:文字表示後花火をあげる
+	/*if (m_clearStagingTime < 2.0f)
+	{
+		int disX = GetRand(1400) - 1400;
+		int srcX = 0;
+		int srcY = 0;
+		DrawRectRotaGraph(disX, Game::kScreenHeight, srcX, srcY, 64, 64, 1.0f, 0.0f, m_fireworks, true);
+	}*/
 }
