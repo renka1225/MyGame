@@ -13,7 +13,6 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	void End();
 	void DrawBg();
 
 	// シーン遷移のフラグ

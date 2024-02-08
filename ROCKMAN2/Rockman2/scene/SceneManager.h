@@ -1,7 +1,8 @@
 #pragma once
 
 class SceneTitle;
-class SceneOption;
+class SceneStageSelect;
+class SceneTutorial;
 class SceneStage1;
 class SceneClear;
 class SceneGameOver;
@@ -16,7 +17,6 @@ public:
 	~SceneManager();
 
 	void Init();
-	void End();
 	void Update();
 	void Draw();
 
@@ -25,6 +25,8 @@ private:
 	enum SceneSelect
 	{
 		kSceneTitle,
+		kSceneStageSelect,
+		kSceneTutorial,
 		kSceneStage1,
 		kSceneClear,
 		kSceneGameOver
@@ -36,8 +38,9 @@ private:
 private:
 	// SceneManagerÇ≈ä«óùÇ∑ÇÈÉVÅ[Éì
 	SceneTitle* m_pTitle;
+	SceneStageSelect* m_pStageSelect;
+	SceneTutorial* m_pTutorial;
 	SceneStage1* m_pStage1;
 	SceneClear* m_pClear;
 	SceneGameOver* m_pGameOver;
 };
-

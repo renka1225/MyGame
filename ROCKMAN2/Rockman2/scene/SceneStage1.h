@@ -39,6 +39,8 @@ public:
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
+	// クリア演出
+	void UpdateClearStaging();
 	//　敵の生成
 	void CreateEnemy();
 	// アイテムの生成

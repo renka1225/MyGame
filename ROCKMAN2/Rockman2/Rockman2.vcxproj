@@ -139,9 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bg\BgTutorial.cpp" />
     <ClCompile Include="bg\BgStage1.cpp" />
     <ClCompile Include="bg\Bg.cpp" />
-    <ClCompile Include="bg\BgStage2.cpp" />
     <ClCompile Include="enemy\EnemyBear.cpp" />
     <ClCompile Include="enemy\EnemyBird.cpp" />
     <ClCompile Include="enemy\EnemyCat.cpp" />
@@ -156,8 +156,8 @@
     <ClCompile Include="recovery\RecoverySmallShot.cpp" />
     <ClCompile Include="recovery\RecoverySmallHp.cpp" />
     <ClCompile Include="recovery\RecoveryBase.cpp" />
+    <ClCompile Include="scene\SceneTutorial.cpp" />
     <ClCompile Include="scene\SceneStage1.cpp" />
-    <ClCompile Include="scene\SceneStage2.cpp" />
     <ClCompile Include="scene\SceneOption.cpp" />
     <ClCompile Include="scene\SceneClear.cpp" />
     <ClCompile Include="scene\SceneStageSelect.cpp" />
@@ -176,9 +176,9 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bg\BgTutorial.h" />
     <ClInclude Include="bg\BgStage1.h" />
     <ClInclude Include="bg\Bg.h" />
-    <ClInclude Include="bg\BgStage2.h" />
     <ClInclude Include="enemy\EnemyBear.h" />
     <ClInclude Include="enemy\EnemyBird.h" />
     <ClInclude Include="enemy\EnemyCat.h" />
@@ -194,8 +194,8 @@
     <ClInclude Include="recovery\RecoverySmallHp.h" />
     <ClInclude Include="recovery\RecoveryBase.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="scene\SceneTutorial.h" />
     <ClInclude Include="scene\SceneStage1.h" />
-    <ClInclude Include="scene\SceneStage2.h" />
     <ClInclude Include="scene\SceneOption.h" />
     <ClInclude Include="scene\SceneClear.h" />
     <ClInclude Include="scene\SceneStageSelect.h" />

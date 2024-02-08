@@ -169,10 +169,6 @@ void SceneTitle::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // •s“§–¾‚É–ß‚·
 }
 
-void SceneTitle::End()
-{
-}
-
 // ”wŒi•`‰æ
 void SceneTitle::DrawBg()
 {

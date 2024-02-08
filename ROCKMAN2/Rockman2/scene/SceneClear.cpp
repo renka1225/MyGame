@@ -30,7 +30,7 @@ namespace
 	// ”wŒiŠg‘å—¦
 	constexpr float kBgScale = 4.0f;
 	// ”wŒi‰æ‘œ‚ÌˆÚ“®—Ê
-	constexpr float kBgMove = -1.0f;
+	constexpr float kBgMove = -0.8f;
 }
 
 
@@ -81,10 +81,6 @@ void SceneClear::Init()
 
 	// BGM‚ð–Â‚ç‚·
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
-}
-
-void SceneClear::End()
-{
 }
 
 void SceneClear::Update()

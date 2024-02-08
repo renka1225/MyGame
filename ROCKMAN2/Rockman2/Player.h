@@ -2,7 +2,7 @@
 #include "Vec2.h"
 #include "Rect.h"
 
-class SceneStage1;
+class SceneMain;
 class Bg;
 
 /// <summary>
@@ -16,7 +16,7 @@ public:
 
 	// マップのポインタを設定する
 	void SetBg(Bg* pBg) { m_pBg = pBg; }
-	void SetStage(SceneStage1* pStage1) { m_pStage1 = pStage1; }
+	void SetStage(SceneMain* pMain) { m_pMain = pMain; }
 
 	void Init();
 	void Update();
@@ -89,7 +89,7 @@ public:
 private:
 	// 背景
 	Bg* m_pBg;
-	SceneStage1* m_pStage1;
+	SceneMain* m_pMain;
 
 	// 表示位置
 	Vec2 m_pos;

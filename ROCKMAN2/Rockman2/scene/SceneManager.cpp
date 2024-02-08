@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 #include "SceneTitle.h"
+#include "SceneStageSelect.h"
+#include "SceneTutorial.h"
 #include "SceneStage1.h"
 #include "SceneClear.h"
 #include "SceneGameOver.h"
@@ -10,7 +12,8 @@ SceneManager::SceneManager() :
 {
 	// クラスのメモリを確保する
 	m_pTitle = new SceneTitle;
-	//m_pOption = new SceneOption;
+	m_pStageSelect = new SceneStageSelect;
+	m_pTutorial = new SceneTutorial;
 	m_pStage1 = new SceneStage1;
 	m_pClear = new SceneClear;
 	m_pGameOver = new SceneGameOver;
@@ -21,6 +24,12 @@ SceneManager::~SceneManager()
 	// クラスのメモリを解放する
 	delete m_pTitle;
 	m_pTitle = nullptr;
+
+	delete m_pStageSelect;
+	m_pStageSelect = nullptr;
+
+	delete m_pTutorial;
+	m_pTutorial = nullptr;
 
 	delete m_pStage1;
 	m_pStage1 = nullptr;
@@ -41,6 +50,14 @@ void SceneManager::Init()
 	case kSceneTitle:
 		m_pTitle->Init();
 		break;
+		// ステージ選択シーン
+	case kSceneStageSelect:
+		m_pStageSelect->Init();
+		break;
+		// チュートリアル
+	case kSceneTutorial:
+		m_pTutorial->Init();
+		break;
 		// ステージ1
 	case kSceneStage1:
 		m_pStage1->Init();
@@ -58,32 +75,6 @@ void SceneManager::Init()
 	}
 }
 
-void SceneManager::End()
-{
-	// 実行するシーンを終了する
-	switch (m_runScene)
-	{
-		// タイトルシーン
-	case kSceneTitle:
-		m_pTitle->End();
-		break;
-		// ステージ1
-	case kSceneStage1:
-		m_pStage1->End();
-		break;
-		// ゲームクリア
-	case kSceneClear:
-		m_pClear->End();
-		break;
-		// ゲームオーバー
-	case kSceneGameOver:
-		m_pGameOver->End();
-		break;
-	default:
-		break;
-	}
-}
-
 void SceneManager::Update()
 {
 	Pad::Update();
@@ -93,33 +84,77 @@ void SceneManager::Update()
 	{
 		// タイトルシーン
 	case kSceneTitle:
-		m_pTitle->End();
 		if (m_pTitle->IsSceneStart())
+		{
+			m_runScene = kSceneStageSelect;
+			m_pStageSelect->Init();
+		}
+		break;
+
+		// ステージ選択シーン
+	case kSceneStageSelect:
+		if (m_pStageSelect->IsSceneTutorial())		// チュートリアル
+		{
+			m_runScene = kSceneTutorial;
+			m_pTutorial->Init();
+		}
+		else if (m_pStageSelect->IsSceneStage1())	// ステージ1
 		{
 			m_runScene = kSceneStage1;
 			m_pStage1->Init();
 		}
+		else if (m_pStageSelect->IsSceneTitle())	// タイトル
+		{
+			m_runScene = kSceneTitle;
+			m_pTitle->Init();
+		}
 		break;
-		// ステージ1
-	case kSceneStage1:
-		m_pStage1->End();
-		if (m_pStage1->IsSceneGameOver())
+
+		// チュートリアル
+	case kSceneTutorial:
+		if (m_pTutorial->IsSceneGameOver())		// ゲームオーバー
 		{
 			m_runScene = kSceneGameOver;
 			m_pGameOver->Init();
 		}
-		else if (m_pStage1->IsSceneClear())
+		else if (m_pTutorial->IsSceneClear())	// ゲームクリア
 		{
 			m_runScene = kSceneClear;
 			m_pClear->Init();
 		}
-		else if (m_pStage1->IsSceneTitle())
+		else if (m_pTutorial->IsSceneTitle())		// タイトル
 		{
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
 			m_pStage1->Init();
 		}
-		else if (m_pStage1->IsSceneEnd()) // リトライ
+		else if (m_pTutorial->IsSceneEnd())		// リトライ
+		{
+			m_runScene = kSceneStage1;
+			m_pStage1->Init();
+		}
+		break;
+
+
+		// ステージ1
+	case kSceneStage1:
+		if (m_pStage1->IsSceneGameOver())		// ゲームオーバー
+		{
+			m_runScene = kSceneGameOver;
+			m_pGameOver->Init();
+		}
+		else if (m_pStage1->IsSceneClear())		// クリア
+		{
+			m_runScene = kSceneClear;
+			m_pClear->Init();
+		}
+		else if (m_pStage1->IsSceneTitle())		// タイトル
+		{
+			m_runScene = kSceneTitle;
+			m_pTitle->Init();
+			m_pStage1->Init();
+		}
+		else if (m_pStage1->IsSceneEnd())		// リトライ
 		{
 			m_runScene = kSceneStage1;
 			m_pStage1->Init();
@@ -128,13 +163,12 @@ void SceneManager::Update()
 
 		// ゲームクリア
 	case kSceneClear:
-		m_pClear->End();
-		if (m_pClear->IsSceneStageSelect())
+		if (m_pClear->IsSceneStageSelect())		// リトライ
 		{
-			m_runScene = kSceneStage1;
-			m_pStage1->Init();
+			m_runScene = kSceneStageSelect;
+			m_pStageSelect->Init();
 		}
-		else if (m_pClear->IsSceneTitle())
+		else if (m_pClear->IsSceneTitle())		// タイトル
 		{
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
@@ -143,8 +177,7 @@ void SceneManager::Update()
 
 		// ゲームオーバー
 	case kSceneGameOver:
-		m_pGameOver->End();
-		if (m_pGameOver->IsSeneRetry()) // リトライ
+		if (m_pGameOver->IsSeneRetry())			 // リトライ
 		{
 			m_runScene = kSceneStage1;
 			m_pStage1->Init();
@@ -166,6 +199,14 @@ void SceneManager::Update()
 		// タイトルシーン
 	case kSceneTitle:
 		m_pTitle->Update();
+		break;
+		// ステージ選択シーン
+	case kSceneStageSelect:
+		m_pStageSelect->Update();
+		break;
+		// チュートリアル
+	case kSceneTutorial:
+		m_pTutorial->Update();
 		break;
 		// ステージ1
 	case kSceneStage1:
@@ -193,7 +234,15 @@ void SceneManager::Draw()
 	case kSceneTitle:
 		m_pTitle->Draw();
 		break;
-		// ステージ1
+		// ステージ選択シーン
+	case kSceneStageSelect:
+		m_pStageSelect->Draw();
+		break;
+		// チュートリアル
+	case kSceneTutorial:
+		m_pTutorial->Draw();
+		break;
+		// ゲームシーン
 	case kSceneStage1:
 		m_pStage1->Draw();
 		break;

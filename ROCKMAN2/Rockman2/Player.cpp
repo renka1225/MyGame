@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "Pad.h"
 #include "Bg.h"
-#include "SceneStage1.h"
+#include "SceneMain.h"
 #include "ShotBuster.h"
 #include "ShotMetal.h"
 #include "ShotFire.h"
@@ -95,7 +95,7 @@ namespace
 }
 
 Player::Player() :
-	m_pStage1(nullptr),
+	m_pMain(nullptr),
 	m_pBg(nullptr),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
@@ -205,7 +205,7 @@ void Player::Init()
 	m_deadFrame = 0;
 
 	// 再プレイ時
-	if (m_life < 0 || m_pStage1->IsSceneGameOver() || m_pStage1->IsSceneClear() || m_pStage1->IsSceneTitle() || m_pStage1->IsSceneEnd())
+	if (m_life < 0 || m_pMain->IsSceneGameOver() || m_pMain->IsSceneClear() || m_pMain->IsSceneTitle() || m_pMain->IsSceneEnd())
 	{
 		// 残機数
 		m_life = kLife;
@@ -324,11 +324,11 @@ void Player::Update()
 			ShotBuster* pShot = new ShotBuster;
 			// 新しい弾を生成する
 			pShot->Init();
-			pShot->SetMain(m_pStage1);
+			pShot->SetMain(m_pMain);
 			pShot->SetPlayer(this);
 			pShot->Start(m_pos);
 			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pStage1->AddShot(pShot);
+			m_pMain->AddShot(pShot);
 
 			// 弾発射のSEを鳴らす
 			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
@@ -348,11 +348,11 @@ void Player::Update()
 				ShotMetal* pShot = new ShotMetal;
 				// 新しい弾を生成する
 				pShot->Init();
-				pShot->SetMain(m_pStage1);
+				pShot->SetMain(m_pMain);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pStage1->AddShot(pShot);
+				m_pMain->AddShot(pShot);
 
 				// 弾発射のSEを鳴らす
 				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
@@ -458,11 +458,11 @@ void Player::Update()
 				// 新しい弾を生成する
 				ShotFire* pShot = new ShotFire;
 				pShot->Init();
-				pShot->SetMain(m_pStage1);
+				pShot->SetMain(m_pMain);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pStage1->AddShot(pShot);
+				m_pMain->AddShot(pShot);
 				m_nowPressTime = 0;
 			}
 			else // 弾エネルギーが0以下
@@ -481,16 +481,16 @@ void Player::Update()
 			m_animation = Anim::kShot;
 			m_shotAnimFrame = kShotAnimFrame;
 
-			if (!m_pStage1->GetIsExistLineMove() && m_lineEnergy > 0)
+			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
 			{
 				ShotLineMove* pShot = new ShotLineMove;
 				// 新しい弾を生成する
 				pShot->Init();
-				pShot->SetMain(m_pStage1);
+				pShot->SetMain(m_pMain);
 				pShot->SetPlayer(this);
 				pShot->Start(m_pos);
 				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pStage1->AddShot(pShot);
+				m_pMain->AddShot(pShot);
 
 				// 弾発射のSEを鳴らす
 				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
@@ -500,7 +500,7 @@ void Player::Update()
 		}
 
 		// 画面内にある場合
-		if (m_pStage1->GetIsExistLineMove())
+		if (m_pMain->GetIsExistLineMove())
 		{
 			m_lineTime--;
 			if (m_lineTime <= 0)
@@ -576,8 +576,8 @@ void Player::Update()
 
 void Player::Draw()
 {
-// ダメージ演出
-// 2フレーム間隔で表示非表示を切り替える
+	// ダメージ演出
+	// 2フレーム間隔で表示非表示を切り替える
 	if (m_damageFrame % 10 >= 8) return;
 
 	// スクロール量を反映する
@@ -814,10 +814,10 @@ void Player::CheckHitMap(Rect chipRect)
 /// <summary>
 /// 弾の選択状態を更新
 /// </summary>
-/// <param name="isBuster"></param>
-/// <param name="isMetal"></param>
-/// <param name="isFire"></param>
-/// <param name="isLineMove"></param>
+/// <param name="isBuster">バスター</param>
+/// <param name="isMetal">メタル</param>
+/// <param name="isFire">ファイア</param>
+/// <param name="isLineMove">2号</param>
 void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
 {
 	// バスターの選択状態を更新
@@ -1014,11 +1014,11 @@ void Player::RideLineMove(Rect shotRect)
 		{
 			if (m_isRight)
 			{
-				m_pos.x += 10.0f;
+				m_pos.x += 3.0f;
 			}
 			else
 			{
-				m_pos.x -= 10.0f;
+				m_pos.x -= 3.0f;
 			}
 		}
 		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;

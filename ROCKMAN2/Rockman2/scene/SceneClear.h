@@ -10,9 +10,9 @@ public:
 	SceneClear();
 	~SceneClear();
 	void Init();
-	void End();
 	void Update();
 	void Draw();
+	// 背景描画
 	void DrawBg();
 
 	// シーンを終了させるか
@@ -33,8 +33,8 @@ private:
 
 private:
 	// シーン選択のフラグ true:シーンに移動
-	bool m_isSceneSelectStage;
-	bool m_isSceneTitle;
+	bool m_isSceneSelectStage;	// ステージ選択
+	bool m_isSceneTitle;		// タイトル
 
 	// 選択カーソルの表示位置
 	Vec2 m_selectPos;

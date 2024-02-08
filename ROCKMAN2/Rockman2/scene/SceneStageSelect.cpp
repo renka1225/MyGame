@@ -29,9 +29,8 @@ namespace
 
 SceneStageSelect::SceneStageSelect() :
 	m_select(kStage1),
+	m_isSceneTutorial(false),
 	m_isSceneStage1(false),
-	m_isSceneStage2(false),
-	m_isSceneStage3(false),
 	m_isSceneTitle(false),
 	m_bgMove(0.0f),
 	m_fadeAlpha(255),
@@ -68,12 +67,11 @@ SceneStageSelect::~SceneStageSelect()
 
 void SceneStageSelect::Init()
 {
+	m_isSceneTutorial = false;
 	m_isSceneStage1 = false;
-	m_isSceneStage2 = false;
-	m_isSceneStage3 = false;
 	m_isSceneTitle = false;
 	m_fadeAlpha = 180;
-	m_select = kStage1;
+	m_select = kStageTutorial;
 	m_bgPos = { 0, 0 };
 	m_selectPos.x = kInitSelectPosX;
 	m_selectPos.y = kInitSelectPosY;
@@ -124,12 +122,12 @@ void SceneStageSelect::Update()
 
 		switch (m_select)
 		{
-		case kStage1:
-			m_isSceneStage1 = true;
+		case kStageTutorial:
+			m_isSceneTutorial = true;
 			StopSoundMem(m_bgm);
 			break;
-		case kStage2:
-			m_isSceneStage2 = true;
+		case kStage1:
+			m_isSceneStage1 = true;
 			StopSoundMem(m_bgm);
 			break;
 		case kBackTitle:
@@ -142,7 +140,7 @@ void SceneStageSelect::Update()
 	}
 
 	// フェードイン
-	if (m_isSceneStage1 || m_isSceneStage2 || m_isSceneTitle)
+	if (m_isSceneTutorial || m_isSceneStage1 || m_isSceneTitle)
 	{
 		m_fadeAlpha += 8;
 		if (m_fadeAlpha > 255)
@@ -181,10 +179,6 @@ void SceneStageSelect::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x808080, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
-}
-
-void SceneStageSelect::End()
-{
 }
 
 void SceneStageSelect::DrawBg()

@@ -16,10 +16,6 @@ public:
 	virtual void Init();
 	virtual	void Update();
 	virtual void Draw();
-	virtual void DrawBg();
-
-	// プレイヤーのポインタを設定
-	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 
 	// プレイヤーの位置からスクロール量を決定する
 	int GetScrollX();
@@ -28,6 +24,9 @@ public:
 	bool IsColPlayer();
 	// 指定した矩形と当たっているか判定する
 	bool IsCollision(Rect rect, Rect& chipRect);
+
+	// プレイヤーのポインタを設定
+	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 
 protected:
 	// プレイヤーのポインタ

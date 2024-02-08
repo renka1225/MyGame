@@ -42,7 +42,7 @@ public:
 	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
 	bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
-	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
+	bool IsSceneEnd() const { return m_isSceneEnd; }			// リトライ
 
 protected:
 	//　敵の生成

@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "FontManager.h"
 #include "BgStage1.h"
+#include "Player.h"
 #include "ScenePause.h"
 #include "RecoverySmallHp.h"
 #include "RecoveryGreatHp.h"
@@ -12,7 +13,6 @@
 #include "RecoveryGreatShot.h"
 #include "RecoveryLife.h"
 #include "RecoveryFullHp.h"
-#include "Player.h"
 #include "ShotBase.h"
 #include "EnemyCat.h"
 #include "EnemyBird.h"
@@ -40,10 +40,12 @@ namespace
 	/*演出*/
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
-	constexpr float kClearTime = 350.0f;
+	constexpr float kClearTime = 240.0f;
 	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
+	// 花火の画像切り出しサイズ
+	constexpr int kFireworksSize = 256;
 
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
@@ -61,7 +63,7 @@ namespace
 	constexpr int kIntervalY = 70;
 
 	/*ゲーム内*/
-	// 黒枠のサイズ
+	// 外枠のサイズ
 	constexpr int kFrameSize = 270;
 	// 残機、敵数、タイム表示位置
 	constexpr int kInfoTextPosX = 30;	// 横
@@ -141,13 +143,14 @@ SceneStage1::SceneStage1():
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
 	m_startSE = LoadSoundMem("data/sound/BGM/start.wav");
 	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
-	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.mp3");
+	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.wav");
 
-	// 画像
+	// 画像読み込み
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
-	m_fireworks = LoadGraph("data/image/Effect/clear/1.png");
+	m_fireworks = LoadGraph("data/image/Effect/fireworks.png");
+	assert(m_fireworks);
 }
 
 SceneStage1::~SceneStage1()
@@ -207,10 +210,11 @@ SceneStage1::~SceneStage1()
 	DeleteSoundMem(m_lineMoveSE);
 	DeleteSoundMem(m_startSE);
 	DeleteSoundMem(m_clearSE);
+	DeleteSoundMem(m_fireworksSE);
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_shotSelectHandle);
 	DeleteGraph(m_startHandle);
-	DeleteGraph(m_fireworksSE);
+	DeleteGraph(m_fireworks);
 }
 
 void SceneStage1::Init()
@@ -343,26 +347,7 @@ void SceneStage1::Update()
 	// 敵をすべて倒したらクリア演出を行う
 	if (m_enemyTotalNum <= 0)
 	{
-		m_clearStagingTime--;
-		m_stagingFade += 150;
-
-		// クリアSE1回だけを鳴らす
-		StopSoundMem(m_bgm);
-		if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
-		{
-			m_stagingFade = 0;
-			PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
-			return;
-		}
-		// 花火の音を流す
-		else if (m_clearStagingTime <= kClearTime - 60.0f || m_clearStagingTime > 0.0f)
-		{
-			if (CheckSoundMem(m_fireworksSE) == 0)
-			{
-				PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
-				return;
-			}
-		}
+		UpdateClearStaging();
 	}
 	if (m_clearStagingTime <= 0.0f)
 	{
@@ -844,6 +829,33 @@ void SceneStage1::DropFullHpRecovery()
 }
 
 /// <summary>
+/// クリア演出の更新
+/// </summary>
+void SceneStage1::UpdateClearStaging()
+{
+	m_clearStagingTime--;
+	m_stagingFade += 150;
+
+	// クリアSE1回だけを鳴らす
+	StopSoundMem(m_bgm);
+	if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
+	{
+		m_stagingFade = 0;
+		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
+		return;
+	}
+	// 花火の音を流す
+	else if (m_clearStagingTime <= kClearTime - 120.0f || m_clearStagingTime > 0.0f)
+	{
+		if (CheckSoundMem(m_fireworksSE) == 0)
+		{
+			PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
+			return;
+		}
+	}
+}
+
+/// <summary>
 /// 敵の生成
 /// </summary>
 void SceneStage1::CreateEnemy()
@@ -1144,11 +1156,22 @@ void SceneStage1::DrawClearStaging()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:文字表示後花火をあげる
-	if (m_clearStagingTime < 180.0f)
+	int srcX = kFireworksSize * 20;	 // アニメーション
+	int srcY = 0;
+
+	if (m_clearStagingTime <= 180.0f && m_clearStagingTime > 120.0f)
 	{
-		int disX = GetRand(1400) - 1400;
-		int srcX = 0;
-		int srcY = 0;
-		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 400, srcX, srcY, 64, 64, 1.0f, 0.0f, m_fireworks, true);
+		int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
+		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
+	}
+	else if (m_clearStagingTime <= 120.0f && m_clearStagingTime > 60.0f)
+	{
+		int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
+		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
+	}
+	else
+	{
+		int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
+		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
 	}
 }

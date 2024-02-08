@@ -13,23 +13,22 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	void End();
 	// 背景表示
 	void DrawBg();
 
 	// シーンを終了させるか
+	bool IsSceneTutorial() const { return  m_isSceneTutorial; }
 	bool IsSceneStage1() const { return m_isSceneStage1; }
-	bool IsSceneStage2() const { return m_isSceneStage2; }
 	bool IsSceneTitle() const { return m_isSceneTitle; }
 
 private:
 	// 選択項目
 	enum Select
 	{
-		kStage1,	// ステージ1
-		kStage2,	// ステージ2
-		kBackTitle,	// タイトルに戻る
-		kSelectNum	// 項目数
+		kStageTutorial,	// チュートリアルステージ
+		kStage1,		// ステージ1
+		kBackTitle,		// タイトルに戻る
+		kSelectNum		// 項目数
 	};
 
 	// 現在の選択状態
@@ -37,9 +36,8 @@ private:
 
 private:
 	// シーン選択のフラグ true:シーンに移動
+	bool m_isSceneTutorial;
 	bool m_isSceneStage1;
-	bool m_isSceneStage2;
-	bool m_isSceneStage3;
 	bool m_isSceneTitle;
 
 	// 選択カーソルの表示位置

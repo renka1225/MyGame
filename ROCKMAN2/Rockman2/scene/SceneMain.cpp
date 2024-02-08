@@ -300,7 +300,7 @@ void SceneMain::Update()
 		StopSoundMem(m_bgm);
 	}
 
-	// TODO:敵をすべて倒したらクリア演出を行う
+	// 敵をすべて倒したらクリア演出を行う
 	if (m_enemyTotalNum <= 0)
 	{
 		m_clearStagingTime--;

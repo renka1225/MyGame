@@ -47,7 +47,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			// 16.66ミリ秒(16667マイクロ秒)経過するまで待つ
 		}
 	}
-	pScene->End();
 
 	// メモリの解放
 	delete pScene;

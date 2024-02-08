@@ -129,12 +129,6 @@
     <ClCompile Include="scene\SceneOption.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="scene\SceneStage2.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="bg\BgStage2.cpp">
-      <Filter>ソース ファイル\bg</Filter>
-    </ClCompile>
     <ClCompile Include="bg\Bg.cpp">
       <Filter>ソース ファイル\bg</Filter>
     </ClCompile>
@@ -154,6 +148,12 @@
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="bg\BgStage1.cpp">
+      <Filter>ソース ファイル\bg</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneTutorial.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bg\BgTutorial.cpp">
       <Filter>ソース ファイル\bg</Filter>
     </ClCompile>
   </ItemGroup>
@@ -239,12 +239,6 @@
     <ClInclude Include="scene\SceneOption.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="scene\SceneStage2.h">
-      <Filter>ヘッダー ファイル\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="bg\BgStage2.h">
-      <Filter>ヘッダー ファイル\bg</Filter>
-    </ClInclude>
     <ClInclude Include="bg\Bg.h">
       <Filter>ヘッダー ファイル\bg</Filter>
     </ClInclude>
@@ -265,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="bg\BgStage1.h">
       <Filter>ヘッダー ファイル\bg</Filter>
+    </ClInclude>
+    <ClInclude Include="bg\BgTutorial.h">
+      <Filter>ヘッダー ファイル\bg</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneTutorial.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
