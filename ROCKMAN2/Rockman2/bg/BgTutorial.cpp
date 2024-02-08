@@ -174,12 +174,12 @@ void BgTutorial::Draw()
 				kChipWidth, kChipHeight,
 				kChipScale, 0.0f,
 				m_mapHandle, true);
-		}
 
 #ifdef _DEBUG
-		// MEMO:“–‚½‚è”»’è•`‰æ
-		//DrawBox(posX, posY, posX + kChipWidth * kChipScale, posY + kChipWidth * kChipScale, 0xff0000, false);
+			// MEMO:“–‚½‚è”»’è•`‰æ
+			//DrawBox(posX, posY, posX + kChipWidth * kChipScale, posY + kChipWidth * kChipScale, 0xff0000, false);
 #endif
+		}
 	}
 
 	// ‘€ìà–¾‚Ì•\¦

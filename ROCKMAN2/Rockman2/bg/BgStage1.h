@@ -1,8 +1,6 @@
 #pragma once
 #include "Bg.h"
 
-class Bg;
-
 /// <summary>
 /// ステージ1の背景クラス
 /// </summary>
@@ -18,10 +16,10 @@ public:
 	// 背景描画
 	void DrawBg();
 	// プレイヤーの位置からスクロール量を決定する
-	int GetScrollX();
-	int GetScrollY();
+	virtual int GetScrollX() override;
+	virtual int GetScrollY() override;
 	// プレイヤーと当たっているか判定する
-	bool IsColPlayer();
+	virtual bool IsColPlayer() override;
 	// 指定した矩形と当たっているか判定する
-	bool IsCollision(Rect rect, Rect& chipRect);
+	virtual bool IsCollision(Rect rect, Rect& chipRect) override;
 };

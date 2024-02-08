@@ -101,7 +101,7 @@ SceneStage1::SceneStage1():
 	m_ampFrame(0)
 {
 	// ゲーム画面描画先の生成
-	m_gameScreenHandle = MakeScreen(Stage::kMapWidth, Stage::kMapHeight, true);
+	m_gameScreenHandle = MakeScreen(Stage1::kMapWidth, Stage1::kMapHeight, true);
 
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player;
@@ -109,7 +109,7 @@ SceneStage1::SceneStage1():
 	// 背景のメモリ確保
 	m_pBg = new BgStage1;
 	m_pBg->SetPlayer(m_pPlayer);
-	m_pPlayer->SetBg(m_pBg);
+	//m_pPlayer->SetBg(m_pBg);
 	m_pPlayer->SetStage(this);
 
 	// フォント
@@ -252,7 +252,7 @@ void SceneStage1::Init()
 
 	// プレイヤーの初期化
 	assert(m_pPlayer);
-	m_pPlayer->Init();
+	m_pPlayer->Init(m_pBg);
 
 	// 背景の初期化
 	m_pBg->Init();
@@ -368,7 +368,7 @@ void SceneStage1::Update()
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
-			m_pPlayer->Init();
+			m_pPlayer->Init(m_pBg);
 			m_isSceneEnd = true;
 		}
 		// タイトルに戻るを選択

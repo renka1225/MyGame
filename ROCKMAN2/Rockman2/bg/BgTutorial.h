@@ -14,18 +14,18 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
+	// プレイヤーの位置からスクロール量を決定する
+	virtual int GetScrollX() override;
+	virtual int GetScrollY() override;
+	// プレイヤーと当たっているか判定する
+	virtual bool IsColPlayer() override;
+	// 指定した矩形と当たっているか判定する
+	virtual bool IsCollision(Rect rect, Rect& chipRect) override;
+
 	// 背景描画
 	void DrawBg();
 	// 操作説明の表示
 	void DrawEx(int scrollX, int scrollY);
-
-	// プレイヤーの位置からスクロール量を決定する
-	int GetScrollX();
-	int GetScrollY();
-	// プレイヤーと当たっているか判定する
-	bool IsColPlayer();
-	// 指定した矩形と当たっているか判定する
-	bool IsCollision(Rect rect, Rect& chipRect);
 
 private:
 	// 操作説明の画像

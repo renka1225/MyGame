@@ -8,10 +8,17 @@ namespace Game
 	constexpr int kColorDepth = 32;
 }
 
-/*ステージ1のマップの広さ*/
-namespace Stage
+/*チュートリアルステージのマップの広さ*/
+namespace Tutorial
 {
 	constexpr int kMapWidth = 6480;
-	constexpr int kMapHeight = 1088;
+	constexpr int kMapHeight = 1080;
+}
+
+/*ステージ1のマップの広さ*/
+namespace Stage1
+{
+	constexpr int kMapWidth = 5940;
+	constexpr int kMapHeight = 3240;
 }
 

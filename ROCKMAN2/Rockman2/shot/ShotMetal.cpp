@@ -56,7 +56,7 @@ void ShotMetal::Update()
 	// 画面外に出た処理
 	bool isOut = false;	// チェック中の座標が画面外かどうか		true:画面外、false:画面内
 	if (m_pos.x < 0.0f - kWidth / 2) isOut = true;				// 画面左端
-	if (m_pos.x > Stage::kMapWidth) isOut = true;				// 画面右端
+	if (m_pos.x > Stage1::kMapWidth) isOut = true;				// 画面右端
 	if (m_pos.y < 0.0f - kWidth) isOut = true;					// 画面上
 	if (m_pos.y > Game::kScreenHeight) isOut = true;			// 画面下
 

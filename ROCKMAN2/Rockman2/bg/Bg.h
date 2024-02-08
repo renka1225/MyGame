@@ -13,17 +13,17 @@ public:
 	Bg();
 	virtual ~Bg();
 
-	virtual void Init();
-	virtual	void Update();
-	virtual void Draw();
+	virtual void Init() = 0;
+	virtual	void Update() = 0;
+	virtual void Draw() = 0;
 
 	// プレイヤーの位置からスクロール量を決定する
-	int GetScrollX();
-	int GetScrollY();
+	virtual int GetScrollX() = 0;
+	virtual int GetScrollY() = 0;
 	// プレイヤーと当たっているか判定する
-	bool IsColPlayer();
+	virtual bool IsColPlayer() = 0;
 	// 指定した矩形と当たっているか判定する
-	bool IsCollision(Rect rect, Rect& chipRect);
+	virtual bool IsCollision(Rect rect, Rect& chipRect) = 0;
 
 	// プレイヤーのポインタを設定
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }

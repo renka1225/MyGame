@@ -15,10 +15,10 @@ public:
 	~Player();
 
 	// マップのポインタを設定する
-	void SetBg(Bg* pBg) { m_pBg = pBg; }
+	//void SetBg(Bg* pBg) { m_pBg = pBg; }
 	void SetStage(SceneMain* pMain) { m_pMain = pMain; }
 
-	void Init();
+	void Init(Bg* pBg);
 	void Update();
 	void Draw();
 

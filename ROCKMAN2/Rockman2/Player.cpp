@@ -96,7 +96,6 @@ namespace
 
 Player::Player() :
 	m_pMain(nullptr),
-	m_pBg(nullptr),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
 	m_isRight(true),
@@ -168,8 +167,9 @@ Player::~Player()
 }
 
 /*初期化処理*/
-void Player::Init()
+void Player::Init(Bg* pBg)
 {
+	m_pBg = pBg;
 	// HP
 	m_hp = kMaxHp;
 	// 現在位置
@@ -518,7 +518,7 @@ void Player::Update()
 	}
 
 	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage::kMapHeight)
+	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage1::kMapHeight)
 	{
 		// HPを0にする
 		m_hp -= kMaxHp;
@@ -1014,11 +1014,11 @@ void Player::RideLineMove(Rect shotRect)
 		{
 			if (m_isRight)
 			{
-				m_pos.x += 3.0f;
+				m_pos.x += 10.0f;
 			}
 			else
 			{
-				m_pos.x -= 3.0f;
+				m_pos.x -= 10.0f;
 			}
 		}
 		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;
