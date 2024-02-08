@@ -1002,10 +1002,7 @@ void Player::HpFullRecovery() // HP全回復
 /// <param name="shotRect">アイテム2号の当たり判定</param>
 void Player::RideLineMove(Rect shotRect)
 {
- 	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
-
-	// 当たり判定更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
+	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
 
 	// アイテム2号に乗った場合
 	if (m_colRect.IsCollision(lineMoveRect))
@@ -1025,4 +1022,7 @@ void Player::RideLineMove(Rect shotRect)
 		m_isGround = true;
 		m_animation = Anim::kIdle;
 	}
+
+	// 当たり判定更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
 }

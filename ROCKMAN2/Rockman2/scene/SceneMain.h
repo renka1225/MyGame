@@ -19,34 +19,34 @@ public:
 	SceneMain();
 	virtual ~SceneMain();
 
-	virtual void Init();
-	virtual void Update();
-	virtual void Draw();
+	virtual void Init() = 0;
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
 
 	// ショットの追加
-	virtual bool AddShot(ShotBase* pShot);
+	virtual bool AddShot(ShotBase* pShot) = 0;
 	//　敵の生成
-	void CreateEnemy();
+	virtual void CreateEnemy() = 0;
 	// アイテムの生成
-	void CreateItem(int enemyIndex);
+	virtual void CreateItem(int enemyIndex) = 0;;
 	// 弾数、敵数等の表示
-	void DrawInfo();
+	virtual void DrawInfo() = 0;;
 	// 武器切り替え画面表示
-	void DrawShotChange();
+	virtual void DrawShotChange() = 0;;
 	// ポーズ画面の表示
-	void DrawPause();
+	virtual void DrawPause() = 0;;
 	// スタート演出の描画
-	void DrawStartStaging();
+	virtual void DrawStartStaging() = 0;;
 	// クリア時演出の描画
-	void DrawClearStaging();
+	virtual void DrawClearStaging() = 0;;
 
 	// アイテムドロップ
-	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
-	void DropHpGreatRecovery(int enemyIndex);	// HP大回復
-	void DropShotSmallRecovery(int enemyIndex);	// 弾小回復
-	void DropShotGreatRecovery(int enemyIndex);	// 弾大回復
-	void DropLifeRecovery(int enemyIndex);		// 残機回復
-	void DropFullHpRecovery();					// HP全回復
+	virtual void DropHpSmallRecovery(int enemyIndex) = 0;	// HP小回復
+	virtual void DropHpGreatRecovery(int enemyIndex) = 0;	// HP大回復
+	virtual void DropShotSmallRecovery(int enemyIndex) = 0;	// 弾小回復
+	virtual void DropShotGreatRecovery(int enemyIndex) = 0;	// 弾大回復
+	virtual void DropLifeRecovery(int enemyIndex) = 0;		// 残機回復
+	virtual void DropFullHpRecovery() = 0;					// HP全回復
 
 	// アイテム2号の表示状態を取得
 	bool GetIsExistLineMove() const {return m_isExistLineMove; }
