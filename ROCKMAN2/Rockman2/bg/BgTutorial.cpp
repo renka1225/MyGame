@@ -31,7 +31,7 @@ namespace
 	constexpr int kChipWidth = 18;
 	constexpr int kChipHeight = 18;
 	// マップチップ拡大率
-	constexpr int kChipScale = 3.0f;
+	constexpr float kChipScale = 3.0f;
 
 	// チップを置く数
 	constexpr int kChipNumX = 120;
@@ -170,7 +170,7 @@ void BgTutorial::Draw()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumY);
 
 			// 描画
-			DrawRectRotaGraph(posX + kChipWidth * kChipScale * 0.5f, posY + kChipHeight * kChipScale * 0.5f, srcX, srcY,
+			DrawRectRotaGraph(static_cast<int>(posX + kChipWidth * kChipScale * 0.5f), static_cast<int>(posY + kChipHeight * kChipScale * 0.5), srcX, srcY,
 				kChipWidth, kChipHeight,
 				kChipScale, 0.0f,
 				m_mapHandle, true);
@@ -218,8 +218,8 @@ void BgTutorial::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg3 + index * bg3Size.width * kBg2Scale,
-			Game::kScreenHeight - bg3Size.height * kBg2Scale,
+			static_cast<int>(scrollBg3 + index * bg3Size.width * kBg2Scale),
+			static_cast<int>(Game::kScreenHeight - bg3Size.height * kBg2Scale),
 			0, 0,
 			kBg2Scale, 0.0f,
 			m_bg3Handle, true);
@@ -228,8 +228,8 @@ void BgTutorial::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg4 + index * bg4Size.width * kBg2Scale,
-			Game::kScreenHeight - bg4Size.height * kBg2Scale,
+			static_cast<int>(scrollBg4 + index * bg4Size.width * kBg2Scale),
+			static_cast<int>(Game::kScreenHeight - bg4Size.height * kBg2Scale),
 			0, 0,
 			kBg2Scale, 0.0f,
 			m_bg4Handle, true);
@@ -275,7 +275,7 @@ void BgTutorial::DrawEx(int scrollX, int scrollY)
 /// <returns>スクロール量</returns>
 int BgTutorial::GetScrollX()
 {
-	int result = m_pPlayer->GetPos().x - Game::kScreenWidth / 2;
+	int result = static_cast<int>(m_pPlayer->GetPos().x - Game::kScreenWidth * 0.5);
 	if (result < 0)
 	{
 		result = 0;
@@ -294,7 +294,7 @@ int BgTutorial::GetScrollX()
 /// <returns>スクロール量</returns>
 int BgTutorial::GetScrollY()
 {
-	int result = m_pPlayer->GetPos().y;
+	int result = static_cast<int>(m_pPlayer->GetPos().y);
 	if (result < 0)
 	{
 		result = 0;
@@ -322,8 +322,8 @@ bool BgTutorial::IsColPlayer()
 	{
 		for (int x = 0; x < kChipNumX; x++)
 		{
-			// 地面以外は当たらない
-			if (kChipData[y][x] != 10) continue;
+			// 地面、床以外は当たらない
+			if (kChipData[y][x] == 0) continue;
 
 			int chipLeft = x * kChipWidth * kChipScale;
 			int chipRight = chipLeft + kChipWidth * kChipScale;
@@ -357,7 +357,7 @@ bool BgTutorial::IsCollision(Rect rect, Rect& chipRect)
 		for (int x = 0; x < kChipNumX; x++)
 		{
 			// 地面、壁以外当たらない
-			if (kChipData[y][x] != 10) continue;
+			if (kChipData[y][x] == 0) continue;
 
 			int chipLeft = x * kChipWidth * kChipScale;
 			int chipRight = chipLeft + kChipWidth * kChipScale;
@@ -371,10 +371,10 @@ bool BgTutorial::IsCollision(Rect rect, Rect& chipRect)
 			if (chipBottom < rect.GetTop()) continue;
 
 			// ぶつかったマップチップの矩形を設定する
-			chipRect.m_left = chipLeft;
-			chipRect.m_right = chipRight;
-			chipRect.m_top = chipTop;
-			chipRect.m_bottom = chipBottom;
+			chipRect.m_left = static_cast<float>(chipLeft);
+			chipRect.m_right = static_cast<float>(chipRight);
+			chipRect.m_top = static_cast<float>(chipTop);
+			chipRect.m_bottom = static_cast<float>(chipBottom);
 
 			// いずれかのチップに当たっていたら終了する
 			return true;

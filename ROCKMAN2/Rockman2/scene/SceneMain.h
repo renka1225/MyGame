@@ -20,12 +20,25 @@ public:
 	virtual ~SceneMain();
 
 	virtual void Init();
-	virtual void End();
 	virtual void Update();
 	virtual void Draw();
 
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot);
+	//　敵の生成
+	void CreateEnemy();
+	// アイテムの生成
+	void CreateItem(int enemyIndex);
+	// 弾数、敵数等の表示
+	void DrawInfo();
+	// 武器切り替え画面表示
+	void DrawShotChange();
+	// ポーズ画面の表示
+	void DrawPause();
+	// スタート演出の描画
+	void DrawStartStaging();
+	// クリア時演出の描画
+	void DrawClearStaging();
 
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
@@ -45,27 +58,9 @@ public:
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// リトライ
 
 protected:
-	//　敵の生成
-	void CreateEnemy();
-	// アイテムの生成
-	void CreateItem(int enemyIndex);
-	// 弾数、敵数等の表示
-	void DrawInfo();
-	// 武器切り替え画面表示
-	void DrawShotChange();
-	// ポーズ画面の表示
-	void DrawPause();
-	// スタート演出の描画
-	void DrawStartStaging();
-	// クリア時演出の描画
-	void DrawClearStaging();
-
-protected:
 	/*ポインタを取得*/
 	// フォント管理
 	FontManager* m_pFont;
-	// 背景
-	Bg* m_pBg;
 	// ポーズ画面
 	ScenePause* m_pPause;
 	// プレイヤー
@@ -120,10 +115,12 @@ protected:
 	int m_lineMoveSE;	// アイテム2号が画面内にあるとき
 	int m_startSE;		// スタート時のSE
 	int m_clearSE;		// クリア時のSE
+	int m_fireworksSE;	// 花火のSE
 
 	// 画像
 	int m_frameHandle;		// 枠
 	int m_shotSelectHandle;	// 選択中の武器
 	int m_startHandle;		// スタート演出の画像
+	int m_fireworks;		// 花火
 };
 

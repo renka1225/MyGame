@@ -277,10 +277,6 @@ void SceneStage1::Init()
 	m_isRetry = false;
 }
 
-void SceneStage1::End()
-{
-}
-
 void SceneStage1::Update()
 {
 	// スタート演出

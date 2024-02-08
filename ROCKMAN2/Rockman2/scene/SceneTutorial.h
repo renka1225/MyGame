@@ -5,21 +5,36 @@ class BgTutorial;
 class Player;
 
 /// <summary>
-/// チュートリアルステージのクラス
+/// ステージ1クラス
 /// </summary>
-class SceneTutorial :public SceneMain
+class SceneTutorial : public SceneMain
 {
 public:
 	SceneTutorial();
 	virtual ~SceneTutorial();
 
-	virtual void Init()  override;
-	virtual void End()  override;
-	virtual void Update()  override;
-	virtual void Draw()  override;
+	virtual void Init() override;
+	virtual void Update() override;
+	virtual void Draw() override;
 
 	// ショットの追加
 	bool AddShot(ShotBase* pShot);
+	// クリア演出
+	void UpdateClearStaging();
+	//　敵の生成
+	void CreateEnemy();
+	// アイテムの生成
+	void CreateItem(int enemyIndex);
+	// 弾数、敵数等の表示
+	void DrawInfo();
+	// 武器切り替え画面表示
+	void DrawShotChange();
+	// ポーズ画面の表示
+	void DrawPause();
+	// スタート演出の描画
+	void DrawStartStaging();
+	// クリア時演出の描画
+	void DrawClearStaging();
 
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
@@ -39,26 +54,10 @@ public:
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
-	//　敵の生成
-	void CreateEnemy();
-	// アイテムの生成
-	void CreateItem(int enemyIndex);
-	// 弾数、敵数等の表示
-	void DrawInfo();
-	// 武器切り替え画面表示
-	void DrawShotChange();
-	// ポーズ画面の表示
-	void DrawPause();
-	// スタート演出の描画
-	void DrawStartStaging();
-	// クリア時演出の描画
-	void DrawClearStaging();
-
-private:
 	// フォント管理
 	FontManager* m_pFont;
 	// 背景
-	Bg* m_pBg;
+	BgTutorial* m_pBg;
 	// ポーズ画面
 	ScenePause* m_pPause;
 	// プレイヤー
@@ -96,6 +95,7 @@ private:
 	bool m_isSceneClear;	// クリア画面に移動
 	bool m_isSceneTitle;	// タイトル画面に移動
 	bool m_isSceneEnd;		// ゲーム画面を終了
+	bool m_isRetry;			// リトライする
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
@@ -105,6 +105,11 @@ private:
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
+	// Readyの表示カウント
+	int m_readyCount;
+	// 画面揺れ演出
+	int m_shakeFrame;
+	float m_ampFrame;
 
 	// 音
 	int m_bgm;			// BGM
@@ -113,10 +118,13 @@ private:
 	int m_lineMoveSE;	// アイテム2号が画面内にあるとき
 	int m_startSE;		// スタート時のSE
 	int m_clearSE;		// クリア時のSE
+	int m_fireworksSE;	// 花火のSE
 
 	// 画像
+	int m_gameScreenHandle;	// ゲーム画面
 	int m_frameHandle;		// 枠
 	int m_shotSelectHandle;	// 選択中の武器
 	int m_startHandle;		// スタート演出の画像
+	int m_fireworks;		// 花火
 };
 

@@ -13,8 +13,8 @@ namespace
 	// 弾の移動速度
 	constexpr float kSpeed = 15.0f;
 	// ショットの大きさ
-	constexpr float kWidth = 32.0f;
-	constexpr float kHeight = 32.0f;
+	constexpr int kWidth = 32.0f;
+	constexpr int kHeight = 32.0f;
 	// 画像の拡大率
 	constexpr float kSmallScale = 0.5f;
 	constexpr float kMiddleScale = 0.8f;
@@ -71,8 +71,8 @@ void ShotFire::Draw()
 	if (!m_isExist) return;
 
 	// 中央座標を左上座標に変換
-	int x = m_pos.x - kWidth * 0.5f;
-	int y = m_pos.y - kHeight * 0.5f;
+	int x = static_cast<int>(m_pos.x - kWidth * 0.5);
+	int y = static_cast<int>(m_pos.y - kHeight * 0.5);
 
 	// スクロール量を反映する
 	x -= m_pBg->GetScrollX();

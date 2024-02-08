@@ -6,6 +6,7 @@
 /// </summary>
 class BgTutorial : public Bg
 {
+public:
 	BgTutorial();
 	virtual ~BgTutorial();
 

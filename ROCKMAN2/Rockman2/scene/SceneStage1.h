@@ -14,12 +14,27 @@ public:
 	virtual ~SceneStage1();
 
 	virtual void Init() override;
-	virtual void End() override;
 	virtual void Update() override;
 	virtual void Draw() override;
 
 	// ショットの追加
 	bool AddShot(ShotBase* pShot);
+	// クリア演出
+	void UpdateClearStaging();
+	//　敵の生成
+	void CreateEnemy();
+	// アイテムの生成
+	void CreateItem(int enemyIndex);
+	// 弾数、敵数等の表示
+	void DrawInfo();
+	// 武器切り替え画面表示
+	void DrawShotChange();
+	// ポーズ画面の表示
+	void DrawPause();
+	// スタート演出の描画
+	void DrawStartStaging();
+	// クリア時演出の描画
+	void DrawClearStaging();
 
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
@@ -39,28 +54,10 @@ public:
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
-	// クリア演出
-	void UpdateClearStaging();
-	//　敵の生成
-	void CreateEnemy();
-	// アイテムの生成
-	void CreateItem(int enemyIndex);
-	// 弾数、敵数等の表示
-	void DrawInfo();
-	// 武器切り替え画面表示
-	void DrawShotChange();
-	// ポーズ画面の表示
-	void DrawPause();
-	// スタート演出の描画
-	void DrawStartStaging();
-	// クリア時演出の描画
-	void DrawClearStaging();
-
-private:
 	// フォント管理
 	FontManager * m_pFont;
 	// 背景
-	Bg* m_pBg;
+	BgStage1* m_pBg;
 	// ポーズ画面
 	ScenePause* m_pPause;
 	// プレイヤー
