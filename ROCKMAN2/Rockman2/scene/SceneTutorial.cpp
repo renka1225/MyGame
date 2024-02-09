@@ -856,18 +856,17 @@ void SceneTutorial::CreateEnemy()
 		{
 		case 0:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(2400.0f, 400.0f, 200.0f);
+			m_pEnemy[i]->Start(2200.0f, 400.0f, 400.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(3400.0f, 240.0f, 80.0f);
+			m_pEnemy[i]->Start(3300.0f, 240.0f, 80.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyBear;
-			//m_pEnemy[i]->Start(6500.0f, 400.0f, 40.0f);
-			m_pEnemy[i]->Start(1000.0f, 400.0f, 60.0f);
+			m_pEnemy[i]->Start(6900.0f, 400.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:

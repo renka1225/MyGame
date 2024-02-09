@@ -256,7 +256,7 @@ void BgTutorial::DrawEx(int scrollX, int scrollY)
 	// ジャンプ
 	DrawGraph(850 - scrollX, 650 - scrollY, m_jumpHandle, true);
 	// バスター
-	DrawGraph(2050 - scrollX, 650 - scrollY, m_shotHandle, true);
+	DrawGraph(2100 - scrollX, 650 - scrollY, m_shotHandle, true);
 	// 武器切り替え
 	DrawGraph(3000 - scrollX, 650 - scrollY, m_menuHandle, true);
 	// メタル

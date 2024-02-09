@@ -37,7 +37,7 @@ public:
 	// “G‚ª“|‚³‚ê‚½‚©æ“¾
 	bool IsDead() const { return m_isDead; }
 	// HP‚Ìæ“¾
-	int GetHp() const { return m_hp; }
+	float GetHp() const { return m_hp; }
 	// Œ»İÀ•W‚Ìæ“¾
 	Vec2 GetPos() const { return m_pos; }
 	// “–‚½‚è”»’è‚ğæ“¾‚·‚é
@@ -61,7 +61,7 @@ protected:
 	// ‘¶İ‚·‚é‚©ƒtƒ‰ƒO true:‘¶İ‚·‚é
 	bool m_isExist;	
 	// “G‚ÌHP
-	int m_hp;
+	float m_hp;
 	// “G‚ª“|‚³‚ê‚½‚©‚Ç‚¤‚© // true:“|‚³‚ê‚½
 	bool m_isDead;
 

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Game.h"
 #include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -20,13 +21,17 @@ namespace
 
 	// 当たり判定のサイズ
 	constexpr float kColWidth = 20.0f * kEnlarge;
-	constexpr float kColHeight = 12.0f * kEffectScale;
+	constexpr float kColHeight = 12.0f * 5.0f;
 
 	// 移動速度
-	constexpr float kSpeedX = 5.0f;
+	constexpr float kSpeedX = 4.0f;
 	constexpr float kSpeedY = 10.0f;
 	// 最大HP
-	constexpr int kHp = 15;
+	constexpr float kHp = 15.0f;
+	// 回復時間
+	constexpr float kRecoveryFrame = 30.0f;
+	// 回復間隔
+	constexpr float kRecoveryIntervalFrame = 120.0f;
 
 	/*待機アニメーション*/
 	// アニメーション
@@ -46,14 +51,19 @@ namespace
 
 	/*回復アニメーション*/
 	// アニメーション
-	constexpr int kRecUseFrame[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	constexpr int kRecUseFrame[] = { 0, 1, 2, 3, 4, 5};
 	// アニメーション1コマのフレーム数
-	constexpr int kRecAnimFrameNum = 30;
+	constexpr int kRecAnimFrameNum = 24;
 	// アニメーション1サイクルのフレーム数
 	constexpr int kRecAnimFrameCycle = _countof(kRecUseFrame) * kRecAnimFrameNum;
 
 
 	/*エフェクト*/
+	// 回復
+	constexpr int kRecEffectSize = 256; // エフェクトのサイズ
+	constexpr int kRecEffectFrame = 30; // エフェクトの表示フレーム
+
+	// ダメージ
 	constexpr int kDamageUseFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
 	constexpr int kEffectFrameNum = 16;
@@ -63,17 +73,25 @@ namespace
 
 
 EnemyBear::EnemyBear() :
+	m_recoveryFrame(kRecoveryFrame),
+	m_recoveryIntervalFrame(kRecoveryIntervalFrame),
+	m_recoveryEffectFrame(0),
 	m_animation(kIdle),
 	m_idleAnimFrame(0),
 	m_runAnimFrame(0),
 	m_recoveryAnimFrame(0)
 {
 	m_handle = LoadGraph("data/image/Enemy/bear.png");
+	m_recoveryEffect = LoadGraph("data/image/Effect/recovery.png");
+	m_recoverySE = LoadSoundMem("data/Sound/SE/recovery.mp3");
+	assert(m_recoveryEffect);
 }
 
 EnemyBear::~EnemyBear()
 {
 	DeleteGraph(m_handle);
+	DeleteGraph(m_recoveryEffect);
+	DeleteSoundMem(m_recoverySE);
 }
 
 void EnemyBear::Init(Bg* pBg, Player* pPlayer)
@@ -82,8 +100,14 @@ void EnemyBear::Init(Bg* pBg, Player* pPlayer)
 	m_pPlayer = pPlayer;
 	m_hp = kHp;
 	m_isDead = false;
-	m_animation = kIdle;
 	m_dir = kDirLeft;
+	m_recoveryFrame = kRecoveryFrame;
+	m_recoveryIntervalFrame = kRecoveryIntervalFrame;
+	m_recoveryEffectFrame = 0;
+	m_animation = kIdle;
+	m_idleAnimFrame = 0;
+	m_runAnimFrame = 0;
+	m_recoveryAnimFrame = 0;
 }
 
 void EnemyBear::Update()
@@ -111,19 +135,26 @@ void EnemyBear::Update()
 	// プレイヤーと熊の距離
 	float kDis = m_pos.x - m_pPlayer->GetPos().x;
 	// プレイヤーが近づいたら突進する
-	if(kDis <= 300.0f && kDis > -0.0f) // プレイヤーが左から近づいた場合
+	if(kDis <= 430.0f && kDis > 10.0f) // プレイヤーが左から近づいた場合
 	{
 		m_animation = kRun;
 		m_dir = kDirLeft;
 		m_vec.x = -kSpeedX;
 	}
-	if (kDis >= -300.0f && kDis < 0.0f)	// プレイヤーが右から近づいた場合
+	else if (kDis >= -430.0f && kDis < -10.0f)	// プレイヤーが右から近づいた場合
 	{
 		m_animation = kRun;
 		m_dir = kDirRight;
 		m_vec.x = kSpeedX;
 	}
-	if(fabsf(kDis) > 300.0f)
+	// プレイヤーが離れたら回復する
+	else if (fabsf(kDis) > 430.0f && fabsf(kDis) < 1000.0f)
+	{
+		m_animation = kRecovery;
+		m_vec.x = 0.0f;
+		UpdateRecovery();
+	}
+	else
 	{
 		m_animation = kIdle;
 		m_vec.x = 0.0f;
@@ -136,8 +167,8 @@ void EnemyBear::Update()
 void EnemyBear::Draw()
 {
 	// 中央座標を左上座標に変換
-	int x = m_pos.x - kWidth * 0.5f;
-	int y = m_pos.y - kHeight * 0.5f;
+	int x = static_cast<int>(m_pos.x - kWidth * 0.5);
+	int y = static_cast<int>(m_pos.y - kHeight * 0.5);
 
 	// スクロール量を反映する
 	x -= m_pBg->GetScrollX();
@@ -150,24 +181,18 @@ void EnemyBear::Draw()
 	// 熊表示
 	DrawBear(x, y);
 
-	// 消滅時ダメージエフェクト表示
-	if (m_isDead)
-	{
-		// 画像の切り出し座標
-		int effectFrame = m_damageFrame / kEffectFrameNum;
-		int effectSrcX = kDamageUseFrame[effectFrame] * kEffectWidth;
-		int effectSrcY = 0;
-		if (m_damageFrame > 0)
-		{
-			DrawRectRotaGraph(x - 10, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_damageEffect, true);
-		}
-	}
+	// エフェクト表示
+	DrawEffect(x, y);
 
 #ifdef _DEBUG
 	// スクロールが反映されないためコメントアウト
 	// 当たり判定の表示
-	m_colRect.Draw(0x00ff00, false);
-#endif
+	//m_colRect.Draw(0x00ff00, false);
+
+	// MEMO:熊の情報確認
+	//printfDx("熊のHP:%f\n", m_hp);
+	//printfDx("熊のアニメーション:%d\n", m_animation);
+#endif // _DEBUG
 }
 
 /// <summary>
@@ -203,6 +228,7 @@ void EnemyBear::HitCollision(Rect chipRect)
 			m_pos.x = chipRect.GetLeft() - kColWidth - 1.0f;
 			m_vec.x *= -1;
 			m_dir = kDirLeft;
+			m_animation = kIdle;
 
 		}
 		else if (m_vec.x < 0.0f) // 左に移動中
@@ -210,6 +236,7 @@ void EnemyBear::HitCollision(Rect chipRect)
 			m_pos.x = chipRect.GetRight() + kColWidth + 1.0f;
 			m_vec.x *= -1;
 			m_dir = kDirRight;
+			m_animation = kIdle;
 		}
 	}
 
@@ -261,6 +288,46 @@ void EnemyBear::OnDamage()
 }
 
 /// <summary>
+/// 回復処理
+/// </summary>
+void EnemyBear::UpdateRecovery()
+{
+	m_recoveryIntervalFrame--;
+
+	if (m_recoveryIntervalFrame < 0.0f)
+	{
+		m_recoveryFrame--;
+
+		// 回復する
+		if (m_recoveryFrame > 0.0f)
+		{
+			m_hp += 0.03f;
+			if (m_hp >= kHp)
+			{
+				m_hp = kHp;
+			}
+			// 回復エフェクト
+			m_recoveryEffectFrame += kRecEffectSize;
+			if (m_recoveryEffectFrame >= kRecEffectSize * 30)
+			{
+				m_recoveryEffectFrame = 0;
+			}
+			//	回復SE
+			if (CheckSoundMem(m_recoverySE) == 0 && m_pPlayer->GetPos().x > 6048.0f)
+			{
+				PlaySoundMem(m_recoverySE, DX_PLAYTYPE_BACK, true);
+			}
+		}
+		else
+		{
+			m_recoveryFrame = kRecoveryFrame;
+			m_recoveryIntervalFrame = kRecoveryIntervalFrame;
+			m_animation = kIdle;
+		}
+	}
+}
+
+/// <summary>
 /// アニメーションの処理
 /// </summary>
 void EnemyBear::UpdateAnim()
@@ -278,7 +345,7 @@ void EnemyBear::UpdateAnim()
 		m_runAnimFrame = 0;
 	}
 	// 回復アニメーション
-	m_idleAnimFrame++;
+	m_recoveryAnimFrame++;
 	if (m_recoveryAnimFrame >= kRecAnimFrameCycle)
 	{
 		m_recoveryAnimFrame = 0;
@@ -326,4 +393,31 @@ void EnemyBear::DrawBear(int x, int y)
 		DrawRectRotaGraph(x, y - 80, recSrcX, recSrcY, kWidth, kHeight, kEnlarge, 0.0f, m_handle, true, false);
 	}
 
+}
+
+/// <summary>
+/// エフェクトの描画
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+void EnemyBear::DrawEffect(int x, int y)
+{
+	// 回復エフェクト
+	if (m_animation == kRecovery && m_recoveryFrame > 0.0f)
+	{
+		DrawRectRotaGraph(x , y - 50, m_recoveryEffectFrame, 0, kRecEffectSize, kRecEffectSize, 1.0f, 0.0f, m_recoveryEffect, true);
+	}
+
+	// 死亡エフェクト
+	if (m_isDead)
+	{
+		// 画像の切り出し座標
+		int effectFrame = m_damageFrame / kEffectFrameNum;
+		int effectSrcX = kDamageUseFrame[effectFrame] * kEffectWidth;
+		int effectSrcY = 0;
+		if (m_damageFrame > 0)
+		{
+			DrawRectRotaGraph(x - 10, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_damageEffect, true);
+		}
+	}
 }

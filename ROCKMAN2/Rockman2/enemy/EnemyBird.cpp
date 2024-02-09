@@ -26,7 +26,7 @@ namespace
 	constexpr float kAnimationSize = 3.0f;
 
 	// 最大HP
-	constexpr int kHp = 1;
+	constexpr float kHp = 1.0f;
 
 	// アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };

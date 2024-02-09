@@ -17,12 +17,28 @@ public:
 	virtual void HitCollision(Rect chipRect) override;
 	virtual void OnDamage() override;
 
+	// 回復処理
+	void UpdateRecovery();
 	// アニメーション
 	void UpdateAnim();
 	// 熊の描画
 	void DrawBear(int x, int y);
+	// エフェクトの描画
+	void DrawEffect(int x, int y);
 
 private:
+	// 回復時間
+	float m_recoveryFrame;
+	// 回復の間隔
+	float m_recoveryIntervalFrame;
+	// 回復エフェクトの表示フレーム
+	int m_recoveryEffectFrame;
+
+	// 回復エフェクト
+	int m_recoveryEffect;
+	// 回復SE
+	int m_recoverySE;
+
 	// アニメーションの種類
 	enum Anim
 	{
