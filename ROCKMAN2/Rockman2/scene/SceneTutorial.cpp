@@ -40,7 +40,7 @@ namespace
 	/*演出*/
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
-	constexpr float kClearTime = 350.0f;
+	constexpr float kClearTime = 240.0f;
 	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
@@ -139,7 +139,7 @@ SceneTutorial::SceneTutorial() :
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
 	m_startSE = LoadSoundMem("data/sound/BGM/start.wav");
 	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
-	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.mp3");
+	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.wav");
 
 	// 画像
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
@@ -866,7 +866,8 @@ void SceneTutorial::CreateEnemy()
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(6500.0f, 400.0f, 40.0f);
+			//m_pEnemy[i]->Start(6500.0f, 400.0f, 40.0f);
+			m_pEnemy[i]->Start(1000.0f, 400.0f, 60.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:

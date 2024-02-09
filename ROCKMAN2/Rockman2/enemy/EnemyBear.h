@@ -17,8 +17,26 @@ public:
 	virtual void HitCollision(Rect chipRect) override;
 	virtual void OnDamage() override;
 
+	// アニメーション
+	void UpdateAnim();
+	// 熊の描画
+	void DrawBear(int x, int y);
+
 private:
-	// 歩きアニメーション
-	int m_walkAnimFrame;
+	// アニメーションの種類
+	enum Anim
+	{
+		kIdle,		// 待機
+		kRun,		// 突進
+		kRecovery,	// 回復
+	};
+	// 現在のアニメーション状態
+	Anim m_animation;
+	// 待機アニメーション
+	int m_idleAnimFrame;
+	// 突進アニメーション
+	int m_runAnimFrame;	
+	// 回復アニメーション
+	int m_recoveryAnimFrame;
 };
 

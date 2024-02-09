@@ -168,14 +168,14 @@ private:
 	int m_fire2Handle;	// 弾2
 	int m_fire3Handle;	// 弾3
 
-	// 画像のアニメーション
+	// アニメーションの種類
 	enum Anim
 	{
-		kIdle,
-		kWalk,
-		kShot,
-		kJump,
-		kDamage
+		kIdle,	// 待機
+		kWalk,	// 移動
+		kShot,	// ショット	
+		kJump,	// ジャンプ
+		kDamage	// ダメージ
 	};
 	// 現在のアニメーション状態
 	Anim m_animation;

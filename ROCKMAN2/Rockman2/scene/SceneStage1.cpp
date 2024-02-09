@@ -147,7 +147,7 @@ SceneStage1::SceneStage1():
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
-	m_fireworks = LoadGraph("data/image/Effect/fireworks.png");
+	m_fireworks = LoadGraph("data/image/Effect/clear/1.png");
 	assert(m_fireworks);
 }
 
@@ -1150,22 +1150,12 @@ void SceneStage1::DrawClearStaging()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:文字表示後花火をあげる
+	int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
 	int srcX = kFireworksSize * 20;	 // アニメーション
 	int srcY = 0;
 
-	if (m_clearStagingTime <= 180.0f && m_clearStagingTime > 120.0f)
+	if (m_clearStagingTime <= 180.0f)
 	{
-		int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
-		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
-	}
-	else if (m_clearStagingTime <= 120.0f && m_clearStagingTime > 60.0f)
-	{
-		int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
-		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
-	}
-	else
-	{
-		int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
 		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
 	}
 }
