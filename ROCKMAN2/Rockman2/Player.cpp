@@ -95,6 +95,7 @@ namespace
 }
 
 Player::Player() :
+	m_pBg(nullptr),
 	m_pMain(nullptr),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
@@ -167,9 +168,10 @@ Player::~Player()
 }
 
 /*初期化処理*/
-void Player::Init(Bg* pBg)
+void Player::Init(Bg* pBg, SceneMain* pMain)
 {
 	m_pBg = pBg;
+	m_pMain = pMain;
 	// HP
 	m_hp = kMaxHp;
 	// 現在位置
@@ -316,198 +318,25 @@ void Player::Update()
 	/*バスター発射*/
 	if (m_isBuster)
 	{
-		if (Pad::IsTrigger(PAD_INPUT_B))
-		{
-			m_animation = Anim::kShot;
-			m_shotAnimFrame = kShotAnimFrame;
-
-			ShotBuster* pShot = new ShotBuster;
-			// 新しい弾を生成する
-			pShot->Init();
-			pShot->SetMain(m_pMain);
-			pShot->SetPlayer(this);
-			pShot->Start(m_pos);
-			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pMain->AddShot(pShot);
-
-			// 弾発射のSEを鳴らす
-			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-		}
+		UpdateShotBuster();
 	}
 
 	/*メタル発射*/
 	if (m_isMetal)
 	{
-		if (Pad::IsTrigger(PAD_INPUT_B))
-		{
-			m_animation = Anim::kShot;
-			m_shotAnimFrame = kShotAnimFrame;
-
-			if (m_metalEnergy > 0)
-			{
-				ShotMetal* pShot = new ShotMetal;
-				// 新しい弾を生成する
-				pShot->Init();
-				pShot->SetMain(m_pMain);
-				pShot->SetPlayer(this);
-				pShot->Start(m_pos);
-				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pMain->AddShot(pShot);
-
-				// 弾発射のSEを鳴らす
-				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
-				if (pShot->IsExist())
-				{
-					// 弾エネルギーを0.25減らす
-					m_metalEnergy -= 0.25f;
-				}
-			}
-			else
-			{
-				m_metalEnergy = 0;
-			}
-		}
+		UpdateShotMetal();
 	}
 
 	/*ファイヤー発射*/
 	if (m_isFire)
 	{
-		// キーが押された瞬間を取得
-		if (Pad::IsTrigger(PAD_INPUT_B))
-		{
-			m_pressTime = GetNowCount();
-		}
-		// キーが押されているか判定
-		if (Pad::IsPress(PAD_INPUT_B))
-		{
-			m_animation = Anim::kShot;
-			m_shotAnimFrame = kShotAnimFrame;
-
-			if (m_fireEnergy > 0)
-			{
-				// 長押し中SEを流す
-				if (CheckSoundMem(m_shotFireSE) == 0)
-				{
-					PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
-				}
-				// パーティクルの表示
-				m_fireParticleFrame += kFireParticleSize;
-				if (m_fireParticleFrame >= kFireParticleSize * 30)
-				{
-					m_fireParticleFrame = 0;
-				}
-			}
-
-			m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
-		}
-		// キーが離された瞬間を判定
-		if (Pad::IsRelease(PAD_INPUT_B))
-		{
-			// SE停止
-			StopSoundMem(m_shotFireSE);
-
-			if (m_fireEnergy > 0) // 弾エネルギーが0以上
-			{
-				// 弾発射のSEを鳴らす
-				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
-				if (m_nowPressTime < 2000) // 長押し時間が2秒以下
-				{
-					m_fireEnergy--; // 弾エネルギーを1減らす
-					m_isSmallFire = true;
-					m_isMiddleFire = false;
-					m_isBigFire = false;
-					
-				}
-				else if (m_nowPressTime < 5000) // 長押し時間が5秒以下
-				{
-					if (m_fireEnergy - 3 < 0) // 弾エネルギーが足りない場合
-					{
-						m_fireEnergy--; // 弾エネルギーを1減らす
-						m_isSmallFire = true;
-						m_isMiddleFire = false;
-						m_isBigFire = false;
-					}
-					else
-					{
-						m_fireEnergy -= 3; // 弾エネルギーを3減らす
-						m_isSmallFire = false;
-						m_isMiddleFire = true;
-						m_isBigFire = false;
-					}
-				}
-				else // 長押し時間が5秒以上
-				{
-					if (m_fireEnergy - 5 < 0) // 弾エネルギーが足りない場合
-					{
-						m_fireEnergy--; // 弾エネルギーを1減らす
-						m_isSmallFire = true;
-						m_isMiddleFire = false;
-						m_isBigFire = false;
-					}
-					else
-					{
-						m_fireEnergy -= 5; // 弾エネルギーを5減らす
-						m_isSmallFire = false;
-						m_isMiddleFire = false;
-						m_isBigFire = true;
-					}
-				}
-
-				// 新しい弾を生成する
-				ShotFire* pShot = new ShotFire;
-				pShot->Init();
-				pShot->SetMain(m_pMain);
-				pShot->SetPlayer(this);
-				pShot->Start(m_pos);
-				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pMain->AddShot(pShot);
-				m_nowPressTime = 0;
-			}
-			else // 弾エネルギーが0以下
-			{
-				m_fireEnergy = 0; // 現在の弾エネルギーを0にする
-			}
-		}
+		UpdateShotFire();
 	}
 	
 	/*アイテム2号発射*/
 	if (m_isLineMove)
 	{
-		// ボタンを押したら発射
-		if (Pad::IsTrigger(PAD_INPUT_B))
-		{
-			m_animation = Anim::kShot;
-			m_shotAnimFrame = kShotAnimFrame;
-
-			if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
-			{
-				ShotLineMove* pShot = new ShotLineMove;
-				// 新しい弾を生成する
-				pShot->Init();
-				pShot->SetMain(m_pMain);
-				pShot->SetPlayer(this);
-				pShot->Start(m_pos);
-				// 以降更新やメモリの解放はSceneMainに任せる
-				m_pMain->AddShot(pShot);
-
-				// 弾発射のSEを鳴らす
-				PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
-				m_lineTime = 120;
-			}
-		}
-
-		// 画面内にある場合
-		if (m_pMain->GetIsExistLineMove())
-		{
-			m_lineTime--;
-			if (m_lineTime <= 0)
-			{
-				m_lineEnergy -= 0.03f; // エネルギーを減らす
-			}
-		}
+		UpdateShotLineMove();
 	}
 
 	/*ダメージ演出*/
@@ -610,6 +439,211 @@ void Player::Draw()
 	// 当たり判定の表示
 	// m_colRect.Draw(0x0000ff, false);
 #endif
+}
+
+/// <summary>
+/// バスター発射時処理
+/// </summary>
+void Player::UpdateShotBuster()
+{
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		ShotBuster* pShot = new ShotBuster;
+		// 新しい弾を生成する
+		pShot->Init();
+		pShot->SetMain(m_pMain);
+		pShot->SetPlayer(this);
+		pShot->Start(m_pos);
+		// 以降更新やメモリの解放はSceneMainに任せる
+		m_pMain->AddShot(pShot);
+
+		// 弾発射のSEを鳴らす
+		PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+	}
+}
+
+/// <summary>
+/// メタル発射時処理
+/// </summary>
+void Player::UpdateShotMetal()
+{
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		if (m_metalEnergy > 0)
+		{
+			ShotMetal* pShot = new ShotMetal;
+			// 新しい弾を生成する
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(m_pos);
+			// 以降更新やメモリの解放はSceneMainに任せる
+			m_pMain->AddShot(pShot);
+
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+			if (pShot->IsExist())
+			{
+				// 弾エネルギーを0.25減らす
+				m_metalEnergy -= 0.25f;
+			}
+		}
+		else
+		{
+			m_metalEnergy = 0;
+		}
+	}
+}
+
+/// <summary>
+/// ファイア発射時処理
+/// </summary>
+void Player::UpdateShotFire()
+{
+	// キーが押された瞬間を取得
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_pressTime = GetNowCount();
+	}
+	// キーが押されているか判定
+	if (Pad::IsPress(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		if (m_fireEnergy > 0)
+		{
+			// 長押し中SEを流す
+			if (CheckSoundMem(m_shotFireSE) == 0)
+			{
+				PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
+			}
+			// パーティクルの表示
+			m_fireParticleFrame += kFireParticleSize;
+			if (m_fireParticleFrame >= kFireParticleSize * 30)
+			{
+				m_fireParticleFrame = 0;
+			}
+		}
+
+		m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
+	}
+	// キーが離された瞬間を判定
+	if (Pad::IsRelease(PAD_INPUT_B))
+	{
+		// SE停止
+		StopSoundMem(m_shotFireSE);
+
+		if (m_fireEnergy > 0) // 弾エネルギーが0以上
+		{
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+			if (m_nowPressTime < 2000) // 長押し時間が2秒以下
+			{
+				m_fireEnergy--; // 弾エネルギーを1減らす
+				m_isSmallFire = true;
+				m_isMiddleFire = false;
+				m_isBigFire = false;
+
+			}
+			else if (m_nowPressTime < 5000) // 長押し時間が5秒以下
+			{
+				if (m_fireEnergy - 3 < 0) // 弾エネルギーが足りない場合
+				{
+					m_fireEnergy--; // 弾エネルギーを1減らす
+					m_isSmallFire = true;
+					m_isMiddleFire = false;
+					m_isBigFire = false;
+				}
+				else
+				{
+					m_fireEnergy -= 3; // 弾エネルギーを3減らす
+					m_isSmallFire = false;
+					m_isMiddleFire = true;
+					m_isBigFire = false;
+				}
+			}
+			else // 長押し時間が5秒以上
+			{
+				if (m_fireEnergy - 5 < 0) // 弾エネルギーが足りない場合
+				{
+					m_fireEnergy--; // 弾エネルギーを1減らす
+					m_isSmallFire = true;
+					m_isMiddleFire = false;
+					m_isBigFire = false;
+				}
+				else
+				{
+					m_fireEnergy -= 5; // 弾エネルギーを5減らす
+					m_isSmallFire = false;
+					m_isMiddleFire = false;
+					m_isBigFire = true;
+				}
+			}
+
+			// 新しい弾を生成する
+			ShotFire* pShot = new ShotFire;
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(m_pos);
+			// 以降更新やメモリの解放はSceneMainに任せる
+			m_pMain->AddShot(pShot);
+			m_nowPressTime = 0;
+		}
+		else // 弾エネルギーが0以下
+		{
+			m_fireEnergy = 0; // 現在の弾エネルギーを0にする
+		}
+	}
+}
+
+/// <summary>
+/// アイテム2号発射時処理
+/// </summary>
+void Player::UpdateShotLineMove()
+{
+	// ボタンを押したら発射
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
+		{
+			ShotLineMove* pShot = new ShotLineMove;
+			// 新しい弾を生成する
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(m_pos);
+			// 以降更新やメモリの解放はSceneMainに任せる
+			m_pMain->AddShot(pShot);
+
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+			m_lineTime = 120;
+		}
+	}
+
+	// 画面内にある場合
+	if (m_pMain->GetIsExistLineMove())
+	{
+		m_lineTime--;
+		if (m_lineTime <= 0)
+		{
+			m_lineEnergy -= 0.03f; // エネルギーを減らす
+		}
+	}
 }
 
 /// <summary>
@@ -1004,6 +1038,9 @@ void Player::RideLineMove(Rect shotRect)
 {
 	Rect lineMoveRect = shotRect; // アイテム2号の当たり判定
 
+	// 当たり判定更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
+
 	// アイテム2号に乗った場合
 	if (m_colRect.IsCollision(lineMoveRect))
 	{
@@ -1022,7 +1059,4 @@ void Player::RideLineMove(Rect shotRect)
 		m_isGround = true;
 		m_animation = Anim::kIdle;
 	}
-
-	// 当たり判定更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
 }

@@ -60,8 +60,6 @@ private:
 	BgStage1* m_pBg;
 	// ポーズ画面
 	ScenePause* m_pPause;
-	// プレイヤー
-	Player* m_pPlayer;
 	// ショット
 	std::vector<ShotBase*> m_pShot;
 	// 敵

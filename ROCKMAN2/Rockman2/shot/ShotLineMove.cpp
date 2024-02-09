@@ -30,6 +30,7 @@ ShotLineMove::~ShotLineMove()
 void ShotLineMove::Init()
 {
 	m_stopFrame = 60;
+	m_isExist = false;
 }
 
 void ShotLineMove::Update()

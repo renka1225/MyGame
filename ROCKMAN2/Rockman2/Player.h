@@ -14,14 +14,15 @@ public:
 	Player();
 	~Player();
 
-	// マップのポインタを設定する
-	//void SetBg(Bg* pBg) { m_pBg = pBg; }
-	void SetStage(SceneMain* pMain) { m_pMain = pMain; }
-
-	void Init(Bg* pBg);
+	void Init(Bg* pBg, SceneMain* pMain);
 	void Update();
 	void Draw();
 
+	// 弾発射時の処理
+	void UpdateShotBuster();	// バスター
+	void UpdateShotMetal();		// メタル
+	void UpdateShotFire();		// ファイア
+	void UpdateShotLineMove();	// 2号
 	// プレイヤーの表示
 	void DrawPlayer(int x, int y);
 	// ファイア溜め演出

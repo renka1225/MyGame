@@ -2,7 +2,6 @@
 #include "SceneMain.h"
 
 class BgTutorial;
-class Player;
 
 /// <summary>
 /// ステージ1クラス
@@ -54,20 +53,8 @@ public:
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
-	// フォント管理
-	FontManager* m_pFont;
 	// 背景
 	BgTutorial* m_pBg;
-	// ポーズ画面
-	ScenePause* m_pPause;
-	// プレイヤー
-	Player* m_pPlayer;
-	// ショット
-	std::vector<ShotBase*> m_pShot;
-	// 敵
-	std::vector<EnemyBase*> m_pEnemy;
-	// 回復アイテム
-	std::vector<RecoveryBase*> m_pRecovery;
 
 	// スタート演出の表示位置
 	Vec2 m_startDis;

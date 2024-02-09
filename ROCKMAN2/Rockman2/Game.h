@@ -11,7 +11,7 @@ namespace Game
 /*チュートリアルステージのマップの広さ*/
 namespace Tutorial
 {
-	constexpr int kMapWidth = 6480;
+	constexpr int kMapWidth = 7560;
 	constexpr int kMapHeight = 1080;
 }
 

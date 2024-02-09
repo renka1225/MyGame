@@ -109,8 +109,6 @@ SceneStage1::SceneStage1():
 	// 背景のメモリ確保
 	m_pBg = new BgStage1;
 	m_pBg->SetPlayer(m_pPlayer);
-	//m_pPlayer->SetBg(m_pBg);
-	m_pPlayer->SetStage(this);
 
 	// フォント
 	m_pFont = new FontManager;
@@ -252,7 +250,7 @@ void SceneStage1::Init()
 
 	// プレイヤーの初期化
 	assert(m_pPlayer);
-	m_pPlayer->Init(m_pBg);
+	m_pPlayer->Init(m_pBg, this);
 
 	// 背景の初期化
 	m_pBg->Init();
@@ -368,7 +366,7 @@ void SceneStage1::Update()
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
-			m_pPlayer->Init(m_pBg);
+			m_pPlayer->Init(m_pBg, this);
 			m_isSceneEnd = true;
 		}
 		// タイトルに戻るを選択
