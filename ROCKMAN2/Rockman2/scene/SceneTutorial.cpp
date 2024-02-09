@@ -102,7 +102,7 @@ SceneTutorial::SceneTutorial() :
 	m_gameScreenHandle = MakeScreen(Tutorial::kMapWidth, Tutorial::kMapHeight, true);
 
 	// プレイヤーのメモリ確保
-	m_pPlayer = new Player;
+	m_pPlayer = new Player{ this };
 
 	// 背景のメモリ確保
 	m_pBg = new BgTutorial;
@@ -246,7 +246,7 @@ void SceneTutorial::Init()
 
 	// プレイヤーの初期化
 	assert(m_pPlayer);
-	m_pPlayer->Init(m_pBg, this);
+	m_pPlayer->Init(m_pBg);
 
 	// 背景の初期化
 	m_pBg->Init();
@@ -362,7 +362,7 @@ void SceneTutorial::Update()
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
-			m_pPlayer->Init(m_pBg, this);
+			m_pPlayer->Init(m_pBg);
 			m_isSceneEnd = true;
 		}
 		// タイトルに戻るを選択

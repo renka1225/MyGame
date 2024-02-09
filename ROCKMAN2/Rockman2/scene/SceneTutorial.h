@@ -17,23 +17,23 @@ public:
 	virtual void Draw() override;
 
 	// ショットの追加
-	bool AddShot(ShotBase* pShot);
+	virtual bool AddShot(ShotBase* pShot) override;
 	// クリア演出
-	void UpdateClearStaging();
+	virtual void UpdateClearStaging() override;
 	//　敵の生成
-	void CreateEnemy();
+	virtual void CreateEnemy() override;
 	// アイテムの生成
-	void CreateItem(int enemyIndex);
+	virtual void CreateItem(int enemyIndex) override;
 	// 弾数、敵数等の表示
-	void DrawInfo();
+	virtual void DrawInfo() override;
 	// 武器切り替え画面表示
-	void DrawShotChange();
+	virtual void DrawShotChange() override;
 	// ポーズ画面の表示
-	void DrawPause();
+	virtual void DrawPause() override;
 	// スタート演出の描画
-	void DrawStartStaging();
+	virtual void DrawStartStaging() override;
 	// クリア時演出の描画
-	void DrawClearStaging();
+	virtual void DrawClearStaging() override;
 
 	// アイテムドロップ
 	void DropHpSmallRecovery(int enemyIndex);	// HP小回復
@@ -55,6 +55,8 @@ public:
 private:
 	// 背景
 	BgTutorial* m_pBg;
+	// ショット
+	std::vector<ShotBase*> m_pShot;
 
 	// スタート演出の表示位置
 	Vec2 m_startDis;

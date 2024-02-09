@@ -22,9 +22,6 @@
 #include <cassert>
 
 SceneMain::SceneMain() :
-	m_pFont(nullptr),
-	m_pPause(nullptr),
-	m_pPlayer(nullptr),
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
 	m_enemyTotalNum(0),
@@ -57,17 +54,5 @@ SceneMain::SceneMain() :
 }
 
 SceneMain::~SceneMain()
-{
-}
-
-void SceneMain::Init()
-{
-}
-
-void SceneMain::Update()
-{
-}
-
-void SceneMain::Draw()
 {
 }

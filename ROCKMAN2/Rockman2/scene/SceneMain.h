@@ -25,6 +25,8 @@ public:
 
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot) = 0;
+	// クリア演出
+	virtual void UpdateClearStaging() = 0;
 	//　敵の生成
 	virtual void CreateEnemy() = 0;
 	// アイテムの生成

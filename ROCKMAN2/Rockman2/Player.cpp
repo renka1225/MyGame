@@ -94,9 +94,9 @@ namespace
 	constexpr int kDeadFrame = 60;
 }
 
-Player::Player() :
+Player::Player(SceneMain* pMain) :
 	m_pBg(nullptr),
-	m_pMain(nullptr),
+	m_pMain(pMain),
 	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
 	m_isRight(true),
@@ -168,10 +168,9 @@ Player::~Player()
 }
 
 /*‰Šú‰»ˆ—*/
-void Player::Init(Bg* pBg, SceneMain* pMain)
+void Player::Init(Bg* pBg)
 {
 	m_pBg = pBg;
-	m_pMain = pMain;
 	// HP
 	m_hp = kMaxHp;
 	// Œ»İˆÊ’u
