@@ -31,11 +31,15 @@ SceneMain::SceneMain() :
 	m_isSceneClear(false),
 	m_isSceneTitle(false),
 	m_isSceneEnd(false),
+	m_isRetry(false),
 	m_fadeAlpha(255),
 	m_stagingFade(0),
 	m_startStagingTime(0.0f),
 	m_clearStagingTime(0.0f),
-	m_gameoverStagingTime(0.0f)
+	m_gameoverStagingTime(0.0f),
+	m_readyCount(0),
+	m_shakeFrame(0),
+	m_ampFrame(0)
 {
 	// âπì«Ç›çûÇ›
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");

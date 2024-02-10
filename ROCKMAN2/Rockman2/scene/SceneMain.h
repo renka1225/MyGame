@@ -52,7 +52,6 @@ public:
 
 	// アイテム2号の表示状態を取得
 	bool GetIsExistLineMove() const {return m_isExistLineMove; }
-
 	// シーン移動の取得
 	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
@@ -100,6 +99,7 @@ protected:
 	bool m_isSceneClear;	// クリア画面に移動
 	bool m_isSceneTitle;	// タイトル画面に移動
 	bool m_isSceneEnd;		// ゲーム画面を終了
+	bool m_isRetry;			// リトライする
 
 	// フェードイン、アウト
 	int m_fadeAlpha;
@@ -109,6 +109,12 @@ protected:
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
+
+	// Readyの表示カウント
+	int m_readyCount;
+	// 画面揺れ演出
+	int m_shakeFrame;
+	float m_ampFrame;
 
 	// 音
 	int m_bgm;			// BGM

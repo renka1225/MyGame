@@ -81,24 +81,7 @@ namespace
 	constexpr int kFramePosY = Game::kScreenHeight * 0.5 - 199;
 }
 
-SceneStage1::SceneStage1():
-	m_drawValue(0),
-	m_isGetFullHpRecovery(false),
-	m_enemyTotalNum(kEnemyMax),
-	m_time(0.0f),
-	m_isExistLineMove(false),
-	m_isSceneGameOver(false),
-	m_isSceneClear(false),
-	m_isSceneEnd(false),
-	m_isRetry(false),
-	m_fadeAlpha(240),
-	m_stagingFade(0),
-	m_startStagingTime(kStartTime),
-	m_clearStagingTime(kClearTime),
-	m_gameoverStagingTime(kGameoverTime),
-	m_readyCount(kReadyCount),
-	m_shakeFrame(0),
-	m_ampFrame(0)
+SceneStage1::SceneStage1()
 {
 	// ÉQÅ[ÉÄâÊñ ï`âÊêÊÇÃê∂ê¨
 	m_gameScreenHandle = MakeScreen(Stage1::kMapWidth, Stage1::kMapHeight, true);
