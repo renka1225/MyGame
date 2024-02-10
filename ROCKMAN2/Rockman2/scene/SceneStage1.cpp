@@ -29,10 +29,13 @@ namespace
 	// 登場する敵数
 	constexpr int kEnemyMax = 10;
 
+	// プレイヤーの初期位置
+	constexpr float kPlayerInitPosX = 350.0f;
+	constexpr float kPlayerInitPosY = 250.0f;
+
 	// プレイヤーの画像サイズ
 	constexpr int kPlayerWidth = 32;
 	constexpr int kPlayerHeight = 64;
-
 	// マップチップのサイズ
 	constexpr int kMapChipWidth = 32;
 	constexpr int kMapChipHeight = 32;
@@ -233,7 +236,7 @@ void SceneStage1::Init()
 
 	// プレイヤーの初期化
 	assert(m_pPlayer);
-	m_pPlayer->Init(m_pBg, this);
+	m_pPlayer->Init(m_pBg, this, { kPlayerInitPosX, kPlayerInitPosY });
 
 	// 背景の初期化
 	m_pBg->Init();
@@ -349,7 +352,7 @@ void SceneStage1::Update()
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
-			m_pPlayer->Init(m_pBg, this);
+			m_pPlayer->Init(m_pBg, this, { kPlayerInitPosX, kPlayerInitPosY });
 			m_isSceneEnd = true;
 		}
 		// タイトルに戻るを選択

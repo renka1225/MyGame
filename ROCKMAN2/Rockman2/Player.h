@@ -14,7 +14,7 @@ public:
 	Player();
 	~Player();
 
-	void Init(Bg* pBg, SceneMain* pMain);
+	void Init(Bg* pBg, SceneMain* pMain, Vec2 initPos);
 	void Update();
 	void Draw();
 

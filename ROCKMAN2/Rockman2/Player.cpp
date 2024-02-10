@@ -23,10 +23,6 @@ namespace
 	// 初速度
 	constexpr float kVelocity = -12.5f;
 
-	// プレイヤーの初期位置
-	constexpr float kPosX = 350.0f;
-	constexpr float kPosY = 450.0f;
-
 	// プレイヤーの最大HP
 	constexpr int kMaxHp = 10;
 	// 最大弾エネルギー
@@ -99,7 +95,6 @@ namespace
 Player::Player() :
 	m_pBg(nullptr),
 	m_pMain(nullptr),
-	m_pos(kPosX, kPosY),
 	m_move(0.0f, 0.0f),
 	m_isRight(true),
 	m_isGround(false),
@@ -170,15 +165,15 @@ Player::~Player()
 }
 
 /*初期化処理*/
-void Player::Init(Bg* pBg, SceneMain* pMain)
+void Player::Init(Bg* pBg, SceneMain* pMain, Vec2 initPos)
 {
 	m_pBg = pBg;
 	m_pMain = pMain;
 	// HP
 	m_hp = kMaxHp;
 	// 現在位置
-	m_pos.x = kPosX;
-	m_pos.y = kPosY;
+	m_pos.x = initPos.x;
+	m_pos.y = initPos.y;
 	// 向き
 	m_isRight = true;
 	// ジャンプフラグ
