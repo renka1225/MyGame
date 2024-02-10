@@ -104,7 +104,7 @@ SceneStage1::SceneStage1():
 	m_gameScreenHandle = MakeScreen(Stage1::kMapWidth, Stage1::kMapHeight, true);
 
 	// プレイヤーのメモリ確保
-	m_pPlayer = new Player{ this };
+	m_pPlayer = new Player;
 
 	// 背景のメモリ確保
 	m_pBg = new BgStage1;
@@ -250,7 +250,7 @@ void SceneStage1::Init()
 
 	// プレイヤーの初期化
 	assert(m_pPlayer);
-	m_pPlayer->Init(m_pBg);
+	m_pPlayer->Init(m_pBg, this);
 
 	// 背景の初期化
 	m_pBg->Init();
@@ -366,7 +366,7 @@ void SceneStage1::Update()
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
 		{
-			m_pPlayer->Init(m_pBg);
+			m_pPlayer->Init(m_pBg, this);
 			m_isSceneEnd = true;
 		}
 		// タイトルに戻るを選択
@@ -418,6 +418,7 @@ void SceneStage1::Update()
 		if (!m_pShot[i]) continue;
 
 		m_pShot[i]->SetBg(m_pBg);
+		m_pShot[i]->SetMain(this);
 		m_pShot[i]->Update();
 
 		// アイテム2号の場合

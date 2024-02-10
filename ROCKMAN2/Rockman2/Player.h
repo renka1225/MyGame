@@ -11,10 +11,10 @@ class Bg;
 class Player
 {
 public:
-	Player(SceneMain* pMain);
+	Player();
 	~Player();
 
-	void Init(Bg* pBg);
+	void Init(Bg* pBg, SceneMain* pMain);
 	void Update();
 	void Draw();
 
