@@ -1079,7 +1079,7 @@ void SceneTutorial::DrawShotChange()
 
 	// Œ»Ý‚ÌEŠÊ”‚ð•\Ž¦
 	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont());
-	DrawFormatStringToHandle(kTextPosX, kBarPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "%d", m_pPlayer->GetFullHpRecovery());
+	DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4, m_fullHpRecHandle, true);
 }
 
 /// <summary>
@@ -1101,7 +1101,7 @@ void SceneTutorial::DrawStartStaging()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
 	DrawGraph(m_startDis.x, Game::kScreenHeight * 0.5f - 220, m_startHandle, true);
 
-	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 170), Game::kScreenHeight * 0.5 - 100,
+	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 190), Game::kScreenHeight * 0.5 - 100,
 		"“G‚ð‚·‚×‚Ä‚½‚¨‚¹I\n", 0xffffff, m_pFont->GetFontStaging());
 
 	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 60), Game::kScreenHeight * 0.5 + 30,

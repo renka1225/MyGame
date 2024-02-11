@@ -48,7 +48,12 @@ namespace
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
 	// 花火の画像切り出しサイズ
-	constexpr int kFireworksSize = 256;
+	constexpr int kFireworksWidth = 92;
+	constexpr int kFireworksHeight = 94;
+	// 花火の打ち上げ速度
+	constexpr float kFireworksSpeed = 15.0f;
+	// 花火の表示フレーム
+	constexpr int kfireworksFrame = 50;
 
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
@@ -133,8 +138,12 @@ SceneStage1::SceneStage1()
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
-	m_fireworks = LoadGraph("data/image/Effect/clear/1.png");
-	assert(m_fireworks);
+	m_fireworks1 = LoadGraph("data/image/Effect/clear/1.png");
+	m_fireworks2 = LoadGraph("data/image/Effect/clear/2.png");
+	m_fireworks3 = LoadGraph("data/image/Effect/clear/3.png");
+	assert(m_fireworks1);
+	assert(m_fireworks2);
+	assert(m_fireworks3);
 }
 
 SceneStage1::~SceneStage1()
@@ -227,6 +236,7 @@ void SceneStage1::Init()
 	// 演出時間の初期化
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
+	m_fireworksFrame = 0.0f;
 	m_shakeFrame = 0;
 	m_readyCount = kReadyCount;
 	m_ampFrame = 0;
@@ -259,8 +269,16 @@ void SceneStage1::Init()
 	m_isSceneTitle = false;
 	m_isSceneEnd = false;
 	m_isRetry = false;
+
+	// 花火の初期位置
+	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) };
+	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) + 250.0f};
+	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) + 300.0f};
 }
 
+/// <summary>
+/// 更新
+/// </summary>
 void SceneStage1::Update()
 {
 	/*スタート演出*/
@@ -400,7 +418,7 @@ void SceneStage1::Update()
 		}
 	}
 
-	// プレイヤーの更新
+	/*プレイヤーの更新*/
 	if (m_enemyTotalNum > 0)
 	{
 		m_pPlayer->Update();
@@ -444,6 +462,9 @@ void SceneStage1::Update()
 #endif
 }
 
+/// <summary>
+/// 描画
+/// </summary>
 void SceneStage1::Draw()
 {
 	// 書き込み
@@ -850,9 +871,25 @@ void SceneStage1::UpdateClearStaging()
 		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
 		return;
 	}
-	// 花火の音を流す
-	else if (m_clearStagingTime <= kClearTime - 120.0f || m_clearStagingTime > 0.0f)
+	// 花火の更新
+	else if (m_clearStagingTime <= kClearTime - 80.0f && m_clearStagingTime > 0.0f)
 	{
+		// 花火を上にあげる
+		m_fireworksFrame++;
+		if (m_clearStagingTime >= 60.0f)
+		{
+			m_fireworks1Pos.y -= kFireworksSpeed;
+		}
+		if(m_clearStagingTime <= 120.0f)
+		{
+			m_fireworks2Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 80.0f)
+		{
+			m_fireworks3Pos.y -= kFireworksSpeed;
+		}
+		
+		// 音を流す
 		if (CheckSoundMem(m_fireworksSE) == 0)
 		{
 			PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
@@ -1110,7 +1147,7 @@ void SceneStage1::DrawShotChange()
 
 	// 現在のE缶数を表示
 	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont());
-	DrawFormatStringToHandle(kTextPosX, kBarPosY + kIntervalY * 4, 0xffffff, m_pFont->GetFont(), "%d", m_pPlayer->GetFullHpRecovery());
+	DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4, m_fullHpRecHandle, true);
 }
 
 /// <summary>
@@ -1163,12 +1200,19 @@ void SceneStage1::DrawClearStaging()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// TODO:文字表示後花火をあげる
-	int disX = GetRand(Game::kScreenWidth - kFrameSize) + kFrameSize; // 表示位置
-	int srcX = kFireworksSize * 20;	 // アニメーション
+	int srcX = kFireworksWidth * (m_fireworksFrame % kfireworksFrame);	 // アニメーション
 	int srcY = 0;
 
-	if (m_clearStagingTime <= 180.0f)
+	if (m_clearStagingTime <= 180.0f && m_clearStagingTime > 110.0f)
 	{
-		DrawRectRotaGraph(disX, Game::kScreenHeight * 0.5f - 300, srcX, srcY, kFireworksSize, kFireworksSize, 3.0f, 0.0f, m_fireworks, true);
+		DrawRectRotaGraph(m_fireworks1Pos.x, m_fireworks1Pos.y, srcX, srcY, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks1, true);
+	}
+	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 70.0f)
+	{
+		DrawRectRotaGraph(m_fireworks2Pos.x, m_fireworks2Pos.y, srcX, srcY, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
+	}
+	if (m_clearStagingTime <= 80.0f && m_clearStagingTime > 0.0f)
+	{
+		DrawRectRotaGraph(m_fireworks3Pos.x, m_fireworks3Pos.y, srcX, srcY, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
 	}
 }

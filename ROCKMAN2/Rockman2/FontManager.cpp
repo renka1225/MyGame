@@ -4,8 +4,7 @@
 FontManager::FontManager()
 {
 	/*フォント*/
-// ファイルのロード
-	// LPCSTR font_path = "data/851Gkktt_005.ttf";	// 読み込むフォントファイルのパス
+	// ファイルのロード
 	LPCSTR font_path = "data/Kaisotai-Next-UP-B.otf";
 
 	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0)
@@ -17,7 +16,6 @@ FontManager::FontManager()
 		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
 	}
 
-	//m_fontHandle = CreateFontToHandle("851ゴチカクット", 28, -1);
 	m_fontHandle = CreateFontToHandle("廻想体 ネクスト UP B", 28, -1);
 	m_fontHandle2 = CreateFontToHandle("廻想体 ネクスト UP B", 36, -1);
 	m_fontHandle3 = CreateFontToHandle("廻想体 ネクスト UP B", 45, -1);

@@ -84,6 +84,10 @@ protected:
 	Vec2 m_startDis;
 	// クリア演出の表示位置
 	Vec2 m_clearDis;
+	// 花火の表示位置
+	Vec2 m_fireworks1Pos;	// 花火1
+	Vec2 m_fireworks2Pos;	// 花火2
+	Vec2 m_fireworks3Pos;	// 花火3
 
 	// プレイヤーの現在地
 	Vec2 m_playerPos;
@@ -116,6 +120,7 @@ protected:
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
+	int m_fireworksFrame;			// 花火の表示フレーム 
 
 	// Readyの表示カウント
 	int m_readyCount;
@@ -134,8 +139,11 @@ protected:
 
 	// 画像
 	int m_frameHandle;		// 枠
+	int m_fullHpRecHandle;  // E缶の画像	
 	int m_shotSelectHandle;	// 選択中の武器
 	int m_startHandle;		// スタート演出の画像
-	int m_fireworks;		// 花火
+	int m_fireworks1;		// 花火1
+	int m_fireworks2;		// 花火2
+	int m_fireworks3;		// 花火3
 };
 

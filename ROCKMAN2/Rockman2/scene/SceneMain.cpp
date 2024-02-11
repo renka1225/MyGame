@@ -37,6 +37,7 @@ SceneMain::SceneMain() :
 	m_startStagingTime(0.0f),
 	m_clearStagingTime(0.0f),
 	m_gameoverStagingTime(0.0f),
+	m_fireworksFrame(0.0f),
 	m_readyCount(0),
 	m_shakeFrame(0),
 	m_ampFrame(0)
@@ -52,9 +53,12 @@ SceneMain::SceneMain() :
 
 	// âÊëúì«Ç›çûÇ›
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
+	m_fullHpRecHandle = LoadGraph("data/image/Recovery/fullHp.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
-	m_fireworks = LoadGraph("data/image/Effect/fireworks.png");
+	m_fireworks1 = LoadGraph("data/image/Effect/1.png");
+	m_fireworks1 = LoadGraph("data/image/Effect/2.png");
+	m_fireworks1 = LoadGraph("data/image/Effect/3.png");
 }
 
 SceneMain::~SceneMain()
