@@ -846,53 +846,53 @@ void SceneStage1::CreateEnemy()
 		switch (i)
 		{
 		case 0:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(600.0f, 400.0f, 200.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(1580.0f, 500.0f, 250.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
-			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1080.0f, 240.0f, 30.0f);
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2970.0f, 150.0f, 450.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1600.0f, 600.0f, 400.0f);
+			m_pEnemy[i]->Start(3350.0f, 400.0f, 260.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 3:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(2052.0f, 450.0f, 40.0f);
+			m_pEnemy[i]->Start(3300.0f, 1800.0f, 250.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 4:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(2850.0f, 320.0f, 40.0f);
+			m_pEnemy[i]->Start(1080.0f, 1600.0f, 120.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 5:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(3240.0f, 250.0f, 200.0f);
+			m_pEnemy[i]->Start(2160.0f, 1200.0f, 300.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 6:
-			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(4000.0f, 600.0f, 270.0f);
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(800.0f, 2000.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(4050.0f, 250.0f, 200.0f);
+			m_pEnemy[i]->Start(1250.0f, 2400.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 8:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(4800.0f, 100.0f, 100.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(4000.0f, 2400.0f, 180.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 9:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(6000.0f, 900.0f, 200.0f);
+			m_pEnemy[i]->Start(5130.0f, 2430.0f, 400.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:
