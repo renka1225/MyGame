@@ -21,7 +21,7 @@ namespace
 }
 
 ShotMetal::ShotMetal() :
-	m_energy(28)
+	m_energy(0)
 {
 	// 弾のグラフィックロード
 	m_handle = LoadGraph("data/image/Shot/shotMetal.png");

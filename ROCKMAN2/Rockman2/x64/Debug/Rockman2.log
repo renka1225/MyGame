@@ -1,8 +1,10 @@
 ﻿  SceneStage1.cpp
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(239,21): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(552,74): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(552,48): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(235,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(236,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(237,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(550,74): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(550,48): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1170,53): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1170,22): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1172,112): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
@@ -13,10 +15,38 @@ C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1195,78): warning C4244
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1195,46): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1198,85): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1198,52): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1208,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1208,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1212,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1212,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1216,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1216,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1205,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1205,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1209,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1209,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1213,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(1213,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  SceneTutorial.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(82,32): warning C4244: '初期化中': 'double' から 'const int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(90,27): warning C4244: '初期化中': 'double' から 'const int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(239,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(240,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(241,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(537,24): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(538,24): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(553,75): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(553,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1137,53): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1137,22): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1139,112): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1142,117): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1153,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1160,42): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1162,78): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1162,46): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1165,85): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1165,52): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1172,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1172,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1176,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1176,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1180,55): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneTutorial.cpp(1180,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  コードを生成中...
   Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe

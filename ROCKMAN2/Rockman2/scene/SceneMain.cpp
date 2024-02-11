@@ -37,7 +37,9 @@ SceneMain::SceneMain() :
 	m_startStagingTime(0.0f),
 	m_clearStagingTime(0.0f),
 	m_gameoverStagingTime(0.0f),
-	m_fireworksFrame(0.0f),
+	m_fireworks1Frame(0),
+	m_fireworks2Frame(0),
+	m_fireworks3Frame(0),
 	m_readyCount(0),
 	m_shakeFrame(0),
 	m_ampFrame(0)

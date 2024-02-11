@@ -17,7 +17,7 @@ namespace
 
 	// 拡大率
 	constexpr float kEnlarge = 3.4f;
-	constexpr float kEffectScale = 3.0f;
+	constexpr float kEffectScale = 5.0f;
 
 	// 移動速度
 	constexpr float kSpeedX = 1.0f;
@@ -38,7 +38,7 @@ namespace
 	// エフェクト
 	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 16;
+	constexpr int kEffectFrameNum = 40;
 	// ダメージ演出フレーム数
 	constexpr int kDamageFrame = 60;
 }
@@ -123,16 +123,6 @@ void EnemyBird::Draw()
 	int srcY = kHeight * m_dir;
 
 	DrawRectRotaGraph(x, y, srcX, srcY, kWidth, kHeight, kEnlarge, 0.0f, m_handle, true, false);
-
-	// ダメージエフェクト表示
-	// 画像の切り出し座標
-	int effectFrame = m_damageFrame / kEffectFrameNum;
-	int effectSrcX = kUseFrame[animFrame] * kEffectWidth;
-	int effectSrcY = kHeight;
-	if (m_damageFrame > 0)
-	{
-		DrawRectRotaGraph(x, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEnlarge, 0.0f, m_damageEffect, true);
-	}
 
 	// 消滅時ダメージエフェクト表示
 	if (m_isDead)

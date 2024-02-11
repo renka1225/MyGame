@@ -53,20 +53,22 @@ namespace
 	// アニメーション
 	constexpr int kRecUseFrame[] = { 0, 1, 2, 3, 4, 5};
 	// アニメーション1コマのフレーム数
-	constexpr int kRecAnimFrameNum = 24;
+	constexpr int kRecAnimFrameNum = 40;
 	// アニメーション1サイクルのフレーム数
 	constexpr int kRecAnimFrameCycle = _countof(kRecUseFrame) * kRecAnimFrameNum;
 
 
 	/*エフェクト*/
 	// 回復
-	constexpr int kRecEffectSize = 256; // エフェクトのサイズ
-	constexpr int kRecEffectFrame = 30; // エフェクトの表示フレーム
+	// エフェクトのサイズ
+	constexpr int kRecEffectSize = 256;
+	// エフェクトの表示フレーム
+	constexpr int kRecEffectFrame = 30;
 
 	// ダメージ
 	constexpr int kDamageUseFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 16;
+	constexpr int kEffectFrameNum = 32;
 	// ダメージ演出フレーム数
 	constexpr int kDamageFrame = 60;
 }

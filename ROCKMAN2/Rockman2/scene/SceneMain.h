@@ -120,7 +120,9 @@ protected:
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
-	int m_fireworksFrame;			// 花火の表示フレーム 
+	int m_fireworks1Frame;			// 花火1の表示フレーム 
+	int m_fireworks2Frame;			// 花火2の表示フレーム 
+	int m_fireworks3Frame;			// 花火3の表示フレーム 
 
 	// Readyの表示カウント
 	int m_readyCount;
