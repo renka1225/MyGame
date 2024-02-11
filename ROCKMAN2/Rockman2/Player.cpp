@@ -329,6 +329,10 @@ void Player::Update()
 	{
 		UpdateShotFire();
 	}
+	else
+	{
+		StopSoundMem(m_shotFireSE);
+	}
 	
 	/*ƒAƒCƒeƒ€2†”­Ë*/
 	if (m_isLineMove)

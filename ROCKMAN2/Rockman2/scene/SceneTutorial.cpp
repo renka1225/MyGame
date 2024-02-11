@@ -1114,7 +1114,10 @@ void SceneTutorial::DrawShotChange()
 
 	// Œ»Ý‚ÌEŠÊ”‚ð•\Ž¦
 	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont());
-	DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4 - 5, m_fullHpRecHandle, true);
+	if (m_pPlayer->GetFullHpRecovery() == 1)
+	{
+		DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4 - 5, m_fullHpRecHandle, true);
+	}
 }
 
 /// <summary>

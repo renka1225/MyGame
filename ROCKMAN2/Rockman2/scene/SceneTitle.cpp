@@ -120,6 +120,9 @@ void SceneTitle::Update()
 			m_isSceneStart = true;
 			StopSoundMem(m_bgm);
 			break;
+		case kOption:
+			m_isSceneOption = true;
+			break;
 		case kExit:
 			DxLib_End();
 			StopSoundMem(m_bgm);

@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "SceneTitle.h"
+#include "SceneOption.h"
 #include "SceneStageSelect.h"
 #include "SceneTutorial.h"
 #include "SceneStage1.h"
@@ -12,6 +13,7 @@ SceneManager::SceneManager() :
 {
 	// クラスのメモリを確保する
 	m_pTitle = new SceneTitle;
+	m_pOption = new SceneOption;
 	m_pStageSelect = new SceneStageSelect;
 	m_pTutorial = new SceneTutorial;
 	m_pStage1 = new SceneStage1;
@@ -24,6 +26,9 @@ SceneManager::~SceneManager()
 	// クラスのメモリを解放する
 	delete m_pTitle;
 	m_pTitle = nullptr;
+
+	delete m_pOption;
+	m_pOption = nullptr;
 
 	delete m_pStageSelect;
 	m_pStageSelect = nullptr;
@@ -49,6 +54,10 @@ void SceneManager::Init()
 		// タイトルシーン
 	case kSceneTitle:
 		m_pTitle->Init();
+		break;
+		// 操作説明
+	case kSceneOption:
+		m_pOption->Init();
 		break;
 		// ステージ選択シーン
 	case kSceneStageSelect:
@@ -88,6 +97,20 @@ void SceneManager::Update()
 		{
 			m_runScene = kSceneStageSelect;
 			m_pStageSelect->Init();
+		}
+		else if (m_pTitle->IsSceneOption())
+		{
+			m_runScene = kSceneOption;
+			m_pOption->Init();
+		}
+		break;
+
+		// 操作説明
+	case kSceneOption:
+		if (m_pOption->IsSceneTitle())
+		{
+			m_runScene = kSceneTitle;
+			m_pTitle->Init();
 		}
 		break;
 
@@ -200,6 +223,10 @@ void SceneManager::Update()
 	case kSceneTitle:
 		m_pTitle->Update();
 		break;
+		// 操作説明
+	case kSceneOption:
+		m_pOption->Update();
+		break;
 		// ステージ選択シーン
 	case kSceneStageSelect:
 		m_pStageSelect->Update();
@@ -233,6 +260,10 @@ void SceneManager::Draw()
 		// タイトルシーン
 	case kSceneTitle:
 		m_pTitle->Draw();
+		break;
+		// 操作説明
+	case kSceneOption:
+		m_pOption->Draw();
 		break;
 		// ステージ選択シーン
 	case kSceneStageSelect:

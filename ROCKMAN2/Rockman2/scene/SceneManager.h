@@ -1,6 +1,7 @@
 #pragma once
 
 class SceneTitle;
+class SceneOption;
 class SceneStageSelect;
 class SceneTutorial;
 class SceneStage1;
@@ -25,6 +26,7 @@ private:
 	enum SceneSelect
 	{
 		kSceneTitle,
+		kSceneOption,
 		kSceneStageSelect,
 		kSceneTutorial,
 		kSceneStage1,
@@ -38,6 +40,7 @@ private:
 private:
 	// SceneManagerÇ≈ä«óùÇ∑ÇÈÉVÅ[Éì
 	SceneTitle* m_pTitle;
+	SceneOption* m_pOption;
 	SceneStageSelect* m_pStageSelect;
 	SceneTutorial* m_pTutorial;
 	SceneStage1* m_pStage1;
