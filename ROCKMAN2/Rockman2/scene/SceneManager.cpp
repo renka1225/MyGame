@@ -122,16 +122,16 @@ void SceneManager::Update()
 			m_runScene = kSceneClear;
 			m_pClear->Init();
 		}
-		else if (m_pTutorial->IsSceneTitle())		// タイトル
+		else if (m_pTutorial->IsSceneTitle())	// タイトル
 		{
 			m_runScene = kSceneTitle;
 			m_pTitle->Init();
-			m_pStage1->Init();
+			m_pTutorial->Init();
 		}
 		else if (m_pTutorial->IsSceneEnd())		// リトライ
 		{
-			m_runScene = kSceneStage1;
-			m_pStage1->Init();
+			m_runScene = kSceneTutorial;
+			m_pTutorial->Init();
 		}
 		break;
 

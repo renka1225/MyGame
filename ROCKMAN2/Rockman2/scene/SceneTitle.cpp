@@ -7,13 +7,13 @@ namespace
 {
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
-	constexpr int kCharPosY = 700;
+	constexpr int kCharPosY = 720;
 
 	// 選択カーソルの初期位置
 	constexpr int kInitSelectPosX = 950;
-	constexpr int kInitSelectPosY = 580;
+	constexpr int kInitSelectPosY = 540;
 	// 選択カーソルの移動量
-	constexpr int kSelectmoveY = 120;
+	constexpr int kSelectmoveY = 185;
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 450;
 	constexpr int kSelectSizeY = 700;
@@ -157,7 +157,7 @@ void SceneTitle::Draw()
 	DrawBg();
 	
 	// ロゴ表示
-	DrawRotaGraph(Game::kScreenWidth * 0.5f, Game::kScreenHeight * 0.25f, 1.0f, 0.0f, m_logoHandle, true);
+	DrawRotaGraph(Game::kScreenWidth * 0.5, Game::kScreenHeight * 0.25 - 40, 1.0f, 0.0f, m_logoHandle, true);
 	// 文字表示
 	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
 	// 選択カーソルの表示
@@ -182,11 +182,11 @@ void SceneTitle::DrawBg()
 
 	// スクロール量を計算する
 	int scrollBg2 = static_cast<int>(m_bgMove * 0.25f) % static_cast<int>(bg2Size.width * kBgScale);
-	int scrollBg3 = static_cast<int>(m_bgMove * 0.5f) % static_cast<int>(bg3Size.width * kBgScale);
+	int scrollBg3 = static_cast<int>(m_bgMove * 0.4f) % static_cast<int>(bg3Size.width * kBgScale);
 	int scrollBg4 = static_cast<int>(m_bgMove) % static_cast<int>(bg4Size.width * kBgScale);
 
 	// 描画
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 240);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawGraph(0, 0, m_bgHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -220,7 +220,7 @@ void SceneTitle::DrawBg()
 			m_bg4Handle, true);
 	}
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 130);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 50);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x00004d, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

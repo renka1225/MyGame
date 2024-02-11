@@ -17,6 +17,12 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
+	// 弾の更新
+	virtual void UpdateShot(Rect playerRect) override;
+	// 敵の更新
+	virtual void UpdateEnemy(Rect playerRect) override;
+	// 回復アイテムの更新
+	virtual void UpdateRecovery(Rect playerRect) override;
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot) override;
 	// クリア演出
@@ -43,15 +49,6 @@ public:
 	void DropShotGreatRecovery(int enemyIndex);	// 弾大回復
 	void DropLifeRecovery(int enemyIndex);		// 残機回復
 	void DropFullHpRecovery();					// HP全回復
-
-	// アイテム2号の表示状態を取得
-	//bool GetIsExistLineMove() const { return m_isExistLineMove; }
-
-	//// シーン移動の取得
-	//bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
-	//bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
-	//bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
-	//bool IsSceneEnd() const { return m_isSceneEnd; }			// プレイ画面を終了
 
 private:
 	/*ポインタ設定*/

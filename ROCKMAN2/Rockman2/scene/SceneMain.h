@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Vec2.h"
+#include "Rect.h"
 
 class FontManager;
 class Bg;
@@ -23,6 +24,12 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	// 弾の更新
+	virtual void UpdateShot(Rect playerRect) = 0;
+	// 敵の更新
+	virtual void UpdateEnemy(Rect playerRect) = 0;
+	// 回復アイテムの更新
+	virtual void UpdateRecovery(Rect playerRect) = 0;
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot) = 0;
 	// クリア演出

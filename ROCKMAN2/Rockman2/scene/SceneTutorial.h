@@ -16,6 +16,12 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
+	// 弾の更新
+	virtual void UpdateShot(Rect playerRect) override;
+	// 敵の更新
+	virtual void UpdateEnemy(Rect playerRect) override;
+	// 回復アイテムの更新
+	virtual void UpdateRecovery(Rect playerRect) override;
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot) override;
 	// クリア演出
