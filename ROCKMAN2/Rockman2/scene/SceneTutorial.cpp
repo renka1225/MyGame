@@ -1178,7 +1178,7 @@ void SceneTutorial::DrawClearStaging()
 	{
 		DrawRectRotaGraph(m_fireworks2Pos.x, m_fireworks2Pos.y, m_fireworks2Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
 	}
-	if (m_clearStagingTime <= 80.0f && m_clearStagingTime > 0.0f)
+	if (m_clearStagingTime <= 100.0f && m_clearStagingTime > 0.0f)
 	{
 		DrawRectRotaGraph(m_fireworks3Pos.x, m_fireworks3Pos.y, m_fireworks3Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
 	}

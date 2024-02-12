@@ -43,7 +43,7 @@ namespace
 	/*演出*/
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
-	constexpr float kClearTime = 240.0f;
+	constexpr float kClearTime = 180.0f;
 	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
@@ -873,12 +873,12 @@ void SceneStage1::UpdateClearStaging()
 	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
 	{
 		// 花火を上にあげる
-		if (m_clearStagingTime >= 170.0f)
+		if (m_clearStagingTime <= 180.0f)
 		{
 			m_fireworks1Frame += kFireworksWidth;
 			m_fireworks1Pos.y -= kFireworksSpeed;
 		}
-		if(m_clearStagingTime <= 160.0f)
+		if(m_clearStagingTime <= 100.0f)
 		{
 			m_fireworks2Frame += kFireworksWidth;
 			m_fireworks2Pos.y -= kFireworksSpeed;
@@ -1198,7 +1198,7 @@ void SceneStage1::DrawClearStaging()
 	DrawStringToHandle(Game::kScreenWidth * 0.5 - 70, Game::kScreenHeight * 0.5 - 100,
 		"CLEAR!\n", 0xffe44d, m_pFont->GetFontStaging());
 
-	DrawFormatStringToHandle(Game::kScreenWidth * 0.5 - 260, Game::kScreenHeight * 0.5 + 30,
+	DrawFormatStringToHandle(Game::kScreenWidth * 0.5 - 300, Game::kScreenHeight * 0.5 + 30,
 		0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -1211,7 +1211,7 @@ void SceneStage1::DrawClearStaging()
 	{
 		DrawRectRotaGraph(m_fireworks2Pos.x, m_fireworks2Pos.y, m_fireworks2Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
 	}
-	if (m_clearStagingTime <= 80.0f && m_clearStagingTime > 0.0f)
+	if (m_clearStagingTime <= 100.0f && m_clearStagingTime > 0.0f)
 	{
 		DrawRectRotaGraph(m_fireworks3Pos.x, m_fireworks3Pos.y, m_fireworks3Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
 	}
