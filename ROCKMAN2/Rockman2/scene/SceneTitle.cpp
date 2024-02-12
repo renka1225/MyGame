@@ -70,7 +70,10 @@ void SceneTitle::Init()
 	m_bgMove = kBgMove;
 
 	// BGM‚ð–Â‚ç‚·
-	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+	if (CheckSoundMem(m_bgm) == 0)
+	{
+		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
+	}
 }
 
 void SceneTitle::Update()

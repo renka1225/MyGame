@@ -202,8 +202,16 @@ void SceneManager::Update()
 	case kSceneGameOver:
 		if (m_pGameOver->IsSeneRetry())			 // リトライ
 		{
-			m_runScene = kSceneStage1;
-			m_pStage1->Init();
+			if (m_pTutorial->IsSceneGameOver())
+			{
+				m_runScene = kSceneTutorial;
+				m_pTutorial->Init();
+			}
+			if (m_pStage1->IsSceneGameOver())
+			{
+				m_runScene = kSceneStage1;
+				m_pStage1->Init();
+			}
 		}
 		else if (m_pGameOver->IsSceneTitle())	// タイトル
 		{

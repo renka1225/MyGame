@@ -45,7 +45,7 @@ namespace
 	// アニメーション
 	constexpr int kRunUseFrame[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 	// アニメーション1コマのフレーム数
-	constexpr int kRunAnimFrameNum = 18;
+	constexpr int kRunAnimFrameNum = 36;
 	// アニメーション1サイクルのフレーム数
 	constexpr int kRunAnimFrameCycle = _countof(kRunUseFrame) * kRunAnimFrameNum;
 

@@ -220,6 +220,35 @@ void Player::Init(Bg* pBg, SceneMain* pMain, Vec2 initPos)
 /*プレイヤーの更新*/
 void Player::Update()
 {
+	/*死亡時演出*/
+	m_deadFrame--;
+	if (m_deadFrame < 0)
+	{
+		m_deadFrame = 0;
+	}
+
+	/*プレイヤーが穴に落下した場合*/
+	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage1::kMapHeight)
+	{
+		// HPを0にする
+		m_hp -= kMaxHp;
+		m_life--;
+
+		// 残機が減るごとにSEを鳴らす
+		PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
+		if (m_hp <= 0)
+		{
+			m_hp = 0;
+		}
+		return;
+	}
+
+	/*プレイヤーのHPが0以下になった場合*/
+	if (m_hp <= 0)
+	{
+		return;
+	}
+
 	// パッドを使用する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
@@ -345,29 +374,6 @@ void Player::Update()
 	if (m_damageFrame < 0)
 	{
 		m_damageFrame = 0;
-	}
-
-	/*プレイヤーが穴に落下した場合*/
-	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage1::kMapHeight)
-	{
-		// HPを0にする
-		m_hp -= kMaxHp;
-		m_life--;
-		
-		// 残機が減るごとにSEを鳴らす
-		PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
-		if (m_hp <= 0)
-		{
-			m_hp = 0;
-		}
-		return;
-	}
-
-	/*死亡時演出*/
-	m_deadFrame--;
-	if(m_deadFrame < 0)
-	{
-		m_deadFrame = 0;
 	}
 
 	/*アニメーション*/
