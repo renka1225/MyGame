@@ -232,9 +232,9 @@ void SceneStage1::Init()
 	// 演出時間の初期化
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
-	m_fireworks1Frame = 0.0f;
-	m_fireworks2Frame = 0.0f;
-	m_fireworks3Frame = 0.0f;
+	m_fireworks1Frame = 0;
+	m_fireworks2Frame = 0;
+	m_fireworks3Frame = 0;
 	m_shakeFrame = 0;
 	m_readyCount = kReadyCount;
 	m_ampFrame = 0;
@@ -555,7 +555,7 @@ void SceneStage1::Draw()
 
 		if (m_readyCount > 0)
 		{
-			DrawStringToHandle(Game::kScreenWidth * 0.5 - 30, Game::kScreenHeight * 0.5, "READY", 0xffffff, m_pFont->GetFontStaging());
+			DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 30), static_cast<int>(Game::kScreenHeight * 0.5), "READY", 0xffffff, m_pFont->GetFontStaging());
 		}
 	}
 
@@ -1203,12 +1203,12 @@ void SceneStage1::DrawStartStaging()
 {
 	// フェードイン→アウト
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
-	DrawGraph(m_startDis.x, Game::kScreenHeight * 0.5f - 220, m_startHandle, true);
+	DrawGraph(static_cast<int>(m_startDis.x), static_cast<int>(Game::kScreenHeight * 0.5 - 220), m_startHandle, true);
 
-	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 170), Game::kScreenHeight * 0.5 - 100,
+	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 170), static_cast<int>(Game::kScreenHeight * 0.5 - 100),
 		"敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
 
-	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 60), Game::kScreenHeight * 0.5 + 30,
+	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 60), static_cast<int>(Game::kScreenHeight * 0.5 + 30),
 		0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
@@ -1219,33 +1219,33 @@ void SceneStage1::DrawStartStaging()
 void SceneStage1::DrawClearStaging()
 {
 	// タイム
-	int milliSec = m_time * 1000 / 60;
+	int milliSec = static_cast<int>(m_time * 1000 / 60);
 	int sec = (milliSec / 1000) % 60;
 	int min = (milliSec / 1000) / 60;
 	milliSec %= 1000;
 
 	// クリアの文字を表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
-	DrawGraph(0, Game::kScreenHeight * 0.5f - 200, m_startHandle, true);
+	DrawGraph(0, static_cast<int>(Game::kScreenHeight * 0.5 - 200), m_startHandle, true);
 
-	DrawStringToHandle(Game::kScreenWidth * 0.5 - 70, Game::kScreenHeight * 0.5 - 100,
+	DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 70), static_cast<int>(Game::kScreenHeight * 0.5 - 100),
 		"CLEAR!\n", 0xffe44d, m_pFont->GetFontStaging());
 
-	DrawFormatStringToHandle(Game::kScreenWidth * 0.5 - 300, Game::kScreenHeight * 0.5 + 30,
+	DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 300), static_cast<int>(Game::kScreenHeight * 0.5 + 30),
 		0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// 文字表示後花火をあげる
 	if (m_clearStagingTime <= 200.0f && m_clearStagingTime > 70.0f)
 	{
-		DrawRectRotaGraph(m_fireworks1Pos.x, m_fireworks1Pos.y, m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks1, true);
+		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks1, true);
 	}
 	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 50.0f)
 	{
-		DrawRectRotaGraph(m_fireworks2Pos.x, m_fireworks2Pos.y, m_fireworks2Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
+		DrawRectRotaGraph(static_cast<int>(m_fireworks2Pos.x), static_cast<int>(m_fireworks2Pos.y), m_fireworks2Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
 	}
 	if (m_clearStagingTime <= 100.0f && m_clearStagingTime > 0.0f)
 	{
-		DrawRectRotaGraph(m_fireworks3Pos.x, m_fireworks3Pos.y, m_fireworks3Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
+		DrawRectRotaGraph(static_cast<int>(m_fireworks3Pos.x), static_cast<int>(m_fireworks3Pos.y), m_fireworks3Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
 	}
 }

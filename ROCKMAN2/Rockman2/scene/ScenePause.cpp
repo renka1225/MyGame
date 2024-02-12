@@ -16,7 +16,7 @@ namespace
 	constexpr float kPosY = 230.0f;
 
 	// メニュー画面の表示移動量
-	constexpr int kMenuMove = 25.0f;
+	constexpr int kMenuMove = 25;
 
 	// 武器選択中カーソルの初期位置
 	constexpr float kInitSelectShotPosY = 445.0f;
@@ -144,7 +144,7 @@ void ScenePause::Update()
 		m_menuHeight += kMenuMove;
 		if (m_menuHeight > kHeight * 0.5)
 		{
-			m_menuHeight = kHeight * 0.5;
+			m_menuHeight = static_cast<int>(kHeight * 0.5);
 		}
 
 		UpdateChangeShot();
@@ -158,7 +158,7 @@ void ScenePause::Update()
 		m_menuHeight += kMenuMove;
 		if (m_menuHeight > kHeight * 0.5)
 		{
-			m_menuHeight = kHeight * 0.5;
+			m_menuHeight = static_cast<int>(kHeight * 0.5);
 		}
 
 		UpdatePause();
@@ -172,22 +172,26 @@ void ScenePause::Draw()
 	if (m_isChangeMenuExist)
 	{
 		// メニュー画面表示演出
-		DrawExtendGraph(m_menuPos.x, m_menuPos.y - m_menuHeight, m_menuPos.x + kWidth, m_menuPos.y + m_menuHeight, m_menuBg, true);
+		DrawExtendGraph(static_cast<int>(m_menuPos.x), static_cast<int>(m_menuPos.y - m_menuHeight), 
+			static_cast<int>(m_menuPos.x + kWidth), static_cast<int>(m_menuPos.y + m_menuHeight), 
+			m_menuBg, true);
 		// changeの文字表示
-		DrawStringToHandle(m_menuPos.x + 200 , m_menuPos.y - 150, "SHOT", 0xffffff, m_pFont->GetFont2());
+		DrawStringToHandle(static_cast<int>(m_menuPos.x + 200), static_cast<int>(m_menuPos.y - 150), "SHOT", 0xffffff, m_pFont->GetFont2());
 		// 選択中のカーソルを描画
-		DrawGraph(m_selectShotPos.x, m_selectShotPos.y, m_selectHandle, true);
+		DrawGraph(static_cast<int>(m_selectShotPos.x), static_cast<int>(m_selectShotPos.y), m_selectHandle, true);
 	}
 
 	// ポーズ画面表示
 	if (m_isPauseExist)
 	{
 		// メニュー画面表示演出
-		DrawExtendGraph(m_menuPos.x, m_menuPos.y - m_menuHeight, m_menuPos.x + kWidth, m_menuPos.y + m_menuHeight, m_menuBg, true);
+		DrawExtendGraph(static_cast<int>(m_menuPos.x), static_cast<int>(m_menuPos.y - m_menuHeight),
+			static_cast<int>(m_menuPos.x + kWidth), static_cast<int>(m_menuPos.y + m_menuHeight), 
+			m_menuBg, true);
 		// PAUSEの文字表示
-		DrawStringToHandle(m_menuPos.x + 200, m_menuPos.y - 150, "PAUSE", 0xffffff, m_pFont->GetFont2());
+		DrawStringToHandle(static_cast<int>(m_menuPos.x + 200), static_cast<int>(m_menuPos.y - 150), "PAUSE", 0xffffff, m_pFont->GetFont2());
 		// 選択中のカーソルを描画
-		DrawGraph(m_selectPausePos.x , m_selectPausePos.y, m_selectHandle, true);
+		DrawGraph(static_cast<int>(m_selectPausePos.x), static_cast<int>(m_selectPausePos.y), m_selectHandle, true);
 	}
 }
 

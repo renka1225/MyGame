@@ -26,15 +26,15 @@ namespace
 	// プレイヤーの最大HP
 	constexpr int kMaxHp = 10;
 	// 最大弾エネルギー
-	constexpr float kMaxShot = 10;
+	constexpr float kMaxShot = 10.0f;
 	// メタルの最大エネルギー
-	constexpr float kMaxMetalShot = 5;
+	constexpr float kMaxMetalShot = 5.0f;
 	// 残機
 	constexpr int kLife = 3;
 
 	// アイテムの回復量
-	constexpr float kSmallRecovery = 2;	// 小アイテム
-	constexpr float kGreatRecovery = 5;	// 大アイテム
+	constexpr int kSmallRecovery = 2;	// 小アイテム
+	constexpr int kGreatRecovery = 5;	// 大アイテム
 
 	// アイテム2号のサイズ
 	constexpr int kShotWidth = 52;
@@ -49,8 +49,8 @@ namespace
 	constexpr int kPlayerHeight = 296;
 
 	// プレイヤーの当たり判定のサイズ
-	constexpr int kPlayerColX = kPlayerWidth * kScale - 40;
-	constexpr int kPlayerColY = kPlayerHeight * kScale;
+	constexpr int kPlayerColX = static_cast<int>(kPlayerWidth * kScale - 40);
+	constexpr int kPlayerColY = static_cast<int>(kPlayerHeight * kScale);
 
 	// エフェクトのサイズ
 	constexpr int kEffectWidth = 32;
@@ -59,8 +59,8 @@ namespace
 	constexpr float kEffectScale = 3.0f;
 
 	// ファイアの大きさ
-	constexpr float kFireWidth = 32.0f;
-	constexpr float kFireHeight = 32.0f;
+	constexpr int kFireWidth = 32;
+	constexpr int kFireHeight = 32;
 	// ファイアの拡大率
 	constexpr float kSmallScale = 0.5f;
 	constexpr float kMiddleScale = 0.8f;
@@ -417,8 +417,8 @@ void Player::Draw()
 	if (m_damageFrame % 10 >= 8) return;
 
 	// スクロール量を反映する
-	int x = m_pos.x;
-	int y = m_pos.y;
+	int x = static_cast<int>(m_pos.x);
+	int y = static_cast<int>(m_pos.y);
 	x -= m_pBg->GetScrollX();
 	y -= m_pBg->GetScrollY();
 
@@ -972,10 +972,10 @@ void Player::ShotSmallRecovery() // 弾小回復
 	}
 	else if (m_isLineMove) // 2号
 	{
-		m_isLineMove += kSmallRecovery;
-		if (m_isLineMove > kMaxShot)
+		m_lineEnergy += kSmallRecovery;
+		if (m_lineEnergy > kMaxShot)
 		{
-			m_isLineMove = kMaxShot;
+			m_lineEnergy = kMaxShot;
 		}
 	}
 }
@@ -998,12 +998,12 @@ void Player::ShotGreatRecovery() // 弾大回復
 			m_fireEnergy = kMaxShot;
 		}
 	}
-	else if (m_isLineMove) // 2号
+	else if (m_lineEnergy) // 2号
 	{
-		m_isLineMove += kSmallRecovery;
-		if (m_isLineMove > kMaxShot)
+		m_lineEnergy += kSmallRecovery;
+		if (m_lineEnergy > kMaxShot)
 		{
-			m_isLineMove = kMaxShot;
+			m_lineEnergy = kMaxShot;
 		}
 	}
 }

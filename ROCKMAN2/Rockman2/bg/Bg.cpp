@@ -17,8 +17,8 @@ namespace
 	constexpr float kChipScale = 3.0f;
 
 	// マップの広さ
-	constexpr int kMapWidth = kChipWidth * kChipScale * kChipNumX;
-	constexpr int kMapHeight = kChipHeight * kChipScale * kChipNumY;
+	constexpr int kMapWidth = static_cast<int>(kChipWidth * kChipScale * kChipNumX);
+	constexpr int kMapHeight = static_cast<int>(kChipHeight * kChipScale * kChipNumY);
 
 	// マップチップの配列情報
 	constexpr int kChipData[kChipNumY][kChipNumX] = { 0, 0 };

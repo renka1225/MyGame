@@ -174,7 +174,7 @@ void SceneGameOver::Draw()
 	// 文字表示
 	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
 	// 選択カーソルの表示
-	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
+	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
 
 #ifdef _DEBUG
 	DrawString(10, 10, "ゲームオーバー", 0xff0000);
@@ -205,8 +205,8 @@ void SceneGameOver::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg2 + index * bg2Size.width * kBgScale,
-			Game::kScreenHeight - bg2Size.height * kBgScale,
+			static_cast<int>(scrollBg2 + index * bg2Size.width * kBgScale),
+			static_cast<int>(Game::kScreenHeight - bg2Size.height * kBgScale),
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg2Handle, true);
@@ -215,8 +215,8 @@ void SceneGameOver::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg3 + index * bg3Size.width * kBgScale,
-			Game::kScreenHeight - bg3Size.height * kBgScale,
+			static_cast<int>(scrollBg3 + index * bg3Size.width * kBgScale),
+			static_cast<int>(Game::kScreenHeight - bg3Size.height * kBgScale),
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg3Handle, true);

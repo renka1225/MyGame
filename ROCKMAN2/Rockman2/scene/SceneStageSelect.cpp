@@ -173,7 +173,7 @@ void SceneStageSelect::Draw()
 	DrawGraph(300, 150, m_selectCharHandle, true);
 	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
 	// 選択カーソルの表示
-	DrawRectRotaGraph(m_selectPos.x, m_selectPos.y, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
+	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
 
 	// フェード描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
@@ -204,8 +204,8 @@ void SceneStageSelect::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg2 + index * bg2Size.width * kBgScale,
-			Game::kScreenHeight - bg2Size.height * kBgScale,
+			static_cast<int>(scrollBg2 + index * bg2Size.width * kBgScale),
+			static_cast<int>(Game::kScreenHeight - bg2Size.height * kBgScale),
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg2Handle, true);
@@ -214,8 +214,8 @@ void SceneStageSelect::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg3 + index * bg3Size.width * kBgScale,
-			Game::kScreenHeight - bg3Size.height * kBgScale,
+			static_cast<int>(scrollBg3 + index * bg3Size.width * kBgScale),
+			static_cast<int>(Game::kScreenHeight - bg3Size.height * kBgScale),
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg3Handle, true);
@@ -224,8 +224,8 @@ void SceneStageSelect::DrawBg()
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(
-			scrollBg4 + index * bg4Size.width * kBgScale,
-			Game::kScreenHeight - bg4Size.height * kBgScale,
+			static_cast<int>(scrollBg4 + index * bg4Size.width * kBgScale),
+			static_cast<int>(Game::kScreenHeight - bg4Size.height * kBgScale),
 			0, 0,
 			kBgScale, 0.0f,
 			m_bg4Handle, true);

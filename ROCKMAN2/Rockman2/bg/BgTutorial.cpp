@@ -38,8 +38,8 @@ namespace
 	constexpr int kChipNumY = 20;
 
 	// マップの広さ
-	constexpr int kMapWidth = kChipWidth * kChipScale * kChipNumX;
-	constexpr int kMapHeight = kChipHeight * kChipScale * kChipNumY;
+	constexpr int kMapWidth = static_cast<int>(kChipWidth * kChipScale * kChipNumX);
+	constexpr int kMapHeight = static_cast<int>(kChipHeight * kChipScale * kChipNumY);
 
 	// マップチップの配列情報
 	constexpr int kChipData[kChipNumY][kChipNumX] =
@@ -153,8 +153,8 @@ void BgTutorial::Draw()
 	{
 		for (int x = 0; x < kChipNumX; x++)
 		{
-			int posX = x * kChipWidth * kChipScale - scrollX;
-			int posY = y * kChipHeight * kChipScale - scrollY;
+			int posX = static_cast<int>(x * kChipWidth * kChipScale - scrollX);
+			int posY = static_cast<int>(y * kChipHeight * kChipScale - scrollY);
 
 			// 画面外は描画しない
 			if (posX < 0 - kChipWidth) continue;
@@ -325,10 +325,10 @@ bool BgTutorial::IsColPlayer()
 			// 地面、床以外は当たらない
 			if (kChipData[y][x] == 0) continue;
 
-			int chipLeft = x * kChipWidth * kChipScale;
-			int chipRight = chipLeft + kChipWidth * kChipScale;
-			int chipTop = y * kChipHeight * kChipScale;
-			int chipBottom = chipTop + kChipHeight * kChipScale;
+			int chipLeft = static_cast<int>(x * kChipWidth * kChipScale);
+			int chipRight = static_cast<int>(chipLeft + kChipWidth * kChipScale);
+			int chipTop = static_cast<int>(y * kChipHeight * kChipScale);
+			int chipBottom = static_cast<int>(chipTop + kChipHeight * kChipScale);
 
 			// 絶対に当たらない場合
 			if (chipLeft > playerRight) continue;
@@ -359,10 +359,10 @@ bool BgTutorial::IsCollision(Rect rect, Rect& chipRect)
 			// 地面、壁以外当たらない
 			if (kChipData[y][x] == 0) continue;
 
-			int chipLeft = x * kChipWidth * kChipScale;
-			int chipRight = chipLeft + kChipWidth * kChipScale;
-			int chipTop = y * kChipHeight * kChipScale;
-			int chipBottom = chipTop + kChipHeight * kChipScale;
+			int chipLeft = static_cast<int>(x * kChipWidth * kChipScale);
+			int chipRight = static_cast<int>(chipLeft + kChipWidth * kChipScale);
+			int chipTop = static_cast<int>(y * kChipHeight * kChipScale);
+			int chipBottom = static_cast<int>(chipTop + kChipHeight * kChipScale);
 
 			// 絶対に当たらない場合
 			if (chipLeft > rect.GetRight()) continue;

@@ -109,8 +109,8 @@ void EnemyBird::Update()
 void EnemyBird::Draw()
 {
 	// 中央座標を左上座標に変換
-	int x = m_pos.x - kWidth * 0.5f;
-	int y = m_pos.y - kHeight * 0.5f;
+	int x = static_cast<int>(m_pos.x - kWidth * 0.5);
+	int y = static_cast<int>(m_pos.y - kHeight * 0.5);
 
 	// スクロール量を反映する
 	x -= m_pBg->GetScrollX();

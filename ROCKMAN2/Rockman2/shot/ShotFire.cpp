@@ -13,8 +13,8 @@ namespace
 	// ’e‚ÌˆÚ“®‘¬“x
 	constexpr float kSpeed = 15.0f;
 	// ƒVƒ‡ƒbƒg‚Ì‘å‚«‚³
-	constexpr int kWidth = 32.0f;
-	constexpr int kHeight = 32.0f;
+	constexpr int kWidth = 32;
+	constexpr int kHeight = 32;
 	// ‰æ‘œ‚ÌŠg‘å—¦
 	constexpr float kSmallScale = 0.5f;
 	constexpr float kMiddleScale = 0.8f;
