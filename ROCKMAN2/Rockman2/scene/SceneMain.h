@@ -59,6 +59,8 @@ public:
 
 	// アイテム2号の表示状態を取得
 	bool GetIsExistLineMove() const {return m_isExistLineMove; }
+	// メニューが開かれているか取得する
+	bool GetIsExistMenu() const {return m_isExistMenu; }
 	// シーン移動の取得
 	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
 	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
@@ -101,6 +103,8 @@ protected:
 
 	// アイテム2号が画面上に存在するか
 	bool m_isExistLineMove;
+	// メニュー、武器切り替え画面が表示されているか
+	bool m_isExistMenu;
 
 	// HPの回復バーの長さ
 	int m_drawValue;

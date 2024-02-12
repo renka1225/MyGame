@@ -27,6 +27,7 @@ SceneMain::SceneMain() :
 	m_enemyTotalNum(0),
 	m_time(0.0f),
 	m_isExistLineMove(false),
+	m_isExistMenu(false),
 	m_isSceneGameOver(false),
 	m_isSceneClear(false),
 	m_isSceneTitle(false),

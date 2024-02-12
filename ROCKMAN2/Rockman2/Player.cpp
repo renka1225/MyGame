@@ -279,7 +279,7 @@ void Player::Update()
 		m_isJump = false;
 
 		/*ZキーorAボタンでジャンプ*/
-		if (Pad::IsTrigger(PAD_INPUT_A))
+		if (Pad::IsTrigger(PAD_INPUT_A) && !m_pMain->GetIsExistMenu())
 		{
 			m_isGround = false;
 			m_isJump = true;

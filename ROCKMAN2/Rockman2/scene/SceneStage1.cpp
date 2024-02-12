@@ -27,7 +27,7 @@ namespace
 	constexpr int kRecoveryMax = 5;
 
 	// 登場する敵数
-	constexpr int kEnemyMax = 10;
+	constexpr int kEnemyMax = 15;
 
 	// プレイヤーの初期位置
 	constexpr float kPlayerInitPosX = 350.0f;
@@ -48,7 +48,7 @@ namespace
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
 	// 花火の打ち上げ速度
-	constexpr float kFireworksSpeed = 18.0f;
+	constexpr float kFireworksSpeed = 20.0f;
 	// 花火の画像切り出しサイズ
 	constexpr int kFireworksWidth = 92;
 	constexpr int kFireworksHeight = 94;
@@ -124,7 +124,7 @@ SceneStage1::SceneStage1()
 	}
 
 	// 音読み込み
-	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
+	m_bgm = LoadSoundMem("data/sound/BGM/stage2.wav");
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
 	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
@@ -260,6 +260,7 @@ void SceneStage1::Init()
 		}
 	}
 	m_isExistLineMove = false;
+	m_isExistMenu = false;
 
 	// 画面遷移の初期化
 	m_isSceneGameOver = false;
@@ -359,8 +360,7 @@ void SceneStage1::Update()
 	// ポーズ画面が表示されている場合画面を止める
 	if (m_pPause->IsPause())
 	{
-		// BGM一時停止
-		StopSoundMem(m_bgm);
+		m_isExistMenu = true;
 
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
@@ -382,7 +382,11 @@ void SceneStage1::Update()
 	}
 
 	/*武器切り替え画面が表示されている場合画面を止める*/
-	if (m_pPause->IsSelectShotExist()) return;
+	if (m_pPause->IsSelectShotExist())
+	{
+		m_isExistMenu = true;
+		return;
+	}
 
 	/*タイムカウント*/
 	if (m_enemyTotalNum > 0)
@@ -448,11 +452,15 @@ void SceneStage1::Update()
 		m_shakeFrame = 0;
 	}
 
-	/*パッドの入力状態を取得*/
-	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	/*メニューを閉じる際にジャンプしないようにする*/
+	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsSelectShotExist())
+	{
+		m_isExistMenu = false;
+	}
 
 #ifdef _DEBUG
 	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
+	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (Pad::IsTrigger(pad & PAD_INPUT_START))
 	{
 		m_enemyTotalNum = 0;
@@ -909,50 +917,75 @@ void SceneStage1::CreateEnemy()
 		{
 		case 0:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1580.0f, 500.0f, 250.0f);
+			m_pEnemy[i]->Start(1000.0f, 500.0f, 40.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2970.0f, 150.0f, 450.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(1580.0f, 500.0f, 250.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(3350.0f, 400.0f, 260.0f);
+			m_pEnemy[i]->Start(2350.0f, 500.0f, 200.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 3:
-			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(3300.0f, 1800.0f, 250.0f);
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2970.0f, 150.0f, 450.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 4:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1080.0f, 1600.0f, 120.0f);
+			m_pEnemy[i]->Start(3350.0f, 400.0f, 260.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 5:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2160.0f, 1200.0f, 300.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(3300.0f, 1800.0f, 250.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 6:
-			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(800.0f, 2000.0f, 200.0f);
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(2200.0f, 1600.0f, 180.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1250.0f, 2400.0f, 200.0f);
+			m_pEnemy[i]->Start(1200.0f, 1600.0f, 140.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 8:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2160.0f, 1200.0f, 300.0f);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
+			break;
+		case 9:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(1000.0f, 1200.0f, 380.0f);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
+			break;
+		case 10:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(800.0f, 2000.0f, 200.0f);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
+			break;
+		case 11:
+			m_pEnemy[i] = new EnemyCat;
+			m_pEnemy[i]->Start(1250.0f, 2400.0f, 200.0f);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
+			break;
+		case 12:
+			m_pEnemy[i] = new EnemyBird;
+			m_pEnemy[i]->Start(2000.0f, 2000.0f, 300.0f);
+			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
+			break;
+		case 13:
 			m_pEnemy[i] = new EnemyCat;
 			m_pEnemy[i]->Start(4000.0f, 2400.0f, 180.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
-		case 9:
+		case 14:
 			m_pEnemy[i] = new EnemyBear;
 			m_pEnemy[i]->Start(5130.0f, 2430.0f, 400.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);

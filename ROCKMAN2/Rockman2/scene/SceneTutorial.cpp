@@ -49,7 +49,7 @@ namespace
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
 	// 花火の打ち上げ速度
-	constexpr float kFireworksSpeed = 18.0f;
+	constexpr float kFireworksSpeed = 20.0f;
 	// 花火の画像切り出しサイズ
 	constexpr int kFireworksWidth = 92;
 	constexpr int kFireworksHeight = 94;
@@ -364,7 +364,7 @@ void SceneTutorial::Update()
 	if (m_pPause->IsPause())
 	{
 		// BGM一時停止
-		StopSoundMem(m_bgm);
+		m_isExistMenu = true;
 
 		// リトライが選択されたら初期化する
 		if (m_pPause->IsSelectRetry())
@@ -386,7 +386,11 @@ void SceneTutorial::Update()
 	}
 
 	/*武器切り替え画面が表示されている場合画面を止める*/
-	if (m_pPause->IsSelectShotExist()) return;
+	if (m_pPause->IsSelectShotExist())
+	{
+		m_isExistMenu = true;
+		return;
+	}
 
 	/*タイムカウント*/
 	if (m_enemyTotalNum > 0)
@@ -451,11 +455,16 @@ void SceneTutorial::Update()
 		m_shakeFrame = 0;
 	}
 
-	// パッドの入力状態を取得
-	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	/*メニューを閉じる際にジャンプしないようにする*/
+	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsSelectShotExist())
+	{
+		m_isExistMenu = false;
+	}
 
 #ifdef _DEBUG
 	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
+	// パッドの入力状態を取得
+	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (Pad::IsTrigger(pad & PAD_INPUT_START))
 	{
 		m_enemyTotalNum = 0;

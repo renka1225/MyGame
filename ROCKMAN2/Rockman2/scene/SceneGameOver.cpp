@@ -7,7 +7,7 @@ namespace
 {
 	// ゲームオーバー文字表示位置
 	constexpr int kGameOverPosX = 960;
-	constexpr int kGameOverPosY = 300;
+	constexpr int kGameOverPosY = 280;
 
 	// ゲームオーバー文字のサイズ
 	constexpr int kGameOverSizeX = 1592;
@@ -15,13 +15,13 @@ namespace
 
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
-	constexpr int kCharPosY = 700;
+	constexpr int kCharPosY = 720;
 
 	// 選択カーソルの初期位置
 	constexpr int kInitSelectPosX = 910;
-	constexpr int kInitSelectPosY = 560;
+	constexpr int kInitSelectPosY = 540;
 	// 選択カーソルの移動量
-	constexpr int kSelectmoveY = 145;
+	constexpr int kSelectmoveY = 185;
 	// 選択カーソルのサイズ
 	constexpr int kSelectSizeX = 500;
 	constexpr int kSelectSizeY = 700;
@@ -36,6 +36,7 @@ namespace
 SceneGameOver::SceneGameOver():
 	m_select(kRetry),
 	m_isSceneRetry(false),
+	m_isSceneSelect(false),
 	m_isSceneTitle(false),
 	m_fadeAlpha(255),
 	m_bgMove(0.0f)
@@ -70,6 +71,7 @@ SceneGameOver::~SceneGameOver()
 void SceneGameOver::Init()
 {
 	m_isSceneRetry = false;
+	m_isSceneSelect = false;
 	m_isSceneTitle = false;
 	m_fadeAlpha = 255;
 	m_select = kRetry;
@@ -127,13 +129,14 @@ void SceneGameOver::Update()
 			m_isSceneRetry = true;
 			StopSoundMem(m_bgm);
 			break;
+		case kSelect:
+			m_isSceneSelect = true;
+			StopSoundMem(m_bgm);
+			break;
 		case kTitle:
 			m_isSceneTitle = true;
 			StopSoundMem(m_bgm);
 			break;
-		case kEnd:
-			DxLib_End();
-			StopSoundMem(m_bgm);
 		default:
 			break;
 		}

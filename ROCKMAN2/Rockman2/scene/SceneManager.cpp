@@ -213,6 +213,11 @@ void SceneManager::Update()
 				m_pStage1->Init();
 			}
 		}
+		else if (m_pGameOver->IsSceneSelect())
+		{
+			m_runScene = kSceneStageSelect;
+			m_pStageSelect->Init();
+		}
 		else if (m_pGameOver->IsSceneTitle())	// ƒ^ƒCƒgƒ‹
 		{
 			m_runScene = kSceneTitle;
