@@ -1,2 +1,5 @@
-﻿  SceneTutorial.cpp
+﻿  SceneStage1.cpp
+  SceneTutorial.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
   Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe

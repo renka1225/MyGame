@@ -213,7 +213,7 @@ SceneTutorial::~SceneTutorial()
 void SceneTutorial::Init()
 {
 	// リトライ時はスタート演出を行わない
-	if (!(m_isSceneEnd || m_isRetry))
+	if (!(m_isSceneEnd || m_isRetry || m_isSceneTitle))
 	{
 		// 演出時間の初期化
 		m_startStagingTime = kStartTime;
