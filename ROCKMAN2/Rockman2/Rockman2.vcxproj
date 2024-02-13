@@ -146,6 +146,7 @@
     <ClCompile Include="enemy\EnemyBird.cpp" />
     <ClCompile Include="enemy\EnemyCat.cpp" />
     <ClCompile Include="enemy\EnemyBase.cpp" />
+    <ClCompile Include="Fireworks.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pad.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="enemy\EnemyBird.h" />
     <ClInclude Include="enemy\EnemyCat.h" />
     <ClInclude Include="enemy\EnemyBase.h" />
+    <ClInclude Include="Fireworks.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Pad.h" />

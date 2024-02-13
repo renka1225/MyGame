@@ -75,7 +75,7 @@ void RecoveryLife::Update()
 
 void RecoveryLife::Draw()
 {
-	// 6•b‚½‚Á‚½‚ç10ƒtƒŒ[ƒ€ŠÔŠu‚Å•\¦”ñ•\¦‚ğØ‚è‘Ö‚¦‚é
+	// 7•b‚½‚Á‚½‚ç10ƒtƒŒ[ƒ€ŠÔŠu‚Å•\¦”ñ•\¦‚ğØ‚è‘Ö‚¦‚é
 	if (m_frame > 420)
 	{
 		if (m_frame % 10 >= 7) return;

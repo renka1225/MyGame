@@ -28,5 +28,8 @@ private:
 	int m_stopFrame;
 	// 現在の弾エネルギー数
 	float m_energy;
+
+	// アイテム2号の当たり判定を広めに設定
+	Rect m_lineMoveColRect;
 };
 

@@ -273,9 +273,12 @@ void SceneTutorial::Init()
 	m_isRetry = false;
 
 	// â‘âŒÇÃèâä˙à íu
-	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) - 200.0f };
-	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) - 250.0f };
-	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) - 250.0f };
+	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) + 50.0f };
+	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) + 200.0f };
+	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) + 250.0f };
+	m_fireworks4Pos = { 500.0f, static_cast<float>(Game::kScreenHeight) + 300.0f };
+	m_fireworks5Pos = { 700.0f, static_cast<float>(Game::kScreenHeight) + 350.0f };
+	m_fireworks6Pos = { 1100.0f, static_cast<float>(Game::kScreenHeight) + 400.0f };
 }
 
 /// <summary>
@@ -795,20 +798,38 @@ void SceneTutorial::UpdateClearStaging()
 	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
 	{
 		// â‘âŒÇè„Ç…Ç†Ç∞ÇÈ
-		if (m_clearStagingTime >= 170.0f)
+		if (m_clearStagingTime <= 220.0f)
 		{
-			m_fireworks1Frame += kFireworksWidth;
 			m_fireworks1Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 160.0f)
+		if (m_clearStagingTime <= 210.0f)
+		{
+			m_fireworks1Frame += kFireworksWidth;
+			m_fireworks2Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 180.0f)
 		{
 			m_fireworks2Frame += kFireworksWidth;
-			m_fireworks2Pos.y -= kFireworksSpeed;
+			m_fireworks3Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 150.0f)
+		{
+			m_fireworks3Frame += kFireworksWidth;
+			m_fireworks4Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 120.0f)
+		{
+			m_fireworks4Frame += kFireworksWidth;
+			m_fireworks5Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 100.0f)
+		{
+			m_fireworks5Frame += kFireworksWidth;
+			m_fireworks6Pos.y -= kFireworksSpeed;
 		}
 		if (m_clearStagingTime <= 80.0f)
 		{
-			m_fireworks3Frame += kFireworksWidth;
-			m_fireworks3Pos.y -= kFireworksSpeed;
+			m_fireworks6Frame += kFireworksWidth;
 		}
 
 		// âπÇó¨Ç∑
@@ -1179,16 +1200,28 @@ void SceneTutorial::DrawClearStaging()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// ï∂éöï\é¶å„â‘âŒÇÇ†Ç∞ÇÈ
-	if (m_clearStagingTime <= 200.0f && m_clearStagingTime > 70.0f)
+	if (m_clearStagingTime <= 220.0f && m_clearStagingTime > 70.0f)
 	{
-		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks1, true);
+		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 6.0f, 0.0f, m_fireworks1, true);
 	}
-	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 50.0f)
+	if (m_clearStagingTime <= 190.0f && m_clearStagingTime > 50.0f)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks2Pos.x), static_cast<int>(m_fireworks2Pos.y), m_fireworks2Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
 	}
-	if (m_clearStagingTime <= 100.0f && m_clearStagingTime > 0.0f)
+	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 30.0f)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks3Pos.x), static_cast<int>(m_fireworks3Pos.y), m_fireworks3Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
+	}
+	if (m_clearStagingTime <= 140.0f && m_clearStagingTime > 10.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks4Pos.x), static_cast<int>(m_fireworks4Pos.y), m_fireworks4Frame, 0, kFireworksWidth, kFireworksHeight, 4.8f, 0.0f, m_fireworks2, true);
+	}
+	if (m_clearStagingTime <= 120.0f && m_clearStagingTime > 5.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks5Pos.x), static_cast<int>(m_fireworks5Pos.y), m_fireworks5Frame, 0, kFireworksWidth, kFireworksHeight, 5.2f, 0.0f, m_fireworks3, true);
+	}
+	if (m_clearStagingTime <= 90.0f && m_clearStagingTime > 0.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks6Pos.x), static_cast<int>(m_fireworks6Pos.y), m_fireworks6Frame, 0, kFireworksWidth, kFireworksHeight, 6.0f, 0.0f, m_fireworks1, true);
 	}
 }

@@ -170,7 +170,10 @@ void BgTutorial::Draw()
 			int srcY = kChipHeight * (chipNo / m_graphChipNumY);
 
 			// •`‰æ
-			DrawRectRotaGraph(static_cast<int>(posX + kChipWidth * kChipScale * 0.5f), static_cast<int>(posY + kChipHeight * kChipScale * 0.5), srcX, srcY,
+			DrawRectRotaGraph(
+				static_cast<int>(posX + kChipWidth * kChipScale * 0.5f), 
+				static_cast<int>(posY + kChipHeight * kChipScale * 0.5), 
+				srcX, srcY,
 				kChipWidth, kChipHeight,
 				kChipScale, 0.0f,
 				m_mapHandle, true);

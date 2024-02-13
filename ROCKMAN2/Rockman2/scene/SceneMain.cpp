@@ -22,6 +22,9 @@
 #include <cassert>
 
 SceneMain::SceneMain() :
+	m_pFont(nullptr),
+	m_pPause(nullptr),
+	m_pPlayer(nullptr),
 	m_drawValue(0),
 	m_isGetFullHpRecovery(false),
 	m_enemyTotalNum(0),
@@ -41,6 +44,9 @@ SceneMain::SceneMain() :
 	m_fireworks1Frame(0),
 	m_fireworks2Frame(0),
 	m_fireworks3Frame(0),
+	m_fireworks4Frame(0),
+	m_fireworks5Frame(0),
+	m_fireworks6Frame(0),
 	m_readyCount(0),
 	m_shakeFrame(0),
 	m_ampFrame(0)
@@ -60,8 +66,8 @@ SceneMain::SceneMain() :
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
 	m_fireworks1 = LoadGraph("data/image/Effect/1.png");
-	m_fireworks1 = LoadGraph("data/image/Effect/2.png");
-	m_fireworks1 = LoadGraph("data/image/Effect/3.png");
+	m_fireworks2 = LoadGraph("data/image/Effect/2.png");
+	m_fireworks3 = LoadGraph("data/image/Effect/3.png");
 }
 
 SceneMain::~SceneMain()

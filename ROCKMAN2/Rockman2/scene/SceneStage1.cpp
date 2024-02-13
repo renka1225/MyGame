@@ -17,6 +17,7 @@
 #include "EnemyCat.h"
 #include "EnemyBird.h"
 #include "EnemyBear.h"
+#include "Fireworks.h"
 #include <cassert>
 
 namespace
@@ -25,9 +26,10 @@ namespace
 	constexpr int kShotMax = 3;
 	// 画面内に1度に出せる回復アイテム数
 	constexpr int kRecoveryMax = 5;
-
 	// 登場する敵数
 	constexpr int kEnemyMax = 15;
+	// 花火の数
+	constexpr int kFireworksMax = 3;
 
 	// プレイヤーの初期位置
 	constexpr float kPlayerInitPosX = 350.0f;
@@ -43,12 +45,12 @@ namespace
 	/*演出*/
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
-	constexpr float kClearTime = 180.0f;
+	constexpr float kClearTime = 240.0f;
 	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
 	// 花火の打ち上げ速度
-	constexpr float kFireworksSpeed = 20.0f;
+	constexpr float kFireworksSpeed = 30.0f;
 	// 花火の画像切り出しサイズ
 	constexpr int kFireworksWidth = 92;
 	constexpr int kFireworksHeight = 94;
@@ -122,6 +124,13 @@ SceneStage1::SceneStage1()
 	{
 		m_pRecovery[i] = nullptr; // 未使用状態にする
 	}
+
+	// 花火演出の初期化
+	//m_pFireworks.resize(kFireworksMax);
+	//for (int i = 0; i < m_pFireworks.size(); i++)
+	//{
+	//	m_pRecovery[i] = nullptr; // 未使用状態にする
+	//}
 
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage2.wav");
@@ -209,7 +218,7 @@ SceneStage1::~SceneStage1()
 void SceneStage1::Init()
 {
 	// リトライ時はスタート演出を行わない
-	if (!(m_isSceneEnd || m_isRetry))
+	if (!(m_isSceneEnd || m_isRetry || m_isSceneTitle))
 	{
 		// 演出時間の初期化
 		m_startStagingTime = kStartTime;
@@ -235,6 +244,9 @@ void SceneStage1::Init()
 	m_fireworks1Frame = 0;
 	m_fireworks2Frame = 0;
 	m_fireworks3Frame = 0;
+	m_fireworks4Frame = 0;
+	m_fireworks5Frame = 0;
+	m_fireworks6Frame = 0;
 	m_shakeFrame = 0;
 	m_readyCount = kReadyCount;
 	m_ampFrame = 0;
@@ -270,9 +282,12 @@ void SceneStage1::Init()
 	m_isRetry = false;
 
 	// 花火の初期位置
-	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) - 200.0f};
-	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) - 250.0f};
-	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) - 250.0f};
+	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) + 50.0f };
+	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) + 200.0f };
+	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) + 250.0f };
+	m_fireworks4Pos = { 500.0f, static_cast<float>(Game::kScreenHeight) + 300.0f };
+	m_fireworks5Pos = { 700.0f, static_cast<float>(Game::kScreenHeight) + 350.0f };
+	m_fireworks6Pos = { 1100.0f, static_cast<float>(Game::kScreenHeight) + 400.0f };
 }
 
 /// <summary>
@@ -877,24 +892,47 @@ void SceneStage1::UpdateClearStaging()
 		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
 		return;
 	}
-	// 花火の更新
+	// 花火の演出
 	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
 	{
-		// 花火を上にあげる
-		if (m_clearStagingTime <= 180.0f)
+		/*for (int i = 0; i < m_pFireworks.size(); i++)
 		{
-			m_fireworks1Frame += kFireworksWidth;
+			m_pFireworks[i]->Update();
+		}*/
+
+		// 花火を上にあげる
+		if (m_clearStagingTime <= 220.0f)
+		{
 			m_fireworks1Pos.y -= kFireworksSpeed;
 		}
-		if(m_clearStagingTime <= 100.0f)
+		if(m_clearStagingTime <= 210.0f)
+		{
+			m_fireworks1Frame += kFireworksWidth;
+			m_fireworks2Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 180.0f)
 		{
 			m_fireworks2Frame += kFireworksWidth;
-			m_fireworks2Pos.y -= kFireworksSpeed;
+			m_fireworks3Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 150.0f)
+		{
+			m_fireworks3Frame += kFireworksWidth;
+			m_fireworks4Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 120.0f)
+		{
+			m_fireworks4Frame += kFireworksWidth;
+			m_fireworks5Pos.y -= kFireworksSpeed;
+		}
+		if (m_clearStagingTime <= 100.0f)
+		{
+			m_fireworks5Frame += kFireworksWidth;
+			m_fireworks6Pos.y -= kFireworksSpeed;
 		}
 		if (m_clearStagingTime <= 80.0f)
 		{
-			m_fireworks3Frame += kFireworksWidth;
-			m_fireworks3Pos.y -= kFireworksSpeed;
+			m_fireworks6Frame += kFireworksWidth;
 		}
 		
 		// 音を流す
@@ -1235,17 +1273,34 @@ void SceneStage1::DrawClearStaging()
 		0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// 文字表示後花火をあげる
-	if (m_clearStagingTime <= 200.0f && m_clearStagingTime > 70.0f)
+	/*for (int i = 0; i < m_pFireworks.size(); i++)
 	{
-		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks1, true);
+		m_pFireworks[i]->Draw();
+	}*/
+
+	// 文字表示後花火をあげる
+	if (m_clearStagingTime <= 220.0f && m_clearStagingTime > 70.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 6.0f, 0.0f, m_fireworks1, true);
 	}
-	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 50.0f)
+	if (m_clearStagingTime <= 190.0f && m_clearStagingTime > 50.0f)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks2Pos.x), static_cast<int>(m_fireworks2Pos.y), m_fireworks2Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks2, true);
 	}
-	if (m_clearStagingTime <= 100.0f && m_clearStagingTime > 0.0f)
+	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 30.0f)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks3Pos.x), static_cast<int>(m_fireworks3Pos.y), m_fireworks3Frame, 0, kFireworksWidth, kFireworksHeight, 5.0f, 0.0f, m_fireworks3, true);
+	}
+	if (m_clearStagingTime <= 140.0f && m_clearStagingTime > 10.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks4Pos.x), static_cast<int>(m_fireworks4Pos.y), m_fireworks4Frame, 0, kFireworksWidth, kFireworksHeight, 4.8f, 0.0f, m_fireworks2, true);
+	}
+	if (m_clearStagingTime <= 120.0f && m_clearStagingTime > 5.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks5Pos.x), static_cast<int>(m_fireworks5Pos.y), m_fireworks5Frame, 0, kFireworksWidth, kFireworksHeight, 5.2f, 0.0f, m_fireworks3, true);
+	}
+	if (m_clearStagingTime <= 90.0f && m_clearStagingTime > 0.0f)
+	{
+		DrawRectRotaGraph(static_cast<int>(m_fireworks6Pos.x), static_cast<int>(m_fireworks6Pos.y), m_fireworks6Frame, 0, kFireworksWidth, kFireworksHeight, 6.0f, 0.0f, m_fireworks1, true);
 	}
 }

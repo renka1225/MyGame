@@ -10,6 +10,7 @@ class Player;
 class ShotBase;
 class EnemyBase;
 class RecoveryBase;
+class Fireworks;
 
 /// <summary>
 /// ゲーム画面のクラス
@@ -81,15 +82,8 @@ protected:
 	std::vector<EnemyBase*> m_pEnemy;
 	// 回復アイテム
 	std::vector<RecoveryBase*> m_pRecovery;
-
-	// スタート演出の表示位置
-	Vec2 m_startDis;
-	// クリア演出の表示位置
-	Vec2 m_clearDis;
-	// 花火の表示位置
-	Vec2 m_fireworks1Pos;	// 花火1
-	Vec2 m_fireworks2Pos;	// 花火2
-	Vec2 m_fireworks3Pos;	// 花火3
+	// 花火
+	//std::vector<Fireworks*> m_pFireworks;
 
 	// プレイヤーの現在地
 	Vec2 m_playerPos;
@@ -116,17 +110,32 @@ protected:
 	bool m_isSceneEnd;		// ゲーム画面を終了
 	bool m_isRetry;			// リトライする
 
+	/*演出*/
 	// フェードイン、アウト
 	int m_fadeAlpha;
 	int m_stagingFade; // スタート演出等のフェード
 
-	// 演出
+	// スタート演出の表示位置
+	Vec2 m_startDis;
+	// クリア演出の表示位置
+	Vec2 m_clearDis;
+	// 花火の表示位置
+	Vec2 m_fireworks1Pos;	// 花火1
+	Vec2 m_fireworks2Pos;	// 花火2
+	Vec2 m_fireworks3Pos;	// 花火3
+	Vec2 m_fireworks4Pos;	// 花火4
+	Vec2 m_fireworks5Pos;	// 花火5
+	Vec2 m_fireworks6Pos;	// 花火6
+
 	float m_startStagingTime;		// スタート演出の時間
 	float m_clearStagingTime;		// クリア演出時間
 	float m_gameoverStagingTime;	// ゲームオーバー演出時間
 	int m_fireworks1Frame;			// 花火1の表示フレーム 
 	int m_fireworks2Frame;			// 花火2の表示フレーム 
 	int m_fireworks3Frame;			// 花火3の表示フレーム 
+	int m_fireworks4Frame;			// 花火4の表示フレーム 
+	int m_fireworks5Frame;			// 花火5の表示フレーム 
+	int m_fireworks6Frame;			// 花火6の表示フレーム 
 
 	// Readyの表示カウント
 	int m_readyCount;
