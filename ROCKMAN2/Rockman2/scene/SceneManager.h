@@ -1,6 +1,5 @@
 #pragma once
 
-class SceneOpening;
 class SceneTitle;
 class SceneOption;
 class SceneStageSelect;
@@ -26,7 +25,6 @@ private:
 	// シーン定数の定義
 	enum SceneSelect
 	{
-		kSceneOpening,
 		kSceneTitle,
 		kSceneOption,
 		kSceneStageSelect,
@@ -41,7 +39,6 @@ private:
 
 private:
 	// SceneManagerで管理するシーン
-	SceneOpening* m_pOpening;
 	SceneTitle* m_pTitle;
 	SceneOption* m_pOption;
 	SceneStageSelect* m_pStageSelect;

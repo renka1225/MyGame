@@ -5,8 +5,10 @@
 
 namespace
 {
+	// OP動画再生時間
+	constexpr int kMoveFrame = 1200;
 	// OPを流すまでの時間
-	constexpr int kStandFrame = 3000;
+	constexpr int kStandFrame = 2400;
 
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
@@ -29,13 +31,12 @@ namespace
 
 SceneTitle::SceneTitle():
 	m_select(kStart),
-	m_isSceneOpening(false),
 	m_isSceneStart(false),
 	m_isSceneOption(false),
+	m_moveFrame(kMoveFrame),
 	m_standFrame(0),
 	m_fadeAlpha(180),
-	m_bgMove(0.0f),
-	m_selectPos({ kInitSelectPosX, kInitSelectPosY })
+	m_bgMove(0.0f)
 {
 	// 画像読み込み
 	m_logoHandle = LoadGraph("data/image/TitleLogo.png");
@@ -68,10 +69,9 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Init()
 {
-	m_isSceneOpening = false;
 	m_isSceneStart = false;
 	m_isSceneOption = false;
-	m_standFrame = 0;
+	m_moveFrame = 0;
 	m_fadeAlpha = 180;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
@@ -91,8 +91,6 @@ void SceneTitle::Update()
 		// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
-		m_standFrame = 0;
-
 		// SEを鳴らす
 		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
 
@@ -104,17 +102,11 @@ void SceneTitle::Update()
 		{
 			m_selectPos.y = kInitSelectPosY;
 		}
+		return;
 	}
-	else
-	{
-		m_standFrame++;
-	}
-
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
 	{
-		m_standFrame = 0;
-
 		// SEを鳴らす
 		PlaySoundMem(m_cursorSE, DX_PLAYTYPE_BACK, true);
 
@@ -125,17 +117,12 @@ void SceneTitle::Update()
 		{
 			m_selectPos.y = kInitSelectPosY + kSelectmoveY * (kSelectNum - 1);
 		}
-	}
-	else
-	{
-		m_standFrame++;
+		return;
 	}
 
 	// ZキーorAボタンを押したら遷移
 	if (Pad::IsTrigger(PAD_INPUT_A))
 	{
-		m_standFrame = 0;
-
 		// SEを鳴らす
 		PlaySoundMem(m_selectSE, DX_PLAYTYPE_BACK, true);
 
@@ -156,17 +143,19 @@ void SceneTitle::Update()
 		default:
 			break;
 		}
-	}
-	else
-	{
-		m_standFrame++;
+		return;
 	}
 
 	// しばらく放置したら動画を再生する
+	m_standFrame++;
 	if (m_standFrame > kStandFrame)
 	{
-		m_isSceneOpening = true;
+		// OP再生
 		StopSoundMem(m_bgm);
+		PlayMovie("data/OP.mp4", 1, DX_MOVIEPLAYTYPE_BCANCEL);
+		m_standFrame = 0;
+
+		Init();
 	}
 
 	// フェードインアウト

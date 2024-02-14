@@ -1,5 +1,4 @@
 #include "SceneManager.h"
-#include "SceneOpening.h"
 #include "SceneTitle.h"
 #include "SceneOption.h"
 #include "SceneStageSelect.h"
@@ -10,10 +9,9 @@
 #include "Pad.h"
 
 SceneManager::SceneManager() :
-	m_runScene(kSceneOpening)
+	m_runScene(kSceneTitle)
 {
 	// クラスのメモリを確保する
-	m_pOpening = new SceneOpening;
 	m_pTitle = new SceneTitle;
 	m_pOption = new SceneOption;
 	m_pStageSelect = new SceneStageSelect;
@@ -26,9 +24,6 @@ SceneManager::SceneManager() :
 SceneManager::~SceneManager()
 {
 	// クラスのメモリを解放する
-	delete m_pOpening;
-	m_pOpening = nullptr;
-
 	delete m_pTitle;
 	m_pTitle = nullptr;
 
@@ -56,10 +51,6 @@ void SceneManager::Init()
 	// 実行するシーンの初期化を行う
 	switch (m_runScene)
 	{
-		// Opシーン
-	case kSceneOpening:
-		m_pOpening->Init();
-		break;
 		// タイトルシーン
 	case kSceneTitle:
 		m_pTitle->Init();
@@ -100,22 +91,9 @@ void SceneManager::Update()
 	// 実行するシーンの切り替えを行う
 	switch (m_runScene)
 	{
-		// オープニングシーン
-	case kSceneOpening:
-		if (m_pOpening->IsSceneStart())
-		{
-			m_runScene = kSceneTitle;
-			m_pOpening->Init();
-		}
-		break;
 		// タイトルシーン
 	case kSceneTitle:
-		if (m_pTitle->IsSceneOpening())
-		{
-			m_runScene = kSceneOpening;
-			m_pOpening->Init();
-		}
-		 else if (m_pTitle->IsSceneStart())
+		if (m_pTitle->IsSceneStart())
 		{
 			m_runScene = kSceneStageSelect;
 			m_pStageSelect->Init();
@@ -254,10 +232,6 @@ void SceneManager::Update()
 	// 実行するシーンの更新を行う
 	switch (m_runScene)
 	{
-		// Opシーン
-	case kSceneOpening:
-		m_pOpening->Update();
-		break;
 		// タイトルシーン
 	case kSceneTitle:
 		m_pTitle->Update();
@@ -296,9 +270,6 @@ void SceneManager::Draw()
 	// 実行するシーンの描画を行う
 	switch (m_runScene)
 	{
-		// オープニングシーン
-	case kSceneOpening:
-		break;
 		// タイトルシーン
 	case kSceneTitle:
 		m_pTitle->Draw();
