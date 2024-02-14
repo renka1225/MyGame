@@ -49,7 +49,8 @@ SceneMain::SceneMain() :
 	m_fireworks6Frame(0),
 	m_readyCount(0),
 	m_shakeFrame(0),
-	m_ampFrame(0)
+	m_ampFrame(0),
+	m_gameScreenHandle(-1)
 {
 	// âπì«Ç›çûÇ›
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
@@ -62,6 +63,9 @@ SceneMain::SceneMain() :
 
 	// âÊëúì«Ç›çûÇ›
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
+	m_metalHandle = LoadGraph("data/image/Shot/shotMetal.png");
+	m_fireHandle = LoadGraph("data/image/Shot/shotFire3.png");
+	m_lineMoveHandle = LoadGraph("data/image/shot/shotLineMove.png");
 	m_fullHpRecHandle = LoadGraph("data/image/Recovery/fullHp.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");

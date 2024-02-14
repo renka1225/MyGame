@@ -1017,10 +1017,11 @@ void Player::LifeRecovery() // 残機回復
 	}
 }
 
-void Player::HpFullRecovery() // HP全回復
+void Player::HpFullRecovery() // HP、エネルギー全回復
 {
 	if (m_fullHpRecovery > 0)
 	{
+		// HP全回復
 		if (m_hp < kMaxHp) // 現在のHPが最大HP未満
 		{
 			m_hp += kMaxHp;	// HPを最大まで回復
@@ -1028,8 +1029,34 @@ void Player::HpFullRecovery() // HP全回復
 			{
 				m_hp = kMaxHp;
 			}
-			m_fullHpRecovery--; // 所持数を1減らす
 		}
+
+		// エネルギー全回復
+		if (m_isMetal) // メタル
+		{
+			m_metalEnergy += kMaxMetalShot;
+			if (m_metalEnergy > kMaxMetalShot)
+			{
+				m_metalEnergy = kMaxMetalShot;
+			}
+		}
+		else if (m_isFire) // ファイア
+		{
+			m_fireEnergy += kMaxShot;
+			if (m_fireEnergy > kMaxShot)
+			{
+				m_fireEnergy = kMaxShot;
+			}
+		}
+		else if (m_lineEnergy) // 2号
+		{
+			m_lineEnergy += kMaxShot;
+			if (m_lineEnergy > kMaxShot)
+			{
+				m_lineEnergy = kMaxShot;
+			}
+		}
+		m_fullHpRecovery--; // 所持数を1減らす
 	}
 	else
 	{

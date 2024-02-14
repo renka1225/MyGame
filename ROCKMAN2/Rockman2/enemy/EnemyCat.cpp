@@ -36,7 +36,7 @@ namespace
 	// アニメーション1コマのフレーム数
 	constexpr int kEffectFrameNum = 40;
 	// ダメージ演出フレーム数
-	constexpr int kDamageFrame = 80;
+	constexpr int kDamageFrame = 20;
 }
 
 

@@ -143,6 +143,10 @@ SceneStage1::SceneStage1()
 
 	// 画像読み込み
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
+	m_metalHandle = LoadGraph("data/image/Shot/shotMetal.png");
+	m_fireHandle = LoadGraph("data/image/Shot/shotFire3.png");
+	m_lineMoveHandle = LoadGraph("data/image/shot/shotLineMove.png");
+	m_fullHpRecHandle = LoadGraph("data/image/Recovery/fullHp.png");
 	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
 	m_startHandle = LoadGraph("data/image/UI/start.png");
 	m_fireworks1 = LoadGraph("data/image/Effect/clear/1.png");
@@ -212,9 +216,14 @@ SceneStage1::~SceneStage1()
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_shotSelectHandle);
 	DeleteGraph(m_startHandle);
-	DeleteGraph(m_fireworks);
+	DeleteGraph(m_fireworks1);
+	DeleteGraph(m_fireworks2);
+	DeleteGraph(m_fireworks3);
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
 void SceneStage1::Init()
 {
 	// リトライ時はスタート演出を行わない
@@ -468,7 +477,7 @@ void SceneStage1::Update()
 	}
 
 	/*メニューを閉じる際にジャンプしないようにする*/
-	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsSelectShotExist())
+	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsPause())
 	{
 		m_isExistMenu = false;
 	}
@@ -1049,15 +1058,15 @@ void SceneStage1::CreateItem(int enemyIndex)
 	{
 		DropHpGreatRecovery(enemyIndex);	// HP回復(大)
 	}
-	else if (getRandDrop <= 60)
+	else if (getRandDrop <= 65)
 	{
 		DropShotSmallRecovery(enemyIndex); // 弾エネルギー(小)
 	}
-	else if (getRandDrop <= 80)
+	else if (getRandDrop <= 90)
 	{
 		DropShotGreatRecovery(enemyIndex); // 弾エネルギー(大)
 	}
-	else if (getRandDrop <= 90)
+	else if (getRandDrop <= 100)
 	{
 		DropLifeRecovery(enemyIndex);	// 残機
 	}
@@ -1097,16 +1106,19 @@ void SceneStage1::DrawInfo()
 	DrawFormatStringToHandle(kInfoTextPosX + 20, kInfoTextPosY + kShotNumIntervalY * 3 + 70, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
 
 
-	/// <summary>
-	/// HP、武器の弾数を右側に表示
-	/// </summary>
-		// HP
+/// <summary>
+/// HP、武器の弾数を右側に表示
+/// </summary>
+	// Energyの表示
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 120, "Energy", 0xffffff, m_pFont->GetFont3());
+
+	// HP
 	if (m_pPlayer->IsBuster())
 	{
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :", 0xffffff, m_pFont->GetFont2());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :", 0xffffff, m_pFont->GetFont2()); // 文字
 	// 現在のHP分だけ四角を描画する
 	for (int i = 0; i < m_pPlayer->GetHp(); i++)
 	{
@@ -1123,7 +1135,8 @@ void SceneStage1::DrawInfo()
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY - 45, m_metalHandle, true); // メタルの画像
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1139,7 +1152,8 @@ void SceneStage1::DrawInfo()
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, "F :", 0xffffff, m_pFont->GetFont2());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, m_fireHandle, true); // ファイアの画像
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1155,7 +1169,8 @@ void SceneStage1::DrawInfo()
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 3, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2());
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, m_lineMoveHandle, true); // 2号の画像
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1172,7 +1187,7 @@ void SceneStage1::DrawInfo()
 void SceneStage1::DrawShotChange()
 {
 	// 現在のHPを表示
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetFont(), "P :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetFont(), "P :"); // 文字
 	for (int i = 0; i < m_pPlayer->GetHp(); i++) // 現在のHP分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -1184,7 +1199,8 @@ void SceneStage1::DrawShotChange()
 
 	// 現在の弾エネルギー数を表示
 	// メタル
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "M :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "M :"); // 文字
+	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY, kTextPosX + 75, kTextPosY + kIntervalY + 25, m_metalHandle, true); // メタルの画像
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -1195,7 +1211,8 @@ void SceneStage1::DrawShotChange()
 	}
 
 	// ファイアー
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "F :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "F :"); // 文字
+	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY * 2, kTextPosX + 75, kTextPosY + kIntervalY * 2 + 25, m_fireHandle, true); // ファイアの画像
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -1206,7 +1223,8 @@ void SceneStage1::DrawShotChange()
 	}
 
 	// アイテム2号
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "L :");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "L :"); // 文字
+	DrawGraph(kTextPosX + 45, kTextPosY + kIntervalY * 3 + 3, m_lineMoveHandle, true); // 2号の画像
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -1217,7 +1235,7 @@ void SceneStage1::DrawShotChange()
 	}
 
 	// 現在のE缶数を表示
-	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont());
+	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont()); // 文字
 	if (m_pPlayer->GetFullHpRecovery() == 1)
 	{
 		DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4 - 5, m_fullHpRecHandle, true);

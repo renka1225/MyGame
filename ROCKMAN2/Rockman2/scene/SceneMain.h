@@ -153,7 +153,11 @@ protected:
 	int m_fireworksSE;	// 花火のSE
 
 	// 画像
+	int m_gameScreenHandle;	// ゲーム画面
 	int m_frameHandle;		// 枠
+	int m_metalHandle;		// メタルの画像
+	int m_fireHandle;		// ファイアの画像
+	int m_lineMoveHandle;	// 2号の画像
 	int m_fullHpRecHandle;  // E缶の画像	
 	int m_shotSelectHandle;	// 選択中の武器
 	int m_startHandle;		// スタート演出の画像

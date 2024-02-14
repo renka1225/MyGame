@@ -135,22 +135,23 @@ void EnemyBear::Update()
 	}
 
 	// プレイヤーと熊の距離
-	float kDis = m_pos.x - m_pPlayer->GetPos().x;
+	float kDisX = m_pos.x - m_pPlayer->GetPos().x;
+	float kDisY = m_pos.y - m_pPlayer->GetPos().y;
 	// プレイヤーが近づいたら突進する
-	if(kDis <= 430.0f && kDis > 10.0f) // プレイヤーが左から近づいた場合
+	if(kDisX <= 400.0f && kDisX > 10.0f) // プレイヤーが左から近づいた場合
 	{
 		m_animation = kRun;
 		m_dir = kDirLeft;
 		m_vec.x = -kSpeedX;
 	}
-	else if (kDis >= -430.0f && kDis < -10.0f)	// プレイヤーが右から近づいた場合
+	else if (kDisX >= -430.0f && kDisX < -10.0f)	// プレイヤーが右から近づいた場合
 	{
 		m_animation = kRun;
 		m_dir = kDirRight;
 		m_vec.x = kSpeedX;
 	}
 	// プレイヤーが離れたら回復する
-	else if (fabsf(kDis) > 430.0f && fabsf(kDis) < 1000.0f)
+	else if (fabsf(kDisX) > 430.0f && fabsf(kDisX) < 1000.0f || fabsf(kDisY) > 100.0f)
 	{
 		m_animation = kRecovery;
 		m_vec.x = 0.0f;
@@ -310,7 +311,7 @@ void EnemyBear::UpdateRecovery()
 			}
 			// 回復エフェクト
 			m_recoveryEffectFrame += kRecEffectSize;
-			if (m_recoveryEffectFrame >= kRecEffectSize * 30)
+			if (m_recoveryEffectFrame >= kRecEffectSize * 35)
 			{
 				m_recoveryEffectFrame = 0;
 			}
