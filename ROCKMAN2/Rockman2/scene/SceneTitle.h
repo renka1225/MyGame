@@ -42,6 +42,10 @@ private:
 	// ”wŒi‚ÌˆÚ“®—Ê
 	float m_bgMove;
 
+	// “®‰æ‚ÌÄ¶ŠÔ
+	int m_moveFrame;
+	// OP‚ğ—¬‚·‚Ü‚Å‚ÌŠÔ
+	int m_standFrame;
 	// ƒtƒF[ƒhƒCƒ“AƒAƒEƒg
 	int m_fadeAlpha;
 
@@ -53,6 +57,7 @@ private:
 	int m_bg2Handle;	// ”wŒi
 	int m_bg3Handle;	// ”wŒi
 	int m_bg4Handle;	// ”wŒi
+
 	// ‰¹
 	int m_bgm;			// BGM
 	int m_selectSE;		// ‘I‘ğ‚ÌSE

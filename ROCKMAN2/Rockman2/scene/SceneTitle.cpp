@@ -5,6 +5,11 @@
 
 namespace
 {
+	// OP動画再生時間
+	constexpr int kMoveFrame = 1200;
+	// OPを流すまでの時間
+	constexpr int kStandFrame = 1200;
+
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
 	constexpr int kCharPosY = 720;
@@ -28,6 +33,8 @@ SceneTitle::SceneTitle():
 	m_select(kStart),
 	m_isSceneStart(false),
 	m_isSceneOption(false),
+	m_moveFrame(kMoveFrame),
+	m_standFrame(0),
 	m_fadeAlpha(180),
 	m_bgMove(0.0f)
 {
@@ -62,8 +69,11 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Init()
 {
+	PlayMovie("data/OP.mp4", 1, DX_MOVIEPLAYTYPE_BCANCEL);
+
 	m_isSceneStart = false;
 	m_isSceneOption = false;
+	m_moveFrame = 0;
 	m_fadeAlpha = 180;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
@@ -80,7 +90,15 @@ void SceneTitle::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	// ↓キーを押したら選択状態を1つ下げる
+	// TODO:ゲームを放置していたらOPを流す
+	//if (m_standFrame > kStandFrame)
+	//{
+	//	m_standFrame = 0;
+	//	// OP再生
+	//	PlayMovie("data/OP.mp4", 1, DX_MOVIEPLAYTYPE_BCANCEL);
+	//}
+
+		// ↓キーを押したら選択状態を1つ下げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_DOWN))
 	{
 		// SEを鳴らす
@@ -94,6 +112,7 @@ void SceneTitle::Update()
 		{
 			m_selectPos.y = kInitSelectPosY;
 		}
+		return;
 	}
 	// ↑キーを押したら選択状態を1つ上げる
 	if (Pad::IsTrigger(pad & PAD_INPUT_UP))
@@ -108,6 +127,7 @@ void SceneTitle::Update()
 		{
 			m_selectPos.y = kInitSelectPosY + kSelectmoveY * (kSelectNum - 1);
 		}
+		return;
 	}
 
 	// ZキーorAボタンを押したら遷移
@@ -133,6 +153,17 @@ void SceneTitle::Update()
 		default:
 			break;
 		}
+		return;
+	}
+
+	// しばらく放置したら動画を再生する
+	m_standFrame++;
+	if (m_standFrame > kStandFrame)
+	{
+		// OP再生
+		PlayMovie("data/OP.mp4", 1, DX_MOVIEPLAYTYPE_BCANCEL);
+		StopSoundMem(m_bgm);
+		m_standFrame = 0;
 	}
 
 	// フェードインアウト
