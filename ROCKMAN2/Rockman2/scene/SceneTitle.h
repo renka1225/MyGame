@@ -16,6 +16,7 @@ public:
 	void DrawBg();
 
 	// シーン遷移のフラグ
+	bool IsSceneOpening() const { return m_isSceneOpening; }
 	bool IsSceneStart() const { return m_isSceneStart; }
 	bool IsSceneOption() const { return m_isSceneOption; }
 
@@ -34,6 +35,7 @@ private:
 
 private:
 	// シーン選択のフラグ true:シーンに移動
+	bool m_isSceneOpening;
 	bool m_isSceneStart;
 	bool m_isSceneOption;
 
@@ -42,8 +44,6 @@ private:
 	// 背景の移動量
 	float m_bgMove;
 
-	// 動画の再生時間
-	int m_moveFrame;
 	// OPを流すまでの時間
 	int m_standFrame;
 	// フェードイン、アウト
