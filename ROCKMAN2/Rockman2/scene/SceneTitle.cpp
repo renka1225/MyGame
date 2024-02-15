@@ -8,7 +8,7 @@ namespace
 	// OP“®‰æÄ¶ŠÔ
 	constexpr int kMoveFrame = 1200;
 	// OP‚ğ—¬‚·‚Ü‚Å‚ÌŠÔ
-	constexpr int kStandFrame = 2400;
+	constexpr int kStandFrame = 1800;
 
 	// •¶š•\¦ˆÊ’u
 	constexpr int kCharPosX = 960;

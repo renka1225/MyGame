@@ -542,6 +542,12 @@ void Player::UpdateShotFire()
 
 		m_nowPressTime = GetNowCount() - m_pressTime; // ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä—£‚·‚Ü‚Å‚ÌŠÔ
 	}
+	else
+	{
+		m_isSmallFire = false;
+		m_isMiddleFire = false;
+		m_isBigFire = false;
+	}
 	// ƒL[‚ª—£‚³‚ê‚½uŠÔ‚ğ”»’è
 	if (Pad::IsRelease(PAD_INPUT_B))
 	{
@@ -553,7 +559,7 @@ void Player::UpdateShotFire()
 			// ’e”­Ë‚ÌSE‚ğ–Â‚ç‚·
 			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 
-			if (m_nowPressTime < 2000) // ’·‰Ÿ‚µŠÔ‚ª2•bˆÈ‰º
+			if (m_nowPressTime > 0 && m_nowPressTime < 2000) // ’·‰Ÿ‚µŠÔ‚ª2•bˆÈ‰º
 			{
 				m_fireEnergy--; // ’eƒGƒlƒ‹ƒM[‚ğ1Œ¸‚ç‚·
 				m_isSmallFire = true;
@@ -561,7 +567,7 @@ void Player::UpdateShotFire()
 				m_isBigFire = false;
 
 			}
-			else if (m_nowPressTime < 5000) // ’·‰Ÿ‚µŠÔ‚ª5•bˆÈ‰º
+			else if (m_nowPressTime < 4000) // ’·‰Ÿ‚µŠÔ‚ª4•bˆÈ‰º
 			{
 				if (m_fireEnergy - 3 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
 				{
@@ -578,7 +584,7 @@ void Player::UpdateShotFire()
 					m_isBigFire = false;
 				}
 			}
-			else // ’·‰Ÿ‚µŠÔ‚ª5•bˆÈã
+			else if (m_nowPressTime >= 4000) // ’·‰Ÿ‚µŠÔ‚ª4•bˆÈã
 			{
 				if (m_fireEnergy - 5 < 0) // ’eƒGƒlƒ‹ƒM[‚ª‘«‚è‚È‚¢ê‡
 				{

@@ -22,7 +22,7 @@ namespace
 	constexpr float kSpeedX = 3.0f;
 	constexpr float kSpeedY = 10.0f;
 	// 最大HP
-	constexpr float kHp = 3.0f;
+	constexpr float kHp = 2.0f;
 
 	// 敵アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };

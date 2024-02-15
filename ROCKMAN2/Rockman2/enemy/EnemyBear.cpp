@@ -27,7 +27,7 @@ namespace
 	constexpr float kSpeedX = 4.0f;
 	constexpr float kSpeedY = 10.0f;
 	// Å‘åHP
-	constexpr float kHp = 15.0f;
+	constexpr float kHp = 13.0f;
 	// ‰ñ•œŠÔ
 	constexpr float kRecoveryFrame = 30.0f;
 	// ‰ñ•œŠÔŠu
