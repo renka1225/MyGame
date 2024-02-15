@@ -545,12 +545,6 @@ void Player::UpdateShotFire()
 
 		m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
 	}
-	else
-	{
-		m_isSmallFire = false;
-		m_isMiddleFire = false;
-		m_isBigFire = false;
-	}
 	// キーが離された瞬間を判定
 	if (Pad::IsRelease(PAD_INPUT_B))
 	{
@@ -603,6 +597,12 @@ void Player::UpdateShotFire()
 					m_isMiddleFire = false;
 					m_isBigFire = true;
 				}
+			}
+			else
+			{
+				m_isSmallFire = true;
+				m_isMiddleFire = false;
+				m_isBigFire = false;
 			}
 
 			// 新しい弾を生成する

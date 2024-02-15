@@ -28,8 +28,6 @@ namespace
 	constexpr int kRecoveryMax = 5;
 	// 登場する敵数
 	constexpr int kEnemyMax = 15;
-	// 花火の数
-	constexpr int kFireworksMax = 3;
 
 	// プレイヤーの初期位置
 	constexpr float kPlayerInitPosX = 350.0f;
@@ -579,7 +577,8 @@ void SceneStage1::Draw()
 
 		if (m_readyCount > 0)
 		{
-			DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 30), static_cast<int>(Game::kScreenHeight * 0.5), "READY", 0xffffff, m_pFont->GetFontStaging());
+			DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 30), static_cast<int>(Game::kScreenHeight * 0.5),
+				"READY", 0xffffff, m_pFont->GetFontStaging());
 		}
 	}
 
@@ -879,7 +878,7 @@ void SceneStage1::DropFullHpRecovery()
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
 			m_pRecovery[i]->Init(m_pBg);
-			m_pRecovery[i]->Start({ 2420.0f, 2150.0f }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ 2415.0f, 2150.0f }); // アイテムの位置を設定
 			return;
 		}
 	}
@@ -1024,7 +1023,7 @@ void SceneStage1::CreateEnemy()
 			break;
 		case 12:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2000.0f, 2000.0f, 300.0f);
+			m_pEnemy[i]->Start(2000.0f, 2000.0f, 350.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 13:
