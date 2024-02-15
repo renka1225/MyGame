@@ -117,18 +117,18 @@ void ShotLineMove::Start(Vec2 pos)
 	// 初期位置の設定
 	if (m_pPlayer->GetDir()) // プレイヤーが右を向いている場合
 	{
-		m_pos.x = pos.x + 40;
+		m_pos.x = pos.x + 20;
 		// 1フレームあたりの移動ベクトルを決定する
 		m_vec.x = kSpeed;
 	}
 	else // プレイヤーが左を向いている場合
 	{
-		m_pos.x = pos.x - 40;
+		m_pos.x = pos.x - 20;
 		// 1フレームあたりの移動ベクトルを決定する
 		m_vec.x = -kSpeed;
 	}
 	m_pos.y = (pos.y + kHeight / 2);
 
 	// アイテム2号を静止する時間
-	m_stopFrame = 120;
+	m_stopFrame = 150;
 }

@@ -6,7 +6,7 @@
 namespace
 {
 	// OP“®‰æÄ¶ŠÔ
-	constexpr int kMoveFrame = 1200;
+	constexpr int kMoveFrame = 1150;
 	// OP‚ğ—¬‚·‚Ü‚Å‚ÌŠÔ
 	constexpr int kStandFrame = 1800;
 

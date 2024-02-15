@@ -70,6 +70,9 @@ namespace
 	// 表示フレーム
 	constexpr int kFireParticleFrame = 30;
 
+	// 2号の待機時間
+	constexpr int kLineMoveStand = 150;
+
 	// キャラクターのアニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 1 };
 	// 待機アニメーション1コマのフレーム数
@@ -119,7 +122,7 @@ Player::Player() :
 	m_isSmallFire(false),
 	m_isMiddleFire(false),
 	m_isBigFire(false),
-	m_lineTime(120),
+	m_lineTime(kLineMoveStand),
 	m_animation(Anim::kIdle),
 	m_idleAnimFrame(0),
 	m_walkAnimFrame(0),
@@ -193,7 +196,7 @@ void Player::Init(Bg* pBg, SceneMain* pMain, Vec2 initPos)
 	m_isMiddleFire = false;
 	m_isBigFire = false;
 	// アイテム2号の待機時間
-	m_lineTime = 120;
+	m_lineTime = kLineMoveStand;
 	// 待機状態にする
 	m_animation = Anim::kIdle;
 	m_idleAnimFrame = 0;
@@ -644,7 +647,7 @@ void Player::UpdateShotLineMove()
 			// 弾発射のSEを鳴らす
 			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 
-			m_lineTime = 120;
+			m_lineTime = kLineMoveStand;
 		}
 	}
 
