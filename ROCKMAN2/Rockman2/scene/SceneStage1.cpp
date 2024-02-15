@@ -1023,7 +1023,7 @@ void SceneStage1::CreateEnemy()
 			break;
 		case 12:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2000.0f, 2000.0f, 350.0f);
+			m_pEnemy[i]->Start(1900.0f, 1950.0f, 280.0f);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 13:
