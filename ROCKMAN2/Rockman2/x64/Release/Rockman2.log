@@ -14,9 +14,9 @@ C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   Fireworks.cpp
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Fireworks.cpp(5,29): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Fireworks.cpp(54,38): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\ROCKMAN2\Rockman2\Fireworks.cpp(54,22): warning C4244: '初期化中': 'double' から 'const float' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\MyGame\ROCKMAN2\Rockman2\Fireworks.cpp(5,29): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\MyGame\ROCKMAN2\Rockman2\Fireworks.cpp(54,38): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\MyGame\ROCKMAN2\Rockman2\Fireworks.cpp(54,22): warning C4244: '初期化中': 'double' から 'const float' への変換です。データが失われる可能性があります。
   FontManager.cpp
 C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   main.cpp
@@ -74,6 +74,6 @@ C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,
   Vec2.cpp
   コード生成しています。
   Previous IPDB not found, fall back to full compilation.
-  All 519 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 522 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   コード生成が終了しました。
-  Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Release\Rockman2.exe
+  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\MyGame\ROCKMAN2\Rockman2\x64\Release\Rockman2.exe
