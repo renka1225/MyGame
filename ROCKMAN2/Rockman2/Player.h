@@ -18,23 +18,8 @@ public:
 	void Update();
 	void Draw();
 
-	// 弾発射時の処理
-	void UpdateShotBuster();	// バスター
-	void UpdateShotMetal();		// メタル
-	void UpdateShotFire();		// ファイア
-	void UpdateShotLineMove();	// 2号
-	// プレイヤーの表示
-	void DrawPlayer(int x, int y);
-	// ファイア溜め演出
-	void DrawFire(int x, int y);
-
-	// マップチップとの当たり判定の処理
-	void CheckHitMap(Rect chipRect);
-
 	// プレイヤーがダメージを受けた時の処理
 	void OnDamage();
-	// プレイヤーのHPが0以下になったときの処理
-	void OnDead();
 	// プレイヤーがE缶取得処理
 	void GetHpFullRecovery();
 	// プレイヤーの回復処理
@@ -44,16 +29,17 @@ public:
 	void ShotGreatRecovery();	// 弾大回復
 	void LifeRecovery();		// 残機回復
 	void HpFullRecovery();		// HP全回復
-
+	
 	// アイテム2号に乗った際の処理
 	void RideLineMove(Rect shotRect);
 
 	// 現在の武器選択状態を更新する
 	void ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove);
 
+	// マップチップとの当たり判定の処理
+	void CheckHitMap(Rect chipRect);
+
 public:
-	// 現在位置を更新する
-	void SetPos(Vec2 pos) { m_pos = pos; }
 	// プレイヤーの現在の向きを取得する
 	bool GetDir() const { return m_isRight; }
 	// プレイヤーの現在座標を取得する
@@ -80,12 +66,24 @@ public:
 	bool IsMiddleFire() const { return m_isMiddleFire; }
 	bool IsBigFire() const { return m_isBigFire; }
 
-public:
 	// 武器が選択中か取得する
 	bool IsBuster() const { return m_isBuster; }	// バスター
 	bool IsMetal() const { return m_isMetal; }		// メタル
 	bool IsFire() const { return m_isFire; }		// ファイア
 	bool IsLineMove() const { return m_isLineMove; }// 2号
+
+private:
+	// 弾発射時の処理
+	void UpdateShotBuster();	// バスター
+	void UpdateShotMetal();		// メタル
+	void UpdateShotFire();		// ファイア
+	void UpdateShotLineMove();	// 2号
+	// プレイヤーのHPが0以下になったときの処理
+	void UpdateDead();
+	// プレイヤーの描画
+	void DrawPlayer(int x, int y);
+	// ファイア溜め演出の描画
+	void DrawFire(int x, int y);
 
 private:
 	// 背景
@@ -112,7 +110,7 @@ private:
 	int m_hp;
 	// 残機
 	int m_life;
-	// E缶
+	// E缶所持数
 	int m_fullHpRecovery;
 
 	// ダメージを受けてからのフレーム数

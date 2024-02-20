@@ -17,7 +17,6 @@
 #include "EnemyCat.h"
 #include "EnemyBird.h"
 #include "EnemyBear.h"
-#include "Fireworks.h"
 #include <cassert>
 
 namespace
@@ -90,7 +89,7 @@ namespace
 SceneStage1::SceneStage1()
 {
 	// ゲーム画面描画先の生成
-	m_gameScreenHandle = MakeScreen(Stage1::kMapWidth, Stage1::kMapHeight, true);
+	m_gameScreenHandle = MakeScreen(static_cast<int>(Stage1::kMapWidth), static_cast<int>(Stage1::kMapHeight), true);
 
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player;
@@ -122,13 +121,6 @@ SceneStage1::SceneStage1()
 	{
 		m_pRecovery[i] = nullptr; // 未使用状態にする
 	}
-
-	// 花火演出の初期化
-	//m_pFireworks.resize(kFireworksMax);
-	//for (int i = 0; i < m_pFireworks.size(); i++)
-	//{
-	//	m_pRecovery[i] = nullptr; // 未使用状態にする
-	//}
 
 	// 音読み込み
 	m_bgm = LoadSoundMem("data/sound/BGM/stage2.wav");
@@ -903,11 +895,6 @@ void SceneStage1::UpdateClearStaging()
 	// 花火の演出
 	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
 	{
-		/*for (int i = 0; i < m_pFireworks.size(); i++)
-		{
-			m_pFireworks[i]->Update();
-		}*/
-
 		// 花火を上にあげる
 		if (m_clearStagingTime <= 220.0f)
 		{

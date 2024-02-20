@@ -202,9 +202,9 @@ void SceneTitle::Draw()
 void SceneTitle::DrawBg()
 {
 	// ‰æ‘œƒTƒCƒY‚ðŽæ“¾
-	Size bg2Size;
-	Size bg3Size;
-	Size bg4Size;
+	Size bg2Size = { 0, 0 };
+	Size bg3Size = { 0, 0 };
+	Size bg4Size = { 0, 0 };
 	GetGraphSize(m_bg2Handle, &bg2Size.width, &bg2Size.height);
 	GetGraphSize(m_bg3Handle, &bg3Size.width, &bg3Size.height);
 	GetGraphSize(m_bg4Handle, &bg4Size.width, &bg4Size.height);

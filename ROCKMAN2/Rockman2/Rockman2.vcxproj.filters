@@ -156,9 +156,6 @@
     <ClCompile Include="bg\BgTutorial.cpp">
       <Filter>ソース ファイル\bg</Filter>
     </ClCompile>
-    <ClCompile Include="Fireworks.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -268,9 +265,6 @@
     </ClInclude>
     <ClInclude Include="scene\SceneTutorial.h">
       <Filter>ヘッダー ファイル\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Fireworks.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

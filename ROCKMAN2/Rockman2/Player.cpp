@@ -13,67 +13,43 @@
 #include "RecoveryBase.h"
 #include <cassert>
 
-// Playerで使用する定数
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
+	/*プレイヤーの情報*/
 	// 移動速度
 	constexpr float kSpeed = 8.0f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
 	constexpr float kVelocity = -12.5f;
-
-	// プレイヤーの最大HP
-	constexpr int kMaxHp = 10;
-	// 最大弾エネルギー
-	constexpr float kMaxShot = 10.0f;
-	// メタルの最大エネルギー
-	constexpr float kMaxMetalShot = 5.0f;
 	// 残機
 	constexpr int kLife = 3;
-
-	// アイテムの回復量
-	constexpr int kSmallRecovery = 2;	// 小アイテム
-	constexpr int kGreatRecovery = 5;	// 大アイテム
-
-	// アイテム2号のサイズ
-	constexpr int kShotWidth = 52;
-
-	// マップチップのサイズ
-	constexpr int kMapWidth = 32;
-	constexpr int kMapHeight = 32;
+	// 最大HP
+	constexpr int kMaxHp = 10;
 
 	// プレイヤーのサイズ
 	constexpr float kScale = 0.3f;
 	constexpr int kPlayerWidth = 200;
 	constexpr int kPlayerHeight = 296;
-
 	// プレイヤーの当たり判定のサイズ
 	constexpr int kPlayerColX = static_cast<int>(kPlayerWidth * kScale - 40);
 	constexpr int kPlayerColY = static_cast<int>(kPlayerHeight * kScale);
 
-	// エフェクトのサイズ
+	// マップチップとの当たり判定の調整
+	constexpr int kColChipAdjustment = 15;
+	// ダメージ時のノックバック量
+	constexpr float kDamageMove = 30.0f;
+
+	// 死亡エフェクトのサイズ
 	constexpr int kEffectWidth = 32;
 	constexpr int kEffectHeight = 32;
-	// 拡大率
+	// エフェクトの拡大率
 	constexpr float kEffectScale = 3.0f;
 
-	// ファイアの大きさ
-	constexpr int kFireWidth = 32;
-	constexpr int kFireHeight = 32;
-	// ファイアの拡大率
-	constexpr float kSmallScale = 0.5f;
-	constexpr float kMiddleScale = 0.8f;
-	constexpr float kBigScale = 1.2f;
-	// ファイア溜めパーティクルのサイズ
-	constexpr int kFireParticleSize = 256;
-	// 表示フレーム
-	constexpr int kFireParticleFrame = 30;
-
-	// 2号の待機時間
-	constexpr int kLineMoveStand = 150;
-
-	// キャラクターのアニメーション
+	//アニメーション
 	constexpr int kUseFrame[] = { 0, 1, 2, 1 };
 	// 待機アニメーション1コマのフレーム数
 	constexpr int kIdleAnimFrameNum = 32;
@@ -89,10 +65,48 @@ namespace
 	constexpr int kDamageAnimFrame = 5;
 	// ダメージ演出のフレーム数
 	constexpr int kDamageFrame = 60;
-
-	// 死亡時
+	// 死亡時のアニメーション
 	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
 	constexpr int kDeadFrame = 60;
+
+	/*弾の情報*/
+	constexpr float kMaxShot = 10.0f;		// 最大弾エネルギー
+	constexpr float kMaxMetalShot = 5.0f;	// メタルの最大エネルギー
+
+	// メタルのエネルギー減少量
+	constexpr float kMetalDecrease = 0.25f;
+	// ファイアのエネルギー減少量
+	constexpr float kMiddleFireDecrease = 3.0f;	// 中
+	constexpr float kBigFireDecrease = 5.0f;	// 大
+	// 2号のエネルギー減少量
+	constexpr float kLineMoveDecrease = 0.03f;
+
+	// ファイアの大きさ
+	constexpr int kFireWidth = 32;
+	constexpr int kFireHeight = 32;
+	// ファイアの拡大率
+	constexpr float kSmallScale = 0.5f;		// 小
+	constexpr float kMiddleScale = 0.8f;	// 中
+	constexpr float kBigScale = 1.2f;		// 大
+	// ファイアパーティクルのサイズ
+	constexpr int kFireParticleSize = 256;
+	// ファイアパーティクルの拡大率
+	constexpr float kFireParticleScale = 0.6f;
+	// ファイアパーティクルの表示フレーム
+	constexpr int kFireParticleFrame = 30;
+
+	// アイテム2号のサイズ
+	constexpr int kShotWidth = 52;
+	// 2号の待機時間
+	constexpr int kLineMoveStand = 150;
+
+	/*アイテムの回復量*/
+	constexpr int kSmallRecovery = 2;	// 小アイテム
+	constexpr int kGreatRecovery = 5;	// 大アイテム
+
+	/*マップチップのサイズ*/
+	constexpr int kMapWidth = 32;
+	constexpr int kMapHeight = 32;
 }
 
 Player::Player() :
@@ -167,7 +181,12 @@ Player::~Player()
 	DeleteSoundMem(m_deadSE);
 }
 
-/*初期化処理*/
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="pBg">背景クラスのポインタ</param>
+/// <param name="pMain">ステージクラスのポインタ</param>
+/// <param name="initPos">プレイヤーの初期位置</param>
 void Player::Init(Bg* pBg, SceneMain* pMain, Vec2 initPos)
 {
 	m_pBg = pBg;
@@ -220,7 +239,10 @@ void Player::Init(Bg* pBg, SceneMain* pMain, Vec2 initPos)
 	}
 }
 
-/*プレイヤーの更新*/
+
+/// <summary>
+/// 更新
+/// </summary>
 void Player::Update()
 {
 	/*死亡時演出*/
@@ -413,6 +435,10 @@ void Player::Update()
 	}
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void Player::Draw()
 {
 	// ダメージ演出
@@ -451,485 +477,40 @@ void Player::Draw()
 #endif
 }
 
-/// <summary>
-/// バスター発射時処理
-/// </summary>
-void Player::UpdateShotBuster()
-{
-	if (Pad::IsTrigger(PAD_INPUT_B))
-	{
-		m_animation = Anim::kShot;
-		m_shotAnimFrame = kShotAnimFrame;
-
-		ShotBuster* pShot = new ShotBuster;
-		// 新しい弾を生成する
-		pShot->Init();
-		pShot->SetMain(m_pMain);
-		pShot->SetPlayer(this);
-		pShot->Start(m_pos);
-		// 以降更新やメモリの解放はSceneMainに任せる
-		m_pMain->AddShot(pShot);
-
-		// 弾発射のSEを鳴らす
-		PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-	}
-}
-
-/// <summary>
-/// メタル発射時処理
-/// </summary>
-void Player::UpdateShotMetal()
-{
-	if (Pad::IsTrigger(PAD_INPUT_B))
-	{
-		m_animation = Anim::kShot;
-		m_shotAnimFrame = kShotAnimFrame;
-
-		if (m_metalEnergy > 0)
-		{
-			ShotMetal* pShot = new ShotMetal;
-			// 新しい弾を生成する
-			pShot->Init();
-			pShot->SetMain(m_pMain);
-			pShot->SetPlayer(this);
-			pShot->Start(m_pos);
-			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pMain->AddShot(pShot);
-
-			// 弾発射のSEを鳴らす
-			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
-			if (pShot->IsExist())
-			{
-				// 弾エネルギーを0.25減らす
-				m_metalEnergy -= 0.25f;
-			}
-		}
-		else
-		{
-			m_metalEnergy = 0;
-		}
-	}
-}
-
-/// <summary>
-/// ファイア発射時処理
-/// </summary>
-void Player::UpdateShotFire()
-{
-	// キーが押された瞬間を取得
-	if (Pad::IsTrigger(PAD_INPUT_B))
-	{
-		m_pressTime = GetNowCount();
-	}
-	// キーが押されているか判定
-	if (Pad::IsPress(PAD_INPUT_B))
-	{
-		m_animation = Anim::kShot;
-		m_shotAnimFrame = kShotAnimFrame;
-
-		if (m_fireEnergy > 0)
-		{
-			// 長押し中SEを流す
-			if (CheckSoundMem(m_shotFireSE) == 0)
-			{
-				PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
-			}
-			// パーティクルの表示
-			m_fireParticleFrame += kFireParticleSize;
-			if (m_fireParticleFrame >= kFireParticleSize * 30)
-			{
-				m_fireParticleFrame = 0;
-			}
-		}
-
-		m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
-	}
-	// キーが離された瞬間を判定
-	if (Pad::IsRelease(PAD_INPUT_B))
-	{
-		// SE停止
-		StopSoundMem(m_shotFireSE);
-
-		if (m_fireEnergy > 0) // 弾エネルギーが0以上
-		{
-			// 弾発射のSEを鳴らす
-			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
-			if (m_nowPressTime > 0 && m_nowPressTime < 2000) // 長押し時間が2秒以下
-			{
-				m_fireEnergy--; // 弾エネルギーを1減らす
-				m_isSmallFire = true;
-				m_isMiddleFire = false;
-				m_isBigFire = false;
-
-			}
-			else if (m_nowPressTime < 4000) // 長押し時間が4秒以下
-			{
-				if (m_fireEnergy - 3 < 0) // 弾エネルギーが足りない場合
-				{
-					m_fireEnergy--; // 弾エネルギーを1減らす
-					m_isSmallFire = true;
-					m_isMiddleFire = false;
-					m_isBigFire = false;
-				}
-				else
-				{
-					m_fireEnergy -= 3; // 弾エネルギーを3減らす
-					m_isSmallFire = false;
-					m_isMiddleFire = true;
-					m_isBigFire = false;
-				}
-			}
-			else if (m_nowPressTime >= 4000) // 長押し時間が4秒以上
-			{
-				if (m_fireEnergy - 5 < 0) // 弾エネルギーが足りない場合
-				{
-					m_fireEnergy--; // 弾エネルギーを1減らす
-					m_isSmallFire = true;
-					m_isMiddleFire = false;
-					m_isBigFire = false;
-				}
-				else
-				{
-					m_fireEnergy -= 5; // 弾エネルギーを5減らす
-					m_isSmallFire = false;
-					m_isMiddleFire = false;
-					m_isBigFire = true;
-				}
-			}
-			else
-			{
-				m_isSmallFire = true;
-				m_isMiddleFire = false;
-				m_isBigFire = false;
-			}
-
-			// 新しい弾を生成する
-			ShotFire* pShot = new ShotFire;
-			pShot->Init();
-			pShot->SetMain(m_pMain);
-			pShot->SetPlayer(this);
-			pShot->Start(m_pos);
-			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pMain->AddShot(pShot);
-			m_nowPressTime = 0;
-		}
-		else // 弾エネルギーが0以下
-		{
-			m_fireEnergy = 0; // 現在の弾エネルギーを0にする
-		}
-	}
-}
-
-/// <summary>
-/// アイテム2号発射時処理
-/// </summary>
-void Player::UpdateShotLineMove()
-{
-	// ボタンを押したら発射
-	if (Pad::IsTrigger(PAD_INPUT_B))
-	{
-		m_animation = Anim::kShot;
-		m_shotAnimFrame = kShotAnimFrame;
-
-		if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
-		{
-			ShotLineMove* pShot = new ShotLineMove;
-			// 新しい弾を生成する
-			pShot->Init();
-			pShot->SetMain(m_pMain);
-			pShot->SetPlayer(this);
-			pShot->Start(m_pos);
-			// 以降更新やメモリの解放はSceneMainに任せる
-			m_pMain->AddShot(pShot);
-
-			// 弾発射のSEを鳴らす
-			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
-
-			m_lineTime = kLineMoveStand;
-		}
-	}
-
-	// 画面内にある場合
-	if (m_pMain->GetIsExistLineMove())
-	{
-		m_lineTime--;
-		if (m_lineTime <= 0)
-		{
-			m_lineEnergy -= 0.03f; // エネルギーを減らす
-		}
-	}
-}
-
-/// <summary>
-/// プレイヤーの描画
-/// </summary>
-void Player::DrawPlayer(int x, int y)
-{
-	// 画像切り出し位置を計算
-	// 待機状態
-	int idleAnimFrame = m_idleAnimFrame / kIdleAnimFrameNum;
-	int idleSrcX = kUseFrame[idleAnimFrame] * kPlayerWidth;
-	int idleSrcY = kPlayerHeight;
-	// 移動状態
-	int walkAnimFrame = m_walkAnimFrame / kWalkAnimFrameNum;
-	int walkSrcX = kUseFrame[walkAnimFrame] * kPlayerWidth;
-	int walkSrcY = kPlayerHeight;
-
-	if (m_isRight)
-	{
-		idleSrcY = kPlayerHeight * 0;
-		walkSrcY = kPlayerHeight * 0;
-	}
-	else
-	{
-		idleSrcY = kPlayerHeight * 1;
-		walkSrcY = kPlayerHeight * 1;
-	}
-
-	// 待機状態
-	if (m_animation == Anim::kIdle && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
-	{
-		if (m_isRight) // 右を向いている場合
-		{
-			DrawRectRotaGraph(x, y, idleSrcX, idleSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_idleHandle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x, y, idleSrcX, idleSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_idleHandle, true);
-		}
-	}
-	// 移動状態
-	else if (m_animation == Anim::kWalk && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
-	{
-		if (m_isRight) // 右を向いている場合
-		{
-			DrawRectRotaGraph(x, y, walkSrcX, walkSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_walkHandle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x, y, walkSrcX, walkSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_walkHandle, true);
-		}
-	}
-	// 弾発射状態
-	else if (m_animation == Anim::kShot || m_shotAnimFrame > 0 && m_damageAnimFrame <= 0)
-	{
-		if (m_isRight) // 右を向いている場合
-		{
-			if (m_isGround) // 接地中
-			{
-				DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
-			}
-			else
-			{
-				DrawRectRotaGraph(x, y, kPlayerWidth, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
-			}
-		}
-		else
-		{
-			if (m_isGround) // 接地中
-			{
-				DrawRectRotaGraph(x, y, 0, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
-			}
-			else
-			{
-				DrawRectRotaGraph(x, y, kPlayerWidth, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
-			}
-		}
-	}
-	// ジャンプ状態
-	else if (m_animation == Anim::kJump && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
-	{
-		if (m_isRight) // 右を向いている場合
-		{
-			DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_jumpHandle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x, y, 0, kPlayerHeight + 1, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_jumpHandle, true);
-		}
-	}
-	// ダメージ状態
-	else if (m_animation == Anim::kDamage && m_shotAnimFrame <= 0 && m_damageAnimFrame > 0)
-	{
-		if (m_isRight) // 右を向いている場合
-		{
-			DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_damageHandle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x, y, 0, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_damageHandle, true);
-		}
-	}
-}
-
-/// <summary>
-/// ファイア溜めの演出描画
-/// </summary>
-/// <param name="x">x</param>
-/// <param name="y">y</param>
-void Player::DrawFire(int x, int y)
-{
-	if (m_fireEnergy > 0 && m_nowPressTime > 0)
-	{
-		// ファイア
-		if (m_nowPressTime < 2000 || m_fireEnergy < 5)
-		{
-			if (m_isRight)
-			{
-				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
-			}
-			else
-			{
-				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
-			}
-		}
-		else if (m_nowPressTime < 5000 && m_fireEnergy >= 5)
-		{
-			if (m_isRight)
-			{
-				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
-			}
-			else
-			{
-				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
-			}
-		}
-		else
-		{
-			if (m_isRight)
-			{
-				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
-			}
-			else
-			{
-				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
-			}
-		}
-
-		// パーティクル
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 100);
-		if (m_isRight)
-		{
-			DrawRectRotaGraph(x + 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
-		}
-		else
-		{
-			DrawRectRotaGraph(x - 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, 0.6f, 0.0f, m_fireParticle, true);
-		}
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	}
-}
-
-/// <summary>
-/// マップチップの当たり判定
-/// </summary>
-/// <param name="chipRect"></param>
-void Player::CheckHitMap(Rect chipRect)
-{
-	// 横から当たったかチェックする
-	m_pos.x += m_move.x;
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
-	if (m_pBg->IsCollision(m_colRect, chipRect))
-	{
-		if (m_move.x > 0.0f)
-		{
-			m_pos.x = chipRect.GetLeft() - kPlayerWidth * kScale * 0.5f + 15 - 1;
-		}
-		else if (m_move.x < 0.0f)
-		{
-			m_pos.x = chipRect.GetRight() + kPlayerWidth * kScale * 0.5f - 15 + 1;
-		}
-	}
-
-	// 縦から当たったかチェックする
-	m_pos.y += m_move.y;
-	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
-	if (m_pBg->IsCollision(m_colRect, chipRect))
-	{
-		if (m_move.y > 0.0f)
-		{
-			m_pos.y = chipRect.GetTop() - kPlayerHeight * kScale  * 0.5f - 1 ;
-			m_isGround = true;
-		}
-		else if (m_move.y < 0.0f)
-		{
-			m_pos.y = chipRect.GetBottom() + kPlayerHeight * kScale * 0.5f + 1;
-			m_move.y *= -1.0f;
-		}
-	}
-}
-
-/// <summary>
-/// 弾の選択状態を更新
-/// </summary>
-/// <param name="isBuster">バスター</param>
-/// <param name="isMetal">メタル</param>
-/// <param name="isFire">ファイア</param>
-/// <param name="isLineMove">2号</param>
-void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
-{
-	// バスターの選択状態を更新
-	m_isBuster = isBuster;
-
-	// メタルの選択状態を更新
-	m_isMetal = isMetal;
-
-	// ファイアの選択状態を更新
-	m_isFire = isFire;
-
-	// 2号の選択状態を更新
-	m_isLineMove = isLineMove;
-}
 
 /// <summary>
 /// プレイヤーのダメージ演出
 /// </summary>
 void Player::OnDamage()
 {
-	// ダメージ演出中は無敵状態になる
-	if (m_damageFrame > 0) return;
-
-	// 演出フレーム数を設定する
-	m_damageFrame = kDamageFrame;
-	m_damageAnimFrame = kDamageAnimFrame;
-	m_animation = Anim::kDamage;
-
 	// ダメージSEを鳴らす
 	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
 
-	// HPを減らす
+	// 演出フレーム数を設定する
+	m_damageAnimFrame = kDamageAnimFrame;
+	m_animation = Anim::kDamage;
+
+	// ダメージ演出中は無敵状態になる
+	if (m_damageFrame > 0) return;
+
 	m_hp--;
+	m_damageFrame = kDamageFrame;
+
 	// 死亡演出
 	if (m_hp <= 0)
 	{
-		OnDead();
+		UpdateDead();
 	}
 
 	// ノックバックさせる
 	if (m_isRight)
 	{
-		m_pos.x -= 30;
+		m_pos.x -= kDamageMove;
 	}
 	else
 	{
-		m_pos.x += 30;
+		m_pos.x += kDamageMove;
 	}
-}
-
-/// <summary>
-/// プレイヤーのHPが0以下になった場合
-/// </summary>
-void Player::OnDead()
-{
-	StopSoundMem(m_shotFireSE);
-	StopSoundMem(m_shotSE);
-	// 残機が減るごとにSEを鳴らす
-	PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
-
-	m_life--;
-	m_deadFrame = kDeadFrame;
 }
 
 /// <summary>
@@ -1103,3 +684,462 @@ void Player::RideLineMove(Rect shotRect)
 		m_animation = Anim::kIdle;
 	}
 }
+
+/// <summary>
+/// マップチップの当たり判定
+/// </summary>
+/// <param name="chipRect"></param>
+void Player::CheckHitMap(Rect chipRect)
+{
+	// 横から当たったかチェックする
+	m_pos.x += m_move.x;
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
+	if (m_pBg->IsCollision(m_colRect, chipRect))
+	{
+		if (m_move.x > 0.0f)
+		{
+			m_pos.x = chipRect.GetLeft() - kPlayerWidth * kScale * 0.5f + kColChipAdjustment;
+		}
+		else if (m_move.x < 0.0f)
+		{
+			m_pos.x = chipRect.GetRight() + kPlayerWidth * kScale * 0.5f - kColChipAdjustment;
+		}
+	}
+
+	// 縦から当たったかチェックする
+	m_pos.y += m_move.y;
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kPlayerColX), static_cast<float>(kPlayerColY));
+	if (m_pBg->IsCollision(m_colRect, chipRect))
+	{
+		if (m_move.y > 0.0f)
+		{
+			m_pos.y = chipRect.GetTop() - kPlayerHeight * kScale * 0.5f;
+			m_isGround = true;
+		}
+		else if (m_move.y < 0.0f)
+		{
+			m_pos.y = chipRect.GetBottom() + kPlayerHeight * kScale * 0.5f;
+			m_move.y *= -1.0f;
+		}
+	}
+}
+
+
+/// <summary>
+/// バスター発射時処理
+/// </summary>
+void Player::UpdateShotBuster()
+{
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		// 新しい弾を生成
+		ShotBuster* pShot = new ShotBuster;
+		pShot->Init();
+		pShot->SetMain(m_pMain);
+		pShot->SetPlayer(this);
+		pShot->Start(m_pos);
+		// 更新、メモリの解放はSceneMainで行う
+		m_pMain->AddShot(pShot);
+
+		// 弾発射のSEを鳴らす
+		PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+	}
+}
+
+
+/// <summary>
+/// メタル発射時処理
+/// </summary>
+void Player::UpdateShotMetal()
+{
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		if (m_metalEnergy > 0)
+		{
+			// 新しい弾を生成
+			ShotMetal* pShot = new ShotMetal;
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(m_pos);
+			// 更新、メモリの解放はSceneMainで行う
+			m_pMain->AddShot(pShot);
+
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+			if (pShot->IsExist())
+			{
+				m_metalEnergy -= kMetalDecrease;
+			}
+		}
+		else
+		{
+			m_metalEnergy = 0;
+		}
+	}
+}
+
+
+/// <summary>
+/// ファイア発射時処理
+/// </summary>
+void Player::UpdateShotFire()
+{
+	// キーが押された瞬間を取得
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_pressTime = GetNowCount();
+	}
+	// キーが押されているか判定
+	if (Pad::IsPress(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		if (m_fireEnergy > 0)
+		{
+			// 長押し中SEを流す
+			if (CheckSoundMem(m_shotFireSE) == 0)
+			{
+				PlaySoundMem(m_shotFireSE, DX_PLAYTYPE_LOOP, true);
+			}
+			// パーティクルの表示
+			m_fireParticleFrame += kFireParticleSize;
+			if (m_fireParticleFrame >= kFireParticleSize * 30)
+			{
+				m_fireParticleFrame = 0;
+			}
+		}
+
+		m_nowPressTime = GetNowCount() - m_pressTime; // ボタンを押して離すまでの時間
+	}
+	// キーが離された瞬間を判定
+	if (Pad::IsRelease(PAD_INPUT_B))
+	{
+		// SE停止
+		StopSoundMem(m_shotFireSE);
+
+		if (m_fireEnergy > 0) // 弾エネルギーが0以上
+		{
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+			// 長押し時間が2秒以下
+			if (m_nowPressTime > 0 && m_nowPressTime < 2000)
+			{
+				m_fireEnergy--; // 弾エネルギーを1減らす
+				m_isSmallFire = true;
+				m_isMiddleFire = false;
+				m_isBigFire = false;
+
+			}
+			// 長押し時間が4秒以下
+			else if (m_nowPressTime < 4000)
+			{
+				if (m_fireEnergy - kMiddleFireDecrease < 0) // 弾エネルギーが足りない場合
+				{
+					m_fireEnergy--; // 弾エネルギーを1減らす
+					m_isSmallFire = true;
+					m_isMiddleFire = false;
+					m_isBigFire = false;
+				}
+				else
+				{
+					m_fireEnergy -= kMiddleFireDecrease;
+					m_isSmallFire = false;
+					m_isMiddleFire = true;
+					m_isBigFire = false;
+				}
+			}
+			// 長押し時間が4秒以上
+			else if (m_nowPressTime >= 4000)
+			{
+				if (m_fireEnergy - kBigFireDecrease < 0) // 弾エネルギーが足りない場合
+				{
+					m_fireEnergy--;
+					m_isSmallFire = true;
+					m_isMiddleFire = false;
+					m_isBigFire = false;
+				}
+				else
+				{
+					m_fireEnergy -= kBigFireDecrease;
+					m_isSmallFire = false;
+					m_isMiddleFire = false;
+					m_isBigFire = true;
+				}
+			}
+			// 長押しされていない
+			else
+			{
+				m_isSmallFire = true;
+				m_isMiddleFire = false;
+				m_isBigFire = false;
+			}
+
+			// 新しい弾を生成
+			ShotFire* pShot = new ShotFire;
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(m_pos);
+			// 更新、メモリの解放はSceneMainで行う
+			m_pMain->AddShot(pShot);
+			m_nowPressTime = 0;
+		}
+		else
+		{
+			m_fireEnergy = 0;
+		}
+	}
+}
+
+
+/// <summary>
+/// アイテム2号発射時処理
+/// </summary>
+void Player::UpdateShotLineMove()
+{
+	// ボタンを押したら発射
+	if (Pad::IsTrigger(PAD_INPUT_B))
+	{
+		m_animation = Anim::kShot;
+		m_shotAnimFrame = kShotAnimFrame;
+
+		if (!m_pMain->GetIsExistLineMove() && m_lineEnergy > 0)
+		{
+			ShotLineMove* pShot = new ShotLineMove;
+			// 新しい弾を生成
+			pShot->Init();
+			pShot->SetMain(m_pMain);
+			pShot->SetPlayer(this);
+			pShot->Start(m_pos);
+			// 更新、メモリの解放はSceneMainで行う
+			m_pMain->AddShot(pShot);
+
+			// 弾発射のSEを鳴らす
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
+
+			m_lineTime = kLineMoveStand;
+		}
+	}
+
+	// 画面内にある場合
+	if (m_pMain->GetIsExistLineMove())
+	{
+		m_lineTime--;
+		if (m_lineTime <= 0)
+		{
+			m_lineEnergy -= kLineMoveDecrease; // エネルギーを減らす
+		}
+	}
+}
+
+
+/// <summary>
+/// プレイヤーのHPが0以下になった場合
+/// </summary>
+void Player::UpdateDead()
+{
+	StopSoundMem(m_shotFireSE);
+	StopSoundMem(m_shotSE);
+	// 残機が減るごとにSEを鳴らす
+	PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
+
+	m_life--;
+	m_deadFrame = kDeadFrame;
+}
+
+
+/// <summary>
+/// プレイヤーの描画
+/// </summary>
+void Player::DrawPlayer(int x, int y)
+{
+	/*画像切り出し位置を計算*/
+	// 待機状態
+	int idleAnimFrame = m_idleAnimFrame / kIdleAnimFrameNum;
+	int idleSrcX = kUseFrame[idleAnimFrame] * kPlayerWidth;
+	int idleSrcY = kPlayerHeight;
+	// 移動状態
+	int walkAnimFrame = m_walkAnimFrame / kWalkAnimFrameNum;
+	int walkSrcX = kUseFrame[walkAnimFrame] * kPlayerWidth;
+	int walkSrcY = kPlayerHeight;
+
+	if (m_isRight)
+	{
+		idleSrcY = kPlayerHeight * 0;
+		walkSrcY = kPlayerHeight * 0;
+	}
+	else
+	{
+		idleSrcY = kPlayerHeight * 1;
+		walkSrcY = kPlayerHeight * 1;
+	}
+
+	/*表示*/
+	// 待機状態
+	if (m_animation == Anim::kIdle && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x, y, idleSrcX, idleSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_idleHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, idleSrcX, idleSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_idleHandle, true);
+		}
+	}
+	// 移動状態
+	else if (m_animation == Anim::kWalk && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x, y, walkSrcX, walkSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_walkHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, walkSrcX, walkSrcY, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_walkHandle, true);
+		}
+	}
+	// 弾発射状態
+	else if (m_animation == Anim::kShot || m_shotAnimFrame > 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight)
+		{
+			if (m_isGround)
+			{
+				DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x, y, kPlayerWidth, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+		}
+		else
+		{
+			if (m_isGround)
+			{
+				DrawRectRotaGraph(x, y, 0, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x, y, kPlayerWidth, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_shotHandle, true);
+			}
+		}
+	}
+	// ジャンプ状態
+	else if (m_animation == Anim::kJump && m_shotAnimFrame <= 0 && m_damageAnimFrame <= 0)
+	{
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_jumpHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, 0, kPlayerHeight + 1, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_jumpHandle, true);
+		}
+	}
+	// ダメージ状態
+	else if (m_animation == Anim::kDamage && m_shotAnimFrame <= 0 && m_damageAnimFrame > 0)
+	{
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x, y, 0, 0, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_damageHandle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x, y, 0, kPlayerHeight, kPlayerWidth, kPlayerHeight, kScale, 0.0f, m_damageHandle, true);
+		}
+	}
+}
+
+
+/// <summary>
+/// ファイア溜めの演出描画
+/// </summary>
+/// <param name="x">x</param>
+/// <param name="y">y</param>
+void Player::DrawFire(int x, int y)
+{
+	if (m_fireEnergy > 0 && m_nowPressTime > 0)
+	{
+		/*ファイアの見た目を大きくする*/
+		if (m_nowPressTime < 2000 || m_fireEnergy < 5)
+		{
+			if (m_isRight)
+			{
+				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
+			}
+		}
+		else if (m_nowPressTime < 5000 && m_fireEnergy >= 5)
+		{
+			if (m_isRight)
+			{
+				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
+			}
+		}
+		else
+		{
+			if (m_isRight)
+			{
+				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
+			}
+			else
+			{
+				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
+			}
+		}
+
+		/*パーティクルの表示*/
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 100);
+		if (m_isRight)
+		{
+			DrawRectRotaGraph(x + 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, kFireParticleScale, 0.0f, m_fireParticle, true);
+		}
+		else
+		{
+			DrawRectRotaGraph(x - 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, kFireParticleScale, 0.0f, m_fireParticle, true);
+		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+}
+
+
+/// <summary>
+/// 弾の選択状態を更新
+/// </summary>
+/// <param name="isBuster">バスター</param>
+/// <param name="isMetal">メタル</param>
+/// <param name="isFire">ファイア</param>
+/// <param name="isLineMove">2号</param>
+void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
+{
+	// バスターの選択状態を更新
+	m_isBuster = isBuster;
+
+	// メタルの選択状態を更新
+	m_isMetal = isMetal;
+
+	// ファイアの選択状態を更新
+	m_isFire = isFire;
+
+	// 2号の選択状態を更新
+	m_isLineMove = isLineMove;
+}
+

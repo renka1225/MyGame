@@ -93,7 +93,7 @@ namespace
 SceneTutorial::SceneTutorial()
 {
 	// ゲーム画面描画先の生成
-	m_gameScreenHandle = MakeScreen(Tutorial::kMapWidth, Tutorial::kMapHeight, true);
+	m_gameScreenHandle = MakeScreen(static_cast<int>(Tutorial::kMapWidth), static_cast<int>(Tutorial::kMapHeight), true);
 
 	// プレイヤーのメモリ確保
 	m_pPlayer = new Player;
@@ -466,7 +466,7 @@ void SceneTutorial::Update()
 	}
 
 	/*メニューを閉じる際にジャンプしないようにする*/
-	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsSelectShotExist())
+	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsPause())
 	{
 		m_isExistMenu = false;
 	}

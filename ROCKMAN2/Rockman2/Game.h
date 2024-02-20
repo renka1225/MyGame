@@ -11,14 +11,14 @@ namespace Game
 /*チュートリアルステージのマップの広さ*/
 namespace Tutorial
 {
-	constexpr int kMapWidth = 7560;
-	constexpr int kMapHeight = 1080;
+	constexpr float kMapWidth = 7560.0f;
+	constexpr float kMapHeight = 1080.0f;
 }
 
 /*ステージ1のマップの広さ*/
 namespace Stage1
 {
-	constexpr int kMapWidth = 5940;
-	constexpr int kMapHeight = 3240;
+	constexpr float kMapWidth = 5940.0f;
+	constexpr float kMapHeight = 3240.0f;
 }
 
