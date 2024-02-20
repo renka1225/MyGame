@@ -73,6 +73,8 @@ public:
 	bool IsLineMove() const { return m_isLineMove; }// 2号
 
 private:
+	// ジャンプ処理
+	void UpdateJump();
 	// 弾発射時の処理
 	void UpdateShotBuster();	// バスター
 	void UpdateShotMetal();		// メタル

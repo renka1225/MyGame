@@ -247,10 +247,7 @@ void Player::Update()
 {
 	/*死亡時演出*/
 	m_deadFrame--;
-	if (m_deadFrame < 0)
-	{
-		m_deadFrame = 0;
-	}
+	if (m_deadFrame < 0) m_deadFrame = 0;
 
 	/*プレイヤーが穴に落下した場合*/
 	if ((m_pos.y - kPlayerHeight * 0.5f) > Stage1::kMapHeight)
@@ -259,20 +256,15 @@ void Player::Update()
 		m_hp -= kMaxHp;
 		m_life--;
 
-		// 残機が減るごとにSEを鳴らす
+		// SEを鳴らす
 		PlaySoundMem(m_deadSE, DX_PLAYTYPE_BACK, true);
-		if (m_hp <= 0)
-		{
-			m_hp = 0;
-		}
+		if (m_hp <= 0) m_hp = 0;
+		
 		return;
 	}
 
 	/*プレイヤーのHPが0以下になった場合*/
-	if (m_hp <= 0)
-	{
-		return;
-	}
+	if (m_hp <= 0) return;
 
 	// パッドを使用する
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -331,28 +323,8 @@ void Player::Update()
 
 		if (m_isJump)
 		{
-			m_jumpFrame++;	// ジャンプフレームの更新
-
-			//ボタンを離した瞬間にジャンプする
-			if (Pad::IsRelease(PAD_INPUT_A))
-			{
-				// ジャンプの高さを決める
-				float jumpHeight;
-
-				if (m_jumpFrame < 10) // 長押し時間10フレーム以下
-				{
-					jumpHeight = 0.5f;
-				}
-				else if (m_jumpFrame < 30) // 30フレーム以下
-				{
-					jumpHeight = 0.8f;
-				}
-				else	// 30フレーム以上
-				{
-					jumpHeight = 1.0f;
-				}
-				m_move.y *= jumpHeight;
-			}
+			// ジャンプ中処理
+			UpdateJump();
 		}
 		m_move.y += kGravity; // 初速度に重力を足す
 
@@ -366,73 +338,43 @@ void Player::Update()
 	// printfDx("moveY:(%f)\n", m_move.y);
 #endif
 
-	/*バスター発射*/
-	if (m_isBuster)
-	{
-		UpdateShotBuster();
-	}
-
-	/*メタル発射*/
-	if (m_isMetal)
-	{
-		UpdateShotMetal();
-	}
-
-	/*ファイヤー発射*/
-	if (m_isFire)
-	{
-		UpdateShotFire();
-	}
-	else
-	{
-		StopSoundMem(m_shotFireSE);
-	}
-	
-	/*アイテム2号発射*/
-	if (m_isLineMove)
-	{
-		UpdateShotLineMove();
-	}
+	/*弾発射処理*/
+	//バスター発射
+	if (m_isBuster) UpdateShotBuster();
+	//メタル発射
+	if (m_isMetal) UpdateShotMetal();
+	//ファイヤー発射
+	if (m_isFire) UpdateShotFire();
+	else StopSoundMem(m_shotFireSE);
+	//アイテム2号発射
+	if (m_isLineMove) UpdateShotLineMove();
 
 	/*ダメージ演出*/
 	m_damageFrame--;
-	if (m_damageFrame < 0)
-	{
-		m_damageFrame = 0;
-	}
+	if (m_damageFrame < 0) m_damageFrame = 0;
 
 	/*アニメーション*/
 	//待機状態
 	if(m_animation == Anim::kIdle)
 	{
 		m_idleAnimFrame++;
-		if (m_idleAnimFrame >= kIdleAnimFrameCycle)
-		{
-			m_idleAnimFrame = 0;
-		}
+		if (m_idleAnimFrame >= kIdleAnimFrameCycle) m_idleAnimFrame = 0;
 	}
+
 	//移動状態
 	else if (m_animation == Anim::kWalk)
 	{
 		m_walkAnimFrame++;
-		if (m_walkAnimFrame >= kWalkAnimFrameCycle)
-		{
-			m_walkAnimFrame = 0;
-		}
+		if (m_walkAnimFrame >= kWalkAnimFrameCycle) m_walkAnimFrame = 0;
 	}
+
 	// ショット
 	m_shotAnimFrame--;
-	if (m_shotAnimFrame < 0)
-	{
-		m_shotAnimFrame = 0;
-	}
+	if (m_shotAnimFrame < 0) m_shotAnimFrame = 0;
 
 	// ダメージ
 	m_damageAnimFrame--;
-	if (m_damageAnimFrame < 0)
-	{
-		m_damageAnimFrame = 0;
-	}
+	if (m_damageAnimFrame < 0) m_damageAnimFrame = 0;
 }
 
 
@@ -524,16 +466,19 @@ void Player::GetHpFullRecovery()
 /// <summary>
 /// 回復
 /// </summary>
-void Player::HpSmallRecovery() // HP小回復
+
+/*HP小回復*/
+void Player::HpSmallRecovery()
 {
 	m_hp += kSmallRecovery;
-	if (m_hp > kMaxHp) // 最大HPを超えた場合
+	if (m_hp > kMaxHp)
 	{
 		m_hp = kMaxHp;
 	}
 }
 
-void Player::HpGreatRecovery() // HP大回復
+/*HP大回復*/
+void Player::HpGreatRecovery()
 {
 	m_hp += kGreatRecovery;
 	if (m_hp > kMaxHp) // 最大HPを超えた場合
@@ -542,7 +487,8 @@ void Player::HpGreatRecovery() // HP大回復
 	}
 }
 
-void Player::ShotSmallRecovery() // 弾小回復
+/*弾小回復*/
+void Player::ShotSmallRecovery()
 {
 	if (m_isMetal) // メタル
 	{
@@ -570,7 +516,8 @@ void Player::ShotSmallRecovery() // 弾小回復
 	}
 }
 
-void Player::ShotGreatRecovery() // 弾大回復
+/*弾大回復*/
+void Player::ShotGreatRecovery()
 {
 	if (m_isMetal) // メタル
 	{
@@ -598,7 +545,8 @@ void Player::ShotGreatRecovery() // 弾大回復
 	}
 }
 
-void Player::LifeRecovery() // 残機回復
+/*残機回復*/
+void Player::LifeRecovery()
 {
 	m_life += 1;	// 残機を1増やす
 	if (m_life > 99)
@@ -607,7 +555,8 @@ void Player::LifeRecovery() // 残機回復
 	}
 }
 
-void Player::HpFullRecovery() // HP、エネルギー全回復
+/*HP、エネルギー全回復*/
+void Player::HpFullRecovery()
 {
 	if (m_fullHpRecovery > 0)
 	{
@@ -654,6 +603,7 @@ void Player::HpFullRecovery() // HP、エネルギー全回復
 	}
 }
 
+
 /// <summary>
 /// アイテム2号に乗った際の処理
 /// </summary>
@@ -685,10 +635,34 @@ void Player::RideLineMove(Rect shotRect)
 	}
 }
 
+
 /// <summary>
-/// マップチップの当たり判定
+/// 弾の選択状態を更新
 /// </summary>
-/// <param name="chipRect"></param>
+/// <param name="isBuster">バスター</param>
+/// <param name="isMetal">メタル</param>
+/// <param name="isFire">ファイア</param>
+/// <param name="isLineMove">2号</param>
+void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
+{
+	// バスターの選択状態を更新
+	m_isBuster = isBuster;
+
+	// メタルの選択状態を更新
+	m_isMetal = isMetal;
+
+	// ファイアの選択状態を更新
+	m_isFire = isFire;
+
+	// 2号の選択状態を更新
+	m_isLineMove = isLineMove;
+}
+
+
+/// <summary>
+/// マップチップと当たったときの処理
+/// </summary>
+/// <param name="chipRect">マップチップの当たり判定</param>
 void Player::CheckHitMap(Rect chipRect)
 {
 	// 横から当たったかチェックする
@@ -721,6 +695,36 @@ void Player::CheckHitMap(Rect chipRect)
 			m_pos.y = chipRect.GetBottom() + kPlayerHeight * kScale * 0.5f;
 			m_move.y *= -1.0f;
 		}
+	}
+}
+
+
+/// <summary>
+/// ジャンプ処理
+/// </summary>
+void Player::UpdateJump()
+{
+	m_jumpFrame++;	// ジャンプフレームの更新
+
+	//ボタンを離した瞬間にジャンプする
+	if (Pad::IsRelease(PAD_INPUT_A))
+	{
+		// ジャンプの高さを決める
+		float jumpHeight;
+
+		if (m_jumpFrame < 10) // 長押し時間10フレーム以下
+		{
+			jumpHeight = 0.5f;
+		}
+		else if (m_jumpFrame < 30) // 30フレーム以下
+		{
+			jumpHeight = 0.8f;
+		}
+		else	// 30フレーム以上
+		{
+			jumpHeight = 1.0f;
+		}
+		m_move.y *= jumpHeight;
 	}
 }
 
@@ -1118,28 +1122,5 @@ void Player::DrawFire(int x, int y)
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
-}
-
-
-/// <summary>
-/// 弾の選択状態を更新
-/// </summary>
-/// <param name="isBuster">バスター</param>
-/// <param name="isMetal">メタル</param>
-/// <param name="isFire">ファイア</param>
-/// <param name="isLineMove">2号</param>
-void Player::ChangeShot(bool isBuster, bool isMetal, bool isFire, bool isLineMove)
-{
-	// バスターの選択状態を更新
-	m_isBuster = isBuster;
-
-	// メタルの選択状態を更新
-	m_isMetal = isMetal;
-
-	// ファイアの選択状態を更新
-	m_isFire = isFire;
-
-	// 2号の選択状態を更新
-	m_isLineMove = isLineMove;
 }
 
