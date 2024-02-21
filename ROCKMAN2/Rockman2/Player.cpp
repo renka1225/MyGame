@@ -81,6 +81,9 @@ namespace
 	// 2号のエネルギー減少量
 	constexpr float kLineMoveDecrease = 0.03f;
 
+	// ファイアの溜め時間
+	constexpr int kSmallFirePressTime = 2000;
+	constexpr int kMiddleFirePressTime = 4000;
 	// ファイアの大きさ
 	constexpr int kFireWidth = 32;
 	constexpr int kFireHeight = 32;
@@ -92,6 +95,9 @@ namespace
 	constexpr int kFireParticleSize = 256;
 	// ファイアパーティクルの拡大率
 	constexpr float kFireParticleScale = 0.6f;
+	// ファイアパーティクルの表示位置調整
+	constexpr int kFireParticlePositioningX = 40;
+	constexpr int kFireParticlePositioningY = 20;
 	// ファイアパーティクルの表示フレーム
 	constexpr int kFireParticleFrame = 30;
 
@@ -354,27 +360,7 @@ void Player::Update()
 	if (m_damageFrame < 0) m_damageFrame = 0;
 
 	/*アニメーション*/
-	//待機状態
-	if(m_animation == Anim::kIdle)
-	{
-		m_idleAnimFrame++;
-		if (m_idleAnimFrame >= kIdleAnimFrameCycle) m_idleAnimFrame = 0;
-	}
-
-	//移動状態
-	else if (m_animation == Anim::kWalk)
-	{
-		m_walkAnimFrame++;
-		if (m_walkAnimFrame >= kWalkAnimFrameCycle) m_walkAnimFrame = 0;
-	}
-
-	// ショット
-	m_shotAnimFrame--;
-	if (m_shotAnimFrame < 0) m_shotAnimFrame = 0;
-
-	// ダメージ
-	m_damageAnimFrame--;
-	if (m_damageAnimFrame < 0) m_damageAnimFrame = 0;
+	UpdatePlayerAnim();
 }
 
 
@@ -425,9 +411,6 @@ void Player::Draw()
 /// </summary>
 void Player::OnDamage()
 {
-	// ダメージSEを鳴らす
-	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
-
 	// 演出フレーム数を設定する
 	m_damageAnimFrame = kDamageAnimFrame;
 	m_animation = Anim::kDamage;
@@ -453,15 +436,21 @@ void Player::OnDamage()
 	{
 		m_pos.x += kDamageMove;
 	}
+
+	// ダメージSEを鳴らす
+	PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK, true);
+	return;
 }
+
 
 /// <summary>
 /// E缶取得
 /// </summary>
 void Player::GetHpFullRecovery()
 {
-	m_fullHpRecovery += 1;
+	m_fullHpRecovery++;
 }
+
 
 /// <summary>
 /// 回復
@@ -816,7 +805,7 @@ void Player::UpdateShotFire()
 			}
 			// パーティクルの表示
 			m_fireParticleFrame += kFireParticleSize;
-			if (m_fireParticleFrame >= kFireParticleSize * 30)
+			if (m_fireParticleFrame >= kFireParticleSize * kFireParticleFrame)
 			{
 				m_fireParticleFrame = 0;
 			}
@@ -836,7 +825,7 @@ void Player::UpdateShotFire()
 			PlaySoundMem(m_shotSE, DX_PLAYTYPE_BACK, true);
 
 			// 長押し時間が2秒以下
-			if (m_nowPressTime > 0 && m_nowPressTime < 2000)
+			if (m_nowPressTime > 0 && m_nowPressTime < kSmallFirePressTime)
 			{
 				m_fireEnergy--; // 弾エネルギーを1減らす
 				m_isSmallFire = true;
@@ -845,7 +834,7 @@ void Player::UpdateShotFire()
 
 			}
 			// 長押し時間が4秒以下
-			else if (m_nowPressTime < 4000)
+			else if (m_nowPressTime < kMiddleFirePressTime)
 			{
 				if (m_fireEnergy - kMiddleFireDecrease < 0) // 弾エネルギーが足りない場合
 				{
@@ -863,7 +852,7 @@ void Player::UpdateShotFire()
 				}
 			}
 			// 長押し時間が4秒以上
-			else if (m_nowPressTime >= 4000)
+			else if (m_nowPressTime >= kMiddleFirePressTime)
 			{
 				if (m_fireEnergy - kBigFireDecrease < 0) // 弾エネルギーが足りない場合
 				{
@@ -959,6 +948,35 @@ void Player::UpdateDead()
 
 	m_life--;
 	m_deadFrame = kDeadFrame;
+}
+
+
+/// <summary>
+///プレイヤーのアニメーション 
+/// </summary>
+void Player::UpdatePlayerAnim()
+{
+	//待機状態
+	if (m_animation == Anim::kIdle)
+	{
+		m_idleAnimFrame++;
+		if (m_idleAnimFrame >= kIdleAnimFrameCycle) m_idleAnimFrame = 0;
+	}
+
+	//移動状態
+	else if (m_animation == Anim::kWalk)
+	{
+		m_walkAnimFrame++;
+		if (m_walkAnimFrame >= kWalkAnimFrameCycle) m_walkAnimFrame = 0;
+	}
+
+	// ショット
+	m_shotAnimFrame--;
+	if (m_shotAnimFrame < 0) m_shotAnimFrame = 0;
+
+	// ダメージ
+	m_damageAnimFrame--;
+	if (m_damageAnimFrame < 0) m_damageAnimFrame = 0;
 }
 
 
@@ -1069,44 +1087,68 @@ void Player::DrawPlayer(int x, int y)
 /// <summary>
 /// ファイア溜めの演出描画
 /// </summary>
-/// <param name="x">x</param>
-/// <param name="y">y</param>
+/// <param name="x">表示位置のX座標</param>
+/// <param name="y">表示位置のY座標</param>
 void Player::DrawFire(int x, int y)
 {
 	if (m_fireEnergy > 0 && m_nowPressTime > 0)
 	{
 		/*ファイアの見た目を大きくする*/
-		if (m_nowPressTime < 2000 || m_fireEnergy < 5)
+		if (m_nowPressTime < kSmallFirePressTime || m_fireEnergy < kMiddleFireDecrease)
 		{
 			if (m_isRight)
 			{
-				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
+				DrawRectRotaGraph(x + kFireParticlePositioningX, y - kFireParticlePositioningY, 
+					0, 0, 
+					kFireWidth, kFireHeight,
+					kSmallScale, 0.0f, 
+					m_fire1Handle, true);
 			}
 			else
 			{
-				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kSmallScale, 0.0f, m_fire1Handle, true);
+				DrawRectRotaGraph(x - kFireParticlePositioningX, y - kFireParticlePositioningY,
+					0, 0,
+					kFireWidth, kFireHeight, 
+					kSmallScale, 0.0f, 
+					m_fire1Handle, true);
 			}
 		}
-		else if (m_nowPressTime < 5000 && m_fireEnergy >= 5)
+		else if (m_nowPressTime < kMiddleFirePressTime && m_fireEnergy >= kMiddleFireDecrease)
 		{
 			if (m_isRight)
 			{
-				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
+				DrawRectRotaGraph(x + kFireParticlePositioningX, y - kFireParticlePositioningY, 
+					0, 0, 
+					kFireWidth, kFireHeight, 
+					kMiddleScale, 0.0f, 
+					m_fire2Handle, true);
 			}
 			else
 			{
-				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kMiddleScale, 0.0f, m_fire2Handle, true);
+				DrawRectRotaGraph(x - kFireParticlePositioningX, y - kFireParticlePositioningY,
+					0, 0,
+					kFireWidth, kFireHeight, 
+					kMiddleScale, 0.0f, 
+					m_fire2Handle, true);
 			}
 		}
 		else
 		{
 			if (m_isRight)
 			{
-				DrawRectRotaGraph(x + 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
+				DrawRectRotaGraph(x + kFireParticlePositioningX, y - kFireParticlePositioningY,
+					0, 0, 
+					kFireWidth, kFireHeight,
+					kBigScale, 0.0f, 
+					m_fire3Handle, true);
 			}
 			else
 			{
-				DrawRectRotaGraph(x - 40, y - 20, 0, 0, kFireWidth, kFireHeight, kBigScale, 0.0f, m_fire3Handle, true);
+				DrawRectRotaGraph(x - kFireParticlePositioningX, y - kFireParticlePositioningY,
+					0, 0, 
+					kFireWidth, kFireHeight,
+					kBigScale, 0.0f,
+					m_fire3Handle, true);
 			}
 		}
 
@@ -1114,11 +1156,19 @@ void Player::DrawFire(int x, int y)
 		SetDrawBlendMode(DX_BLENDMODE_ADD, 100);
 		if (m_isRight)
 		{
-			DrawRectRotaGraph(x + 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, kFireParticleScale, 0.0f, m_fireParticle, true);
+			DrawRectRotaGraph(x + kFireParticlePositioningX, y - kFireParticlePositioningY, 
+				m_fireParticleFrame, 0, 
+				kFireParticleSize, kFireParticleSize, 
+				kFireParticleScale, 0.0f, 
+				m_fireParticle, true);
 		}
 		else
 		{
-			DrawRectRotaGraph(x - 40, y - 20, m_fireParticleFrame, 0, kFireParticleSize, kFireParticleSize, kFireParticleScale, 0.0f, m_fireParticle, true);
+			DrawRectRotaGraph(x - kFireParticlePositioningX, y - kFireParticlePositioningY, 
+				m_fireParticleFrame, 0, 
+				kFireParticleSize, kFireParticleSize, 
+				kFireParticleScale, 0.0f, 
+				m_fireParticle, true);
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}

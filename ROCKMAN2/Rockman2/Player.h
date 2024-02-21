@@ -82,6 +82,8 @@ private:
 	void UpdateShotLineMove();	// 2号
 	// プレイヤーのHPが0以下になったときの処理
 	void UpdateDead();
+	// プレイヤーのアニメーション処理
+	void UpdatePlayerAnim();
 	// プレイヤーの描画
 	void DrawPlayer(int x, int y);
 	// ファイア溜め演出の描画
