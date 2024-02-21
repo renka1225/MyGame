@@ -1,2 +1,19 @@
 ﻿  Player.cpp
+  Bg.cpp
+  BgStage1.cpp
+  BgTutorial.cpp
+  EnemyBase.cpp
+  EnemyBear.cpp
+  EnemyBird.cpp
+  EnemyCat.cpp
+  RecoveryBase.cpp
+  SceneMain.cpp
+  ScenePause.cpp
+  SceneStage1.cpp
+  SceneTutorial.cpp
+  ShotBuster.cpp
+  ShotFire.cpp
+  ShotLineMove.cpp
+  ShotMetal.cpp
+  コードを生成中...
   Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
