@@ -25,23 +25,34 @@ namespace
 	constexpr float kGravity = 0.5f;
 	// 初速度
 	constexpr float kVelocity = -12.5f;
-	// 残機
-	constexpr int kLife = 3;
 	// 最大HP
 	constexpr int kMaxHp = 10;
+	// 初期の残機数
+	constexpr int kLife = 3;
+	// 最大残機数
+	constexpr int kMaxLife = 99;
 
 	// プレイヤーのサイズ
 	constexpr float kScale = 0.3f;
 	constexpr int kPlayerWidth = 200;
 	constexpr int kPlayerHeight = 296;
 	// プレイヤーの当たり判定のサイズ
-	constexpr int kPlayerColX = static_cast<int>(kPlayerWidth * kScale - 40);
-	constexpr int kPlayerColY = static_cast<int>(kPlayerHeight * kScale);
-
+	constexpr int kPlayerColX = static_cast<int>(kPlayerWidth * kScale - 40);	// 横幅
+	constexpr int kPlayerColY = static_cast<int>(kPlayerHeight * kScale);		// 高さ
+	// 当たり判定サイズの調節
+	constexpr float kColAdjustment = 0.5f;
 	// マップチップとの当たり判定の調整
 	constexpr int kColChipAdjustment = 15;
+
 	// ダメージ時のノックバック量
-	constexpr float kDamageMove = 30.0f;
+	constexpr float kDamageMove = 50.0f;
+	// ジャンプの長押し時間
+	constexpr int kPressShortJumpFrame = 10;	// 10フレーム
+	constexpr int kPressMediumJumpFrame = 30;	// 30フレーム
+	// ジャンプの高さ調整
+	constexpr float kLittleJumpHeight = 0.5f;	// 小ジャンプ
+	constexpr float kInJumpHeight = 0.8f;		// 中ジャンプ
+	constexpr float kBigJumpHeight = 1.0f;		// 大ジャンプ
 
 	// 死亡エフェクトのサイズ
 	constexpr int kEffectWidth = 32;
@@ -62,7 +73,7 @@ namespace
 	// ショットのアニメーション表示時間
 	constexpr int kShotAnimFrame = 30;
 	// ダメージのアニメーション表示時間
-	constexpr int kDamageAnimFrame = 5;
+	constexpr int kDamageAnimFrame = 3;
 	// ダメージ演出のフレーム数
 	constexpr int kDamageFrame = 60;
 	// 死亡時のアニメーション
@@ -100,11 +111,12 @@ namespace
 	constexpr int kFireParticlePositioningY = 20;
 	// ファイアパーティクルの表示フレーム
 	constexpr int kFireParticleFrame = 30;
-
-	// アイテム2号のサイズ
+	// 2号のサイズ
 	constexpr int kShotWidth = 52;
 	// 2号の待機時間
 	constexpr int kLineMoveStand = 150;
+	// 2号に乗った際の移動量
+	constexpr float kLineMoveMovement = 10.0f;
 
 	/*アイテムの回復量*/
 	constexpr int kSmallRecovery = 2;	// 小アイテム
@@ -395,7 +407,11 @@ void Player::Draw()
 	int effectSrcY = 0;
 	if (m_deadFrame > 0)
 	{
-		DrawRectRotaGraph(x, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_deadEffect, true);
+		DrawRectRotaGraph(x, y, 
+			effectSrcX, effectSrcY, 
+			kEffectWidth, kEffectHeight, 
+			kEffectScale, 0.0f,
+			m_deadEffect, true);
 	}
 
 #ifdef _DEBUG
@@ -537,10 +553,10 @@ void Player::ShotGreatRecovery()
 /*残機回復*/
 void Player::LifeRecovery()
 {
-	m_life += 1;	// 残機を1増やす
-	if (m_life > 99)
+	m_life++;	// 残機を1増やす
+	if (m_life > kMaxLife)
 	{
-		m_life = 99;
+		m_life = kMaxLife;
 	}
 }
 
@@ -611,14 +627,14 @@ void Player::RideLineMove(Rect shotRect)
 		{
 			if (m_isRight)
 			{
-				m_pos.x += 10.0f;
+				m_pos.x += kLineMoveMovement;
 			}
 			else
 			{
-				m_pos.x -= 10.0f;
+				m_pos.x -= kLineMoveMovement;
 			}
 		}
-		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * 0.5f;
+		m_pos.y = lineMoveRect.GetTop() - kPlayerHeight * kScale * kColAdjustment;
 		m_isGround = true;
 		m_animation = Anim::kIdle;
 	}
@@ -693,7 +709,7 @@ void Player::CheckHitMap(Rect chipRect)
 /// </summary>
 void Player::UpdateJump()
 {
-	m_jumpFrame++;	// ジャンプフレームの更新
+	m_jumpFrame++;
 
 	//ボタンを離した瞬間にジャンプする
 	if (Pad::IsRelease(PAD_INPUT_A))
@@ -701,17 +717,17 @@ void Player::UpdateJump()
 		// ジャンプの高さを決める
 		float jumpHeight;
 
-		if (m_jumpFrame < 10) // 長押し時間10フレーム以下
+		if (m_jumpFrame < kPressShortJumpFrame)
 		{
-			jumpHeight = 0.5f;
+			jumpHeight = kLittleJumpHeight;
 		}
-		else if (m_jumpFrame < 30) // 30フレーム以下
+		else if (m_jumpFrame < kPressMediumJumpFrame)
 		{
-			jumpHeight = 0.8f;
+			jumpHeight = kInJumpHeight;
 		}
-		else	// 30フレーム以上
+		else
 		{
-			jumpHeight = 1.0f;
+			jumpHeight = kLittleJumpHeight;
 		}
 		m_move.y *= jumpHeight;
 	}

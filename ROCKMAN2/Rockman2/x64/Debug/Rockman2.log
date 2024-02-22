@@ -1,3 +1,21 @@
 ﻿  Player.cpp
-C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-  Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
+  Bg.cpp
+  BgStage1.cpp
+  BgTutorial.cpp
+  EnemyBase.cpp
+  EnemyBear.cpp
+  EnemyBird.cpp
+  EnemyCat.cpp
+  RecoveryBase.cpp
+  SceneMain.cpp
+  SceneManager.cpp
+  ScenePause.cpp
+  SceneStage1.cpp
+  SceneTitle.cpp
+  SceneTutorial.cpp
+  ShotBuster.cpp
+  ShotFire.cpp
+  ShotLineMove.cpp
+  ShotMetal.cpp
+  コードを生成中...
+  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe

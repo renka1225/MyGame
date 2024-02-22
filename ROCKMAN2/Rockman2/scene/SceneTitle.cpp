@@ -8,7 +8,11 @@ namespace
 	// OP動画再生時間
 	constexpr int kMoveFrame = 1150;
 	// OPを流すまでの時間
-	constexpr int kStandFrame = 1800;
+	constexpr int kStandFrame = 2000;
+
+	// タイトルロゴ表示位置
+	constexpr int kTitleLogoPosX = Game::kScreenHeight * 0.5;
+	constexpr int kTitleLogoPosY = Game::kScreenHeight * 0.25 - 40;
 
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
@@ -27,16 +31,19 @@ namespace
 	constexpr float kBgScale = 2.0f;
 	// 背景画像の移動量
 	constexpr float kBgMove = -3.0f;
+
+	// フェードインアウトの時間
+	constexpr int kFadeFrame = 8;
 }
 
 SceneTitle::SceneTitle():
 	m_select(kStart),
 	m_isSceneStart(false),
 	m_isSceneOption(false),
+	m_bgMove(0.0f),
 	m_moveFrame(kMoveFrame),
 	m_standFrame(0),
-	m_fadeAlpha(180),
-	m_bgMove(0.0f)
+	m_fadeAlpha(180)
 {
 	// 画像読み込み
 	m_logoHandle = LoadGraph("data/image/TitleLogo.png");
@@ -71,7 +78,7 @@ void SceneTitle::Init()
 {
 	m_isSceneStart = false;
 	m_isSceneOption = false;
-	m_moveFrame = 0;
+	m_moveFrame = kMoveFrame;
 	m_fadeAlpha = 180;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
@@ -161,19 +168,13 @@ void SceneTitle::Update()
 	// フェードインアウト
 	if (m_isSceneStart)
 	{
-		m_fadeAlpha += 8;
-		if (m_fadeAlpha > 255)
-		{
-			m_fadeAlpha = 255;
-		}
+		m_fadeAlpha += kFadeFrame;
+		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
 	}
 	else
 	{
-		m_fadeAlpha -= 8;
-		if (m_fadeAlpha < 0)
-		{
-			m_fadeAlpha = 0;
-		}
+		m_fadeAlpha -= kFadeFrame;
+		if (m_fadeAlpha < 0) m_fadeAlpha = 0;
 	}
 
 	// 背景の表示位置の更新
@@ -186,11 +187,23 @@ void SceneTitle::Draw()
 	DrawBg();
 	
 	// ロゴ表示
-	DrawRotaGraph(static_cast<int>(Game::kScreenWidth * 0.5), static_cast<int>(Game::kScreenHeight * 0.25 - 40), 1.0f, 0.0f, m_logoHandle, true);
+	DrawRotaGraph(kTitleLogoPosX, kTitleLogoPosY,
+		1.0f, 0.0f,
+		m_logoHandle, true);
+
 	// 文字表示
-	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
+	DrawRectRotaGraph(kCharPosX, kCharPosY, 
+		0, 0,
+		kSelectSizeX, kSelectSizeY,
+		1.0f, 0.0f, 
+		m_charHandle, true, false);
+
 	// 選択カーソルの表示
-	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
+	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 
+		0, 0, 
+		kSelectSizeX, kSelectSizeY, 
+		1.0f, 0.0f, 
+		m_selectHandle, true);
 
 	// フェード描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);

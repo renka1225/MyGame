@@ -40,16 +40,16 @@ public:
 	void CheckHitMap(Rect chipRect);
 
 public:
-	// プレイヤーの現在の向きを取得する
+	// プレイヤーの現在の向きを取得
 	bool GetDir() const { return m_isRight; }
-	// プレイヤーの現在座標を取得する
+	// プレイヤーの現在座標を取得
 	Vec2 GetPos() const { return m_pos; }
-	// プレイヤーの当たり判定を取得する
+	// プレイヤーの当たり判定を取得
 	Rect GetColRect() const { return m_colRect; }
 
-	// 現在のHPを取得する
+	// 現在のHPを取得
 	int GetHp() const { return m_hp; }
-	// 現在の残機数を取得する
+	// 現在の残機数を取得
 	int GetLife() const { return m_life; }
 	// 現在のE缶数を取得
 	int GetFullHpRecovery() const { return m_fullHpRecovery; }
@@ -57,16 +57,16 @@ public:
 	int GetDeadFrame() const { return m_deadFrame; }
 
 	// 現在の弾エネルギー数を取得する
-	float GetMetalEnergy() const { return m_metalEnergy; }
-	float GetFireEnergy() const { return m_fireEnergy; }
-	float GetLineEnergy() const { return m_lineEnergy; }
+	float GetMetalEnergy() const { return m_metalEnergy; }	// メタル
+	float GetFireEnergy() const { return m_fireEnergy; }	// ファイア
+	float GetLineEnergy() const { return m_lineEnergy; }	// 2号
 
 	// ファイアの状態を取得
-	bool IsSmallFire() const { return m_isSmallFire; }
-	bool IsMiddleFire() const { return m_isMiddleFire; }
-	bool IsBigFire() const { return m_isBigFire; }
+	bool IsSmallFire() const { return m_isSmallFire; }		// 小
+	bool IsMiddleFire() const { return m_isMiddleFire; }	// 中
+	bool IsBigFire() const { return m_isBigFire; }			// 大
 
-	// 武器が選択中か取得する
+	// 武器が選択状態を取得
 	bool IsBuster() const { return m_isBuster; }	// バスター
 	bool IsMetal() const { return m_isMetal; }		// メタル
 	bool IsFire() const { return m_isFire; }		// ファイア
@@ -166,9 +166,9 @@ private:
 	int m_deadEffect;	// 死亡時エフェクト
 	// ファイア
 	int m_fireParticle;	// ファイア溜めのパーティクル
-	int m_fire1Handle;	// 弾1
-	int m_fire2Handle;	// 弾2
-	int m_fire3Handle;	// 弾3
+	int m_fire1Handle;	// 弾小
+	int m_fire2Handle;	// 弾中
+	int m_fire3Handle;	// 弾大
 
 	// アニメーションの種類
 	enum Anim
