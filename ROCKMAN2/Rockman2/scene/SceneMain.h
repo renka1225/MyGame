@@ -25,6 +25,17 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	// アイテム2号の表示状態を取得
+	bool GetIsExistLineMove() const {return m_isExistLineMove; }
+	// メニューが開かれているか取得する
+	bool GetIsExistMenu() const {return m_isExistMenu; }
+	// シーン移動の取得
+	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
+	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
+	bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
+	bool IsSceneEnd() const { return m_isSceneEnd; }			// リトライ
+
+protected:
 	// 弾の更新
 	virtual void UpdateShot(Rect playerRect) = 0;
 	// 敵の更新
@@ -57,16 +68,6 @@ public:
 	virtual void DropShotGreatRecovery(int enemyIndex) = 0;	// 弾大回復
 	virtual void DropLifeRecovery(int enemyIndex) = 0;		// 残機回復
 	virtual void DropFullHpRecovery() = 0;					// HP全回復
-
-	// アイテム2号の表示状態を取得
-	bool GetIsExistLineMove() const {return m_isExistLineMove; }
-	// メニューが開かれているか取得する
-	bool GetIsExistMenu() const {return m_isExistMenu; }
-	// シーン移動の取得
-	bool IsSceneGameOver() const { return m_isSceneGameOver; }	// ゲームオーバー画面
-	bool IsSceneClear() const { return m_isSceneClear; }		// クリア画面
-	bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
-	bool IsSceneEnd() const { return m_isSceneEnd; }			// リトライ
 
 protected:
 	/*ポインタを取得*/

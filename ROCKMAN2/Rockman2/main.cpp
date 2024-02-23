@@ -7,7 +7,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	SetMainWindowText("DOGMAN");
 
-	// 一部の関数はDxLib_Init()の前に実行する必要がある
 	ChangeWindowMode(true);
 
 	// 画面サイズの変更
@@ -33,9 +32,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 描画を行う前に画面をクリアする
 		ClearDrawScreen();
 
-		// ゲームの処理
+		// 処理
  		pScene->Update();
-
+		// 描画
 		pScene->Draw();
 
 		// 画面が切り替わるのを待つ
