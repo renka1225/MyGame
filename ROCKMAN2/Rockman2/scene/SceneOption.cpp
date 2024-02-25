@@ -3,6 +3,16 @@
 #include "Pad.h"
 #include "DxLib.h"
 
+/// <summary>
+/// 定数
+/// </summary>
+namespace
+{
+	// フェード
+	constexpr int kFadeFrame = 8;
+}
+
+
 SceneOption::SceneOption():
 	m_isSceneTitle(false),
 	m_fadeAlpha(255)
@@ -10,16 +20,25 @@ SceneOption::SceneOption():
 	m_exHandle = LoadGraph("data/image/ex.png");
 }
 
+
 SceneOption::~SceneOption()
 {
 	DeleteGraph(m_exHandle);
 }
 
+
+/// <summary>
+/// 初期化
+/// </summary>
 void SceneOption::Init()
 {
 	m_isSceneTitle = false;
 }
 
+
+/// <summary>
+/// 更新
+/// </summary>
 void SceneOption::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -31,17 +50,19 @@ void SceneOption::Update()
 	}
 
 	// フェードイン
-	m_fadeAlpha -= 8;
-	if (m_fadeAlpha < 0)
-	{
-		m_fadeAlpha = 0;
-	}
+	m_fadeAlpha -= kFadeFrame;
+	if (m_fadeAlpha < 0) m_fadeAlpha = 0;
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void SceneOption::Draw()
 {
 	DrawGraph(0, 0, m_exHandle, true);
+
 #ifdef _DEBUG
-	DrawString(20, 20, "オプション画面", 0xffffff);
+	DrawString(20, 20, "操作説明画面", 0xffffff);
 #endif
 }

@@ -35,7 +35,7 @@ public:
 	bool IsSceneTitle() const { return m_isSceneTitle; }		// タイトル画面
 	bool IsSceneEnd() const { return m_isSceneEnd; }			// リトライ
 
-protected:
+public:
 	// 弾の更新
 	virtual void UpdateShot(Rect playerRect) = 0;
 	// 敵の更新

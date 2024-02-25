@@ -3,6 +3,9 @@
 #include "Pad.h"
 #include "DxLib.h"
 
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
 	// OP動画再生時間
@@ -11,8 +14,8 @@ namespace
 	constexpr int kStandFrame = 2000;
 
 	// タイトルロゴ表示位置
-	constexpr int kTitleLogoPosX = Game::kScreenHeight * 0.5;
-	constexpr int kTitleLogoPosY = Game::kScreenHeight * 0.25 - 40;
+	constexpr int kTitleLogoPosX = 970;
+	constexpr int kTitleLogoPosY = 230;
 
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
@@ -35,6 +38,7 @@ namespace
 	// フェードインアウトの時間
 	constexpr int kFadeFrame = 8;
 }
+
 
 SceneTitle::SceneTitle():
 	m_select(kStart),
@@ -60,6 +64,7 @@ SceneTitle::SceneTitle():
 	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
+
 SceneTitle::~SceneTitle()
 {
 	DeleteGraph(m_logoHandle);
@@ -74,6 +79,10 @@ SceneTitle::~SceneTitle()
 	DeleteSoundMem(m_cursorSE);
 }
 
+
+/// <summary>
+/// 初期化
+/// </summary>
 void SceneTitle::Init()
 {
 	m_isSceneStart = false;
@@ -91,6 +100,10 @@ void SceneTitle::Init()
 	}
 }
 
+
+/// <summary>
+/// 更新
+/// </summary>
 void SceneTitle::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -181,6 +194,10 @@ void SceneTitle::Update()
 	m_bgMove += kBgMove;
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void SceneTitle::Draw()
 {
 	// 背景表示
@@ -211,7 +228,10 @@ void SceneTitle::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
 }
 
-// 背景描画
+
+/// <summary>
+/// 背景描画
+/// </summary>
 void SceneTitle::DrawBg()
 {
 	// 画像サイズを取得

@@ -2,7 +2,7 @@
 #include "Vec2.h"
 
 /// <summary>
-/// オプションクラス
+/// 操作説明クラス
 /// </summary>
 class SceneOption
 {

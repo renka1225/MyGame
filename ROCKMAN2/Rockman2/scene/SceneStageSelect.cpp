@@ -3,11 +3,17 @@
 #include "Pad.h"
 #include "DxLib.h"
 
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
+	// SelectStageの文字表示位置
+	constexpr int kSelectCharPosX = 300;
+	constexpr int kSelectCharPosY = 150;
+
 	// 文字間隔
 	constexpr int kCharInterval = 50;
-
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
 	constexpr int kCharPosY = 700;
@@ -25,7 +31,11 @@ namespace
 	constexpr float kBgScale = 2.0f;
 	// 背景画像の移動量
 	constexpr int kBgMove = -3;
+
+	// フェード
+	constexpr int kFadeFrame = 8;
 }
+
 
 SceneStageSelect::SceneStageSelect() :
 	m_select(kStage1),
@@ -51,6 +61,7 @@ SceneStageSelect::SceneStageSelect() :
 	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
+
 SceneStageSelect::~SceneStageSelect()
 {
 	DeleteGraph(m_selectHandle);
@@ -65,6 +76,10 @@ SceneStageSelect::~SceneStageSelect()
 	DeleteSoundMem(m_cursorSE);
 }
 
+
+/// <summary>
+/// 初期化
+/// </summary>
 void SceneStageSelect::Init()
 {
 	m_isSceneTutorial = false;
@@ -80,6 +95,10 @@ void SceneStageSelect::Init()
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
+
+/// <summary>
+/// 更新
+/// </summary>
 void SceneStageSelect::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -142,45 +161,56 @@ void SceneStageSelect::Update()
 	// フェードイン
 	if (m_isSceneTutorial || m_isSceneStage1 || m_isSceneTitle)
 	{
-		m_fadeAlpha += 8;
-		if (m_fadeAlpha > 255)
-		{
-			m_fadeAlpha = 255;
-		}
+		m_fadeAlpha += kFadeFrame;
+		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
 	}
 	// フェードアウト
 	else
 	{
-		m_fadeAlpha -= 8;
-		if (m_fadeAlpha < 0)
-		{
-			m_fadeAlpha = 0;
-		}
+		m_fadeAlpha -= kFadeFrame;
+		if (m_fadeAlpha < 0) m_fadeAlpha = 0;
 	}
 
 	// 背景の表示位置の更新
 	m_bgMove += kBgMove;
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void SceneStageSelect::Draw()
 {
-	// 背景表示 TODO:背景動かす
+	// 背景表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	DrawGraph(0, 0, m_bgHandle, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 表示モードを元に戻す
 
 	// 文字表示
-	DrawGraph(300, 150, m_selectCharHandle, true);
-	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
+	DrawGraph(kSelectCharPosX, kSelectCharPosY, m_selectCharHandle, true);
+	DrawRectRotaGraph(kCharPosX, kCharPosY, 
+		0, 0, 
+		kSelectSizeX, kSelectSizeY, 
+		1.0f, 0.0f, 
+		m_charHandle, true);
+
 	// 選択カーソルの表示
-	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
+	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 
+		0, 0, 
+		kSelectSizeX, kSelectSizeY, 
+		1.0f, 0.0f, 
+		m_selectHandle, true);
 
 	// フェード描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x808080, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 不透明に戻す
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
+
+/// <summary>
+/// 背景描画
+/// </summary>
 void SceneStageSelect::DrawBg()
 {
 	// 画像サイズを取得

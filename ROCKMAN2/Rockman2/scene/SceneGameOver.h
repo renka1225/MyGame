@@ -13,7 +13,6 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	void End();
 	void DrawBg();
 
 	// ƒV[ƒ“‚ğI—¹‚³‚¹‚é‚©

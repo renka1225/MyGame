@@ -3,15 +3,19 @@
 #include "Pad.h"
 #include "DxLib.h"
 
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
-	// ゲームオーバー文字表示位置
+	// Gameoverの文字表示位置
 	constexpr int kGameOverPosX = 960;
 	constexpr int kGameOverPosY = 280;
-
-	// ゲームオーバー文字のサイズ
+	// Gameoverの文字サイズ
 	constexpr int kGameOverSizeX = 1592;
 	constexpr int kGameOverSizeY = 174;
+	// Gameoverの文字拡大率
+	constexpr float kGameOverScale = 0.8f;
 
 	// 文字表示位置
 	constexpr int kCharPosX = 960;
@@ -30,6 +34,9 @@ namespace
 	constexpr float kBgScale = 3.0f;
 	// 背景画像の移動量
 	constexpr float kBgMove = -1.0f;
+
+	//フェード
+	constexpr int kFadeFrame = 8;
 }
 
 
@@ -55,6 +62,7 @@ SceneGameOver::SceneGameOver():
 	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
+
 SceneGameOver::~SceneGameOver()
 {
 	DeleteGraph(m_bgHandle);
@@ -68,6 +76,10 @@ SceneGameOver::~SceneGameOver()
 	DeleteSoundMem(m_cursorSE);
 }
 
+
+/// <summary>
+/// 初期化
+/// </summary>
 void SceneGameOver::Init()
 {
 	m_isSceneRetry = false;
@@ -82,6 +94,10 @@ void SceneGameOver::Init()
 	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 }
 
+
+/// <summary>
+/// 更新
+/// </summary>
 void SceneGameOver::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -145,48 +161,58 @@ void SceneGameOver::Update()
 	// フェードインアウト
 	if (m_isSceneRetry || m_isSceneTitle)
 	{
-		m_fadeAlpha += 8;
-		if (m_fadeAlpha > 255)
-		{
-			m_fadeAlpha = 255;
-		}
+		m_fadeAlpha += kFadeFrame;
+		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
 	}
 	else
 	{
-		m_fadeAlpha -= 8;
-		if (m_fadeAlpha < 0)
-		{
-			m_fadeAlpha = 0;
-		}
+		m_fadeAlpha -= kFadeFrame;
+		if (m_fadeAlpha < 0) m_fadeAlpha = 0;
 	}
 
 	// 背景の表示位置の更新
 	m_bgMove += kBgMove;
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void SceneGameOver::Draw()
 {
 	// 背景表示
 	DrawBg();
 
 	// ゲームオーバー表示
-	DrawRectRotaGraph(kGameOverPosX, kGameOverPosY, 0, 0,kGameOverSizeX,kGameOverSizeY, 0.8f, 0.0f, m_gameoverHandle, true, false);
+	DrawRectRotaGraph(kGameOverPosX, kGameOverPosY, 
+		0, 0,
+		kGameOverSizeX, kGameOverSizeY, 
+		kGameOverScale, 0.0f,
+		m_gameoverHandle, true);
+
 	// 文字表示
-	DrawRectRotaGraph(kCharPosX, kCharPosY, 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_charHandle, true, false);
+	DrawRectRotaGraph(kCharPosX, kCharPosY,
+		0, 0, 
+		kSelectSizeX, kSelectSizeY, 
+		1.0f, 0.0f, 
+		m_charHandle, true);
+
 	// 選択カーソルの表示
-	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y), 0, 0, kSelectSizeX, kSelectSizeY, 1.0f, 0.0f, m_selectHandle, true, false);
+	DrawRectRotaGraph(static_cast<int>(m_selectPos.x), static_cast<int>(m_selectPos.y),
+		0, 0, 
+		kSelectSizeX, kSelectSizeY, 
+		1.0f, 0.0f, 
+		m_selectHandle, true);
 
 #ifdef _DEBUG
 	DrawString(10, 10, "ゲームオーバー", 0xff0000);
 #endif
 }
 
-void SceneGameOver::End()
-{
-	
-}
 
-// 背景描画
+/// <summary>
+/// 背景描画
+/// </summary>
 void SceneGameOver::DrawBg()
 {
 	// 画像サイズを取得

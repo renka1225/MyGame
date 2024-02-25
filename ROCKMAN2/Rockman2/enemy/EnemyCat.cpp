@@ -4,39 +4,52 @@
 #include "Game.h"
 #include "DxLib.h"
 
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
-	// 敵のサイズ
-	constexpr int kWidth = 60;
-	constexpr int kHeight = 36;
-
-	// エフェクトのサイズ
-	constexpr int kEffectWidth = 32;
-	constexpr int kEffectHeight = 32;
-
-	// 拡大率
-	constexpr float kEnlarge = 1.3f;
-	constexpr float kEffectScale = 3.0f;
-
+	/*猫の情報*/
 	// 移動速度
 	constexpr float kSpeedX = 3.0f;
 	constexpr float kSpeedY = 10.0f;
 	// 最大HP
 	constexpr float kHp = 2.0f;
 
-	// 敵アニメーション
+	// 敵のサイズ
+	constexpr int kWidth = 60;
+	constexpr int kHeight = 36;
+	// 拡大率
+	constexpr float kEnlarge = 1.3f;
+
+	// ダメージ量
+	constexpr int kMiddleDamage = 3; // 中ダメージ
+	constexpr int kBigDamage = 5; // 大ダメージ
+
+	// 位置調整
+	constexpr float kColSizeAdjustment = 0.5f;
+	constexpr float kPosAdjustment = 1.0f;
+
+	/*アニメーション*/
 	constexpr int kUseFrame[] = { 0, 1, 2, 3 };
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimFrameNum = 8;
 	// アニメーション1サイクルのフレーム数
 	constexpr int kAnimFrameCycle = _countof(kUseFrame) * kAnimFrameNum;
-
-	// エフェクト
+	// ダメージアニメーション
 	constexpr int kdamageFrame[] = { 0, 1, 2, 3 };
-	// アニメーション1コマのフレーム数
-	constexpr int kEffectFrameNum = 40;
 	// ダメージ演出フレーム数
 	constexpr int kDamageFrame = 20;
+
+
+	/*エフェクト*/
+	// エフェクトのサイズ
+	constexpr int kEffectWidth = 32;
+	constexpr int kEffectHeight = 32;
+	// エフェクトの拡大率
+	constexpr float kEffectScale = 3.0f;
+	// エフェクトのアニメーション1コマのフレーム数
+	constexpr int kEffectFrameNum = 40;
 }
 
 
@@ -51,6 +64,11 @@ EnemyCat::~EnemyCat()
 	DeleteGraph(m_handle);
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="pBg">背景クラスのポインタ</param>
+/// <param name="pPlayer">プレイヤークラスのポインタ</param>
 void EnemyCat::Init(Bg* pBg, Player* pPlayer)
 {
 	m_pBg = pBg;
@@ -59,6 +77,10 @@ void EnemyCat::Init(Bg* pBg, Player* pPlayer)
 	m_isDead = false;
 }
 
+
+/// <summary>
+/// 更新
+/// </summary>
 void EnemyCat::Update()
 {
 	// 存在しない敵の処理はしない
@@ -82,19 +104,17 @@ void EnemyCat::Update()
 
 	// 移動アニメーション
 	m_walkAnimFrame++;
-	if (m_walkAnimFrame >= kAnimFrameCycle)
-	{
-		m_walkAnimFrame = 0;
-	}
+	if (m_walkAnimFrame >= kAnimFrameCycle) m_walkAnimFrame = 0;
 
 	// ダメージエフェクト
 	m_damageFrame--;
-	if (m_damageFrame < 0)
-	{
-		m_damageFrame = 0;
-	}
+	if (m_damageFrame < 0) m_damageFrame = 0;
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void EnemyCat::Draw()
 {
 	// 中央座標を左上座標に変換
@@ -125,7 +145,11 @@ void EnemyCat::Draw()
 		int effectSrcY = 0;
 		if (m_damageFrame > 0)
 		{
-			DrawRectRotaGraph(x + 10, y, effectSrcX, effectSrcY, kEffectWidth, kEffectHeight, kEffectScale, 0.0f, m_damageEffect, true);
+			DrawRectRotaGraph(x + 10, y, 
+				effectSrcX, effectSrcY, 
+				kEffectWidth, kEffectHeight, 
+				kEffectScale, 0.0f, 
+				m_damageEffect, true);
 		}
 	}
 
@@ -136,9 +160,15 @@ void EnemyCat::Draw()
 #endif
 }
 
+
+/// <summary>
+/// 生成時の処理
+/// </summary>
+/// <param name="posX">初期位置のX座標</param>
+/// <param name="posY">初期位置のY座標</param>
+/// <param name="moveRangeX">移動量</param>
 void EnemyCat::Start(float posX, float posY, float moveRangeX)
 {
-	// 敵キャラクターを登場させる
 	m_isExist = true;
 
 	m_pos = { posX, posY };
@@ -148,40 +178,50 @@ void EnemyCat::Start(float posX, float posY, float moveRangeX)
 	m_moveRangeX = moveRangeX;
 }
 
+
+/// <summary>
+/// マップチップとの当たり判定
+/// </summary>
+/// <param name="chipRect">マップチップの当たり判定</param>
 void EnemyCat::HitCollision(Rect chipRect)
 {
 	// 横から当たったかチェックする
-	m_pos.x += m_vec.x;	// 現在位置の更新
+	m_pos.x += m_vec.x;
 	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * kEnlarge), static_cast<float>(kHeight * kEnlarge)); // 当たり判定を生成
+
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_vec.x > 0.0f) // 右に移動中
 		{
-			m_pos.x = chipRect.GetLeft() - kWidth * kEnlarge * 0.5f - 1;
+			m_pos.x = chipRect.GetLeft() - kWidth * kEnlarge * kColSizeAdjustment - kPosAdjustment;
 			m_vec.x *= -1;
 			m_dir = kDirLeft;
 
 		}
 		else if (m_vec.x < 0.0f) // 左に移動中
 		{
-			m_pos.x = chipRect.GetRight() + kWidth * kEnlarge * 0.5f + 1;
+			m_pos.x = chipRect.GetRight() + kWidth * kEnlarge * kColSizeAdjustment + kPosAdjustment;
 			m_vec.x *= -1;
 			m_dir = kDirRight;
 		}
 	}
 
 	// 縦から当たったかチェックする
-	m_pos.y += m_vec.y; 	// 現在位置の更新
+	m_pos.y += m_vec.y;
 	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(kWidth * kEnlarge), static_cast<float>(kHeight * kEnlarge)); // 当たり判定を生成
+
 	if (m_pBg->IsCollision(m_colRect, chipRect))
 	{
 		if (m_vec.y > 0.0f)
 		{
-			m_pos.y = chipRect.GetTop() - kHeight * kEnlarge * 0.5f - 1;
+			m_pos.y = chipRect.GetTop() - kHeight * kEnlarge * kColSizeAdjustment - kPosAdjustment;
 		}
 	}
 }
 
+/// <summary>
+/// ダメージ処理
+/// </summary>
 void EnemyCat::OnDamage()
 {
 	// ダメージ演出中は再度食らわない
@@ -192,11 +232,11 @@ void EnemyCat::OnDamage()
 	// 現在のHPを減らす
 	if (m_pPlayer->IsMiddleFire())
 	{
-		m_hp -= 3;
+		m_hp -= kMiddleDamage;
 	}
 	else if (m_pPlayer->IsBigFire())
 	{
-		m_hp -= 5;
+		m_hp -= kBigDamage;;
 	}
 	else
 	{
