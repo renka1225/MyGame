@@ -8,7 +8,7 @@ class SceneTitle
 {
 public:
 	SceneTitle();
-	~SceneTitle();
+	virtual ~SceneTitle();
 
 	void Init();
 	void Update();

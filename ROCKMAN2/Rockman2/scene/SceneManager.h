@@ -15,7 +15,7 @@ class SceneManager
 {
 public:
 	SceneManager();
-	~SceneManager();
+	virtual ~SceneManager();
 
 	void Init();
 	void Update();

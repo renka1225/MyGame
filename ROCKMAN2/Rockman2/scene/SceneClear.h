@@ -8,7 +8,7 @@ class SceneClear
 {
 public:
 	SceneClear();
-	~SceneClear();
+	virtual ~SceneClear();
 	void Init();
 	void Update();
 	void Draw();

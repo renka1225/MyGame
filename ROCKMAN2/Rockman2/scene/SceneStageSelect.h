@@ -8,7 +8,7 @@ class SceneStageSelect
 {
 public:
 	SceneStageSelect();
-	~SceneStageSelect();
+	virtual ~SceneStageSelect();
 
 	void Init();
 	void Update();

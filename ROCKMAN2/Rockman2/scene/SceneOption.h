@@ -8,7 +8,7 @@ class SceneOption
 {
 public:
 	SceneOption();
-	~SceneOption();
+	virtual ~SceneOption();
 
 	void Init();
 	void Update();

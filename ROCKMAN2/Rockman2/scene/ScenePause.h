@@ -11,7 +11,7 @@ class ScenePause
 {
 public:
 	ScenePause(Player* pPlayer);
-	~ScenePause();
+	virtual ~ScenePause();
 	void Init();
 	void Update();
 	void Draw();

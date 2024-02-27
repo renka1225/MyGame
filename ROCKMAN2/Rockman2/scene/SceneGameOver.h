@@ -8,7 +8,7 @@ class SceneGameOver
 {
 public:
 	SceneGameOver();
-	~SceneGameOver();
+	virtual ~SceneGameOver();
 
 	void Init();
 	void Update();
