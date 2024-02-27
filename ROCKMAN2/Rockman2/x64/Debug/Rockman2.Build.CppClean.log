@@ -1,5 +1,6 @@
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\vc143.pdb
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\vc143.idb
+c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\sceneoption.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\scenestage1.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\scenetutorial.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\recoverybase.obj
@@ -12,7 +13,6 @@ c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\recov
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\pad.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\main.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\fontmanager.obj
-c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\fireworks.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\enemybase.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\enemycat.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\enemybird.obj
@@ -35,12 +35,12 @@ c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\scene
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\scenepause.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\scenestageselect.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\sceneclear.obj
-c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\sceneoption.obj
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.exe
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.ilk
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.pdb
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.res
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.tlog\cl.command.1.tlog
+c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.tlog\cl.items.tlog
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.tlog\cl.read.1.tlog
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.tlog\cl.write.1.tlog
 c:\users\fko2347058\desktop\ueda\github\mygame\rockman2\rockman2\x64\debug\rockman2.tlog\link.command.1.tlog

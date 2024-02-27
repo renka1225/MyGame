@@ -1,4 +1,4 @@
-#include "SceneTutorial.h"
+ï»¿#include "SceneTutorial.h"
 #include "DxLib.h"
 #include "Pad.h"
 #include "Rect.h"
@@ -21,112 +21,112 @@
 
 namespace
 {
-	// ‰æ–Ê“à‚É1“x‚Éo‚¹‚é’e”
+	// ç”»é¢å†…ã«1åº¦ã«å‡ºã›ã‚‹å¼¾æ•°
 	constexpr int kShotMax = 3;
-	// ‰æ–Ê“à‚É1“x‚Éo‚¹‚é‰ñ•œƒAƒCƒeƒ€”
+	// ç”»é¢å†…ã«1åº¦ã«å‡ºã›ã‚‹å›å¾©ã‚¢ã‚¤ãƒ†ãƒ æ•°
 	constexpr int kRecoveryMax = 5;
 
-	// “oê‚·‚é“G”
+	// ç™»å ´ã™ã‚‹æ•µæ•°
 	constexpr int kEnemyMax = 3;
 
-	// ƒvƒŒƒCƒ„[‚Ì‰ŠúˆÊ’u
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åˆæœŸä½ç½®
 	constexpr float kPlayerInitPosX = 350.0f;
 	constexpr float kPlayerInitPosY = 430.0f;
 
-	// ƒvƒŒƒCƒ„[‚Ì‰æ‘œƒTƒCƒY
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç”»åƒã‚µã‚¤ã‚º
 	constexpr int kPlayerWidth = 32;
 	constexpr int kPlayerHeight = 64;
 
-	// ƒ}ƒbƒvƒ`ƒbƒv‚ÌƒTƒCƒY
+	// ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã®ã‚µã‚¤ã‚º
 	constexpr int kMapChipWidth = 32;
 	constexpr int kMapChipHeight = 32;
 
-	/*‰‰o*/
-	// ƒXƒ^[ƒg‰‰oŠÔ
+	/*æ¼”å‡º*/
+	// ã‚¹ã‚¿ãƒ¼ãƒˆæ¼”å‡ºæ™‚é–“
 	constexpr float kStartTime = 120.0f;
 	constexpr float kClearTime = 240.0f;
 	constexpr float kGameoverTime = 300.0f;
-	// readyƒJƒEƒ“ƒg‰‰o
+	// readyã‚«ã‚¦ãƒ³ãƒˆæ¼”å‡º
 	constexpr int kReadyCount = 60;
-	// ‰Ô‰Î‚Ì‘Å‚¿ã‚°‘¬“x
+	// èŠ±ç«ã®æ‰“ã¡ä¸Šã’é€Ÿåº¦
 	constexpr float kFireworksSpeed = 20.0f;
-	// ‰Ô‰Î‚Ì‰æ‘œØ‚èo‚µƒTƒCƒY
+	// èŠ±ç«ã®ç”»åƒåˆ‡ã‚Šå‡ºã—ã‚µã‚¤ã‚º
 	constexpr int kFireworksWidth = 92;
 	constexpr int kFireworksHeight = 94;
-	// ‰Ô‰Î‚Ì•\¦ƒtƒŒ[ƒ€
+	// èŠ±ç«ã®è¡¨ç¤ºãƒ•ãƒ¬ãƒ¼ãƒ 
 	constexpr int kFireworksFrame = 10;
 
-	/*ƒ|[ƒY‰æ–Ê*/
-	// ƒ|[ƒY‰æ–Ê‚Ì•¶š•\¦ˆÊ’u
+	/*ãƒãƒ¼ã‚ºç”»é¢*/
+	// ãƒãƒ¼ã‚ºç”»é¢ã®æ–‡å­—è¡¨ç¤ºä½ç½®
 	constexpr int kTextPosX = 850;
 	constexpr int kTextPosY = 420;
-	// ’e”•\¦ˆÊ’u
+	// å¼¾æ•°è¡¨ç¤ºä½ç½®
 	constexpr int kBarPosX = 850;
 	constexpr int kBarPosY = 455;
-	// ’e”•\¦ŠÔŠu
+	// å¼¾æ•°è¡¨ç¤ºé–“éš”
 	constexpr int kBarInterval = 23;
-	// ’e”•\¦ƒTƒCƒY
+	// å¼¾æ•°è¡¨ç¤ºã‚µã‚¤ã‚º
 	constexpr int kPauseShotNumWidth = 18;
 	constexpr int kPauseShotNumHeight = 20;
-	// ’e”YÀ•W•\¦ŠÔŠu
+	// å¼¾æ•°Yåº§æ¨™è¡¨ç¤ºé–“éš”
 	constexpr int kIntervalY = 70;
 
-	/*ƒQ[ƒ€“à*/
-	// •˜g‚ÌƒTƒCƒY
+	/*ã‚²ãƒ¼ãƒ å†…*/
+	// é»’æ ã®ã‚µã‚¤ã‚º
 	constexpr int kFrameSize = 270;
-	// c‹@A“G”Aƒ^ƒCƒ€•\¦ˆÊ’u
-	constexpr int kInfoTextPosX = 30;	// ‰¡
-	constexpr int kInfoTextPosY = 290;	// c
-	// ’e”•\¦ˆÊ’u
-	constexpr int kShotNumDisPosX = static_cast<int>(Game::kScreenWidth - kFrameSize + 10);	// ‰¡
-	constexpr int kShotNumDisPosY = static_cast<int>(Game::kScreenHeight * 0.5 - 140);		// c
-	// ’e”•\¦ŠÔŠu
-	constexpr int kShotNumIntervalX = 25;	// ‰¡
-	constexpr int kShotNumIntervalY = 100;	// c
-	// ’e”•\¦ƒTƒCƒY
-	constexpr int kShotDisWidth = 18;	// ‰¡
-	constexpr int kShotDisHeight = 20;	// c
-	// ƒtƒŒ[ƒ€‚Ì•\¦ˆÊ’u
+	// æ®‹æ©Ÿã€æ•µæ•°ã€ã‚¿ã‚¤ãƒ è¡¨ç¤ºä½ç½®
+	constexpr int kInfoTextPosX = 30;	// æ¨ª
+	constexpr int kInfoTextPosY = 290;	// ç¸¦
+	// å¼¾æ•°è¡¨ç¤ºä½ç½®
+	constexpr int kShotNumDisPosX = static_cast<int>(Game::kScreenWidth - kFrameSize + 10);	// æ¨ª
+	constexpr int kShotNumDisPosY = static_cast<int>(Game::kScreenHeight * 0.5 - 140);		// ç¸¦
+	// å¼¾æ•°è¡¨ç¤ºé–“éš”
+	constexpr int kShotNumIntervalX = 25;	// æ¨ª
+	constexpr int kShotNumIntervalY = 100;	// ç¸¦
+	// å¼¾æ•°è¡¨ç¤ºã‚µã‚¤ã‚º
+	constexpr int kShotDisWidth = 18;	// æ¨ª
+	constexpr int kShotDisHeight = 20;	// ç¸¦
+	// ãƒ•ãƒ¬ãƒ¼ãƒ ã®è¡¨ç¤ºä½ç½®
 	constexpr int kFramePosY = static_cast<int>(Game::kScreenHeight * 0.5 - 199);
 }
 
 SceneTutorial::SceneTutorial()
 {
-	// ƒQ[ƒ€‰æ–Ê•`‰ææ‚Ì¶¬
+	// ã‚²ãƒ¼ãƒ ç”»é¢æç”»å…ˆã®ç”Ÿæˆ
 	m_gameScreenHandle = MakeScreen(static_cast<int>(Tutorial::kMapWidth), static_cast<int>(Tutorial::kMapHeight), true);
 
-	// ƒvƒŒƒCƒ„[‚Ìƒƒ‚ƒŠŠm•Û
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	m_pPlayer = new Player;
 
-	// ”wŒi‚Ìƒƒ‚ƒŠŠm•Û
+	// èƒŒæ™¯ã®ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	m_pBg = new BgTutorial;
 	m_pBg->SetPlayer(m_pPlayer);
 
-	// ƒtƒHƒ“ƒg
+	// ãƒ•ã‚©ãƒ³ãƒˆ
 	m_pFont = new FontManager;
 
-	// ƒ|[ƒY‰æ–Ê‚Ìƒƒ‚ƒŠŠm•Û
+	// ãƒãƒ¼ã‚ºç”»é¢ã®ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	m_pPause = new ScenePause{ m_pPlayer };
 
-	// ƒVƒ‡ƒbƒg‚Ì‰Šú‰»
+	// ã‚·ãƒ§ãƒƒãƒˆã®åˆæœŸåŒ–
 	m_pShot.resize(kShotMax);
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
-		m_pShot[i] = nullptr; // –¢g—pó‘Ô‚É‚·‚é
+		m_pShot[i] = nullptr; // æœªä½¿ç”¨çŠ¶æ…‹ã«ã™ã‚‹
 	}
 
-	// “G‚Ì‰Šú‰»
+	// æ•µã®åˆæœŸåŒ–
 	m_pEnemy.resize(kEnemyMax);
 	CreateEnemy();
 
-	// ‰ñ•œƒAƒCƒeƒ€‚Ì‰Šú‰»
+	// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®åˆæœŸåŒ–
 	m_pRecovery.resize(kRecoveryMax);
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
-		m_pRecovery[i] = nullptr; // –¢g—pó‘Ô‚É‚·‚é
+		m_pRecovery[i] = nullptr; // æœªä½¿ç”¨çŠ¶æ…‹ã«ã™ã‚‹
 	}
 
-	// ‰¹“Ç‚İ‚İ
+	// éŸ³èª­ã¿è¾¼ã¿
 	m_bgm = LoadSoundMem("data/sound/BGM/stage1.mp3");
 	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
 	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
@@ -135,7 +135,7 @@ SceneTutorial::SceneTutorial()
 	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
 	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.wav");
 
-	// ‰æ‘œ
+	// ç”»åƒ
 	m_frameHandle = LoadGraph("data/image/UI/frame.png");
 	m_metalHandle = LoadGraph("data/image/Shot/shotMetal.png");
 	m_fireHandle = LoadGraph("data/image/Shot/shotFire3.png");
@@ -150,50 +150,50 @@ SceneTutorial::SceneTutorial()
 
 SceneTutorial::~SceneTutorial()
 {
-	// ”wŒi‚Ìƒƒ‚ƒŠ‰ğ•ú
+	// èƒŒæ™¯ã®ãƒ¡ãƒ¢ãƒªè§£æ”¾
 	delete m_pBg;
 	m_pBg = nullptr;
 
-	// ƒtƒHƒ“ƒg
+	// ãƒ•ã‚©ãƒ³ãƒˆ
 	delete m_pFont;
 	m_pFont = nullptr;
 
-	// ƒ|[ƒY‰æ–Ê‚Ìƒƒ‚ƒŠŠm•Û
+	// ãƒãƒ¼ã‚ºç”»é¢ã®ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	delete m_pPause;
 	m_pPause = nullptr;
 
-	// ƒvƒŒƒCƒ„[‚Ìƒƒ‚ƒŠ‰ğ•ú
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ¡ãƒ¢ãƒªè§£æ”¾
 	delete m_pPlayer;
 	m_pPlayer = nullptr;
 
-	// ƒVƒ‡ƒbƒg‚Ìƒƒ‚ƒŠ‰ğ•ú
+	// ã‚·ãƒ§ãƒƒãƒˆã®ãƒ¡ãƒ¢ãƒªè§£æ”¾
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		if (m_pShot[i])
 		{
-			// nullptr‚Å‚È‚¢ê‡Anullptr‚ğ“ü‚ê‚é
+			// nullptrã§ãªã„å ´åˆã€nullptrã‚’å…¥ã‚Œã‚‹
 			delete m_pShot[i];
 			m_pShot[i] = nullptr;
 		}
 	}
 
-	// “G‚Ìƒƒ‚ƒŠ‰ğ•ú
+	// æ•µã®ãƒ¡ãƒ¢ãƒªè§£æ”¾
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		if (m_pEnemy[i])
 		{
-			// nullptr‚Å‚È‚¢ê‡Anullptr‚ğ“ü‚ê‚é
+			// nullptrã§ãªã„å ´åˆã€nullptrã‚’å…¥ã‚Œã‚‹
 			delete m_pEnemy[i];
 			m_pEnemy[i] = nullptr;
 		}
 	}
 
-	// ‰ñ•œƒAƒCƒeƒ€‚Ìƒƒ‚ƒŠ‰ğ•ú
+	// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®ãƒ¡ãƒ¢ãƒªè§£æ”¾
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
 		if (m_pRecovery[i])
 		{
-			// nullptr‚Å‚È‚¢ê‡Anullptr‚ğ“ü‚ê‚é
+			// nullptrã§ãªã„å ´åˆã€nullptrã‚’å…¥ã‚Œã‚‹
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
 		}
@@ -215,32 +215,32 @@ SceneTutorial::~SceneTutorial()
 }
 
 /// <summary>
-/// ‰Šú‰»
+/// åˆæœŸåŒ–
 /// </summary>
 void SceneTutorial::Init()
 {
-	// ƒŠƒgƒ‰ƒC‚ÍƒXƒ^[ƒg‰‰o‚ğs‚í‚È‚¢
+	// ãƒªãƒˆãƒ©ã‚¤æ™‚ã¯ã‚¹ã‚¿ãƒ¼ãƒˆæ¼”å‡ºã‚’è¡Œã‚ãªã„
 	if (!(m_isSceneEnd || m_isRetry || m_isSceneTitle))
 	{
-		// ‰‰oŠÔ‚Ì‰Šú‰»
+		// æ¼”å‡ºæ™‚é–“ã®åˆæœŸåŒ–
 		m_startStagingTime = kStartTime;
 		m_startDis = { 30, 0 };
 		m_fadeAlpha = 240;
 		m_stagingFade = 0;
-		// ƒXƒ^[ƒgSE
+		// ã‚¹ã‚¿ãƒ¼ãƒˆSE
 		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
 	}
-	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½ê‡‚Ís‚í‚È‚¢
+	// HPãŒ0ä»¥ä¸‹ã«ãªã£ãŸå ´åˆã¯è¡Œã‚ãªã„
 	if (!m_isRetry)
 	{
-		// “G‚Ì‰Šú‰»
+		// æ•µã®åˆæœŸåŒ–
 		CreateEnemy();
 		m_enemyTotalNum = kEnemyMax;
 		m_time = 0.0f;
 
 		m_isGetFullHpRecovery = false;
 	}
-	// ‰‰oŠÔ‚Ì‰Šú‰»
+	// æ¼”å‡ºæ™‚é–“ã®åˆæœŸåŒ–
 	m_clearStagingTime = kClearTime;
 	m_gameoverStagingTime = kGameoverTime;
 	m_fireworks1Frame = 0;
@@ -250,17 +250,17 @@ void SceneTutorial::Init()
 	m_readyCount = kReadyCount;
 	m_ampFrame = 0;
 
-	// ƒ|[ƒY‰æ–Ê‚Ì‰Šú‰»
+	// ãƒãƒ¼ã‚ºç”»é¢ã®åˆæœŸåŒ–
 	m_pPause->Init();
 
-	// ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åˆæœŸåŒ–
 	assert(m_pPlayer);
 	m_pPlayer->Init(m_pBg, this, { kPlayerInitPosX, kPlayerInitPosY });
 
-	// ”wŒi‚Ì‰Šú‰»
+	// èƒŒæ™¯ã®åˆæœŸåŒ–
 	m_pBg->Init();
 
-	// ‰ñ•œƒAƒCƒeƒ€‚Ì‰Šú‰»
+	// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®åˆæœŸåŒ–
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
 		if (m_pRecovery[i])
@@ -272,14 +272,14 @@ void SceneTutorial::Init()
 	}
 	m_isExistLineMove = false;
 
-	// ‰æ–Ê‘JˆÚ‚Ì‰Šú‰»
+	// ç”»é¢é·ç§»ã®åˆæœŸåŒ–
 	m_isSceneGameOver = false;
 	m_isSceneClear = false;
 	m_isSceneTitle = false;
 	m_isSceneEnd = false;
 	m_isRetry = false;
 
-	// ‰Ô‰Î‚Ì‰ŠúˆÊ’u
+	// èŠ±ç«ã®åˆæœŸä½ç½®
 	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) + 50.0f };
 	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) + 200.0f };
 	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) + 250.0f };
@@ -289,14 +289,14 @@ void SceneTutorial::Init()
 }
 
 /// <summary>
-/// XV
+/// æ›´æ–°
 /// </summary>
 void SceneTutorial::Update()
 {
-	/*ƒXƒ^[ƒg‰‰o*/
+	/*ã‚¹ã‚¿ãƒ¼ãƒˆæ¼”å‡º*/
 	if (m_startStagingTime > 0.0f)
 	{
-		m_startStagingTime--;	// ƒXƒ^[ƒg‰‰o‚ÌŠÔ
+		m_startStagingTime--;	// ã‚¹ã‚¿ãƒ¼ãƒˆæ¼”å‡ºã®æ™‚é–“
 
 		if (m_startStagingTime > kStartTime - 3.0f)
 		{
@@ -314,7 +314,7 @@ void SceneTutorial::Update()
 		}
 		else if (m_startStagingTime <= 0)
 		{
-			// 0.5•bŠÔ‘Ò‹@
+			// 0.5ç§’é–“å¾…æ©Ÿ
 			WaitTimer(500);
 		}
 		else
@@ -325,7 +325,7 @@ void SceneTutorial::Update()
 		return;
 	}
 
-	/*ƒtƒF[ƒhƒCƒ“ƒAƒEƒg*/
+	/*ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã‚¢ã‚¦ãƒˆ*/
 	if (m_isSceneGameOver || m_isSceneClear || m_isSceneTitle || m_isSceneEnd)
 	{
 		m_fadeAlpha += 8;
@@ -343,81 +343,81 @@ void SceneTutorial::Update()
 		}
 	}
 
-	/*ƒJƒEƒ“ƒgƒ_ƒEƒ“‰‰o*/
+	/*ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³æ¼”å‡º*/
 	m_readyCount--;
 	if (m_readyCount >= 0) return;
 	else m_readyCount = 0;
 
-	/*ƒXƒ^[ƒgSE‚ğ–Â‚ç‚µ‚½Œã‚ÉBGM‚ğ–Â‚ç‚·*/
+	/*ã‚¹ã‚¿ãƒ¼ãƒˆSEã‚’é³´ã‚‰ã—ãŸå¾Œã«BGMã‚’é³´ã‚‰ã™*/
 	if (CheckSoundMem(m_startSE) == 0 && CheckSoundMem(m_bgm) == 0)
 	{
 		PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP, true);
 	}
 
-	/*“G‚ğ‚·‚×‚Ä“|‚µ‚½‚çƒNƒŠƒA‰‰o‚ğs‚¤*/
+	/*æ•µã‚’ã™ã¹ã¦å€’ã—ãŸã‚‰ã‚¯ãƒªã‚¢æ¼”å‡ºã‚’è¡Œã†*/
 	if (m_enemyTotalNum <= 0)
 	{
 		UpdateClearStaging();
 	}
 	if (m_clearStagingTime <= 0.0f)
 	{
-		// 0.5•bŒã‚ÉƒNƒŠƒA‰æ–Ê‚É‘JˆÚ
+		// 0.5ç§’å¾Œã«ã‚¯ãƒªã‚¢ç”»é¢ã«é·ç§»
 		m_isSceneClear = true;
 		WaitTimer(500);
 		return;
 	}
 
-	/*ƒ|[ƒY‰æ–Ê‚ÌXV*/
+	/*ãƒãƒ¼ã‚ºç”»é¢ã®æ›´æ–°*/
 	m_pPause->Update();
 
-	/*ƒ|[ƒY‰æ–Ê‚ª•\¦‚³‚ê‚Ä‚¢‚éê‡‰æ–Ê‚ğ~‚ß‚é*/
+	/*ãƒãƒ¼ã‚ºç”»é¢ãŒè¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹å ´åˆç”»é¢ã‚’æ­¢ã‚ã‚‹*/
 	if (m_pPause->IsPause())
 	{
-		// BGMˆê’â~
+		// BGMä¸€æ™‚åœæ­¢
 		m_isExistMenu = true;
 
-		// ƒŠƒgƒ‰ƒC‚ª‘I‘ğ‚³‚ê‚½‚ç‰Šú‰»‚·‚é
+		// ãƒªãƒˆãƒ©ã‚¤ãŒé¸æŠã•ã‚ŒãŸã‚‰åˆæœŸåŒ–ã™ã‚‹
 		if (m_pPause->IsSelectRetry())
 		{
 			m_pPlayer->Init(m_pBg, this, { kPlayerInitPosX, kPlayerInitPosY });
 			m_isSceneEnd = true;
 		}
-		// ƒ^ƒCƒgƒ‹‚É–ß‚é‚ğ‘I‘ğ
+		// ã‚¿ã‚¤ãƒˆãƒ«ã«æˆ»ã‚‹ã‚’é¸æŠ
 		else if (m_pPause->IsSelectTitle())
 		{
-			// ƒ^ƒCƒgƒ‹‰æ–Ê‚É‘JˆÚ
+			// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã«é·ç§»
 			m_isSceneTitle = true;
 			StopSoundMem(m_bgm);
 
-			// 1•bŒã‚É‘JˆÚ
+			// 1ç§’å¾Œã«é·ç§»
 			WaitTimer(1000);
 		}
 		return;
 	}
 
-	/*•ŠíØ‚è‘Ö‚¦‰æ–Ê‚ª•\¦‚³‚ê‚Ä‚¢‚éê‡‰æ–Ê‚ğ~‚ß‚é*/
+	/*æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆç”»é¢ãŒè¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹å ´åˆç”»é¢ã‚’æ­¢ã‚ã‚‹*/
 	if (m_pPause->IsSelectShotExist())
 	{
 		m_isExistMenu = true;
 		return;
 	}
 
-	/*ƒ^ƒCƒ€ƒJƒEƒ“ƒg*/
+	/*ã‚¿ã‚¤ãƒ ã‚«ã‚¦ãƒ³ãƒˆ*/
 	if (m_enemyTotalNum > 0)
 	{
 		m_time++;
 	}
 
-	/*”wŒi‚ÌXV*/
+	/*èƒŒæ™¯ã®æ›´æ–°*/
 	m_pBg->Update();
 
-	/*ƒvƒŒƒCƒ„[‚ÌHP‚ª0‚É‚È‚Á‚½ê‡*/
+	/*ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPãŒ0ã«ãªã£ãŸå ´åˆ*/
 	if (m_pPlayer->GetHp() <= 0)
 	{
-		// ƒvƒŒƒCƒ„[‚Ìc‹@‚ª0ˆÈ‰º‚Ìê‡
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ®‹æ©ŸãŒ0ä»¥ä¸‹ã®å ´åˆ
 		if (m_pPlayer->GetLife() <= 0)
 		{
-			// 1•bŒã‚ÉƒQ[ƒ€ƒI[ƒo[‰æ–Ê‚É‘JˆÚ
+			// 1ç§’å¾Œã«ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢ã«é·ç§»
 			WaitTimer(1000);
 			m_isSceneGameOver = true;
 			StopSoundMem(m_bgm);
@@ -425,7 +425,7 @@ void SceneTutorial::Update()
 		}
 		else
 		{
-			// €–SƒAƒjƒ[ƒVƒ‡ƒ“ŒãƒŠƒgƒ‰ƒC
+			// æ­»äº¡ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å¾Œãƒªãƒˆãƒ©ã‚¤
 			if (m_pPlayer->GetDeadFrame() <= 0)
 			{
 				m_isRetry = true;
@@ -434,30 +434,30 @@ void SceneTutorial::Update()
 		}
 	}
 
-	/*ƒvƒŒƒCƒ„[‚ÌXV*/
+	/*ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ›´æ–°*/
 	if (m_enemyTotalNum > 0)
 	{
 		m_pPlayer->Update();
 	}
-	/*ƒvƒŒƒCƒ„[‚ÌŒ»İ’n‚ğæ“¾*/
+	/*ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨åœ°ã‚’å–å¾—*/
 	m_playerPos = m_pPlayer->GetPos();
-	/*ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è‚ğæ“¾*/
+	/*ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®šã‚’å–å¾—*/
 	Rect playerRect = m_pPlayer->GetColRect();
 
-	// EŠÊ‚ğ•\¦
+	// Eç¼¶ã‚’è¡¨ç¤º
 	if (!m_isGetFullHpRecovery)
 	{
 		DropFullHpRecovery();
 	}
 
-	/*’e‚ÌXV*/
+	/*å¼¾ã®æ›´æ–°*/
 	UpdateShot(playerRect);
-	/*“G‚ÌXV*/
+	/*æ•µã®æ›´æ–°*/
 	UpdateEnemy(playerRect);
-	/*‰ñ•œƒAƒCƒeƒ€‚ÌXV*/
+	/*å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®æ›´æ–°*/
 	UpdateRecovery(playerRect);
 
-	/*‰æ–Ê‚ğ—h‚ç‚·*/
+	/*ç”»é¢ã‚’æºã‚‰ã™*/
 	m_shakeFrame--;
 	m_ampFrame *= 0.95f;
 	if (m_shakeFrame < 0)
@@ -465,15 +465,15 @@ void SceneTutorial::Update()
 		m_shakeFrame = 0;
 	}
 
-	/*ƒƒjƒ…[‚ğ•Â‚¶‚éÛ‚ÉƒWƒƒƒ“ƒv‚µ‚È‚¢‚æ‚¤‚É‚·‚é*/
+	/*ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’é–‰ã˜ã‚‹éš›ã«ã‚¸ãƒ£ãƒ³ãƒ—ã—ãªã„ã‚ˆã†ã«ã™ã‚‹*/
 	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsPause())
 	{
 		m_isExistMenu = false;
 	}
 
 #ifdef _DEBUG
-	// MEMO:ESCAPEƒL[or¶ƒXƒeƒBƒbƒN‰Ÿ‚µ‚İ‚ÅƒNƒŠƒA‰æ–Ê‚ÉˆÚ“®
-	// ƒpƒbƒh‚Ì“ü—Íó‘Ô‚ğæ“¾
+	// MEMO:ESCAPEã‚­ãƒ¼orå·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯æŠ¼ã—è¾¼ã¿ã§ã‚¯ãƒªã‚¢ç”»é¢ã«ç§»å‹•
+	// ãƒ‘ãƒƒãƒ‰ã®å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (Pad::IsTrigger(pad & PAD_INPUT_START))
 	{
@@ -483,82 +483,82 @@ void SceneTutorial::Update()
 }
 
 /// <summary>
-/// •`‰æ
+/// æç”»
 /// </summary>
 void SceneTutorial::Draw()
 {
-	// ‘‚«‚İ
+	// æ›¸ãè¾¼ã¿
 	SetDrawScreen(m_gameScreenHandle);
-	// •`‰ææƒXƒNƒŠ[ƒ“‚ğƒNƒŠƒA‚·‚é
+	// æç”»å…ˆã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
 	ClearDrawScreen();
 
-	// ”wŒi‚Ì•`‰æ
+	// èƒŒæ™¯ã®æç”»
 	m_pBg->Draw();
 
-	// ’e‚Ì•`‰æ
+	// å¼¾ã®æç”»
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
-		// nullptr‚È‚çˆ—‚Ís‚í‚È‚¢
+		// nullptrãªã‚‰å‡¦ç†ã¯è¡Œã‚ãªã„
 		if (!m_pShot[i])continue;
 		m_pShot[i]->Draw();
 	}
 
-	// “G‚Ì•`‰æ
+	// æ•µã®æç”»
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		// nullptr‚È‚çˆ—‚Ís‚í‚È‚¢
+		// nullptrãªã‚‰å‡¦ç†ã¯è¡Œã‚ãªã„
 		if (!m_pEnemy[i])continue;
 		m_pEnemy[i]->Draw();
 	}
 
-	// ‰ñ•œƒAƒCƒeƒ€‚Ì•`‰æ
+	// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®æç”»
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
-		// nullptr‚È‚çˆ—‚Ís‚í‚È‚¢
+		// nullptrãªã‚‰å‡¦ç†ã¯è¡Œã‚ãªã„
 		if (!m_pRecovery[i])continue;
 		m_pRecovery[i]->Draw();
 	}
 
-	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æç”»
 	m_pPlayer->Draw();
 
-	/*‰æ–Ê‰¡‚Éî•ñ•\¦*/
+	/*ç”»é¢æ¨ªã«æƒ…å ±è¡¨ç¤º*/
 	DrawInfo();
 
-	/*ƒ|[ƒY‰æ–ÊA•ŠíØ‚è‘Ö‚¦‰æ–Ê‚Ì•\¦*/
+	/*ãƒãƒ¼ã‚ºç”»é¢ã€æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆç”»é¢ã®è¡¨ç¤º*/
 	m_pPause->Draw();
 
-	/*•ŠíØ‚è‘Ö‚¦‰æ–Ê•\¦’†*/
+	/*æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆç”»é¢è¡¨ç¤ºä¸­*/
 	if (m_pPause->IsSelectShotExist())
 	{
 		DrawShotChange();
 	}
-	/*ƒ|[ƒY‰æ–Ê•\¦’†*/
+	/*ãƒãƒ¼ã‚ºç”»é¢è¡¨ç¤ºä¸­*/
 	if (m_pPause->IsPause())
 	{
 		DrawPause();
 	}
 
-	// ƒtƒF[ƒhƒCƒ“ƒAƒEƒg
+	// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã‚¢ã‚¦ãƒˆ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x0e0918, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// ƒoƒbƒNƒoƒbƒtƒ@‚É‘‚«‚Şİ’è‚É–ß‚µ‚Ä‚¨‚­
+	// ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã«æ›¸ãè¾¼ã‚€è¨­å®šã«æˆ»ã—ã¦ãŠã
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	// ƒQ[ƒ€‰æ–Ê‚ğƒoƒbƒNƒoƒbƒtƒ@‚É•`‰æ‚·‚é
+	// ã‚²ãƒ¼ãƒ ç”»é¢ã‚’ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã«æç”»ã™ã‚‹
 	int screenX = 0;
 	int screenY = 0;
 	if (m_shakeFrame > 0)
 	{
-		// ‰æ–Ê—h‚ê
+		// ç”»é¢æºã‚Œ
 		screenX = GetRand(4) - 2 * static_cast<int>(m_ampFrame);
 		screenY = GetRand(4) - 2 * static_cast<int>(m_ampFrame);
 	}
 	DrawRectGraph(screenX, screenY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_gameScreenHandle, true);
 
-	// ƒXƒ^[ƒg‚ÆƒNƒŠƒAğŒ‚Ì•\¦
+	// ã‚¹ã‚¿ãƒ¼ãƒˆã¨ã‚¯ãƒªã‚¢æ¡ä»¶ã®è¡¨ç¤º
 	if (m_startStagingTime > 0.0f)
 	{
 		DrawStartStaging();
@@ -573,7 +573,7 @@ void SceneTutorial::Draw()
 		}
 	}
 
-	// ƒNƒŠƒA‚Ì‰‰o‚Æƒ^ƒCƒ€•\¦
+	// ã‚¯ãƒªã‚¢ã®æ¼”å‡ºã¨ã‚¿ã‚¤ãƒ è¡¨ç¤º
 	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
 	{
 		DrawClearStaging();
@@ -581,28 +581,28 @@ void SceneTutorial::Draw()
 }
 
 /// <summary>
-/// ’e‚ÌXV
+/// å¼¾ã®æ›´æ–°
 /// </summary>
 void SceneTutorial::UpdateShot(Rect playerRect)
 {
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
-		// nullptr‚È‚çˆ—‚Ís‚í‚È‚¢
+		// nullptrãªã‚‰å‡¦ç†ã¯è¡Œã‚ãªã„
 		if (!m_pShot[i]) continue;
 
 		m_pShot[i]->SetBg(m_pBg);
 		m_pShot[i]->SetMain(this);
 		m_pShot[i]->Update();
 
-		// ƒAƒCƒeƒ€2†‚Ìê‡
+		// ã‚¢ã‚¤ãƒ†ãƒ 2å·ã®å ´åˆ
 		if (m_pShot[i]->GetShotType() == ShotType::kShotLineMove)
 		{
-			// ‰æ–Êã‚É‘¶İ‚·‚é‚©
+			// ç”»é¢ä¸Šã«å­˜åœ¨ã™ã‚‹ã‹
 			if (m_pShot[i]->IsExist())
 			{
 				m_isExistLineMove = true;
 
-				// ƒAƒCƒeƒ€2†‚ÌSE‚ğ–Â‚ç‚·
+				// ã‚¢ã‚¤ãƒ†ãƒ 2å·ã®SEã‚’é³´ã‚‰ã™
 				if (CheckSoundMem(m_lineMoveSE) == 0)
 				{
 					PlaySoundMem(m_lineMoveSE, DX_PLAYTYPE_BACK, true);
@@ -614,16 +614,16 @@ void SceneTutorial::UpdateShot(Rect playerRect)
 				StopSoundMem(m_lineMoveSE);
 			}
 
-			// ’e‚Ì“–‚½‚è”»’è
+			// å¼¾ã®å½“ãŸã‚Šåˆ¤å®š
 			Rect shotRect = m_pShot[i]->GetColRect();
-			// ƒvƒŒƒCƒ„[‚Æ’e‚Ì“–‚½‚è”»’è
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨å¼¾ã®å½“ãŸã‚Šåˆ¤å®š
 			if (playerRect.IsCollision(shotRect))
 			{
 				m_pPlayer->RideLineMove(shotRect);
 			}
 		}
 
-		// ‰æ–ÊŠO‚Éo‚½‚çƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é
+		// ç”»é¢å¤–ã«å‡ºãŸã‚‰ãƒ¡ãƒ¢ãƒªã‚’è§£æ”¾ã™ã‚‹
 		if (!m_pShot[i]->IsExist())
 		{
 			delete m_pShot[i];
@@ -633,9 +633,9 @@ void SceneTutorial::UpdateShot(Rect playerRect)
 }
 
 /// <summary>
-/// “G‚ÌXV
+/// æ•µã®æ›´æ–°
 /// </summary>
-/// <param name="playerRect">ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è</param>
+/// <param name="playerRect">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®š</param>
 void SceneTutorial::UpdateEnemy(Rect playerRect)
 {
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -643,25 +643,25 @@ void SceneTutorial::UpdateEnemy(Rect playerRect)
 		if (!m_pEnemy[i]) continue;
 		m_pEnemy[i]->Update();
 
-		// g—pÏ‚İ‚Ì“GƒLƒƒƒ‰ƒNƒ^[‚ğíœ
+		// ä½¿ç”¨æ¸ˆã¿ã®æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚’å‰Šé™¤
 		if (!m_pEnemy[i]->IsExist())
 		{
-			// Á–ÅSE‚ğ–Â‚ç‚·
+			// æ¶ˆæ»…æ™‚SEã‚’é³´ã‚‰ã™
 			PlaySoundMem(m_enemyDeadSE, DX_PLAYTYPE_BACK, true);
 
-			// “G‚Ì‡Œv”‚ğŒ¸‚ç‚·
+			// æ•µã®åˆè¨ˆæ•°ã‚’æ¸›ã‚‰ã™
 			m_enemyTotalNum--;
 
-			// Šm—¦‚ÅƒAƒCƒeƒ€‚ğƒhƒƒbƒv
+			// ç¢ºç‡ã§ã‚¢ã‚¤ãƒ†ãƒ ã‚’ãƒ‰ãƒ­ãƒƒãƒ—
 			CreateItem(i);
 
-			// ƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é
+			// ãƒ¡ãƒ¢ãƒªã‚’è§£æ”¾ã™ã‚‹
 			delete m_pEnemy[i];
-			m_pEnemy[i] = nullptr;	// nullptr‚ğ“ü‚ê‚é
+			m_pEnemy[i] = nullptr;	// nullptrã‚’å…¥ã‚Œã‚‹
 		}
 		else
 		{
-			// “G‚ÆƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è
+			// æ•µã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®š
 			Rect enemyRect = m_pEnemy[i]->GetColRect();
 			if (playerRect.IsCollision(enemyRect))
 			{
@@ -672,21 +672,21 @@ void SceneTutorial::UpdateEnemy(Rect playerRect)
 
 			for (int j = 0; j < m_pShot.size(); j++)
 			{
-				// nullptr‚È‚çˆ—‚Ís‚í‚È‚¢
+				// nullptrãªã‚‰å‡¦ç†ã¯è¡Œã‚ãªã„
 				if (!m_pShot[j]) continue;
 
-				// “G‚Æ’e‚Ì“–‚½‚è”»’è
-				// ƒAƒCƒeƒ€‚Q†‚Ìê‡‚Í“G‚Æ‚Ì“–‚½‚è”»’è‚ğ–³‹‚·‚é
+				// æ•µã¨å¼¾ã®å½“ãŸã‚Šåˆ¤å®š
+				// ã‚¢ã‚¤ãƒ†ãƒ ï¼’å·ã®å ´åˆã¯æ•µã¨ã®å½“ãŸã‚Šåˆ¤å®šã‚’ç„¡è¦–ã™ã‚‹
 				if (m_pShot[j]->GetShotType() != ShotType::kShotLineMove)
 				{
-					Rect shotRect = m_pShot[j]->GetColRect(); // ’e‚Ì“–‚½‚è”»’è
+					Rect shotRect = m_pShot[j]->GetColRect(); // å¼¾ã®å½“ãŸã‚Šåˆ¤å®š
 					if (shotRect.IsCollision(enemyRect))
 					{
 						m_pEnemy[i]->OnDamage();
 					}
 					if (enemyRect.IsCollision(shotRect))
 					{
-						// ’e‚ğíœ
+						// å¼¾ã‚’å‰Šé™¤
 						delete m_pShot[j];
 						m_pShot[j] = nullptr;
 					}
@@ -697,61 +697,61 @@ void SceneTutorial::UpdateEnemy(Rect playerRect)
 }
 
 /// <summary>
-/// ‰ñ•œƒAƒCƒeƒ€‚ÌXV
+/// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®æ›´æ–°
 /// </summary>
-/// <param name="playerRect">ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è</param>
+/// <param name="playerRect">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®š</param>
 void SceneTutorial::UpdateRecovery(Rect playerRect)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
 	{
-		// nullptr‚È‚çˆ—‚Ís‚í‚È‚¢
+		// nullptrãªã‚‰å‡¦ç†ã¯è¡Œã‚ãªã„
 		if (!m_pRecovery[i]) continue;
 
 		m_pRecovery[i]->Update();
 
-		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// ‰ñ•œƒAƒCƒeƒ€‚Ì“–‚½‚è”»’è
-		// ƒvƒŒƒCƒ„[‚Æ‰ñ•œƒAƒCƒeƒ€‚Ì“–‚½‚è”»’è
+		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®å½“ãŸã‚Šåˆ¤å®š
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã®å½“ãŸã‚Šåˆ¤å®š
 		if (playerRect.IsCollision(recoveryRect))
 		{
-			// SE‚ğ–Â‚ç‚·
+			// SEã‚’é³´ã‚‰ã™
 			PlaySoundMem(m_recoverySE, DX_PLAYTYPE_BACK, true);
 
-			if (dynamic_cast<RecoverySmallHp*>(m_pRecovery[i])) // HP¬‰ñ•œ
+			if (dynamic_cast<RecoverySmallHp*>(m_pRecovery[i])) // HPå°å›å¾©
 			{
 				m_pPlayer->HpSmallRecovery();
 			}
-			else if (dynamic_cast<RecoveryGreatHp*>(m_pRecovery[i])) // HP‘å‰ñ•œ
+			else if (dynamic_cast<RecoveryGreatHp*>(m_pRecovery[i])) // HPå¤§å›å¾©
 			{
 				m_pPlayer->HpGreatRecovery();
 			}
-			else if (dynamic_cast<RecoverySmallShot*>(m_pRecovery[i])) // ’e¬‰ñ•œ
+			else if (dynamic_cast<RecoverySmallShot*>(m_pRecovery[i])) // å¼¾å°å›å¾©
 			{
 				m_pPlayer->ShotSmallRecovery();
 			}
-			else if (dynamic_cast<RecoveryGreatShot*>(m_pRecovery[i])) // ’e‘å‰ñ•œ
+			else if (dynamic_cast<RecoveryGreatShot*>(m_pRecovery[i])) // å¼¾å¤§å›å¾©
 			{
 				m_pPlayer->ShotGreatRecovery();
 			}
-			else if (dynamic_cast<RecoveryLife*>(m_pRecovery[i])) // c‹@‰ñ•œ
+			else if (dynamic_cast<RecoveryLife*>(m_pRecovery[i])) // æ®‹æ©Ÿå›å¾©
 			{
 				m_pPlayer->LifeRecovery();
 			}
-			else if (dynamic_cast<RecoveryFullHp*>(m_pRecovery[i])) // HP‘S‰ñ•œ
+			else if (dynamic_cast<RecoveryFullHp*>(m_pRecovery[i])) // HPå…¨å›å¾©
 			{
-				if (!m_isGetFullHpRecovery)  // EŠÊ‚ğæ“¾‚µ‚Ä‚È‚¢ê‡
+				if (!m_isGetFullHpRecovery)  // Eç¼¶ã‚’å–å¾—ã—ã¦ãªã„å ´åˆ
 				{
 					m_pPlayer->GetHpFullRecovery();
 					m_isGetFullHpRecovery = true;
 				}
 			}
 
-			// æ“¾‚µ‚½‚çƒAƒCƒeƒ€‚ğÁ‚·
+			// å–å¾—ã—ãŸã‚‰ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¶ˆã™
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
 		}
 		else if (!m_pRecovery[i]->IsExist())
 		{
-			// ƒAƒCƒeƒ€‚ğÁ‚·
+			// ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¶ˆã™
 			delete m_pRecovery[i];
 			m_pRecovery[i] = nullptr;
 		}
@@ -759,41 +759,41 @@ void SceneTutorial::UpdateRecovery(Rect playerRect)
 }
 
 /// <summary>
-/// ’e‚Ì¶¬
+/// å¼¾ã®ç”Ÿæˆ
 /// </summary>
-/// <param name="pShot">’e‚Ìí—Ş</param>
+/// <param name="pShot">å¼¾ã®ç¨®é¡</param>
 /// <returns></returns>
 bool SceneTutorial::AddShot(ShotBase* pShot)
 {
-	// nullptr‚ğ“n‚³‚ê‚½‚ç~‚Ü‚é
+	// nullptrã‚’æ¸¡ã•ã‚ŒãŸã‚‰æ­¢ã¾ã‚‹
 	assert(pShot);
 
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
-		// g—p’†‚È‚çŸ‚Ìƒ`ƒFƒbƒN‚ğs‚¤
+		// ä½¿ç”¨ä¸­ãªã‚‰æ¬¡ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
 		if (m_pShot[i])continue;
 
-		// m_pShot[i] == nullptr‚È‚Ì‚ÅV‚µ‚­“o˜^‚·‚é
+		// m_pShot[i] == nullptrãªã®ã§æ–°ã—ãç™»éŒ²ã™ã‚‹
 		m_pShot[i] = pShot;
 
-		// “o˜^‚µ‚½‚çI—¹
+		// ç™»éŒ²ã—ãŸã‚‰çµ‚äº†
 		return true;
 	}
 
-	// m_pShot‚Éƒ|ƒCƒ“ƒ^‚ğ“o˜^‚Å‚«‚È‚©‚Á‚½
+	// m_pShotã«ãƒã‚¤ãƒ³ã‚¿ã‚’ç™»éŒ²ã§ããªã‹ã£ãŸ
 	delete pShot;
 	return false;
 }
 
 /// <summary>
-/// ƒNƒŠƒA‰‰o‚ÌXV
+/// ã‚¯ãƒªã‚¢æ¼”å‡ºã®æ›´æ–°
 /// </summary>
 void SceneTutorial::UpdateClearStaging()
 {
 	m_clearStagingTime--;
 	m_stagingFade += 150;
 
-	// ƒNƒŠƒASE1‰ñ‚¾‚¯‚ğ–Â‚ç‚·
+	// ã‚¯ãƒªã‚¢SE1å›ã ã‘ã‚’é³´ã‚‰ã™
 	StopSoundMem(m_bgm);
 	if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
 	{
@@ -801,10 +801,10 @@ void SceneTutorial::UpdateClearStaging()
 		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
 		return;
 	}
-	// ‰Ô‰Î‚ÌXV
+	// èŠ±ç«ã®æ›´æ–°
 	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
 	{
-		// ‰Ô‰Î‚ğã‚É‚ ‚°‚é
+		// èŠ±ç«ã‚’ä¸Šã«ã‚ã’ã‚‹
 		if (m_clearStagingTime <= 220.0f)
 		{
 			m_fireworks1Pos.y -= kFireworksSpeed;
@@ -839,7 +839,7 @@ void SceneTutorial::UpdateClearStaging()
 			m_fireworks6Frame += kFireworksWidth;
 		}
 
-		// ‰¹‚ğ—¬‚·
+		// éŸ³ã‚’æµã™
 		if (CheckSoundMem(m_fireworksSE) == 0)
 		{
 			PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
@@ -849,10 +849,10 @@ void SceneTutorial::UpdateClearStaging()
 }
 
 /// <summary>
-/// ƒAƒCƒeƒ€¶¬
+/// ã‚¢ã‚¤ãƒ†ãƒ ç”Ÿæˆ
 /// </summary>
-/// <param name="enemyIndex">“G</param>
-// HP¬‰ñ•œ
+/// <param name="enemyIndex">æ•µ</param>
+// HPå°å›å¾©
 void SceneTutorial::DropHpSmallRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -866,7 +866,7 @@ void SceneTutorial::DropHpSmallRecovery(int enemyIndex)
 		}
 	}
 }
-// HP‘å‰ñ•œ
+// HPå¤§å›å¾©
 void SceneTutorial::DropHpGreatRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -880,7 +880,7 @@ void SceneTutorial::DropHpGreatRecovery(int enemyIndex)
 		}
 	}
 }
-// ’e¬‰ñ•œ
+// å¼¾å°å›å¾©
 void SceneTutorial::DropShotSmallRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -894,7 +894,7 @@ void SceneTutorial::DropShotSmallRecovery(int enemyIndex)
 		}
 	}
 }
-// ’e‘å‰ñ•œ
+// å¼¾å¤§å›å¾©
 void SceneTutorial::DropShotGreatRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -908,7 +908,7 @@ void SceneTutorial::DropShotGreatRecovery(int enemyIndex)
 		}
 	}
 }
-// c‹@‰ñ•œ
+// æ®‹æ©Ÿå›å¾©
 void SceneTutorial::DropLifeRecovery(int enemyIndex)
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -922,7 +922,7 @@ void SceneTutorial::DropLifeRecovery(int enemyIndex)
 		}
 	}
 }
-// HP‘S‰ñ•œ
+// HPå…¨å›å¾©
 void SceneTutorial::DropFullHpRecovery()
 {
 	for (int i = 0; i < m_pRecovery.size(); i++)
@@ -931,14 +931,14 @@ void SceneTutorial::DropFullHpRecovery()
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
 			m_pRecovery[i]->Init(m_pBg);
-			m_pRecovery[i]->Start({ 4200, 750 }); // ƒAƒCƒeƒ€‚ÌˆÊ’u‚ğİ’è
+			m_pRecovery[i]->Start({ 4200, 750 }); // ã‚¢ã‚¤ãƒ†ãƒ ã®ä½ç½®ã‚’è¨­å®š
 			return;
 		}
 	}
 }
 
 /// <summary>
-/// “G‚Ì¶¬
+/// æ•µã®ç”Ÿæˆ
 /// </summary>
 void SceneTutorial::CreateEnemy()
 {
@@ -968,82 +968,82 @@ void SceneTutorial::CreateEnemy()
 }
 
 /// <summary>
-/// ‰ñ•œƒAƒCƒeƒ€ƒhƒƒbƒv
+/// å›å¾©ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—
 /// </summary>
-/// <param name="enemyIndex">“G</param>
+/// <param name="enemyIndex">æ•µ</param>
 void SceneTutorial::CreateItem(int enemyIndex)
 {
 	int getRandDrop = GetRand(100);
 	if (getRandDrop <= 20)
 	{
-		DropHpSmallRecovery(enemyIndex); // HP‰ñ•œ(¬)
+		DropHpSmallRecovery(enemyIndex); // HPå›å¾©(å°)
 	}
 	else if (getRandDrop <= 35)
 	{
-		DropHpGreatRecovery(enemyIndex);	// HP‰ñ•œ(‘å)
+		DropHpGreatRecovery(enemyIndex);	// HPå›å¾©(å¤§)
 	}
 	else if (getRandDrop <= 65)
 	{
-		DropShotSmallRecovery(enemyIndex); // ’eƒGƒlƒ‹ƒM[(¬)
+		DropShotSmallRecovery(enemyIndex); // å¼¾ã‚¨ãƒãƒ«ã‚®ãƒ¼(å°)
 	}
 	else if (getRandDrop <= 90)
 	{
-		DropShotGreatRecovery(enemyIndex); // ’eƒGƒlƒ‹ƒM[(‘å)
+		DropShotGreatRecovery(enemyIndex); // å¼¾ã‚¨ãƒãƒ«ã‚®ãƒ¼(å¤§)
 	}
 	else if (getRandDrop <= 100)
 	{
-		DropLifeRecovery(enemyIndex);	// c‹@
+		DropLifeRecovery(enemyIndex);	// æ®‹æ©Ÿ
 	}
 }
 
 /// <summary>
-/// ’e”A“G”•\¦
+/// å¼¾æ•°ã€æ•µæ•°è¡¨ç¤º
 /// </summary>
 void SceneTutorial::DrawInfo()
 {
-	// ‰æ–Ê‰¡‚Ì•\¦
-	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // ¶‘¤
+	// ç”»é¢æ¨ªã®è¡¨ç¤º
+	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // å·¦å´
 	DrawLine(kFrameSize + 1, 0, kFrameSize + 1, Game::kScreenHeight, 0xffffff , 2);
-	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // ‰E‘¤
+	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // å³å´
 	DrawLine(Game::kScreenWidth - kFrameSize - 1, 0, Game::kScreenWidth - kFrameSize - 1, Game::kScreenHeight, 0xffffff, 2);
 
-	// ˜g•\¦
-	DrawGraph(0, kFramePosY, m_frameHandle, true); // ¶‘¤
-	DrawGraph(Game::kScreenWidth - kFrameSize, kFramePosY, m_frameHandle, true); // ‰E‘¤
+	// æ è¡¨ç¤º
+	DrawGraph(0, kFramePosY, m_frameHandle, true); // å·¦å´
+	DrawGraph(Game::kScreenWidth - kFrameSize, kFramePosY, m_frameHandle, true); // å³å´
 
-	/*c‹@Ac‚è“G”Aƒ^ƒCƒ€‚ğ¶‘¤‚É•\¦*/
-	// c‹@”•\¦
-	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "c‹@", 0xffffff, m_pFont->GetFont2());
+	/*æ®‹æ©Ÿã€æ®‹ã‚Šæ•µæ•°ã€ã‚¿ã‚¤ãƒ ã‚’å·¦å´ã«è¡¨ç¤º*/
+	// æ®‹æ©Ÿæ•°è¡¨ç¤º
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "æ®‹æ©Ÿ", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 80, kInfoTextPosY + kShotNumIntervalY + 40, 0xffaa00, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
 
-	// “G”•\¦
-	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2 + 10, "“G”", 0xffffff, m_pFont->GetFont2());
+	// æ•µæ•°è¡¨ç¤º
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2 + 10, "æ•µæ•°", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 50, kInfoTextPosY + kShotNumIntervalY * 2 + 50, 0xffaa00, m_pFont->GetFont3(), " %d / %d", m_enemyTotalNum, kEnemyMax);
 
-	// ƒ^ƒCƒ€
+	// ã‚¿ã‚¤ãƒ 
 	int milliSec = static_cast<int>(m_time) * 1000 / 60;
 	int sec = (milliSec / 1000) % 60;
 	int min = (milliSec / 1000) / 60;
 	milliSec %= 1000;
 
-	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3 + 30, "ƒ^ƒCƒ€", 0xffffff, m_pFont->GetFont2());
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3 + 30, "ã‚¿ã‚¤ãƒ ", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + 20, kInfoTextPosY + kShotNumIntervalY * 3 + 70, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
 
 
 /// <summary>
-/// HPA•Ší‚Ì’e”‚ğ‰E‘¤‚É•\¦
+/// HPã€æ­¦å™¨ã®å¼¾æ•°ã‚’å³å´ã«è¡¨ç¤º
 /// </summary>
-	// Energy‚Ì•\¦
+	// Energyã®è¡¨ç¤º
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 120, "Energy", 0xffffff, m_pFont->GetFont3());
 
 	// HP
 	if (m_pPlayer->IsBuster())
 	{
-		// •Ší‘I‘ğ’†‚Ì•\¦
+		// æ­¦å™¨é¸æŠä¸­ã®è¡¨ç¤º
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :", 0xffffff, m_pFont->GetFont2()); // •¶š
-	// Œ»İ‚ÌHP•ª‚¾‚¯lŠp‚ğ•`‰æ‚·‚é
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :", 0xffffff, m_pFont->GetFont2()); // æ–‡å­—
+	// ç¾åœ¨ã®HPåˆ†ã ã‘å››è§’ã‚’æç”»ã™ã‚‹
 	for (int i = 0; i < m_pPlayer->GetHp(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1053,14 +1053,14 @@ void SceneTutorial::DrawInfo()
 			0xeee8aa, true);
 	}
 
-	// ƒƒ^ƒ‹
+	// ãƒ¡ã‚¿ãƒ«
 	if (m_pPlayer->IsMetal())
 	{
-		// •Ší‘I‘ğ’†‚Ì•\¦
+		// æ­¦å™¨é¸æŠä¸­ã®è¡¨ç¤º
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2()); // •¶š
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY - 45, m_metalHandle, true); // ƒƒ^ƒ‹‚Ì‰æ‘œ
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2()); // æ–‡å­—
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY - 45, m_metalHandle, true); // ãƒ¡ã‚¿ãƒ«ã®ç”»åƒ
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1070,14 +1070,14 @@ void SceneTutorial::DrawInfo()
 			0xc0c0c0, true);
 	}
 
-	// ƒtƒ@ƒCƒA
+	// ãƒ•ã‚¡ã‚¤ã‚¢
 	if (m_pPlayer->IsFire())
 	{
-		// •Ší‘I‘ğ’†‚Ì•\¦
+		// æ­¦å™¨é¸æŠä¸­ã®è¡¨ç¤º
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, "F :", 0xffffff, m_pFont->GetFont2()); // •¶š
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, m_fireHandle, true); // ƒtƒ@ƒCƒA‚Ì‰æ‘œ
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, "F :", 0xffffff, m_pFont->GetFont2()); // æ–‡å­—
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, m_fireHandle, true); // ãƒ•ã‚¡ã‚¤ã‚¢ã®ç”»åƒ
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1087,14 +1087,14 @@ void SceneTutorial::DrawInfo()
 			0xff4500, true);
 	}
 
-	// 2†
+	// 2å·
 	if (m_pPlayer->IsLineMove())
 	{
-		// •Ší‘I‘ğ’†‚Ì•\¦
+		// æ­¦å™¨é¸æŠä¸­ã®è¡¨ç¤º
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 3, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2()); // •¶š
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, m_lineMoveHandle, true); // 2†‚Ì‰æ‘œ
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2()); // æ–‡å­—
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, m_lineMoveHandle, true); // 2å·ã®ç”»åƒ
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1106,13 +1106,13 @@ void SceneTutorial::DrawInfo()
 }
 
 /// <summary>
-/// •ŠíØ‚è‘Ö‚¦‰æ–Ê•\¦
+/// æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆç”»é¢è¡¨ç¤º
 /// </summary>
 void SceneTutorial::DrawShotChange()
 {
-	// Œ»İ‚ÌHP‚ğ•\¦
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetFont(), "P :"); // •¶š
-	for (int i = 0; i < m_pPlayer->GetHp(); i++) // Œ»İ‚ÌHP•ª‚¾‚¯lŠp‚ğ•`‰æ‚·‚é
+	// ç¾åœ¨ã®HPã‚’è¡¨ç¤º
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetFont(), "P :"); // æ–‡å­—
+	for (int i = 0; i < m_pPlayer->GetHp(); i++) // ç¾åœ¨ã®HPåˆ†ã ã‘å››è§’ã‚’æç”»ã™ã‚‹
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY,
@@ -1121,11 +1121,11 @@ void SceneTutorial::DrawShotChange()
 			0xeee8aa, true);
 	}
 
-	// Œ»İ‚Ì’eƒGƒlƒ‹ƒM[”‚ğ•\¦
-	// ƒƒ^ƒ‹
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "M :"); // •¶š
-	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY, kTextPosX + 75, kTextPosY + kIntervalY + 25, m_metalHandle, true); // ƒƒ^ƒ‹‚Ì‰æ‘œ
-	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // Œ»İ‚ÌƒGƒlƒ‹ƒM[•ª‚¾‚¯lŠp‚ğ•`‰æ‚·‚é
+	// ç¾åœ¨ã®å¼¾ã‚¨ãƒãƒ«ã‚®ãƒ¼æ•°ã‚’è¡¨ç¤º
+	// ãƒ¡ã‚¿ãƒ«
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "M :"); // æ–‡å­—
+	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY, kTextPosX + 75, kTextPosY + kIntervalY + 25, m_metalHandle, true); // ãƒ¡ã‚¿ãƒ«ã®ç”»åƒ
+	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++) // ç¾åœ¨ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼åˆ†ã ã‘å››è§’ã‚’æç”»ã™ã‚‹
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY + kIntervalY,
@@ -1134,10 +1134,10 @@ void SceneTutorial::DrawShotChange()
 			0xc0c0c0, true);
 	}
 
-	// ƒtƒ@ƒCƒA[
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "F :"); // •¶š
-	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY * 2, kTextPosX + 75, kTextPosY + kIntervalY * 2 + 25, m_fireHandle, true); // ƒtƒ@ƒCƒA‚Ì‰æ‘œ
-	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // Œ»İ‚ÌƒGƒlƒ‹ƒM[•ª‚¾‚¯lŠp‚ğ•`‰æ‚·‚é
+	// ãƒ•ã‚¡ã‚¤ã‚¢ãƒ¼
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "F :"); // æ–‡å­—
+	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY * 2, kTextPosX + 75, kTextPosY + kIntervalY * 2 + 25, m_fireHandle, true); // ãƒ•ã‚¡ã‚¤ã‚¢ã®ç”»åƒ
+	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // ç¾åœ¨ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼åˆ†ã ã‘å››è§’ã‚’æç”»ã™ã‚‹
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY + kIntervalY * 2,
@@ -1146,10 +1146,10 @@ void SceneTutorial::DrawShotChange()
 			0xff4500, true);
 	}
 
-	// ƒAƒCƒeƒ€2†
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "L :"); // •¶š
-	DrawGraph(kTextPosX + 45, kTextPosY + kIntervalY * 3 + 3, m_lineMoveHandle, true); // 2†‚Ì‰æ‘œ
-	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // Œ»İ‚ÌƒGƒlƒ‹ƒM[•ª‚¾‚¯lŠp‚ğ•`‰æ‚·‚é
+	// ã‚¢ã‚¤ãƒ†ãƒ 2å·
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "L :"); // æ–‡å­—
+	DrawGraph(kTextPosX + 45, kTextPosY + kIntervalY * 3 + 3, m_lineMoveHandle, true); // 2å·ã®ç”»åƒ
+	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // ç¾åœ¨ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼åˆ†ã ã‘å››è§’ã‚’æç”»ã™ã‚‹
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
 			kBarPosY + kIntervalY * 3,
@@ -1158,8 +1158,8 @@ void SceneTutorial::DrawShotChange()
 			0xb22222, true);
 	}
 
-	// Œ»İ‚ÌEŠÊ”‚ğ•\¦
-	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont()); // •¶š
+	// ç¾åœ¨ã®Eç¼¶æ•°ã‚’è¡¨ç¤º
+	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont()); // æ–‡å­—
 	if (m_pPlayer->GetFullHpRecovery() == 1)
 	{
 		DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4 - 5, m_fullHpRecHandle, true);
@@ -1167,26 +1167,26 @@ void SceneTutorial::DrawShotChange()
 }
 
 /// <summary>
-/// ƒ|[ƒY‰æ–Ê•\¦
+/// ãƒãƒ¼ã‚ºç”»é¢è¡¨ç¤º
 /// </summary>
 void SceneTutorial::DrawPause()
 {
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "ƒQ[ƒ€‚É–ß‚é");
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "ƒŠƒgƒ‰ƒC");
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "ƒ^ƒCƒgƒ‹‚É–ß‚é");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "ã‚²ãƒ¼ãƒ ã«æˆ»ã‚‹");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "ãƒªãƒˆãƒ©ã‚¤");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "ã‚¿ã‚¤ãƒˆãƒ«ã«æˆ»ã‚‹");
 }
 
 /// <summary>
-/// ƒXƒ^[ƒg‰‰o‚Ì•`‰æ
+/// ã‚¹ã‚¿ãƒ¼ãƒˆæ¼”å‡ºã®æç”»
 /// </summary>
 void SceneTutorial::DrawStartStaging()
 {
-	// ƒtƒF[ƒhƒCƒ“¨ƒAƒEƒg
+	// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³â†’ã‚¢ã‚¦ãƒˆ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
 	DrawGraph(static_cast<int>(m_startDis.x), static_cast<int>(Game::kScreenHeight * 0.5 - 220), m_startHandle, true);
 
 	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 190), static_cast<int>(Game::kScreenHeight * 0.5 - 100),
-		"“G‚ğ‚·‚×‚Ä‚½‚¨‚¹I\n", 0xffffff, m_pFont->GetFontStaging());
+		"æ•µã‚’ã™ã¹ã¦ãŸãŠã›ï¼\n", 0xffffff, m_pFont->GetFontStaging());
 
 	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 60), static_cast<int>(Game::kScreenHeight * 0.5 + 30),
 		0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
@@ -1194,17 +1194,17 @@ void SceneTutorial::DrawStartStaging()
 }
 
 /// <summary>
-/// ƒNƒŠƒA‰‰o‚Ì•`‰æ
+/// ã‚¯ãƒªã‚¢æ¼”å‡ºã®æç”»
 /// </summary>
 void SceneTutorial::DrawClearStaging()
 {
-	// ƒ^ƒCƒ€
+	// ã‚¿ã‚¤ãƒ 
 	int milliSec = static_cast<int>(m_time * 1000 / 60);
 	int sec = (milliSec / 1000) % 60;
 	int min = (milliSec / 1000) / 60;
 	milliSec %= 1000;
 
-	// ƒNƒŠƒA‚Ì•¶š‚ğ•\¦
+	// ã‚¯ãƒªã‚¢ã®æ–‡å­—ã‚’è¡¨ç¤º
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
 	DrawGraph(0, static_cast<int>(Game::kScreenHeight * 0.5 - 200), m_startHandle, true);
 
@@ -1212,10 +1212,10 @@ void SceneTutorial::DrawClearStaging()
 		"CLEAR!\n", 0xffe44d, m_pFont->GetFontStaging());
 
 	DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 260), static_cast<int>(Game::kScreenHeight * 0.5 + 30),
-		0xffffff, m_pFont->GetFontStaging(), "ƒNƒŠƒAƒ^ƒCƒ€ : % 3d:%02d.%03d", min, sec, milliSec);
+		0xffffff, m_pFont->GetFontStaging(), "ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ  : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// •¶š•\¦Œã‰Ô‰Î‚ğ‚ ‚°‚é
+	// æ–‡å­—è¡¨ç¤ºå¾ŒèŠ±ç«ã‚’ã‚ã’ã‚‹
 	if (m_clearStagingTime <= 220.0f && m_clearStagingTime > 70.0f)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), m_fireworks1Frame, 0, kFireworksWidth, kFireworksHeight, 6.0f, 0.0f, m_fireworks1, true);
