@@ -49,17 +49,19 @@ public:
 	//　敵の生成
 	virtual void CreateEnemy() = 0;
 	// アイテムの生成
-	virtual void CreateItem(int enemyIndex) = 0;
+	virtual void CreateItem(int enemyIndex) ;
 	// 弾数、敵数等の表示
 	virtual void DrawInfo() = 0;
+
+
 	// 武器切り替え画面表示
-	virtual void DrawShotChange() = 0;
+	virtual void DrawShotChange();
 	// ポーズ画面の表示
-	virtual void DrawPause() = 0;;
+	virtual void DrawPause();
 	// スタート演出の描画
-	virtual void DrawStartStaging() = 0;
+	virtual void DrawStartStaging();
 	// クリア時演出の描画
-	virtual void DrawClearStaging() = 0;
+	virtual void DrawClearStaging();
 
 	// アイテムドロップ
 	virtual void DropHpSmallRecovery(int enemyIndex) = 0;	// HP小回復

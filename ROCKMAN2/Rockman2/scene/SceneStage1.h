@@ -29,26 +29,16 @@ public:
 	virtual void UpdateClearStaging() override;
 	//　敵の生成
 	virtual void CreateEnemy() override;
-	// アイテムの生成
-	virtual void CreateItem(int enemyIndex) override;
 	// 弾数、敵数等の表示
 	virtual void DrawInfo() override;
-	// 武器切り替え画面表示
-	virtual void DrawShotChange() override;
-	// ポーズ画面の表示
-	virtual void DrawPause() override;
-	// スタート演出の描画
-	virtual void DrawStartStaging() override;
-	// クリア時演出の描画
-	virtual void DrawClearStaging() override;
 
 	// アイテムドロップ
-	virtual void DropHpSmallRecovery(int enemyIndex) override;		// HP小回復
-	virtual void DropHpGreatRecovery(int enemyIndex) override;		// HP大回復
-	virtual void DropShotSmallRecovery(int enemyIndex) override;	// 弾小回復
-	virtual void DropShotGreatRecovery(int enemyIndex) override;	// 弾大回復
-	virtual void DropLifeRecovery(int enemyIndex) override;			// 残機回復
-	virtual void DropFullHpRecovery()override;						// HP全回復
+	void DropHpSmallRecovery(int enemyIndex);		// HP小回復
+	void DropHpGreatRecovery(int enemyIndex);		// HP大回復
+	void DropShotSmallRecovery(int enemyIndex);		// 弾小回復
+	void DropShotGreatRecovery(int enemyIndex);		// 弾大回復
+	void DropLifeRecovery(int enemyIndex);			// 残機回復
+	void DropFullHpRecovery();						// HP全回復
 
 private:
 	/*ポインタ設定*/

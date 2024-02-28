@@ -32,14 +32,6 @@ public:
 	virtual void CreateItem(int enemyIndex) override;
 	// 弾数、敵数等の表示
 	virtual void DrawInfo() override;
-	// 武器切り替え画面表示
-	virtual void DrawShotChange() override;
-	// ポーズ画面の表示
-	virtual void DrawPause() override;
-	// スタート演出の描画
-	virtual void DrawStartStaging() override;
-	// クリア時演出の描画
-	virtual void DrawClearStaging() override;
 
 	// アイテムドロップ
 	virtual void DropHpSmallRecovery(int enemyIndex) override;		// HP小回復

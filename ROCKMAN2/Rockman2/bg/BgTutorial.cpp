@@ -73,6 +73,7 @@ BgTutorial::BgTutorial():
 m_exAnimFrame(0),
 m_exFireAnimFrame(0)
 {
+	// îwåiÇÃâÊëú
 	m_bgHandle = LoadGraph("data/image/BackGround/Stage1/1.png");
 	m_bg2Handle = LoadGraph("data/image/BackGround/Stage1/2.png");
 	m_bg3Handle = LoadGraph("data/image/BackGround/Stage1/3.png");
@@ -128,15 +129,10 @@ void BgTutorial::Update()
 
 	// ê‡ñæâÊëúï\é¶ÇÃçXêV
 	m_exAnimFrame++;
-	if (m_exAnimFrame >= kExAnimFrameCycle)
-	{
-		m_exAnimFrame = 0;
-	}
+	if (m_exAnimFrame >= kExAnimFrameCycle) m_exAnimFrame = 0;
+
 	m_exFireAnimFrame++;
-	if (m_exFireAnimFrame >= kExFireAnimFrameCycle)
-	{
-		m_exFireAnimFrame = 0;
-	}
+	if (m_exFireAnimFrame >= kExFireAnimFrameCycle) m_exFireAnimFrame = 0;
 }
 
 void BgTutorial::Draw()
@@ -204,7 +200,6 @@ void BgTutorial::DrawBg()
 	int scrollBg3 = static_cast<int>(m_bgMove * 0.1f) % static_cast<int>(bg3Size.width * kBgScale);
 	int scrollBg4 = static_cast<int>(m_bgMove * 0.3f) % static_cast<int>(bg4Size.width * kBgScale);
 
-
 	// îwåiï`âÊ
 	DrawRectRotaGraph(0, 0,
 		0, 0,
@@ -218,6 +213,7 @@ void BgTutorial::DrawBg()
 		kBgScale, 0.0f,
 		m_bg2Handle, true);
 
+	// îwåiÉXÉNÉçÅ[Éã
 	for (int index = 0; index < 2; index++)
 	{
 		DrawRotaGraph2(

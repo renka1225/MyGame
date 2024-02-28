@@ -4,26 +4,6 @@
 #include "Game.h"
 #include <cassert>
 
-namespace
-{
-	// マップチップ1つのサイズ
-	constexpr int kChipWidth = 18;
-	constexpr int kChipHeight = 18;
-
-	// チップを置く数
-	constexpr int kChipNumX = 120;
-	constexpr int kChipNumY = 60;
-	// マップチップ拡大率
-	constexpr float kChipScale = 3.0f;
-
-	// マップの広さ
-	constexpr int kMapWidth = static_cast<int>(kChipWidth * kChipScale * kChipNumX);
-	constexpr int kMapHeight = static_cast<int>(kChipHeight * kChipScale * kChipNumY);
-
-	// マップチップの配列情報
-	constexpr int kChipData[kChipNumY][kChipNumX] = { 0, 0 };
-}
-
 Bg::Bg() :
 	m_pPlayer(nullptr),
 	m_bgPos(0.0f, 0.0f),
@@ -39,17 +19,5 @@ Bg::Bg() :
 }
 
 Bg::~Bg()
-{
-}
-
-void Bg::Init()
-{
-}
-
-void Bg::Update()
-{
-}
-
-void Bg::Draw()
 {
 }
