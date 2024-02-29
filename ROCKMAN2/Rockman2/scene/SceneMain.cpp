@@ -73,6 +73,13 @@ namespace
 	// フレームの表示位置
 	constexpr int kFramePosY = static_cast<int>(Game::kScreenHeight * 0.5 - 199);
 
+	/*アイテムドロップの確率*/
+	constexpr int kItemDropMax = 100;		// 最大確率
+	constexpr int kHpSmallRec = 20;			// HP回復(小)
+	constexpr int kHpGreatRec = 35;			// HP回復(大)
+	constexpr int kShotSmallRec = 60;		// 弾回復(小)
+	constexpr int kShotGreatRec = 80;			// 弾回復(大)
+	constexpr int kLifeRec = 85;			// 残機回復
 }
 
 
@@ -107,6 +114,25 @@ SceneMain::SceneMain() :
 	m_ampFrame(0),
 	m_gameScreenHandle(-1)
 {
+	m_bgm = LoadSoundMem("data/sound/BGM/stage2.wav");
+	m_enemyDeadSE = LoadSoundMem("data/sound/SE/enemyDamage.mp3");
+	m_recoverySE = LoadSoundMem("data/sound/SE/recovery.mp3");
+	m_lineMoveSE = LoadSoundMem("data/sound/SE/shotLine.mp3");
+	m_startSE = LoadSoundMem("data/sound/BGM/start.wav");
+	m_clearSE = LoadSoundMem("data/sound/SE/clear.wav");
+	m_fireworksSE = LoadSoundMem("data/sound/SE/fireworks.wav");
+
+	// 画像読み込み
+	m_frameHandle = LoadGraph("data/image/UI/frame.png");
+	m_metalHandle = LoadGraph("data/image/Shot/shotMetal.png");
+	m_fireHandle = LoadGraph("data/image/Shot/shotFire3.png");
+	m_lineMoveHandle = LoadGraph("data/image/shot/shotLineMove.png");
+	m_fullHpRecHandle = LoadGraph("data/image/Recovery/fullHp.png");
+	m_shotSelectHandle = LoadGraph("data/image/UI/shotSelect.png");
+	m_startHandle = LoadGraph("data/image/UI/start.png");
+	m_fireworks1 = LoadGraph("data/image/Effect/clear/1.png");
+	m_fireworks2 = LoadGraph("data/image/Effect/clear/2.png");
+	m_fireworks3 = LoadGraph("data/image/Effect/clear/3.png");
 }
 
 
@@ -115,30 +141,39 @@ SceneMain::~SceneMain()
 }
 
 
+/// <summary>
+/// アイテムドロップ
+/// </summary>
+/// <param name="enemyIndex">アイテムドロップする敵</param>
 void SceneMain::CreateItem(int enemyIndex)
 {
-	int getRandDrop = GetRand(100);
-	if (getRandDrop <= 20)
+	int getRandDrop = GetRand(kItemDropMax);
+	if (getRandDrop <= kHpSmallRec)
 	{
 		DropHpSmallRecovery(enemyIndex); // HP回復(小)
 	}
-	else if (getRandDrop <= 35)
+	else if (getRandDrop <= kHpGreatRec)
 	{
 		DropHpGreatRecovery(enemyIndex);	// HP回復(大)
 	}
-	else if (getRandDrop <= 65)
+	else if (getRandDrop <= kShotSmallRec)
 	{
 		DropShotSmallRecovery(enemyIndex); // 弾エネルギー(小)
 	}
-	else if (getRandDrop <= 90)
+	else if (getRandDrop <= kShotGreatRec)
 	{
 		DropShotGreatRecovery(enemyIndex); // 弾エネルギー(大)
 	}
-	else if (getRandDrop <= 100)
+	else if (getRandDrop <= kLifeRec)
 	{
 		DropLifeRecovery(enemyIndex);	// 残機
 	}
+	else
+	{
+		// 何もドロップしない
+	}
 }
+
 
 /// <summary>
 /// 武器切り替え画面表示
@@ -170,8 +205,8 @@ void SceneMain::DrawShotChange()
 	}
 
 	// ファイアー
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "F :"); // 文字
-	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY * 2, kTextPosX + 75, kTextPosY + kIntervalY * 2 + 25, m_fireHandle, true); // ファイアの画像
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * kShotFire, 0xffffff, m_pFont->GetFont(), "F :"); // 文字
+	DrawExtendGraph(kTextPosX + 50, kTextPosY + kIntervalY * 2, kTextPosX + 75, kTextPosY + kIntervalY * kShotFire + 25, m_fireHandle, true); // ファイアの画像
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -182,8 +217,8 @@ void SceneMain::DrawShotChange()
 	}
 
 	// アイテム2号
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "L :"); // 文字
-	DrawGraph(kTextPosX + 45, kTextPosY + kIntervalY * 3 + 3, m_lineMoveHandle, true); // 2号の画像
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * kShotLineMove, 0xffffff, m_pFont->GetFont(), "L :"); // 文字
+	DrawGraph(kTextPosX + 45, kTextPosY + kIntervalY * kShotLineMove + 3, m_lineMoveHandle, true); // 2号の画像
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++) // 現在のエネルギー分だけ四角を描画する
 	{
 		DrawBox(kBarPosX + kBarInterval * i,
@@ -194,10 +229,10 @@ void SceneMain::DrawShotChange()
 	}
 
 	// 現在のE缶数を表示
-	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * 4, "E : ", 0xffffff, m_pFont->GetFont()); // 文字
+	DrawStringToHandle(kTextPosX, kTextPosY + kIntervalY * kRecovery, "E : ", 0xffffff, m_pFont->GetFont()); // 文字
 	if (m_pPlayer->GetFullHpRecovery() == 1)
 	{
-		DrawGraph(kTextPosX, kBarPosY + kIntervalY * 4 - 5, m_fullHpRecHandle, true);
+		DrawGraph(kTextPosX, kBarPosY + kIntervalY * kRecovery - 5, m_fullHpRecHandle, true);
 	}
 }
 
