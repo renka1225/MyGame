@@ -25,6 +25,11 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	// クリア演出の処理
+	virtual void UpdateClearStaging();
+	// 回復アイテムの更新
+	virtual void UpdateRecovery(Rect playerRect);
+
 	// 武器切り替え画面表示
 	virtual void DrawShotChange();
 	// ポーズ画面の表示
@@ -33,21 +38,17 @@ public:
 	virtual void DrawStartStaging();
 	// クリア時演出の描画
 	virtual void DrawClearStaging();
+	// アイテムの生成
+	virtual void CreateItem(int enemyIndex);
 
 	// 弾の更新
 	virtual void UpdateShot(Rect playerRect) = 0;
 	// 敵の更新
 	virtual void UpdateEnemy(Rect playerRect) = 0;
-	// 回復アイテムの更新
-	virtual void UpdateRecovery(Rect playerRect) = 0;
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot) = 0;
-	// クリア演出
-	virtual void UpdateClearStaging() = 0;
 	//　敵の生成
 	virtual void CreateEnemy() = 0;
-	// アイテムの生成
-	virtual void CreateItem(int enemyIndex) ;
 	// 弾数、敵数等の表示
 	virtual void DrawInfo() = 0;
 

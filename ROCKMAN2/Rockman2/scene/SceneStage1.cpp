@@ -480,6 +480,7 @@ void SceneStage1::Update()
 #endif
 }
 
+
 /// <summary>
 /// 描画
 /// </summary>
@@ -579,6 +580,7 @@ void SceneStage1::Draw()
 	}
 }
 
+
 /// <summary>
 /// 弾の更新
 /// </summary>
@@ -631,6 +633,7 @@ void SceneStage1::UpdateShot(Rect playerRect)
 		}
 	}
 }
+
 
 /// <summary>
 /// 敵の更新
@@ -696,67 +699,6 @@ void SceneStage1::UpdateEnemy(Rect playerRect)
 	}
 }
 
-/// <summary>
-/// 回復アイテムの更新
-/// </summary>
-/// <param name="playerRect">プレイヤーの当たり判定</param>
-void SceneStage1::UpdateRecovery(Rect playerRect)
-{
-	for (int i = 0; i < m_pRecovery.size(); i++)
-	{
-		// nullptrなら処理は行わない
-		if (!m_pRecovery[i]) continue;
-
-		m_pRecovery[i]->Update();
-
-		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// 回復アイテムの当たり判定
-		// プレイヤーと回復アイテムの当たり判定
-		if (playerRect.IsCollision(recoveryRect))
-		{
-			// SEを鳴らす
-			PlaySoundMem(m_recoverySE, DX_PLAYTYPE_BACK, true);
-
-			if (dynamic_cast<RecoverySmallHp*>(m_pRecovery[i])) // HP小回復
-			{
-				m_pPlayer->HpSmallRecovery();
-			}
-			else if (dynamic_cast<RecoveryGreatHp*>(m_pRecovery[i])) // HP大回復
-			{
-				m_pPlayer->HpGreatRecovery();
-			}
-			else if (dynamic_cast<RecoverySmallShot*>(m_pRecovery[i])) // 弾小回復
-			{
-				m_pPlayer->ShotSmallRecovery();
-			}
-			else if (dynamic_cast<RecoveryGreatShot*>(m_pRecovery[i])) // 弾大回復
-			{
-				m_pPlayer->ShotGreatRecovery();
-			}
-			else if (dynamic_cast<RecoveryLife*>(m_pRecovery[i])) // 残機回復
-			{
-				m_pPlayer->LifeRecovery();
-			}
-			else if (dynamic_cast<RecoveryFullHp*>(m_pRecovery[i])) // HP全回復
-			{
-				if (!m_isGetFullHpRecovery)  // E缶を取得してない場合
-				{
-					m_pPlayer->GetHpFullRecovery();
-					m_isGetFullHpRecovery = true;
-				}
-			}
-
-			// 取得したらアイテムを消す
-			delete m_pRecovery[i];
-			m_pRecovery[i] = nullptr;
-		}
-		else if (!m_pRecovery[i]->IsExist())
-		{
-			// アイテムを消す
-			delete m_pRecovery[i];
-			m_pRecovery[i] = nullptr;
-		}
-	}
-}
 
 /// <summary>
 /// 弾の生成
@@ -874,68 +816,6 @@ void SceneStage1::DropFullHpRecovery()
 	}
 }
 
-/// <summary>
-/// クリア演出の更新
-/// </summary>
-void SceneStage1::UpdateClearStaging()
-{
-	m_clearStagingTime--;
-	m_stagingFade += 150;
-
-	// クリアSE1回だけを鳴らす
-	StopSoundMem(m_bgm);
-	if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
-	{
-		m_stagingFade = 0;
-		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
-		return;
-	}
-	// 花火の演出
-	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
-	{
-		// 花火を上にあげる
-		if (m_clearStagingTime <= 220.0f)
-		{
-			m_fireworks1Pos.y -= kFireworksSpeed;
-		}
-		if(m_clearStagingTime <= 210.0f)
-		{
-			m_fireworks1Frame += kFireworksWidth;
-			m_fireworks2Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 180.0f)
-		{
-			m_fireworks2Frame += kFireworksWidth;
-			m_fireworks3Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 150.0f)
-		{
-			m_fireworks3Frame += kFireworksWidth;
-			m_fireworks4Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 120.0f)
-		{
-			m_fireworks4Frame += kFireworksWidth;
-			m_fireworks5Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 100.0f)
-		{
-			m_fireworks5Frame += kFireworksWidth;
-			m_fireworks6Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 80.0f)
-		{
-			m_fireworks6Frame += kFireworksWidth;
-		}
-		
-		// 音を流す
-		if (CheckSoundMem(m_fireworksSE) == 0)
-		{
-			PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
-			return;
-		}
-	}
-}
 
 /// <summary>
 /// 敵の生成
@@ -1026,6 +906,7 @@ void SceneStage1::CreateEnemy()
 		}
 	}
 }
+
 
 /// <summary>
 /// 弾数、敵数表示

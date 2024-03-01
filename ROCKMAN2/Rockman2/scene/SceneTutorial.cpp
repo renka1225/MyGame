@@ -56,6 +56,11 @@ namespace
 	// 花火の表示フレーム
 	constexpr int kFireworksFrame = 10;
 
+	// フェード
+	constexpr int kStartFadeAlpha = 240;	// スタート時のα値
+	constexpr int kFadeFrame = 8;			// フェード変化量
+
+
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
 	constexpr int kTextPosX = 850;
@@ -225,7 +230,7 @@ void SceneTutorial::Init()
 		// 演出時間の初期化
 		m_startStagingTime = kStartTime;
 		m_startDis = { 30, 0 };
-		m_fadeAlpha = 240;
+		m_fadeAlpha = kStartFadeAlpha;
 		m_stagingFade = 0;
 		// スタートSE
 		PlaySoundMem(m_startSE, DX_PLAYTYPE_BACK, true);
@@ -328,19 +333,13 @@ void SceneTutorial::Update()
 	/*フェードインアウト*/
 	if (m_isSceneGameOver || m_isSceneClear || m_isSceneTitle || m_isSceneEnd)
 	{
-		m_fadeAlpha += 8;
-		if (m_fadeAlpha > 255)
-		{
-			m_fadeAlpha = 255;
-		}
+		m_fadeAlpha += kFadeFrame;
+		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
 	}
 	else
 	{
-		m_fadeAlpha -= 8;
-		if (m_fadeAlpha < 0)
-		{
-			m_fadeAlpha = 0;
-		}
+		m_fadeAlpha -= kFadeFrame;
+		if (m_fadeAlpha < 0) m_fadeAlpha = 0;
 	}
 
 	/*カウントダウン演出*/
@@ -580,6 +579,7 @@ void SceneTutorial::Draw()
 	}
 }
 
+
 /// <summary>
 /// 弾の更新
 /// </summary>
@@ -631,6 +631,7 @@ void SceneTutorial::UpdateShot(Rect playerRect)
 		}
 	}
 }
+
 
 /// <summary>
 /// 敵の更新
@@ -696,67 +697,6 @@ void SceneTutorial::UpdateEnemy(Rect playerRect)
 	}
 }
 
-/// <summary>
-/// 回復アイテムの更新
-/// </summary>
-/// <param name="playerRect">プレイヤーの当たり判定</param>
-void SceneTutorial::UpdateRecovery(Rect playerRect)
-{
-	for (int i = 0; i < m_pRecovery.size(); i++)
-	{
-		// nullptrなら処理は行わない
-		if (!m_pRecovery[i]) continue;
-
-		m_pRecovery[i]->Update();
-
-		Rect recoveryRect = m_pRecovery[i]->GetColRect();	// 回復アイテムの当たり判定
-		// プレイヤーと回復アイテムの当たり判定
-		if (playerRect.IsCollision(recoveryRect))
-		{
-			// SEを鳴らす
-			PlaySoundMem(m_recoverySE, DX_PLAYTYPE_BACK, true);
-
-			if (dynamic_cast<RecoverySmallHp*>(m_pRecovery[i])) // HP小回復
-			{
-				m_pPlayer->HpSmallRecovery();
-			}
-			else if (dynamic_cast<RecoveryGreatHp*>(m_pRecovery[i])) // HP大回復
-			{
-				m_pPlayer->HpGreatRecovery();
-			}
-			else if (dynamic_cast<RecoverySmallShot*>(m_pRecovery[i])) // 弾小回復
-			{
-				m_pPlayer->ShotSmallRecovery();
-			}
-			else if (dynamic_cast<RecoveryGreatShot*>(m_pRecovery[i])) // 弾大回復
-			{
-				m_pPlayer->ShotGreatRecovery();
-			}
-			else if (dynamic_cast<RecoveryLife*>(m_pRecovery[i])) // 残機回復
-			{
-				m_pPlayer->LifeRecovery();
-			}
-			else if (dynamic_cast<RecoveryFullHp*>(m_pRecovery[i])) // HP全回復
-			{
-				if (!m_isGetFullHpRecovery)  // E缶を取得してない場合
-				{
-					m_pPlayer->GetHpFullRecovery();
-					m_isGetFullHpRecovery = true;
-				}
-			}
-
-			// 取得したらアイテムを消す
-			delete m_pRecovery[i];
-			m_pRecovery[i] = nullptr;
-		}
-		else if (!m_pRecovery[i]->IsExist())
-		{
-			// アイテムを消す
-			delete m_pRecovery[i];
-			m_pRecovery[i] = nullptr;
-		}
-	}
-}
 
 /// <summary>
 /// 弾の生成
@@ -785,68 +725,6 @@ bool SceneTutorial::AddShot(ShotBase* pShot)
 	return false;
 }
 
-/// <summary>
-/// クリア演出の更新
-/// </summary>
-void SceneTutorial::UpdateClearStaging()
-{
-	m_clearStagingTime--;
-	m_stagingFade += 150;
-
-	// クリアSE1回だけを鳴らす
-	StopSoundMem(m_bgm);
-	if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
-	{
-		m_stagingFade = 0;
-		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
-		return;
-	}
-	// 花火の更新
-	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
-	{
-		// 花火を上にあげる
-		if (m_clearStagingTime <= 220.0f)
-		{
-			m_fireworks1Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 210.0f)
-		{
-			m_fireworks1Frame += kFireworksWidth;
-			m_fireworks2Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 180.0f)
-		{
-			m_fireworks2Frame += kFireworksWidth;
-			m_fireworks3Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 150.0f)
-		{
-			m_fireworks3Frame += kFireworksWidth;
-			m_fireworks4Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 120.0f)
-		{
-			m_fireworks4Frame += kFireworksWidth;
-			m_fireworks5Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 100.0f)
-		{
-			m_fireworks5Frame += kFireworksWidth;
-			m_fireworks6Pos.y -= kFireworksSpeed;
-		}
-		if (m_clearStagingTime <= 80.0f)
-		{
-			m_fireworks6Frame += kFireworksWidth;
-		}
-
-		// 音を流す
-		if (CheckSoundMem(m_fireworksSE) == 0)
-		{
-			PlaySoundMem(m_fireworksSE, DX_PLAYTYPE_BACK, true);
-			return;
-		}
-	}
-}
 
 /// <summary>
 /// アイテム生成
@@ -968,35 +846,6 @@ void SceneTutorial::CreateEnemy()
 }
 
 /// <summary>
-/// 回復アイテムドロップ
-/// </summary>
-/// <param name="enemyIndex">敵</param>
-void SceneTutorial::CreateItem(int enemyIndex)
-{
-	int getRandDrop = GetRand(100);
-	if (getRandDrop <= 20)
-	{
-		DropHpSmallRecovery(enemyIndex); // HP回復(小)
-	}
-	else if (getRandDrop <= 35)
-	{
-		DropHpGreatRecovery(enemyIndex);	// HP回復(大)
-	}
-	else if (getRandDrop <= 65)
-	{
-		DropShotSmallRecovery(enemyIndex); // 弾エネルギー(小)
-	}
-	else if (getRandDrop <= 90)
-	{
-		DropShotGreatRecovery(enemyIndex); // 弾エネルギー(大)
-	}
-	else if (getRandDrop <= 100)
-	{
-		DropLifeRecovery(enemyIndex);	// 残機
-	}
-}
-
-/// <summary>
 /// 弾数、敵数表示
 /// </summary>
 void SceneTutorial::DrawInfo()
@@ -1076,8 +925,8 @@ void SceneTutorial::DrawInfo()
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, m_fireHandle, true); // ファイアの画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, m_fireHandle, true); // ファイアの画像
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1093,8 +942,8 @@ void SceneTutorial::DrawInfo()
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 3, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, m_lineMoveHandle, true); // 2号の画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, m_lineMoveHandle, true); // 2号の画像
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,

@@ -20,16 +20,10 @@ public:
 	virtual void UpdateShot(Rect playerRect) override;
 	// 敵の更新
 	virtual void UpdateEnemy(Rect playerRect) override;
-	// 回復アイテムの更新
-	virtual void UpdateRecovery(Rect playerRect) override;
 	// ショットの追加
 	virtual bool AddShot(ShotBase* pShot) override;
-	// クリア演出
-	virtual void UpdateClearStaging() override;
 	//　敵の生成
 	virtual void CreateEnemy() override;
-	// アイテムの生成
-	virtual void CreateItem(int enemyIndex) override;
 	// 弾数、敵数等の表示
 	virtual void DrawInfo() override;
 
@@ -42,7 +36,7 @@ public:
 	virtual void DropFullHpRecovery() override;						// HP全回復
 
 private:
-	// 背景
+	// 背景のポインタ
 	BgTutorial* m_pBg;
 };
 
