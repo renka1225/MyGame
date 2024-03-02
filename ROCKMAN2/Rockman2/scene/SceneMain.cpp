@@ -25,20 +25,64 @@
 /// </summary>
 namespace
 {
-	/*演出*/
-// スタート演出時間
+	/*スタート演出*/
+	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
-	constexpr float kClearTime = 240.0f;
-	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
+	// 四角表示位置
+	constexpr int kStartBackPos = 320;
+	// クリア条件表示位置調整
+	constexpr int kStartDisPosX = 790;
+	constexpr int kStartDisPosY = 440;
+	// 敵数表示位置
+	constexpr int kEnemyNumDisPosX = 900;
+	constexpr int kEnemyNumDisPosY = 570;
+
+	/*クリア演出*/
+	// クリア演出時間
+	constexpr float kClearTime = 240.0f;
+	// クリアSEを流し始める時間
+	constexpr float kClearSETime = 180.0f;
+	// クリア時のフェード時間
+	constexpr int kClearFadeFrame = 150;
+	// 四角表示位置
+	constexpr int kClearBackPos = 340;
+	// クリアの文字表示位置調整
+	constexpr int kClearDisPosX = 890;
+	constexpr int kClearDisPosY = 440;
+	// クリア時間表示位置
+	constexpr int kClearTimePosX = 700;
+	constexpr int kClearTimePosY = 570;
+
+	/*花火の演出*/
+	// 花火を打ち上げ始める時間
+	constexpr float kFireworks1Time = 220.0f;
+	constexpr float kFireworks2Time = 210.0f;
+	constexpr float kFireworks3Time = 180.0f;
+	constexpr float kFireworks4Time = 150.0f;
+	constexpr float kFireworks5Time = 120.0f;
+	constexpr float kFireworks6Time = 100.0f;
+	constexpr float kFireworks7Time = 80.0f;
+	// 描画時間調整
+	constexpr float kDrawFireworks = 10.0f;
+	// 描画終了時間
+	constexpr float kDrawEndFireworks1 = 70.0f;	// 1つ目
+	constexpr float kDrawEndFireworks2 = 50.0f;	// 2つ目
+	constexpr float kDrawEndFireworks3 = 30.0f;	// 3つ目
+	constexpr float kDrawEndFireworks4 = 10.0f;	// 4つ目
+	constexpr float kDrawEndFireworks5 = 5.0f;	// 5つ目
+	constexpr float kDrawEndFireworks6 = 0.0f;	// 6つ目
+	// 花火の表示フレーム
+	constexpr int kFireworksFrame = 10;
 	// 花火の打ち上げ速度
 	constexpr float kFireworksSpeed = 20.0f;
 	// 花火の画像切り出しサイズ
 	constexpr int kFireworksWidth = 92;
 	constexpr int kFireworksHeight = 94;
-	// 花火の表示フレーム
-	constexpr int kFireworksFrame = 10;
+	// 花火の拡大率
+	constexpr float kFireworksScale1 = 5.0f;
+	constexpr float kFireworksScale2 = 6.0f;
 
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
@@ -78,7 +122,7 @@ namespace
 	constexpr int kHpSmallRec = 20;			// HP回復(小)
 	constexpr int kHpGreatRec = 35;			// HP回復(大)
 	constexpr int kShotSmallRec = 60;		// 弾回復(小)
-	constexpr int kShotGreatRec = 80;			// 弾回復(大)
+	constexpr int kShotGreatRec = 80;		// 弾回復(大)
 	constexpr int kLifeRec = 85;			// 残機回復
 }
 
@@ -181,54 +225,54 @@ void SceneMain::CreateItem(int enemyIndex)
 void SceneMain::UpdateClearStaging()
 {
 	m_clearStagingTime--;
-	m_stagingFade += 150;
+	m_stagingFade += kClearFadeFrame;
 
 	// クリアSE1回だけを鳴らす
 	StopSoundMem(m_bgm);
-	if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearTime - 60.0f)
+	if (CheckSoundMem(m_clearSE) == 0 && m_clearStagingTime >= kClearSETime)
 	{
 		m_stagingFade = 0;
 		PlaySoundMem(m_clearSE, DX_PLAYTYPE_BACK, true);
 		return;
 	}
 	// 花火の更新
-	else if (m_clearStagingTime <= kClearTime - 30.0f && m_clearStagingTime > 0.0f)
+	else if (m_clearStagingTime <= kFireworks1Time && m_clearStagingTime > 0.0f)
 	{
 		// 花火を上にあげる
-		if (m_clearStagingTime <= 220.0f)
+		if (m_clearStagingTime <= kFireworks1Time)
 		{
 			m_fireworks1Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 210.0f)
+		if (m_clearStagingTime <= kFireworks2Time)
 		{
 			m_fireworks1Frame += kFireworksWidth;
 			m_fireworks2Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 180.0f)
+		if (m_clearStagingTime <= kFireworks3Time)
 		{
 			m_fireworks2Frame += kFireworksWidth;
 			m_fireworks3Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 150.0f)
+		if (m_clearStagingTime <= kFireworks4Time)
 		{
 			m_fireworks3Frame += kFireworksWidth;
 			m_fireworks4Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 120.0f)
+		if (m_clearStagingTime <= kFireworks5Time)
 		{
 			m_fireworks4Frame += kFireworksWidth;
 			m_fireworks5Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 100.0f)
+		if (m_clearStagingTime <= kFireworks6Time)
 		{
 			m_fireworks5Frame += kFireworksWidth;
 			m_fireworks6Pos.y -= kFireworksSpeed;
 		}
-		if (m_clearStagingTime <= 80.0f)
+		if(m_clearStagingTime <= kFireworks7Time)
 		{
 			m_fireworks6Frame += kFireworksWidth;
 		}
-
+	
 		// 音を流す
 		if (CheckSoundMem(m_fireworksSE) == 0)
 		{
@@ -370,8 +414,8 @@ void SceneMain::DrawShotChange()
 void SceneMain::DrawPause()
 {
 	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY, 0xffffff, m_pFont->GetFont(), "ゲームに戻る");
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 2, 0xffffff, m_pFont->GetFont(), "リトライ");
-	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * 3, 0xffffff, m_pFont->GetFont(), "タイトルに戻る");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * (kPauseRetry + 1), 0xffffff, m_pFont->GetFont(), "リトライ");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY + kIntervalY * (kPauseTitle + 1), 0xffffff, m_pFont->GetFont(), "タイトルに戻る");
 }
 
 
@@ -382,12 +426,12 @@ void SceneMain::DrawStartStaging()
 {
 	// フェードイン→アウト
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
-	DrawGraph(static_cast<int>(m_startDis.x), static_cast<int>(Game::kScreenHeight * 0.5 - 220), m_startHandle, true);
+	DrawGraph(static_cast<int>(m_startDis.x), kStartBackPos, m_startHandle, true);
 
-	DrawStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 170), static_cast<int>(Game::kScreenHeight * 0.5 - 100),
+	DrawStringToHandle(static_cast<int>(m_startDis.x + kStartDisPosX), kStartDisPosY,
 		"敵をすべてたおせ！\n", 0xffffff, m_pFont->GetFontStaging());
 
-	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + Game::kScreenWidth * 0.5 - 60), static_cast<int>(Game::kScreenHeight * 0.5 + 30),
+	DrawFormatStringToHandle(static_cast<int>(m_startDis.x + kEnemyNumDisPosX), kEnemyNumDisPosY,
 		0xffffff, m_pFont->GetFontStaging(), "%d / %d\n", m_enemyTotalNum, m_enemyTotalNum);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
@@ -406,62 +450,62 @@ void SceneMain::DrawClearStaging()
 
 	// クリアの文字を表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_stagingFade);
-	DrawGraph(0, static_cast<int>(Game::kScreenHeight * 0.5 - 200), m_startHandle, true);
+	DrawGraph(0, kClearBackPos, m_startHandle, true);
 
-	DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 70), static_cast<int>(Game::kScreenHeight * 0.5 - 100),
+	DrawStringToHandle(kClearDisPosX, kClearDisPosY,
 		"CLEAR!\n", 0xffe44d, m_pFont->GetFontStaging());
 
-	DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 260), static_cast<int>(Game::kScreenHeight * 0.5 + 30),
+	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY,
 		0xffffff, m_pFont->GetFontStaging(), "クリアタイム : % 3d:%02d.%03d", min, sec, milliSec);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// 文字表示後花火をあげる
-	if (m_clearStagingTime <= 220.0f && m_clearStagingTime > 70.0f)
+	if (m_clearStagingTime <= kFireworks1Time && m_clearStagingTime > kDrawEndFireworks1)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks1Pos.x), static_cast<int>(m_fireworks1Pos.y), 
 			m_fireworks1Frame, 0,
 			kFireworksWidth, kFireworksHeight, 
-			6.0f, 0.0f,
+			kFireworksScale2, 0.0f,
 			m_fireworks1, true);
 	}
-	if (m_clearStagingTime <= 190.0f && m_clearStagingTime > 50.0f)
+	if (m_clearStagingTime <= (kFireworks3Time + kDrawFireworks) && m_clearStagingTime > kDrawEndFireworks2)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks2Pos.x), static_cast<int>(m_fireworks2Pos.y),
 			m_fireworks2Frame, 0, 
 			kFireworksWidth, kFireworksHeight, 
-			5.0f, 0.0f, 
+			kFireworksScale1, 0.0f,
 			m_fireworks2, true);
 	}
-	if (m_clearStagingTime <= 160.0f && m_clearStagingTime > 30.0f)
+	if (m_clearStagingTime <= (kFireworks4Time + kDrawFireworks) && m_clearStagingTime > kDrawEndFireworks3)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks3Pos.x), static_cast<int>(m_fireworks3Pos.y),
 			m_fireworks3Frame, 0,
 			kFireworksWidth, kFireworksHeight, 
-			5.0f, 0.0f, 
+			kFireworksScale1, 0.0f,
 			m_fireworks3, true);
 	}
-	if (m_clearStagingTime <= 140.0f && m_clearStagingTime > 10.0f)
+	if (m_clearStagingTime <= (kFireworks4Time - kDrawFireworks) && m_clearStagingTime > kDrawEndFireworks4)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks4Pos.x), static_cast<int>(m_fireworks4Pos.y),
 			m_fireworks4Frame, 0,
 			kFireworksWidth, kFireworksHeight, 
-			4.8f, 0.0f,
+			kFireworksScale1, 0.0f,
 			m_fireworks2, true);
 	}
-	if (m_clearStagingTime <= 120.0f && m_clearStagingTime > 5.0f)
+	if (m_clearStagingTime <= kFireworks4Time && m_clearStagingTime > kDrawEndFireworks5)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks5Pos.x), static_cast<int>(m_fireworks5Pos.y), 
 			m_fireworks5Frame, 0,
 			kFireworksWidth, kFireworksHeight,
-			5.2f, 0.0f,
+			kFireworksScale1, 0.0f,
 			m_fireworks3, true);
 	}
-	if (m_clearStagingTime <= 90.0f && m_clearStagingTime > 0.0f)
+	if (m_clearStagingTime <= (kFireworks6Time - kDrawFireworks) && m_clearStagingTime > kDrawEndFireworks6)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_fireworks6Pos.x), static_cast<int>(m_fireworks6Pos.y),
 			m_fireworks6Frame, 0,
 			kFireworksWidth, kFireworksHeight,
-			6.0f, 0.0f, 
+			kFireworksScale2, 0.0f,
 			m_fireworks1, true);
 	}
 }

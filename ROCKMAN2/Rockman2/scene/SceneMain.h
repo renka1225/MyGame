@@ -176,5 +176,13 @@ protected:
 		kShotLineMove,	// 2号
 		kRecovery		// E缶
 	};
+
+	// ポーズ画面表示
+	enum Pause
+	{
+		kPauseBack,		// ゲームに戻る
+		kPauseRetry,	// リトライ
+		kPauseTitle		// タイトルに戻る
+	};
 };
 

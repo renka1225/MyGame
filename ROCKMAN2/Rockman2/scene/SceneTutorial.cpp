@@ -48,17 +48,29 @@ namespace
 	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
-	// 花火の打ち上げ速度
-	constexpr float kFireworksSpeed = 20.0f;
-	// 花火の画像切り出しサイズ
-	constexpr int kFireworksWidth = 92;
-	constexpr int kFireworksHeight = 94;
-	// 花火の表示フレーム
-	constexpr int kFireworksFrame = 10;
-
 	// フェード
 	constexpr int kStartFadeAlpha = 240;	// スタート時のα値
 	constexpr int kFadeFrame = 8;			// フェード変化量
+
+	/*花火の演出*/
+	// 花火の打ち上げ速度
+	constexpr float kFireworksSpeed = 30.0f;
+	// 花火の画像切り出しサイズ
+	constexpr int kFireworksWidth = 92;
+	constexpr int kFireworksHeight = 94;
+	// 花火の初期位置
+	constexpr float kFireworks1StartPosX = 900.0f;
+	constexpr float kFireworks1StartPosY = 1130.0f;
+	constexpr float kFireworks2StartPosX = 300.0f;
+	constexpr float kFireworks2StartPosY = 1280.0f;
+	constexpr float kFireworks3StartPosX = 1400.0f;
+	constexpr float kFireworks3StartPosY = 1330.0f;
+	constexpr float kFireworks4StartPosX = 500.0f;
+	constexpr float kFireworks4StartPosY = 1380.0f;
+	constexpr float kFireworks5StartPosX = 700.0f;
+	constexpr float kFireworks5StartPosY = 1430.0f;
+	constexpr float kFireworks6StartPosX = 1100.0f;
+	constexpr float kFireworks6StartPosY = 1480.0f;
 
 
 	/*ポーズ画面*/
@@ -219,6 +231,7 @@ SceneTutorial::~SceneTutorial()
 	DeleteGraph(m_fireworks3);
 }
 
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -285,13 +298,14 @@ void SceneTutorial::Init()
 	m_isRetry = false;
 
 	// 花火の初期位置
-	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) + 50.0f };
-	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) + 200.0f };
-	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) + 250.0f };
-	m_fireworks4Pos = { 500.0f, static_cast<float>(Game::kScreenHeight) + 300.0f };
-	m_fireworks5Pos = { 700.0f, static_cast<float>(Game::kScreenHeight) + 350.0f };
-	m_fireworks6Pos = { 1100.0f, static_cast<float>(Game::kScreenHeight) + 400.0f };
+	m_fireworks1Pos = { kFireworks1StartPosX, kFireworks1StartPosY };
+	m_fireworks2Pos = { kFireworks2StartPosX, kFireworks2StartPosY };
+	m_fireworks3Pos = { kFireworks3StartPosX, kFireworks3StartPosY };
+	m_fireworks4Pos = { kFireworks4StartPosX, kFireworks4StartPosY };
+	m_fireworks5Pos = { kFireworks5StartPosX, kFireworks5StartPosY };
+	m_fireworks6Pos = { kFireworks6StartPosX, kFireworks6StartPosY };
 }
+
 
 /// <summary>
 /// 更新
@@ -480,6 +494,7 @@ void SceneTutorial::Update()
 	}
 #endif
 }
+
 
 /// <summary>
 /// 描画
@@ -815,6 +830,7 @@ void SceneTutorial::DropFullHpRecovery()
 	}
 }
 
+
 /// <summary>
 /// 敵の生成
 /// </summary>
@@ -845,6 +861,7 @@ void SceneTutorial::CreateEnemy()
 	}
 }
 
+
 /// <summary>
 /// 弾数、敵数表示
 /// </summary>
@@ -852,9 +869,9 @@ void SceneTutorial::DrawInfo()
 {
 	// 画面横の表示
 	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
-	DrawLine(kFrameSize + 1, 0, kFrameSize + 1, Game::kScreenHeight, 0xffffff , 2);
+	DrawLine(kFrameSize + 1, 0, kFrameSize + 1, Game::kScreenHeight, 0x000000 , 2);
 	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
-	DrawLine(Game::kScreenWidth - kFrameSize - 1, 0, Game::kScreenWidth - kFrameSize - 1, Game::kScreenHeight, 0xffffff, 2);
+	DrawLine(Game::kScreenWidth - kFrameSize - 1, 0, Game::kScreenWidth - kFrameSize - 1, Game::kScreenHeight, 0x000000, 2);
 
 	// 枠表示
 	DrawGraph(0, kFramePosY, m_frameHandle, true); // 左側
@@ -923,7 +940,7 @@ void SceneTutorial::DrawInfo()
 	if (m_pPlayer->IsFire())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * kShotFire, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
 	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, m_fireHandle, true); // ファイアの画像
@@ -940,7 +957,7 @@ void SceneTutorial::DrawInfo()
 	if (m_pPlayer->IsLineMove())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 3, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * kShotLineMove, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
 	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, m_lineMoveHandle, true); // 2号の画像

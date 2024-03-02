@@ -2,7 +2,6 @@
 #include "SceneMain.h"
 
 class BgStage1;
-class Player;
 
 /// <summary>
 /// ステージ1クラス

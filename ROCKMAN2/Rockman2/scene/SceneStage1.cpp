@@ -43,18 +43,31 @@ namespace
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
 	constexpr float kClearTime = 240.0f;
-	constexpr float kGameoverTime = 300.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
+	// フェード
+	constexpr int kStartFadeAlpha = 240;	// スタート時のα値
+	constexpr int kFadeFrame = 8;			// フェード変化量
+
+	/*花火の演出*/
 	// 花火の打ち上げ速度
 	constexpr float kFireworksSpeed = 30.0f;
 	// 花火の画像切り出しサイズ
 	constexpr int kFireworksWidth = 92;
 	constexpr int kFireworksHeight = 94;
-
-	// フェード
-	constexpr int kStartFadeAlpha = 240;	// スタート時のα値
-	constexpr int kFadeFrame = 8;			// フェード変化量
+	// 花火の初期位置
+	constexpr float kFireworks1StartPosX = 900.0f;
+	constexpr float kFireworks1StartPosY = 1130.0f;
+	constexpr float kFireworks2StartPosX = 300.0f;
+	constexpr float kFireworks2StartPosY = 1280.0f;
+	constexpr float kFireworks3StartPosX = 1400.0f;
+	constexpr float kFireworks3StartPosY = 1330.0f;
+	constexpr float kFireworks4StartPosX = 500.0f;
+	constexpr float kFireworks4StartPosY = 1380.0f;
+	constexpr float kFireworks5StartPosX = 700.0f;
+	constexpr float kFireworks5StartPosY = 1430.0f;
+	constexpr float kFireworks6StartPosX = 1100.0f;
+	constexpr float kFireworks6StartPosY = 1480.0f;
 
 	/*ポーズ画面*/
 	// ポーズ画面の文字表示位置
@@ -88,6 +101,10 @@ namespace
 	constexpr int kShotDisHeight = 20;	// 縦
 	// フレームの表示位置
 	constexpr int kFramePosY = static_cast<int>(Game::kScreenHeight * 0.5 - 199);
+
+	// E缶の初期位置
+	constexpr float kFullRecStartPosX = 2415.0f;
+	constexpr float kFullRecStartPosY = 2150.0f;
 }
 
 SceneStage1::SceneStage1()
@@ -243,7 +260,6 @@ void SceneStage1::Init()
 	}
 	// 演出時間の初期化
 	m_clearStagingTime = kClearTime;
-	m_gameoverStagingTime = kGameoverTime;
 	m_fireworks1Frame = 0;
 	m_fireworks2Frame = 0;
 	m_fireworks3Frame = 0;
@@ -285,12 +301,12 @@ void SceneStage1::Init()
 	m_isRetry = false;
 
 	// 花火の初期位置
-	m_fireworks1Pos = { 900.0f, static_cast<float>(Game::kScreenHeight) + 50.0f };
-	m_fireworks2Pos = { 300.0f, static_cast<float>(Game::kScreenHeight) + 200.0f };
-	m_fireworks3Pos = { 1400.0f, static_cast<float>(Game::kScreenHeight) + 250.0f };
-	m_fireworks4Pos = { 500.0f, static_cast<float>(Game::kScreenHeight) + 300.0f };
-	m_fireworks5Pos = { 700.0f, static_cast<float>(Game::kScreenHeight) + 350.0f };
-	m_fireworks6Pos = { 1100.0f, static_cast<float>(Game::kScreenHeight) + 400.0f };
+	m_fireworks1Pos = { kFireworks1StartPosX, kFireworks1StartPosY };
+	m_fireworks2Pos = { kFireworks2StartPosX, kFireworks2StartPosY };
+	m_fireworks3Pos = { kFireworks3StartPosX, kFireworks3StartPosY };
+	m_fireworks4Pos = { kFireworks4StartPosX, kFireworks4StartPosY };
+	m_fireworks5Pos = { kFireworks5StartPosX, kFireworks5StartPosY };
+	m_fireworks6Pos = { kFireworks6StartPosX, kFireworks6StartPosY };
 }
 
 /// <summary>
@@ -727,6 +743,7 @@ bool SceneStage1::AddShot(ShotBase* pShot)
 	return false;
 }
 
+
 /// <summary>
 /// アイテム生成
 /// </summary>
@@ -810,7 +827,7 @@ void SceneStage1::DropFullHpRecovery()
 		{
 			m_pRecovery[i] = new RecoveryFullHp;
 			m_pRecovery[i]->Init(m_pBg);
-			m_pRecovery[i]->Start({ 2415.0f, 2150.0f }); // アイテムの位置を設定
+			m_pRecovery[i]->Start({ kFullRecStartPosX, kFullRecStartPosY }); // アイテムの位置を設定
 			return;
 		}
 	}
@@ -915,9 +932,9 @@ void SceneStage1::DrawInfo()
 {
 	// 画面横の表示
 	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
-	DrawLine(kFrameSize + 1, 0, kFrameSize + 1, Game::kScreenHeight, 0xffffff, 2);
+	DrawLine(kFrameSize + 1, 0, kFrameSize + 1, Game::kScreenHeight, 0x000000, 2);
 	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
-	DrawLine(Game::kScreenWidth - kFrameSize - 1, 0, Game::kScreenWidth - kFrameSize - 1, Game::kScreenHeight, 0xffffff, 2);
+	DrawLine(Game::kScreenWidth - kFrameSize - 1, 0, Game::kScreenWidth - kFrameSize - 1, Game::kScreenHeight, 0x000000, 2);
 
 	// 枠表示
 	DrawGraph(0, kFramePosY, m_frameHandle, true); // 左側
@@ -988,14 +1005,14 @@ void SceneStage1::DrawInfo()
 		// 武器選択中の表示
 		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 2 - 40, m_fireHandle, true); // ファイアの画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, m_fireHandle, true); // ファイアの画像
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
-			kShotNumDisPosY + kShotNumIntervalY * 2,
+			kShotNumDisPosY + kShotNumIntervalY * kShotFire,
 			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
-			kShotNumDisPosY + kShotNumIntervalY * 2 + kPauseShotNumHeight,
+			kShotNumDisPosY + kShotNumIntervalY * kShotFire + kPauseShotNumHeight,
 			0xff4500, true);
 	}
 
@@ -1003,16 +1020,16 @@ void SceneStage1::DrawInfo()
 	if (m_pPlayer->IsLineMove())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 3, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * kShotLineMove, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * 3 - 40, m_lineMoveHandle, true); // 2号の画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, m_lineMoveHandle, true); // 2号の画像
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
-			kShotNumDisPosY + kShotNumIntervalY * 3,
+			kShotNumDisPosY + kShotNumIntervalY * kShotLineMove,
 			(kShotNumDisPosX + kShotNumIntervalX * i) + kShotDisWidth,
-			kShotNumDisPosY + kShotNumIntervalY * 3 + kPauseShotNumHeight,
+			kShotNumDisPosY + kShotNumIntervalY * kShotLineMove + kPauseShotNumHeight,
 			0xb22222, true);
 	}
 }
