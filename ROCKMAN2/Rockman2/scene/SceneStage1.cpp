@@ -27,7 +27,6 @@ namespace
 	constexpr int kRecoveryMax = 5;
 	// 登場する敵数
 	constexpr int kEnemyMax = 15;
-
 	// プレイヤーの初期位置
 	constexpr float kPlayerInitPosX = 350.0f;
 	constexpr float kPlayerInitPosY = 250.0f;
@@ -43,11 +42,23 @@ namespace
 	// スタート演出時間
 	constexpr float kStartTime = 120.0f;
 	constexpr float kClearTime = 240.0f;
+	// スタート演出開始時間
+	constexpr float kStartStagingStartTime = 90.0f;
+	constexpr float kStartStagingTime2 = 100.0f;
+	constexpr float kStartStagingTime3 = 40.0f;
+	// スタート演出表示位置
+	constexpr int kStartDisX1 = 5.0f;
+	constexpr int kStartDisX2 = 1.0f;
+	constexpr int kStartDisX3 = 40.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
+	// readyカウント表示位置調整
+	constexpr int kReadyCountTextX = 30;
 	// フェード
 	constexpr int kStartFadeAlpha = 240;	// スタート時のα値
 	constexpr int kFadeFrame = 8;			// フェード変化量
+	// 画面振れ幅調整
+	constexpr float kAmpFrame = 0.95f;
 
 	/*花火の演出*/
 	// 花火の打ち上げ速度
@@ -319,19 +330,16 @@ void SceneStage1::Update()
 	{
 		m_startStagingTime--;	// スタート演出の時間
 
-		if (m_startStagingTime > kStartTime - 3.0f)
+		if (m_startStagingTime > kStartStagingStartTime)
 		{
-			m_startDis.x -= 5.0f;
+			m_startDis.x -= kStartDisX1;
 			m_stagingFade += 45;
 		}
-		else if (m_startStagingTime <= kStartTime - 2.0f && m_startStagingTime >= 40.0f)
+		else if (m_startStagingTime <= kStartStagingTime2 && m_startStagingTime >= kStartStagingTime3)
 		{
-			m_startDis.x -= 1.0f;
+			m_startDis.x -= kStartDisX2;
 			m_stagingFade += 30;
-			if (m_stagingFade > 255)
-			{
-				m_stagingFade = 255;
-			}
+			if (m_stagingFade > 255) m_stagingFade = 255;
 		}
 		else if (m_startStagingTime <= 0)
 		{
@@ -340,7 +348,7 @@ void SceneStage1::Update()
 		}
 		else
 		{
-			m_startDis.x -= 40.0f;
+			m_startDis.x -= kStartDisX3;
 			m_stagingFade -= 40;
 		}
 		return;
@@ -417,10 +425,7 @@ void SceneStage1::Update()
 	}
 
 	/*タイムカウント*/
-	if (m_enemyTotalNum > 0)
-	{
-		m_time++;
-	}
+	if (m_enemyTotalNum > 0) m_time++;
 
 	/*背景の更新*/
 	m_pBg->Update();
@@ -449,10 +454,7 @@ void SceneStage1::Update()
 	}
 
 	/*プレイヤーの更新*/
-	if (m_enemyTotalNum > 0)
-	{
-		m_pPlayer->Update();
-	}
+	if (m_enemyTotalNum > 0) m_pPlayer->Update();
 
 	/*プレイヤーの現在地を取得*/
 	m_playerPos = m_pPlayer->GetPos();
@@ -460,10 +462,7 @@ void SceneStage1::Update()
 	Rect playerRect = m_pPlayer->GetColRect();
 
 	// E缶を表示
-	if (!m_isGetFullHpRecovery)
-	{
-		DropFullHpRecovery();
-	}
+	if (!m_isGetFullHpRecovery) DropFullHpRecovery();
 
 	/*弾の更新*/
 	UpdateShot(playerRect);
@@ -474,25 +473,16 @@ void SceneStage1::Update()
 
 	/*画面を揺らす*/
 	m_shakeFrame--;
-	m_ampFrame *= 0.95f;
-	if (m_shakeFrame < 0)
-	{
-		m_shakeFrame = 0;
-	}
+	m_ampFrame *= kAmpFrame;
+	if (m_shakeFrame < 0) m_shakeFrame = 0;
 
 	/*メニューを閉じる際にジャンプしないようにする*/
-	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsPause())
-	{
-		m_isExistMenu = false;
-	}
+	if (!m_pPause->IsSelectShotExist() || !m_pPause->IsPause()) m_isExistMenu = false;
 
 #ifdef _DEBUG
 	// MEMO:ESCAPEキーor左スティック押し込みでクリア画面に移動
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (Pad::IsTrigger(pad & PAD_INPUT_START))
-	{
-		m_enemyTotalNum = 0;
-	}
+	if (Pad::IsTrigger(pad & PAD_INPUT_START)) 	m_enemyTotalNum = 0;
 #endif
 }
 
@@ -569,7 +559,7 @@ void SceneStage1::Draw()
 	{
 		// 画面揺れ
 		screenX = static_cast<int>(GetRand(4) - 2 * m_ampFrame);
-		screenY = static_cast<int>(GetRand(4) - 2* m_ampFrame);
+		screenY = static_cast<int>(GetRand(4) - 2 * m_ampFrame);
 	}
 	DrawRectGraph(screenX, screenY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_gameScreenHandle, true);
 
@@ -584,16 +574,13 @@ void SceneStage1::Draw()
 
 		if (m_readyCount > 0)
 		{
-			DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - 30), static_cast<int>(Game::kScreenHeight * 0.5),
+			DrawStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5 - kReadyCountTextX), static_cast<int>(Game::kScreenHeight * 0.5),
 				"READY", 0xffffff, m_pFont->GetFontStaging());
 		}
 	}
 
 	// クリアの演出とタイム表示
-	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f)
-	{
-		DrawClearStaging();
-	}
+	if (m_enemyTotalNum <= 0 && m_clearStagingTime >= 0.0f) DrawClearStaging();
 }
 
 
@@ -1003,7 +990,7 @@ void SceneStage1::DrawInfo()
 	if (m_pPlayer->IsFire())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * 2, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * kShotFire, m_shotSelectHandle, true);
 	}
 	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
 	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, m_fireHandle, true); // ファイアの画像
