@@ -101,6 +101,20 @@ namespace
 	// 残機、敵数、タイム表示位置
 	constexpr int kInfoTextPosX = 30;	// 横
 	constexpr int kInfoTextPosY = 290;	// 縦
+	// 敵数表示位置調整
+	constexpr int kEnemyNumTextPos = 50;
+	// タイム表示位置調整
+	constexpr int kTimeTextPos = 20;
+	constexpr int kTimeTextPos2 = 30;
+	constexpr int kTimeTextPos3 = 70;
+	// Energyの文字表示位置
+	constexpr int kEnergyTextPosY = 280;
+	// 選択状態表示位置調整
+	constexpr int kSelectPosXAdjustment = 3;
+	constexpr int kSelectPosYAdjustment = 10;
+	// 文字表示位置調整
+	constexpr int kTextPosAdjustment = 40;
+	constexpr int kTextPosAdjustment2 = 45;
 	// 弾数表示位置
 	constexpr int kShotNumDisPosX = static_cast<int>(Game::kScreenWidth - kFrameSize + 10);	// 横
 	constexpr int kShotNumDisPosY = static_cast<int>(Game::kScreenHeight * 0.5 - 140);		// 縦
@@ -378,10 +392,8 @@ void SceneStage1::Update()
 	}
 
 	/*敵をすべて倒したらクリア演出を行う*/
-	if (m_enemyTotalNum <= 0)
-	{
-		UpdateClearStaging();
-	}
+	if (m_enemyTotalNum <= 0) UpdateClearStaging();
+	
 	if (m_clearStagingTime <= 0.0f)
 	{
 		// 0.5秒後にクリア画面に遷移
@@ -917,24 +929,9 @@ void SceneStage1::CreateEnemy()
 /// </summary>
 void SceneStage1::DrawInfo()
 {
-	// 画面横の表示
-	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
-	DrawLine(kFrameSize + 1, 0, kFrameSize + 1, Game::kScreenHeight, 0x000000, 2);
-	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
-	DrawLine(Game::kScreenWidth - kFrameSize - 1, 0, Game::kScreenWidth - kFrameSize - 1, Game::kScreenHeight, 0x000000, 2);
-
-	// 枠表示
-	DrawGraph(0, kFramePosY, m_frameHandle, true); // 左側
-	DrawGraph(Game::kScreenWidth - kFrameSize, kFramePosY, m_frameHandle, true); // 右側
-
-	/*残機、残り敵数、タイムを左側に表示*/
-	// 残機数表示
-	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "残機", 0xffffff, m_pFont->GetFont2());
-	DrawFormatStringToHandle(kInfoTextPosX + 80, kInfoTextPosY + kShotNumIntervalY + 40, 0xffaa00, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
-
 	// 敵数表示
-	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2 + 10, "敵数", 0xffffff, m_pFont->GetFont2());
-	DrawFormatStringToHandle(kInfoTextPosX + 50, kInfoTextPosY + kShotNumIntervalY * 2 + 50, 0xffaa00, m_pFont->GetFont3(), " %d / %d", m_enemyTotalNum, kEnemyMax);
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2 + kSelectPosYAdjustment, "敵数", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + kEnemyNumTextPos, kInfoTextPosY + kShotNumIntervalY * 2 + kEnemyNumTextPos, 0xffaa00, m_pFont->GetFont3(), " %d / %d", m_enemyTotalNum, kEnemyMax);
 
 	// タイム
 	int milliSec = static_cast<int>(m_time) * 1000 / 60;
@@ -942,23 +939,23 @@ void SceneStage1::DrawInfo()
 	int min = (milliSec / 1000) / 60;
 	milliSec %= 1000;
 
-	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3 + 30, "タイム", 0xffffff, m_pFont->GetFont2());
-	DrawFormatStringToHandle(kInfoTextPosX + 20, kInfoTextPosY + kShotNumIntervalY * 3 + 70, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 3 + kTimeTextPos2, "タイム", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + kTimeTextPos, kInfoTextPosY + kShotNumIntervalY * 3 + kTimeTextPos3, 0xffaa00, m_pFont->GetFont3(), " %3d:%02d.%03d", min, sec, milliSec);
 
 
 /// <summary>
 /// HP、武器の弾数を右側に表示
 /// </summary>
 	// Energyの表示
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 120, "Energy", 0xffffff, m_pFont->GetFont3());
+	DrawStringToHandle(kShotNumDisPosX, kEnergyTextPosY, "Energy", 0xffffff, m_pFont->GetFont3());
 
 	// HP
 	if (m_pPlayer->IsBuster())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + kSelectPosXAdjustment, kShotNumDisPosY - kSelectPosYAdjustment, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - 40, "HP :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY - kTextPosAdjustment, "HP :", 0xffffff, m_pFont->GetFont2()); // 文字
 	// 現在のHP分だけ四角を描画する
 	for (int i = 0; i < m_pPlayer->GetHp(); i++)
 	{
@@ -973,10 +970,10 @@ void SceneStage1::DrawInfo()
 	if (m_pPlayer->IsMetal())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + kSelectPosXAdjustment, kShotNumDisPosY - kSelectPosYAdjustment + kShotNumIntervalY, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - 40, "M :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY - 45, m_metalHandle, true); // メタルの画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY - kTextPosAdjustment, "M :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + kTextPosAdjustment, kShotNumDisPosY + kShotNumIntervalY - kTextPosAdjustment2, m_metalHandle, true); // メタルの画像
 	for (int i = 0; i < m_pPlayer->GetMetalEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -990,10 +987,10 @@ void SceneStage1::DrawInfo()
 	if (m_pPlayer->IsFire())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * kShotFire, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + kSelectPosXAdjustment, kShotNumDisPosY - kSelectPosYAdjustment + kShotNumIntervalY * kShotFire, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotFire - 40, m_fireHandle, true); // ファイアの画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotFire - kTextPosAdjustment, "F :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + kTextPosAdjustment, kShotNumDisPosY + kShotNumIntervalY * kShotFire - kTextPosAdjustment, m_fireHandle, true); // ファイアの画像
 	for (int i = 0; i < m_pPlayer->GetFireEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,
@@ -1007,10 +1004,10 @@ void SceneStage1::DrawInfo()
 	if (m_pPlayer->IsLineMove())
 	{
 		// 武器選択中の表示
-		DrawGraph(Game::kScreenWidth - kFrameSize + 3, kShotNumDisPosY - 10 + kShotNumIntervalY * kShotLineMove, m_shotSelectHandle, true);
+		DrawGraph(Game::kScreenWidth - kFrameSize + kSelectPosXAdjustment, kShotNumDisPosY - kSelectPosYAdjustment + kShotNumIntervalY * kShotLineMove, m_shotSelectHandle, true);
 	}
-	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
-	DrawGraph(kShotNumDisPosX + 40, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - 40, m_lineMoveHandle, true); // 2号の画像
+	DrawStringToHandle(kShotNumDisPosX, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - kTextPosAdjustment, "L :", 0xffffff, m_pFont->GetFont2()); // 文字
+	DrawGraph(kShotNumDisPosX + kTextPosAdjustment, kShotNumDisPosY + kShotNumIntervalY * kShotLineMove - kTextPosAdjustment, m_lineMoveHandle, true); // 2号の画像
 	for (int i = 0; i < m_pPlayer->GetLineEnergy(); i++)
 	{
 		DrawBox(kShotNumDisPosX + kShotNumIntervalX * i,

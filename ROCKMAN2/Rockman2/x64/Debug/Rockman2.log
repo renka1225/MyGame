@@ -1,2 +1,15 @@
-﻿  SceneTitle.cpp
-  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
+﻿  Player.cpp
+  EnemyBase.cpp
+  RecoveryBase.cpp
+  SceneMain.cpp
+  SceneManager.cpp
+  SceneStage1.cpp
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(50,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(51,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\ROCKMAN2\Rockman2\scene\SceneStage1.cpp(52,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+  SceneTutorial.cpp
+  ShotBuster.cpp
+  ShotFire.cpp
+  ShotMetal.cpp
+  コードを生成中...
+  Rockman2.vcxproj -> C:\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Debug\Rockman2.exe
