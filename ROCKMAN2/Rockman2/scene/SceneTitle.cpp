@@ -37,6 +37,10 @@ namespace
 
 	// フェードインアウトの時間
 	constexpr int kFadeFrame = 8;
+	// 初期フェード量
+	constexpr int kStartFade = 180;
+	// 最大フェード量
+	constexpr int kFadeMax = 255;
 }
 
 
@@ -47,7 +51,7 @@ SceneTitle::SceneTitle():
 	m_bgMove(0.0f),
 	m_moveFrame(kMoveFrame),
 	m_standFrame(0),
-	m_fadeAlpha(180)
+	m_fadeAlpha(kStartFade)
 {
 	// 画像読み込み
 	m_logoHandle = LoadGraph("data/image/TitleLogo.png");
@@ -88,7 +92,7 @@ void SceneTitle::Init()
 	m_isSceneStart = false;
 	m_isSceneOption = false;
 	m_moveFrame = kMoveFrame;
-	m_fadeAlpha = 180;
+	m_fadeAlpha = kStartFade;
 	m_select = kStart;
 	m_selectPos = { kInitSelectPosX,  kInitSelectPosY };
 	m_bgMove = kBgMove;
@@ -182,7 +186,7 @@ void SceneTitle::Update()
 	if (m_isSceneStart)
 	{
 		m_fadeAlpha += kFadeFrame;
-		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
+		if (m_fadeAlpha > kFadeMax) m_fadeAlpha = kFadeMax;
 	}
 	else
 	{

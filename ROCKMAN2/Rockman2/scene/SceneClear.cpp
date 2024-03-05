@@ -38,6 +38,8 @@ namespace
 
 	// フェード
 	constexpr int kFadeFrame = 8;
+	// 最大フェード量
+	constexpr int kFadeMax = 255;
 }
 
 
@@ -45,7 +47,7 @@ SceneClear::SceneClear():
 	m_select(kSelectStage),
 	m_isSceneSelectStage(false),
 	m_isSceneTitle(false),
-	m_fadeAlpha(255),
+	m_fadeAlpha(kFadeMax),
 	m_bgMove(0.0f)
 {
 	// 画像読み込み
@@ -88,7 +90,7 @@ void SceneClear::Init()
 	m_isSceneTitle = false;
 	m_select = kSelectStage;
 	m_selectPos = { kInitSelectPosX, kInitSelectPosY };
-	m_fadeAlpha = 255;
+	m_fadeAlpha = kFadeMax;
 	m_bgMove = kBgMove;
 
 	// BGMを鳴らす
@@ -159,7 +161,7 @@ void SceneClear::Update()
 	if (m_isSceneSelectStage || m_isSceneTitle)
 	{
 		m_fadeAlpha += kFadeFrame;
-		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
+		if (m_fadeAlpha > kFadeMax) m_fadeAlpha = kFadeMax;
 	}
 	else
 	{

@@ -5,8 +5,15 @@
 #include "Pad.h"
 #include "DxLib.h"
 
+
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
+	// 最大音量
+	constexpr int kVolumeMax = 255;
+
 	// ポーズ画面のサイズ
 	constexpr int kWidth = 782;
 	constexpr int kHeight = 568;
@@ -14,7 +21,9 @@ namespace
 	// メニュー画面の表示位置
 	constexpr float kPosX = Game::kScreenWidth * 0.5f - 400;
 	constexpr float kPosY = 230.0f;
-
+	// メニュー文字表示位置調整
+	constexpr float kTextPosXAdjustment = 180.0f;
+	constexpr float kTextPosYAdjustment = 150.0f;
 	// メニュー画面の表示移動量
 	constexpr int kMenuMove = 25;
 
@@ -22,13 +31,13 @@ namespace
 	constexpr float kInitSelectShotPosY = 445.0f;
 	// ポーズ画面の選択中カーソルの初期位置
 	constexpr float kPauseInitSelectPosY = 485.0f;
-
 	// 選択カーソルのX座標の位置
 	constexpr float kCursorX = kPosX + 275;
 
 	// 選択カーソルの移動間隔
 	constexpr float kSelectPosY = 70.0f;
 }
+
 
 ScenePause::ScenePause(Player* pPlayer):
 	m_shotSelect(SelectShot::kBuster),
@@ -53,6 +62,7 @@ ScenePause::ScenePause(Player* pPlayer):
 	m_cursorSE = LoadSoundMem("data/sound/SE/cursor.mp3");
 }
 
+
 ScenePause::~ScenePause()
 {
 	delete m_pFont;
@@ -63,6 +73,10 @@ ScenePause::~ScenePause()
 	DeleteSoundMem(m_cursorSE);
 }
 
+
+/// <summary>
+/// 初期化
+/// </summary>
 void ScenePause::Init()
 {
 	m_isChangeMenuExist = false;
@@ -75,9 +89,13 @@ void ScenePause::Init()
 	m_menuPos = { kPosX, Game::kScreenHeight * 0.5f };
 	m_selectShotPos = { kCursorX, kInitSelectShotPosY };
 	m_selectPausePos = { kCursorX, kPauseInitSelectPosY };
-	ChangeVolumeSoundMem(255, m_menuSE);
+	ChangeVolumeSoundMem(kVolumeMax, m_menuSE);
 }
 
+
+/// <summary>
+/// 更新
+/// </summary>
 void ScenePause::Update()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -166,6 +184,10 @@ void ScenePause::Update()
 	}
 }
 
+
+/// <summary>
+/// 描画
+/// </summary>
 void ScenePause::Draw()
 {
 	// 武器切り替え画面表示
@@ -176,7 +198,9 @@ void ScenePause::Draw()
 			static_cast<int>(m_menuPos.x + kWidth), static_cast<int>(m_menuPos.y + m_menuHeight), 
 			m_menuBg, true);
 		// changeの文字表示
-		DrawStringToHandle(static_cast<int>(m_menuPos.x + 180), static_cast<int>(m_menuPos.y - 150), "Menu", 0xffffff, m_pFont->GetFont3());
+		DrawStringToHandle(static_cast<int>(m_menuPos.x + kTextPosXAdjustment), static_cast<int>(m_menuPos.y - kTextPosYAdjustment), 
+			"Menu", 
+			0xffffff, m_pFont->GetFont3());
 		// 選択中のカーソルを描画
 		DrawGraph(static_cast<int>(m_selectShotPos.x), static_cast<int>(m_selectShotPos.y), m_selectHandle, true);
 	}
@@ -189,13 +213,18 @@ void ScenePause::Draw()
 			static_cast<int>(m_menuPos.x + kWidth), static_cast<int>(m_menuPos.y + m_menuHeight), 
 			m_menuBg, true);
 		// PAUSEの文字表示
-		DrawStringToHandle(static_cast<int>(m_menuPos.x + 180), static_cast<int>(m_menuPos.y - 150), "Pause", 0xffffff, m_pFont->GetFont3());
+		DrawStringToHandle(static_cast<int>(m_menuPos.x + kTextPosXAdjustment), static_cast<int>(m_menuPos.y - kTextPosYAdjustment), 
+			"Pause",
+			0xffffff, m_pFont->GetFont3());
 		// 選択中のカーソルを描画
 		DrawGraph(static_cast<int>(m_selectPausePos.x), static_cast<int>(m_selectPausePos.y), m_selectHandle, true);
 	}
 }
 
-/*武器選択状態を更新*/
+
+/// <summary>
+/// 武器選択状態更新
+/// </summary>
 void ScenePause::UpdateChangeShot()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -287,7 +316,10 @@ void ScenePause::UpdateChangeShot()
 	}
 }
 
-/*ポーズ画面選択状態を更新*/
+
+/// <summary>
+/// ポーズ画面選択状態更新
+/// </summary>
 void ScenePause::UpdatePause()
 {
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);

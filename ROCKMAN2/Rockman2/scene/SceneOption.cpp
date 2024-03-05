@@ -8,6 +8,8 @@
 /// </summary>
 namespace
 {
+	// フェード最大値
+	constexpr int kFadeMax = 255;
 	// フェード
 	constexpr int kFadeFrame = 8;
 }
@@ -15,7 +17,7 @@ namespace
 
 SceneOption::SceneOption():
 	m_isSceneTitle(false),
-	m_fadeAlpha(255)
+	m_fadeAlpha(kFadeMax)
 {
 	m_exHandle = LoadGraph("data/image/ex.png");
 }

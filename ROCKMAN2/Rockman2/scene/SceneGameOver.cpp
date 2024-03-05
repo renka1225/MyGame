@@ -37,6 +37,8 @@ namespace
 
 	//フェード
 	constexpr int kFadeFrame = 8;
+	// 最大フェード量
+	constexpr int kFadeMax = 255;
 }
 
 
@@ -45,7 +47,7 @@ SceneGameOver::SceneGameOver():
 	m_isSceneRetry(false),
 	m_isSceneSelect(false),
 	m_isSceneTitle(false),
-	m_fadeAlpha(255),
+	m_fadeAlpha(kFadeMax),
 	m_bgMove(0.0f)
 {
 	// 画像読み込み
@@ -85,7 +87,7 @@ void SceneGameOver::Init()
 	m_isSceneRetry = false;
 	m_isSceneSelect = false;
 	m_isSceneTitle = false;
-	m_fadeAlpha = 255;
+	m_fadeAlpha = kFadeMax;
 	m_select = kRetry;
 	m_selectPos = { kInitSelectPosX, kInitSelectPosY };
 	m_bgMove = kBgMove;
@@ -162,7 +164,7 @@ void SceneGameOver::Update()
 	if (m_isSceneRetry || m_isSceneTitle)
 	{
 		m_fadeAlpha += kFadeFrame;
-		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
+		if (m_fadeAlpha > kFadeMax) m_fadeAlpha = kFadeMax;
 	}
 	else
 	{

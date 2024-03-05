@@ -34,6 +34,10 @@ namespace
 
 	// フェード
 	constexpr int kFadeFrame = 8;
+	// 初期フェード量
+	constexpr int kStartFade = 180;
+	// 最大フェード量
+	constexpr int kFadeMax = 255;
 }
 
 
@@ -43,7 +47,7 @@ SceneStageSelect::SceneStageSelect() :
 	m_isSceneStage1(false),
 	m_isSceneTitle(false),
 	m_bgMove(0.0f),
-	m_fadeAlpha(255),
+	m_fadeAlpha(kFadeMax),
 	m_selectPos(kInitSelectPosX, kInitSelectPosY)
 {
 	// 画像読み込み
@@ -85,7 +89,7 @@ void SceneStageSelect::Init()
 	m_isSceneTutorial = false;
 	m_isSceneStage1 = false;
 	m_isSceneTitle = false;
-	m_fadeAlpha = 180;
+	m_fadeAlpha = kStartFade;
 	m_select = kStageTutorial;
 	m_bgPos = { 0, 0 };
 	m_selectPos.x = kInitSelectPosX;
@@ -162,7 +166,7 @@ void SceneStageSelect::Update()
 	if (m_isSceneTutorial || m_isSceneStage1 || m_isSceneTitle)
 	{
 		m_fadeAlpha += kFadeFrame;
-		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
+		if (m_fadeAlpha > kFadeMax) m_fadeAlpha = kFadeMax;
 	}
 	// フェードアウト
 	else

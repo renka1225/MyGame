@@ -19,6 +19,10 @@
 #include "EnemyBear.h"
 #include <cassert>
 
+
+/// <summary>
+/// 定数
+/// </summary>
 namespace
 {
 	// 画面内に1度に出せる弾数
@@ -47,18 +51,28 @@ namespace
 	constexpr float kStartStagingTime2 = 100.0f;
 	constexpr float kStartStagingTime3 = 40.0f;
 	// スタート演出表示位置
-	constexpr int kStartDisX1 = 5.0f;
-	constexpr int kStartDisX2 = 1.0f;
-	constexpr int kStartDisX3 = 40.0f;
+	constexpr float kInitStartDisX = 30.0f;	// 演出表示初期位置
+	constexpr float kStartDisX1 = 5.0f;
+	constexpr float kStartDisX2 = 1.0f;
+	constexpr float kStartDisX3 = 40.0f;
 	// readyカウント演出
 	constexpr int kReadyCount = 60;
 	// readyカウント表示位置調整
 	constexpr int kReadyCountTextX = 30;
+
 	// フェード
+	constexpr int kFadeMax = 255;			// フェードの最大量
 	constexpr int kStartFadeAlpha = 240;	// スタート時のα値
 	constexpr int kFadeFrame = 8;			// フェード変化量
+	constexpr int kStartStagingFade1 = 45;	// スタート演出表示のフェード量1
+	constexpr int kStartStagingFade2 = 30;	// スタート演出表示のフェード量2
+	constexpr int kStartStagingFade3 = 40;	// スタート演出表示のフェード量3
+
 	// 画面振れ幅調整
 	constexpr float kAmpFrame = 0.95f;
+	// ダメージの揺れ演出
+	constexpr int kDamageShakeFrame = 2;
+	constexpr int kDamageAmpFrame = 5;
 
 	/*花火の演出*/
 	// 花火の打ち上げ速度
@@ -98,9 +112,14 @@ namespace
 	/*ゲーム内*/
 	// 外枠のサイズ
 	constexpr int kFrameSize = 270;
+	// 枠線の表示位置調整
+	constexpr int kFrameLineAdjustment = 1;
 	// 残機、敵数、タイム表示位置
 	constexpr int kInfoTextPosX = 30;	// 横
 	constexpr int kInfoTextPosY = 290;	// 縦
+	// 残機数表示位置調整
+	constexpr int kLifeTextPosX = 80;
+	constexpr int kLifeTextPosY = 40;
 	// 敵数表示位置調整
 	constexpr int kEnemyNumTextPos = 50;
 	// タイム表示位置調整
@@ -267,7 +286,7 @@ void SceneStage1::Init()
 	{
 		// 演出時間の初期化
 		m_startStagingTime = kStartTime;
-		m_startDis = { 30, 0 };
+		m_startDis = { kInitStartDisX, 0 };
 		m_fadeAlpha = kStartFadeAlpha;
 		m_stagingFade = 0;
 		// スタートSE
@@ -347,13 +366,13 @@ void SceneStage1::Update()
 		if (m_startStagingTime > kStartStagingStartTime)
 		{
 			m_startDis.x -= kStartDisX1;
-			m_stagingFade += 45;
+			m_stagingFade += kStartStagingFade1;
 		}
 		else if (m_startStagingTime <= kStartStagingTime2 && m_startStagingTime >= kStartStagingTime3)
 		{
 			m_startDis.x -= kStartDisX2;
-			m_stagingFade += 30;
-			if (m_stagingFade > 255) m_stagingFade = 255;
+			m_stagingFade += kStartStagingFade2;
+			if (m_stagingFade > kFadeMax) m_stagingFade = kFadeMax;
 		}
 		else if (m_startStagingTime <= 0)
 		{
@@ -363,7 +382,7 @@ void SceneStage1::Update()
 		else
 		{
 			m_startDis.x -= kStartDisX3;
-			m_stagingFade -= 40;
+			m_stagingFade -= kStartStagingFade3;
 		}
 		return;
 	}
@@ -372,7 +391,7 @@ void SceneStage1::Update()
 	if (m_isSceneGameOver || m_isSceneClear || m_isSceneTitle || m_isSceneEnd)
 	{
 		m_fadeAlpha += kFadeFrame;
-		if (m_fadeAlpha > 255) m_fadeAlpha = 255;
+		if (m_fadeAlpha > kFadeMax) m_fadeAlpha = kFadeMax;
 	}
 	else
 	{
@@ -684,8 +703,8 @@ void SceneStage1::UpdateEnemy(Rect playerRect)
 			if (playerRect.IsCollision(enemyRect))
 			{
 				m_pPlayer->OnDamage();
-				m_shakeFrame = 2;
-				m_ampFrame = 5;
+				m_shakeFrame = kDamageShakeFrame;
+				m_ampFrame = kDamageAmpFrame;
 			}
 
 			for (int j = 0; j < m_pShot.size(); j++)
@@ -929,6 +948,21 @@ void SceneStage1::CreateEnemy()
 /// </summary>
 void SceneStage1::DrawInfo()
 {
+	// 画面横の表示
+	DrawBox(0, 0, kFrameSize, Game::kScreenHeight, 0x483d8b, true); // 左側
+	DrawLine(kFrameSize + kFrameLineAdjustment, 0, kFrameSize + kFrameLineAdjustment, Game::kScreenHeight, 0x000000, 2);
+	DrawBox(Game::kScreenWidth - kFrameSize, 0, Game::kScreenWidth, Game::kScreenHeight, 0x483d8b, true); // 右側
+	DrawLine(Game::kScreenWidth - kFrameSize - kFrameLineAdjustment, 0, Game::kScreenWidth - kFrameSize - kFrameLineAdjustment, Game::kScreenHeight, 0x000000, 2);
+
+	// 枠表示
+	DrawGraph(0, kFramePosY, m_frameHandle, true); // 左側
+	DrawGraph(Game::kScreenWidth - kFrameSize, kFramePosY, m_frameHandle, true); // 右側
+
+	/*残機、残り敵数、タイムを左側に表示*/
+	// 残機数表示
+	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY, "残機", 0xffffff, m_pFont->GetFont2());
+	DrawFormatStringToHandle(kInfoTextPosX + kLifeTextPosX, kInfoTextPosY + kShotNumIntervalY + kLifeTextPosY, 0xffaa00, m_pFont->GetFont3(), " %d", m_pPlayer->GetLife());
+
 	// 敵数表示
 	DrawStringToHandle(kInfoTextPosX, kInfoTextPosY + kShotNumIntervalY * 2 + kSelectPosYAdjustment, "敵数", 0xffffff, m_pFont->GetFont2());
 	DrawFormatStringToHandle(kInfoTextPosX + kEnemyNumTextPos, kInfoTextPosY + kShotNumIntervalY * 2 + kEnemyNumTextPos, 0xffaa00, m_pFont->GetFont3(), " %d / %d", m_enemyTotalNum, kEnemyMax);
