@@ -1,9 +1,9 @@
 #include "Player.h"
-#include "DxLib.h"
 
-Player::Player()
+Player::Player():
+	m_pos(VGet(0.0f, 0.0f, 0.0f))
 {
-	m_handle = MV1LoadModel("data/chicken.mv1");
+	m_handle = MV1LoadModel("data/Duck.mv1");
 }
 
 
