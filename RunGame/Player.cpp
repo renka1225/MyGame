@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Input.h"
 
 Player::Player():
 	m_pos(VGet(0.0f, 0.0f, 0.0f))
@@ -24,8 +25,25 @@ void Player::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update()
+void Player::Update(Input& input)
 {
+	if (input.IsPressing("left"))
+	{
+		m_pos.x -= 3;
+	}
+	else if (input.IsPressing("right"))
+	{
+		m_pos.x += 3;
+	}
+	else if (input.IsPressing("up"))
+	{
+		m_pos.y += 3;
+	}
+	else if (input.IsPressing("down"))
+	{
+		m_pos.y -= 3;
+	}
+
 	// ３Ｄモデルの位置を決定
 	MV1SetPosition(m_handle, m_pos);
 }

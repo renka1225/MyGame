@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
 
+class Input;
+
 /// <summary>
 /// プレイヤークラス
 /// </summary>
@@ -10,7 +12,7 @@ public:
 	Player();
 	virtual ~Player();
 	void Init();
-	void Update();
+	void Update(Input& input);
 	void Draw();
 	void End();
 

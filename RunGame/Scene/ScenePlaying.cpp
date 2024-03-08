@@ -5,11 +5,12 @@
 #include "Camera.h"
 #include "Input.h"
 #include "DxLib.h"
+#include <memory>
 
 ScenePlaying::ScenePlaying()
 {
 	m_pPlayer = std::make_shared<Player>();
-	//m_pCamera = std::make_shared<Camera>(m_pPlayer);
+	m_pCamera = std::make_shared<Camera>();
 }
 
 
@@ -33,9 +34,9 @@ void ScenePlaying::Init()
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 	// プレイヤーの更新
-	m_pPlayer->Update();
+	m_pPlayer->Update(input);
 	// カメラの更新
-	m_pCamera->Update();
+	m_pCamera->Update(m_pPlayer);
 
 #if _DEBUG
 	// MEMO:デバック用

@@ -1,12 +1,4 @@
 ﻿  Camera.cpp
-  Input.cpp
-  main.cpp
-  Player.cpp
-  SceneBase.cpp
-  SceneClear.cpp
-  SceneGameover.cpp
-  SceneManager.cpp
   ScenePlaying.cpp
-  SceneTitle.cpp
   コードを生成中...
   RunGame.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe

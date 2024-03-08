@@ -9,12 +9,13 @@ class Player;
 class Camera
 {
 public:
-	Camera(Player* pPlayer);
+	Camera();
 	virtual ~Camera();
 	void Init();
-	void Update();
+	void Update(Player* pPlayer);
 
 private:
 	Player* m_pPlayer;
+
 	VECTOR m_pos;
 };

@@ -4,16 +4,15 @@
 #define DegreeToRadian (DX_PI_F / 180.0f)
 float DegToRad(float degree) { return (DegreeToRadian * degree); }
 
-Camera::Camera(Player* pPlayer):
-	m_pPlayer(pPlayer),
+Camera::Camera():
 	m_pos(VGet(0, 20, -30))
 {
 	// 視野角の設定
 	SetupCamera_Perspective(DegToRad(60.0f));
 	// カメラの描画範囲
 	SetCameraNearFar(0.1f, 1000.0f);
-	// カメラを接地
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 10, -20), VGet(0.0f, 10.0f, 0.0f));
+	// カメラを設置
+	SetCameraPositionAndTarget_UpVecY(VGet(0, 50, -100), VGet(0.0f, 17.0f, 0.0f));
 }
 
 Camera::~Camera()
@@ -32,6 +31,7 @@ void Camera::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update()
+void Camera::Update(Player* pPlayer)
 {
+	m_pPlayer = pPlayer;
 }
