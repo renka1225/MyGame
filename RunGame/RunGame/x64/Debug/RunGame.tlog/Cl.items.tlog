@@ -1,8 +1,0 @@
-C:\GitHub\MyGame\RunGame\RunGame\Input.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\Input.obj
-C:\GitHub\MyGame\RunGame\RunGame\main.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\main.obj
-C:\GitHub\MyGame\RunGame\RunGame\Scene\SceneClear.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\SceneClear.obj
-C:\GitHub\MyGame\RunGame\RunGame\Scene\SceneGameover.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\SceneGameover.obj
-C:\GitHub\MyGame\RunGame\RunGame\Scene\ScenePlaying.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\ScenePlaying.obj
-C:\GitHub\MyGame\RunGame\RunGame\Scene\SceneTitle.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\SceneTitle.obj
-C:\GitHub\MyGame\RunGame\RunGame\Scene\SceneManager.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\SceneManager.obj
-C:\GitHub\MyGame\RunGame\RunGame\Scene\SceneBase.cpp;C:\GitHub\MyGame\RunGame\RunGame\x64\Debug\SceneBase.obj
