@@ -16,9 +16,23 @@ public:
 	void Draw();
 	void End();
 
+	VECTOR GetPos() const { return m_pos; }
+
 private:
-	// 位置
+	// ジャンプ処理
+	void Jump(Input& input);
+
+private:
+	// 表示位置
 	VECTOR m_pos;
-	// モデル
+	// 移動量
+	VECTOR m_move;
+
+	// ジャンプフラグ true:ジャンプ中
+	bool m_isJump;
+	// ジャンプフレーム
+	int m_jumpFrame;
+
+	// 3Dモデル
 	int m_handle;
 };

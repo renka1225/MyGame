@@ -31,7 +31,17 @@ void Camera::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(Player* pPlayer)
+void Camera::Update(std::shared_ptr<Player> pPlayer)
 {
+	// プレイヤーのポインタを取得
 	m_pPlayer = pPlayer;
+
+	// カメラ位置の調整
+	VECTOR aimPos = VGet(m_pPlayer->GetPos().x, 0.0f, -200.0f);
+	VECTOR posToAim = VSub(aimPos, m_pos);
+	VECTOR scaledPosToAim = VScale(posToAim, 0.1f);
+	m_pos = VAdd(m_pos, scaledPosToAim);
+
+	// カメラ位置を反映
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_pPlayer->GetPos());
 }

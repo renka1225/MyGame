@@ -4,18 +4,24 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Input.h"
+#include "Game.h"
 #include "DxLib.h"
 #include <memory>
 
-ScenePlaying::ScenePlaying()
+/// <summary>
+/// 定数
+/// </summary>
+namespace
+{
+	// ゲーム時間
+	constexpr int kClearTime = 60 * 120;
+}
+
+ScenePlaying::ScenePlaying():
+	m_time(0)
 {
 	m_pPlayer = std::make_shared<Player>();
 	m_pCamera = std::make_shared<Camera>();
-}
-
-
-ScenePlaying::~ScenePlaying()
-{
 }
 
 
@@ -33,6 +39,15 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
+	// タイム更新
+	m_time++;
+
+	// クリア
+	if (m_time >= kClearTime)
+	{
+		return std::make_shared<SceneClear>();
+	}
+
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
 	// カメラの更新
@@ -59,6 +74,12 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
+	// 経過時間の描画
+	int milliSec = m_time * 1000 / 60;
+	int sec = (milliSec / 1000) % 120;
+	milliSec %= 1000;
+	DrawFormatString(0, 50, 0xffffff, "time:%03d:%03d", sec, milliSec);
+
 	// プレイヤーの描画
 	m_pPlayer->Draw();
 
