@@ -2,6 +2,7 @@
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Camera.h"
 #include "Input.h"
 #include "Game.h"
@@ -21,6 +22,7 @@ ScenePlaying::ScenePlaying():
 	m_time(0)
 {
 	m_pPlayer = std::make_shared<Player>();
+	m_pEnemy = std::make_shared<Enemy>();
 	m_pCamera = std::make_shared<Camera>();
 }
 
@@ -50,6 +52,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
+	// 敵の更新
+	m_pEnemy->Update();
 	// カメラの更新
 	m_pCamera->Update(m_pPlayer);
 
@@ -82,6 +86,8 @@ void ScenePlaying::Draw()
 
 	// プレイヤーの描画
 	m_pPlayer->Draw();
+	// 敵の描画
+	m_pEnemy->Draw();
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");

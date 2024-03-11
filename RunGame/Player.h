@@ -1,7 +1,9 @@
 #pragma once
 #include "DxLib.h"
+#include <memory>
 
 class Input;
+class ManagerModel;
 
 /// <summary>
 /// プレイヤークラス
@@ -10,7 +12,7 @@ class Player
 {
 public:
 	Player();
-	virtual ~Player();
+	virtual ~Player() {};
 	void Init();
 	void Update(Input& input);
 	void Draw();
@@ -23,6 +25,9 @@ private:
 	void Jump(Input& input);
 
 private:
+	// モデルクラスのポインタ
+	std::shared_ptr<ManagerModel> m_pModel;
+
 	// 表示位置
 	VECTOR m_pos;
 	// 移動量
@@ -32,7 +37,4 @@ private:
 	bool m_isJump;
 	// ジャンプフレーム
 	int m_jumpFrame;
-
-	// 3Dモデル
-	int m_handle;
 };

@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class Player;
+class Enemy;
 class Camera;
 
 /// <summary>
@@ -21,8 +22,8 @@ public:
 private:
 	// ƒ|ƒCƒ“ƒ^
 	std::shared_ptr<Player> m_pPlayer;
+	std::shared_ptr<Enemy> m_pEnemy;
 	std::shared_ptr<Camera> m_pCamera;
 
 	int m_time;
 };
-

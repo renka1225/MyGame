@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Input.h"
+#include "ManagerModel.h"
 
 /// <summary>
 /// 定数
@@ -12,6 +13,8 @@ namespace
 	constexpr float kGravity = 0.5f;
 	// 初速度
 	constexpr float kVelocity = 10.0f;
+	// Y軸方向の向き
+	constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;
 
 	// 地面の高さ
 	constexpr float kGroundHeight = 0.0f;
@@ -37,13 +40,7 @@ Player::Player():
 	m_isJump(false),
 	m_jumpFrame(0)
 {
-	m_handle = MV1LoadModel("data/Duck.mv1");
-}
-
-
-Player::~Player()
-{
-	MV1DeleteModel(m_handle);
+	m_pModel = std::make_shared<ManagerModel>();
 }
 
 
@@ -87,9 +84,9 @@ void Player::Update(Input& input)
 
 	// 3Dモデルの位置を更新
 	m_pos = VAdd(m_pos, m_move);
-	MV1SetPosition(m_handle, m_pos);
-	// 3Dモデルを横に回転させる
-	MV1SetRotationXYZ(m_handle, VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f));
+	MV1SetPosition(m_pModel->GetPlayerHandle(), m_pos);
+	// 3DモデルをY軸方向に回転
+	MV1SetRotationXYZ(m_pModel->GetPlayerHandle(), VGet(0.0f, kDirY, 0.0f));
 }
 
 
@@ -99,7 +96,7 @@ void Player::Update(Input& input)
 void Player::Draw()
 {
 	// ３Ｄモデルの描画
-	MV1DrawModel(m_handle);
+	MV1DrawModel(m_pModel->GetPlayerHandle());
 
 #ifdef _DEBUG
 	// MEMO:プレイヤーの座標描画
