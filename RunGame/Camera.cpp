@@ -1,18 +1,33 @@
 #include "Camera.h"
 #include "Player.h"
 
-#define DegreeToRadian (DX_PI_F / 180.0f)
-float DegToRad(float degree) { return (DegreeToRadian * degree); }
+/// <summary>
+/// 定数
+/// </summary>
+namespace
+{
+	// 視野角
+	constexpr float kFov = (DX_PI_F / 180.0f) * 60.0f;
+	// 手前クリップ距離
+	constexpr float kNear = 0.1f;
+	// 奥クリップ距離
+	constexpr float kFar = 1000.0f;
+	// カメラの初期注視点
+	constexpr float kTargetX = 0.0f;	// X軸
+	constexpr float kTargetY = 80.0f;	// Y軸
+	constexpr float kTargetZ = -150.0f;	// Z軸
+
+}
 
 Camera::Camera():
-	m_pos(VGet(0, 20, -30))
+	m_pos(VGet(0.0f, 0.0f, 0.0f))
 {
 	// 視野角の設定
-	SetupCamera_Perspective(DegToRad(60.0f));
+	SetupCamera_Perspective(kFov);
 	// カメラの描画範囲
-	SetCameraNearFar(0.1f, 1000.0f);
+	SetCameraNearFar(kNear, kFar);
 	// カメラを設置
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 50, -100), VGet(0.0f, 17.0f, 0.0f));
+	SetCameraPositionAndTarget_UpVecY(m_pos, VGet(0.0f, kTargetY, 0.0f));
 }
 
 Camera::~Camera()
@@ -37,7 +52,7 @@ void Camera::Update(std::shared_ptr<Player> pPlayer)
 	m_pPlayer = pPlayer;
 
 	// カメラ位置の調整
-	VECTOR aimPos = VGet(m_pPlayer->GetPos().x, 0.0f, -200.0f);
+	VECTOR aimPos = VGet(m_pPlayer->GetPos().x, kTargetY, kTargetZ);
 	VECTOR posToAim = VSub(aimPos, m_pos);
 	VECTOR scaledPosToAim = VScale(posToAim, 0.1f);
 	m_pos = VAdd(m_pos, scaledPosToAim);

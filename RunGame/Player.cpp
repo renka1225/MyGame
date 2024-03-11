@@ -6,6 +6,8 @@
 /// </summary>
 namespace
 {
+	// 移動量
+	constexpr float kMove = 2.0f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
@@ -79,12 +81,15 @@ void Player::Update(Input& input)
 	if (m_pos.y < kGroundHeight)
 	{
 		m_pos.y = kGroundHeight;
+		m_move.y = 0;
 		m_isJump = false;
 	}
 
-	// ３Ｄモデルの位置を更新
+	// 3Dモデルの位置を更新
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_handle, m_pos);
+	// 3Dモデルを横に回転させる
+	MV1SetRotationXYZ(m_handle, VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f));
 }
 
 
@@ -99,7 +104,6 @@ void Player::Draw()
 #ifdef _DEBUG
 	// MEMO:プレイヤーの座標描画
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(x:%f,y:%f,z:%f)\n", m_pos.x, m_pos.y, m_pos.z);
-
 	// MEMO:地面位置描画
 	DrawLine3D(VGet(-100, kGroundHeight, 0), VGet(100, kGroundHeight, 0), 0x0000ff);
 #endif
