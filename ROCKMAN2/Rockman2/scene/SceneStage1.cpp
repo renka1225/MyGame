@@ -151,6 +151,59 @@ namespace
 	constexpr float kFullRecStartPosY = 2150.0f;
 }
 
+/// <summary>
+/// 敵初期位置
+/// </summary>
+namespace EnemyInitPos
+{
+	constexpr float kEnemy1PosX = 1000.0f;
+	constexpr float kEnemy1PosY = 500.0f;
+	constexpr float kEnemy1MoveRange = 40.0f;
+	constexpr float kEnemy2PosX = 1580.0f;
+	constexpr float kEnemy2PosY = 500.0f;
+	constexpr float kEnemy2MoveRange = 250.0f;
+	constexpr float kEnemy3PosX = 2350.0f;
+	constexpr float kEnemy3PosY = 500.0f;
+	constexpr float kEnemy3MoveRange = 200.0f;
+	constexpr float kEnemy4PosX = 2970.0f;
+	constexpr float kEnemy4PosY = 150.0f;
+	constexpr float kEnemy4MoveRange = 450.0f;
+	constexpr float kEnemy5PosX = 3350.0f;
+	constexpr float kEnemy5PosY = 400.0f;
+	constexpr float kEnemy5MoveRange = 260.0f;
+	constexpr float kEnemy6PosX = 3300.0f;
+	constexpr float kEnemy6PosY = 1800.0f;
+	constexpr float kEnemy6MoveRange = 250.0f;
+	constexpr float kEnemy7PosX = 2200.0f;
+	constexpr float kEnemy7PosY = 1600.0f;
+	constexpr float kEnemy7MoveRange = 180.0f;
+	constexpr float kEnemy8PosX = 1200.0f;
+	constexpr float kEnemy8PosY = 1600.0f;
+	constexpr float kEnemy8MoveRange = 140.0f;
+	constexpr float kEnemy9PosX = 2160.0f;
+	constexpr float kEnemy9PosY = 1200.0f;
+	constexpr float kEnemy9MoveRange = 300.0f;
+	constexpr float kEnemy10PosX = 1000.0f;
+	constexpr float kEnemy10PosY = 1200.0f;
+	constexpr float kEnemy10MoveRange = 380.0f;
+	constexpr float kEnemy11PosX = 800.0f;
+	constexpr float kEnemy11PosY = 2000.0f;
+	constexpr float kEnemy11MoveRange = 200.0f;
+	constexpr float kEnemy12PosX = 1250.0f;
+	constexpr float kEnemy12PosY = 2400.0f;
+	constexpr float kEnemy12MoveRange = 200.0f;
+	constexpr float kEnemy13PosX = 1900.0f;
+	constexpr float kEnemy13PosY = 1950.0f;
+	constexpr float kEnemy13MoveRange = 280.0f;
+	constexpr float kEnemy14PosX =4100.0f;
+	constexpr float kEnemy14PosY = 2400.0f;
+	constexpr float kEnemy14MoveRange = 180.0f;
+	constexpr float kEnemy15PosX = 5130.0f;
+	constexpr float kEnemy15PosY = 2430.0f;
+	constexpr float kEnemy15MoveRange = 400.0f;
+}
+
+
 SceneStage1::SceneStage1()
 {
 	// ゲーム画面描画先の生成
@@ -209,6 +262,7 @@ SceneStage1::SceneStage1()
 	m_fireworks3 = LoadGraph("data/image/Effect/clear/3.png");
 	assert(m_fireworks1);
 }
+
 
 SceneStage1::~SceneStage1()
 {
@@ -275,6 +329,7 @@ SceneStage1::~SceneStage1()
 	DeleteGraph(m_fireworks2);
 	DeleteGraph(m_fireworks3);
 }
+
 
 /// <summary>
 /// 初期化
@@ -352,6 +407,7 @@ void SceneStage1::Init()
 	m_fireworks5Pos = { kFireworks5StartPosX, kFireworks5StartPosY };
 	m_fireworks6Pos = { kFireworks6StartPosX, kFireworks6StartPosY };
 }
+
 
 /// <summary>
 /// 更新
@@ -863,77 +919,77 @@ void SceneStage1::CreateEnemy()
 		{
 		case 0:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1000.0f, 500.0f, 40.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy1PosX, EnemyInitPos::kEnemy1PosY, EnemyInitPos::kEnemy1MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 1:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1580.0f, 500.0f, 250.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy2PosX, EnemyInitPos::kEnemy2PosY, EnemyInitPos::kEnemy2MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 2:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(2350.0f, 500.0f, 200.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy3PosX, EnemyInitPos::kEnemy3PosY, EnemyInitPos::kEnemy3MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 3:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2970.0f, 150.0f, 450.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy4PosX, EnemyInitPos::kEnemy4PosY, EnemyInitPos::kEnemy4MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 4:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(3350.0f, 400.0f, 260.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy5PosX, EnemyInitPos::kEnemy5PosY, EnemyInitPos::kEnemy5MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 5:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(3300.0f, 1800.0f, 250.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy6PosX, EnemyInitPos::kEnemy6PosY, EnemyInitPos::kEnemy6MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 6:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(2200.0f, 1600.0f, 180.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy6PosX, EnemyInitPos::kEnemy6PosY, EnemyInitPos::kEnemy6MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 7:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1200.0f, 1600.0f, 140.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy9PosX, EnemyInitPos::kEnemy9PosY, EnemyInitPos::kEnemy9MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 8:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(2160.0f, 1200.0f, 300.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy9PosX, EnemyInitPos::kEnemy9PosY, EnemyInitPos::kEnemy9MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 9:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(1000.0f, 1200.0f, 380.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy10PosX, EnemyInitPos::kEnemy10PosY, EnemyInitPos::kEnemy10MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 10:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(800.0f, 2000.0f, 200.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy11PosX, EnemyInitPos::kEnemy11PosY, EnemyInitPos::kEnemy11MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 11:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(1250.0f, 2400.0f, 200.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy12PosX, EnemyInitPos::kEnemy12PosY, EnemyInitPos::kEnemy12MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 12:
 			m_pEnemy[i] = new EnemyBird;
-			m_pEnemy[i]->Start(1900.0f, 1950.0f, 280.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy13PosX, EnemyInitPos::kEnemy13PosY, EnemyInitPos::kEnemy13MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 13:
 			m_pEnemy[i] = new EnemyCat;
-			m_pEnemy[i]->Start(4000.0f, 2400.0f, 180.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy14PosX, EnemyInitPos::kEnemy14PosY, EnemyInitPos::kEnemy14MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		case 14:
 			m_pEnemy[i] = new EnemyBear;
-			m_pEnemy[i]->Start(5130.0f, 2430.0f, 400.0f);
+			m_pEnemy[i]->Start(EnemyInitPos::kEnemy15PosX, EnemyInitPos::kEnemy15PosY, EnemyInitPos::kEnemy15MoveRange);
 			m_pEnemy[i]->Init(m_pBg, m_pPlayer);
 			break;
 		default:
