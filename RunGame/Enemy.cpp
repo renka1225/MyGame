@@ -14,16 +14,17 @@ namespace
 	constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;
 }
 
-Enemy::Enemy():
+Enemy::Enemy(std::shared_ptr<ManagerModel> pModel):
+	m_pModel(pModel),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_move(VGet(kMoveX, 0.0f, 0.0f))
 {
-	m_pModel = std::make_shared<ManagerModel>();
+	m_modelHandle = MV1DuplicateModel(m_pModel->GetEnemyHandle());
 
 	// 3Dモデルのサイズを小さくする
-	MV1SetScale(m_pModel->GetEnemyHandle(), VGet(kScale, kScale, kScale));
+	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	// 3DモデルをY軸方向に回転
-	MV1SetRotationXYZ(m_pModel->GetEnemyHandle(), VGet(0.0f, kDirY, 0.0f));
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 }
 
 
@@ -45,9 +46,9 @@ void Enemy::Init()
 /// </summary>
 void Enemy::Update()
 {
-	// 位置更新
+	// TODO:位置更新
 	//m_pos = VAdd(m_pos, m_move);
-	MV1SetPosition(m_pModel->GetEnemyHandle(), m_pos);
+	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 
@@ -57,7 +58,7 @@ void Enemy::Update()
 void Enemy::Draw()
 {
 	// ３Ｄモデルの描画
-	MV1DrawModel(m_pModel->GetEnemyHandle());
+	MV1DrawModel(m_modelHandle);
 }
 
 

@@ -34,13 +34,14 @@ namespace Jump
 	constexpr float kBigJumpHeight = 1.0f;		// 大ジャンプ
 }
 
-Player::Player():
+Player::Player(std::shared_ptr<ManagerModel> pModel):
+	m_pModel(pModel),
 	m_pos(VGet(0.0f, kGroundHeight, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
 	m_isJump(false),
 	m_jumpFrame(0)
 {
-	m_pModel = std::make_shared<ManagerModel>();
+	m_modelHandle = MV1DuplicateModel(m_pModel->GetPlayerHandle());
 }
 
 
@@ -84,9 +85,9 @@ void Player::Update(Input& input)
 
 	// 3Dモデルの位置を更新
 	m_pos = VAdd(m_pos, m_move);
-	MV1SetPosition(m_pModel->GetPlayerHandle(), m_pos);
+	MV1SetPosition(m_modelHandle, m_pos);
 	// 3DモデルをY軸方向に回転
-	MV1SetRotationXYZ(m_pModel->GetPlayerHandle(), VGet(0.0f, kDirY, 0.0f));
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 }
 
 
@@ -96,7 +97,7 @@ void Player::Update(Input& input)
 void Player::Draw()
 {
 	// ３Ｄモデルの描画
-	MV1DrawModel(m_pModel->GetPlayerHandle());
+	MV1DrawModel(m_modelHandle);
 
 #ifdef _DEBUG
 	// MEMO:プレイヤーの座標描画

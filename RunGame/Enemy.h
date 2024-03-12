@@ -10,7 +10,7 @@ class ManagerModel;
 class Enemy
 {
 public:
-	Enemy();
+	Enemy(std::shared_ptr<ManagerModel> pModel);
 	virtual ~Enemy();
 	void Init();
 	void Update();
@@ -25,4 +25,7 @@ private:
 	VECTOR m_pos;
 	// ˆÚ“®—Ê
 	VECTOR m_move;
+
+	// 3Dƒ‚ƒfƒ‹
+	int m_modelHandle;
 };

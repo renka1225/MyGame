@@ -11,7 +11,7 @@ class ManagerModel;
 class Player
 {
 public:
-	Player();
+	Player(std::shared_ptr<ManagerModel> pModel);
 	virtual ~Player() {};
 	void Init();
 	void Update(Input& input);
@@ -37,4 +37,7 @@ private:
 	bool m_isJump;
 	// ジャンプフレーム
 	int m_jumpFrame;
+
+	// 3Dモデル
+	int m_modelHandle;
 };

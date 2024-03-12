@@ -1,6 +1,7 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
+#include "ManagerModel.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Camera.h"
@@ -21,8 +22,9 @@ namespace
 ScenePlaying::ScenePlaying():
 	m_time(0)
 {
-	m_pPlayer = std::make_shared<Player>();
-	m_pEnemy = std::make_shared<Enemy>();
+	m_pModel = std::make_shared<ManagerModel>();
+	m_pPlayer = std::make_shared<Player>(m_pModel);
+	m_pEnemy = std::make_shared<Enemy>(m_pModel);
 	m_pCamera = std::make_shared<Camera>();
 }
 
