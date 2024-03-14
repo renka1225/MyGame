@@ -52,6 +52,8 @@ void Camera::Update(std::shared_ptr<Player> pPlayer)
 	m_pPlayer = pPlayer;
 
 	// ƒJƒƒ‰ˆÊ’u‚Ì’²®
+	// MEMO:m_pPlayer->GetPos().y‚Æ‚·‚é‚Æ—h‚ê‚é‚æ‚¤‚ÉŒ©‚¦‚é
+	// VECTOR aimPos = VGet(m_pPlayer->GetPos().x, m_pPlayer->GetPos().y, kTargetZ);
 	VECTOR aimPos = VGet(m_pPlayer->GetPos().x, kTargetY, kTargetZ);
 	VECTOR posToAim = VSub(aimPos, m_pos);
 	VECTOR scaledPosToAim = VScale(posToAim, 0.1f);
