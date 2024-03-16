@@ -1,6 +1,8 @@
-C:\GitHub\MyGame\RunGame\Camera.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Camera.obj
-C:\GitHub\MyGame\RunGame\Input.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Input.obj
+C:\GitHub\MyGame\RunGame\Game\Camera.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Camera.obj
+C:\GitHub\MyGame\RunGame\Enemy.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Enemy.obj
+C:\GitHub\MyGame\RunGame\Game\Input.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Input.obj
 C:\GitHub\MyGame\RunGame\main.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\main.obj
+C:\GitHub\MyGame\RunGame\Manager\ManagerModel.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\ManagerModel.obj
 C:\GitHub\MyGame\RunGame\Player.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Player.obj
 C:\GitHub\MyGame\RunGame\Scene\SceneBase.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\SceneBase.obj
 C:\GitHub\MyGame\RunGame\Scene\SceneClear.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\SceneClear.obj

@@ -16,7 +16,9 @@
 namespace
 {
 	// ゲーム時間
-	constexpr int kClearTime = 60 * 120;
+	constexpr int kClearTime = 60 * 90;
+	// 経過時間の表示間隔
+	constexpr int kIntervalTime = 20;
 }
 
 ScenePlaying::ScenePlaying():
@@ -60,7 +62,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	m_pCamera->Update(m_pPlayer);
 
 #if _DEBUG
-	// MEMO:デバック用
+	// MEMO:デバック用ボタン
 	if (input.IsTriggered("debug"))
 	{
 		return std::make_shared<SceneClear>();

@@ -15,6 +15,8 @@ namespace
 	constexpr float kVelocity = 10.0f;
 	// Y軸方向の向き
 	constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;
+	// サイズ
+	constexpr float kScale = 0.5f;
 
 	// 地面の高さ
 	constexpr float kGroundHeight = 0.0f;
@@ -58,6 +60,9 @@ void Player::Init()
 /// </summary>
 void Player::Update(Input& input)
 {
+	// 毎フレーム右に移動
+	m_pos = VAdd(m_pos, VGet(kMove, 0.0f, 0.0f));
+
 	if (m_isJump)	// ジャンプ中
 	{
 		Jump(input);
@@ -71,7 +76,7 @@ void Player::Update(Input& input)
 		if (input.IsTriggered("jump"))
 		{
 			m_isJump = true;
-			m_move.y = kVelocity;
+			m_move = VAdd(m_move, VGet(0.0f, kVelocity, 0.0f));
 		}
 	}
 
@@ -83,11 +88,13 @@ void Player::Update(Input& input)
 		m_isJump = false;
 	}
 
+	// 3Dモデルのサイズを決定
+	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
+	// 3DモデルをY軸方向に回転
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 	// 3Dモデルの位置を更新
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
-	// 3DモデルをY軸方向に回転
-	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 }
 
 
@@ -103,7 +110,7 @@ void Player::Draw()
 	// MEMO:プレイヤーの座標描画
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(x:%f,y:%f,z:%f)\n", m_pos.x, m_pos.y, m_pos.z);
 	// MEMO:地面位置描画
-	DrawLine3D(VGet(-100, kGroundHeight, 0), VGet(100, kGroundHeight, 0), 0x0000ff);
+	DrawLine3D(VGet(-100, kGroundHeight, 0), VGet(1000, kGroundHeight, 0), 0x0000ff);
 #endif
 
 }
@@ -141,7 +148,8 @@ void Player::Jump(Input& input)
 		{
 			jumpHeight = Jump::kBigJumpHeight;
 		}
-		m_move.y *= jumpHeight;
+		m_move.y = VDot(m_move, VGet(0.0f,jumpHeight, 0.0f));
 	}
-	m_move.y -= kGravity;
+
+	m_move = VSub(m_move, VGet(0.0f, kGravity, 0.0f));
 }

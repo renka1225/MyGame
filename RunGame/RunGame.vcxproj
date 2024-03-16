@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game\Input.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="Scene\SceneTitle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game\Game.h" />
