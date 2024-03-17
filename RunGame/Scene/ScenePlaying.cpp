@@ -2,6 +2,7 @@
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "ManagerModel.h"
+#include "Background.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Camera.h"
@@ -25,6 +26,7 @@ ScenePlaying::ScenePlaying():
 	m_time(0)
 {
 	m_pModel = std::make_shared<ManagerModel>();
+	m_pBackground = std::make_shared<Background>(m_pModel);
 	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pEnemy = std::make_shared<Enemy>(m_pModel);
 	m_pCamera = std::make_shared<Camera>();
@@ -54,6 +56,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		return std::make_shared<SceneClear>();
 	}
 
+	// ”wŒi‚ÌXV
+	m_pBackground->Update();
 	// ƒvƒŒƒCƒ„[‚ÌXV
 	m_pPlayer->Update(input);
 	// “G‚ÌXV
@@ -88,6 +92,8 @@ void ScenePlaying::Draw()
 	milliSec %= 1000;
 	DrawFormatString(0, 50, 0xffffff, "time:%03d:%03d", sec, milliSec);
 
+	// ”wŒi‚Ì•`‰æ
+	m_pBackground->Draw();
 	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
 	m_pPlayer->Draw();
 	// “G‚Ì•`‰æ

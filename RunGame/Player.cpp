@@ -8,7 +8,7 @@
 namespace
 {
 	// 移動量
-	constexpr float kMove = 2.0f;
+	constexpr float kMove = 0.5f;
 	// 重力
 	constexpr float kGravity = 0.5f;
 	// 初速度
@@ -81,7 +81,8 @@ void Player::Update(Input& input)
 	}
 
 	// 着地処理
-	if (m_pos.y < kGroundHeight)
+	VECTOR rangeGround = VSub(m_pos, VGet(0.0f, kGroundHeight, 0.0f));	// 地面までの距離
+	if (rangeGround.y < 0.0f)
 	{
 		m_pos.y = kGroundHeight;
 		m_move.y = 0;
@@ -110,7 +111,7 @@ void Player::Draw()
 	// MEMO:プレイヤーの座標描画
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(x:%f,y:%f,z:%f)\n", m_pos.x, m_pos.y, m_pos.z);
 	// MEMO:地面位置描画
-	DrawLine3D(VGet(-100, kGroundHeight, 0), VGet(1000, kGroundHeight, 0), 0x0000ff);
+	DrawLine3D(VGet(-100, kGroundHeight, 0), VGet(10000, kGroundHeight, 0), 0x0000ff);
 #endif
 
 }

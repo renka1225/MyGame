@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class ManagerModel;
+class Background;
 class Player;
 class Enemy;
 class Camera;
@@ -23,6 +24,7 @@ public:
 private:
 	// ƒ|ƒCƒ“ƒ^
 	std::shared_ptr<ManagerModel> m_pModel;
+	std::shared_ptr<Background> m_pBackground;
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Enemy> m_pEnemy;
 	std::shared_ptr<Camera> m_pCamera;

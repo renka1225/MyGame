@@ -11,8 +11,10 @@ public:
 
 	int GetPlayerHandle() const{ return m_playerHandle; }
 	int GetEnemyHandle() const{ return m_enemyHandle; }
+	int GetWaterHandle() const{ return m_waterHandle; }
 
 private:
 	int m_playerHandle;	// ƒvƒŒƒCƒ„[
 	int m_enemyHandle;	// “G
+	int m_waterHandle;	// …–Ê
 };
