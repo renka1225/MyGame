@@ -6,10 +6,8 @@
 /// </summary>
 namespace
 {
-	// 移動量
-	constexpr float kMoveX = -1.0f;
 	// 拡大率
-	constexpr float kScale = 0.25f;
+	constexpr float kScale = 0.15f;
 	// Y軸方向の向き
 	constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;
 }
@@ -17,7 +15,7 @@ namespace
 Enemy::Enemy(std::shared_ptr<ManagerModel> pModel):
 	m_pModel(pModel),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_move(VGet(kMoveX, 0.0f, 0.0f))
+	m_move(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_modelHandle = MV1DuplicateModel(m_pModel->GetEnemyHandle());
 
@@ -46,8 +44,7 @@ void Enemy::Init()
 /// </summary>
 void Enemy::Update()
 {
-	// TODO:位置更新
-	//m_pos = VAdd(m_pos, m_move);
+	// TODO:複数配置
 	MV1SetPosition(m_modelHandle, m_pos);
 }
 
