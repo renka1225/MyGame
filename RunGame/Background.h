@@ -24,7 +24,7 @@ private:
 	// •\¦ˆÊ’u
 	VECTOR m_pos;
 
-	// …–Ê‚Ì3Dƒ‚ƒfƒ‹
-	int m_waterHandle;
+	// ”wŒi
+	int m_background;
 };
 
