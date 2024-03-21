@@ -7,8 +7,7 @@
 /// <param name="pModel">3Dƒ‚ƒfƒ‹</param>
 Background::Background(std::shared_ptr<ManagerModel> pModel):
 	m_pModel(pModel),
-	m_pos(VGet(0.0f,-0.0f, 0.0f)),
-	m_wavePosX(0)
+	m_pos(VGet(0.0f,-0.0f, 0.0f))
 {
 	m_background = LoadGraph("data/background/5.png");
 }
@@ -26,7 +25,6 @@ void Background::Init()
 /// </summary>
 void Background::Update()
 {
-	m_wavePosX--;
 }
 
 /// <summary>
@@ -40,7 +38,6 @@ void Background::Draw()
 	// ”g‚Ì•`‰æ
 	for (int x = 0; x < kWaveRange; x++)
 	{
-		x += m_wavePosX;
 		int y = static_cast<int>(kWaveAmplitude * sin(DX_PI_F * x / kWaveFrequency) + kDrawWaveY);
 		DrawPixel(x, y, 0xffffff);
 	}

@@ -1,16 +1,17 @@
 #include "Enemy.h"
 #include "ManagerModel.h"
-
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
-Enemy::Enemy(std::shared_ptr<ManagerModel> pModel):
-	m_pModel(pModel),
-	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_move(VGet(0.0f, 0.0f, 0.0f))
+Enemy::Enemy(std::shared_ptr<ManagerModel> pModel) :
+	m_pModel(pModel)
 {
+	m_pos.resize(kEnemyNum);
 	m_modelHandle = MV1DuplicateModel(m_pModel->GetEnemyHandle());
 
 	// 3Dモデルのサイズを小さくする
@@ -21,12 +22,34 @@ Enemy::Enemy(std::shared_ptr<ManagerModel> pModel):
 
 
 /// <summary>
+/// デストラクタ
+/// </summary>
+Enemy::~Enemy()
+{
+	MV1DeleteModel(m_modelHandle);
+}
+
+
+/// <summary>
 /// 初期化
 /// </summary>
 void Enemy::Init()
 {
+	// TODO:敵データ読み込み
+	std::fstream file;
+	file.open("data/file/enemy.csv", std::ios::in | std::ios::binary);
+	
+	if (!file.is_open())	// ファイル読み込み失敗時
+	{
+		printfDx("ファイル読み込み失敗\n");
+	}
+	else 					// 成功時
+	{
+		// ファイルの中身をメモリ上にコピーする
+		file.read(reinterpret_cast<char*>(&m_pos), sizeof(kEnemyNum));
+		file.close();
+	}
 }
-
 
 /// <summary>
 /// 更新
@@ -34,7 +57,10 @@ void Enemy::Init()
 void Enemy::Update()
 {
 	// TODO:複数配置
-	MV1SetPosition(m_modelHandle, m_pos);
+	for (int i = 0; i < m_pos.size(); i++)
+	{
+		MV1SetPosition(m_modelHandle, m_pos[i]);
+	}
 }
 
 

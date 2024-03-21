@@ -31,6 +31,7 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
+	m_pEnemy->Init();
 }
 
 

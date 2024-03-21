@@ -12,7 +12,7 @@ class Player
 {
 public:
 	Player(std::shared_ptr<ManagerModel> pModel);
-	virtual ~Player() {};
+	virtual ~Player();
 	void Init();
 	void Update(Input& input);
 	void Draw();

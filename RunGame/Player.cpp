@@ -19,6 +19,15 @@ Player::Player(std::shared_ptr<ManagerModel> pModel):
 
 
 /// <summary>
+/// デストラクタ
+/// </summary>
+Player::~Player()
+{
+	MV1DeleteModel(m_modelHandle);
+}
+
+
+/// <summary>
 /// 初期化
 /// </summary>
 void Player::Init()

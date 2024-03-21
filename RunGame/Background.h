@@ -24,9 +24,6 @@ private:
 	// •\¦ˆÊ’u
 	VECTOR m_pos;
 
-	// ”g‚Ì•\¦ˆÊ’u
-	int m_wavePosX;
-
 	// ”wŒi
 	int m_background;
 
@@ -36,6 +33,6 @@ private:	// ’è”
 	static constexpr int kWaveAmplitude = 10;	// ”g‚ÌU•
 	static constexpr int kWaveFrequency = 100;	// ”g‚Ìü”g”
 	static constexpr int kWaveRange = 1000;		// ”g‚Ì•`‰æ”ÍˆÍ
-	static constexpr int kDrawWaveY = 450;		// ”g‚Ì•`‰æˆÊ’uYÀ•W
+	static constexpr int kDrawWaveY = 460;		// ”g‚Ì•`‰æˆÊ’uYÀ•W
 };
 
