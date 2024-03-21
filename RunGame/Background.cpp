@@ -1,17 +1,16 @@
 #include "Background.h"
 #include "ManagerModel.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="pModel">3Dモデル</param>
 Background::Background(std::shared_ptr<ManagerModel> pModel):
 	m_pModel(pModel),
-	m_pos(VGet(0.0f,-5.0f, -20.0f))
+	m_pos(VGet(0.0f,-0.0f, 0.0f)),
+	m_wavePosX(0)
 {
 	m_background = LoadGraph("data/background/5.png");
-}
-
-
-Background::~Background()
-{
 }
 
 
@@ -27,6 +26,7 @@ void Background::Init()
 /// </summary>
 void Background::Update()
 {
+	m_wavePosX--;
 }
 
 /// <summary>
@@ -35,13 +35,22 @@ void Background::Update()
 void Background::Draw()
 {
 	// 背景の描画
-	DrawBillboard3D(m_pos, 0.0f, 0.0f, 1.0f, 0.0f, m_background, true);
+	DrawBillboard3D(m_pos, 0.0f, 0.0f, kBackgroundSize, 0.0f, m_background, true);
+
+	// 波の描画
+	for (int x = 0; x < kWaveRange; x++)
+	{
+		x += m_wavePosX;
+		int y = static_cast<int>(kWaveAmplitude * sin(DX_PI_F * x / kWaveFrequency) + kDrawWaveY);
+		DrawPixel(x, y, 0xffffff);
+	}
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示
-	DrawLine3D(VGet(-300, 0.0f, 0), VGet(300.0f, 0.0f, 0.0f), 0xff0000);
-	DrawLine3D(VGet(0.0f, -300.0f, 0.0f), VGet(0.0f, 300.0f, 0.0f), 0x00ff00);
-	DrawLine3D(VGet(0.0f, 0.0f, -300.0f), VGet(0.0f, 0.0f, 300.0f), 0x0000ff);
+	float lineSize = 300.0f;
+	DrawLine3D(VGet(-lineSize, 0.0f, 0), VGet(lineSize, 0.0f, 0.0f), 0xff0000);
+	DrawLine3D(VGet(0.0f, -lineSize, 0.0f), VGet(0.0f, lineSize, 0.0f), 0x00ff00);
+	DrawLine3D(VGet(0.0f, 0.0f, -lineSize), VGet(0.0f, 0.0f, lineSize), 0x0000ff);
 #endif
 }
 

@@ -30,4 +30,10 @@ private:
 	std::shared_ptr<Camera> m_pCamera;
 
 	int m_time;
+
+private:	// ’è”
+	// ƒQ[ƒ€ŠÔ
+	static constexpr int kClearTime = 60 * 90;
+	// Œo‰ßŠÔ‚Ì•\¦ŠÔŠu
+	static constexpr int kIntervalTime = 20;
 };

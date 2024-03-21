@@ -1,17 +1,11 @@
 #include "Enemy.h"
 #include "ManagerModel.h"
 
-/// <summary>
-/// 定数
-/// </summary>
-namespace
-{
-	// 拡大率
-	constexpr float kScale = 0.15f;
-	// Y軸方向の向き
-	constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;
-}
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="pModel">3Dモデル</param>
 Enemy::Enemy(std::shared_ptr<ManagerModel> pModel):
 	m_pModel(pModel),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
@@ -23,11 +17,6 @@ Enemy::Enemy(std::shared_ptr<ManagerModel> pModel):
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	// 3DモデルをY軸方向に回転
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
-}
-
-
-Enemy::~Enemy()
-{
 }
 
 

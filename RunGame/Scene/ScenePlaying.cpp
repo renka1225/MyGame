@@ -11,17 +11,10 @@
 #include "DxLib.h"
 #include <memory>
 
-/// <summary>
-/// 定数
-/// </summary>
-namespace
-{
-	// ゲーム時間
-	constexpr int kClearTime = 60 * 90;
-	// 経過時間の表示間隔
-	constexpr int kIntervalTime = 20;
-}
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ScenePlaying::ScenePlaying():
 	m_time(0)
 {

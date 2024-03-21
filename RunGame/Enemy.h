@@ -11,7 +11,7 @@ class Enemy
 {
 public:
 	Enemy(std::shared_ptr<ManagerModel> pModel);
-	virtual ~Enemy();
+	virtual ~Enemy() {};
 	void Init();
 	void Update();
 	void Draw();
@@ -28,4 +28,10 @@ private:
 
 	// 3Dƒ‚ƒfƒ‹
 	int m_modelHandle;
+
+private:	// ’è”
+	// Šg‘å—¦
+	static constexpr float kScale = 0.15f;
+	// Y²•ûŒü‚ÌŒü‚«
+	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;
 };
