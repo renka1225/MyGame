@@ -8,7 +8,6 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Game.h"
-#include "DxLib.h"
 #include <memory>
 
 
@@ -16,7 +15,8 @@
 /// コンストラクタ
 /// </summary>
 ScenePlaying::ScenePlaying():
-	m_time(0)
+	m_time(0),
+	m_enemyPos(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pBackground = std::make_shared<Background>(m_pModel);
@@ -55,7 +55,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
 	// 敵の更新
-	m_pEnemy->Update();
+	m_pEnemy->Update(m_enemyPos);
 	// カメラの更新
 	m_pCamera->Update(m_pPlayer);
 

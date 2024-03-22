@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "DxLib.h"
 
 class ManagerModel;
 class Background;
@@ -29,7 +30,9 @@ private:
 	std::shared_ptr<Enemy> m_pEnemy;
 	std::shared_ptr<Camera> m_pCamera;
 
-	int m_time;
+	int m_time; // ŠÔ
+
+	VECTOR m_enemyPos;	// “GˆÊ’u
 
 private:	// ’è”
 	// ƒQ[ƒ€ŠÔ
