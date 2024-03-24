@@ -33,7 +33,4 @@ private:	// ’è”
 	static constexpr float kScale = 0.10f;
 	// Y²•ûŒü‚ÌŒü‚«
 	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;
-	
-	// “G”
-	static constexpr int kEnemyNum = 5;
 };

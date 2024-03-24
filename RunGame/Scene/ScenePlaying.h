@@ -33,7 +33,7 @@ private:
 
 	int m_time; // ŠÔ
 
-	VECTOR m_enemyPos;	// “GˆÊ’u
+	std::vector<VECTOR> m_enemyPos;	// “GˆÊ’u
 
 private:	// ’è”
 	// ƒQ[ƒ€ŠÔ

@@ -9,14 +9,17 @@
 #include "Input.h"
 #include "Game.h"
 #include <memory>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
 
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 ScenePlaying::ScenePlaying():
-	m_time(0),
-	m_enemyPos(VGet(0.0f, 0.0f, 0.0f))
+	m_time(0)
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pBackground = std::make_shared<Background>(m_pModel);
@@ -36,9 +39,36 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
+	// csvファイル読み込み
+	std::ifstream file;
+	file.open("data/file/enemy.csv");
+	if (!file.is_open())	// ファイル読み込み失敗時
+	{
+		printfDx("ファイル読み込み失敗\n");
+	}
+	else
+	{
+		std::string path;	// 読み取り元
+		while (std::getline(file, path))
+		{
+			std::istringstream istream(path);
+			std::string line;
+			VECTOR pos;
+
+			if (std::getline(istream, line, ',') &&
+				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.x)&&
+				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.y)&&
+				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.z))
+			{
+				m_enemyPos.push_back(pos);
+			}
+		}
+	}
+	file.close();
+	m_enemyPos.resize(kEnemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		m_pEnemy[i]->Init(VGet(i * 100, 0.0f, 0.0f));
+		m_pEnemy[i]->Init(m_enemyPos[i]);
 	}
 }
 
@@ -108,7 +138,7 @@ void ScenePlaying::Draw()
 	int milliSec = m_time * 1000 / 60;
 	int sec = (milliSec / 1000) % 120;
 	milliSec %= 1000;
-	DrawFormatString(0, 50, 0xffffff, "time:%03d:%03d", sec, milliSec);
+	DrawFormatString(0, 50, 0xffffff, "time:%02d:%03d", sec, milliSec);
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");

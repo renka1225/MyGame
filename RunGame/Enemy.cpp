@@ -1,8 +1,6 @@
 #include "Enemy.h"
 #include "ManagerModel.h"
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
+
 
 /// <summary>
 /// コンストラクタ
