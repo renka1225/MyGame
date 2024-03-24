@@ -4,8 +4,8 @@
 #include "ManagerModel.h"
 #include "Background.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "Camera.h"
+#include "Enemy.h"
 #include "Input.h"
 #include "Game.h"
 #include <memory>
@@ -21,8 +21,13 @@ ScenePlaying::ScenePlaying():
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pBackground = std::make_shared<Background>(m_pModel);
 	m_pPlayer = std::make_shared<Player>(m_pModel);
-	m_pEnemy = std::make_shared<Enemy>(m_pModel);
 	m_pCamera = std::make_shared<Camera>();
+
+	m_pEnemy.resize(kEnemyNum);
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		m_pEnemy[i] = std::make_shared<Enemy>(m_pModel);
+	}
 }
 
 
@@ -31,7 +36,10 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
-	m_pEnemy->Init();
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		m_pEnemy[i]->Init(VGet(i * 100, 0.0f, 0.0f));
+	}
 }
 
 
@@ -54,10 +62,14 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	m_pBackground->Update();
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
-	// 敵の更新
-	m_pEnemy->Update(m_enemyPos);
 	// カメラの更新
 	m_pCamera->Update(m_pPlayer);
+	// 敵の更新
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		// 敵の更新
+		m_pEnemy[i]->Update();
+	}
 
 #if _DEBUG
 	// MEMO:デバック用ボタン
@@ -80,18 +92,23 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
+	// 背景の描画
+	m_pBackground->Draw();
+
+	// プレイヤーの描画
+	m_pPlayer->Draw();
+
+	// 敵の描画
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		m_pEnemy[i]->Draw();
+	}
+
 	// 経過時間の描画
 	int milliSec = m_time * 1000 / 60;
 	int sec = (milliSec / 1000) % 120;
 	milliSec %= 1000;
 	DrawFormatString(0, 50, 0xffffff, "time:%03d:%03d", sec, milliSec);
-
-	// 背景の描画
-	m_pBackground->Draw();
-	// プレイヤーの描画
-	m_pPlayer->Draw();
-	// 敵の描画
-	m_pEnemy->Draw();
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");

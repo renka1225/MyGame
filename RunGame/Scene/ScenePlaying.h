@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include "DxLib.h"
+#include <vector>
 
 class ManagerModel;
 class Background;
@@ -27,8 +28,8 @@ private:
 	std::shared_ptr<ManagerModel> m_pModel;
 	std::shared_ptr<Background> m_pBackground;
 	std::shared_ptr<Player> m_pPlayer;
-	std::shared_ptr<Enemy> m_pEnemy;
 	std::shared_ptr<Camera> m_pCamera;
+	std::vector<std::shared_ptr<Enemy>> m_pEnemy;
 
 	int m_time; // ŠÔ
 
@@ -39,4 +40,7 @@ private:	// ’è”
 	static constexpr int kClearTime = 60 * 90;
 	// Œo‰ßŠÔ‚Ì•\¦ŠÔŠu
 	static constexpr int kIntervalTime = 20;
+
+	// Å‘å“G”
+	static constexpr int kEnemyNum = 10;
 };

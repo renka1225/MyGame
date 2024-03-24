@@ -13,14 +13,17 @@ class Enemy
 public:
 	Enemy(std::shared_ptr<ManagerModel> pModel);
 	virtual ~Enemy();
-	void Init();
-	void Update(VECTOR pos);
+	void Init(VECTOR pos);
+	void Update();
 	void Draw();
 	void End();
 	
 private:
 	// モデルクラスのポインタ
 	std::shared_ptr<ManagerModel> m_pModel;
+
+	// 敵の位置
+	VECTOR m_pos;
 
 	// 3Dモデル
 	int m_modelHandle;

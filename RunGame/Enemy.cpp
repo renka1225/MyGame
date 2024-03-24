@@ -9,7 +9,8 @@
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
 Enemy::Enemy(std::shared_ptr<ManagerModel> pModel) :
-	m_pModel(pModel)
+	m_pModel(pModel),
+	m_pos(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_modelHandle = MV1DuplicateModel(m_pModel->GetEnemyHandle());
 
@@ -32,17 +33,18 @@ Enemy::~Enemy()
 /// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Init()
+void Enemy::Init(VECTOR pos)
 {
+	m_pos = pos;
 }
 
 /// <summary>
 /// 更新
 /// </summary>
-void Enemy::Update(VECTOR pos)
+void Enemy::Update()
 {
 	// 敵配置
-	MV1SetPosition(m_modelHandle, pos);
+	MV1SetPosition(m_modelHandle, m_pos);
 	
 }
 
