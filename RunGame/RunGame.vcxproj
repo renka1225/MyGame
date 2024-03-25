@@ -144,9 +144,10 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerModel.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Game\Rect.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Scene\SceneGameover.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
+    <ClInclude Include="ManagerFont.h" />
     <ClInclude Include="Manager\ManagerModel.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rect.h" />

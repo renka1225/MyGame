@@ -34,9 +34,8 @@ private:
 	int m_modelHandle;
 
 private:	// ’è”
-	
 	static constexpr float kScale = 0.08f;												// Šg‘å—¦
 	static constexpr int kWidth = 110;													// “G‚Ì‰¡•
-	static constexpr int kHeight = 100;													// “G‚Ì‚‚³
+	static constexpr int kHeight = 50;													// “G‚Ì‚‚³
 	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;							// ‰¡•ûŒü‚ÌŒü‚«
 };

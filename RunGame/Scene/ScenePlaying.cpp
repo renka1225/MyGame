@@ -1,6 +1,7 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
+#include "ManagerFont.h"
 #include "ManagerModel.h"
 #include "Background.h"
 #include "Player.h"
@@ -22,6 +23,7 @@
 ScenePlaying::ScenePlaying():
 	m_time(0)
 {
+	m_pFont = std::make_shared<ManagerFont>();
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pBackground = std::make_shared<Background>(m_pModel);
 	m_pPlayer = std::make_shared<Player>(m_pModel);
@@ -123,6 +125,12 @@ void ScenePlaying::Draw()
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
+
+	// 経過時間描画確認
+	if (sec >= 5)
+	{
+		//DrawFormatStringToHandle(100, 50, 0xff0f0d, m_pFont->GetFont(), "20秒経過!");
+	}
 #endif
 }
 

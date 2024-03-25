@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include <vector>
 
+class ManagerFont;
 class ManagerModel;
 class Background;
 class Player;
@@ -29,6 +30,7 @@ private:
 
 private:
 	// ƒ|ƒCƒ“ƒ^
+	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerModel> m_pModel;
 	std::shared_ptr<Background> m_pBackground;
 	std::shared_ptr<Player> m_pPlayer;
