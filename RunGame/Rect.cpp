@@ -21,13 +21,15 @@ void Rect::Draw(unsigned int color, bool isFill)
 		color, isFill);
 }
 
-void Rect::SetCenter(float x, float y, float width, float height)
+void Rect::SetCenter(float x, float y, float z, float width, float height)
 {
-	// TODO:2Dだと左上座標になるので3Dの座標に変換が必要
-	m_left = x;
-	m_top = y - height;
-	m_right = x + width ;
-	m_bottom = y;
+	// ワールド座標からスクリーン座標に変換
+	VECTOR screenPos = ConvWorldPosToScreenPos(VGet(x, y, z));
+
+	m_left = screenPos.x - width * 0.5f;
+	m_top = screenPos.y - height * 0.5f;
+	m_right = screenPos.x +  width * 0.5f;
+	m_bottom = screenPos.y + height * 0.5f;
 }
 
 float Rect::GetWidth() const
@@ -55,9 +57,9 @@ bool Rect::IsCollision(const Rect& rect)
 {
 	// 絶対に当たらないパターンをはじいていく
 	if (m_left > rect.m_right) return false;
-	if (m_top < rect.m_bottom) return false;
+	if (m_top > rect.m_bottom) return false;
 	if (m_right < rect.m_left) return false;
-	if (m_bottom > rect.m_top) return false;
+	if (m_bottom < rect.m_top) return false;
 
 	// 当たらないパターン以外は当たっている
 	return true;

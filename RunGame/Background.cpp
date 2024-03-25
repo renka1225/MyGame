@@ -36,11 +36,11 @@ void Background::Draw()
 	DrawBillboard3D(m_pos, 0.0f, 0.0f, kBackgroundSize, 0.0f, m_background, true);
 
 	// 波の描画
-	for (int x = 0; x < kWaveRange; x++)
-	{
-		int y = static_cast<int>(kWaveAmplitude * sin(DX_PI_F * x / kWaveFrequency) + kDrawWaveY);
-		DrawPixel(x, y, 0xffffff);
-	}
+	//for (int x = 0; x < kWaveRange; x++)
+	//{
+	//	int y = static_cast<int>(kWaveAmplitude * sin(DX_PI_F * x / kWaveFrequency) + kDrawWaveY);
+	//	DrawPixel(x, y, 0xffffff);
+	//}
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示

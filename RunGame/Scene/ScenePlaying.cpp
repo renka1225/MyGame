@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Enemy.h"
 #include "Input.h"
+#include "Rect.h"
 #include "Game.h"
 #include <memory>
 #include <iostream>
@@ -40,31 +41,8 @@ ScenePlaying::ScenePlaying():
 void ScenePlaying::Init()
 {
 	// csvファイル読み込み
-	std::ifstream file;
-	file.open("data/file/enemy.csv");
-	if (!file.is_open())	// ファイル読み込み失敗時
-	{
-		printfDx("ファイル読み込み失敗\n");
-	}
-	else
-	{
-		std::string path;	// 読み取り元
-		while (std::getline(file, path))
-		{
-			std::istringstream istream(path);
-			std::string line;
-			VECTOR pos;
-
-			if (std::getline(istream, line, ',') &&
-				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.x)&&
-				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.y)&&
-				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.z))
-			{
-				m_enemyPos.push_back(pos);
-			}
-		}
-	}
-	file.close();
+	ReadFile();
+	
 	m_enemyPos.resize(kEnemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
@@ -99,10 +77,13 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	{
 		// 敵の更新
 		m_pEnemy[i]->Update();
+
+		// プレイヤーと敵の当たり判定
+		IsCollision(i);
 	}
 
 #if _DEBUG
-	// MEMO:デバック用ボタン
+	// MEMO:デバック用コマンド
 	if (input.IsTriggered("debug"))
 	{
 		return std::make_shared<SceneClear>();
@@ -151,4 +132,56 @@ void ScenePlaying::Draw()
 /// </summary>
 void ScenePlaying::End()
 {
+}
+
+
+/// <summary>
+/// csvファイル読み込み
+/// </summary>
+void ScenePlaying::ReadFile()
+{
+	std::ifstream file;
+	file.open("data/file/enemy.csv");
+	if (!file.is_open())	// ファイル読み込み失敗時
+	{
+		printfDx("ファイル読み込み失敗\n");
+	}
+	else
+	{
+		std::string path;	// 読み取り元
+		while (std::getline(file, path))
+		{
+			std::istringstream istream(path);
+			std::string line;
+			VECTOR pos = VGet(0.0f, 0.0f, 0.0f);
+
+			if (std::getline(istream, line, ',') &&
+				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.x) &&
+				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.y) &&
+				std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.z))
+			{
+				m_enemyPos.push_back(pos);
+			}
+		}
+	}
+	file.close();
+}
+
+
+/// <summary>
+/// プレイヤーと敵の当たり判定処理
+/// </summary>
+void ScenePlaying::IsCollision(int enemyIdx)
+{
+	// プレイヤーの当たり判定
+	Rect playerRect = m_pPlayer->GetColRect();
+	// 敵の当たり判定
+	Rect enemyRect = m_pEnemy[enemyIdx]->GetColRect();
+	if (playerRect.IsCollision(enemyRect))
+	{
+#ifdef _DEBUG
+		// MEMO:当たっているか文字で確認
+		DrawString(0, 80, "当たった", 0xff0000);
+#endif
+	}
 }

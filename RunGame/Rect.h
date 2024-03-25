@@ -12,7 +12,7 @@ public:
 	// 四角の描画
 	void Draw(unsigned int color, bool isFill);
 	// 中心座標と幅高さを指定
-	void SetCenter(float x, float y, float width, float height);
+	void SetCenter(float x, float y, float z, float width, float height);
 
 	// 情報取得
 	float GetWidth() const;			// 矩形の幅
@@ -28,4 +28,3 @@ private:
 	float m_right;	// 右下のX座標
 	float m_bottom;	// 右下のY座標
 };
-

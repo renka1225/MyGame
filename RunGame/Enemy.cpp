@@ -44,6 +44,8 @@ void Enemy::Update()
 	// 敵配置
 	MV1SetPosition(m_modelHandle, m_pos);
 	
+	// 当たり判定の更新
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_pos.z, kWidth, kHeight);
 }
 
 
@@ -54,6 +56,12 @@ void Enemy::Draw()
 {
 	// ３Ｄモデルの描画
 	MV1DrawModel(m_modelHandle);
+
+#ifdef _DEBUG
+	// MEMO:敵の当たり判定表示
+	m_colRect.Draw(0xff00ff, false);
+#endif
+
 }
 
 

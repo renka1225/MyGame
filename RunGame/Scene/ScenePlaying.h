@@ -24,6 +24,10 @@ public:
 	virtual void End();
 
 private:
+	void ReadFile();	// ファイル読み込み
+	void IsCollision(int enemyIdx);	// プレイヤーと敵の当たり判定処理
+
+private:
 	// ポインタ
 	std::shared_ptr<ManagerModel> m_pModel;
 	std::shared_ptr<Background> m_pBackground;
@@ -36,11 +40,9 @@ private:
 	std::vector<VECTOR> m_enemyPos;	// 敵位置
 
 private:	// 定数
-	// ゲーム時間
-	static constexpr int kClearTime = 60 * 90;
-	// 経過時間の表示間隔
-	static constexpr int kIntervalTime = 20;
+	
+	static constexpr int kClearTime = 60 * 90;	// ゲーム時間
+	static constexpr int kIntervalTime = 20;	// 経過時間の表示間隔
 
-	// 最大敵数
-	static constexpr int kEnemyNum = 10;
+	static constexpr int kEnemyNum = 10;		// 最大敵数
 };

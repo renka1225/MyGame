@@ -79,7 +79,7 @@ void Player::Update(Input& input)
 	MV1SetPosition(m_modelHandle, m_pos);
 
 	// 当たり判定の更新
-	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_pos.z, kWidth, kHeight);
 }
 
 
@@ -95,7 +95,7 @@ void Player::Draw()
 	// MEMO:プレイヤー座標描画
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(x:%f,y:%f,z:%f)\n", m_pos.x, m_pos.y, m_pos.z);
 	// MEMO:当たり判定の表示
-	m_colRect.Draw(0xddffdd, false);
+	m_colRect.Draw(0x00fffff, false);
 #endif
 
 }

@@ -1,2 +1,5 @@
-﻿  Rect.cpp
-  RunGame.vcxproj -> C:\Users\lotus\デスクトップ\MyGame\RunGame\x64\Debug\RunGame.exe
+﻿  Camera.cpp
+  Player.cpp
+  ScenePlaying.cpp
+  コードを生成中...
+  RunGame.vcxproj -> C:\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe
