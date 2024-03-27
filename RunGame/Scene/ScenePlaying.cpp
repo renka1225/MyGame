@@ -4,6 +4,7 @@
 #include "ManagerFont.h"
 #include "ManagerModel.h"
 #include "Background.h"
+#include "Map.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Enemy.h"
@@ -26,6 +27,7 @@ ScenePlaying::ScenePlaying():
 	m_pFont = std::make_shared<ManagerFont>();
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pBackground = std::make_shared<Background>(m_pModel);
+	m_pMap = std::make_shared<Map>();
 	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pCamera = std::make_shared<Camera>();
 
@@ -42,8 +44,10 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
-	// csvファイル読み込み
-	ReadFile();
+	// マップデータ読み込み
+	m_pMap->Init("data/file/map.ppj");
+	// 敵のcsvファイル読み込み
+	LoadEnemy();
 	
 	m_enemyPos.resize(kEnemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -107,7 +111,8 @@ void ScenePlaying::Draw()
 {
 	// 背景の描画
 	m_pBackground->Draw();
-
+	// マップの描画
+	m_pMap->Draw();
 	// プレイヤーの描画
 	m_pPlayer->Draw();
 
@@ -146,7 +151,7 @@ void ScenePlaying::End()
 /// <summary>
 /// csvファイル読み込み
 /// </summary>
-void ScenePlaying::ReadFile()
+void ScenePlaying::LoadEnemy()
 {
 	std::ifstream file;
 	file.open("data/file/enemy.csv");

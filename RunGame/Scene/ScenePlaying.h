@@ -6,6 +6,7 @@
 class ManagerFont;
 class ManagerModel;
 class Background;
+class Map;
 class Player;
 class Enemy;
 class Camera;
@@ -25,7 +26,7 @@ public:
 	virtual void End();
 
 private:
-	void ReadFile();	// ファイル読み込み
+	void LoadEnemy();				// 敵情報読み込み
 	void IsCollision(int enemyIdx);	// プレイヤーと敵の当たり判定処理
 
 private:
@@ -33,6 +34,7 @@ private:
 	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerModel> m_pModel;
 	std::shared_ptr<Background> m_pBackground;
+	std::shared_ptr<Map> m_pMap;
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Camera> m_pCamera;
 	std::vector<std::shared_ptr<Enemy>> m_pEnemy;
@@ -45,6 +47,5 @@ private:	// 定数
 	
 	static constexpr int kClearTime = 60 * 90;	// ゲーム時間
 	static constexpr int kIntervalTime = 20;	// 経過時間の表示間隔
-
 	static constexpr int kEnemyNum = 10;		// 最大敵数
 };

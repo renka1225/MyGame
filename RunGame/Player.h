@@ -57,8 +57,8 @@ private:	// 定数
 	static constexpr float kGroundHeight = 0.0f;										// 地面の高さ
 
 	// ジャンプフレーム
-	static constexpr int kLittleJumpFrame = 10;		// 小ジャンプ
-	static constexpr int kMediumJumpFrame = 30;		// 中ジャンプ
+	static constexpr int kLittleJumpFrame = 10;			// 小ジャンプ
+	static constexpr int kMediumJumpFrame = 30;			// 中ジャンプ
 	// ジャンプの高さ
 	static constexpr float kLittleJumpHeight = 0.5f;	// 小ジャンプ
 	static constexpr float kMediumJumpHeight = 0.8f;	// 中ジャンプ

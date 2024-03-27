@@ -31,6 +31,12 @@
     <Filter Include="ヘッダー ファイル\Game">
       <UniqueIdentifier>{286fa81f-5111-4076-b5df-2cec40fe68d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Background">
+      <UniqueIdentifier>{fe7191d7-8e22-4dfc-ab96-ab7b74861068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Background">
+      <UniqueIdentifier>{ca79a789-cc02-44f9-829d-21a46848755d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,13 +75,22 @@
     <ClCompile Include="Game\Input.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Rect.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
     <ClCompile Include="Manager\ManagerFont.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\WorldSprite.cpp">
+      <Filter>ソース ファイル\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\Background.cpp">
+      <Filter>ソース ファイル\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\PlatinumLoader.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,14 +131,23 @@
     <ClInclude Include="Game\Game.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Background.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
     <ClInclude Include="ManagerFont.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\WorldSprite.h">
+      <Filter>ヘッダー ファイル\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\Background.h">
+      <Filter>ヘッダー ファイル\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ヘッダー ファイル\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\PlatinumLoader.h">
+      <Filter>ヘッダー ファイル\Background</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
