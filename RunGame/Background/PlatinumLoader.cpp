@@ -19,14 +19,14 @@ void PlatinumLoader::Load(const TCHAR* filePath)
 	};//20バイト
 
 	Header header;
-	int handle =  FileRead_open(filePath);
-	FileRead_read(&header,sizeof(header), handle);
+	int handle = FileRead_open(filePath);
+	FileRead_read(&header, sizeof(header), handle);
 
 	std::string strId;
 	strId.resize(4);
 	std::copy_n(header.id, 4, strId.begin());
 
-	if (strId != "FMF") {
+	if (strId != "FMF_") {
 		assert(0);
 	}
 
@@ -88,5 +88,4 @@ void PlatinumLoader::TransposeMapData(int layerId)
 			mapData_[layerId][idxDst] = temp[idxSrc];
 		}
 	}
-
 }

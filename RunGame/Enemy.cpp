@@ -34,6 +34,8 @@ Enemy::~Enemy()
 void Enemy::Init(VECTOR pos)
 {
 	m_pos = pos;
+	// 敵配置
+	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 /// <summary>
@@ -41,8 +43,8 @@ void Enemy::Init(VECTOR pos)
 /// </summary>
 void Enemy::Update()
 {
-	// 敵配置
-	MV1SetPosition(m_modelHandle, m_pos);
+	// 横に移動させる
+	m_pos = VAdd(m_pos, VGet(kMove, 0.0f, 0.0f));
 	
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_pos.z, kWidth, kHeight);

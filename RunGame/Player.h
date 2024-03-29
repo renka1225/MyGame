@@ -53,8 +53,8 @@ private:	// 定数
 	static constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;							// Y軸方向の向き
 	static constexpr float kScale = 0.5f;												// プレイヤーのサイズ
 	static constexpr int kWidth = 60;													// プレイヤーの横幅
-	static constexpr int kHeight = 60;													// プレイヤーの高さ
-	static constexpr float kGroundHeight = 0.0f;										// 地面の高さ
+	static constexpr int kHeight = 46;													// プレイヤーの縦幅
+	static constexpr float kGroundHeight = 10.0f;										// 地面の高さ
 
 	// ジャンプフレーム
 	static constexpr int kLittleJumpFrame = 10;			// 小ジャンプ

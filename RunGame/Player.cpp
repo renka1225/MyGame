@@ -79,7 +79,7 @@ void Player::Update(Input& input)
 	MV1SetPosition(m_modelHandle, m_pos);
 
 	// “–‚½‚è”»’è‚ÌXV
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_pos.z, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y + 10.0f, m_pos.z, kWidth, kHeight);
 }
 
 

@@ -45,7 +45,7 @@ ScenePlaying::ScenePlaying():
 void ScenePlaying::Init()
 {
 	// マップデータ読み込み
-	m_pMap->Init("data/file/map.ppj");
+	m_pMap->Init("data/file/map.fmf");
 	// 敵のcsvファイル読み込み
 	LoadEnemy();
 	

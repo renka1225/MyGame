@@ -8,13 +8,7 @@
 /// </summary>
 Map::Map()
 {
-	m_mapHandle = LoadGraph("data/data/background/water.png");
-
-	m_mapData.resize(kChipNumY);
-	for (int y = 0; y < kChipNumY; ++y)
-	{
-		m_mapData[y].resize(kChipNumX);
-	}
+	m_chips.clear();
 	m_loader = std::make_shared<PlatinumLoader>();
 }
 
@@ -49,18 +43,21 @@ void Map::Init(const TCHAR* fmfFilePath)
 		m_mapData.push_back(newColData);
 	}
 
-	// マップ描画開始位置
-	VECTOR chipLeftTopPos = VGet(0.0f, kChipNumY * kChipSize, 0.0f);
+	m_mapHandle = LoadGraph("data/background/water.png");
+
+	// WorldSprite実体設定と位置初期化
+	VECTOR chipLeftTopPos = VGet(0.0f, kChipNumY * kChipSize, 0.0f);	// マップの描画開始位置（左上）
 	for (int y = 0; y < kChipNumY; y++)
 	{
 		for(int x = 0; x < kChipNumX; x++)
 		{
 			auto sprite = std::make_shared<WorldSprite>();
 			sprite->Init(m_mapHandle, kChipPixelSize, m_mapData[y][x]);
-			VECTOR chipHalfOffset = VGet(-kChipSize * 0.5f, -kChipSize * 0.5f, 0);					// マップチップの半分サイズ左下にずらすオフセット
-			VECTOR chipPos = VAdd(VGet(x * kChipSize, (-y - 1) * kChipSize, 0), chipHalfOffset);	// 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
+			VECTOR chipHalfOffset = VGet(-kChipSize * 0.5f, -kChipSize * 0.5f, 0.0f);					// マップチップの半分サイズ左下にずらすオフセット
+			VECTOR chipPos = VAdd(VGet(x * 7.0f, (-y - 1) * kChipSize, 0.0f), chipHalfOffset);		// 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
 			chipPos = VAdd(chipPos, chipLeftTopPos);
 			sprite->SetTransform(chipPos, kChipSize);
+
 			Chip chip;
 			chip.pos = chipPos;
 			chip.w = chip.h = kChipSize;

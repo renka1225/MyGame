@@ -50,7 +50,7 @@ private:	// 定数
 	static constexpr int kChipWidth = 16;		// マップチップの横幅
 	static constexpr int kChipHeight = 16;		// マップチップの縦幅
 	static constexpr int kChipPixelSize = 16;	// マップチップのサイズ
-	static constexpr float kChipSize = 1.0f;	// マップチップの拡大率
+	static constexpr float kChipSize = 15.0f;	// マップチップの拡大率
 	// チップを置く数
 	static constexpr int kChipNumX = 10;
 	static constexpr int kChipNumY = 10;
