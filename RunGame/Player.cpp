@@ -9,7 +9,7 @@
 /// <param name="pModel">3DÉÇÉfÉã</param>
 Player::Player(std::shared_ptr<ManagerModel> pModel):
 	m_pModel(pModel),
-	m_pos(VGet(0.0f, kGroundHeight, 0.0f)),
+	m_pos(VGet(kInitPosX, kGroundHeight, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
 	m_isJump(false),
 	m_jumpFrame(0)
@@ -79,7 +79,7 @@ void Player::Update(Input& input)
 	MV1SetPosition(m_modelHandle, m_pos);
 
 	// ìñÇΩÇËîªíËÇÃçXêV
-	m_colRect.SetCenter(m_pos.x, m_pos.y + 10.0f, m_pos.z, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y + kColPosAdjustment, m_pos.z, kWidth, kHeight);
 }
 
 

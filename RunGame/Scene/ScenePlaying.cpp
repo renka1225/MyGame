@@ -82,7 +82,10 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		// 敵の更新
-		m_pEnemy[i]->Update();
+		if (m_pEnemy[i])
+		{
+			m_pEnemy[i]->Update();
+		}
 
 		// プレイヤーと敵の当たり判定
 		IsCollision(i);
@@ -119,7 +122,10 @@ void ScenePlaying::Draw()
 	// 敵の描画
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		m_pEnemy[i]->Draw();
+		if(m_pEnemy[i])
+		{
+			m_pEnemy[i]->Draw();
+		}
 	}
 
 	// 経過時間の描画

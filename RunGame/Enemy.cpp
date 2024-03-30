@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "ManagerModel.h"
+#include "Game/Game.h"
 
 
 /// <summary>
@@ -8,7 +9,8 @@
 /// <param name="pModel">3Dモデル</param>
 Enemy::Enemy(std::shared_ptr<ManagerModel> pModel) :
 	m_pModel(pModel),
-	m_pos(VGet(0.0f, 0.0f, 0.0f))
+	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_isExist(false)
 {
 	m_modelHandle = MV1DuplicateModel(m_pModel->GetEnemyHandle());
 
@@ -34,8 +36,6 @@ Enemy::~Enemy()
 void Enemy::Init(VECTOR pos)
 {
 	m_pos = pos;
-	// 敵配置
-	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 /// <summary>
@@ -43,8 +43,26 @@ void Enemy::Init(VECTOR pos)
 /// </summary>
 void Enemy::Update()
 {
-	// 横に移動させる
-	m_pos = VAdd(m_pos, VGet(kMove, 0.0f, 0.0f));
+	//  敵の座標をスクリーン座標に変換する
+	VECTOR screenPos = ConvWorldPosToScreenPos(m_pos);
+
+	if (screenPos.x <= Game::kScreenWidth && screenPos.x >= 0)
+	{
+		m_isExist = true;
+	}
+	else
+	{
+		m_isExist = false;
+	}
+
+	// 画面内にいない敵の処理はしない
+	if (!m_isExist) return;
+
+	// 敵配置
+	MV1SetPosition(m_modelHandle, m_pos);
+
+	// TODO:横に移動させる
+	//m_pos = VAdd(m_pos, VGet(kMove, 0.0f, 0.0f));
 	
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_pos.z, kWidth, kHeight);
@@ -56,6 +74,8 @@ void Enemy::Update()
 /// </summary>
 void Enemy::Draw()
 {
+	if (!m_isExist) return;
+
 	// ３Ｄモデルの描画
 	MV1DrawModel(m_modelHandle);
 

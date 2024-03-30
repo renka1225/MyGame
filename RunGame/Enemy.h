@@ -30,14 +30,17 @@ private:
 	// “–‚½‚è”»’è—p‚Ì‹éŒ`
 	Rect m_colRect;
 
+	// ‘¶İƒtƒ‰ƒO
+	bool m_isExist;
+
 	// 3Dƒ‚ƒfƒ‹
 	int m_modelHandle;
 
 private:	// ’è”
 
-	static constexpr float kMove = -3.0f;												// ˆÚ“®—Ê
+	static constexpr float kMove = -10.0f;												// ˆÚ“®—Ê
 	static constexpr float kScale = 0.08f;												// Šg‘å—¦
-	static constexpr int kWidth = 110;													// “G‚Ì‰¡•
+	static constexpr int kWidth = 140;													// “G‚Ì‰¡•
 	static constexpr int kHeight = 50;													// “G‚Ìc•
 	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;							// ‰¡•ûŒü‚ÌŒü‚«
 };
