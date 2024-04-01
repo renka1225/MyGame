@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "WorldSprite.h"
 #include "PlatinumLoader.h"
+#include "Game/Game.h"
 #include <cassert>
 
 /// <summary>
@@ -76,6 +77,7 @@ void Map::Init(const TCHAR* fmfFilePath)
 /// </summary>
 void Map::Update()
 {
+	// 処理なし
 }
 
 
@@ -86,9 +88,17 @@ void Map::Draw()
 {
 	for (const auto& chip : m_chips)
 	{
-		if (chip.chipKind > 0)
+		// ワールド座標からスクリーン座標に変換
+		VECTOR chipScreenPos = ConvWorldPosToScreenPos(chip.pos);
+
+		// 画面内のマップチップのみ描画する
+		if (chipScreenPos.x + chip.w >= -chip.w && chipScreenPos.x + chip.w <= Game::kScreenWidth + chip.w &&
+			chipScreenPos.y + chip.h >= -chip.h && chipScreenPos.y + chip.h <= Game::kScreenHeight + chip.h)
 		{
-			chip.sprite->Draw();
+			if (chip.chipKind > 0)
+			{
+				chip.sprite->Draw();
+			}
 		}
 	}
 }
@@ -103,7 +113,7 @@ const Map::Chip& Map::GetChip(int col, int row) const
 			return chip;
 		}
 	}
-	// ここまでくるという事はエラーなのでエラー吐いて0,0の物を返す
+	// MEMO:エラー時
 	assert(0 && "データ範囲指定エラー");
 	return m_chips[0];
 }

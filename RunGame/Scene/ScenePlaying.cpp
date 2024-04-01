@@ -72,8 +72,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		return std::make_shared<SceneClear>();
 	}
 
-	// 背景の更新
-	m_pBackground->Update();
+	// TODO:背景の更新
+	//m_pBackground->Update();
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
 	// カメラの更新
@@ -114,10 +114,9 @@ void ScenePlaying::Draw()
 {
 	// 背景の描画
 	m_pBackground->Draw();
+
 	// マップの描画
 	m_pMap->Draw();
-	// プレイヤーの描画
-	m_pPlayer->Draw();
 
 	// 敵の描画
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -128,6 +127,9 @@ void ScenePlaying::Draw()
 		}
 	}
 
+	// プレイヤーの描画
+	m_pPlayer->Draw();
+
 	// 経過時間の描画
 	int milliSec = m_time * 1000 / 60;
 	int sec = (milliSec / 1000) % 120;
@@ -136,12 +138,6 @@ void ScenePlaying::Draw()
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
-
-	// 経過時間描画確認
-	if (sec >= 5)
-	{
-		//DrawFormatStringToHandle(100, 50, 0xff0f0d, m_pFont->GetFont(), "20秒経過!");
-	}
 #endif
 }
 
@@ -198,8 +194,8 @@ void ScenePlaying::IsCollision(int enemyIdx)
 	Rect enemyRect = m_pEnemy[enemyIdx]->GetColRect();
 	if (playerRect.IsCollision(enemyRect))
 	{
+		// TODO:ゲームオーバー画面に遷移
 #ifdef _DEBUG
-		// MEMO:当たっているか文字で確認
 		DrawString(0, 80, "当たった", 0xff0000);
 #endif
 	}
