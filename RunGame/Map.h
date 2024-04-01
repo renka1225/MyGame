@@ -1,10 +1,12 @@
 #pragma once
+#include "Rect.h"
 #include "DxLib.h"
 #include <vector>
 #include <memory>
 
 class WorldSprite;
 class PlatinumLoader;
+class Player;
 
 /// <summary>
 /// マップ管理クラス
@@ -18,7 +20,9 @@ public:
 	void Init(const TCHAR* fmfFilePath);
 	void Update();
 	void Draw();
+	bool IsCollision(Rect rect, Rect& chipRect);	// 参照した矩形と当たっているか判定する
 
+	Rect GetColRect() const { return m_colRect; }	// 当たり判定を取得する
 
 	/// <summary>
 	/// マップチップ構造体
@@ -41,6 +45,9 @@ private:
 	std::vector<std::vector<int>> m_mapData;	// マップデータ
 	std::vector<Chip> m_chips;
 	std::shared_ptr<PlatinumLoader> m_loader;
+
+	Rect m_colRect;		// 当たり判定用の矩形
+
 	int m_mapHandle;	// マップの画像
 
 	int m_dataColNum = 0;
@@ -48,7 +55,7 @@ private:
 
 private:	// 定数
 	static constexpr int kChipPixelSize = 16;	// マップチップのサイズ
-	static constexpr float kChipSize = 15.0f;	// マップチップの拡大率
+	static constexpr float kChipScale = 15.0f;	// マップチップの拡大率
 	// チップを置く数
 	static constexpr int kChipNumX = 10;
 	static constexpr int kChipNumY = 10;

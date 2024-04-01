@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Map.h"
 #include "Input.h"
 #include "ManagerModel.h"
 
@@ -7,8 +8,9 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
-Player::Player(std::shared_ptr<ManagerModel> pModel):
+Player::Player(std::shared_ptr<ManagerModel> pModel, std::shared_ptr<Map> pMap):
 	m_pModel(pModel),
+	m_pMap(pMap),
 	m_pos(VGet(kInitPosX, kGroundHeight, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
 	m_isJump(false),
@@ -80,6 +82,10 @@ void Player::Update(Input& input)
 
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x, m_pos.y + kColPosAdjustment, m_pos.z, kWidth, kHeight);
+
+	// マップチップとの当たり判定
+	Rect chipRect;	// 当たったマップチップの矩形
+	CheckHitMap(chipRect);
 }
 
 
@@ -137,4 +143,18 @@ void Player::Jump(Input& input)
 	}
 
 	m_move = VSub(m_move, VGet(0.0f, kGravity, 0.0f));
+}
+
+/// <summary>
+/// マップチップとの当たり判定の処理
+/// </summary>
+/// <param name="chipRect">マップチップの当たり判定</param>
+void Player::CheckHitMap(Rect chipRect)
+{
+	if (m_pMap->IsCollision(m_colRect, chipRect))
+	{
+#ifdef _DEBUG
+		DrawFormatString(0, 100, 0x0ff0ff, "当たった\n");
+#endif
+	}
 }

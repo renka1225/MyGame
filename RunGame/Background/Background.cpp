@@ -33,14 +33,7 @@ void Background::Update()
 void Background::Draw()
 {
 	// ”wŒi‚Ì•`‰æ
-	DrawBillboard3D(m_pos, 0.0f, 0.0f, kBackgroundSize, 0.0f, m_background, true);
-
-	// ”g‚Ì•`‰æ
-	//for (int x = 0; x < kWaveRange; x++)
-	//{
-	//	int y = static_cast<int>(kWaveAmplitude * sin(DX_PI_F * x / kWaveFrequency) + kDrawWaveY);
-	//	DrawPixel(x, y, 0xffffff);
-	//}
+	//DrawBillboard3D(m_pos, 0.0f, 0.0f, kBackgroundSize, 0.0f, m_background, true);
 
 #ifdef _DEBUG
 	// MEMO:XYZŽ²ƒfƒoƒbƒN•\Ž¦

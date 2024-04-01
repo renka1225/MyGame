@@ -26,10 +26,10 @@ ScenePlaying::ScenePlaying():
 {
 	m_pFont = std::make_shared<ManagerFont>();
 	m_pModel = std::make_shared<ManagerModel>();
-	m_pBackground = std::make_shared<Background>(m_pModel);
-	m_pMap = std::make_shared<Map>();
-	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pCamera = std::make_shared<Camera>();
+	m_pMap = std::make_shared<Map>();
+	m_pBackground = std::make_shared<Background>(m_pModel);
+	m_pPlayer = std::make_shared<Player>(m_pModel, m_pMap);
 
 	m_pEnemy.resize(kEnemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)

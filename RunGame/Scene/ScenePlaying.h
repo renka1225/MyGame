@@ -33,10 +33,10 @@ private:
 	// ƒ|ƒCƒ“ƒ^
 	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerModel> m_pModel;
-	std::shared_ptr<Background> m_pBackground;
-	std::shared_ptr<Map> m_pMap;
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Camera> m_pCamera;
+	std::shared_ptr<Map> m_pMap;
+	std::shared_ptr<Background> m_pBackground;
 	std::vector<std::shared_ptr<Enemy>> m_pEnemy;
 
 	int m_time; // ŠÔ

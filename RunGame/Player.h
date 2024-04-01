@@ -5,6 +5,7 @@
 
 class Input;
 class ManagerModel;
+class Map;
 
 /// <summary>
 /// プレイヤークラス
@@ -12,7 +13,7 @@ class ManagerModel;
 class Player
 {
 public:
-	Player(std::shared_ptr<ManagerModel> pModel);
+	Player(std::shared_ptr<ManagerModel> pModel, std::shared_ptr<Map> pMap);
 	virtual ~Player();
 	void Init();
 	void Update(Input& input);
@@ -23,27 +24,21 @@ public:
 	Rect GetColRect() const { return m_colRect; }	// 当たり判定を取得する
 
 private:
-	// ジャンプ処理
-	void Jump(Input& input);
+	void Jump(Input& input);			// ジャンプ処理
+	void CheckHitMap(Rect chipRect);	// マップチップとの当たり判定の処理
 
 private:
-	// モデルクラスのポインタ
-	std::shared_ptr<ManagerModel> m_pModel;
+	std::shared_ptr<ManagerModel> m_pModel;	// モデルクラスのポインタ
+	std::shared_ptr<Map> m_pMap;			// マップクラスのポインタ
 
-	// 表示位置
-	VECTOR m_pos;
-	// 移動量
-	VECTOR m_move;
-	// 当たり判定用の矩形
-	Rect m_colRect;
+	VECTOR m_pos;		// 表示位置
+	VECTOR m_move;		// 移動量
+	Rect m_colRect;		// 当たり判定用の矩形
 
-	// ジャンプフラグ true:ジャンプ中
-	bool m_isJump;
-	// ジャンプフレーム
-	int m_jumpFrame;
+	bool m_isJump;		// ジャンプフラグ true:ジャンプ中
+	int m_jumpFrame;	// ジャンプフレーム
 
-	// 3Dモデル
-	int m_modelHandle;
+	int m_modelHandle;	// プレイヤーの3Dモデル
 
 
 private:	// 定数
@@ -55,8 +50,8 @@ private:	// 定数
 	static constexpr int kWidth = 80;													// プレイヤーの横幅
 	static constexpr int kHeight = 80;													// プレイヤーの縦幅
 	static constexpr float kColPosAdjustment = 10.0f;									// 当たり判定位置調整
-	static constexpr float kGroundHeight = 10.0f;										// 地面の高さ
-	static constexpr float kInitPosX = 50.0f;											// 初期位置
+	static constexpr float kGroundHeight = 5.0f;										// 地面の高さ
+	static constexpr float kInitPosX = 0.0f;											// 初期位置
 
 	// ジャンプフレーム
 	static constexpr int kLittleJumpFrame = 10;			// 小ジャンプ
