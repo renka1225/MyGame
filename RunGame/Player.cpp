@@ -145,6 +145,7 @@ void Player::Jump(Input& input)
 	m_move = VSub(m_move, VGet(0.0f, kGravity, 0.0f));
 }
 
+
 /// <summary>
 /// マップチップとの当たり判定の処理
 /// </summary>
@@ -154,7 +155,7 @@ void Player::CheckHitMap(Rect chipRect)
 	if (m_pMap->IsCollision(m_colRect, chipRect))
 	{
 #ifdef _DEBUG
-		DrawFormatString(0, 100, 0x0ff0ff, "当たった\n");
+		DrawFormatString(0, 100, 0x0f00ff, "マップに当たった\n");
 #endif
 	}
 }

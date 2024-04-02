@@ -6,6 +6,7 @@
 
 class WorldSprite;
 class PlatinumLoader;
+class Camera;
 class Player;
 
 /// <summary>
@@ -19,7 +20,7 @@ public:
 
 	void Init(const TCHAR* fmfFilePath);
 	void Update();
-	void Draw();
+	void Draw(std::shared_ptr<Camera> pCamera);
 	bool IsCollision(Rect rect, Rect& chipRect);	// 参照した矩形と当たっているか判定する
 
 	Rect GetColRect() const { return m_colRect; }	// 当たり判定を取得する
@@ -42,9 +43,10 @@ public:
 	int GetMapRowNum() const { return kChipNumY; }
 
 private:
+	std::shared_ptr<PlatinumLoader> m_pLoader;
+	std::shared_ptr<Camera> m_pCamera;
 	std::vector<std::vector<int>> m_mapData;	// マップデータ
 	std::vector<Chip> m_chips;
-	std::shared_ptr<PlatinumLoader> m_loader;
 
 	Rect m_colRect;		// 当たり判定用の矩形
 

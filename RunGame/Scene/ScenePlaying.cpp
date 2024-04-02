@@ -116,7 +116,7 @@ void ScenePlaying::Draw()
 	m_pBackground->Draw();
 
 	// ƒ}ƒbƒv‚Ì•`‰æ
-	m_pMap->Draw();
+	m_pMap->Draw(m_pCamera);
 
 	// “G‚Ì•`‰æ
 	for (int i = 0; i < m_pEnemy.size(); i++)

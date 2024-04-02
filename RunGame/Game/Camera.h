@@ -15,6 +15,8 @@ public:
 	void Init();
 	void Update(std::shared_ptr<Player> pPlayer);
 
+	VECTOR GetPos() const { return m_pos; }		// ƒJƒƒ‰ˆÊ’u‚ğæ“¾
+
 private:
 	std::shared_ptr<Player> m_pPlayer;
 

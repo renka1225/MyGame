@@ -42,16 +42,16 @@ private:
 
 
 private:	// 定数
-	static constexpr float kMove = static_cast<float>(10000.0 / 60.0 / 60.0 / 60.0);	// 移動量
-	static constexpr float kGravity = 0.5f;												// 重力
-	static constexpr float kVelocity = 10.0f;											// 初速度
-	static constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;							// Y軸方向の向き
-	static constexpr float kScale = 0.5f;												// プレイヤーのサイズ
-	static constexpr int kWidth = 80;													// プレイヤーの横幅
-	static constexpr int kHeight = 80;													// プレイヤーの縦幅
-	static constexpr float kColPosAdjustment = 10.0f;									// 当たり判定位置調整
-	static constexpr float kGroundHeight = 5.0f;										// 地面の高さ
-	static constexpr float kInitPosX = 0.0f;											// 初期位置
+	static constexpr float kMove = 0.3f;						// 移動量
+	static constexpr float kGravity = 0.5f;						// 重力
+	static constexpr float kVelocity = 10.0f;					// 初速度
+	static constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;	// Y軸方向の向き
+	static constexpr float kScale = 0.5f;						// プレイヤーのサイズ
+	static constexpr int kWidth = 80;							// プレイヤーの横幅
+	static constexpr int kHeight = 80;							// プレイヤーの縦幅
+	static constexpr float kColPosAdjustment = 10.0f;			// 当たり判定位置調整
+	static constexpr float kGroundHeight = 5.0f;				// 地面の高さ
+	static constexpr float kInitPosX = 0.0f;					// 初期位置
 
 	// ジャンプフレーム
 	static constexpr int kLittleJumpFrame = 10;			// 小ジャンプ
