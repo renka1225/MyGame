@@ -38,9 +38,9 @@ private:
 
 private:	// ’è”
 
-	static constexpr float kMove = -10.0f;												// ˆÚ“®—Ê
-	static constexpr float kScale = 0.08f;												// Šg‘å—¦
-	static constexpr int kWidth = 140;													// “G‚Ì‰¡•
-	static constexpr int kHeight = 50;													// “G‚Ìc•
-	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;							// ‰¡•ûŒü‚ÌŒü‚«
+	static constexpr float kMove = -10.0f;						// ˆÚ“®—Ê
+	static constexpr float kScale = 0.05f;						// Šg‘å—¦
+	static constexpr int kWidth = 140;							// “G‚Ì‰¡•
+	static constexpr int kHeight = 50;							// “G‚Ìc•
+	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;	// Œü‚«
 };

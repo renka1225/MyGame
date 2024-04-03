@@ -76,7 +76,6 @@ void Map::Init(const TCHAR* fmfFilePath)
 }
 
 
-
 /// <summary>
 /// 更新
 /// </summary>
@@ -101,59 +100,13 @@ void Map::Draw(std::shared_ptr<Camera> pCamera)
 		VECTOR chipScreenPos = ConvWorldPosToScreenPos(chip.pos);
 
 		// 画面内のマップチップのみ描画する
-		// //if (chipScreenPos.x + chip.w >= -chip.w && chipScreenPos.x + chip.w <= Game::kScreenWidth + chip.w)
 		if (chip.pos.x >= cameraPos.x - Game::kScreenWidth * 0.5f &&
 			chip.pos.x <= cameraPos.x + Game::kScreenWidth * 0.5f)
-
 		{
 			if (chip.chipKind == 0) continue;
 			chip.sprite->Draw();
-
-#ifdef _DEBUG
-			// MEMO:当たり判定描画
-			DrawBox(static_cast<int>(chipScreenPos.x - chip.w * 3.0f), static_cast<int>(chipScreenPos.y - chip.h * 3.0f),
-				static_cast<int>(chipScreenPos.x + chip.w * 3.0f), static_cast<int>(chipScreenPos.y + chip.h * 3.0f),
-				0x2ffd700, false);
-#endif
 		}
 	}
-}
-
-
-/// <summary>
-/// 当たり判定の処理
-/// </summary>
-/// <param name="rect">指定した矩形</param>
-/// <param name="chipRect">当たったマップチップ</param>
-/// <returns>矩形同士が当たっているか</returns>
-bool Map::IsCollision(Rect rect, Rect& chipRect)
-{
-	for (const auto& chip : m_chips)
-	{
-			// 地面以外とは当たらない
-			if (chip.chipKind == 0) continue;
-
-			int chipLeft = chip.w * chip.col;
-			int chipRight = chipLeft + chip.w;
-			int chipTop = chip.h * chip.row;
-			int chipBottom = chipTop + chip.h;
-
-			// 絶対に当たらない場合次へ
-			if (chipLeft > rect.m_right) continue;
-			if (chipTop > rect.m_bottom) continue;
-			if (chipRight < rect.m_left) continue;
-			if (chipBottom < rect.m_top) continue;
-
-			// ぶつかったマップチップの矩形を設定する
-			chipRect.m_left = chipLeft;
-			chipRect.m_right = chipRight;
-			chipRect.m_top = chipTop;
-			chipRect.m_bottom = chipBottom;
-
-			// いずれのチップと当たっていたら終了
-			return true;
-	}
-	return false;
 }
 
 

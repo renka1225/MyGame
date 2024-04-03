@@ -21,9 +21,6 @@ public:
 	void Init(const TCHAR* fmfFilePath);
 	void Update();
 	void Draw(std::shared_ptr<Camera> pCamera);
-	bool IsCollision(Rect rect, Rect& chipRect);	// 参照した矩形と当たっているか判定する
-
-	Rect GetColRect() const { return m_colRect; }	// 当たり判定を取得する
 
 	/// <summary>
 	/// マップチップ構造体
@@ -43,12 +40,10 @@ public:
 	int GetMapRowNum() const { return kChipNumY; }
 
 private:
-	std::shared_ptr<PlatinumLoader> m_pLoader;
-	std::shared_ptr<Camera> m_pCamera;
+	std::shared_ptr<PlatinumLoader> m_pLoader;	// マップデータ読み込みのポインタ
+	std::shared_ptr<Camera> m_pCamera;			// カメラのポインタ
 	std::vector<std::vector<int>> m_mapData;	// マップデータ
-	std::vector<Chip> m_chips;
-
-	Rect m_colRect;		// 当たり判定用の矩形
+	std::vector<Chip> m_chips;					// マップチップ
 
 	int m_mapHandle;	// マップの画像
 
