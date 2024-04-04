@@ -21,6 +21,6 @@ private:
 
 private:	// 定数
 	static constexpr int kTextPosX = 750;	// テキスト表示位置X
-	static constexpr int kTextPosY = 800;	// テキスト表示位置Y
+	static constexpr int kTextPosY = 700;	// テキスト表示位置Y
 };
 

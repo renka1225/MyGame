@@ -51,9 +51,9 @@ void SceneClear::Draw()
 	DrawFormatString(0, 0, 0xffffff, "クリア画面");
 #endif
 
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
 	if (m_textFrame % 60 >= 30) return;
 	DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
 }
 
 

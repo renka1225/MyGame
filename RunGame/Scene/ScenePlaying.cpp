@@ -22,7 +22,8 @@
 /// コンストラクタ
 /// </summary>
 ScenePlaying::ScenePlaying():
-	m_time(0)
+	m_time(0),
+	m_noticeDisPlayFrame(0)
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pCamera = std::make_shared<Camera>();
@@ -64,6 +65,30 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 	// タイム更新
 	m_time++;
+
+	// 20秒ごとに時間経過の通知を表示する
+	m_noticeDisPlayFrame--;
+	if (m_noticeDisPlayFrame < 0)
+	{
+		m_noticeDisPlayFrame = 0;
+	}
+
+	if (m_time == kNoticeTime1)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+	if (m_time == kNoticeTime2)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+	if (m_time == kNoticeTime3)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+	if (m_time == kNoticeTime4)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
 
 	// クリア
 	if (m_time >= kClearTime)
@@ -112,7 +137,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 void ScenePlaying::Draw()
 {
 	// マップの描画
-	m_pMap->Draw(m_pCamera);
+	//m_pMap->Draw(m_pCamera);
 
 	// 敵の描画
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -131,6 +156,23 @@ void ScenePlaying::Draw()
 	int sec = (milliSec / 1000) % 90;
 	milliSec %= 1000;
 	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffd700, m_pFont->GetTimeFont(), "経過時間 %02d:%03d", sec, milliSec);
+
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime1 && m_time < kNoticeTime2)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "20秒経過！");
+	}
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime2 && m_time < kNoticeTime3)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "40秒経過！");
+	}
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime3 && m_time < kNoticeTime4)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "60秒経過！");
+	}
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime4)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "80秒経過！");
+	}
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");

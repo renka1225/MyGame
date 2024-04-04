@@ -50,7 +50,7 @@ private:	// 定数
 	static constexpr int kHeight = 100;							// プレイヤーの縦幅
 	static constexpr float kColPosAdjustment = 8.0f;			// 当たり判定位置調整
 	static constexpr float kInitPosX = 120.0f;					// 初期位置
-	static constexpr float kGroundHeight = 30.0f;				// 地面の高さ
+	static constexpr float kGroundHeight = 20.0f;				// 地面の高さ
 
 	// ジャンプフレーム
 	static constexpr int kLittleJumpFrame = 10;			// 小ジャンプ
