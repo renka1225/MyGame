@@ -31,7 +31,6 @@ private:
 
 private:
 	// ポインタ
-	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerModel> m_pModel;
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Camera> m_pCamera;
@@ -48,4 +47,7 @@ private:	// 定数
 	static constexpr int kClearTime = 60 * 90;	// ゲーム時間
 	static constexpr int kIntervalTime = 20;	// 経過時間の表示間隔
 	static constexpr int kEnemyNum = 10;		// 最大敵数
+
+	static constexpr int kTimePosX = 640;	// 経過時間表示位置X
+	static constexpr int kTimePosY = 80;	// 経過時間表示位置Y
 };

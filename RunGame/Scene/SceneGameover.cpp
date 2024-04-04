@@ -1,9 +1,11 @@
 #include "SceneGameover.h"
 #include "SceneTitle.h"
 #include "Input.h"
+#include "ManagerFont.h"
 #include "DxLib.h"
 
-SceneGameover::SceneGameover()
+SceneGameover::SceneGameover():
+	m_textFrame(0)
 {
 }
 
@@ -27,6 +29,8 @@ void SceneGameover::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 {
+	m_textFrame++;
+
 #if _DEBUG
 	// MEMO:デバック用
 	if (input.IsTriggered("debug"))
@@ -47,6 +51,10 @@ void SceneGameover::Draw()
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "ゲームオーバー画面");
 #endif
+
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
+	if (m_textFrame % 60 >= 30) return;
+	DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
 }
 
 

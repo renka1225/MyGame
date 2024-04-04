@@ -9,7 +9,7 @@ class ManagerModel;
 class Background
 {
 public:
-	Background(std::shared_ptr<ManagerModel> pModel);
+	Background();
 	~Background() {};
 
 	void Init();
@@ -23,16 +23,14 @@ private:
 
 	// •\¦ˆÊ’u
 	VECTOR m_pos;
+	VECTOR m_pos2;
 
 	// ”wŒi
 	int m_background;
+	int m_background2;
 
 private:	// ’è”
-	static constexpr float kBackgroundSize = 300.0f;	// ”wŒi‰æ‘œ‚ÌƒTƒCƒY
-
-	static constexpr int kWaveAmplitude = 10;	// ”g‚ÌU•
-	static constexpr int kWaveFrequency = 100;	// ”g‚Ìü”g”
-	static constexpr int kWaveRange = 1000;		// ”g‚Ì•`‰æ”ÍˆÍ
-	static constexpr int kDrawWaveY = 460;		// ”g‚Ì•`‰æˆÊ’uYÀ•W
+	static constexpr float kBgSize = 300.0f;	// ”wŒi‰æ‘œ‚ÌƒTƒCƒY
+	static constexpr float kBgMove = -0.005f;	// ”wŒi‚ÌˆÚ“®—Ê
 };
 

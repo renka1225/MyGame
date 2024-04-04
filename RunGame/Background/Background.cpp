@@ -5,11 +5,12 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
-Background::Background(std::shared_ptr<ManagerModel> pModel):
-	m_pModel(pModel),
-	m_pos(VGet(0.0f,-0.0f, 0.0f))
+Background::Background():
+	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_pos2(VGet(0.0f, 0.0f, 0.0f))
 {
-	m_background = LoadGraph("data/background/5.png");
+	m_background = LoadGraph("data/background/2.png");
+	m_background2 = LoadGraph("data/background/3.png");
 }
 
 
@@ -25,6 +26,7 @@ void Background::Init()
 /// </summary>
 void Background::Update()
 {
+	m_pos2 = VAdd(m_pos2, VGet(kBgMove, 0.0f, 0.0f));
 }
 
 /// <summary>
@@ -33,7 +35,8 @@ void Background::Update()
 void Background::Draw()
 {
 	// 背景の描画
-	//DrawBillboard3D(m_pos, 0.0f, 0.0f, kBackgroundSize, 0.0f, m_background, true);
+	DrawBillboard3D(m_pos, 0.0f, 0.0f, kBgSize, 0.0f, m_background, true);
+	DrawBillboard3D(m_pos2, 0.0f, 0.0f, kBgSize, 0.0f, m_background, true);
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示

@@ -24,11 +24,10 @@
 ScenePlaying::ScenePlaying():
 	m_time(0)
 {
-	m_pFont = std::make_shared<ManagerFont>();
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pCamera = std::make_shared<Camera>();
 	m_pMap = std::make_shared<Map>();
-	m_pBackground = std::make_shared<Background>(m_pModel);
+	m_pBackground = std::make_shared<Background>();
 	m_pPlayer = std::make_shared<Player>(m_pModel, m_pMap);
 
 	m_pEnemy.resize(kEnemyNum);
@@ -73,7 +72,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	}
 
 	// TODO:背景の更新
-	//m_pBackground->Update();
+	m_pBackground->Update();
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
 	// カメラの更新
@@ -112,9 +111,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-	// 背景の描画
-	m_pBackground->Draw();
-
 	// マップの描画
 	m_pMap->Draw(m_pCamera);
 
@@ -132,9 +128,9 @@ void ScenePlaying::Draw()
 
 	// 経過時間の描画
 	int milliSec = m_time * 1000 / 60;
-	int sec = (milliSec / 1000) % 120;
+	int sec = (milliSec / 1000) % 90;
 	milliSec %= 1000;
-	DrawFormatString(0, 50, 0xffffff, "time:%02d:%03d", sec, milliSec);
+	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffd700, m_pFont->GetTimeFont(), "経過時間 %02d:%03d", sec, milliSec);
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");

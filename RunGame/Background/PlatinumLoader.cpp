@@ -8,10 +8,10 @@ void PlatinumLoader::Load(const TCHAR* filePath)
 {
 	//FMFヘッダー(Platinumのドキュメントに書いてある)
 	struct Header {
-		int8_t id[4];			//識別子(FMF_)			1*4バイト
-		uint32_t size;			//データサイズ　		4バイト
-		uint32_t mapWidth;		//マップの幅			4バイト
-		uint32_t mapHeight;		//マップの高さ　		4バイト
+		int8_t id[4];			//識別子(FMF_)							1*4バイト
+		uint32_t size;			//データサイズ　						4バイト
+		uint32_t mapWidth;		//マップの幅							4バイト
+		uint32_t mapHeight;		//マップの高さ　						4バイト
 		uint8_t chiphWidth;		//チップ(セル一個)の幅					1バイト
 		uint8_t chpHeight;		//チップ(セル一個)の高さ				1バイト
 		uint8_t layerCount;		//レイヤーの数							1バイト
@@ -73,7 +73,6 @@ void PlatinumLoader::GetMapSize(int& width, int& height)
 
 void PlatinumLoader::TransposeMapData(int layerId)
 {
-
 	auto temp = mapData_[layerId];//いったんコピーしておく
 	//理由としてはコピーせずに転置しようとすると元のデータが消える
 	for (int Y = 0; Y < mapHeight_; ++Y) {
@@ -83,7 +82,7 @@ void PlatinumLoader::TransposeMapData(int layerId)
 			//さらに、横200縦15は維持する必要がある。
 			//縦に並べていきたい
 			//0の隣は1段下にしたい
-			int idxSrc = Y * mapWidth_ + X;	//Source Index
+			int idxSrc = Y * mapWidth_ + X;		//Source Index
 			int idxDst = Y + mapHeight_ * X;	//Destination Index
 			mapData_[layerId][idxDst] = temp[idxSrc];
 		}
