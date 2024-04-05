@@ -6,7 +6,7 @@
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
 Background::Background():
-	m_pos(VGet(0.0f, 0.0f, 150.0f)),
+	m_pos(VGet(0.0f, 0.0f, 200.0f)),
 	m_pos2(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_background = LoadGraph("data/background/5.png");
@@ -21,6 +21,7 @@ void Background::Init()
 {
 }
 
+
 /// <summary>
 /// 更新
 /// </summary>
@@ -29,13 +30,14 @@ void Background::Update()
 	m_pos2 = VAdd(m_pos2, VGet(kBgMove, 0.0f, 0.0f));
 }
 
+
 /// <summary>
 /// 描画
 /// </summary>
 void Background::Draw()
 {
 	// 背景の描画
-	DrawGraph3D(m_pos.x, m_pos.y, m_pos.z, m_background, false);
+	//DrawRotaGraph3D(m_pos.x, m_pos.y, m_pos.z, 0.3f, 0.0f, m_background, false);
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示

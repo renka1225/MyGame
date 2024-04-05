@@ -3,6 +3,7 @@
 #include <memory>
 
 class ManagerModel;
+
 /// <summary>
 /// ”wŒiƒNƒ‰ƒX
 /// </summary>
