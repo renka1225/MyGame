@@ -65,38 +65,16 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 	// タイム更新
 	m_time++;
-
 	// 20秒ごとに時間経過の通知を表示する
-	m_noticeDisPlayFrame--;
-	if (m_noticeDisPlayFrame < 0)
-	{
-		m_noticeDisPlayFrame = 0;
-	}
+	UpdateNotice();
 
-	if (m_time == kNoticeTime1)
-	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
-	}
-	if (m_time == kNoticeTime2)
-	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
-	}
-	if (m_time == kNoticeTime3)
-	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
-	}
-	if (m_time == kNoticeTime4)
-	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
-	}
-
-	// クリア
+	// クリア画面に遷移
 	if (m_time >= kClearTime)
 	{
 		return std::make_shared<SceneClear>();
 	}
 
-	// TODO:背景の更新
+	// 背景の更新
 	m_pBackground->Update();
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
@@ -111,8 +89,19 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			m_pEnemy[i]->Update();
 		}
 
-		// プレイヤーと敵の当たり判定
-		IsCollision(i);
+		// プレイヤーの当たり判定
+		Rect playerRect = m_pPlayer->GetColRect();
+		// 敵の当たり判定
+		Rect enemyRect = m_pEnemy[i]->GetColRect();
+		if (playerRect.IsCollision(enemyRect))
+		{
+			// TODO:ゲームオーバー画面に遷移
+			//return std::make_shared<SceneGameover>();
+
+#ifdef _DEBUG
+			DrawString(0, 80, "当たった", 0xff0000);
+#endif
+		}
 	}
 
 #if _DEBUG
@@ -121,7 +110,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	{
 		return std::make_shared<SceneClear>();
 	}
-	else if (input.IsTriggered("OK"))
+	else if (input.IsTriggered("debug2"))
 	{
 		return std::make_shared<SceneGameover>();
 	}
@@ -136,6 +125,9 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
+	// 背景の描画
+	m_pBackground->Draw();
+
 	// マップの描画
 	//m_pMap->Draw(m_pCamera);
 
@@ -157,22 +149,7 @@ void ScenePlaying::Draw()
 	milliSec %= 1000;
 	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffd700, m_pFont->GetTimeFont(), "経過時間 %02d:%03d", sec, milliSec);
 
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime1 && m_time < kNoticeTime2)
-	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "20秒経過！");
-	}
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime2 && m_time < kNoticeTime3)
-	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "40秒経過！");
-	}
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime3 && m_time < kNoticeTime4)
-	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "60秒経過！");
-	}
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime4)
-	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "80秒経過！");
-	}
+	DrawNotice();
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
@@ -222,19 +199,53 @@ void ScenePlaying::LoadEnemy()
 
 
 /// <summary>
-/// プレイヤーと敵の当たり判定処理
+/// 時間経過の通知を行う
 /// </summary>
-void ScenePlaying::IsCollision(int enemyIdx)
+void ScenePlaying::UpdateNotice()
 {
-	// プレイヤーの当たり判定
-	Rect playerRect = m_pPlayer->GetColRect();
-	// 敵の当たり判定
-	Rect enemyRect = m_pEnemy[enemyIdx]->GetColRect();
-	if (playerRect.IsCollision(enemyRect))
+	m_noticeDisPlayFrame--;
+	if (m_noticeDisPlayFrame < 0)
 	{
-		// TODO:ゲームオーバー画面に遷移
-#ifdef _DEBUG
-		DrawString(0, 80, "当たった", 0xff0000);
-#endif
+		m_noticeDisPlayFrame = 0;
+	}
+	if (m_time == kNoticeTime1)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+	if (m_time == kNoticeTime2)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+	if (m_time == kNoticeTime3)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+	if (m_time == kNoticeTime4)
+	{
+		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+	}
+}
+
+
+/// <summary>
+/// 時間経過の通知を表示
+/// </summary>
+void ScenePlaying::DrawNotice()
+{
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime1 && m_time < kNoticeTime2)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "20秒経過！");
+	}
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime2 && m_time < kNoticeTime3)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "40秒経過！");
+	}
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime3 && m_time < kNoticeTime4)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "60秒経過！");
+	}
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime4)
+	{
+		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "80秒経過！");
 	}
 }

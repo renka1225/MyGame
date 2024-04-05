@@ -1,5 +1,6 @@
 #include "SceneGameover.h"
 #include "SceneTitle.h"
+#include "ScenePlaying.h"
 #include "Input.h"
 #include "ManagerFont.h"
 #include "DxLib.h"
@@ -31,13 +32,16 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 {
 	m_textFrame++;
 
-#if _DEBUG
-	// MEMO:デバック用
-	if (input.IsTriggered("debug"))
+	//　プレイ画面に遷移
+	if (input.IsTriggered("Enter"))
+	{
+		return std::make_shared<ScenePlaying>();
+	}
+	// タイトル画面に遷移
+	else if (input.IsTriggered("debug"))
 	{
 		return std::make_shared<SceneTitle>();
 	}
-#endif
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }
@@ -52,8 +56,8 @@ void SceneGameover::Draw()
 	DrawFormatString(0, 0, 0xffffff, "ゲームオーバー画面");
 #endif
 
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
 	if (m_textFrame % 60 >= 30) return;
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
 	DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
 }
 

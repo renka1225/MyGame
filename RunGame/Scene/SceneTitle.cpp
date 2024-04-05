@@ -7,11 +7,13 @@
 SceneTitle::SceneTitle():
 	m_textFrame(0)
 {
+	m_titleLogo = LoadGraph("data/title_test.png");
 }
 
 
 SceneTitle::~SceneTitle()
 {
+	DeleteGraph(m_titleLogo);
 }
 
 
@@ -31,13 +33,11 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
 	m_textFrame++;
 
-#if _DEBUG
-	// MEMO:デバック用
-	if (input.IsTriggered("debug"))
+	// プレイ画面に遷移
+	if (input.IsTriggered("OK"))
 	{
 		return std::make_shared<ScenePlaying>();
 	}
-#endif
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }
@@ -48,6 +48,9 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	// タイトルロゴ表示
+	DrawGraph(0, 0, m_titleLogo, false);
+
 #if _DEBUG
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
@@ -55,7 +58,7 @@ void SceneTitle::Draw()
 
 	// テキスト表示
 	if (m_textFrame % 60 >= 30) return;
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "Press A");
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "Press Enter");
 }
 
 

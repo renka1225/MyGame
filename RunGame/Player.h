@@ -41,11 +41,11 @@ private:
 
 
 private:	// 定数
-	static constexpr float kMove = 0.03f;						// 移動量
+	static constexpr float kMove = 0.1f;						// 移動量
 	static constexpr float kGravity = 0.5f;						// 重力
 	static constexpr float kVelocity = 10.0f;					// 初速度
 	static constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;	// Y軸方向の向き
-	static constexpr float kScale = 0.5f;						// プレイヤーのサイズ
+	static constexpr float kScale = 0.3f;						// プレイヤーのサイズ
 	static constexpr int kWidth = 100;							// プレイヤーの横幅
 	static constexpr int kHeight = 100;							// プレイヤーの縦幅
 	static constexpr float kColPosAdjustment = 8.0f;			// 当たり判定位置調整

@@ -1,24 +1,10 @@
 #include "Camera.h"
 #include "Player.h"
 
+
 /// <summary>
-/// 定数
+/// コンストラクタ
 /// </summary>
-namespace
-{
-	// 視野角
-	constexpr float kFov = (DX_PI_F / 180.0f) * 60.0f;
-	// 手前クリップ距離
-	constexpr float kNear = 0.1f;
-	// 奥クリップ距離
-	constexpr float kFar = 1000.0f;
-	// カメラの初期注視点
-	constexpr float kTargetX = 0.0f;	// X軸
-	constexpr float kTargetY = 80.0f;	// Y軸
-	constexpr float kTargetZ = -150.0f;	// Z軸
-
-}
-
 Camera::Camera():
 	m_pos(VGet(0.0f, 0.0f, 0.0f))
 {
@@ -30,10 +16,15 @@ Camera::Camera():
 	SetCameraPositionAndTarget_UpVecY(m_pos, VGet(0.0f, kTargetY, 0.0f));
 }
 
+
+/// <summary>
+/// デストラクタ
+/// </summary>
 Camera::~Camera()
 {
 	// 処理なし
 }
+
 
 /// <summary>
 /// 初期化

@@ -113,14 +113,14 @@ Input::Input()
 	m_commandTable["OK"] = { {InputType::keybd, KEY_INPUT_RETURN},
 							{InputType::pad, PAD_INPUT_A} };
 
-	m_commandTable["cancel"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
-							{InputType::pad, PAD_INPUT_B} };
+	m_commandTable["jump"] = { {InputType::keybd, KEY_INPUT_SPACE},
+							   {InputType::pad, PAD_INPUT_B} };
 
 	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_P},
-							   {InputType::pad, PAD_INPUT_R} };
+						   {InputType::pad, PAD_INPUT_R} };
 
-	m_commandTable["jump"] = { {InputType::keybd, KEY_INPUT_Z},
-							   {InputType::pad, PAD_INPUT_C} };
+	m_commandTable["cancel"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
+						{InputType::pad, PAD_INPUT_C} };
 
 	m_commandTable["up"] = { {InputType::keybd, KEY_INPUT_UP},
 							   {InputType::pad, PAD_INPUT_UP} };
@@ -134,6 +134,9 @@ Input::Input()
 	m_commandTable["right"] = { {InputType::keybd, KEY_INPUT_RIGHT},
 							   {InputType::pad, PAD_INPUT_RIGHT} };
 
-	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_SPACE},
+	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_Z},
 							   {InputType::pad, PAD_INPUT_R} };
+
+	m_commandTable["debug2"] = { {InputType::keybd, KEY_INPUT_X},
+						   {InputType::pad, PAD_INPUT_Y} };
 }

@@ -6,10 +6,10 @@
 /// </summary>
 /// <param name="pModel">3Dƒ‚ƒfƒ‹</param>
 Background::Background():
-	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_pos(VGet(0.0f, 0.0f, 150.0f)),
 	m_pos2(VGet(0.0f, 0.0f, 0.0f))
 {
-	m_background = LoadGraph("data/background/2.png");
+	m_background = LoadGraph("data/background/5.png");
 	m_background2 = LoadGraph("data/background/3.png");
 }
 
@@ -35,8 +35,7 @@ void Background::Update()
 void Background::Draw()
 {
 	// ”wŒi‚Ì•`‰æ
-	DrawBillboard3D(m_pos, 0.0f, 0.0f, kBgSize, 0.0f, m_background, true);
-	DrawBillboard3D(m_pos2, 0.0f, 0.0f, kBgSize, 0.0f, m_background, true);
+	DrawGraph3D(m_pos.x, m_pos.y, m_pos.z, m_background, false);
 
 #ifdef _DEBUG
 	// MEMO:XYZŽ²ƒfƒoƒbƒN•\Ž¦

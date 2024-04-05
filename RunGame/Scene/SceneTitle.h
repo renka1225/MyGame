@@ -18,9 +18,10 @@ public:
 
 private:
 	int m_textFrame;	// テキスト表示時間
+	int m_titleLogo;	// タイトルロゴの画像
 
 private:	// 定数
-	static constexpr int kTextPosX = 750;	// テキスト表示位置X
+	static constexpr int kTextPosX = 650;	// テキスト表示位置X
 	static constexpr int kTextPosY = 700;	// テキスト表示位置Y
 };
 
