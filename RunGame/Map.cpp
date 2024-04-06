@@ -10,8 +10,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Map::Map():
-	m_pCamera(nullptr)
+Map::Map()
 {
 	m_chips.clear();
 	m_pLoader = std::make_shared<PlatinumLoader>();
@@ -88,25 +87,12 @@ void Map::Update()
 /// <summary>
 /// 描画
 /// </summary>
-void Map::Draw(std::shared_ptr<Camera> pCamera)
+void Map::Draw()
 {
-	// カメラ位置取得
-	m_pCamera = pCamera;
-	VECTOR cameraPos = m_pCamera->GetPos();
-
-#ifdef _DEBUG
-	// MEMO:カメラ座標デバッグ表示
-	DrawFormatString(0, 50, 0xffffff, "カメラ座標(x:%f, y:%f, z:%f)", m_pCamera->GetPos().x, m_pCamera->GetPos().y, m_pCamera->GetPos().z);
-#endif
-
-
 	for (const auto& chip : m_chips)
 	{
-		//  座標をワールド座標に変換する
-		VECTOR ScreenSize = ConvScreenPosToWorldPos(VGet(Game::kScreenWidth, Game::kScreenHeight, 0));
-
 		// 画面内のマップチップのみ描画する
-		if (chip.pos.x >= cameraPos.x - ScreenSize.x * 0.5f && chip.pos.x <= cameraPos.x)
+		if(!CheckCameraViewClip(chip.pos))
 		{
 			if (chip.chipKind == 0) continue;
 			chip.sprite->Draw();

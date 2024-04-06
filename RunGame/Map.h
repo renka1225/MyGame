@@ -6,7 +6,6 @@
 
 class WorldSprite;
 class PlatinumLoader;
-class Camera;
 class Player;
 
 /// <summary>
@@ -20,7 +19,7 @@ public:
 
 	void Init(const TCHAR* fmfFilePath);
 	void Update();
-	void Draw(std::shared_ptr<Camera> pCamera);
+	void Draw();
 
 	/// <summary>
 	/// マップチップ構造体
@@ -41,7 +40,6 @@ public:
 
 private:
 	std::shared_ptr<PlatinumLoader> m_pLoader;	// マップデータ読み込みのポインタ
-	std::shared_ptr<Camera> m_pCamera;			// カメラのポインタ
 	std::vector<std::vector<int>> m_mapData;	// マップデータ
 	std::vector<Chip> m_chips;					// マップチップ
 
