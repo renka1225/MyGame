@@ -68,8 +68,7 @@ void Player::Update(Input& input)
 	}
 
 	// ’…’nˆ—
-	VECTOR rangeGround = VSub(m_pos, VGet(0.0f, kGroundHeight, 0.0f));	// ’n–Ê‚Ü‚Å‚Ì‹——£
-	if (rangeGround.y < 0.0f)
+	if (m_pos.y < 0.0f)
 	{
 		m_pos.y = kGroundHeight;
 		m_move.y = 0;

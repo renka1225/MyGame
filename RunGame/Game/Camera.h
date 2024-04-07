@@ -30,7 +30,7 @@ private:	// 定数
 	// 奥クリップ距離
 	static constexpr float kFar = 1000.0f;
 	// カメラの初期注視点
-	static constexpr float kTargetX = 0.0f;	// X軸
-	static constexpr float kTargetY = 80.0f;	// Y軸
-	static constexpr float kTargetZ = -150.0f;	// Z軸
+	static constexpr float kTargetX = 0.0f;		// X軸
+	static constexpr float kTargetY = 50.0f;	// Y軸
+	static constexpr float kTargetZ = -100.0f;	// Z軸
 };

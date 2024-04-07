@@ -43,10 +43,8 @@ void Enemy::Init(VECTOR pos)
 /// </summary>
 void Enemy::Update()
 {
-	//  敵の座標をスクリーン座標に変換する
-	VECTOR screenPos = ConvWorldPosToScreenPos(m_pos);
-
-	if (screenPos.x <= Game::kScreenWidth && screenPos.x >= 0)
+	// 画面内に存在するか
+	if(!CheckCameraViewClip(m_pos))
 	{
 		m_isExist = true;
 	}

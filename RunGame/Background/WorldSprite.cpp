@@ -74,5 +74,5 @@ void WorldSprite::SetTransform(const VECTOR& pos, float spriteSize)
 void WorldSprite::Draw()
 {
     // ２ポリゴンの描画
-    DrawPolygonIndexed3D(Vertex, 4, Index, 2, textureGraph, FALSE);
+    DrawPolygonIndexed3D(Vertex, 4, Index, 2, textureGraph, true);
 }

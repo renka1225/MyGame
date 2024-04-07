@@ -6,7 +6,6 @@
 
 class WorldSprite;
 class PlatinumLoader;
-class Player;
 
 /// <summary>
 /// マップ管理クラス
@@ -33,7 +32,7 @@ public:
 		std::shared_ptr<WorldSprite> sprite;
 	};
 
-	const Chip& GetChip(int col, int row) const;
+	const Chip& GetChip(int col, int row) const;	// チップ数取得
 
 	int GetMapColNum() const { return kChipNumX; }
 	int GetMapRowNum() const { return kChipNumY; }
@@ -49,13 +48,12 @@ private:
 	int m_dataRowNum = 0;
 
 private:	// 定数
-	static constexpr int kChipPixelSize = 16;	// マップチップのサイズ
-	static constexpr float kChipScale = 15.0f;	// マップチップの拡大率
+	static constexpr int kChipPixelSize = 32;	// マップチップのサイズ
+	static constexpr float kChipScale = 20.0f;	// マップチップの拡大率
 	// チップを置く数
 	static constexpr int kChipNumX = 10;
-	static constexpr int kChipNumY = 10;
-	static constexpr int kMapcChipNum = kChipNumX * kChipNumY;
+	static constexpr int kChipNumY = 2;
 	// マップチップ情報
-	static const int kMapData[kChipNumX][kChipNumY];
-	static constexpr float kChipPosZ = 0.0f;	// マップチップの位置
+	static constexpr float kChipPosYAdjustment = 20.0f;	// マップチップ位置の調整
+	static constexpr float kChipPosZ = 0.0f;			// マップチップのZ座標
 };

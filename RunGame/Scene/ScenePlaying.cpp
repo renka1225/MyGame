@@ -27,8 +27,8 @@ ScenePlaying::ScenePlaying():
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pCamera = std::make_shared<Camera>();
-	m_pMap = std::make_shared<Map>();
 	m_pBackground = std::make_shared<Background>();
+	m_pMap = std::make_shared<Map>();
 	m_pPlayer = std::make_shared<Player>(m_pModel, m_pMap);
 
 	m_pEnemy.resize(kEnemyNum);
@@ -45,7 +45,7 @@ ScenePlaying::ScenePlaying():
 void ScenePlaying::Init()
 {
 	// ƒ}ƒbƒvƒf[ƒ^“Ç‚Ýž‚Ý
-	m_pMap->Init("data/file/map.fmf");
+	m_pMap->Init("data/file/test.fmf");
 	// “G‚Ìcsvƒtƒ@ƒCƒ‹“Ç‚Ýž‚Ý
 	LoadEnemy();
 	
@@ -128,9 +128,6 @@ void ScenePlaying::Draw()
 	// ”wŒi‚Ì•`‰æ
 	m_pBackground->Draw();
 
-	// ƒ}ƒbƒv‚Ì•`‰æ
-	m_pMap->Draw();
-
 	// “G‚Ì•`‰æ
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
@@ -142,6 +139,9 @@ void ScenePlaying::Draw()
 
 	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
 	m_pPlayer->Draw();
+
+	// ƒ}ƒbƒv‚Ì•`‰æ
+	//m_pMap->Draw();
 
 	// Œo‰ßŽžŠÔ‚Ì•`‰æ
 	int milliSec = m_time * 1000 / 60;

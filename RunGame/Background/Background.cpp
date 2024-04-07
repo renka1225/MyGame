@@ -1,16 +1,29 @@
 #include "Background.h"
-#include "ManagerModel.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
 Background::Background():
-	m_pos(VGet(0.0f, 0.0f, 200.0f)),
-	m_pos2(VGet(0.0f, 0.0f, 0.0f))
+	m_pos(VGet(kBgPosX, kBgPosY, kBgPosZ)),
+	m_pos2(VGet(kBg2PosX, kBgPosY, kBg2PosZ)),
+	m_pos3(VGet(kBg3PosX, kBg3PosY, kBg3PosZ)),
+	m_bgMove(kBgMove)
 {
-	m_background = LoadGraph("data/background/5.png");
-	m_background2 = LoadGraph("data/background/3.png");
+	m_background = LoadGraph("data/background/1.png");
+	m_background2 = LoadGraph("data/background/2.png");
+	m_background3 = LoadGraph("data/background/3.png");
+}
+
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+Background::~Background()
+{
+	DeleteGraph(m_background);
+	DeleteGraph(m_background2);
+	DeleteGraph(m_background3);
 }
 
 
@@ -19,6 +32,7 @@ Background::Background():
 /// </summary>
 void Background::Init()
 {
+	// 処理なし
 }
 
 
@@ -27,7 +41,7 @@ void Background::Init()
 /// </summary>
 void Background::Update()
 {
-	m_pos2 = VAdd(m_pos2, VGet(kBgMove, 0.0f, 0.0f));
+	m_bgMove +=kBgMove;
 }
 
 
@@ -36,8 +50,34 @@ void Background::Update()
 /// </summary>
 void Background::Draw()
 {
+	// 画像サイズを取得
+	Size bgSize;
+	Size bg3Size;
+	GetGraphSize(m_background, &bgSize.width, &bgSize.height);
+	GetGraphSize(m_background3, &bg3Size.width, &bg3Size.height);
+
+	// スクロール量を計算
+	int scrollBg = static_cast<int>(m_bgMove * 0.3f) % static_cast<int>(bgSize.width * kBgScale);
+	int scrollBg3 = static_cast<int>(m_bgMove * 0.5f) % static_cast<int>(bg3Size.width * kBg3Scale);
+
 	// 背景の描画
-	//DrawRotaGraph3D(m_pos.x, m_pos.y, m_pos.z, 0.3f, 0.0f, m_background, false);
+	for (int i = 0; i < 2; i++)
+	{
+		DrawRotaGraph3D(scrollBg + i * bgSize.width * kBgScale,
+			m_pos.y,
+			m_pos.z,
+			kBgScale, 0.0f, 
+			m_background, true);
+	}
+	DrawRotaGraph3D(m_pos2.x, m_pos2.y, m_pos2.z, kBg2Scale, 0.0f, m_background2, true);
+	for (int i = 0; i < 2; i++)
+	{
+		DrawRotaGraph3D(scrollBg3 + i * bg3Size.width * kBg3Scale + kBg3PosX,
+			m_pos3.y,
+			m_pos3.z,
+			kBg3Scale, 0.0f,
+			m_background3, true);
+	}
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示
