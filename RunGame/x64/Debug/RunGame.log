@@ -1,4 +1,6 @@
-﻿  Background.cpp
+﻿  SceneClear.cpp
+  SceneGameover.cpp
   ScenePlaying.cpp
+  SceneTitle.cpp
   コードを生成中...
   RunGame.vcxproj -> C:\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe

@@ -41,7 +41,16 @@ void Background::Init()
 /// </summary>
 void Background::Update()
 {
-	m_bgMove +=kBgMove;
+	// MEMO:スクロール処理がカクつくため1秒ごとにスクロールを行う
+	int frame  =0;
+	frame++;
+	if (frame >= 60)
+	{
+		m_pos = VAdd(m_pos, VGet(kBgMove, 0.0f, 0.0f));
+		m_pos3 = VAdd(m_pos3, VGet(kBgMove, 0.0f, 0.0f));
+		frame = 0;
+	}
+
 }
 
 
@@ -57,8 +66,8 @@ void Background::Draw()
 	GetGraphSize(m_background3, &bg3Size.width, &bg3Size.height);
 
 	// スクロール量を計算
-	int scrollBg = static_cast<int>(m_bgMove * 0.3f) % static_cast<int>(bgSize.width * kBgScale);
-	int scrollBg3 = static_cast<int>(m_bgMove * 0.5f) % static_cast<int>(bg3Size.width * kBg3Scale);
+	int scrollBg = static_cast<int>(m_pos.x * 0.3f) % static_cast<int>(bgSize.width * kBgScale);
+	int scrollBg3 = static_cast<int>(m_pos3.x) % static_cast<int>(bg3Size.width * kBg3Scale);
 
 	// 背景の描画
 	for (int i = 0; i < 2; i++)
@@ -72,7 +81,7 @@ void Background::Draw()
 	DrawRotaGraph3D(m_pos2.x, m_pos2.y, m_pos2.z, kBg2Scale, 0.0f, m_background2, true);
 	for (int i = 0; i < 2; i++)
 	{
-		DrawRotaGraph3D(scrollBg3 + i * bg3Size.width * kBg3Scale + kBg3PosX,
+		DrawRotaGraph3D(scrollBg3 + i * bg3Size.width * kBg3Scale,
 			m_pos3.y,
 			m_pos3.z,
 			kBg3Scale, 0.0f,
@@ -86,12 +95,4 @@ void Background::Draw()
 	DrawLine3D(VGet(0.0f, -lineSize, 0.0f), VGet(0.0f, lineSize, 0.0f), 0x00ff00);
 	DrawLine3D(VGet(0.0f, 0.0f, -lineSize), VGet(0.0f, 0.0f, lineSize), 0x0000ff);
 #endif
-}
-
-
-/// <summary>
-/// 終了
-/// </summary>
-void Background::End()
-{
 }

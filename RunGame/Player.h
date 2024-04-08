@@ -18,13 +18,12 @@ public:
 	void Init();
 	void Update(Input& input);
 	void Draw();
-	void End();
 
 	VECTOR GetPos() const { return m_pos; }			// 現在位置を取得
 	Rect GetColRect() const { return m_colRect; }	// 当たり判定を取得する
 
 private:
-	void Jump(Input& input);			// ジャンプ処理
+	void Jump(Input& input);	// ジャンプ処理
 
 private:
 	std::shared_ptr<ManagerModel> m_pModel;	// モデルクラスのポインタ

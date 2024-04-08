@@ -60,11 +60,3 @@ void SceneGameover::Draw()
 	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
 	DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
 }
-
-
-/// <summary>
-/// 終了
-/// </summary>
-void SceneGameover::End()
-{
-}

@@ -16,8 +16,9 @@ public:
 	virtual void Init() = 0;
 	virtual std::shared_ptr<SceneBase> Update(Input& input) = 0;
 	virtual void Draw() = 0;
-	virtual void End() = 0;
 
 protected:
 	std::shared_ptr<ManagerFont> m_pFont;
+
+	int m_fadeAlpha;	// フェードインアウト
 };

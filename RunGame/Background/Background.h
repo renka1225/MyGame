@@ -16,7 +16,6 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	void End();
 
 private:
 	// 表示位置
@@ -41,12 +40,12 @@ private:	// 定数
 	static constexpr float kBgScale = 1.2f;			// 背景画像のサイズ
 	static constexpr float kBg2Scale = 1.0f;		// 背景画像のサイズ
 	static constexpr float kBg3Scale = 0.9f;		// 背景画像のサイズ
-	static constexpr float kBgMove = -0.05f;		// 背景の移動量
+	static constexpr float kBgMove = -0.1f;			// 背景の移動量
 
 	// 背景の描画位置
 	static constexpr float kBgPosX = 50.0f;			// 最背面のX座標
 	static constexpr float kBg2PosX = 150.0f;		// 2番目のX座標
-	static constexpr float kBg3PosX = 150.0f;		// 最前面のX座標
+	static constexpr float kBg3PosX = -850.0f;		// 最前面のX座標
 	static constexpr float kBgPosY = 50.0f;			// Y座標
 	static constexpr float kBg3PosY = 55.0f;		// 最前面のY座標
 	static constexpr float kBgPosZ = 200.0f;		// 最背面のZ座標

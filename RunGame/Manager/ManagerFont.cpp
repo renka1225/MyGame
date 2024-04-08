@@ -20,7 +20,7 @@ ManagerFont::ManagerFont()
 
 	m_fontHandle = CreateFontToHandle("KyouryunoGuratan", 28, -1);
 	m_textFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
-	m_timeFontHandle = CreateFontToHandle("KyouryunoGuratan", 50, -1);
+	m_timeFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
 }
 
 

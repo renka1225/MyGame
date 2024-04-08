@@ -60,11 +60,3 @@ void SceneTitle::Draw()
 	if (m_textFrame % 60 >= 30) return;
 	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "Press Enter");
 }
-
-
-/// <summary>
-/// I—¹ˆ—
-/// </summary>
-void SceneTitle::End()
-{
-}

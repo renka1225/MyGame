@@ -44,8 +44,10 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
+	m_fadeAlpha = kStartFadeAlpha;
+
 	// マップデータ読み込み
-	m_pMap->Init("data/file/test.fmf");
+	m_pMap->Init("data/file/map.fmf");
 	// 敵のcsvファイル読み込み
 	LoadEnemy();
 	
@@ -63,6 +65,12 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
+	m_fadeAlpha -= kFadeFrame;
+	if (m_fadeAlpha < 0)
+	{
+		m_fadeAlpha = 0;
+	}
+	
 	// タイム更新
 	m_time++;
 	// 20秒ごとに時間経過の通知を表示する
@@ -148,20 +156,17 @@ void ScenePlaying::Draw()
 	int sec = (milliSec / 1000) % 90;
 	milliSec %= 1000;
 	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffd700, m_pFont->GetTimeFont(), "経過時間 %02d:%03d", sec, milliSec);
-
+	// 時間経過の通知を表示
 	DrawNotice();
+
+	// フェードインアウト
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x0e0918, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
 #endif
-}
-
-
-/// <summary>
-/// 終了
-/// </summary>
-void ScenePlaying::End()
-{
 }
 
 

@@ -14,7 +14,6 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
-	virtual void End();
 
 private:
 	int m_textFrame;	// テキスト表示時間

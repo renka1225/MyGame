@@ -103,14 +103,6 @@ void Player::Draw()
 
 
 /// <summary>
-/// I—¹
-/// </summary>
-void Player::End()
-{
-}
-
-
-/// <summary>
 /// ƒWƒƒƒ“ƒvˆ—
 /// </summary>
 void Player::Jump(Input& input)
