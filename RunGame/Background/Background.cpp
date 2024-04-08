@@ -78,7 +78,11 @@ void Background::Draw()
 			kBgScale, 0.0f, 
 			m_background, true);
 	}
-	DrawRotaGraph3D(m_pos2.x, m_pos2.y, m_pos2.z, kBg2Scale, 0.0f, m_background2, true);
+	DrawRotaGraph3D(m_pos2.x, 
+		m_pos2.y, 
+		m_pos2.z, 
+		kBg2Scale, 0.0f, 
+		m_background2, true);
 	for (int i = 0; i < 2; i++)
 	{
 		DrawRotaGraph3D(scrollBg3 + i * bg3Size.width * kBg3Scale,

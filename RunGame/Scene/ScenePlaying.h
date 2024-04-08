@@ -54,11 +54,11 @@ private:	// 定数
 	static constexpr int kStartTime = 60 * 4;			// スタート時の演出時間
 	static constexpr int kStartCount1 = 60 * 3;			// 1カウント目
 	static constexpr int kStartCount2 = 60 * 2;			// 2カウント目
-	static constexpr int kStartCount3 = 60;			// 3カウント目
+	static constexpr int kStartCount3 = 60;				// 3カウント目
 	static constexpr int kStartCount4 = 0;				// startの文字表示
-	static constexpr int kStartCountPosX = 860;			// カウント表示位置X
+	static constexpr int kStartCountPosX = 910;			// カウント表示位置X
+	static constexpr int kNoticeStartPosX = 670;		// startの文字表示位置X
 	static constexpr int kStartCountPosY = 500;			// カウント表示位置Y
-
 
 	// 20秒ごとに時間経過の通知を表示する
 	static constexpr int kNoticeTime1 = 20 * 60;
@@ -66,12 +66,12 @@ private:	// 定数
 	static constexpr int kNoticeTime3 = 60 * 60;
 	static constexpr int kNoticeTime4 = 80 * 60;
 	static constexpr int kNoticeDisPlayFrame = 3 * 60;	// 通知を表示する時間
-
 	static constexpr int kTimePosX = 620;				// 時間表示位置X
 	static constexpr int kTimePosY = 100;				// 時間表示位置Y
 	static constexpr int kNoticeTimePosX = 800;			// 時間経過の通知表示位置X
 	static constexpr int kNoticeTimePosY = 190;			// 時間経過の通知表示位置Y
 
+	// フェード
 	static constexpr int kStartFadeAlpha = 150;			// スタート時のフェードα値
 	static constexpr int kFadeFrame = 8;				// フェード変化量
 };

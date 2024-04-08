@@ -1,7 +1,5 @@
-﻿  ManagerFont.cpp
-  SceneBase.cpp
+﻿  Input.cpp
   SceneClear.cpp
-  SceneGameover.cpp
   ScenePlaying.cpp
   SceneTitle.cpp
   コードを生成中...

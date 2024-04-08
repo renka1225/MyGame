@@ -176,7 +176,10 @@ void ScenePlaying::Draw()
 	}
 
 #if _DEBUG
+	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
+	// MEMO:中心線
+	//DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
 #endif
 }
 
@@ -221,19 +224,19 @@ void ScenePlaying::StartStaging()
 {
 	if (m_startTime >= kStartCount1)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "3");
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "3");
 	}
 	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "2");
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "2");
 	}
 	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "1");
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "1");
 	}
 	if (m_startTime < kStartCount3 && m_startTime >= kStartCount4)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "START!");
+		DrawFormatStringToHandle(kNoticeStartPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "START!");
 	}
 }
 

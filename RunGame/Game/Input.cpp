@@ -119,7 +119,7 @@ Input::Input()
 	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_P},
 						   {InputType::pad, PAD_INPUT_R} };
 
-	m_commandTable["cancel"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
+	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 						{InputType::pad, PAD_INPUT_C} };
 
 	m_commandTable["up"] = { {InputType::keybd, KEY_INPUT_UP},
