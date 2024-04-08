@@ -7,8 +7,7 @@
 Background::Background():
 	m_pos(VGet(kBgPosX, kBgPosY, kBgPosZ)),
 	m_pos2(VGet(kBg2PosX, kBgPosY, kBg2PosZ)),
-	m_pos3(VGet(kBg3PosX, kBg3PosY, kBg3PosZ)),
-	m_bgMove(kBgMove)
+	m_pos3(VGet(kBg3PosX, kBg3PosY, kBg3PosZ))
 {
 	m_background = LoadGraph("data/background/1.png");
 	m_background2 = LoadGraph("data/background/2.png");
@@ -41,16 +40,7 @@ void Background::Init()
 /// </summary>
 void Background::Update()
 {
-	// MEMO:スクロール処理がカクつくため1秒ごとにスクロールを行う
-	int frame  =0;
-	frame++;
-	if (frame >= 60)
-	{
-		m_pos = VAdd(m_pos, VGet(kBgMove, 0.0f, 0.0f));
-		m_pos3 = VAdd(m_pos3, VGet(kBgMove, 0.0f, 0.0f));
-		frame = 0;
-	}
-
+	// 処理なし
 }
 
 

@@ -22,7 +22,6 @@ private:
 	VECTOR m_pos;
 	VECTOR m_pos2;
 	VECTOR m_pos3;
-	float m_bgMove;
 
 	// îwåi
 	int m_background;
