@@ -19,6 +19,4 @@ public:
 
 protected:
 	std::shared_ptr<ManagerFont> m_pFont;
-
-	int m_fadeAlpha;	// フェードインアウト
 };

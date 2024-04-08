@@ -1,4 +1,6 @@
-﻿  SceneClear.cpp
+﻿  ManagerFont.cpp
+  SceneBase.cpp
+  SceneClear.cpp
   SceneGameover.cpp
   ScenePlaying.cpp
   SceneTitle.cpp

@@ -23,7 +23,9 @@
 /// </summary>
 ScenePlaying::ScenePlaying():
 	m_time(0),
-	m_noticeDisPlayFrame(0)
+	m_startTime(kStartTime),
+	m_noticeDisPlayFrame(0),
+	m_fadeAlpha(kStartFadeAlpha)
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pCamera = std::make_shared<Camera>();
@@ -44,8 +46,6 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
-	m_fadeAlpha = kStartFadeAlpha;
-
 	// マップデータ読み込み
 	m_pMap->Init("data/file/map.fmf");
 	// 敵のcsvファイル読み込み
@@ -65,21 +65,11 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
+	// フェードアウト
 	m_fadeAlpha -= kFadeFrame;
 	if (m_fadeAlpha < 0)
 	{
 		m_fadeAlpha = 0;
-	}
-	
-	// タイム更新
-	m_time++;
-	// 20秒ごとに時間経過の通知を表示する
-	UpdateNotice();
-
-	// クリア画面に遷移
-	if (m_time >= kClearTime)
-	{
-		return std::make_shared<SceneClear>();
 	}
 
 	// 背景の更新
@@ -105,11 +95,25 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		{
 			// TODO:ゲームオーバー画面に遷移
 			//return std::make_shared<SceneGameover>();
-
-#ifdef _DEBUG
-			DrawString(0, 80, "当たった", 0xff0000);
-#endif
 		}
+	}
+
+	// スタート演出を行う
+	if (m_startTime > 0)
+	{
+		m_startTime--;
+		return shared_from_this();
+	}
+
+	// タイム更新
+	m_time++;
+	// 20秒ごとに時間経過の通知を表示する
+	UpdateNotice();
+
+	// クリア画面に遷移
+	if (m_time >= kClearTime)
+	{
+		return std::make_shared<SceneClear>();
 	}
 
 #if _DEBUG
@@ -151,18 +155,25 @@ void ScenePlaying::Draw()
 	// マップの描画
 	//m_pMap->Draw();
 
-	// 経過時間の描画
-	int milliSec = m_time * 1000 / 60;
-	int sec = (milliSec / 1000) % 90;
-	milliSec %= 1000;
-	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffd700, m_pFont->GetTimeFont(), "経過時間 %02d:%03d", sec, milliSec);
-	// 時間経過の通知を表示
-	DrawNotice();
-
-	// フェードインアウト
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x0e0918, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (m_startTime > 0)
+	{
+		// フェードインアウト
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+		DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x20b2aa, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		// スタート演出の表示
+		StartStaging();
+	}
+	else
+	{
+		// 経過時間の描画
+		int milliSec = m_time * 1000 / 60;
+		int sec = (milliSec / 1000) % 90;
+		milliSec %= 1000;
+		DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffd700, m_pFont->GetTimeFont(), "経過時間 %02d:%03d", sec, milliSec);
+		// 時間経過の通知を表示
+		DrawNotice();
+	}
 
 #if _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
@@ -200,6 +211,30 @@ void ScenePlaying::LoadEnemy()
 		}
 	}
 	file.close();
+}
+
+
+/// <summary>
+/// スタート演出
+/// </summary>
+void ScenePlaying::StartStaging()
+{
+	if (m_startTime >= kStartCount1)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "3");
+	}
+	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "2");
+	}
+	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "1");
+	}
+	if (m_startTime < kStartCount3 && m_startTime >= kStartCount4)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetTimeFont(), "START!");
+	}
 }
 
 

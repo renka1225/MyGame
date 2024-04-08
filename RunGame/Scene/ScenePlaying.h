@@ -26,6 +26,7 @@ public:
 
 private:
 	void LoadEnemy();		// 敵情報読み込み
+	void StartStaging();	// スタート演出の表示
 	void UpdateNotice();	// 時間経過の通知を行う
 	void DrawNotice();		// 時間経過の通知を表示
 
@@ -41,11 +42,23 @@ private:
 	std::vector<VECTOR> m_enemyPos;	// 敵位置
 
 	int m_time;					// 時間
+	int m_startTime;			// スタート時の演出時間
 	int m_noticeDisPlayFrame;	// 経過時間の通知を表示する時間
+	int m_fadeAlpha;			// フェードのα値
 
 private:	// 定数
 	static constexpr int kEnemyNum = 10;				// 最大敵数
 	static constexpr int kClearTime = 60 * 90;			// ゲーム時間
+
+	//スタート時にカウントを表示
+	static constexpr int kStartTime = 60 * 4;			// スタート時の演出時間
+	static constexpr int kStartCount1 = 60 * 3;			// 1カウント目
+	static constexpr int kStartCount2 = 60 * 2;			// 2カウント目
+	static constexpr int kStartCount3 = 60;			// 3カウント目
+	static constexpr int kStartCount4 = 0;				// startの文字表示
+	static constexpr int kStartCountPosX = 860;			// カウント表示位置X
+	static constexpr int kStartCountPosY = 500;			// カウント表示位置Y
+
 
 	// 20秒ごとに時間経過の通知を表示する
 	static constexpr int kNoticeTime1 = 20 * 60;
@@ -59,6 +72,6 @@ private:	// 定数
 	static constexpr int kNoticeTimePosX = 800;			// 時間経過の通知表示位置X
 	static constexpr int kNoticeTimePosY = 190;			// 時間経過の通知表示位置Y
 
-	static constexpr int kStartFadeAlpha = 60;			// スタート時のフェードα値
+	static constexpr int kStartFadeAlpha = 150;			// スタート時のフェードα値
 	static constexpr int kFadeFrame = 8;				// フェード変化量
 };
