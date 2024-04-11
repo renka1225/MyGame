@@ -34,6 +34,7 @@ Player::~Player()
 /// </summary>
 void Player::Init()
 {
+	// ˆ—‚È‚µ
 }
 
 

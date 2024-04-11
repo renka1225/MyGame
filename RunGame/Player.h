@@ -40,7 +40,7 @@ private:
 
 
 private:	// ’è”
-	static constexpr float kMove = 0.03f;						// ˆÚ“®—Ê
+	static constexpr float kMove = 0.05f;						// ˆÚ“®—Ê
 	static constexpr float kGravity = 0.5f;						// d—Í
 	static constexpr float kVelocity = 8.3f;					// ‰‘¬“x
 	static constexpr float kDirY = -90.0f * DX_PI_F / 180.0f;	// Y²•ûŒü‚ÌŒü‚«

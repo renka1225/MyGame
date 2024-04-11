@@ -27,6 +27,9 @@ ScenePlaying::ScenePlaying():
 	m_noticeDisPlayFrame(0),
 	m_fadeAlpha(kStartFadeAlpha)
 {
+	// 敵のcsvファイル読み込み
+	LoadEnemy();
+
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pCamera = std::make_shared<Camera>();
 	m_pBackground = std::make_shared<Background>();
@@ -36,7 +39,7 @@ ScenePlaying::ScenePlaying():
 	m_pEnemy.resize(kEnemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		m_pEnemy[i] = std::make_shared<Enemy>(m_pModel);
+		m_pEnemy[i] = std::make_shared<Enemy>(m_pModel, m_enemyPos[i]);
 	}
 }
 
@@ -48,14 +51,6 @@ void ScenePlaying::Init()
 {
 	// マップデータ読み込み
 	m_pMap->Init("data/file/map.fmf");
-	// 敵のcsvファイル読み込み
-	LoadEnemy();
-	
-	m_enemyPos.resize(kEnemyNum);
-	for (int i = 0; i < m_pEnemy.size(); i++)
-	{
-		m_pEnemy[i]->Init(m_enemyPos[i]);
-	}
 }
 
 
@@ -81,20 +76,19 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		// 敵の更新
-		if (m_pEnemy[i])
+		if (m_pEnemy[i])	// nullptrではないチェック
 		{
-			m_pEnemy[i]->Update();
-		}
+ 			m_pEnemy[i]->Update();
 
-		// プレイヤーの当たり判定
-		Rect playerRect = m_pPlayer->GetColRect();
-		// 敵の当たり判定
-		Rect enemyRect = m_pEnemy[i]->GetColRect();
-		if (playerRect.IsCollision(enemyRect))
-		{
-			// TODO:ゲームオーバー画面に遷移
-			//return std::make_shared<SceneGameover>();
+			// プレイヤーの当たり判定
+			Rect playerRect = m_pPlayer->GetColRect();
+			// 敵の当たり判定
+			Rect enemyRect = m_pEnemy[i]->GetColRect();
+			if (playerRect.IsCollision(enemyRect))
+			{
+				// TODO:ゲームオーバー画面に遷移
+				//return std::make_shared<SceneGameover>();
+			}
 		}
 	}
 

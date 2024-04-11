@@ -7,9 +7,9 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
-Enemy::Enemy(std::shared_ptr<ManagerModel> pModel) :
+Enemy::Enemy(std::shared_ptr<ManagerModel> pModel, VECTOR pos) :
 	m_pModel(pModel),
-	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_pos(pos),
 	m_isExist(false)
 {
 	m_modelHandle = MV1DuplicateModel(m_pModel->GetEnemyHandle());
@@ -33,9 +33,9 @@ Enemy::~Enemy()
 /// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Init(VECTOR pos)
+void Enemy::Init()
 {
-	m_pos = pos;
+	// 処理なし
 }
 
 /// <summary>
@@ -56,11 +56,11 @@ void Enemy::Update()
 	// 画面内にいない敵の処理はしない
 	if (!m_isExist) return;
 
+	// 横に移動させる
+	m_pos = VAdd(m_pos, VGet(kMove, 0.0f, 0.0f));
+
 	// 敵配置
 	MV1SetPosition(m_modelHandle, m_pos);
-
-	// TODO:横に移動させる
-	//m_pos = VAdd(m_pos, VGet(kMove, 0.0f, 0.0f));
 	
 	// 当たり判定の更新
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_pos.z, kWidth, kHeight);
@@ -82,12 +82,4 @@ void Enemy::Draw()
 	m_colRect.Draw(0xff00ff, false);
 #endif
 
-}
-
-
-/// <summary>
-/// 終了
-/// </summary>
-void Enemy::End()
-{
 }
