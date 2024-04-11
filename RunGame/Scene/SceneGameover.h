@@ -18,6 +18,15 @@ private:
 	int m_textFrame;	// テキスト表示時間
 	int m_fadeAlpha;	// フェードのα値
 
+	// 選択項目
+	enum Select
+	{
+		kStart,		// スタート
+		kTitle,		// タイトルに戻る
+		kSelectNum	// 項目数
+	};
+	int m_select;	// 現在の選択状態
+
 private:	// 定数
 	static constexpr int kTextPosX = 750;			// テキスト表示位置X
 	static constexpr int kTextPosY = 700;			// テキスト表示位置Y

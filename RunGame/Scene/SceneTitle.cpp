@@ -7,9 +7,10 @@
 
 SceneTitle::SceneTitle():
 	m_textFrame(0),
-	m_fadeAlpha(0)
+	m_fadeAlpha(0),
+	m_select(kStart)
 {
-	m_titleLogo = LoadGraph("data/title_test.png");
+	m_titleLogo = LoadGraph("data/UI/titleLogo.png");
 }
 
 
@@ -36,7 +37,16 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
 	m_textFrame++;
 
-	// プレイ画面に遷移
+	if (input.IsTriggered("down"))
+	{
+		m_select = (m_select + 1) % kSelectNum;					// 選択状態を1つ下げる
+	}
+	if(input.IsTriggered("up"))
+	{
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum; 	// 選択状態を1つ上げる
+	}
+
+	// シーン遷移
 	if (input.IsTriggered("OK"))
 	{
 		// フェードイン
@@ -46,14 +56,15 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 			m_fadeAlpha = kMaxFade;
 		}
 
-		return std::make_shared<ScenePlaying>();
+		if (m_select == kStart)
+		{
+			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
+		}
+		else if (m_select == kEnd)
+		{
+			DxLib_End();	// ゲーム終了
+		}
 	}
-	// ゲーム終了
-	if (input.IsTriggered("end"))
-	{
-		DxLib_End();
-	}
-
 	return shared_from_this();	// 自身のshared_ptrを返す
 }
 
@@ -63,8 +74,10 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	// 背景表示
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);
 	// タイトルロゴ表示
-	DrawGraph(0, 0, m_titleLogo, false);
+	DrawGraph(kLogoPosX, kLogoPosY, m_titleLogo, true);
 
 #if _DEBUG
 	// MEMO:デバッグ表示
@@ -73,10 +86,19 @@ void SceneTitle::Draw()
 	//DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
 #endif
 
-	// テキスト表示
-	if (m_textFrame % 60 >= 30) return;
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "はじめる");
-	DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "おわる");
+	// 選択中のテキストを点滅させる
+	if (m_select == kStart)
+	{
+		DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "おわる");
+		if (m_textFrame % 60 >= kTextFrame) return;
+		DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "はじめる");
+	}
+	else if (m_select == kEnd)
+	{
+		DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "はじめる");
+		if (m_textFrame % 60 >= kTextFrame) return;
+		DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "おわる");
+	}
 
 	// フェードイン
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);

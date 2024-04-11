@@ -147,6 +147,15 @@ void ScenePlaying::Draw()
 		{
 			m_pEnemy[i]->Draw();
 		}
+
+		// プレイヤーの当たり判定
+		Rect playerRect = m_pPlayer->GetColRect();
+		// 敵の当たり判定
+		Rect enemyRect = m_pEnemy[i]->GetColRect();
+		if (playerRect.IsCollision(enemyRect))
+		{
+			DrawFormatString(0, 100, 0xff0000, "あたった");
+		}
 	}
 
 	// プレイヤーの描画

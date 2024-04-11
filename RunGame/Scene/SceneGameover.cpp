@@ -12,7 +12,8 @@
 /// </summary>
 SceneGameover::SceneGameover():
 	m_textFrame(0),
-	m_fadeAlpha(kMaxFade)
+	m_fadeAlpha(kMaxFade),
+	m_select(kStart)
 {
 }
 
@@ -39,10 +40,18 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 		m_fadeAlpha = 0;
 	}
 
-	// 文字点滅
-	m_textFrame++;
+	m_textFrame++;	// 文字点滅
 
-	//　プレイ画面に遷移
+	if (input.IsTriggered("down"))
+	{
+		m_select = (m_select + 1) % kSelectNum;					// 選択状態を1つ下げる
+	}
+	if (input.IsTriggered("up"))
+	{
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum; 	// 選択状態を1つ上げる
+	}
+
+	//　画面遷移
 	if (input.IsTriggered("OK"))
 	{
 		// フェードイン
@@ -51,18 +60,15 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 		{
 			m_fadeAlpha = kMaxFade;
 		}
-		return std::make_shared<ScenePlaying>();
-	}
-	// タイトル画面に遷移
-	else if (input.IsTriggered("debug"))
-	{
-		// フェードイン
-		m_fadeAlpha += kFadeFrame;
-		if (m_fadeAlpha > kMaxFade)
+
+		if (m_select == kStart)
 		{
-			m_fadeAlpha = kMaxFade;
+			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
 		}
-		return std::make_shared<SceneTitle>();
+		else if (m_select == kTitle)
+		{
+			return std::make_shared<SceneTitle>();		//	タイトルシーンに遷移
+		}
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -83,9 +89,19 @@ void SceneGameover::Draw()
 	//DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
 #endif
 
-	if (m_textFrame % 60 >= 30) return;
-	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
-	DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
+		// 選択中のテキストを点滅させる
+	if (m_select == kStart)
+	{
+		DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
+		if (m_textFrame % 60 >= 30) return;
+		DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
+	}
+	else if (m_select == kTitle)
+	{
+		DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffd700, m_pFont->GetTextFont(), "もう1回遊ぶ");
+		if (m_textFrame % 60 >= 30) return;
+		DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
+	}
 
 	// フェードインアウト
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);

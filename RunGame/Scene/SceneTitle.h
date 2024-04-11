@@ -21,13 +21,24 @@ private:
 
 	int m_titleLogo;	// タイトルロゴの画像
 
+	// 選択項目
+	enum Select
+	{
+		kStart,		// スタート
+		kEnd,		// ゲーム終了
+		kSelectNum	// 項目数
+	};
+	int m_select;	// 現在の選択状態
+
 private:	// 定数
+	static constexpr int kLogoPosX = 610;	// タイトルロゴ表示位置X
+	static constexpr int kLogoPosY = 100;	// タイトルロゴ表示位置Y
 	static constexpr int kTextPosX = 840;	// テキスト表示位置X
 	static constexpr int kTextPosY = 700;	// テキスト表示位置Y
 	static constexpr int kText2PosX = 870;	// テキスト2表示位置X
 	static constexpr int kText2PosY = 850;	// テキスト2表示位置Y
+	static constexpr int kTextFrame = 30;	// テキスト表示フレーム
 
 	static constexpr int kMaxFade = 255;	// フェードα最大値
 	static constexpr int kFadeFrame = 8;	// フェード変化量
 };
-
