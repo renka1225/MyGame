@@ -26,7 +26,8 @@ void PlatinumLoader::Load(const TCHAR* filePath)
 	strId.resize(4);
 	std::copy_n(header.id, 4, strId.begin());
 
-	if (strId != "FMF_") {
+	if (strId != "FMF_")
+	{
 		assert(0);
 	}
 
@@ -38,18 +39,19 @@ void PlatinumLoader::Load(const TCHAR* filePath)
 	int layerDataSize = header.mapWidth * header.mapHeight * (header.bitCount / 8);
 
 	mapData_.resize(layerCount);
-	for (auto& layer : mapData_) {
+	for (auto& layer : mapData_)
+	{
 		layer.resize(layerDataSize);
 		FileRead_read(layer.data(), layerDataSize, handle);
 	}
 
 	FileRead_close(handle);
 
-	//実行時メモリ小売t化のために、データを加工
-	for (int layerIdx = 0; layerIdx < layerCount; ++layerIdx) {
+	//実行時メモリ小売化のために、データを加工
+	for (int layerIdx = 0; layerIdx < layerCount; ++layerIdx)
+	{
 		TransposeMapData(layerIdx);
 	}
-
 }
 
 const MapData_t& PlatinumLoader::GetMapData() const
@@ -73,13 +75,13 @@ void PlatinumLoader::GetMapSize(int& width, int& height)
 
 void PlatinumLoader::TransposeMapData(int layerId)
 {
+
 	auto temp = mapData_[layerId];//いったんコピーしておく
 	//理由としてはコピーせずに転置しようとすると元のデータが消える
 	for (int Y = 0; Y < mapHeight_; ++Y) {
 		for (int X = 0; X < mapWidth_; ++X) {
 			//通常のXY指定の場合
-			//Y*mapwidht_+xという風になる
-			//さらに、横200縦15は維持する必要がある。
+			//Y*mapwidht_+ xという風になる
 			//縦に並べていきたい
 			//0の隣は1段下にしたい
 			int idxSrc = Y * mapWidth_ + X;		//Source Index

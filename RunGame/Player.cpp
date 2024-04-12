@@ -97,7 +97,7 @@ void Player::Draw()
 	// MEMO:プレイヤー座標描画
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(x:%f,y:%f,z:%f)\n", m_pos.x, m_pos.y, m_pos.z);
 	// MEMO:当たり判定の表示
-	m_colRect.Draw(0x00fffff, false);
+	m_colRect.Draw(0x00ffff, false);
 #endif
 
 }

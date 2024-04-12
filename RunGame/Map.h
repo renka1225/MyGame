@@ -42,10 +42,10 @@ private:
 	std::vector<std::vector<int>> m_mapData;	// マップデータ
 	std::vector<Chip> m_chips;					// マップチップ
 
-	int m_mapHandle;	// マップの画像
+	int m_dataColNum;	// 縦のチップ数
+	int m_dataRowNum;	// 横のチップ数
 
-	int m_dataColNum = 0;
-	int m_dataRowNum = 0;
+	int m_mapHandle;	// マップの画像
 
 private:	// 定数
 	static constexpr int kChipPixelSize = 32;	// マップチップのサイズ

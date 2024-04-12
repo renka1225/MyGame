@@ -44,6 +44,8 @@ private:
 	int m_time;					// 時間
 	int m_startTime;			// スタート時の演出時間
 	int m_noticeDisPlayFrame;	// 経過時間の通知を表示する時間
+
+	VECTOR m_noticePos;			// 通知の表示位置
 	int m_fadeAlpha;			// フェードのα値
 
 private:	// 定数
@@ -66,6 +68,9 @@ private:	// 定数
 	static constexpr int kNoticeTime3 = 60 * 60;
 	static constexpr int kNoticeTime4 = 80 * 60;
 	static constexpr int kNoticeDisPlayFrame = 3 * 60;	// 通知を表示する時間
+	static constexpr int kNoticeMoveFrame = 30;			// 通知の移動時間
+	static constexpr int kNoticeStopFrame = 160;		// 通知の停止時間
+	static constexpr float kNoticeMove = 6.0f;			// 通知表示の移動量
 	static constexpr int kTimePosX = 620;				// 時間表示位置X
 	static constexpr int kTimePosY = 100;				// 時間表示位置Y
 	static constexpr int kNoticeTimePosX = 800;			// 時間経過の通知表示位置X

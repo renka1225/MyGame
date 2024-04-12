@@ -16,6 +16,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <cmath>
 
 
 /// <summary>
@@ -25,6 +26,7 @@ ScenePlaying::ScenePlaying():
 	m_time(0),
 	m_startTime(kStartTime),
 	m_noticeDisPlayFrame(0),
+	m_noticePos(VGet(Game::kScreenWidth, 0.0f, 0.0f)),
 	m_fadeAlpha(kStartFadeAlpha)
 {
 	// 敵のcsvファイル読み込み
@@ -50,7 +52,7 @@ ScenePlaying::ScenePlaying():
 void ScenePlaying::Init()
 {
 	// マップデータ読み込み
-	m_pMap->Init("data/file/map.fmf");
+	m_pMap->Init("data/file/test.fmf");
 }
 
 
@@ -73,6 +75,14 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	m_pPlayer->Update(input);
 	// カメラの更新
 	m_pCamera->Update(m_pPlayer);
+
+	// スタート演出を行う
+	if (m_startTime > 0)
+	{
+		m_startTime--;
+		return shared_from_this();
+	}
+
 	// 敵の更新
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
@@ -86,17 +96,10 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			Rect enemyRect = m_pEnemy[i]->GetColRect();
 			if (playerRect.IsCollision(enemyRect))
 			{
-				// TODO:ゲームオーバー画面に遷移
+				//ゲームオーバー画面に遷移
 				//return std::make_shared<SceneGameover>();
 			}
 		}
-	}
-
-	// スタート演出を行う
-	if (m_startTime > 0)
-	{
-		m_startTime--;
-		return shared_from_this();
 	}
 
 	// タイム更新
@@ -141,22 +144,13 @@ void ScenePlaying::Draw()
 		{
 			m_pEnemy[i]->Draw();
 		}
-
-		// プレイヤーの当たり判定
-		Rect playerRect = m_pPlayer->GetColRect();
-		// 敵の当たり判定
-		Rect enemyRect = m_pEnemy[i]->GetColRect();
-		if (playerRect.IsCollision(enemyRect))
-		{
-			DrawFormatString(0, 100, 0xff0000, "あたった");
-		}
 	}
 
 	// プレイヤーの描画
 	m_pPlayer->Draw();
 
 	// マップの描画
-	//m_pMap->Draw();
+	m_pMap->Draw();
 
 	if (m_startTime > 0)
 	{
@@ -253,20 +247,13 @@ void ScenePlaying::UpdateNotice()
 	if (m_noticeDisPlayFrame < 0)
 	{
 		m_noticeDisPlayFrame = 0;
+		m_noticePos = VGet(Game::kScreenWidth, 0.0f, 0.0f);
 	}
-	if (m_time == kNoticeTime1)
+	if(m_noticeDisPlayFrame > 0)
 	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
+		m_noticePos = VGet(Game::kScreenWidth + (-Game::kScreenWidth * kNoticeMove), 0.0f, 0.0f);	// 通知を右から左に移動
 	}
-	if (m_time == kNoticeTime2)
-	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
-	}
-	if (m_time == kNoticeTime3)
-	{
-		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
-	}
-	if (m_time == kNoticeTime4)
+	if (m_time == kNoticeTime1 || m_time == kNoticeTime2 || m_time == kNoticeTime3 || m_time == kNoticeTime4)	// 20秒ごとに実行
 	{
 		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
 	}
@@ -278,20 +265,58 @@ void ScenePlaying::UpdateNotice()
 /// </summary>
 void ScenePlaying::DrawNotice()
 {
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime1 && m_time < kNoticeTime2)
+	int textPosX = m_noticePos.x;	// テキストの表示位置X
+
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime1)
 	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "20秒経過！");
+		if (m_time <= kNoticeTime1 + kNoticeStopFrame)
+		{
+			textPosX = kNoticeTimePosX;
+			m_noticePos.x = kNoticeTimePosX;
+		}
+		else
+		{
+			textPosX = kNoticeTimePosX - m_noticePos.x;
+		}
+		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "20秒経過！");
 	}
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime2 && m_time < kNoticeTime3)
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime2)
 	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "40秒経過！");
+		if (m_time <= kNoticeTime2 + kNoticeStopFrame)
+		{
+			textPosX = kNoticeTimePosX;
+			m_noticePos.x = kNoticeTimePosX;
+		}
+		else
+		{
+			textPosX = kNoticeTimePosX - m_noticePos.x;
+		}
+		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "40秒経過！");
 	}
-	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime3 && m_time < kNoticeTime4)
+	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime3)
 	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "60秒経過！");
+		if (m_time <= kNoticeTime3 + kNoticeStopFrame)
+		{
+			textPosX = kNoticeTimePosX;
+			m_noticePos.x = kNoticeTimePosX;
+		}
+		else
+		{
+			textPosX = kNoticeTimePosX - m_noticePos.x;
+		}
+		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "60秒経過！");
 	}
 	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime4)
 	{
-		DrawFormatStringToHandle(kNoticeTimePosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "80秒経過！");
+		if (m_time <= kNoticeTime4 + kNoticeStopFrame)
+		{
+			textPosX = kNoticeTimePosX;
+			m_noticePos.x = kNoticeTimePosX;
+		}
+		else
+		{
+			textPosX = kNoticeTimePosX - m_noticePos.x;
+		}
+		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "80秒経過！");
 	}
 }

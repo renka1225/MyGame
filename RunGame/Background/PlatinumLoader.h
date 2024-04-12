@@ -54,4 +54,3 @@ private:
 	int mapWidth_ = 0;
 	int mapHeight_ = 0;
 };
-

@@ -73,7 +73,7 @@ void Background::Draw()
 		m_pos2.z, 
 		kBg2Scale, 0.0f, 
 		m_background2, true);
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		DrawRotaGraph3D(scrollBg3 + i * bg3Size.width * kBg3Scale,
 			m_pos3.y,
@@ -88,5 +88,11 @@ void Background::Draw()
 	DrawLine3D(VGet(-lineSize, 0.0f, 0), VGet(lineSize, 0.0f, 0.0f), 0xff0000);
 	DrawLine3D(VGet(0.0f, -lineSize, 0.0f), VGet(0.0f, lineSize, 0.0f), 0x00ff00);
 	DrawLine3D(VGet(0.0f, 0.0f, -lineSize), VGet(0.0f, 0.0f, lineSize), 0x0000ff);
+
+	for (int i = 0; i < 20; i++)
+	{
+		float y = 20.0 * (i - 1); // 一個下のラインからチップが始まる
+		DrawLine3D(VGet(-lineSize, y, 0), VGet(lineSize, y, 0), 0xffdd0d);
+	}
 #endif
 }

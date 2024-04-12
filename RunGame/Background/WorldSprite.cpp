@@ -9,7 +9,7 @@
 /// <param name="spriteNo">スプライト番号</param>
 void WorldSprite::Init(int textureGraph, int chipPixelSize, int spriteNo)
 {
-	this->textureGraph = textureGraph;
+    this->textureGraph = textureGraph;
 
     // NOTE:初期化時に固定しているが、変更したければ自分で関数を追加する必要がある
     // ４頂点分のuvデータを設定
