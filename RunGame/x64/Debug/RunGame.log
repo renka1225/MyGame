@@ -1,7 +1,11 @@
-﻿  ScenePlaying.cpp
-C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(268,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(279,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(292,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(305,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(318,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+﻿  SceneClear.cpp
+C:\GitHub\MyGame\RunGame\Scene\SceneClear.cpp(99,60): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\RunGame\Scene\SceneClear.cpp(99,30): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  ScenePlaying.cpp
+C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(269,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(280,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(293,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(306,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\RunGame\Scene\ScenePlaying.cpp(319,31): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+  コードを生成中...
   RunGame.vcxproj -> C:\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe

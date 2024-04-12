@@ -15,6 +15,16 @@ SceneClear::SceneClear():
 	m_fadeAlpha(kStartFadeAlpha),
 	m_select(kStart)
 {
+	m_clearText = LoadGraph("data/UI/clear.png");
+}
+
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+SceneClear::~SceneClear()
+{
+	DeleteGraph(m_clearText);
 }
 
 
@@ -79,13 +89,14 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);	// 背景
+	DrawGraph(kClearTextPosX, kClearTextPosY, m_clearText, true);			// CLEARの文字
 
 #if _DEBUG
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "クリア画面");
 	// MEMO:中心線
-	//DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
+	DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
 #endif
 
 	// 選択中のテキストを点滅させる

@@ -8,7 +8,7 @@ class SceneGameover : public SceneBase
 {
 public:
 	SceneGameover();
-	virtual ~SceneGameover() {};
+	virtual ~SceneGameover();
 
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
@@ -17,6 +17,8 @@ public:
 private:
 	int m_textFrame;	// テキスト表示時間
 	int m_fadeAlpha;	// フェードのα値
+
+	int m_gameoverText;	// GAMEOVERの文字
 
 	// 選択項目
 	enum Select
@@ -28,6 +30,8 @@ private:
 	int m_select;	// 現在の選択状態
 
 private:	// 定数
+	static constexpr int kGameoverTextPosX = 290;	// GAMEOVER表示位置X
+	static constexpr int kGameoverTextPosY = 180;	// GAMEOVER表示位置Y
 	static constexpr int kTextPosX = 750;			// テキスト表示位置X
 	static constexpr int kTextPosY = 700;			// テキスト表示位置Y
 	static constexpr int kText2PosX = 720;			// テキスト2表示位置X

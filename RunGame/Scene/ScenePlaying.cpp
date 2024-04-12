@@ -244,15 +244,16 @@ void ScenePlaying::StartStaging()
 void ScenePlaying::UpdateNotice()
 {
 	m_noticeDisPlayFrame--;
-	if (m_noticeDisPlayFrame < 0)
+	if (m_noticeDisPlayFrame > 0)
+	{
+		m_noticePos = VGet(Game::kScreenWidth + (-Game::kScreenWidth * kNoticeMove), 0.0f, 0.0f);	// 通知を右から左に移動
+	}
+	else
 	{
 		m_noticeDisPlayFrame = 0;
 		m_noticePos = VGet(Game::kScreenWidth, 0.0f, 0.0f);
 	}
-	if(m_noticeDisPlayFrame > 0)
-	{
-		m_noticePos = VGet(Game::kScreenWidth + (-Game::kScreenWidth * kNoticeMove), 0.0f, 0.0f);	// 通知を右から左に移動
-	}
+
 	if (m_time == kNoticeTime1 || m_time == kNoticeTime2 || m_time == kNoticeTime3 || m_time == kNoticeTime4)	// 20秒ごとに実行
 	{
 		m_noticeDisPlayFrame = kNoticeDisPlayFrame;

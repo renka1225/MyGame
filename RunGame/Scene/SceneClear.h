@@ -8,7 +8,7 @@ class SceneClear : public SceneBase
 {
 public:
 	SceneClear();
-	virtual ~SceneClear() {};
+	virtual ~SceneClear();
 
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
@@ -17,6 +17,8 @@ public:
 private:
 	int m_textFrame;	// テキスト表示時間
 	int m_fadeAlpha;	// フェードのα値
+
+	int m_clearText;	// CLEARの文字
 
 	// 選択項目
 	enum Select
@@ -28,6 +30,8 @@ private:
 	int m_select;	// 現在の選択状態
 
 private:	// 定数
+	static constexpr int kClearTextPosX = 500;		// CLEAR表示位置X
+	static constexpr int kClearTextPosY = 180;		//	CLEAR表示位置Y
 	static constexpr int kTextPosX = 750;			// テキスト表示位置X
 	static constexpr int kTextPosY = 700;			// テキスト表示位置Y
 	static constexpr int kText2PosX = 720;			// テキスト2表示位置X

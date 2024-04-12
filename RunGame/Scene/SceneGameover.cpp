@@ -15,6 +15,16 @@ SceneGameover::SceneGameover():
 	m_fadeAlpha(kMaxFade),
 	m_select(kStart)
 {
+	m_gameoverText = LoadGraph("data/UI/gameover.png");
+}
+
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+SceneGameover::~SceneGameover()
+{
+	DeleteGraph(m_gameoverText);
 }
 
 
@@ -80,7 +90,8 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 /// </summary>
 void SceneGameover::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);	// 背景
+	DrawGraph(kGameoverTextPosX, kGameoverTextPosY, m_gameoverText, true);	// GAMEOVERの文字
 
 #if _DEBUG
 	// デバッグ表示
@@ -89,7 +100,7 @@ void SceneGameover::Draw()
 	//DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
 #endif
 
-		// 選択中のテキストを点滅させる
+	// 選択中のテキストを点滅させる
 	if (m_select == kStart)
 	{
 		DrawFormatStringToHandle(kText2PosX, kText2PosY, 0xffd700, m_pFont->GetTextFont(), "タイトルにもどる");
