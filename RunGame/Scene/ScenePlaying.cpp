@@ -2,6 +2,7 @@
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "ManagerFont.h"
+#include "ManagerSound.h"
 #include "ManagerModel.h"
 #include "Background.h"
 #include "Map.h"
@@ -16,7 +17,6 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-#include <cmath>
 
 
 /// <summary>
@@ -43,6 +43,9 @@ ScenePlaying::ScenePlaying():
 	{
 		m_pEnemy[i] = std::make_shared<Enemy>(m_pModel, m_enemyPos[i]);
 	}
+
+	// スタートSE
+	PlaySoundMem(m_pSound->GetStartCountSE(), DX_PLAYTYPE_BACK);
 }
 
 

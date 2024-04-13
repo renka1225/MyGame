@@ -40,10 +40,27 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	if (input.IsTriggered("down"))
 	{
 		m_select = (m_select + 1) % kSelectNum;					// 選択状態を1つ下げる
+		if (m_cursorPosY == kTextPosY)
+		{
+			m_cursorPosY = kText2PosY;
+		}
+		else
+		{
+			m_cursorPosY = kTextPosY;
+		}
+		
 	}
 	if(input.IsTriggered("up"))
 	{
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum; 	// 選択状態を1つ上げる
+		if (m_cursorPosY == kTextPosY)
+		{
+			m_cursorPosY = kText2PosY;
+		}
+		else
+		{
+			m_cursorPosY = kTextPosY;
+		}
 	}
 
 	// シーン遷移
@@ -74,10 +91,9 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
-	// 背景表示
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);
-	// タイトルロゴ表示
-	DrawGraph(kLogoPosX, kLogoPosY, m_titleLogo, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);		// 背景表示
+	DrawGraph(kLogoPosX, kLogoPosY, m_titleLogo, true);							// タイトルロゴ表示
+	DrawGraph(kCursorPosX, m_cursorPosY, m_cursorHandle, true);					// カーソル表示
 
 #if _DEBUG
 	// MEMO:デバッグ表示

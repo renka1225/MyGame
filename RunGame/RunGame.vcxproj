@@ -148,6 +148,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\ManagerSound.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerModel.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -168,7 +169,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
-    <ClInclude Include="ManagerFont.h" />
+    <ClInclude Include="Manager\ManagerFont.h" />
+    <ClInclude Include="Manager\ManagerSound.h" />
     <ClInclude Include="Manager\ManagerModel.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Background\PlatinumLoader.h" />

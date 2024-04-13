@@ -55,10 +55,26 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 	if (input.IsTriggered("down"))
 	{
 		m_select = (m_select + 1) % kSelectNum;					// 選択状態を1つ下げる
+		if (m_cursorPosY == kTextPosY)
+		{
+			m_cursorPosY = kText2PosY;
+		}
+		else
+		{
+			m_cursorPosY = kTextPosY;
+		}
 	}
 	if (input.IsTriggered("up"))
 	{
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum; 	// 選択状態を1つ上げる
+		if (m_cursorPosY == kTextPosY)
+		{
+			m_cursorPosY = kText2PosY;
+		}
+		else
+		{
+			m_cursorPosY = kTextPosY;
+		}
 	}
 
 	//　画面遷移
@@ -92,6 +108,7 @@ void SceneGameover::Draw()
 {
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x17949B, true);	// 背景
 	DrawGraph(kGameoverTextPosX, kGameoverTextPosY, m_gameoverText, true);	// GAMEOVERの文字
+	DrawGraph(kCursorPosX, m_cursorPosY, m_cursorHandle, true);				// カーソル表示
 
 #if _DEBUG
 	// デバッグ表示

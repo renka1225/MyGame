@@ -33,6 +33,7 @@ private:
 private:	// 定数
 	static constexpr int kLogoPosX = 610;	// タイトルロゴ表示位置X
 	static constexpr int kLogoPosY = 100;	// タイトルロゴ表示位置Y
+	static constexpr int kCursorPosX = 700;	// カーソル表示位置X
 	static constexpr int kTextPosX = 840;	// テキスト表示位置X
 	static constexpr int kTextPosY = 700;	// テキスト表示位置Y
 	static constexpr int kText2PosX = 870;	// テキスト2表示位置X

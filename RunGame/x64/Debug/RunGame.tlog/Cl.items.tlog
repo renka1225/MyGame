@@ -3,6 +3,7 @@ C:\GitHub\MyGame\RunGame\Game\Camera.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Came
 C:\GitHub\MyGame\RunGame\Enemy.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Enemy.obj
 C:\GitHub\MyGame\RunGame\Game\Input.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Input.obj
 C:\GitHub\MyGame\RunGame\main.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\main.obj
+C:\GitHub\MyGame\RunGame\Manager\ManagerSound.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\ManagerSound.obj
 C:\GitHub\MyGame\RunGame\Manager\ManagerFont.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\ManagerFont.obj
 C:\GitHub\MyGame\RunGame\Manager\ManagerModel.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\ManagerModel.obj
 C:\GitHub\MyGame\RunGame\Map.cpp;C:\GitHub\MyGame\RunGame\x64\Debug\Map.obj

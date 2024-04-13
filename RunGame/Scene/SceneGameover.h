@@ -32,6 +32,7 @@ private:
 private:	// 定数
 	static constexpr int kGameoverTextPosX = 290;	// GAMEOVER表示位置X
 	static constexpr int kGameoverTextPosY = 180;	// GAMEOVER表示位置Y
+	static constexpr int kCursorPosX = 600;			// カーソル表示位置X
 	static constexpr int kTextPosX = 750;			// テキスト表示位置X
 	static constexpr int kTextPosY = 700;			// テキスト表示位置Y
 	static constexpr int kText2PosX = 720;			// テキスト2表示位置X

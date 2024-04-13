@@ -54,6 +54,5 @@ private:	// 定数
 	static constexpr int kChipNumX = 10;
 	static constexpr int kChipNumY = 2;
 	// マップチップ情報
-	static constexpr float kChipPosYAdjustment = 20.0f;	// マップチップ位置の調整
 	static constexpr float kChipPosZ = 0.0f;			// マップチップのZ座標
 };

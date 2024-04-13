@@ -57,14 +57,14 @@ void Map::Init(const TCHAR* fmfFilePath)
 		{
 			auto sprite = std::make_shared<WorldSprite>();
 			sprite->Init(m_mapHandle, kChipPixelSize, m_mapData[y][x]);
-			VECTOR chipHalfOffset = VGet(-kChipScale * 0.5f, -kChipScale * 0.5f, kChipPosZ);											// マップチップの半分サイズ左下にずらすオフセット
-			VECTOR chipPos = VAdd(VGet(x * kChipScale * 0.5f, (-y - 1) * kChipScale + kChipPosYAdjustment, kChipPosZ), chipHalfOffset);	// 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
+			VECTOR chipHalfOffset = VGet(-kChipScale * 0.5f, -kChipScale * 0.5f, kChipPosZ);							// マップチップの半分サイズ左下にずらすオフセット
+			VECTOR chipPos = VAdd(VGet(x * kChipScale * 0.5f, (-y - 1) * kChipScale, kChipPosZ), chipHalfOffset);		// 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
 			chipPos = VAdd(chipPos, chipLeftTopPos);
 			sprite->SetTransform(chipPos, kChipScale);
 
 			Chip chip;
 			chip.pos = chipPos;
-			chip.w = chip.h = kChipPixelSize;
+			chip.w = chip.h = kChipPixelSize * kChipScale;
 			chip.col = y;
 			chip.row = x;
 			chip.sprite = sprite;
@@ -91,7 +91,7 @@ void Map::Draw()
 	for (const auto& chip : m_chips)
 	{
 		// 画面内のマップチップのみ描画する
-		VECTOR DrawChipPos = VAdd(chip.pos, VGet(10.0f, 0.0f, 0.0f));
+ 		VECTOR DrawChipPos = VAdd(chip.pos, VGet(10.0f, 0.0f, 0.0f));
 		if(!CheckCameraViewClip(DrawChipPos))
 		{
 			//if (chip.chipKind == 0) continue;

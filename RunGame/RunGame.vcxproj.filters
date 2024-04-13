@@ -93,6 +93,9 @@
     <ClCompile Include="Background\PlatinumLoader.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Manager\ManagerSound.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -134,7 +137,7 @@
     <ClInclude Include="Rect.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="ManagerFont.h">
+    <ClInclude Include="Manager\ManagerFont.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Background\WorldSprite.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="Background\PlatinumLoader.h">
       <Filter>ヘッダー ファイル\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\ManagerSound.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

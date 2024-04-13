@@ -31,7 +31,8 @@ private:
 
 private:	// 定数
 	static constexpr int kClearTextPosX = 500;		// CLEAR表示位置X
-	static constexpr int kClearTextPosY = 180;		//	CLEAR表示位置Y
+	static constexpr int kClearTextPosY = 180;		// CLEAR表示位置Y
+	static constexpr int kCursorPosX = 600;			// カーソル表示位置
 	static constexpr int kTextPosX = 750;			// テキスト表示位置X
 	static constexpr int kTextPosY = 700;			// テキスト表示位置Y
 	static constexpr int kText2PosX = 720;			// テキスト2表示位置X
