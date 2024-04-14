@@ -36,6 +36,11 @@ void SceneTitle::Init()
 /// <returns>‘JˆÚæ‚Ìƒ|ƒCƒ“ƒ^</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	if (!CheckSoundMem(m_pSound->GetTitleBgm()))
+	{
+		PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_BACK);	// BGM‚ğ–Â‚ç‚·
+	}
+
 	m_textFrame++;
 
 	if (input.IsTriggered("down"))

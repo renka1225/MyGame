@@ -44,6 +44,11 @@ void SceneGameover::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 {
+	if (!CheckSoundMem(m_pSound->GetGameoverBgm()))
+	{
+		PlaySoundMem(m_pSound->GetGameoverBgm(), DX_PLAYTYPE_BACK); // BGMを鳴らす
+	}
+
 	// フェードアウト
 	m_fadeAlpha -= kFadeFrame;
 	if (m_fadeAlpha < 0)

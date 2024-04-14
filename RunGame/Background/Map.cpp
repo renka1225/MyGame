@@ -64,7 +64,7 @@ void Map::Init(const TCHAR* fmfFilePath)
 
 			Chip chip;
 			chip.pos = chipPos;
-			chip.w = chip.h = kChipPixelSize * kChipScale;
+			chip.w = chip.h = kChipPixelSize;
 			chip.col = y;
 			chip.row = x;
 			chip.sprite = sprite;
@@ -94,7 +94,7 @@ void Map::Draw()
  		VECTOR DrawChipPos = VAdd(chip.pos, VGet(10.0f, 0.0f, 0.0f));
 		if(!CheckCameraViewClip(DrawChipPos))
 		{
-			//if (chip.chipKind == 0) continue;
+			if (chip.chipKind == 0) continue;
 			chip.sprite->Draw();
 		}
 	}
