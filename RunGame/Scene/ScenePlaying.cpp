@@ -55,7 +55,7 @@ ScenePlaying::ScenePlaying():
 void ScenePlaying::Init()
 {
 	// マップデータ読み込み
-	m_pMap->Init("data/file/test.fmf");
+	m_pMap->Init("data/file/map.fmf");
 }
 
 
@@ -100,7 +100,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			if (playerRect.IsCollision(enemyRect))
 			{
 				//ゲームオーバー画面に遷移
-				//return std::make_shared<SceneGameover>();
+				return std::make_shared<SceneGameover>();
 			}
 		}
 	}
@@ -153,7 +153,7 @@ void ScenePlaying::Draw()
 	m_pPlayer->Draw();
 
 	// マップの描画
-	m_pMap->Draw();
+	//m_pMap->Draw();
 
 	if (m_startTime > 0)
 	{

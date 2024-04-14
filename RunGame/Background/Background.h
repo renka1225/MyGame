@@ -27,6 +27,7 @@ private:
 	int m_background;
 	int m_background2;
 	int m_background3;
+	int m_bg;
 
 	// ‰æ‘œƒTƒCƒY
 	struct Size

@@ -31,6 +31,7 @@ Camera::~Camera()
 /// </summary>
 void Camera::Init()
 {
+	// ˆ—‚È‚µ
 }
 
 
@@ -48,5 +49,6 @@ void Camera::Update(std::shared_ptr<Player> pPlayer)
 	m_pos = VAdd(m_pos, posToAim);
 
 	// ƒJƒƒ‰ˆÊ’u‚ğ”½‰f
+	SetCameraScreenCenter(m_pPlayer->GetPos().x + kScreenCenterX, kScreenCenterY);
 	SetCameraPositionAndTarget_UpVecY(m_pos, VGet(m_pPlayer->GetPos().x, kTargetY, 0.0f));
 }

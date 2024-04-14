@@ -33,4 +33,7 @@ private:	// 定数
 	static constexpr float kTargetX = 0.0f;		// X軸
 	static constexpr float kTargetY = 50.0f;	// Y軸
 	static constexpr float kTargetZ = -100.0f;	// Z軸
+	// カメラの中心座標
+	static constexpr float kScreenCenterX = 300.0f;	// X座標
+	static constexpr float kScreenCenterY = 500.0f;	// Y座標
 };

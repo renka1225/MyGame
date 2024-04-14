@@ -3,6 +3,7 @@
 #include "ScenePlaying.h"
 #include "Input.h"
 #include "ManagerFont.h"
+#include "ManagerSound.h"
 #include "Game.h"
 #include "DxLib.h"
 
@@ -54,7 +55,8 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 
 	if (input.IsTriggered("down"))
 	{
-		m_select = (m_select + 1) % kSelectNum;					// 選択状態を1つ下げる
+		PlaySoundMem(m_pSound->GetSelectSE(), DX_PLAYTYPE_BACK);	// SEを鳴らす
+		m_select = (m_select + 1) % kSelectNum;						// 選択状態を1つ下げる
 		if (m_cursorPosY == kTextPosY)
 		{
 			m_cursorPosY = kText2PosY;
@@ -66,7 +68,8 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum; 	// 選択状態を1つ上げる
+		PlaySoundMem(m_pSound->GetSelectSE(), DX_PLAYTYPE_BACK);	// SEを鳴らす
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum; 		// 選択状態を1つ上げる
 		if (m_cursorPosY == kTextPosY)
 		{
 			m_cursorPosY = kText2PosY;
@@ -80,6 +83,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 	//　画面遷移
 	if (input.IsTriggered("OK"))
 	{
+		PlaySoundMem(m_pSound->GetDetermineSE(), DX_PLAYTYPE_BACK);	// SEを鳴らす
 		// フェードイン
 		m_fadeAlpha += kFadeFrame;
 		if (m_fadeAlpha > kMaxFade)
@@ -113,7 +117,7 @@ void SceneClear::Draw()
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "クリア画面");
 	// MEMO:中心線
-	DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
+	//DrawLine(Game::kScreenWidth * 0.5f, 0, Game::kScreenWidth * 0.5f, Game::kScreenHeight, 0x0000000, 1);
 #endif
 
 	// 選択中のテキストを点滅させる

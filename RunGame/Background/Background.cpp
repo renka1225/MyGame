@@ -12,6 +12,7 @@ Background::Background():
 	m_background = LoadGraph("data/background/1.png");
 	m_background2 = LoadGraph("data/background/2.png");
 	m_background3 = LoadGraph("data/background/3.png");
+	m_bg = LoadGraph("data/background/bg3.png");
 }
 
 
@@ -23,6 +24,7 @@ Background::~Background()
 	DeleteGraph(m_background);
 	DeleteGraph(m_background2);
 	DeleteGraph(m_background3);
+	DeleteGraph(m_bg);
 }
 
 

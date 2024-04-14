@@ -151,7 +151,7 @@
     <ClCompile Include="Manager\ManagerSound.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerModel.cpp" />
-    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Background\Map.cpp" />
     <ClCompile Include="Background\PlatinumLoader.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Game\Rect.cpp" />
@@ -172,10 +172,10 @@
     <ClInclude Include="Manager\ManagerFont.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
     <ClInclude Include="Manager\ManagerModel.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="Background\Map.h" />
     <ClInclude Include="Background\PlatinumLoader.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Game\Rect.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\SceneGameover.h" />
