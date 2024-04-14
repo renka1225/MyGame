@@ -100,7 +100,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			if (playerRect.IsCollision(enemyRect))
 			{
 				//ゲームオーバー画面に遷移
-				return std::make_shared<SceneGameover>();
+				//return std::make_shared<SceneGameover>();
 			}
 		}
 	}

@@ -44,7 +44,7 @@ private:	// 定数
 
 	// 背景の描画位置
 	static constexpr float kBgPosX = 50.0f;			// 最背面のX座標
-	static constexpr float kBg2PosX = 150.0f;		// 2番目のX座標
+	static constexpr float kBg2PosX = 300.0f;		// 2番目のX座標
 	static constexpr float kBg3PosX = -850.0f;		// 最前面のX座標
 	static constexpr float kBgPosY = 50.0f;			// Y座標
 	static constexpr float kBg3PosY = 55.0f;		// 最前面のY座標

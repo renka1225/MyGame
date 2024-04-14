@@ -37,7 +37,7 @@ private:
 
 private:	// ’è”
 
-	static constexpr float kMove = -1.2f;						// ˆÚ“®—Ê
+	static constexpr float kMove = -1.4f;						// ˆÚ“®—Ê
 	static constexpr float kScale = 0.03f;						// Šg‘å—¦
 	static constexpr int kWidth = 160;							// “G‚Ì‰¡•
 	static constexpr int kHeight = 50;							// “G‚Ìc•

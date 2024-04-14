@@ -49,7 +49,7 @@ private:
 	int m_fadeAlpha;			// フェードのα値
 
 private:	// 定数
-	static constexpr int kEnemyNum = 10;				// 最大敵数
+	static constexpr int kEnemyNum = 45;				// 最大敵数
 	static constexpr int kClearTime = 60 * 90;			// ゲーム時間
 
 	//スタート時にカウントを表示
