@@ -55,7 +55,7 @@ ScenePlaying::ScenePlaying():
 void ScenePlaying::Init()
 {
 	// マップデータ読み込み
-	m_pMap->Init("data/file/test.fmf");
+ 	m_pMap->Load();
 }
 
 
@@ -149,17 +149,17 @@ void ScenePlaying::Draw()
 	// プレイヤーの描画
 	m_pPlayer->Draw();
 
+	// マップの描画
+	m_pMap->Draw();
+
 	// 敵の描画
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		if(m_pEnemy[i])
+		if (m_pEnemy[i])
 		{
 			m_pEnemy[i]->Draw();
 		}
 	}
-
-	// マップの描画
-	//m_pMap->Draw();
 
 	if (m_startTime > 0)
 	{

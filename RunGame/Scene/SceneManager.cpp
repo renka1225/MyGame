@@ -31,8 +31,11 @@ void SceneManager::Update(Input& input)
 	std::shared_ptr<SceneBase> pNext = m_pScene->Update(input);
 
 	// 遷移先のシーンの開始処理を行う
-	m_pScene = pNext;
-	m_pScene->Init();
+	if (m_pScene != pNext)
+	{
+		m_pScene = pNext;
+		m_pScene->Init();
+	}
 }
 
 

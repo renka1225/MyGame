@@ -1,78 +1,91 @@
+#include<vector>
 #include "Map.h"
 #include "WorldSprite.h"
-#include "PlatinumLoader.h"
-#include "Camera.h"
-#include "Game.h"
-#include <cassert>
 
+const int Map::kMapData[kColNum][kRowNum] =
+{
+	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+	{ 7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8},
+	{28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29},
+	{28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29},
+};
+
+const float Map::ChipSize = 8.0f;
+const int Map::ChipPixelSize = 32;
+
+/// <summary>
+/// 配列へのポインタをもらってベクタを作成する
+/// </summary>
+std::vector<int> CreateArrayVector(const int targetData[], int num)
+{
+	std::vector<int> newVector;
+	for (int i = 0; i < num; i++)
+	{
+		newVector.push_back(targetData[i]);
+	}
+	return newVector;
+}
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Map::Map():
-	m_dataColNum(0),
-	m_dataRowNum(0),
-	m_mapHandle(-1)
+Map::Map()
+	: chipGraph(-1)
 {
-	m_pLoader = std::make_shared<PlatinumLoader>();
+	currentData.clear();
 }
-
 
 /// <summary>
 /// デストラクタ
 /// </summary>
 Map::~Map()
 {
-	m_chips.clear();
+	for (const auto& sprite : sprites)
+	{
+		if (sprite != nullptr)
+		{
+			delete sprite;
+		}
+	}
+	sprites.clear();
 }
-
 
 /// <summary>
-/// 初期化
+/// ロード
 /// </summary>
-void Map::Init(const TCHAR* fmfFilePath)
+void Map::Load()
 {
-	m_pLoader->Load(fmfFilePath);
-	m_mapData.clear();
-
-	std::vector<int> newColData;
-	m_pLoader->GetMapSize(m_dataRowNum, m_dataColNum);		// データの行と列の長さを代入
-	for (int y = 0; y < m_dataColNum; y++)
+	currentData.clear();
+	
+	dataColNum = kColNum;
+	dataRowNum = kRowNum;
+	for (int i = 0; i < dataColNum; i++)
 	{
-		for (int x = 0; x < m_dataRowNum; x++)
-		{
-			int spriteNo = m_pLoader->GetChipSpriteNo(LayerType::BackGround, x, y);
-			newColData.push_back(spriteNo);
-		}
-		m_mapData.push_back(newColData);
+		currentData.push_back(CreateArrayVector(kMapData[i], kRowNum));
 	}
 
-	m_mapHandle = LoadGraph("data/background/water.png");	// マップチップ画像読み込み
+	// マップチップロード
+	chipGraph = LoadGraph("data/background/water.png");
 
 	// WorldSprite実体設定と位置初期化
-	VECTOR chipLeftTopPos = VGet(0.0f, m_dataColNum * kChipScale, kChipPosZ);	// マップの描画開始位置（左上）
-	for (int y = 0; y < m_dataColNum; y++)
+	VECTOR chipLeftTopPos = VGet(0.0f, dataColNum * ChipSize - 8.0f, 0.0f);			// マップの描画開始位置（左上）
+	for (int i = 0; i < dataColNum; i++)
 	{
-		for (int x = 0; x < m_dataRowNum; x++)
+		for (int j = 0; j < dataRowNum; j++)
 		{
-			auto sprite = std::make_shared<WorldSprite>();
-			sprite->Init(m_mapHandle, kChipPixelSize, m_mapData[y][x]);
-			VECTOR chipHalfOffset = VGet(-kChipScale * 0.5f, -kChipScale * 0.5f, kChipPosZ);							// マップチップの半分サイズ左下にずらすオフセット
-			VECTOR chipPos = VAdd(VGet(x * kChipScale * 0.5f, (-y - 1) * kChipScale, kChipPosZ), chipHalfOffset);		// 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
-			chipPos = VAdd(chipPos, chipLeftTopPos);
-			sprite->SetTransform(chipPos, kChipScale);
+			if (currentData[i][j] == 0) continue;
 
-			Chip chip;
-			chip.pos = chipPos;
-			chip.w = chip.h = kChipPixelSize;
-			chip.col = y;
-			chip.row = x;
-			chip.sprite = sprite;
-			m_chips.push_back(chip);
+			auto sprite = new WorldSprite();
+			sprite->Init(chipGraph, ChipPixelSize, currentData[i][j]);
+			VECTOR chipHalfOffset = VGet(-Map::ChipSize * 0.5f, -Map::ChipSize * 0.5f, 0);					// マップチップの半分サイズ左下にずらすオフセット
+			chipPos = VAdd(VGet(j * Map::ChipSize, (-i - 1) * Map::ChipSize, 0), chipHalfOffset);	// 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
+			chipPos = VAdd(chipPos, chipLeftTopPos);
+			sprite->SetTransform(chipPos, Map::ChipSize);
+			sprites.push_back(sprite);
 		}
 	}
 }
-
 
 /// <summary>
 /// 更新
@@ -82,41 +95,18 @@ void Map::Update()
 	// 処理なし
 }
 
-
 /// <summary>
 /// 描画
 /// </summary>
 void Map::Draw()
 {
-	for (const auto& chip : m_chips)
+	for (const auto& sprite : sprites)
 	{
 		// 画面内のマップチップのみ描画する
- 		VECTOR DrawChipPos = VAdd(chip.pos, VGet(10.0f, 0.0f, 0.0f));
-		if(!CheckCameraViewClip(DrawChipPos))
+		VECTOR DrawChipPos = VAdd(chipPos, VGet(10.0f, 0.0f, 0.0f));
+		if (!CheckCameraViewClip(DrawChipPos))
 		{
-			if (chip.chipKind == 0) continue;
-			chip.sprite->Draw();
+			sprite->Draw();
 		}
 	}
-}
-
-
-/// <summary>
-/// 指定位置のマップチップを取得する
-/// </summary>
-/// <param name="col">y</param>
-/// <param name="row">x</param>
-/// <returns></returns>
-const Map::Chip& Map::GetChip(int col, int row) const
-{
-	for (const auto& chip : m_chips)
-	{
-		if (col == chip.col && row == chip.row)
-		{
-			return chip;
-		}
-	}
-	// MEMO:エラー時
-	assert(0 && "データ範囲指定エラー");
-	return m_chips[0];
 }
