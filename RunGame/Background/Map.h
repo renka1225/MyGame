@@ -34,6 +34,6 @@ private:
 
 private:
 	static const int kColNum = 5;		// マップ行
-	static const int kRowNum = 20;		// マップ列
+	static const int kRowNum = 60;		// マップ列
 	static const int kMapData[kColNum][kRowNum];
 };

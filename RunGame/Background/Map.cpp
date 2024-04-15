@@ -4,15 +4,15 @@
 
 const int Map::kMapData[kColNum][kRowNum] =
 {
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-	{ 7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8,  9,  7,  8},
-	{28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29},
-	{28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29, 30, 28, 29},
+	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0},
+	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0 , 0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0},
+	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0},
+	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0 , 0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0},
+	{21, 22, 23, 21, 22, 23, 21, 22, 23, 21,  22, 23, 21, 22, 23, 22, 23, 21, 22, 23, 21, 22,  23, 21, 22, 23, 21, 22, 23, 21,  22, 23, 21, 22,  23, 22, 23, 21, 22, 23, 21, 22, 23, 21, 22, 23,  21, 22, 23, 22, 23, 21, 22, 23}
 };
 
-const float Map::ChipSize = 8.0f;
-const int Map::ChipPixelSize = 32;
+const float Map::ChipSize = 12.0f;
+const int Map::ChipPixelSize = 16;
 
 /// <summary>
 /// 配列へのポインタをもらってベクタを作成する
@@ -41,13 +41,6 @@ Map::Map()
 /// </summary>
 Map::~Map()
 {
-	for (const auto& sprite : sprites)
-	{
-		if (sprite != nullptr)
-		{
-			delete sprite;
-		}
-	}
 	sprites.clear();
 }
 
@@ -69,7 +62,7 @@ void Map::Load()
 	chipGraph = LoadGraph("data/background/water.png");
 
 	// WorldSprite実体設定と位置初期化
-	VECTOR chipLeftTopPos = VGet(0.0f, dataColNum * ChipSize - 8.0f, 0.0f);			// マップの描画開始位置（左上）
+	VECTOR chipLeftTopPos = VGet(0.0f, dataColNum * ChipSize, 0.0f); // マップの描画開始位置（左上）
 	for (int i = 0; i < dataColNum; i++)
 	{
 		for (int j = 0; j < dataRowNum; j++)
@@ -102,11 +95,6 @@ void Map::Draw()
 {
 	for (const auto& sprite : sprites)
 	{
-		// 画面内のマップチップのみ描画する
-		VECTOR DrawChipPos = VAdd(chipPos, VGet(10.0f, 0.0f, 0.0f));
-		if (!CheckCameraViewClip(DrawChipPos))
-		{
-			sprite->Draw();
-		}
+		sprite->Draw();
 	}
 }

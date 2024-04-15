@@ -161,6 +161,9 @@ void ScenePlaying::Draw()
 		}
 	}
 
+	// 操作説明の表示
+	DrawFormatStringToHandle(kNoticeStartPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "");
+
 	if (m_startTime > 0)
 	{
 		// フェードインアウト
