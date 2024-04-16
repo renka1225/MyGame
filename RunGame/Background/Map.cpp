@@ -30,8 +30,9 @@ std::vector<int> CreateArrayVector(const int targetData[], int num)
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Map::Map()
-	: chipGraph(-1)
+Map::Map(): 
+	chipPos(VGet(0.0f, 0.0f, 0.0f)),
+	chipGraph(-1)
 {
 	currentData.clear();
 }

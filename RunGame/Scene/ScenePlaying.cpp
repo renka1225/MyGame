@@ -278,7 +278,7 @@ void ScenePlaying::UpdateNotice()
 /// </summary>
 void ScenePlaying::DrawNotice()
 {
-	int textPosX = m_noticePos.x;	// テキストの表示位置X
+	int textPosX = static_cast<int>(m_noticePos.x);	// テキストの表示位置X
 
 	if (m_noticeDisPlayFrame > 0 && m_time >= kNoticeTime1)
 	{
@@ -289,7 +289,7 @@ void ScenePlaying::DrawNotice()
 		}
 		else
 		{
-			textPosX = kNoticeTimePosX - m_noticePos.x;
+			textPosX = kNoticeTimePosX - static_cast<int>(m_noticePos.x);
 		}
 		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "20秒経過！");
 	}
@@ -302,7 +302,7 @@ void ScenePlaying::DrawNotice()
 		}
 		else
 		{
-			textPosX = kNoticeTimePosX - m_noticePos.x;
+			textPosX = kNoticeTimePosX - static_cast<int>(m_noticePos.x);
 		}
 		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "40秒経過！");
 	}
@@ -315,7 +315,7 @@ void ScenePlaying::DrawNotice()
 		}
 		else
 		{
-			textPosX = kNoticeTimePosX - m_noticePos.x;
+			textPosX = kNoticeTimePosX - static_cast<int>(m_noticePos.x);
 		}
 		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "60秒経過！");
 	}
@@ -328,7 +328,7 @@ void ScenePlaying::DrawNotice()
 		}
 		else
 		{
-			textPosX = kNoticeTimePosX - m_noticePos.x;
+			textPosX = kNoticeTimePosX - static_cast<int>(m_noticePos.x);
 		}
 		DrawFormatStringToHandle(textPosX, kNoticeTimePosY, 0xffd700, m_pFont->GetTimeFont(), "80秒経過！");
 	}
