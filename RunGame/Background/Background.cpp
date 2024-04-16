@@ -90,13 +90,5 @@ void Background::Draw()
 	DrawLine3D(VGet(-lineSize, 0.0f, 0), VGet(lineSize, 0.0f, 0.0f), 0xff0000);
 	DrawLine3D(VGet(0.0f, -lineSize, 0.0f), VGet(0.0f, lineSize, 0.0f), 0x00ff00);
 	DrawLine3D(VGet(0.0f, 0.0f, -lineSize), VGet(0.0f, 0.0f, lineSize), 0x0000ff);
-
-	//for (int i = 0; i < 20; i++)
-	//{
-	//	float x = 20.0 * i;
-	//	float y = 20.0 * (i - 1); // 一個下のラインからチップが始まる
-	//	DrawLine3D(VGet(-lineSize, y, 0), VGet(lineSize, y, 0), 0xffdd0d);
-	//	DrawLine3D(VGet(x, -lineSize, 0), VGet(x, lineSize, 0), 0x00f0dd);
-	//}
 #endif
 }
