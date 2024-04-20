@@ -36,7 +36,7 @@ ScenePlaying::ScenePlaying():
 	m_pCamera = std::make_shared<Camera>();
 	m_pBackground = std::make_shared<Background>();
 	m_pMap = std::make_shared<Map>();
-	m_pPlayer = std::make_shared<Player>(m_pModel, m_pMap);
+	m_pPlayer = std::make_shared<Player>(m_pModel, m_pSound, m_pMap);
 
 	m_pEnemy.resize(kEnemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -99,6 +99,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			Rect enemyRect = m_pEnemy[i]->GetColRect();
 			if (playerRect.IsCollision(enemyRect))
 			{
+				PlaySoundMem(m_pSound->GetDamageSE(), DX_PLAYTYPE_BACK);
 				//ゲームオーバー画面に遷移
 				return std::make_shared<SceneGameover>();
 			}
@@ -231,6 +232,8 @@ void ScenePlaying::LoadEnemy()
 /// </summary>
 void ScenePlaying::StartStaging()
 {
+	DrawFormatStringToHandle(kTimePosX, kExPosY, 0xffffff, m_pFont->GetTimeFont(), "SPACEでジャンプ！");	// 操作説明
+
 	if (m_startTime >= kStartCount1)
 	{
 		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "3");
@@ -268,6 +271,7 @@ void ScenePlaying::UpdateNotice()
 
 	if (m_time == kNoticeTime1 || m_time == kNoticeTime2 || m_time == kNoticeTime3 || m_time == kNoticeTime4)	// 20秒ごとに実行
 	{
+		PlaySoundMem(m_pSound->GetNoticeSE(), DX_PLAYTYPE_BACK);	// SEを鳴らす
 		m_noticeDisPlayFrame = kNoticeDisPlayFrame;
 	}
 }

@@ -49,7 +49,7 @@ private:
 	int m_fadeAlpha;			// フェードのα値
 
 private:	// 定数
-	static constexpr int kEnemyNum = 45;				// 最大敵数
+	static constexpr int kEnemyNum = 100;				// 最大敵数
 	static constexpr int kClearTime = 60 * 90;			// ゲーム時間
 
 	//スタート時にカウントを表示
@@ -61,6 +61,7 @@ private:	// 定数
 	static constexpr int kStartCountPosX = 910;			// カウント表示位置X
 	static constexpr int kNoticeStartPosX = 670;		// startの文字表示位置X
 	static constexpr int kStartCountPosY = 500;			// カウント表示位置Y
+	static constexpr int kExPosY = 380;					// 操作説明表示位置Y
 
 	// 20秒ごとに時間経過の通知を表示する
 	static constexpr int kNoticeTime1 = 20 * 60;

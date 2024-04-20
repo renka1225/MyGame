@@ -104,6 +104,8 @@ void SceneTitle::Draw()
 	DrawGraph(kLogoPosX, kLogoPosY, m_titleLogo, true);							// タイトルロゴ表示
 	DrawGraph(kCursorPosX, m_cursorPosY, m_cursorHandle, true);					// カーソル表示
 
+	DrawFormatStringToHandle(1500, 950, 0xffffff, m_pFont->GetCreditFont(), "Sound:OtoLogic");	// クレジット表示
+
 #if _DEBUG
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");

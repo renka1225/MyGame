@@ -22,6 +22,7 @@ ManagerFont::ManagerFont()
 	m_startCountFontHandle = CreateFontToHandle("KyouryunoGuratan", 100, -1);
 	m_textFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
 	m_timeFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
+	m_creditFontHandle = CreateFontToHandle("KyouryunoGuratan", 24, -1);
 }
 
 
@@ -34,4 +35,5 @@ ManagerFont::~ManagerFont()
 	DeleteFontToHandle(m_startCountFontHandle);
 	DeleteFontToHandle(m_textFontHandle);
 	DeleteFontToHandle(m_timeFontHandle);
+	DeleteFontToHandle(m_creditFontHandle);
 }

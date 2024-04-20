@@ -5,6 +5,7 @@
 
 class Input;
 class ManagerModel;
+class ManagerSound;
 class Map;
 
 /// <summary>
@@ -13,7 +14,7 @@ class Map;
 class Player
 {
 public:
-	Player(std::shared_ptr<ManagerModel> pModel, std::shared_ptr<Map> pMap);
+	Player(std::shared_ptr<ManagerModel> pModel, std::shared_ptr<ManagerSound> pSound, std::shared_ptr<Map> pMap);
 	virtual ~Player();
 	void Init();
 	void Update(Input& input);
@@ -27,6 +28,7 @@ private:
 
 private:
 	std::shared_ptr<ManagerModel> m_pModel;	// モデルクラスのポインタ
+	std::shared_ptr<ManagerSound> m_pSound;	// サウンドクラスのポインタ
 	std::shared_ptr<Map> m_pMap;			// マップクラスのポインタ
 
 	VECTOR m_pos;		// 表示位置

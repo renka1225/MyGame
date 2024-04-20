@@ -44,6 +44,11 @@ void SceneClear::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	if (!CheckSoundMem(m_pSound->GetClearBgm()))
+	{
+		PlaySoundMem(m_pSound->GetClearBgm(), DX_PLAYTYPE_BACK);	// BGMを鳴らす
+	}
+
 	// フェードアウト
 	m_fadeAlpha -= kFadeFrame;
 	if (m_fadeAlpha < 0)

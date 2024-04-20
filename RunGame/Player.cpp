@@ -2,14 +2,16 @@
 #include "Map.h"
 #include "Input.h"
 #include "ManagerModel.h"
+#include "ManagerSound.h"
 
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="pModel">3Dモデル</param>
-Player::Player(std::shared_ptr<ManagerModel> pModel, std::shared_ptr<Map> pMap):
+Player::Player(std::shared_ptr<ManagerModel> pModel, std::shared_ptr<ManagerSound> pSound, std::shared_ptr<Map> pMap):
 	m_pModel(pModel),
+	m_pSound(pSound),
 	m_pMap(pMap),
 	m_pos(VGet(kInitPosX, kGroundHeight, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
@@ -113,6 +115,9 @@ void Player::Jump(Input& input)
 	// ボタンを離した瞬間ジャンプ
 	if (input.IsReleased("jump"))
 	{
+		// ジャンプSEを鳴らす
+		PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
+
 		// ジャンプの高さを決める
 		float jumpHeight;
 		if (m_jumpFrame < kLittleJumpFrame)
