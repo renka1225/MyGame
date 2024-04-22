@@ -1,21 +1,12 @@
-#include "SceneTitle.h"
 #include "ScenePlaying.h"
+#include "SceneClear.h"
 #include "Input.h"
 #include "DxLib.h"
-
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneTitle::SceneTitle()
-{
-}
-
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-SceneTitle::~SceneTitle()
+ScenePlaying::ScenePlaying()
 {
 }
 
@@ -23,7 +14,7 @@ SceneTitle::~SceneTitle()
 /// <summary>
 /// 初期化
 /// </summary>
-void SceneTitle::Init()
+void ScenePlaying::Init()
 {
 }
 
@@ -33,11 +24,11 @@ void SceneTitle::Init()
 /// </summary>
 /// <param name="input">ボタン入力</param>
 /// <returns>遷移先のポインタ</returns>
-std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
+std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 	if (input.IsTriggered("OK"))
 	{
-		return std::make_shared<ScenePlaying>();
+		return std::make_shared<SceneClear>();
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -47,10 +38,10 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// <summary>
 /// 描画
 /// </summary>
-void SceneTitle::Draw()
+void ScenePlaying::Draw()
 {
 #ifdef _DEBUG
-	// デバッグ表示
-	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
+	// MEMO:デバッグ表示
+	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
 #endif
 }

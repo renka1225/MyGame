@@ -1,2 +1,3 @@
 C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\RunGame\jumpRace\x64\Debug\jumpRace.exe
 C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe
+C:\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe

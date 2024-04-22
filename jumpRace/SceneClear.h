@@ -2,15 +2,16 @@
 #include "SceneBase.h"
 
 /// <summary>
-/// タイトル画面
+/// クリア画面
 /// </summary>
-class SceneTitle : public SceneBase
+class SceneClear : public SceneBase
 {
 public:
-	SceneTitle();
-	virtual ~SceneTitle();
+	SceneClear();
+	virtual ~SceneClear();
 
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 };
+

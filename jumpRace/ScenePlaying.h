@@ -2,15 +2,16 @@
 #include "SceneBase.h"
 
 /// <summary>
-/// タイトル画面
+/// プレイ画面
 /// </summary>
-class SceneTitle : public SceneBase
+class ScenePlaying : public SceneBase
 {
 public:
-	SceneTitle();
-	virtual ~SceneTitle();
+	ScenePlaying();
+	virtual ~ScenePlaying() {};
 
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 };
+

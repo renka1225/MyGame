@@ -6,7 +6,7 @@
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	SetMainWindowText("JumpRace");
+	SetMainWindowText("ジャンプレース");
 
 	// 画面サイズの変更
 	ChangeWindowMode(true);

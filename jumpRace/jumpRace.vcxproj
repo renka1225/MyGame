@@ -146,6 +146,8 @@
     <ClCompile Include="Manager\ManagerModel.cpp" />
     <ClCompile Include="Manager\ManagerSound.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SceneClear.cpp" />
+    <ClCompile Include="ScenePlaying.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -158,6 +160,8 @@
     <ClInclude Include="Manager\ManagerModel.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SceneClear.h" />
+    <ClInclude Include="ScenePlaying.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
