@@ -19,6 +19,6 @@ public:
 	virtual void Draw() = 0;
 
 protected:
-	//std::shared_ptr<ManagerFont> m_pFont;
+	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerSound> m_pSound;
 };

@@ -7,7 +7,7 @@
 ManagerFont::ManagerFont()
 {
 	// ファイルのロード
-	LPCSTR font_path = "data/font/KyouryunoGuratan.otf";
+	LPCSTR font_path = "data/font/Pomeranian-Regular.ttf";
 
 	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0)
 	{
@@ -18,11 +18,11 @@ ManagerFont::ManagerFont()
 		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
 	}
 
-	m_fontHandle = CreateFontToHandle("KyouryunoGuratan", 28, -1);
-	m_startCountFontHandle = CreateFontToHandle("KyouryunoGuratan", 100, -1);
-	m_textFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
-	m_timeFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
-	m_creditFontHandle = CreateFontToHandle("KyouryunoGuratan", 24, -1);
+	m_fontHandle = CreateFontToHandle("Pomeranian", 28, -1);
+	//m_startCountFontHandle = CreateFontToHandle("KyouryunoGuratan", 100, -1);
+	//m_textFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
+	//m_timeFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
+	//m_creditFontHandle = CreateFontToHandle("KyouryunoGuratan", 24, -1);
 }
 
 
@@ -32,8 +32,8 @@ ManagerFont::ManagerFont()
 ManagerFont::~ManagerFont()
 {
 	DeleteFontToHandle(m_fontHandle);
-	DeleteFontToHandle(m_startCountFontHandle);
-	DeleteFontToHandle(m_textFontHandle);
-	DeleteFontToHandle(m_timeFontHandle);
-	DeleteFontToHandle(m_creditFontHandle);
+	//DeleteFontToHandle(m_startCountFontHandle);
+	//DeleteFontToHandle(m_textFontHandle);
+	//DeleteFontToHandle(m_timeFontHandle);
+	//DeleteFontToHandle(m_creditFontHandle);
 }

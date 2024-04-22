@@ -113,8 +113,17 @@ Input::Input()
 	m_commandTable["OK"] = { {InputType::keybd, KEY_INPUT_RETURN},
 							{InputType::pad, PAD_INPUT_A} };
 
-	m_commandTable["jump"] = { {InputType::keybd, KEY_INPUT_SPACE},
+	m_commandTable["A"] = { {InputType::keybd, KEY_INPUT_RIGHT},
+						   {InputType::pad, PAD_INPUT_A} };
+
+	m_commandTable["B"] = { {InputType::keybd, KEY_INPUT_DOWN},
 							   {InputType::pad, PAD_INPUT_B} };
+
+	m_commandTable["X"] = { {InputType::keybd, KEY_INPUT_UP},
+							   {InputType::pad, PAD_INPUT_C} };
+
+	m_commandTable["Y"] = { {InputType::keybd, KEY_INPUT_LEFT},
+							   {InputType::pad, PAD_INPUT_X} };
 
 	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_P},
 						   {InputType::pad, PAD_INPUT_R} };
@@ -122,21 +131,9 @@ Input::Input()
 	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 						{InputType::pad, PAD_INPUT_C} };
 
-	m_commandTable["up"] = { {InputType::keybd, KEY_INPUT_UP},
-							   {InputType::pad, PAD_INPUT_UP} };
-
-	m_commandTable["down"] = { {InputType::keybd, KEY_INPUT_DOWN},
-							   {InputType::pad, PAD_INPUT_DOWN} };
-
-	m_commandTable["left"] = { {InputType::keybd, KEY_INPUT_LEFT},
-							   {InputType::pad, PAD_INPUT_LEFT} };
-
-	m_commandTable["right"] = { {InputType::keybd, KEY_INPUT_RIGHT},
-							   {InputType::pad, PAD_INPUT_RIGHT} };
-
-	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_Z},
-							   {InputType::pad, PAD_INPUT_R} };
-
-	m_commandTable["debug2"] = { {InputType::keybd, KEY_INPUT_X},
+	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
 						   {InputType::pad, PAD_INPUT_Y} };
+
+	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_X},
+							   {InputType::pad, PAD_INPUT_R} };
 }

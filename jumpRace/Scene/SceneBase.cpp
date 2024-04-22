@@ -9,7 +9,7 @@
 /// </summary>
 SceneBase::SceneBase()
 {
-	//m_pFont = std::make_shared<ManagerFont>();
+	m_pFont = std::make_shared<ManagerFont>();
 	m_pSound = std::make_shared<ManagerSound>();
 }
 

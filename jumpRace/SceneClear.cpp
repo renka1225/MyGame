@@ -34,7 +34,7 @@ void SceneClear::Init()
 /// <returns>‘JˆÚæ‚Ìƒ|ƒCƒ“ƒ^</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
-	if (input.IsTriggered("OK"))
+	if (input.IsTriggered("sceneChange"))
 	{
 		return std::make_shared<SceneTitle>();
 	}
