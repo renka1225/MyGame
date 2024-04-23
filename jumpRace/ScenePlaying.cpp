@@ -1,6 +1,8 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
 #include "ManagerFont.h"
+#include "Player.h"
+#include "Camera.h"
 #include "Input.h"
 #include "Game.h"
 #include "DxLib.h"
@@ -13,6 +15,8 @@ ScenePlaying::ScenePlaying():
 	m_time(0),
 	m_pushCount(0)
 {
+	m_pPlayer = std::make_shared<Player>();
+	m_pCamera = std::make_shared<Camera>();
 }
 
 
@@ -44,6 +48,11 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		return std::make_shared<SceneClear>();
 	}
 
+	// プレイヤーの更新
+	m_pPlayer->Update(input);
+	// カメラの更新
+	m_pCamera->Update(m_pPlayer);
+
 #ifdef _DEBUG
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
@@ -61,6 +70,9 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
+	// プレイヤーの描画
+	m_pPlayer->Draw();
+
 	// 入力コマンドを表示
 	DrawCommand();
 
@@ -70,6 +82,12 @@ void ScenePlaying::Draw()
 	milliSec %= 1000;
 
 #ifdef _DEBUG
+	// MEMO:XYZ軸デバック表示
+	float lineSize = 300.0f;
+	DrawLine3D(VGet(-lineSize, 0.0f, 0), VGet(lineSize, 0.0f, 0.0f), 0xff0000);
+	DrawLine3D(VGet(0.0f, -lineSize, 0.0f), VGet(0.0f, lineSize, 0.0f), 0x00ff00);
+	DrawLine3D(VGet(0.0f, 0.0f, -lineSize), VGet(0.0f, 0.0f, lineSize), 0x0000ff);
+
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
 	DrawFormatString(0, 20, 0xffffff, "入力回数:%d", m_pushCount);
@@ -88,6 +106,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		if (input.IsTriggered("A"))
 		{
 			m_pushCount++;
+			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
 	}
@@ -96,6 +115,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		if (input.IsTriggered("B"))
 		{
 			m_pushCount++;
+			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
 	}
@@ -104,6 +124,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		if (input.IsTriggered("X"))
 		{
 			m_pushCount++;
+			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
 	}
@@ -112,6 +133,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		if (input.IsTriggered("Y"))
 		{
 			m_pushCount++;
+			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
 	}
@@ -125,18 +147,18 @@ void ScenePlaying::DrawCommand()
 {
 	if (m_nowCommand == A)
 	{
-		DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, 200, 0xff0000, m_pFont->GetFont(), "A");
+		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0xff0000, m_pFont->GetFont(), "A");
 	}
 	if (m_nowCommand == B)
 	{
-		DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, 200, 0x00ff00, m_pFont->GetFont(), "B");
+		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0x00ff00, m_pFont->GetFont(), "B");
 	}
 	if (m_nowCommand == X)
 	{
-		DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, 200, 0x0000ff, m_pFont->GetFont(), "X");
+		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0x0000ff, m_pFont->GetFont(), "X");
 	}
 	if (m_nowCommand == Y)
 	{
-		DrawFormatStringToHandle(Game::kScreenWidth * 0.5f, 200, 0xff00ff, m_pFont->GetFont(), "Y");
+		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0xff00ff, m_pFont->GetFont(), "Y");
 	}
 }

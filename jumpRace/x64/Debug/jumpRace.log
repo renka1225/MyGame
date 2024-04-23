@@ -1,8 +1,2 @@
-﻿  ManagerSound.cpp
-  ScenePlaying.cpp
-C:\GitHub\MyGame\jumpRace\ScenePlaying.cpp(128,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\jumpRace\ScenePlaying.cpp(132,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\jumpRace\ScenePlaying.cpp(136,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\jumpRace\ScenePlaying.cpp(140,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  コードを生成中...
-  jumpRace.vcxproj -> C:\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe
+﻿  Player.cpp
+  jumpRace.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe
