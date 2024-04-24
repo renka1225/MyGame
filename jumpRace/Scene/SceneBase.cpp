@@ -1,6 +1,7 @@
 #include "SceneBase.h"
 #include "ManagerFont.h"
 #include "ManagerSound.h"
+#include "ManagerResult.h"
 #include "DxLib.h"
 
 
@@ -11,6 +12,7 @@ SceneBase::SceneBase()
 {
 	m_pFont = std::make_shared<ManagerFont>();
 	m_pSound = std::make_shared<ManagerSound>();
+	m_pResult = std::make_shared<ManagerResult>();
 }
 
 

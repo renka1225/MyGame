@@ -24,8 +24,8 @@ private:
 
 private:
 	// ポインタ
-	std::shared_ptr<Player> m_pPlayer;	// プレイヤー
-	std::shared_ptr<Camera> m_pCamera;	// カメラ
+	std::shared_ptr<Player> m_pPlayer;			// プレイヤー
+	std::shared_ptr<Camera> m_pCamera;			// カメラ
 
 	// 入力コマンドの種類
 	enum Command
@@ -41,6 +41,6 @@ private:
 	int m_pushCount;	// ボタンを押した回数
 
 private:	// 定数
-	static constexpr int kMaxPush = 50;		// 50回ボタン入力を行う
+	static constexpr int kMaxPush = 10;		// 50回ボタン入力を行う
 };
 

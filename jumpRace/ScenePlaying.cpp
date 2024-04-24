@@ -1,6 +1,7 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
 #include "ManagerFont.h"
+#include "ManagerResult.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Input.h"
@@ -25,6 +26,7 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
+	m_pResult->Load();
 	m_nowCommand = GetRand(Y);
 }
 
@@ -45,7 +47,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// 50回入力できたらクリア画面に遷移
 	if (m_pushCount >= kMaxPush)
 	{
-		return std::make_shared<SceneClear>();
+		m_pResult->Save(m_time);	// クリアタイムを保存
+		return std::make_shared<SceneClear>(m_time);
 	}
 
 	// プレイヤーの更新
@@ -70,9 +73,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-	// プレイヤーの描画
-	m_pPlayer->Draw();
-
 	// 入力コマンドを表示
 	DrawCommand();
 
@@ -93,6 +93,9 @@ void ScenePlaying::Draw()
 	DrawFormatString(0, 20, 0xffffff, "入力回数:%d", m_pushCount);
 	DrawFormatString(0, 40, 0xffffff, "タイム %02d:%03d", sec, milliSec);
 #endif
+
+	// プレイヤーの描画
+	m_pPlayer->Draw();
 }
 
 

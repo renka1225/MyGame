@@ -142,6 +142,7 @@
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ManagerResult.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerSound.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
+    <ClInclude Include="ManagerResult.h" />
     <ClInclude Include="Manager\ManagerFont.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
     <ClInclude Include="Player.h" />

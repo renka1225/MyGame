@@ -4,6 +4,7 @@
 class Input;
 class ManagerFont;
 class ManagerSound;
+class ManagerResult;
 
 /// <summary>
 /// シーン基底クラス
@@ -21,4 +22,5 @@ public:
 protected:
 	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerSound> m_pSound;
+	std::shared_ptr<ManagerResult> m_pResult;
 };
