@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager;$(projectDir)Background</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -93,7 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager;$(projectDir)Background</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager;$(projectDir)Background</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;$(projectDir);$(projectDir)Game;$(projectDir);$(projectDir)Game;$(projectDir)Scene;$(ProjectDir);$(ProjectDir)Game;$(ProjectDir)Manager;$(projectDir)Background</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -139,32 +139,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Background\Background.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ManagerResult.cpp" />
+    <ClCompile Include="Manager\ManagerResult.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerSound.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneClear.cpp" />
-    <ClCompile Include="ScenePlaying.cpp" />
-    <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="Scene\SceneClear.cpp" />
+    <ClCompile Include="Scene\ScenePlaying.cpp" />
+    <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Background\WorldSprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Background\Background.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
-    <ClInclude Include="ManagerResult.h" />
+    <ClInclude Include="Manager\ManagerResult.h" />
     <ClInclude Include="Manager\ManagerFont.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneClear.h" />
-    <ClInclude Include="ScenePlaying.h" />
-    <ClInclude Include="SceneTitle.h" />
+    <ClInclude Include="Scene\SceneClear.h" />
+    <ClInclude Include="Scene\ScenePlaying.h" />
+    <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Background\WorldSprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

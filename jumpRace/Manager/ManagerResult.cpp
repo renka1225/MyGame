@@ -4,7 +4,8 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-ManagerResult::ManagerResult()
+ManagerResult::ManagerResult():
+	fp(nullptr)
 {
 }
 
@@ -35,10 +36,13 @@ void ManagerResult::Save(int time)
 	// ハイスコア更新
 	if (m_saveData.highScore > time)
 	{
+		m_saveData.third = m_saveData.second;
+		m_saveData.second = m_saveData.highScore;
 		m_saveData.highScore = time;
 	}
 	else if (m_saveData.second > time)
 	{
+		m_saveData.third = m_saveData.second;
 		m_saveData.second = time;
 	}
 	else if(m_saveData.third > time)
@@ -48,7 +52,23 @@ void ManagerResult::Save(int time)
 
 	m_saveData.clearTime = time;	// クリアタイム更新
 
-	printfDx("ベストタイム:%d, 2位:%d, 3位:%d", m_saveData.highScore, m_saveData.second, m_saveData.third);
+#ifdef _DEBUG
+	// 経過時間の描画
+	int milliSec = m_saveData.highScore * 1000 / 60;
+	int sec = (milliSec / 1000) % 90;
+	milliSec %= 1000;
+	printfDx("ベストタイム:%02d:%03d\n", sec, milliSec);
+
+	milliSec = m_saveData.second * 1000 / 60;
+	sec = (milliSec / 1000) % 90;
+	milliSec %= 1000;
+	printfDx("2位:%02d:%03d\n", sec, milliSec);
+
+	milliSec = m_saveData.third * 1000 / 60;
+	sec = (milliSec / 1000) % 90;
+	milliSec %= 1000;
+	printfDx("3位:%02d:%03d\n", sec, milliSec);
+#endif
 
 	if (fopen_s(&fp, fileName, "wb") != 0)
 	{

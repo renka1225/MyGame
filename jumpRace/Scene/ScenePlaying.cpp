@@ -1,9 +1,11 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
 #include "ManagerFont.h"
+#include "ManagerSound.h"
 #include "ManagerResult.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Background.h"
 #include "Input.h"
 #include "Game.h"
 #include "DxLib.h"
@@ -13,11 +15,13 @@
 /// </summary>
 ScenePlaying::ScenePlaying():
 	m_nowCommand(A),
+	m_startTime(0),
 	m_time(0),
 	m_pushCount(0)
 {
 	m_pPlayer = std::make_shared<Player>();
-	m_pCamera = std::make_shared<Camera>();
+	m_pCamera = std::make_shared<Camera>(m_pPlayer);
+	m_pBackground = std::make_shared<Background>();
 }
 
 
@@ -26,6 +30,7 @@ ScenePlaying::ScenePlaying():
 /// </summary>
 void ScenePlaying::Init()
 {
+	m_pBackground->Init();
 	m_pResult->Load();
 	m_nowCommand = GetRand(Y);
 }
@@ -38,6 +43,19 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
+	// プレイヤーの更新
+	m_pPlayer->Update(input);
+	// カメラの更新
+	m_pCamera->Update();
+
+	// スタート演出を行う
+	//if (m_startTime > 0)
+	//{
+	//	m_startTime--;
+	//	StartCount();
+	//	return shared_from_this();
+	//}
+
 	// タイム更新
 	m_time++;
 
@@ -50,11 +68,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		m_pResult->Save(m_time);	// クリアタイムを保存
 		return std::make_shared<SceneClear>(m_time);
 	}
-
-	// プレイヤーの更新
-	m_pPlayer->Update(input);
-	// カメラの更新
-	m_pCamera->Update(m_pPlayer);
 
 #ifdef _DEBUG
 	// MEMO:デバッグ用
@@ -73,8 +86,18 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-	// 入力コマンドを表示
-	DrawCommand();
+	m_pBackground->Draw();
+
+	if (m_startTime > 0)
+	{
+		// スタート演出の表示
+		StartStaging();
+	}
+	else
+	{
+		// 入力コマンドを表示
+		DrawCommand();
+	}
 
 	// 経過時間の描画
 	int milliSec = m_time * 1000 / 60;
@@ -96,6 +119,46 @@ void ScenePlaying::Draw()
 
 	// プレイヤーの描画
 	m_pPlayer->Draw();
+}
+
+
+/// <summary>
+/// スタートカウントを鳴らす
+/// </summary>
+void ScenePlaying::StartCount()
+{
+	if (m_startTime >= kStartCount1)
+	{
+		PlaySoundMem(m_pSound->GetCount3SE(), DX_PLAYTYPE_BACK);
+	}
+	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
+	{
+		PlaySoundMem(m_pSound->GetCount2SE(), DX_PLAYTYPE_BACK);
+	}
+	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
+	{
+		PlaySoundMem(m_pSound->GetCount1SE(), DX_PLAYTYPE_BACK);
+	}
+}
+
+
+/// <summary>
+/// スタート演出の表示
+/// </summary>
+void ScenePlaying::StartStaging()
+{
+	if (m_startTime >= kStartCount1)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "3");
+	}
+	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "2");
+	}
+	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
+	{
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "1");
+	}
 }
 
 

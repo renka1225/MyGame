@@ -31,6 +31,12 @@
     <Filter Include="ヘッダー ファイル\Manager">
       <UniqueIdentifier>{8e76a2ea-e90c-480e-b6fb-e2ba1b7fde65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Background">
+      <UniqueIdentifier>{1c6fc806-58c3-48f6-9fec-264a49ca3ebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Background">
+      <UniqueIdentifier>{0afddca2-3a14-40f7-9f5a-2da7aae004dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,20 +60,26 @@
     <ClCompile Include="Manager\ManagerFont.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTitle.cpp">
+    <ClCompile Include="Scene\SceneTitle.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ScenePlaying.cpp">
+    <ClCompile Include="Scene\ScenePlaying.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneClear.cpp">
+    <ClCompile Include="Scene\SceneClear.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ManagerResult.cpp">
+    <ClCompile Include="Manager\ManagerResult.cpp">
       <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\Background.cpp">
+      <Filter>ソース ファイル\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\WorldSprite.cpp">
+      <Filter>ソース ファイル\Background</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,20 +104,26 @@
     <ClInclude Include="Manager\ManagerFont.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTitle.h">
+    <ClInclude Include="Scene\SceneTitle.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ScenePlaying.h">
+    <ClInclude Include="Scene\ScenePlaying.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneClear.h">
+    <ClInclude Include="Scene\SceneClear.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ManagerResult.h">
+    <ClInclude Include="Manager\ManagerResult.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\WorldSprite.h">
+      <Filter>ヘッダー ファイル\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\Background.h">
+      <Filter>ヘッダー ファイル\Background</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

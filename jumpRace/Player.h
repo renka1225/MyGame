@@ -25,8 +25,10 @@ private:
 
 private:	// 定数
 	static constexpr float kScale = 0.5f;							// プレイヤーのサイズ
-	static constexpr float kMove = -3.0f;							// 移動量
+	static constexpr float kJumpHeight = 40.0f;						// ジャンプの高さ
+	static constexpr float kMoveZ = -10.0f;							// Z軸の移動量
+	static constexpr float kGravity = -5.0f;						// 重力
 	static constexpr float kInitPosX = 0.0f;						// 初期位置X
 	static constexpr float kInitPosY = 10.0f;						// 初期位置Y
-	static constexpr float kInitPosZ = 100.0f;						// 初期位置Z
+	static constexpr float kInitPosZ = 0.0f;						// 初期位置Z
 };

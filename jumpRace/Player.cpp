@@ -8,7 +8,7 @@ Player::Player():
 	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ)),
 	m_model(-1)
 {
-	m_model = MV1LoadModel("data/Model/duck.mv1");
+	m_model = MV1LoadModel("data/Model/rabbit.mv1");
 
 	// 3Dモデルのサイズ決定
 	MV1SetScale(m_model, VGet(kScale, kScale, kScale));
@@ -39,6 +39,14 @@ void Player::Init()
 /// <param name="input">ボタン入力</param>
 void Player::Update(Input& input)
 {
+	m_pos = VAdd(m_pos, VGet(0.0f, kGravity, 0.0f));
+
+	// 地面に着地させる
+	if (m_pos.y < 0.0f)
+	{
+		m_pos = VGet(0.0f, 0.0f, m_pos.z);
+	}
+
 	// ポジション設定
 	MV1SetPosition(m_model, m_pos);
 }
@@ -64,5 +72,5 @@ void Player::Draw()
 /// </summary>
 void Player::Move()
 {
-	m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, kMove));
+	m_pos = VAdd(m_pos, VGet(0.0f, kJumpHeight, kMoveZ));
 }
