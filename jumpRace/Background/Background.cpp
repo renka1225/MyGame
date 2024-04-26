@@ -45,5 +45,6 @@ void Background::Update()
 /// </summary>
 void Background::Draw()
 {
+	DrawGraph(0, 0, m_background, true);
 	m_sprite->Draw();
 }

@@ -24,7 +24,7 @@ private:
 	int m_model;	// 3Dモデル
 
 private:	// 定数
-	static constexpr float kScale = 0.5f;							// プレイヤーのサイズ
+	static constexpr float kScale = 0.3f;							// プレイヤーのサイズ
 	static constexpr float kJumpHeight = 40.0f;						// ジャンプの高さ
 	static constexpr float kMoveZ = -10.0f;							// Z軸の移動量
 	static constexpr float kGravity = -5.0f;						// 重力

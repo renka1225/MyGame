@@ -3,10 +3,10 @@
 #include "Input.h"
 #include "Game.h"
 
-// プログラムは WinMain から始まります
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	SetMainWindowText("ジャンプレース");
+	SetMainWindowText("HoppingRace");
 
 	// 画面サイズの変更
 	ChangeWindowMode(true);
@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	DxLib_End();				// ＤＸライブラリ使用の終了処理
+	DxLib_End();			// ＤＸライブラリ使用の終了処理
 
 	return 0;				// ソフトの終了 
 }

@@ -18,7 +18,7 @@ void WorldSprite::Init(int textureGraph, int width, int height, int spriteNo)
 	int chipNumX = texW / width;
 	int chipNoX = spriteNo % chipNumX;
 	int chipNumY = texH / height;
-	int chipNoY = spriteNo / chipNumY;
+	int chipNoY = spriteNo % chipNumY;
 	float URate = 1.0f / static_cast<float>(chipNumX); // テクスチャ全部を1.0とした時のuのサイズ
 	float VRate = 1.0f / static_cast<float>(chipNumY); // テクスチャ全部を1.0とした時のvのサイズ
 	Vertex[0].u = (chipNoX + 0.0f) * URate;

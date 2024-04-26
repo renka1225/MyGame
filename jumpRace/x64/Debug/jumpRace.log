@@ -1,2 +1,6 @@
-﻿  ScenePlaying.cpp
+﻿  WorldSprite.cpp
+  ScenePlaying.cpp
+  SceneTitle.cpp
+  main.cpp
+  コードを生成中...
   jumpRace.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe
