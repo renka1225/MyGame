@@ -28,7 +28,7 @@ Background::~Background()
 void Background::Init()
 {
 	m_sprite->Init(m_background, kWidth, kHeight, 0);
-	m_sprite->SetTransform(m_pos, kScele);
+	m_sprite->SetGroundTransform(m_pos, kScele);
 }
 
 
