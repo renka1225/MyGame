@@ -125,6 +125,18 @@ Input::Input()
 	m_commandTable["Y"] = { {InputType::keybd, KEY_INPUT_LEFT},
 							   {InputType::pad, PAD_INPUT_X} };
 
+	m_commandTable["up"] = { {InputType::keybd, KEY_INPUT_UP},
+						   {InputType::pad, PAD_INPUT_UP} };
+
+	m_commandTable["down"] = { {InputType::keybd, KEY_INPUT_DOWN},
+							   {InputType::pad, PAD_INPUT_DOWN} };
+
+	m_commandTable["left"] = { {InputType::keybd, KEY_INPUT_LEFT},
+							   {InputType::pad, PAD_INPUT_LEFT} };
+
+	m_commandTable["right"] = { {InputType::keybd, KEY_INPUT_RIGHT},
+							   {InputType::pad, PAD_INPUT_RIGHT} };
+
 	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_P},
 						   {InputType::pad, PAD_INPUT_R} };
 

@@ -1,5 +1,7 @@
-﻿  Camera.cpp
-  Player.cpp
+﻿  SceneClear.cpp
+C:\GitHub\MyGame\jumpRace\Scene\SceneClear.cpp(74,38): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  SceneManager.cpp
   ScenePlaying.cpp
+  SceneTitle.cpp
   コードを生成中...
   jumpRace.vcxproj -> C:\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe

@@ -1,5 +1,7 @@
 #include "SceneClear.h"
 #include "SceneTitle.h"
+#include "ScenePlaying.h"
+#include "ManagerFont.h"
 #include "ManagerResult.h"
 #include "Input.h"
 #include "Game.h"
@@ -9,7 +11,8 @@
 /// コンストラクタ
 /// </summary>
 SceneClear::SceneClear(int time):
-	m_clearTime(time)
+	m_clearTime(time),
+	m_select(kStart)
 {
 }
 
@@ -27,6 +30,7 @@ SceneClear::~SceneClear()
 /// </summary>
 void SceneClear::Init()
 {
+	// 処理なし
 }
 
 
@@ -37,9 +41,18 @@ void SceneClear::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	UpdateSelect(input);	// 選択状態更新
+
 	if (input.IsTriggered("sceneChange"))
 	{
-		return std::make_shared<SceneTitle>();
+		if (m_select == kStart)
+		{
+			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
+		}
+		else if (m_select == kTitle)
+		{
+			return std::make_shared<SceneTitle>();		//タイトル画面に移動
+		}
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -51,6 +64,9 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
+	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetFont(), "もう1回");
+	DrawFormatStringToHandle(kTitleTextPosX, kTitleTextPosY, 0xffffff, m_pFont->GetFont(), "タイトルにもどる");
+
 	// クリアタイム表示
 	int milliSec = m_clearTime * 1000 / 60;
 	int sec = (milliSec / 1000) % 90;
@@ -62,3 +78,20 @@ void SceneClear::Draw()
 	DrawFormatString(0, 0, 0xffffff, "クリア画面");
 #endif
 }
+
+
+/// <summary>
+/// 選択状態の更新
+/// </summary>
+void SceneClear::UpdateSelect(Input& input)
+{
+	if (input.IsTriggered("down"))
+	{
+		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
+	}
+	if (input.IsTriggered("up"))
+	{
+		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ上げる
+	}
+}
+
