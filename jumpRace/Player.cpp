@@ -1,14 +1,15 @@
 #include "Player.h"
+#include "ManagerModel.h"
 #include "Input.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Player::Player():
-	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ)),
-	m_model(-1)
+Player::Player(std::shared_ptr<ManagerModel> pModel):
+	m_pModel(pModel),
+	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ))
 {
-	m_model = MV1LoadModel("data/Model/rabbit.mv1");
+	m_model = MV1DuplicateModel(m_pModel->GetPlayerModel());
 
 	// 3Dモデルのサイズ決定
 	MV1SetScale(m_model, VGet(kScale, kScale, kScale));
@@ -39,10 +40,19 @@ void Player::Init()
 /// <param name="input">ボタン入力</param>
 void Player::Update(Input& input)
 {
+	if (input.IsPressing("down"))
+	{
+		m_pos.z -= 1.0f;
+	}
+	if (input.IsPressing("up"))
+	{
+		m_pos.z += 1.0f;
+	}
+
 	m_pos = VAdd(m_pos, VGet(0.0f, kGravity, 0.0f));
 
 	// 地面に着地させる
-	if (m_pos.y < 0.0f)
+	if (m_pos.y < kInitPosX)
 	{
 		m_pos = VGet(0.0f, 0.0f, m_pos.z);
 	}

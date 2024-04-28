@@ -1,5 +1,6 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
+#include "ManagerModel.h"
 #include "ManagerFont.h"
 #include "ManagerSound.h"
 #include "ManagerResult.h"
@@ -19,9 +20,10 @@ ScenePlaying::ScenePlaying():
 	m_time(0),
 	m_pushCount(0)
 {
-	m_pPlayer = std::make_shared<Player>();
+	m_pModel = std::make_shared<ManagerModel>();
+	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pCamera = std::make_shared<Camera>(m_pPlayer);
-	m_pBackground = std::make_shared<Background>();
+	m_pBackground = std::make_shared<Background>(m_pModel);
 }
 
 
@@ -43,18 +45,22 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
+	// モデルの更新
+	m_pModel->Update();
+	// 背景の更新
+	m_pBackground->Update();
 	// プレイヤーの更新
 	m_pPlayer->Update(input);
 	// カメラの更新
 	m_pCamera->Update();
 
 	// スタート演出を行う
-	//if (m_startTime > 0)
-	//{
-	//	m_startTime--;
-	//	StartCount();
-	//	return shared_from_this();
-	//}
+	if (m_startTime > 0)
+	{
+		m_startTime--;
+		//StartCount();
+		return shared_from_this();
+	}
 
 	// タイム更新
 	m_time++;
@@ -86,7 +92,10 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
+	// 背景描画
 	m_pBackground->Draw();
+	// モデル描画
+	m_pModel->Draw();
 
 	if (m_startTime > 0)
 	{
@@ -149,15 +158,15 @@ void ScenePlaying::StartStaging()
 {
 	if (m_startTime >= kStartCount1)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "3");
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffffff, m_pFont->GetStartCountFont(), "3");
 	}
 	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "2");
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffffff, m_pFont->GetStartCountFont(), "2");
 	}
 	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffd700, m_pFont->GetStartCountFont(), "1");
+		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffffff, m_pFont->GetStartCountFont(), "1");
 	}
 }
 

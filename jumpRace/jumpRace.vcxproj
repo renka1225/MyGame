@@ -143,9 +143,13 @@
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\ManagerModel.cpp" />
     <ClCompile Include="Manager\ManagerResult.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerSound.cpp" />
+    <ClCompile Include="ModelBase.cpp" />
+    <ClCompile Include="ModelGround.cpp" />
+    <ClCompile Include="ModelTree.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Scene\ScenePlaying.cpp" />
@@ -159,9 +163,13 @@
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
+    <ClInclude Include="Manager\ManagerModel.h" />
     <ClInclude Include="Manager\ManagerResult.h" />
     <ClInclude Include="Manager\ManagerFont.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
+    <ClInclude Include="ModelBase.h" />
+    <ClInclude Include="ModelGround.h" />
+    <ClInclude Include="ModelTree.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\ScenePlaying.h" />

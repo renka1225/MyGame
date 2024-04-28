@@ -2,9 +2,13 @@ C:\GitHub\MyGame\jumpRace\Background\Background.cpp;C:\GitHub\MyGame\jumpRace\x6
 C:\GitHub\MyGame\jumpRace\Game\Camera.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Camera.obj
 C:\GitHub\MyGame\jumpRace\Game\Input.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Input.obj
 C:\GitHub\MyGame\jumpRace\main.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\main.obj
+C:\GitHub\MyGame\jumpRace\Manager\ManagerModel.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ManagerModel.obj
 C:\GitHub\MyGame\jumpRace\Manager\ManagerResult.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ManagerResult.obj
 C:\GitHub\MyGame\jumpRace\Manager\ManagerFont.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ManagerFont.obj
 C:\GitHub\MyGame\jumpRace\Manager\ManagerSound.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ManagerSound.obj
+C:\GitHub\MyGame\jumpRace\ModelBase.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ModelBase.obj
+C:\GitHub\MyGame\jumpRace\ModelGround.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ModelGround.obj
+C:\GitHub\MyGame\jumpRace\ModelTree.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ModelTree.obj
 C:\GitHub\MyGame\jumpRace\Player.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Player.obj
 C:\GitHub\MyGame\jumpRace\Scene\SceneClear.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\SceneClear.obj
 C:\GitHub\MyGame\jumpRace\Scene\ScenePlaying.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ScenePlaying.obj

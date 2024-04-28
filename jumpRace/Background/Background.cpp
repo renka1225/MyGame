@@ -1,15 +1,19 @@
 #include "Background.h"
+#include "ManagerModel.h"
 #include "WorldSprite.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Background::Background():
-	m_pos(VGet(0.0f, 0.0f, 0.0f))
+Background::Background(std::shared_ptr<ManagerModel> pModel):
+	m_pModel(pModel),
+	m_backgroundPos(VGet(0.0f, 0.0f, 10.0f))
 {
-	m_background = LoadGraph("data/Background/5.png");
-
 	m_sprite = std::make_shared<WorldSprite>();
+
+	m_background = LoadGraph("data/Background/5.png");
+	m_groundModel = MV1DuplicateModel(m_pModel->GetGroundModel());
+	m_treeModel = MV1DuplicateModel(m_pModel->GetTreeModel());
 }
 
 
@@ -19,6 +23,8 @@ Background::Background():
 Background::~Background()
 {
 	DeleteGraph(m_background);
+	MV1DeleteModel(m_groundModel);
+	MV1DeleteModel(m_treeModel);
 }
 
 
@@ -27,8 +33,20 @@ Background::~Background()
 /// </summary>
 void Background::Init()
 {
+	// スプライト画像の初期化
 	m_sprite->Init(m_background, kWidth, kHeight, 0);
-	m_sprite->SetGroundTransform(m_pos, kScele);
+	m_sprite->SetGroundTransform(m_backgroundPos, kBackScele);
+
+	// 地面の調整
+	MV1SetScale(m_groundModel, VGet(kGroundScaleWidth, kGroundScaleHeight, kGroundScaleDepth));
+	MV1SetPosition(m_groundModel, VGet(0.0f, -kGroundPosY, kGroundPosZ));
+
+	// 木の調整
+	MV1SetScale(m_treeModel, VGet(50.0f, 50.0f, 50.0f));
+	for (int i = 0; i < 10; i++)
+	{
+		MV1SetPosition(m_treeModel, VGet(-100.0f, -50.0f, -30.0f * i));
+	}
 }
 
 
@@ -46,5 +64,8 @@ void Background::Update()
 void Background::Draw()
 {
 	DrawGraph(0, 0, m_background, true);
-	m_sprite->Draw();
+	//m_sprite->Draw();
+
+	MV1DrawModel(m_groundModel);
+	MV1DrawModel(m_treeModel);
 }

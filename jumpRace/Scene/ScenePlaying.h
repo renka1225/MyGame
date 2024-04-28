@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 #include <memory>
 
+class ManagerModel;
 class Player;
 class Camera;
 class Background;
@@ -27,6 +28,7 @@ private:
 
 private:
 	// ポインタ
+	std::shared_ptr<ManagerModel> m_pModel;		// 3Dモデル
 	std::shared_ptr<Player> m_pPlayer;			// プレイヤー
 	std::shared_ptr<Camera> m_pCamera;			// カメラ
 	std::shared_ptr<Background> m_pBackground;	// 背景
@@ -49,11 +51,11 @@ private:	// 定数
 	static constexpr int kMaxPush = 10;		// 50回ボタン入力を行う
 
 	// スタート演出
-	static constexpr int kStartTime = 60 * 4;		// スタート時の演出時間
-	static constexpr int kStartCount1 = 60 * 3;		// 1カウント目
-	static constexpr int kStartCount2 = 60 * 2;		// 2カウント目
+	static constexpr int kStartTime = 240;			// スタート時の演出時間
+	static constexpr int kStartCount1 = 180;		// 1カウント目
+	static constexpr int kStartCount2 = 120;		// 2カウント目
 	static constexpr int kStartCount3 = 60;			// 3カウント目
 	static constexpr int kStartCount4 = 0;			// startSEを鳴らす
-	static constexpr int kStartCountPosX = 500;		// カウント表示位置X
-	static constexpr int kStartCountPosY = 400;		// カウント表示位置Y
+	static constexpr int kStartCountPosX = 620;		// カウント表示位置X
+	static constexpr int kStartCountPosY = 200;		// カウント表示位置Y
 };
