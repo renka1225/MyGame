@@ -37,6 +37,12 @@
     <Filter Include="ヘッダー ファイル\Background">
       <UniqueIdentifier>{0afddca2-3a14-40f7-9f5a-2da7aae004dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Model">
+      <UniqueIdentifier>{8fbef38e-88fe-40b3-a300-2cd392a87fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Model">
+      <UniqueIdentifier>{508539a5-f9ff-4c4d-9cb3-5c796e351732}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,14 +90,14 @@
     <ClCompile Include="Manager\ManagerModel.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="ModelBase.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Model\ModelBase.cpp">
+      <Filter>ソース ファイル\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Background\ModelTree.cpp">
-      <Filter>ソース ファイル\Background</Filter>
+    <ClCompile Include="Model\ModelTree.cpp">
+      <Filter>ソース ファイル\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Background\ModelGround.cpp">
-      <Filter>ソース ファイル\Background</Filter>
+    <ClCompile Include="Model\ModelGround.cpp">
+      <Filter>ソース ファイル\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,14 +146,14 @@
     <ClInclude Include="Manager\ManagerModel.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="ModelBase.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Model\ModelBase.h">
+      <Filter>ヘッダー ファイル\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Background\ModelTree.h">
-      <Filter>ヘッダー ファイル\Background</Filter>
+    <ClInclude Include="Model\ModelTree.h">
+      <Filter>ヘッダー ファイル\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Background\ModelGround.h">
-      <Filter>ヘッダー ファイル\Background</Filter>
+    <ClInclude Include="Model\ModelGround.h">
+      <Filter>ヘッダー ファイル\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

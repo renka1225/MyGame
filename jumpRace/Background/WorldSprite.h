@@ -9,7 +9,6 @@ class WorldSprite
 public:
 	void Init(int textureGraph, int width, int height, int spriteNo);
 	void SetTransform(const VECTOR& pos, float spriteSize);
-	void SetGroundTransform(const VECTOR& pos, float spriteSize);
 	void Draw();
 
 private:

@@ -14,7 +14,7 @@ public:
 private:
 	static constexpr float kScale = 30.0f;	// モデルの拡大率
 
-	static constexpr float kGroundScaleWidth = 300.0f;	// 地面横の拡大率
+	static constexpr float kGroundScaleWidth = 500.0f;	// 地面横の拡大率
 	static constexpr float kGroundScaleHeight = 20.0f;	// 地面高さの拡大率
 	static constexpr float kGroundScaleDepth = 700.0f;	// 地面奥行きの拡大率
 };

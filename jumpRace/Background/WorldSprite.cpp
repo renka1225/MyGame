@@ -62,30 +62,10 @@ void WorldSprite::SetTransform(const VECTOR& pos, float spriteSize)
 {
 	this->pos = pos;
 	// ピボット中心で設定
-	Vertex[0].pos = VScale(VGet(-1.0f, 1.0f, 0.0f), spriteSize * 0.5f);
-	Vertex[1].pos = VScale(VGet(1.0f, 1.0f, 0.0f), spriteSize * 0.5f);
-	Vertex[2].pos = VScale(VGet(-1.0, -1.0f, 0.0f), spriteSize * 0.5f);
-	Vertex[3].pos = VScale(VGet(1.0f, -1.0f, 0.0f), spriteSize * 0.5f);
-	for (int i = 0; i < 4; i++)
-	{
-		Vertex[i].pos = VAdd(Vertex[i].pos, pos);
-	}
-}
-
-
-/// <summary>
-/// 地面の4頂点分の頂点座標を調整する
-/// </summary>
-/// <param name="pos">ポジション</param>
-/// <param name="spriteSize">配置するワールドスプライトのサイズ</param>
-void WorldSprite::SetGroundTransform(const VECTOR& pos, float spriteSize)
-{
-	this->pos = pos;
-	// ピボット中心で設定
-	Vertex[0].pos = VScale(VGet(-0.1f, 1.0f, 0.0f), spriteSize);
-	Vertex[1].pos = VScale(VGet(0.1f, 1.0f, 0.0f), spriteSize);
-	Vertex[2].pos = VScale(VGet(-1.0, -1.0f, 0.0f), spriteSize);
-	Vertex[3].pos = VScale(VGet(1.0f, -1.0f, 0.0f), spriteSize);
+	Vertex[0].pos = VScale(VGet(-2.0f, 1.0f, 0.0f), spriteSize * 0.5f);
+	Vertex[1].pos = VScale(VGet(2.0f, 1.0f, 0.0f), spriteSize * 0.5f);
+	Vertex[2].pos = VScale(VGet(-2.0, -1.0f, 0.0f), spriteSize * 0.5f);
+	Vertex[3].pos = VScale(VGet(2.0f, -1.0f, 0.0f), spriteSize * 0.5f);
 	for (int i = 0; i < 4; i++)
 	{
 		Vertex[i].pos = VAdd(Vertex[i].pos, pos);

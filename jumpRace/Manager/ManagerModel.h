@@ -32,7 +32,7 @@ private:
 
 private:
 	static constexpr int kGroundNum = 3;			// 設置する地面の数
-	static constexpr float kGroundPosX = 150.0f;	// 設置する地面の位置X
+	static constexpr float kGroundPosX = 500.0f;	// 設置する地面の位置X
 	static constexpr float kGroundPosY = 100.0f;	// 設置する地面の位置Y
 	static constexpr float kGroundPosZ = 0.0f;		// 設置する地面の位置Z
 	static constexpr int kTreeNum = 10;				// 合計の木の数

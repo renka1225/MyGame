@@ -30,9 +30,11 @@ private:
 	int m_select;	// 現在の選択状態
 
 private: // 定数
-	static constexpr int kStartTextPosX = 600;	// スタート表示位置X
+	static constexpr int kClearTimePosX = 580;	// クリアタイム表示位置X
+	static constexpr int kClearTimePosY = 100;	// クリアタイム表示位置Y
+	static constexpr int kStartTextPosX = 580;	// スタート表示位置X
 	static constexpr int kStartTextPosY = 500;	// スタート表示位置Y
-	static constexpr int kTitleTextPosX = 600;	// タイトルに戻る表示位置X
+	static constexpr int kTitleTextPosX = 520;	// タイトルに戻る表示位置X
 	static constexpr int kTitleTextPosY = 600;	// タイトルに戻る表示位置Y
 };
 

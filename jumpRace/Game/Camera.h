@@ -31,6 +31,6 @@ private:	// ’è”
 	static constexpr float kFar = 1000.0f;
 	// ƒJƒƒ‰‚Ì’‹“_
 	static constexpr float kTargetX = 0.0f;		// X²
-	static constexpr float kTargetY = 30.0f;	// Y²
-	static constexpr float kTargetZ = -100.0f;	// Z²
+	static constexpr float kTargetY = 40.0f;	// Y²
+	static constexpr float kTargetZ = -130.0f;	// Z²
 };

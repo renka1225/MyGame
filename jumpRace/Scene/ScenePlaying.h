@@ -48,7 +48,7 @@ private:
 	int m_pushCount;	// ボタンを押した回数
 
 private:	// 定数
-	static constexpr int kMaxPush = 50;		// 50回ボタン入力を行う
+	static constexpr int kMaxPush = 10;		// 50回ボタン入力を行う
 
 	// スタート演出
 	static constexpr int kStartTime = 240;			// スタート時の演出時間
@@ -58,4 +58,6 @@ private:	// 定数
 	static constexpr int kStartCount4 = 0;			// startSEを鳴らす
 	static constexpr int kStartCountPosX = 620;		// カウント表示位置X
 	static constexpr int kStartCountPosY = 200;		// カウント表示位置Y
+	static constexpr int kCommandPosX = 625;		// 入力コマンド表示位置X
+	static constexpr int kCommandPosY = 200;		// 入力コマンド表示位置Y
 };

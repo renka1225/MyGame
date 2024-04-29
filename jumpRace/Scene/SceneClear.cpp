@@ -71,11 +71,13 @@ void SceneClear::Draw()
 	int milliSec = m_clearTime * 1000 / 60;
 	int sec = (milliSec / 1000) % 90;
 	milliSec %= 1000;
-	DrawFormatString(Game::kScreenWidth * 0.5f, 100, 0xffffff, "クリアタイム:%02d:%03d", sec, milliSec);
+	DrawFormatString(kClearTimePosX, kClearTimePosY, 0xffffff, "クリアタイム:%02d:%03d", sec, milliSec);
 
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "クリア画面");
+	// 中心線
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
 #endif
 }
 

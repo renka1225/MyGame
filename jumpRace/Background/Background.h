@@ -30,8 +30,10 @@ private:
 	int m_treeModel;	// –Ø‚Ì3Dƒ‚ƒfƒ‹
 
 private:	// ’è”
-	static constexpr int kWidth = 2304;					// ”wŒi‰æ‘œ‚Ì‰¡•
-	static constexpr int kHeight = 1296;				// ”wŒi‰æ‘œ‚Ìc•
-	static constexpr float kBackScele = 100.0f;			// ”wŒi‰æ‘œ‚ÌŠg‘å—¦
+	static constexpr int kWidth = 576;				// ”wŒi‰æ‘œ‚Ì‰¡•
+	static constexpr int kHeight = 324;				// ”wŒi‰æ‘œ‚Ìc•
+	static constexpr float kBackScele = 300.0f;		// ”wŒi‰æ‘œ‚ÌŠg‘å—¦
+	static constexpr float kBackPosY = 60.0f;		// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uY
+	static constexpr float kBackPosZ = 30.0f;		// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uZ
 };
 

@@ -2,6 +2,7 @@
 #include "ScenePlaying.h"
 #include "ManagerFont.h"
 #include "Input.h"
+#include "Game.h"
 #include "DxLib.h"
 
 
@@ -67,6 +68,8 @@ void SceneTitle::Draw()
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
+	// 中心線
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
 #endif
 }
 

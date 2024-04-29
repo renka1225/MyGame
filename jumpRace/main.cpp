@@ -21,6 +21,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SetUseZBufferFlag(true);	// Zバッファを使用する
 
+	// ライトの調整
+	//SetLightDifColor(GetColorF(0.8f, 0.5f, 0.3f, 0.0f));
+	//SetLightSpcColor(GetColorF(0.5f, 0.5f, 0.5f, 0.5f));
+	SetLightAmbColor(GetColorF(0.5f, 1.0f, 1.0f, 1.0f));
+
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
 	pScene->Init();
@@ -36,6 +41,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// 描画を行う前に画面をクリアする
 		ClearDrawScreen();
+
+		//ChangeLightTypePoint(VGet(0.0f, 500.0f, 200.0f), 1000.0f, 0.0f, 0.0001f, 0.0f);
 
 		// ゲームの処理
 		input.Update();

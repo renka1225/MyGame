@@ -222,18 +222,18 @@ void ScenePlaying::DrawCommand()
 {
 	if (m_nowCommand == A)
 	{
-		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0xff0000, m_pFont->GetFont(), "A");
+		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0xff0000, m_pFont->GetFont(), "A");
 	}
 	if (m_nowCommand == B)
 	{
-		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0x00ff00, m_pFont->GetFont(), "B");
+		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0x00ff00, m_pFont->GetFont(), "B");
 	}
 	if (m_nowCommand == X)
 	{
-		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0x0000ff, m_pFont->GetFont(), "X");
+		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0x0000ff, m_pFont->GetFont(), "X");
 	}
 	if (m_nowCommand == Y)
 	{
-		DrawFormatStringToHandle(static_cast<int>(Game::kScreenWidth * 0.5f), 200, 0xff00ff, m_pFont->GetFont(), "Y");
+		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0xff00ff, m_pFont->GetFont(), "Y");
 	}
 }
