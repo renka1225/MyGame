@@ -1,4 +1,6 @@
-﻿  ManagerModel.cpp
+﻿  Background.cpp
+  ManagerModel.cpp
+  Player.cpp
   ScenePlaying.cpp
   コードを生成中...
   jumpRace.vcxproj -> C:\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe

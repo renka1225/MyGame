@@ -15,6 +15,6 @@ public:
 
 protected:
 	VECTOR m_pos;	// 3Dモデルの表示位置
-	int m_model;		// 3Dモデル
+	int m_model;	// 3Dモデル
 };
 

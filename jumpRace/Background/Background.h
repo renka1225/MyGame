@@ -33,10 +33,5 @@ private:	// ’è”
 	static constexpr int kWidth = 2304;					// ”wŒi‰æ‘œ‚Ì‰¡•
 	static constexpr int kHeight = 1296;				// ”wŒi‰æ‘œ‚Ìc•
 	static constexpr float kBackScele = 100.0f;			// ”wŒi‰æ‘œ‚ÌŠg‘å—¦
-	static constexpr float kGroundPosY = 100.0f;		// ’n–Ê‚ÌˆÊ’uY
-	static constexpr float kGroundPosZ = 0.0f;			// ’n–Ê‚ÌˆÊ’uZ
-	static constexpr float kGroundScaleWidth = 300.0f;	// ’n–Ê‰¡‚ÌŠg‘å—¦
-	static constexpr float kGroundScaleHeight = 20.0f;	// ’n–Ê‚‚³‚ÌŠg‘å—¦
-	static constexpr float kGroundScaleDepth = 700.0f;	// ’n–Ê‰œs‚«‚ÌŠg‘å—¦
 };
 

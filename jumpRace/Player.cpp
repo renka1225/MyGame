@@ -40,14 +40,17 @@ void Player::Init()
 /// <param name="input">ボタン入力</param>
 void Player::Update(Input& input)
 {
-	if (input.IsPressing("down"))
-	{
-		m_pos.z -= 1.0f;
-	}
-	if (input.IsPressing("up"))
-	{
-		m_pos.z += 1.0f;
-	}
+//#ifdef _DEBUG
+//	// MEMO:デバッグ移動用
+//	if (input.IsPressing("down"))
+//	{
+//		m_pos.z -= 1.0f;
+//	}
+//	if (input.IsPressing("up"))
+//	{
+//		m_pos.z += 1.0f;
+//	}
+//#endif
 
 	m_pos = VAdd(m_pos, VGet(0.0f, kGravity, 0.0f));
 

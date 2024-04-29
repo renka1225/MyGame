@@ -10,5 +10,8 @@ public:
 	ModelTree(int model, VECTOR pos);
 	virtual ~ModelTree();
 	virtual void Update() override;
+
+private:
+	static constexpr float kScale = 30.0f;	// ƒ‚ƒfƒ‹‚ÌŠg‘å—¦
 };
 

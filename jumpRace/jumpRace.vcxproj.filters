@@ -87,10 +87,10 @@
     <ClCompile Include="ModelBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ModelGround.cpp">
+    <ClCompile Include="Background\ModelTree.cpp">
       <Filter>ソース ファイル\Background</Filter>
     </ClCompile>
-    <ClCompile Include="ModelTree.cpp">
+    <ClCompile Include="Background\ModelGround.cpp">
       <Filter>ソース ファイル\Background</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,10 +143,10 @@
     <ClInclude Include="ModelBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ModelGround.h">
+    <ClInclude Include="Background\ModelTree.h">
       <Filter>ヘッダー ファイル\Background</Filter>
     </ClInclude>
-    <ClInclude Include="ModelTree.h">
+    <ClInclude Include="Background\ModelGround.h">
       <Filter>ヘッダー ファイル\Background</Filter>
     </ClInclude>
   </ItemGroup>

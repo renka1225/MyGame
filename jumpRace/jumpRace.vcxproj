@@ -148,8 +148,8 @@
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerSound.cpp" />
     <ClCompile Include="ModelBase.cpp" />
-    <ClCompile Include="ModelGround.cpp" />
-    <ClCompile Include="ModelTree.cpp" />
+    <ClCompile Include="Background\ModelGround.cpp" />
+    <ClCompile Include="Background\ModelTree.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Scene\ScenePlaying.cpp" />
@@ -168,8 +168,8 @@
     <ClInclude Include="Manager\ManagerFont.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
     <ClInclude Include="ModelBase.h" />
-    <ClInclude Include="ModelGround.h" />
-    <ClInclude Include="ModelTree.h" />
+    <ClInclude Include="Background\ModelGround.h" />
+    <ClInclude Include="Background\ModelTree.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\ScenePlaying.h" />
