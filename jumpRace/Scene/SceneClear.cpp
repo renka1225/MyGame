@@ -77,7 +77,7 @@ void SceneClear::Draw()
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "クリア画面");
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
 #endif
 }
 

@@ -97,17 +97,6 @@ void ScenePlaying::Draw()
 	// モデル描画
 	m_pModel->Draw();
 
-	if (m_startTime > 0)
-	{
-		// スタート演出の表示
-		StartStaging();
-	}
-	else
-	{
-		// 入力コマンドを表示
-		DrawCommand();
-	}
-
 	// 経過時間の描画
 	int milliSec = m_time * 1000 / 60;
 	int sec = (milliSec / 1000) % 90;
@@ -125,6 +114,17 @@ void ScenePlaying::Draw()
 	DrawFormatString(0, 20, 0xffffff, "入力回数:%d", m_pushCount);
 	DrawFormatString(0, 40, 0xffffff, "タイム %02d:%03d", sec, milliSec);
 #endif
+
+	if (m_startTime > 0)
+	{
+		// スタート演出の表示
+		StartStaging();
+	}
+	else
+	{
+		// 入力コマンドを表示
+		DrawCommand();
+	}
 
 	// プレイヤーの描画
 	m_pPlayer->Draw();
