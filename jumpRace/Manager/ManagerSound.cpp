@@ -15,9 +15,7 @@ ManagerSound::ManagerSound()
 	//m_gameoverBgm = LoadSoundMem("data/sound/gameover.mp3");
 	//m_clearBgm = LoadSoundMem("data/sound/clear.mp3");
 
-	m_count3SE = LoadSoundMem("data/sound/count/san.wav");
-	m_count2SE = LoadSoundMem("data/sound/count/ni.wav");
-	m_count1SE = LoadSoundMem("data/sound/count/ichi.wav");
+	m_countSE = LoadSoundMem("data/sound/countdown.wav");
 }
 
 
@@ -35,7 +33,5 @@ ManagerSound::~ManagerSound()
 	//DeleteSoundMem(m_gameoverBgm);
 	//DeleteSoundMem(m_clearBgm);
 
-	DeleteSoundMem(m_count3SE);
-	DeleteSoundMem(m_count2SE);
-	DeleteSoundMem(m_count1SE);
+	DeleteSoundMem(m_countSE);
 }

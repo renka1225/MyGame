@@ -35,6 +35,7 @@ void ScenePlaying::Init()
 	m_pBackground->Init();
 	m_pResult->Load();
 	m_nowCommand = GetRand(Y);
+	//PlaySoundMem(m_pSound->GetCountSE(), DX_PLAYTYPE_BACK);	// カウントダウン
 }
 
 
@@ -58,7 +59,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_startTime > 0)
 	{
 		m_startTime--;
-		//StartCount();
 		return shared_from_this();
 	}
 
@@ -101,6 +101,7 @@ void ScenePlaying::Draw()
 	int milliSec = m_time * 1000 / 60;
 	int sec = (milliSec / 1000) % 90;
 	milliSec %= 1000;
+	DrawFormatStringToHandle(580, 80, 0xffffff, m_pFont->GetTimeFont(), "%02d:%03d", sec, milliSec);
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示
@@ -112,7 +113,6 @@ void ScenePlaying::Draw()
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
 	DrawFormatString(0, 20, 0xffffff, "入力回数:%d", m_pushCount);
-	DrawFormatString(0, 40, 0xffffff, "タイム %02d:%03d", sec, milliSec);
 #endif
 
 	if (m_startTime > 0)
@@ -128,26 +128,6 @@ void ScenePlaying::Draw()
 
 	// プレイヤーの描画
 	m_pPlayer->Draw();
-}
-
-
-/// <summary>
-/// スタートカウントを鳴らす
-/// </summary>
-void ScenePlaying::StartCount()
-{
-	if (m_startTime >= kStartCount1)
-	{
-		PlaySoundMem(m_pSound->GetCount3SE(), DX_PLAYTYPE_BACK);
-	}
-	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
-	{
-		PlaySoundMem(m_pSound->GetCount2SE(), DX_PLAYTYPE_BACK);
-	}
-	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
-	{
-		PlaySoundMem(m_pSound->GetCount1SE(), DX_PLAYTYPE_BACK);
-	}
 }
 
 
@@ -220,20 +200,27 @@ void ScenePlaying::UpdateCommand(Input& input)
 /// </summary>
 void ScenePlaying::DrawCommand()
 {
+	int srcX = 0;	// 画像の切り出し位置X
+	int srcY = 0;	// 画像の切り出し位置Y
+
 	if (m_nowCommand == A)
 	{
-		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0xff0000, m_pFont->GetFont(), "A");
+		srcY = kCommandSize * A;
+		DrawRectRotaGraph(kCommandPosX, kCommandPosY, srcX, srcY, kCommandSize, kCommandSize, kCommandScale, 0.0f, m_buttonHandle, true);
 	}
 	if (m_nowCommand == B)
 	{
-		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0x00ff00, m_pFont->GetFont(), "B");
+		srcY = kCommandSize * B;
+		DrawRectRotaGraph(kCommandPosX, kCommandPosY, srcX, srcY, kCommandSize, kCommandSize, kCommandScale, 0.0f, m_buttonHandle, true);
 	}
 	if (m_nowCommand == X)
 	{
-		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0x0000ff, m_pFont->GetFont(), "X");
+		srcY = kCommandSize * X;
+		DrawRectRotaGraph(kCommandPosX, kCommandPosY, srcX, srcY, kCommandSize, kCommandSize, kCommandScale, 0.0f, m_buttonHandle, true);
 	}
 	if (m_nowCommand == Y)
 	{
-		DrawFormatStringToHandle(kCommandPosX, kCommandPosY, 0xff00ff, m_pFont->GetFont(), "Y");
+		srcY = kCommandSize * Y;
+		DrawRectRotaGraph(kCommandPosX, kCommandPosY, srcX, srcY, kCommandSize, kCommandSize, kCommandScale, 0.0f, m_buttonHandle, true);
 	}
 }

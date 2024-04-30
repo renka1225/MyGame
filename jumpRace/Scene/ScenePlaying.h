@@ -21,7 +21,6 @@ public:
 	virtual void Draw();
 
 private:
-	void StartCount();					// スタートカウントを鳴らす
 	void StartStaging();				// スタート演出の表示
 	void UpdateCommand(Input& input);	// 入力コマンドの更新
 	void DrawCommand();					// 入力コマンドの表示
@@ -58,6 +57,9 @@ private:	// 定数
 	static constexpr int kStartCount4 = 0;			// startSEを鳴らす
 	static constexpr int kStartCountPosX = 620;		// カウント表示位置X
 	static constexpr int kStartCountPosY = 200;		// カウント表示位置Y
-	static constexpr int kCommandPosX = 625;		// 入力コマンド表示位置X
+
+	static constexpr int kCommandSize = 16;			// 入力コマンドのサイズ
+	static constexpr float kCommandScale = 4.0f;	// 入力コマンドの拡大率
+	static constexpr int kCommandPosX = 650;		// 入力コマンド表示位置X
 	static constexpr int kCommandPosY = 200;		// 入力コマンド表示位置Y
 };

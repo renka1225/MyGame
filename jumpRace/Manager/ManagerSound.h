@@ -11,9 +11,7 @@ public:
 
 	int GetSelectSE() const { return m_selectSE; }
 	int GetDetermineSE() const { return m_determineSE; }
-	int GetCount3SE() const { return m_count3SE; }
-	int GetCount2SE() const { return m_count2SE; }
-	int GetCount1SE() const { return m_count1SE; }
+	int GetCountSE() const { return m_countSE; }
 	int GetNoticeSE() const { return m_noticeSE; }
 	int GetJumpSE() const { return m_jumpSE; }
 	int GetTitleBgm() const { return m_titleBgm; }
@@ -24,13 +22,7 @@ public:
 private:
 	int m_selectSE;		// 選択時のSE
 	int m_determineSE;	// 決定時のSE
-
-	// スタートカウントのSE
-	int m_count3SE;
-	int m_count2SE;
-	int m_count1SE;
-
-
+	int m_countSE;		// スタートカウントのSE
 	int m_noticeSE;		// 通知表示時のSE
 	int m_jumpSE;		// ジャンプのSE
 

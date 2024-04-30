@@ -23,4 +23,6 @@ protected:
 	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerSound> m_pSound;
 	std::shared_ptr<ManagerResult> m_pResult;
+
+	int m_buttonHandle;	// コントローラーのボタンの画像
 };

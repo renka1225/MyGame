@@ -62,8 +62,10 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
-	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetFont(), "スタート");
-	DrawFormatStringToHandle(kEndTextPosX, kEndTextPosY, 0xffffff, m_pFont->GetFont(), "おわる");
+	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetTextFont(), "スタート");
+	DrawFormatStringToHandle(kEndTextPosX, kEndTextPosY, 0xffffff, m_pFont->GetTextFont(), "おわる");
+	// MEMO:クレジット表記
+	DrawFormatStringToHandle(900, 690, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
 
 #ifdef _DEBUG
 	// デバッグ表示

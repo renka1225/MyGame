@@ -18,11 +18,10 @@ ManagerFont::ManagerFont()
 		MessageBox(NULL, "ÉtÉHÉìÉgì«çûé∏îs", "", MB_OK);
 	}
 
-	m_fontHandle = CreateFontToHandle("Pomeranian", 28, -1);
+	m_textFontHandle = CreateFontToHandle("Pomeranian", 30, -1);
 	m_startCountFontHandle = CreateFontToHandle("Pomerania", 100, -1);
-	//m_textFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
-	//m_timeFontHandle = CreateFontToHandle("KyouryunoGuratan", 60, -1);
-	//m_creditFontHandle = CreateFontToHandle("KyouryunoGuratan", 24, -1);
+	m_timeFontHandle = CreateFontToHandle("Pomerania", 35, -1);
+	m_creditFontHandle = CreateFontToHandle("Pomerania", 15, -1);
 }
 
 
@@ -31,9 +30,8 @@ ManagerFont::ManagerFont()
 /// </summary>
 ManagerFont::~ManagerFont()
 {
-	DeleteFontToHandle(m_fontHandle);
+	DeleteFontToHandle(m_textFontHandle);
 	DeleteFontToHandle(m_startCountFontHandle);
-	//DeleteFontToHandle(m_textFontHandle);
-	//DeleteFontToHandle(m_timeFontHandle);
-	//DeleteFontToHandle(m_creditFontHandle);
+	DeleteFontToHandle(m_timeFontHandle);
+	DeleteFontToHandle(m_creditFontHandle);
 }
