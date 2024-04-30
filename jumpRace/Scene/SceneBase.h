@@ -5,6 +5,7 @@ class Input;
 class ManagerFont;
 class ManagerSound;
 class ManagerResult;
+class ConversionTime;
 
 /// <summary>
 /// シーン基底クラス
@@ -23,6 +24,8 @@ protected:
 	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerSound> m_pSound;
 	std::shared_ptr<ManagerResult> m_pResult;
+	std::shared_ptr<ConversionTime> m_pConversionTime;
 
+	int m_frameHandle;	// 枠の画像
 	int m_buttonHandle;	// コントローラーのボタンの画像
 };

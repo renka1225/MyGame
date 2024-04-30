@@ -60,6 +60,6 @@ private:	// 定数
 
 	static constexpr int kCommandSize = 16;			// 入力コマンドのサイズ
 	static constexpr float kCommandScale = 4.0f;	// 入力コマンドの拡大率
-	static constexpr int kCommandPosX = 650;		// 入力コマンド表示位置X
-	static constexpr int kCommandPosY = 200;		// 入力コマンド表示位置Y
+	static constexpr int kCommandPosX = 645;		// 入力コマンド表示位置X
+	static constexpr int kCommandPosY = 250;		// 入力コマンド表示位置Y
 };

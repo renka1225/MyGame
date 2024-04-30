@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Background\Background.cpp" />
+    <ClCompile Include="Game\ConversionTime.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Model\ModelGround.cpp" />
     <ClCompile Include="Model\ModelTree.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scene\SceneResult.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Scene\ScenePlaying.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
@@ -160,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background\Background.h" />
+    <ClInclude Include="Game\ConversionTime.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="Model\ModelGround.h" />
     <ClInclude Include="Model\ModelTree.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Scene\SceneResult.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\ScenePlaying.h" />
     <ClInclude Include="Scene\SceneTitle.h" />

@@ -1,4 +1,5 @@
 C:\GitHub\MyGame\jumpRace\Background\Background.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Background.obj
+C:\GitHub\MyGame\jumpRace\Game\ConversionTime.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ConversionTime.obj
 C:\GitHub\MyGame\jumpRace\Game\Camera.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Camera.obj
 C:\GitHub\MyGame\jumpRace\Game\Input.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Input.obj
 C:\GitHub\MyGame\jumpRace\main.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\main.obj
@@ -10,6 +11,7 @@ C:\GitHub\MyGame\jumpRace\Model\ModelBase.cpp;C:\GitHub\MyGame\jumpRace\x64\Debu
 C:\GitHub\MyGame\jumpRace\Model\ModelGround.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ModelGround.obj
 C:\GitHub\MyGame\jumpRace\Model\ModelTree.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ModelTree.obj
 C:\GitHub\MyGame\jumpRace\Player.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\Player.obj
+C:\GitHub\MyGame\jumpRace\Scene\SceneResult.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\SceneResult.obj
 C:\GitHub\MyGame\jumpRace\Scene\SceneClear.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\SceneClear.obj
 C:\GitHub\MyGame\jumpRace\Scene\ScenePlaying.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\ScenePlaying.obj
 C:\GitHub\MyGame\jumpRace\Scene\SceneTitle.cpp;C:\GitHub\MyGame\jumpRace\x64\Debug\SceneTitle.obj

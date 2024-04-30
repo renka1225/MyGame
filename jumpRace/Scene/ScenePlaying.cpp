@@ -72,14 +72,15 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_pushCount >= kMaxPush)
 	{
 		m_pResult->Save(m_time);	// クリアタイムを保存
-		return std::make_shared<SceneClear>(m_time);
+		printfDx("%d\n", m_pResult->GetHighScore());
+		return std::make_shared<SceneClear>(m_pResult, m_time);
 	}
 
 #ifdef _DEBUG
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
 	{
-		return std::make_shared<SceneClear>();
+		return std::make_shared<SceneClear>(m_pResult, m_time);
 	}
 #endif
 

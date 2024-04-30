@@ -8,7 +8,7 @@ class SceneClear : public SceneBase
 {
 public:
 	SceneClear() {};
-	SceneClear(int time);
+	SceneClear(std::shared_ptr<ManagerResult> pResult, int time);
 	virtual ~SceneClear();
 
 	virtual void Init();
@@ -16,6 +16,8 @@ public:
 	virtual void Draw();
 
 	void UpdateSelect(Input& input);	// 選択状態の更新
+	void DrawSelect();					// 選択項目表示
+	void DrawResult();					// 結果表示
 
 private:
 	int m_clearTime;	// クリアタイム
@@ -30,8 +32,21 @@ private:
 	int m_select;	// 現在の選択状態
 
 private: // 定数
-	static constexpr int kClearTimePosX = 580;	// クリアタイム表示位置X
+	static constexpr int kClearTimePosX = 500;	// クリアタイム表示位置X
 	static constexpr int kClearTimePosY = 100;	// クリアタイム表示位置Y
+	static constexpr int kTimePosX = 560;		// 順位表示位置X
+	static constexpr int kHighScorePosY = 150;	// ハイスコア表示位置Y
+	static constexpr int kSecondPosY = 200;		// 2位表示位置Y
+	static constexpr int kThirdPosY = 250;		// 3位表示位置Y
+
+	static constexpr int kNowSelectPosX = 534;	// 選択中表示位置X
+	static constexpr int kNowSelectPosY = 485;	// 選択中表示位置Y
+	static constexpr int kNowSelectWidth = 210;	// 選択中表示の横幅
+	static constexpr int kNowSelectHeight = 61;	// 選択中表示の縦幅
+	static constexpr int kFramePosX = 530;		// 枠表示位置X
+	static constexpr int kFramePosY = 480;		// 枠表示位置Y
+	static constexpr int kSelectMove = 100;		// 選択表示の移動量
+
 	static constexpr int kStartTextPosX = 580;	// スタート表示位置X
 	static constexpr int kStartTextPosY = 500;	// スタート表示位置Y
 	static constexpr int kTitleTextPosX = 520;	// タイトルに戻る表示位置X

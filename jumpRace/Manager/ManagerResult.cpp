@@ -1,4 +1,5 @@
 #include "ManagerResult.h"
+#include "ConversionTime.h"
 
 
 /// <summary>
@@ -7,6 +8,7 @@
 ManagerResult::ManagerResult():
 	fp(nullptr)
 {
+	m_pConversionTime = std::make_shared<ConversionTime>();
 }
 
 
@@ -54,20 +56,14 @@ void ManagerResult::Save(int time)
 
 #ifdef _DEBUG
 	// 経過時間の描画
-	int milliSec = m_saveData.highScore * 1000 / 60;
-	int sec = (milliSec / 1000) % 90;
-	milliSec %= 1000;
-	printfDx("ベストタイム:%02d:%03d\n", sec, milliSec);
+	m_pConversionTime->Change(m_saveData.highScore);
+	printfDx("ベストタイム:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
-	milliSec = m_saveData.second * 1000 / 60;
-	sec = (milliSec / 1000) % 90;
-	milliSec %= 1000;
-	printfDx("2位:%02d:%03d\n", sec, milliSec);
+	m_pConversionTime->Change(m_saveData.second);
+	printfDx("2位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
-	milliSec = m_saveData.third * 1000 / 60;
-	sec = (milliSec / 1000) % 90;
-	milliSec %= 1000;
-	printfDx("3位:%02d:%03d\n", sec, milliSec);
+	m_pConversionTime->Change(m_saveData.third);
+	printfDx("3位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 #endif
 
 	if (fopen_s(&fp, fileName, "wb") != 0)

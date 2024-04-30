@@ -3,17 +3,30 @@
 #include "ScenePlaying.h"
 #include "ManagerFont.h"
 #include "ManagerResult.h"
+#include "ConversionTime.h"
 #include "Input.h"
 #include "Game.h"
 #include "DxLib.h"
 
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneClear::SceneClear(int time):
+SceneClear::SceneClear(std::shared_ptr<ManagerResult> pResult, int time):
 	m_clearTime(time),
 	m_select(kStart)
 {
+	m_pResult = pResult;
+
+	m_pConversionTime->Change(m_pResult->GetHighScore());
+	printfDx("%d\n", m_pResult->GetHighScore());
+	printfDx("ベストタイム:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+
+	m_pConversionTime->Change(m_pResult->GetSecond());
+	printfDx("2位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+
+	m_pConversionTime->Change(m_pResult->GetThird());
+	printfDx("3位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 }
 
 
@@ -64,14 +77,10 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
-	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetTextFont(), "もう1回");
-	DrawFormatStringToHandle(kTitleTextPosX, kTitleTextPosY, 0xffffff, m_pFont->GetTextFont(), "タイトルにもどる");
-
-	// クリアタイム表示
-	int milliSec = m_clearTime * 1000 / 60;
-	int sec = (milliSec / 1000) % 90;
-	milliSec %= 1000;
-	DrawFormatString(kClearTimePosX, kClearTimePosY, 0xffffff, "クリアタイム:%02d:%03d", sec, milliSec);
+	// 選択項目を表示
+	DrawSelect();
+	// 結果表示
+	DrawResult();
 
 #ifdef _DEBUG
 	// デバッグ表示
@@ -97,3 +106,48 @@ void SceneClear::UpdateSelect(Input& input)
 	}
 }
 
+
+/// <summary>
+/// 選択項目表示
+/// </summary>
+void SceneClear::DrawSelect()
+{
+	// 選択中の項目に色をつける
+	DrawBox(kNowSelectPosX, kNowSelectPosY + kSelectMove * m_select,
+		kNowSelectPosX + kNowSelectWidth, kNowSelectPosY + kSelectMove * m_select + kNowSelectHeight,
+		0x00ff00, true);
+
+	// 枠表示
+	for (int i = 0; i < kSelectNum; i++)
+	{
+		DrawGraph(kFramePosX, kFramePosY + kSelectMove * i, m_frameHandle, true);
+	}
+
+	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetTextFont(), "もう1回");
+	DrawFormatStringToHandle(kTitleTextPosX, kTitleTextPosY, 0xffffff, m_pFont->GetTextFont(), "タイトルにもどる");
+}
+
+
+/// <summary>
+/// 結果表示
+/// </summary>
+void SceneClear::DrawResult()
+{
+	// クリアタイム表示
+	m_pConversionTime->Change(m_clearTime);	// タイム変換
+	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xffffff, m_pFont->GetResultTimeFont(), 
+		"クリアタイム:%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+
+	// ハイスコア表示
+	m_pConversionTime->Change(m_pResult->GetHighScore());	// タイム変換
+	DrawFormatStringToHandle(kTimePosX, kHighScorePosY, 0xffffff, m_pFont->GetResultTimeFont(),
+		"1位:%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+
+	m_pConversionTime->Change(m_pResult->GetSecond());		// タイム変換
+	DrawFormatStringToHandle(kTimePosX, kSecondPosY, 0xffffff, m_pFont->GetResultTimeFont(),
+		"2位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+
+	m_pConversionTime->Change(m_pResult->GetThird());		// タイム変換
+	DrawFormatStringToHandle(kTimePosX, kThirdPosY, 0xffffff, m_pFont->GetResultTimeFont(),
+		"3位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+}

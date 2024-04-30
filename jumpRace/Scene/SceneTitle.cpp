@@ -1,5 +1,6 @@
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
+#include "SceneResult.h"
 #include "ManagerFont.h"
 #include "Input.h"
 #include "Game.h"
@@ -12,6 +13,7 @@
 SceneTitle::SceneTitle():
 	m_select(kStart)
 {
+	m_titleLogo = LoadGraph("data/UI/title.png");
 }
 
 
@@ -20,6 +22,7 @@ SceneTitle::SceneTitle():
 /// </summary>
 SceneTitle::~SceneTitle()
 {
+	DeleteGraph(m_titleLogo);
 }
 
 
@@ -47,6 +50,10 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		{
 			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
 		}
+		else if (m_select == kResult)
+		{
+			return std::make_shared<SceneResult>();		// 結果確認画面に移動
+		}
 		else if (m_select == kEnd)
 		{
 			DxLib_End();	// ゲーム終了
@@ -62,9 +69,13 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
-	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetTextFont(), "スタート");
-	DrawFormatStringToHandle(kEndTextPosX, kEndTextPosY, 0xffffff, m_pFont->GetTextFont(), "おわる");
-	// MEMO:クレジット表記
+	// タイトル表示
+	DrawGraph(kTitleLogoPosX, kTitleLogoPosY, m_titleLogo, true);
+
+	// 選択項目を表示
+	DrawSelect();
+
+	// クレジット表記
 	DrawFormatStringToHandle(900, 690, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
 
 #ifdef _DEBUG
@@ -87,6 +98,29 @@ void SceneTitle::UpdateSelect(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ上げる
+		m_select = (m_select + 2) % kSelectNum;	// 選択状態を1つ上げる
 	}
+}
+
+
+/// <summary>
+/// 選択項目を表示
+/// </summary>
+void SceneTitle::DrawSelect()
+{
+	// 選択中の項目に色をつける
+	DrawBox(kNowSelectPosX, kNowSelectPosY + kSelectMove * m_select,
+		kNowSelectPosX + kNowSelectWidth, kNowSelectPosY + kSelectMove * m_select + kNowSelectHeight,
+		0x00ff00, true);
+
+	// 枠表示
+	for (int i = 0; i < kSelectNum; i++)
+	{
+		DrawGraph(kFramePosX, kFramePosY + kSelectMove * i, m_frameHandle, true);
+	}
+
+	// テキスト表示
+	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetTextFont(), "スタート");
+	DrawFormatStringToHandle(kResultTextPosX, kResultTextPosY, 0xffffff, m_pFont->GetTextFont(), "ランキング");
+	DrawFormatStringToHandle(kEndTextPosX, kEndTextPosY, 0xffffff, m_pFont->GetTextFont(), "おわる");
 }
