@@ -14,6 +14,7 @@ public:
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
+private:
 	void UpdateSelect(Input& input);	// 選択状態の更新
 	void DrawSelect();					// 選択項目表示
 	void DrawResult();					// 結果表示
@@ -48,7 +49,7 @@ private: // 定数
 
 	static constexpr int kStartTextPosX = 580;	// スタート表示位置X
 	static constexpr int kStartTextPosY = 500;	// スタート表示位置Y
-	static constexpr int kTitleTextPosX = 520;	// タイトルに戻る表示位置X
-	static constexpr int kTitleTextPosY = 600;	// タイトルに戻る表示位置Y
+	static constexpr int kTitleTextPosX = 540;	// タイトルに戻る表示位置X
+	static constexpr int kTitleTextPosY = 605;	// タイトルに戻る表示位置Y
 };
 

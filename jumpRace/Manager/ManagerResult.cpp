@@ -49,7 +49,15 @@ void ManagerResult::Load()
 void ManagerResult::Save(int time)
 {
 	// クリアタイムがランキング内に入っている場合ランキングを更新する
-	auto it = std::find_if(m_ranking.begin(), m_ranking.end(), [time](int t) { return t > time; });
+	// 同じタイムの場合は更新しない
+	auto it = std::find(m_ranking.begin(), m_ranking.end(), time);
+	if (it != m_ranking.end())
+	{
+		// 同じタイムがある場合は更新しない
+		return;
+	}
+
+	it = std::find_if(m_ranking.begin(), m_ranking.end(), [time](int t) { return t > time; });
 	if (it != m_ranking.end())
 	{
 		m_ranking.insert(it, time);
@@ -66,6 +74,7 @@ void ManagerResult::Save(int time)
 
 	// 順位を昇順にする
 	std::sort(m_ranking.begin(), m_ranking.end(), [](int a, int b) { return a < b; });
+
 	// クリアタイムを更新する
 	m_clearTime = time;
 

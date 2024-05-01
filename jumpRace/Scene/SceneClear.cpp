@@ -104,7 +104,7 @@ void SceneClear::DrawSelect()
 	// 選択中の項目に色をつける
 	DrawBox(kNowSelectPosX, kNowSelectPosY + kSelectMove * m_select,
 		kNowSelectPosX + kNowSelectWidth, kNowSelectPosY + kSelectMove * m_select + kNowSelectHeight,
-		0x00ff00, true);
+		0x4289A3, true);
 
 	// 枠表示
 	for (int i = 0; i < kSelectNum; i++)
@@ -113,7 +113,7 @@ void SceneClear::DrawSelect()
 	}
 
 	DrawFormatStringToHandle(kStartTextPosX, kStartTextPosY, 0xffffff, m_pFont->GetTextFont(), "もう1回");
-	DrawFormatStringToHandle(kTitleTextPosX, kTitleTextPosY, 0xffffff, m_pFont->GetTextFont(), "タイトルにもどる");
+	DrawFormatStringToHandle(kTitleTextPosX, kTitleTextPosY, 0xffffff, m_pFont->GetTextFont2(), "タイトルにもどる");
 }
 
 

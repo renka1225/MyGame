@@ -14,6 +14,7 @@ public:
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
+private:
 	void UpdateSelect(Input& input);	// 選択状態の更新
 	void DrawSelect();					// 選択項目を表示
 

@@ -17,6 +17,7 @@ public:
 private:
 	void DrawRanking();
 
+private:	// 定数
 	static constexpr int kTimePosX = 560;		// 順位表示位置X
 	static constexpr int kTimePosY = 150;		// 順位表示位置Y
 	static constexpr int kIntervalY = 50;		// 順位表示間隔

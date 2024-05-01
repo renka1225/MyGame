@@ -6,7 +6,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	SetMainWindowText("HoppingRace");
+	SetMainWindowText("HOPPINGRACE");
 
 	// 画面サイズの変更
 	ChangeWindowMode(true);

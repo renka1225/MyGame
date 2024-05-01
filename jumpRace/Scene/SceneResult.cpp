@@ -69,8 +69,8 @@ void SceneResult::DrawRanking()
 {
 	for (int i = 0; i < kDisplayRanking; i++)
 	{
-		auto ranking = m_pResult->GetRanking(); // ランキングを取得
-		m_pConversionTime->Change(ranking[i]);  // タイム変換
+		auto ranking = m_pResult->GetRanking()[i]; // ランキングを取得
+		m_pConversionTime->Change(ranking);  // タイム変換
 		DrawFormatStringToHandle(kTimePosX, kTimePosY + kIntervalY * i, 0xffffff, m_pFont->GetResultTimeFont(),
 			"%02d位:%02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 	}

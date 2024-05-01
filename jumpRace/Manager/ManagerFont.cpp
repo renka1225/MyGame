@@ -19,6 +19,7 @@ ManagerFont::ManagerFont()
 	}
 
 	m_textFontHandle = CreateFontToHandle("Pomeranian", 30, -1);
+	m_textFont2Handle = CreateFontToHandle("Pomeranian", 25, -1);
 	m_startCountFontHandle = CreateFontToHandle("Pomerania", 100, -1);
 	m_timeFontHandle = CreateFontToHandle("Pomerania", 35, -1);
 	m_resultTimeFontHandle = CreateFontToHandle("Pomerania", 25, -1);
@@ -32,6 +33,7 @@ ManagerFont::ManagerFont()
 ManagerFont::~ManagerFont()
 {
 	DeleteFontToHandle(m_textFontHandle);
+	DeleteFontToHandle(m_textFont2Handle);
 	DeleteFontToHandle(m_startCountFontHandle);
 	DeleteFontToHandle(m_timeFontHandle);
 	DeleteFontToHandle(m_resultTimeFontHandle);

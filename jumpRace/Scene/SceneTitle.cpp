@@ -111,7 +111,7 @@ void SceneTitle::DrawSelect()
 	// ‘I‘ğ’†‚Ì€–Ú‚ÉF‚ğ‚Â‚¯‚é
 	DrawBox(kNowSelectPosX, kNowSelectPosY + kSelectMove * m_select,
 		kNowSelectPosX + kNowSelectWidth, kNowSelectPosY + kSelectMove * m_select + kNowSelectHeight,
-		0x00ff00, true);
+		0x4289A3, true);
 
 	// ˜g•\¦
 	for (int i = 0; i < kSelectNum; i++)
