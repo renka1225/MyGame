@@ -10,7 +10,7 @@ public:
 	SceneTitle();
 	virtual ~SceneTitle();
 
-	virtual void Init();
+	virtual void Init(std::shared_ptr<ManagerResult> pResult);
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 

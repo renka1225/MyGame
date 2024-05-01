@@ -7,11 +7,10 @@
 class SceneClear : public SceneBase
 {
 public:
-	SceneClear() {};
-	SceneClear(std::shared_ptr<ManagerResult> pResult, int time);
+	SceneClear(int time);
 	virtual ~SceneClear();
 
-	virtual void Init();
+	virtual void Init(std::shared_ptr<ManagerResult> pResult);
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
@@ -35,9 +34,9 @@ private: // 定数
 	static constexpr int kClearTimePosX = 500;	// クリアタイム表示位置X
 	static constexpr int kClearTimePosY = 100;	// クリアタイム表示位置Y
 	static constexpr int kTimePosX = 560;		// 順位表示位置X
-	static constexpr int kHighScorePosY = 150;	// ハイスコア表示位置Y
-	static constexpr int kSecondPosY = 200;		// 2位表示位置Y
-	static constexpr int kThirdPosY = 250;		// 3位表示位置Y
+	static constexpr int kTimePosY = 150;		// 順位表示位置Y
+	static constexpr int kIntervalY = 50;		// 順位表示間隔
+	static constexpr int kDisplayRanking = 5;	// 表示する順位数
 
 	static constexpr int kNowSelectPosX = 534;	// 選択中表示位置X
 	static constexpr int kNowSelectPosY = 485;	// 選択中表示位置Y

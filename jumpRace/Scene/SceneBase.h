@@ -16,7 +16,7 @@ public:
 	SceneBase();
 	virtual ~SceneBase();
 
-	virtual void Init() = 0;
+	virtual void Init(std::shared_ptr<ManagerResult> pResult) = 0;
 	virtual std::shared_ptr<SceneBase> Update(Input& input) = 0;
 	virtual void Draw() = 0;
 

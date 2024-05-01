@@ -13,7 +13,6 @@ SceneBase::SceneBase()
 {
 	m_pFont = std::make_shared<ManagerFont>();
 	m_pSound = std::make_shared<ManagerSound>();
-	m_pResult = std::make_shared<ManagerResult>();
 	m_pConversionTime = std::make_shared<ConversionTime>();
 
 	m_frameHandle = LoadGraph("data/UI/frame.png");

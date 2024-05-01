@@ -2,6 +2,7 @@
 #include <memory>
 
 class SceneBase;
+class ManagerResult;
 class Input;
 
 /// <summary>
@@ -19,5 +20,5 @@ public:
 
 private:
 	std::shared_ptr<SceneBase> m_pScene;
+	std::shared_ptr<ManagerResult> m_pResult;
 };
-

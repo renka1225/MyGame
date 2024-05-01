@@ -12,21 +12,10 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneClear::SceneClear(std::shared_ptr<ManagerResult> pResult, int time):
+SceneClear::SceneClear(int time):
 	m_clearTime(time),
 	m_select(kStart)
 {
-	m_pResult = pResult;
-
-	m_pConversionTime->Change(m_pResult->GetHighScore());
-	printfDx("%d\n", m_pResult->GetHighScore());
-	printfDx("ベストタイム:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-
-	m_pConversionTime->Change(m_pResult->GetSecond());
-	printfDx("2位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-
-	m_pConversionTime->Change(m_pResult->GetThird());
-	printfDx("3位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 }
 
 
@@ -41,9 +30,9 @@ SceneClear::~SceneClear()
 /// <summary>
 /// 初期化
 /// </summary>
-void SceneClear::Init()
+void SceneClear::Init(std::shared_ptr<ManagerResult> pResult)
 {
-	// 処理なし
+	m_pResult = pResult;
 }
 
 
@@ -138,16 +127,10 @@ void SceneClear::DrawResult()
 	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xffffff, m_pFont->GetResultTimeFont(), 
 		"クリアタイム:%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
-	// ハイスコア表示
-	m_pConversionTime->Change(m_pResult->GetHighScore());	// タイム変換
-	DrawFormatStringToHandle(kTimePosX, kHighScorePosY, 0xffffff, m_pFont->GetResultTimeFont(),
-		"1位:%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-
-	m_pConversionTime->Change(m_pResult->GetSecond());		// タイム変換
-	DrawFormatStringToHandle(kTimePosX, kSecondPosY, 0xffffff, m_pFont->GetResultTimeFont(),
-		"2位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-
-	m_pConversionTime->Change(m_pResult->GetThird());		// タイム変換
-	DrawFormatStringToHandle(kTimePosX, kThirdPosY, 0xffffff, m_pFont->GetResultTimeFont(),
-		"3位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+	for (int i = 0; i < kDisplayRanking; i++)
+	{
+		m_pConversionTime->Change(m_pResult->GetRanking()[i]); // タイム変換
+		DrawFormatStringToHandle(kTimePosX, kTimePosY + kIntervalY * i, 0xffffff, m_pFont->GetResultTimeFont(),
+			"%d位:%02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+	}
 }

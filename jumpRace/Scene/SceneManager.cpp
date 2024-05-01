@@ -1,11 +1,13 @@
 #include "SceneManager.h"
 #include "SceneBase.h"
 #include "SceneTitle.h"
+#include "ManagerResult.h"
 #include "Input.h"
 
 SceneManager::SceneManager():
 	m_pScene(nullptr)
 {
+	m_pResult = std::make_shared<ManagerResult>();
 }
 
 
@@ -20,7 +22,7 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	m_pScene = std::make_shared<SceneTitle>();
-	m_pScene->Init();
+	m_pScene->Init(m_pResult);
 }
 
 
@@ -36,7 +38,7 @@ void SceneManager::Update(Input& input)
 	{
 		// Updateが返した新しいシーンの開始処理を行う
 		m_pScene = pNext;
-		m_pScene->Init();
+		m_pScene->Init(m_pResult);
 	}
 }
 

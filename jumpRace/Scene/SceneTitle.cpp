@@ -29,9 +29,9 @@ SceneTitle::~SceneTitle()
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-void SceneTitle::Init()
+void SceneTitle::Init(std::shared_ptr<ManagerResult> pResult)
 {
-	// ˆ—‚È‚µ
+	m_pResult = pResult;
 }
 
 

@@ -14,7 +14,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-ScenePlaying::ScenePlaying():
+ScenePlaying::ScenePlaying(): 
 	m_nowCommand(A),
 	m_startTime(0),
 	m_time(0),
@@ -30,8 +30,9 @@ ScenePlaying::ScenePlaying():
 /// <summary>
 /// 初期化
 /// </summary>
-void ScenePlaying::Init()
+void ScenePlaying::Init(std::shared_ptr<ManagerResult> pResult)
 {
+	m_pResult = pResult;
 	m_pBackground->Init();
 	m_pResult->Load();
 	m_nowCommand = GetRand(Y);
@@ -72,15 +73,14 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_pushCount >= kMaxPush)
 	{
 		m_pResult->Save(m_time);	// クリアタイムを保存
-		printfDx("%d\n", m_pResult->GetHighScore());
-		return std::make_shared<SceneClear>(m_pResult, m_time);
+		return std::make_shared<SceneClear>(m_time);
 	}
 
 #ifdef _DEBUG
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
 	{
-		return std::make_shared<SceneClear>(m_pResult, m_time);
+		return std::make_shared<SceneClear>(m_time);
 	}
 #endif
 

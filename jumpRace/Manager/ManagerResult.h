@@ -1,16 +1,12 @@
 #pragma once
 #include "DxLib.h"
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <stdlib.h>
 #include <memory>
-
+#include <vector>
 
 class ConversionTime;
 
 /// <summary>
-/// クリアタイムの管理
+/// クリアタイムの読み書き
 /// </summary>
 class ManagerResult
 {
@@ -20,25 +16,19 @@ public:
 	void Load();	// ファイル読み込み
 	void Save(int time);	// ファイル書き込み
 
-	int GetClearTime() const { return m_saveData.clearTime; }	// クリアタイム取得
-	int GetHighScore() const { return m_saveData.highScore; }	// ハイスコア取得
-	int GetSecond() const { return m_saveData.second; }	// 2位のタイム取得
-	int GetThird() const { return m_saveData.third; }		// 3位のタイム取得
+	int GetClearTime() const { return m_clearTime; }			// クリアタイム取得
+	std::vector<int> GetRanking() const { return m_ranking; }	// ランキング取得
 
 private:
-	std::shared_ptr<ConversionTime> m_pConversionTime;
+	std::shared_ptr<ConversionTime> m_pConversionTime;	// タイムに変換する
 
-	// セーブデータの構造体
-	struct SaveData
-	{
-		int highScore = 8000;	// ハイスコア
-		int second = 9000;		// 2位のタイム
-		int third = 10000;		// 3位のタイム
-		int clearTime = 0;		// クリアタイム
-	};
+	// ランキング
+	std::vector<int> m_ranking = {8000, 9000, 10000, 11000, 12000, 
+								13000, 14000, 15000, 16000, 17000};
+	// クリアタイム
+	int m_clearTime;
 
-	SaveData m_saveData;
-	FILE *fp;
-	const char *fileName = "saveData.dat";
+private:
+	const char* fileName = "saveData.bin";	//　ファイル名
+	static constexpr int kRankingNum = 10;	// 保存する順位数
 };
-

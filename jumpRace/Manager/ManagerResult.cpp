@@ -1,78 +1,90 @@
 #include "ManagerResult.h"
 #include "ConversionTime.h"
+#include <fstream>
+#include <algorithm>
 
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 ManagerResult::ManagerResult():
-	fp(nullptr)
+	m_clearTime(0)
 {
 	m_pConversionTime = std::make_shared<ConversionTime>();
 }
 
 
 /// <summary>
-/// ファイルの読み込み
+/// ファイル読み込み
 /// </summary>
 void ManagerResult::Load()
 {
-	if (fopen_s(&fp, fileName, "rb") != 0)
+	std::fstream file;
+	file.open(fileName, std::ios::in | std::ios::binary);
+	if (!file.is_open()) // ファイル読み込み失敗
 	{
 		printfDx("ファイル読み込み失敗\n");
 	}
-	else
+	else // ファイル読み込み成功
 	{
-		// ファイルからデータを読み込む
-		fread(&m_saveData, sizeof(SaveData), 1, fp);
-		fclose(fp);
+		// クリアタイムの読み込み
+		file.read(reinterpret_cast<char*>(&m_clearTime), sizeof(int));
+
+		// ランキングの読み込み
+		m_ranking.clear(); // すでに要素がある場合はクリアする
+		for (int i = 0; i < kRankingNum; ++i)
+		{
+			int temp;
+			file.read(reinterpret_cast<char*>(&temp), sizeof(int));
+			m_ranking.push_back(temp);
+		}
+		file.close();
 	}
 }
 
 
 /// <summary>
-/// ファイルに書き込み
+/// ファイル書き込み
 /// </summary>
 void ManagerResult::Save(int time)
 {
-	// ハイスコア更新
-	if (m_saveData.highScore > time)
+	// クリアタイムがランキング内に入っている場合ランキングを更新する
+	auto it = std::find_if(m_ranking.begin(), m_ranking.end(), [time](int t) { return t > time; });
+	if (it != m_ranking.end())
 	{
-		m_saveData.third = m_saveData.second;
-		m_saveData.second = m_saveData.highScore;
-		m_saveData.highScore = time;
-	}
-	else if (m_saveData.second > time)
-	{
-		m_saveData.third = m_saveData.second;
-		m_saveData.second = time;
-	}
-	else if(m_saveData.third > time)
-	{
-		m_saveData.third = time;
-	}
-
-	m_saveData.clearTime = time;	// クリアタイム更新
-
-#ifdef _DEBUG
-	// 経過時間の描画
-	m_pConversionTime->Change(m_saveData.highScore);
-	printfDx("ベストタイム:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-
-	m_pConversionTime->Change(m_saveData.second);
-	printfDx("2位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-
-	m_pConversionTime->Change(m_saveData.third);
-	printfDx("3位:%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-#endif
-
-	if (fopen_s(&fp, fileName, "wb") != 0)
-	{
-		printfDx("ファイルオープンエラー\n");
+		m_ranking.insert(it, time);
+		// 10位以上保存されないようにする
+		if (m_ranking.size() > kRankingNum)
+		{
+			m_ranking.resize(kRankingNum);
+		}
 	}
 	else
 	{
-		fwrite(&m_saveData, sizeof(SaveData), 1, fp);
-		fclose(fp);
+		m_ranking.push_back(time);
+	}
+
+	// 順位を昇順にする
+	std::sort(m_ranking.begin(), m_ranking.end(), [](int a, int b) { return a < b; });
+	// クリアタイムを更新する
+	m_clearTime = time;
+
+	// ファイルに書き込む
+	std::fstream file;
+	file.open(fileName, std::ios::out | std::ios::binary);
+	if (!file.is_open())	// ファイル読み込み失敗時
+	{
+		printfDx("ファイル書き込み失敗\n");
+	}
+	else	// ファイル読み込み成功
+	{
+		file.write(reinterpret_cast<char*>(&m_clearTime), sizeof(int));
+
+		// ランキングの書き込み
+		for (int i = 0; i < kRankingNum; ++i)
+		{
+			file.write(reinterpret_cast<char*>(&m_ranking[i]), sizeof(int));
+		}
+		file.close();
 	}
 }
