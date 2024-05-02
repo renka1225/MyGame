@@ -18,6 +18,7 @@ ScenePlaying::ScenePlaying():
 	m_nowCommand(A),
 	m_startTime(0),
 	m_time(0),
+	m_stopTime(0),
 	m_pushCount(0)
 {
 	m_pModel = std::make_shared<ManagerModel>();
@@ -65,6 +66,11 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 
 	// タイム更新
 	m_time++;
+	m_stopTime--;
+	if (m_stopTime < 0)
+	{
+		m_stopTime = 0;
+	}
 
 	// 入力コマンドを更新
 	UpdateCommand(input);
@@ -159,38 +165,81 @@ void ScenePlaying::UpdateCommand(Input& input)
 {
 	if (m_nowCommand == A)
 	{
-		if (input.IsTriggered("A"))
+		if (input.IsTriggered("A") && m_stopTime <= 0)
 		{
+			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
+			m_stopTime = kNextCommandTime;
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
+		}
+		else if (!input.IsTriggered("A") && ((input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y"))))
+		{
+			m_stopTime = kStopTime;
+			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			{
+				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
+			}
 		}
 	}
 	if (m_nowCommand == B)
 	{
-		if (input.IsTriggered("B"))
+		if (input.IsTriggered("B") && m_stopTime <= 0)
 		{
+			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
+			m_stopTime = kNextCommandTime;
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
+		}
+		else if (!input.IsTriggered("B") && (input.IsTriggered("A") || input.IsTriggered("X") || input.IsTriggered("Y")))
+		{
+			m_stopTime = kStopTime;
+			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			{
+				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
+			}
 		}
 	}
 	if (m_nowCommand == X)
 	{
-		if (input.IsTriggered("X"))
+		if (input.IsTriggered("X") && m_stopTime <= 0)
 		{
+			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
+			m_stopTime = kNextCommandTime;
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
+		}
+		else if (!input.IsTriggered("X"))
+		{
+			if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("Y"))
+			{
+				m_stopTime = kStopTime;
+				if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+				{
+					PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
+				}
+			}
 		}
 	}
 	if (m_nowCommand == Y)
 	{
-		if (input.IsTriggered("Y"))
+		if (input.IsTriggered("Y") && m_stopTime <= 0)
 		{
+			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
+			m_stopTime = kNextCommandTime;
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
+		}
+		else if(!input.IsTriggered("Y") && (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X")))
+		{
+			m_stopTime = kStopTime;
+			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			{
+				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
+			}
 		}
 	}
 }

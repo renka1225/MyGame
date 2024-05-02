@@ -44,6 +44,7 @@ private:
 
 	int m_startTime;	// スタート時の演出時間
 	int m_time;			// 経過時間
+	int m_stopTime;		// 動けない時間
 	int m_pushCount;	// ボタンを押した回数
 
 private:	// 定数
@@ -62,4 +63,7 @@ private:	// 定数
 	static constexpr float kCommandScale = 4.0f;	// 入力コマンドの拡大率
 	static constexpr int kCommandPosX = 645;		// 入力コマンド表示位置X
 	static constexpr int kCommandPosY = 250;		// 入力コマンド表示位置Y
+
+	static constexpr int kStopTime = 30;			// ミス時に動けなくなる時間
+	static constexpr int kNextCommandTime = 10;		// 次のコマンドを表示するまでの時間
 };
