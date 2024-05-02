@@ -12,6 +12,7 @@
 /// </summary>
 SceneResult::SceneResult()
 {
+	m_fadeAlpha = kStartFadeAlpha;
 }
 
 
@@ -39,8 +40,11 @@ void SceneResult::Init(std::shared_ptr<ManagerResult> pResult)
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 {
+	FadeOut();	// フェードアウト
+
 	if (input.IsTriggered("sceneChange"))
 	{
+		FadeIn();	// フェードイン
 		return std::make_shared<SceneTitle>();		//タイトル画面に移動
 	}
 
@@ -59,6 +63,8 @@ void SceneResult::Draw()
 #endif
 
 	DrawRanking();	// ランキング表示
+
+	DrawFade();		// フェード
 }
 
 

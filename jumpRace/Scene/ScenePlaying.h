@@ -66,4 +66,6 @@ private:	// 定数
 
 	static constexpr int kStopTime = 30;			// ミス時に動けなくなる時間
 	static constexpr int kNextCommandTime = 10;		// 次のコマンドを表示するまでの時間
+
+	static constexpr int kStartFadeAlpha = 200;		// スタート時のフェードα値
 };

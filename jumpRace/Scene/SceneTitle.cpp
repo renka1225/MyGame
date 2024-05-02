@@ -14,6 +14,7 @@ SceneTitle::SceneTitle():
 	m_select(kStart)
 {
 	m_titleLogo = LoadGraph("data/UI/title.png");
+	m_fadeAlpha = kStartFadeAlpha;
 }
 
 
@@ -42,10 +43,14 @@ void SceneTitle::Init(std::shared_ptr<ManagerResult> pResult)
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	FadeOut();	// フェードアウト
 	UpdateSelect(input);	// 選択状態更新
 
 	if (input.IsTriggered("sceneChange"))
 	{
+		FadeIn();	// フェードイン
+
+		// 画面切り替え
 		if (m_select == kStart)
 		{
 			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
@@ -69,14 +74,16 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	// クレジット表記
+	DrawFormatStringToHandle(900, 670, 0xffffff, m_pFont->GetCreditFont(), "Sound/OtoLogic");
+	DrawFormatStringToHandle(900, 690, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
+
 	// タイトル表示
 	DrawGraph(kTitleLogoPosX, kTitleLogoPosY, m_titleLogo, true);
 
-	// 選択項目を表示
-	DrawSelect();
+	DrawSelect();	// 選択項目を表示
 
-	// クレジット表記
-	DrawFormatStringToHandle(900, 690, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
+	DrawFade();		// フェードイン
 
 #ifdef _DEBUG
 	// デバッグ表示

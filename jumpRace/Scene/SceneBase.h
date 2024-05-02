@@ -21,11 +21,22 @@ public:
 	virtual void Draw() = 0;
 
 protected:
+	void FadeIn();		// フェードインの処理
+	void FadeOut();		// フェードアウトの処理
+	void DrawFade();	// フェードインアウトの描画
+
+protected:
 	std::shared_ptr<ManagerFont> m_pFont;
 	std::shared_ptr<ManagerSound> m_pSound;
 	std::shared_ptr<ManagerResult> m_pResult;
 	std::shared_ptr<ConversionTime> m_pConversionTime;
 
+	int m_fadeAlpha;	// フェードのα値
+
 	int m_frameHandle;	// 枠の画像
 	int m_buttonHandle;	// コントローラーのボタンの画像
+
+private:
+	static constexpr int kMaxFade = 255;	// フェードのα最大値
+	static constexpr int kFadeFrame = 8;	// フェード変化量
 };

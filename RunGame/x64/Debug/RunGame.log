@@ -1,2 +1,21 @@
-﻿  main.cpp
-  RunGame.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe
+﻿  Background.cpp
+  Camera.cpp
+  Enemy.cpp
+  Input.cpp
+  main.cpp
+  ManagerSound.cpp
+  ManagerFont.cpp
+  ManagerModel.cpp
+  Map.cpp
+  PlatinumLoader.cpp
+  Player.cpp
+  Rect.cpp
+  SceneBase.cpp
+  SceneClear.cpp
+  SceneGameover.cpp
+  SceneManager.cpp
+  ScenePlaying.cpp
+  SceneTitle.cpp
+  WorldSprite.cpp
+  コードを生成中...
+  RunGame.vcxproj -> C:\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe

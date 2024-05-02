@@ -16,7 +16,7 @@
 /// </summary>
 ScenePlaying::ScenePlaying(): 
 	m_nowCommand(A),
-	m_startTime(0),
+	m_startTime(kStartTime),
 	m_time(0),
 	m_stopTime(0),
 	m_pushCount(0)
@@ -25,6 +25,8 @@ ScenePlaying::ScenePlaying():
 	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pCamera = std::make_shared<Camera>(m_pPlayer);
 	m_pBackground = std::make_shared<Background>(m_pModel);
+
+	m_fadeAlpha = kStartFadeAlpha;
 }
 
 
@@ -48,14 +50,12 @@ void ScenePlaying::Init(std::shared_ptr<ManagerResult> pResult)
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
-	// モデルの更新
-	m_pModel->Update();
-	// 背景の更新
-	m_pBackground->Update();
-	// プレイヤーの更新
-	m_pPlayer->Update(input);
-	// カメラの更新
-	m_pCamera->Update();
+	FadeOut();		// フェードアウト
+
+	m_pModel->Update();			// モデル更新
+	m_pBackground->Update();	// 背景更新
+	m_pPlayer->Update(input);	// プレイヤー更新
+	m_pCamera->Update();		// カメラ更新
 
 	// スタート演出を行う
 	if (m_startTime > 0)
@@ -79,6 +79,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_pushCount >= kMaxPush)
 	{
 		m_pResult->Save(m_time);	// クリアタイムを保存
+		FadeIn();	// フェードイン
 		return std::make_shared<SceneClear>(m_time);
 	}
 
@@ -86,6 +87,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
 	{
+		FadeIn();	// フェードイン
 		return std::make_shared<SceneClear>(m_time);
 	}
 #endif
@@ -99,10 +101,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-	// 背景描画
-	m_pBackground->Draw();
-	// モデル描画
-	m_pModel->Draw();
+	m_pBackground->Draw(); // 背景描画
+	m_pModel->Draw();	   // モデル描画
 
 	// 経過時間の描画
 	int milliSec = m_time * 1000 / 60;
@@ -124,17 +124,15 @@ void ScenePlaying::Draw()
 
 	if (m_startTime > 0)
 	{
-		// スタート演出の表示
-		StartStaging();
+		DrawFade();		// フェード
+		StartStaging();	// スタート演出の表示
 	}
 	else
 	{
-		// 入力コマンドを表示
-		DrawCommand();
+		DrawCommand();	// 入力コマンドを表示
 	}
 
-	// プレイヤーの描画
-	m_pPlayer->Draw();
+	m_pPlayer->Draw();	// プレイヤーの描画
 }
 
 
@@ -173,7 +171,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
-		else if (!input.IsTriggered("A") && ((input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y"))))
+		else if (!input.IsTriggered("A") && (input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
 			m_stopTime = kStopTime;
 			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))

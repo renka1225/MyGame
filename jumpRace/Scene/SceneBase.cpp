@@ -3,13 +3,15 @@
 #include "ManagerSound.h"
 #include "ManagerResult.h"
 #include "ConversionTime.h"
+#include "Game.h"
 #include "DxLib.h"
 
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneBase::SceneBase()
+SceneBase::SceneBase():
+	m_fadeAlpha(0)
 {
 	m_pFont = std::make_shared<ManagerFont>();
 	m_pSound = std::make_shared<ManagerSound>();
@@ -27,4 +29,42 @@ SceneBase::~SceneBase()
 {
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_buttonHandle);
+}
+
+
+/// <summary>
+/// フェードイン
+/// </summary>
+void SceneBase::FadeIn()
+{
+	m_fadeAlpha += kFadeFrame;
+	if (m_fadeAlpha > kMaxFade)
+	{
+		m_fadeAlpha = kMaxFade;
+	}
+}
+
+
+/// <summary>
+/// フェードアウト
+/// </summary>
+void SceneBase::FadeOut()
+{
+	m_fadeAlpha -= kFadeFrame;
+	if (m_fadeAlpha < 0)
+	{
+		m_fadeAlpha = 0;
+	}
+}
+
+
+/// <summary>
+/// フェードインアウトの描画
+/// </summary>
+void SceneBase::DrawFade()
+{
+	// フェードイン
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x4289A3, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

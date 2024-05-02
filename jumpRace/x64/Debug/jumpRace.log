@@ -1,5 +1,7 @@
 ﻿  SceneClear.cpp
+  SceneManager.cpp
   ScenePlaying.cpp
+  SceneResult.cpp
   SceneTitle.cpp
   コードを生成中...
   jumpRace.vcxproj -> C:\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe

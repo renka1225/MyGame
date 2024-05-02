@@ -51,5 +51,7 @@ private: // 定数
 	static constexpr int kStartTextPosY = 500;	// スタート表示位置Y
 	static constexpr int kTitleTextPosX = 540;	// タイトルに戻る表示位置X
 	static constexpr int kTitleTextPosY = 605;	// タイトルに戻る表示位置Y
+
+	static constexpr int kStartFadeAlpha = 200;		// スタート時のフェードα値
 };
 

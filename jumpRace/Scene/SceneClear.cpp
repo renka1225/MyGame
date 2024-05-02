@@ -16,6 +16,7 @@ SceneClear::SceneClear(int time):
 	m_clearTime(time),
 	m_select(kStart)
 {
+	m_fadeAlpha = kStartFadeAlpha;
 }
 
 
@@ -43,10 +44,14 @@ void SceneClear::Init(std::shared_ptr<ManagerResult> pResult)
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	FadeOut();	// フェードアウト
+
 	UpdateSelect(input);	// 選択状態更新
 
 	if (input.IsTriggered("sceneChange"))
 	{
+		FadeIn();	// フェードイン
+
 		if (m_select == kStart)
 		{
 			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
@@ -66,10 +71,10 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
-	// 選択項目を表示
-	DrawSelect();
-	// 結果表示
-	DrawResult();
+	DrawSelect();	// 選択項目を表示
+	DrawResult();	// 結果表示
+
+	DrawFade();		// フェード
 
 #ifdef _DEBUG
 	// デバッグ表示

@@ -50,4 +50,6 @@ private: // 定数
 	static constexpr int kResultTextPosY = 540;	// リザルト表示位置Y
 	static constexpr int kEndTextPosX = 600;	// ゲーム終了表示位置X
 	static constexpr int kEndTextPosY = 620;	// ゲーム終了表示位置Y
+
+	static constexpr int kStartFadeAlpha = 200;		// スタート時のフェードα値
 };
