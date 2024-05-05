@@ -65,6 +65,6 @@ void SceneBase::DrawFade()
 {
 	// フェードイン
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x4289A3, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

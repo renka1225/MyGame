@@ -46,7 +46,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	FadeOut();	// フェードアウト
 	UpdateSelect(input);	// 選択状態更新
 
-	if (input.IsTriggered("sceneChange"))
+	if (input.IsTriggered("OK"))
 	{
 		FadeIn();	// フェードイン
 

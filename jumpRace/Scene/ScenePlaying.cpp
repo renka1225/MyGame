@@ -171,7 +171,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
-		else if (!input.IsTriggered("A") && (input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y")))
+		else if ((input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
 			m_stopTime = kStopTime;
 			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
@@ -190,7 +190,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
-		else if (!input.IsTriggered("B") && (input.IsTriggered("A") || input.IsTriggered("X") || input.IsTriggered("Y")))
+		else if ((input.IsTriggered("A") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
 			m_stopTime = kStopTime;
 			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
@@ -209,15 +209,12 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
-		else if (!input.IsTriggered("X"))
+		else if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("Y"))
 		{
-			if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("Y"))
+			m_stopTime = kStopTime;
+			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
 			{
-				m_stopTime = kStopTime;
-				if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
-				{
-					PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
-				}
+				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 			}
 		}
 	}
@@ -231,7 +228,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_pPlayer->Move();
 			m_nowCommand = GetRand(Y);
 		}
-		else if(!input.IsTriggered("Y") && (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X")))
+		else if((input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X")))
 		{
 			m_stopTime = kStopTime;
 			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))

@@ -48,7 +48,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 
 	UpdateSelect(input);	// 選択状態更新
 
-	if (input.IsTriggered("sceneChange"))
+	if (input.IsTriggered("OK"))
 	{
 		FadeIn();	// フェードイン
 
@@ -71,6 +71,8 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x456889, true);	// 背景表示
+
 	DrawSelect();	// 選択項目を表示
 	DrawResult();	// 結果表示
 

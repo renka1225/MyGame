@@ -4,6 +4,7 @@
 #include "ManagerResult.h"
 #include "ConversionTime.h"
 #include "Input.h"
+#include "Game.h"
 #include "DxLib.h"
 
 
@@ -13,6 +14,7 @@
 SceneResult::SceneResult()
 {
 	m_fadeAlpha = kStartFadeAlpha;
+	m_rankingTextHandle = LoadGraph("data/UI/ranking.png");
 }
 
 
@@ -21,6 +23,7 @@ SceneResult::SceneResult()
 /// </summary>
 SceneResult::~SceneResult()
 {
+	DeleteGraph(m_rankingTextHandle);
 }
 
 
@@ -42,7 +45,7 @@ std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 {
 	FadeOut();	// フェードアウト
 
-	if (input.IsTriggered("sceneChange"))
+	if (input.IsTriggered("back"))
 	{
 		FadeIn();	// フェードイン
 		return std::make_shared<SceneTitle>();		//タイトル画面に移動
@@ -57,14 +60,21 @@ std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 /// </summary>
 void SceneResult::Draw()
 {
-#ifdef _DEBUG
-	// MEMO:デバッグ表示
-	DrawString(0, 0, "結果確認画面", 0xffffff);
-#endif
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x456889, true);	// 背景表示
+	DrawGraph(kRankingTextPosX, kRankingTextPosY, m_rankingTextHandle, true);		// ランキングの文字表示
+	DrawRectRotaGraph(kButtonPosX, kButtonPosY, kButtonSize, kButtonSize, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_buttonHandle, true);	// ボタン画像表示
+	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetTextFont(), "でもどる");	// 文字表示
 
 	DrawRanking();	// ランキング表示
 
 	DrawFade();		// フェード
+
+#ifdef _DEBUG
+	// MEMO:デバッグ表示
+	DrawString(0, 0, "ランキング画面", 0xffffff);
+	// 中心線
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
+#endif
 }
 
 
@@ -76,8 +86,16 @@ void SceneResult::DrawRanking()
 	for (int i = 0; i < kDisplayRanking; i++)
 	{
 		auto ranking = m_pResult->GetRanking()[i]; // ランキングを取得
-		m_pConversionTime->Change(ranking);  // タイム変換
-		DrawFormatStringToHandle(kTimePosX, kTimePosY + kIntervalY * i, 0xffffff, m_pFont->GetResultTimeFont(),
-			"%02d位:%02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+		m_pConversionTime->Change(ranking);		   // タイム変換
+		if (i < 5)
+		{
+			DrawFormatStringToHandle(kRankPosX, kRankPosY + kIntervalY * i, 0xffffff, m_pFont->GetResultTimeFont(),
+				"%02d位:%02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+		}
+		else
+		{
+			DrawFormatStringToHandle(kRank2PosX, kRankPosY + kIntervalY * (i % 5), 0xffffff, m_pFont->GetResultTimeFont(),
+				"%02d位:%02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+		}
 	}
 }
