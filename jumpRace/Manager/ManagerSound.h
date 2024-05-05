@@ -9,8 +9,8 @@ public:
 	ManagerSound();
 	~ManagerSound();
 
+	int GetCursorSE() const { return m_cursorSE; }
 	int GetSelectSE() const { return m_selectSE; }
-	int GetDetermineSE() const { return m_determineSE; }
 	int GetCountSE() const { return m_countSE; }
 	int GetJumpSE() const { return m_jumpSE; }
 	int GetMissSE() const { return m_missSE; }
@@ -20,8 +20,8 @@ public:
 	int GetClearBgm() const { return m_clearBgm; }
 
 private:
+	int m_cursorSE;		// カーソル移動時のSE
 	int m_selectSE;		// 選択時のSE
-	int m_determineSE;	// 決定時のSE
 	int m_countSE;		// スタートカウントのSE
 	int m_jumpSE;		// ジャンプのSE
 	int m_missSE;		// ボタン押しミス時のSE

@@ -6,8 +6,8 @@
 /// </summary>
 ManagerSound::ManagerSound()
 {
-	//m_selectSE = LoadSoundMem("data/sound/select.mp3");
-	//m_determineSE = LoadSoundMem("data/sound/determine.mp3");
+	m_cursorSE = LoadSoundMem("data/sound/cursor.mp3");
+	m_selectSE = LoadSoundMem("data/sound/select.mp3");
 	m_countSE = LoadSoundMem("data/sound/countdown.wav");
 	m_jumpSE = LoadSoundMem("data/sound/jump.wav");
 	m_missSE = LoadSoundMem("data/sound/miss.mp3");
@@ -23,14 +23,13 @@ ManagerSound::ManagerSound()
 /// </summary>
 ManagerSound::~ManagerSound()
 {
-	//DeleteSoundMem(m_selectSE);
-	//DeleteSoundMem(m_determineSE);
+	DeleteSoundMem(m_cursorSE);
+	DeleteSoundMem(m_selectSE);
+	DeleteSoundMem(m_countSE);
+	DeleteSoundMem(m_jumpSE);
+	DeleteSoundMem(m_missSE);
 	//DeleteSoundMem(m_titleBgm);
 	//DeleteSoundMem(m_playBgm);
 	//DeleteSoundMem(m_gameoverBgm);
 	//DeleteSoundMem(m_clearBgm);
-
-	DeleteSoundMem(m_countSE);
-	DeleteSoundMem(m_jumpSE);
-	DeleteSoundMem(m_missSE);
 }

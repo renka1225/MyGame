@@ -7,9 +7,10 @@
 ManagerFont::ManagerFont()
 {
 	// ファイルのロード
-	LPCSTR font_path = "data/font/Pomeranian-Regular.ttf";
+	LPCSTR fontPath = "data/font/Pomeranian-Regular.ttf";
+	LPCSTR fontPath2 = "data/font/ChitoseGothic-Regular.otf";
 
-	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0)
+	if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0 || AddFontResourceEx(fontPath2, FR_PRIVATE, NULL) > 0)
 	{
 	}
 	else
@@ -20,9 +21,10 @@ ManagerFont::ManagerFont()
 
 	m_textFontHandle = CreateFontToHandle("Pomeranian", 30, -1);
 	m_textFont2Handle = CreateFontToHandle("Pomeranian", 25, -1);
-	m_startCountFontHandle = CreateFontToHandle("Pomerania", 100, -1);
-	m_timeFontHandle = CreateFontToHandle("Pomerania", 35, -1);
-	m_resultTimeFontHandle = CreateFontToHandle("Pomerania", 30, -1);
+	m_startCountFontHandle = CreateFontToHandle("Chitose Gothic", 80, 6, DX_FONTTYPE_ANTIALIASING_EDGE);
+	m_timeFontHandle = CreateFontToHandle("Chitose Gothic", 35, 3);
+	m_resultFontHandle = CreateFontToHandle("Chitose Gothic", 40, -1);
+	m_resultTimeFontHandle = CreateFontToHandle("Chitose Gothic", 30, -1);
 	m_creditFontHandle = CreateFontToHandle("Pomerania", 15, -1);
 }
 
@@ -36,6 +38,7 @@ ManagerFont::~ManagerFont()
 	DeleteFontToHandle(m_textFont2Handle);
 	DeleteFontToHandle(m_startCountFontHandle);
 	DeleteFontToHandle(m_timeFontHandle);
+	DeleteFontToHandle(m_resultFontHandle);
 	DeleteFontToHandle(m_resultTimeFontHandle);
 	DeleteFontToHandle(m_creditFontHandle);
 }

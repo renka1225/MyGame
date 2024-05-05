@@ -2,6 +2,7 @@
 #include "ScenePlaying.h"
 #include "SceneResult.h"
 #include "ManagerFont.h"
+#include "ManagerSound.h"
 #include "Input.h"
 #include "Game.h"
 #include "DxLib.h"
@@ -49,6 +50,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	if (input.IsTriggered("OK"))
 	{
 		FadeIn();	// フェードイン
+		PlaySoundMem(m_pSound->GetSelectSE(), DX_PLAYTYPE_BACK);
 
 		// 画面切り替え
 		if (m_select == kStart)
@@ -101,10 +103,12 @@ void SceneTitle::UpdateSelect(Input& input)
 {
 	if (input.IsTriggered("down"))
 	{
+		PlaySoundMem(m_pSound->GetCursorSE(), DX_PLAYTYPE_BACK);
 		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
 	}
 	if (input.IsTriggered("up"))
 	{
+		PlaySoundMem(m_pSound->GetCursorSE(), DX_PLAYTYPE_BACK);
 		m_select = (m_select + 2) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }

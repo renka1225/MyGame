@@ -5,6 +5,7 @@
 #include "ManagerFont.h"
 #include "ManagerSound.h"
 #include "ManagerResult.h"
+#include "ConversionTime.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Background.h"
@@ -29,7 +30,7 @@ ScenePlaying::ScenePlaying():
 	m_pBackground = std::make_shared<Background>(m_pModel);
 
 	m_fadeAlpha = kStartFadeAlpha;
-	m_pLight->CreateDirLight();	// ライトを作成
+	m_pLight->CreateDirLight();	// ディレクショナルライトを作成
 }
 
 
@@ -51,7 +52,7 @@ void ScenePlaying::Init(std::shared_ptr<ManagerResult> pResult)
 	m_pBackground->Init();
 	m_pResult->Load();
 	m_nowCommand = GetRand(Y);
-	//PlaySoundMem(m_pSound->GetCountSE(), DX_PLAYTYPE_BACK);	// カウントダウン
+	PlaySoundMem(m_pSound->GetCountSE(), DX_PLAYTYPE_BACK);	// カウントダウン
 }
 
 
@@ -117,10 +118,9 @@ void ScenePlaying::Draw()
 	m_pModel->Draw();	   // モデル描画
 
 	// 経過時間の描画
-	int milliSec = m_time * 1000 / 60;
-	int sec = (milliSec / 1000) % 90;
-	milliSec %= 1000;
-	DrawFormatStringToHandle(580, 80, 0xffffff, m_pFont->GetTimeFont(), "%02d:%03d", sec, milliSec);
+	m_pConversionTime->Change(m_time);	// タイム変換
+	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffffff, m_pFont->GetTimeFont(), 
+		"%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
 #ifdef _DEBUG
 	// MEMO:XYZ軸デバック表示

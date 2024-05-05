@@ -2,6 +2,7 @@
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
 #include "ManagerFont.h"
+#include "ManagerSound.h"
 #include "ManagerResult.h"
 #include "ConversionTime.h"
 #include "Input.h"
@@ -51,6 +52,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 	if (input.IsTriggered("OK"))
 	{
 		FadeIn();	// フェードイン
+		PlaySoundMem(m_pSound->GetSelectSE(), DX_PLAYTYPE_BACK);
 
 		if (m_select == kStart)
 		{
@@ -94,10 +96,12 @@ void SceneClear::UpdateSelect(Input& input)
 {
 	if (input.IsTriggered("down"))
 	{
+		PlaySoundMem(m_pSound->GetCursorSE(), DX_PLAYTYPE_BACK);
 		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
 	}
 	if (input.IsTriggered("up"))
 	{
+		PlaySoundMem(m_pSound->GetCursorSE(), DX_PLAYTYPE_BACK);
 		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }
@@ -132,12 +136,12 @@ void SceneClear::DrawResult()
 	// クリアタイム表示
 	m_pConversionTime->Change(m_clearTime);	// タイム変換
 	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xffffff, m_pFont->GetResultTimeFont(), 
-		"クリアタイム:%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+		"クリアタイム %02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
 	for (int i = 0; i < kDisplayRanking; i++)
 	{
 		m_pConversionTime->Change(m_pResult->GetRanking()[i]); // タイム変換
 		DrawFormatStringToHandle(kTimePosX, kTimePosY + kIntervalY * i, 0xffffff, m_pFont->GetResultTimeFont(),
-			"%d位:%02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+			"%d位 %02d:%03d\n", (i + 1), m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 	}
 }

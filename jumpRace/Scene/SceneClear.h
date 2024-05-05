@@ -35,7 +35,7 @@ private: // 定数
 	static constexpr int kClearTimePosX = 500;	// クリアタイム表示位置X
 	static constexpr int kClearTimePosY = 100;	// クリアタイム表示位置Y
 	static constexpr int kTimePosX = 560;		// 順位表示位置X
-	static constexpr int kTimePosY = 150;		// 順位表示位置Y
+	static constexpr int kTimePosY = 180;		// 順位表示位置Y
 	static constexpr int kIntervalY = 50;		// 順位表示間隔
 	static constexpr int kDisplayRanking = 5;	// 表示する順位数
 

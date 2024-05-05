@@ -16,6 +16,6 @@ private:
 private:	// íËêî
 	static constexpr float kDirLightPosX = 0.0f;
 	static constexpr float kDirLightPosY = 0.0f;
-	static constexpr float kDirLightPosZ = -7.0f;
+	static constexpr float kDirLightPosZ = -20.0f;
 };
 
