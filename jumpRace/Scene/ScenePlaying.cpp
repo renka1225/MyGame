@@ -1,6 +1,7 @@
 #include "ScenePlaying.h"
 #include "SceneClear.h"
 #include "ManagerModel.h"
+#include "ManagerLight.h"
 #include "ManagerFont.h"
 #include "ManagerSound.h"
 #include "ManagerResult.h"
@@ -22,11 +23,22 @@ ScenePlaying::ScenePlaying():
 	m_pushCount(0)
 {
 	m_pModel = std::make_shared<ManagerModel>();
+	m_pLight = std::make_shared<ManagerLight>();
 	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pCamera = std::make_shared<Camera>(m_pPlayer);
 	m_pBackground = std::make_shared<Background>(m_pModel);
 
 	m_fadeAlpha = kStartFadeAlpha;
+	m_pLight->CreateDirLight();	// ライトを作成
+}
+
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+ScenePlaying::~ScenePlaying()
+{
+	m_pLight->DeleteDirLight();
 }
 
 

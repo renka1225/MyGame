@@ -3,6 +3,7 @@
 #include <memory>
 
 class ManagerModel;
+class ManagerLight;
 class Player;
 class Camera;
 class Background;
@@ -14,7 +15,7 @@ class ScenePlaying : public SceneBase
 {
 public:
 	ScenePlaying();
-	virtual ~ScenePlaying() {};
+	virtual ~ScenePlaying();
 
 	virtual void Init(std::shared_ptr<ManagerResult> pResult);
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
@@ -28,6 +29,7 @@ private:
 private:
 	// ポインタ
 	std::shared_ptr<ManagerModel> m_pModel;		// 3Dモデル
+	std::shared_ptr<ManagerLight> m_pLight;		// ライト
 	std::shared_ptr<Player> m_pPlayer;			// プレイヤー
 	std::shared_ptr<Camera> m_pCamera;			// カメラ
 	std::shared_ptr<Background> m_pBackground;	// 背景

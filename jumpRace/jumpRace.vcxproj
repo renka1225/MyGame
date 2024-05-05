@@ -144,6 +144,7 @@
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ManagerLight.cpp" />
     <ClCompile Include="Manager\ManagerModel.cpp" />
     <ClCompile Include="Manager\ManagerResult.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
+    <ClInclude Include="ManagerLight.h" />
     <ClInclude Include="Manager\ManagerModel.h" />
     <ClInclude Include="Manager\ManagerResult.h" />
     <ClInclude Include="Manager\ManagerFont.h" />
