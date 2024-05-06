@@ -42,13 +42,13 @@ private:	// ’è”
 	static constexpr float kBgPosZ = 30.0f;			// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uZ
 	static constexpr float kBg2PosY = 90.0f;		// ”wŒi‰æ‘œ2‚Ì•\¦ˆÊ’uY
 	static constexpr float kBg2PosZ = 20.0f;		// ”wŒi‰æ‘œ2‚Ì•\¦ˆÊ’uZ
-	static constexpr float kBg3PosY = 88.0f;		// ”wŒi‰æ‘œ3‚Ì•\¦ˆÊ’uY
+	static constexpr float kBg3PosY = 100.0f;		// ”wŒi‰æ‘œ3‚Ì•\¦ˆÊ’uY
 	static constexpr float kBg3PosZ = 18.0f;		// ”wŒi‰æ‘œ3‚Ì•\¦ˆÊ’uZ
-	static constexpr float kBg4PosY = 160.0f;		// ”wŒi‰æ‘œ4‚Ì•\¦ˆÊ’uY
-	static constexpr float kBg4PosZ = 16.0f;		// ”wŒi‰æ‘œ4‚Ì•\¦ˆÊ’uZ
+	static constexpr float kBg4PosY = 190.0f;		// ”wŒi‰æ‘œ4‚Ì•\¦ˆÊ’uY
+	static constexpr float kBg4PosZ = 17.0f;		// ”wŒi‰æ‘œ4‚Ì•\¦ˆÊ’uZ
 	static constexpr float kBgScale = 250.0f;		// ”wŒi‰æ‘œ‚ÌŠg‘å—¦
 	static constexpr float kBg2Scale = 200.0f;		// ”wŒi‰æ‘œ2‚ÌŠg‘å—¦
-	static constexpr float kBg3Scale = 200.0f;		// ”wŒi‰æ‘œ3‚ÌŠg‘å—¦
+	static constexpr float kBg3Scale = 250.0f;		// ”wŒi‰æ‘œ3‚ÌŠg‘å—¦
 	static constexpr float kBg4Scale = 250.0f;		// ”wŒi‰æ‘œ4‚ÌŠg‘å—¦
 	static constexpr float kBgMove = 3.0f;			// ”wŒi‚ÌˆÚ“®—Ê
 };
