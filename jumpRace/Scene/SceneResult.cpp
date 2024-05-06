@@ -50,7 +50,7 @@ std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 	{
 		PlaySoundMem(m_pSound->GetSelectSE(), DX_PLAYTYPE_BACK);
 		FadeIn();	// フェードイン
-		return std::make_shared<SceneTitle>();		//タイトル画面に移動
+		return std::make_shared<SceneTitle>();	// タイトル画面に移動
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -62,7 +62,7 @@ std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 /// </summary>
 void SceneResult::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x456889, true);		// 背景表示
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x263a4d, true);		// 背景表示
 	DrawGraph(kRankingTextPosX, kRankingTextPosY, m_rankingTextHandle, true);	// ランキングの文字表示
 	DrawRectRotaGraph(kButtonPosX, kButtonPosY, kButtonSize, kButtonSize, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_buttonHandle, true);	// ボタン画像表示
 	DrawFormatStringToHandle(kTextPosX, kTextPosY, 0xffffff, m_pFont->GetTextFont(), "でもどる");	// 文字表示

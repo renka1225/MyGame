@@ -73,7 +73,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x456889, true);	// ”wŒi•\¦
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x263a4d, true);	// ”wŒi•\¦
 
 	DrawSelect();	// ‘I‘ğ€–Ú‚ğ•\¦
 	DrawResult();	// Œ‹‰Ê•\¦

@@ -72,14 +72,15 @@ void ManagerModel::CreateGroundModel()
 {
 	for (int i = 0; i < m_pGroundModel.size(); i++)
 	{
-		VECTOR pos = VGet(i * kGroundPosX - kGroundPosX, -kGroundPosY, kGroundPosZ);
+		VECTOR pos = VGet(i * kGroundPosX - kGroundPosX, kGroundPosY, kGroundPosZ);
 		
 		if(i == 1)
-		{ 
+		{
 			m_pGroundModel[i] = std::make_shared<ModelGround>(m_groundModel, pos);
 		}
 		else
 		{
+			pos = VGet(i * kGroundPosX - kGroundPosX, kDesertGroundPosY, kGroundPosZ);
 			m_pGroundModel[i] = std::make_shared<ModelGround>(m_desertModel, pos);
 		}
 	}

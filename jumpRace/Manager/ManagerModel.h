@@ -31,15 +31,16 @@ private:
 	int m_treeModel;	// 木の3Dモデル
 
 private:
-	static constexpr int kGroundNum = 3;			// 設置する地面の数
-	static constexpr float kGroundPosX = 500.0f;	// 設置する地面の位置X
-	static constexpr float kGroundPosY = 100.0f;	// 設置する地面の位置Y
-	static constexpr float kGroundPosZ = 0.0f;		// 設置する地面の位置Z
-	static constexpr int kTreeNum = 10;				// 合計の木の数
-	static constexpr int kTreeColNum = 5;			// 1列に設置する木の数
-	static constexpr float kTreePosX = 100.0f;		// 設置する木の位置X
-	static constexpr float kTreePosY = -50.0f;		// 設置する木の位置Y
-	static constexpr float kTreePosZ = -70.0f;		// 設置する木の位置Z
-	static constexpr float kTreeInitPosZ =100.0f;	// 設置する木の初期位置Z
+	static constexpr int kGroundNum = 3;				// 設置する地面の数
+	static constexpr float kGroundPosX = 450.0f;		// 設置する地面の位置X
+	static constexpr float kGroundPosY = -100.0f;		// 設置する地面の位置Y
+	static constexpr float kDesertGroundPosY = -110.0f;	// 横の地面の位置Y
+	static constexpr float kGroundPosZ = 0.0f;			// 設置する地面の位置Z
+	static constexpr int kTreeNum = 10;					// 合計の木の数
+	static constexpr int kTreeColNum = 5;				// 1列に設置する木の数
+	static constexpr float kTreePosX = 150.0f;			// 設置する木の位置X
+	static constexpr float kTreePosY = -50.0f;			// 設置する木の位置Y
+	static constexpr float kTreePosZ = -70.0f;			// 設置する木の位置Z
+	static constexpr float kTreeInitPosZ = 100.0f;		// 設置する木の初期位置Z
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "DxLib.h"
 #include <memory>
+#include <vector>
 
 class ManagerModel;
 class WorldSprite;
@@ -20,19 +21,29 @@ public:
 
 private:
 	std::shared_ptr<ManagerModel> m_pModel;
-	std::shared_ptr<WorldSprite> m_sprite;
+	std::vector<std::shared_ptr<WorldSprite>> m_sprite;
+	std::vector<int> m_bgHandle;	// ”wŒi‚Ì‰æ‘œ
 
-	VECTOR m_backgroundPos;		// ”wŒi‚Ì•\¦ˆÊ’u
-	VECTOR m_treePos;			// –Ø‚Ì•\¦ˆÊ’u
+	VECTOR m_bgPos;		// ”wŒi‚Ì•\¦ˆÊ’u
+	VECTOR m_bg2Pos;	// ”wŒi2‚Ì•\¦ˆÊ’u
+	float m_bgMove;		// ”wŒi‚ÌˆÚ“®—Ê
 
-	int m_background;	// ”wŒi‚Ì‰æ‘œ
-	int m_groundModel;	// ’n–Ê‚Ì3Dƒ‚ƒfƒ‹
-	int m_treeModel;	// –Ø‚Ì3Dƒ‚ƒfƒ‹
+	// ‰æ‘œƒTƒCƒY
+	struct Size
+	{
+		int width;
+		int height;
+	};
 
 private:	// ’è”
+	static constexpr int kBgNum = 4;				// ”wŒi‰æ‘œ‚Ì”
 	static constexpr int kWidth = 576;				// ”wŒi‰æ‘œ‚Ì‰¡•
 	static constexpr int kHeight = 324;				// ”wŒi‰æ‘œ‚Ìc•
-	static constexpr float kBackScele = 350.0f;		// ”wŒi‰æ‘œ‚ÌŠg‘å—¦
-	static constexpr float kBackPosY = 60.0f;		// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uY
-	static constexpr float kBackPosZ = 30.0f;		// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uZ
+	static constexpr float kBgPosY = 100.0f;		// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uY
+	static constexpr float kBgPosZ = 30.0f;			// ”wŒi‰æ‘œ‚Ì•\¦ˆÊ’uZ
+	static constexpr float kBg2PosY = 90.0f;		// ”wŒi‰æ‘œ2‚Ì•\¦ˆÊ’uY
+	static constexpr float kBg2PosZ = 20.0f;		// ”wŒi‰æ‘œ2‚Ì•\¦ˆÊ’uZ
+	static constexpr float kBgScale = 250.0f;		// ”wŒi‰æ‘œ‚ÌŠg‘å—¦
+	static constexpr float kBg2Scale = 200.0f;		// ”wŒi‰æ‘œ2‚ÌŠg‘å—¦
+	static constexpr float kBgMove = 3.0f;			// ”wŒi‚ÌˆÚ“®—Ê
 };
