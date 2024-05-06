@@ -7,9 +7,7 @@
 /// コンストラクタ
 /// </summary>
 Background::Background(std::shared_ptr<ManagerModel> pModel):
-	m_pModel(pModel),
-	m_bgPos(VGet(0.0f, kBgPosY, kBgPosZ)),
-	m_bg2Pos(VGet(0.0f, kBg2PosY, kBg2PosZ))
+	m_pModel(pModel)
 {
 	// 背景画像読み込み
 	m_bgHandle.resize(kBgNum);
@@ -51,12 +49,23 @@ void Background::Init()
 	for (int i = 0; i < m_sprite.size(); i++)
 	{
 		float scale = kBgScale;
-		VECTOR pos = m_bgPos;
+		VECTOR pos = VGet(0.0f, kBgPosY, kBgPosZ);
 		if (i == 1)
 		{
 			scale = kBg2Scale;
-			pos = m_bg2Pos;
+			pos = VGet(0.0f, kBg2PosY, kBg2PosZ);
 		}
+		else if (i == 2)
+		{
+			scale = kBg3Scale;
+			pos = VGet(0.0f, kBg3PosY, kBg3PosZ);
+		}
+		else if (i == 3)
+		{
+			scale = kBg4Scale;
+			pos = VGet(0.0f, kBg4PosY, kBg4PosZ);
+		}
+
 		m_sprite[i]->Init(m_bgHandle[i], kWidth, kHeight, 0);
 		m_sprite[i]->SetTransform(pos, scale);
 	}
@@ -78,8 +87,8 @@ void Background::Update()
 /// </summary>
 void Background::Draw()
 {
-	for (int i = 0; i < m_sprite.size(); i++)
+	for (auto& sprite : m_sprite)
 	{
-		m_sprite[i]->Draw();
+		sprite->Draw();
 	}
 }
