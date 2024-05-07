@@ -16,7 +16,7 @@ public:
 	int GetMissSE() const { return m_missSE; }
 	int GetTitleBgm() const { return m_titleBgm; }
 	int GetPlayBgm() const { return m_playBgm; }
-	int GetGameoverBgm() const { return m_gameoverBgm; }
+	int GetClearStagingBgm() const { return m_clearStagingBgm; }
 	int GetClearBgm() const { return m_clearBgm; }
 
 private:
@@ -26,9 +26,9 @@ private:
 	int m_jumpSE;		// ジャンプのSE
 	int m_missSE;		// ボタン押しミス時のSE
 
-	int m_titleBgm;		// タイトルBGM
-	int m_playBgm;		// プレイ中BGM
-	int m_gameoverBgm;	// ゲームオーバーBGM
-	int m_clearBgm;		// クリアBGM
+	int m_titleBgm;			// タイトルBGM
+	int m_playBgm;			// プレイ中BGM
+	int m_clearStagingBgm;	// クリア演出中のBGM
+	int m_clearBgm;			// クリアBGM
 };
 

@@ -19,6 +19,7 @@
 ScenePlaying::ScenePlaying(): 
 	m_nowCommand(A),
 	m_startTime(kStartTime),
+	m_clearStagingTime(kClearStagingTime),
 	m_time(0),
 	m_stopTime(0),
 	m_pushCount(0)
@@ -28,6 +29,10 @@ ScenePlaying::ScenePlaying():
 	m_pPlayer = std::make_shared<Player>(m_pModel);
 	m_pCamera = std::make_shared<Camera>(m_pPlayer);
 	m_pBackground = std::make_shared<Background>(m_pModel);
+
+	m_startCount3 = LoadGraph("data/UI/3.png");
+	m_startCount2 = LoadGraph("data/UI/2.png");
+	m_startCount1 = LoadGraph("data/UI/1.png");
 
 	m_fadeAlpha = kStartFadeAlpha;
 	m_pLight->CreateDirLight();	// ディレクショナルライトを作成
@@ -77,6 +82,21 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		return shared_from_this();
 	}
 
+	// クリア演出後、クリア画面に移動
+	if (m_clearStagingTime < 0)
+	{
+		m_pResult->Save(m_time);	// クリアタイムを保存
+		FadeIn();	// フェードイン
+		return std::make_shared<SceneClear>(m_time);
+	}
+
+	// クリアしたらクリア演出を行う
+	if (m_pushCount >= kMaxPush)
+	{
+		ClearStaging();
+		return shared_from_this();
+	}
+
 	// タイム更新
 	m_time++;
 	m_stopTime--;
@@ -87,15 +107,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 
 	// 入力コマンドを更新
 	UpdateCommand(input);
-
-	// 50回入力できたらクリア画面に遷移
-	if (m_pushCount >= kMaxPush)
-	{
-		m_pResult->Save(m_time);	// クリアタイムを保存
-		FadeIn();	// フェードイン
-		return std::make_shared<SceneClear>(m_time);
-	}
-
 #ifdef _DEBUG
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
@@ -119,7 +130,9 @@ void ScenePlaying::Draw()
 
 	// 経過時間の描画
 	m_pConversionTime->Change(m_time);	// タイム変換
-	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffffff, m_pFont->GetTimeFont(), 
+	DrawFormatStringToHandle(kTimeEdgePosX, kTimeEdgePosY, 0x2e3b40, m_pFont->GetTimeFontEdge(),
+		"%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());	// 縁取り表示
+	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffffff, m_pFont->GetTimeFont(),
 		"%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
 #ifdef _DEBUG
@@ -155,16 +168,26 @@ void ScenePlaying::StartStaging()
 {
 	if (m_startTime >= kStartCount1)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffffff, m_pFont->GetStartCountFont(), "3");
+		DrawGraph(kStartCountPosX, kStartCountPosY, m_startCount3, true);
 	}
 	if (m_startTime < kStartCount1 && m_startTime >= kStartCount2)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffffff, m_pFont->GetStartCountFont(), "2");
+		DrawGraph(kStartCountPosX, kStartCountPosY, m_startCount2, true);
 	}
 	if (m_startTime <= kStartCount2 && m_startTime > kStartCount3)
 	{
-		DrawFormatStringToHandle(kStartCountPosX, kStartCountPosY, 0xffffff, m_pFont->GetStartCountFont(), "1");
+		DrawGraph(kStartCountPosX, kStartCountPosY, m_startCount1, true);
 	}
+}
+
+
+/// <summary>
+/// クリア演出の表示
+/// </summary>
+void ScenePlaying::ClearStaging()
+{
+	m_clearStagingTime--;
+	PlaySoundMem(m_pSound->GetClearStagingBgm(), DX_PLAYTYPE_BACK);
 }
 
 
@@ -186,7 +209,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		else if ((input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
 			m_stopTime = kStopTime;
-			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
 			{
 				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 			}
@@ -205,7 +228,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		else if ((input.IsTriggered("A") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
 			m_stopTime = kStopTime;
-			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
 			{
 				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 			}
@@ -224,7 +247,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		else if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("Y"))
 		{
 			m_stopTime = kStopTime;
-			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
 			{
 				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 			}
@@ -243,7 +266,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 		else if((input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X")))
 		{
 			m_stopTime = kStopTime;
-			if (!CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
+			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
 			{
 				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 			}

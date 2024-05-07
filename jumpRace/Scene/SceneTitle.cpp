@@ -44,6 +44,11 @@ void SceneTitle::Init(std::shared_ptr<ManagerResult> pResult)
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	if (!CheckSoundMem(m_pSound->GetTitleBgm()))
+	{
+		PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_BACK);
+	}
+
 	FadeOut();	// フェードアウト
 	UpdateSelect(input);	// 選択状態更新
 

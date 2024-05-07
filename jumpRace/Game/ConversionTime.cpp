@@ -12,6 +12,6 @@ ConversionTime::ConversionTime() :
 void ConversionTime::Change(int time)
 {
 	m_milliSec = time * 1000 / 60;
-	m_sec = (m_milliSec / 1000) % 60;
+	m_sec = m_milliSec / 1000;
 	m_milliSec %= 1000;
 }
