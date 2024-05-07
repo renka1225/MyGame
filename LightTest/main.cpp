@@ -1,22 +1,32 @@
 #include "DxLib.h"
 
-// プログラムは WinMain から始まります
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+// 行列を使ったカメラ回転
+void CameraRotate()
 {
-	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
-	{
-		return -1;			// エラーが起きたら直ちに終了
-	}
+    // カメラ回転
+    float Rotate = 0.0f;
+    MATRIX Matrix;
 
-    // Ｚバッファを有効にする
-    SetUseZBuffer3D(TRUE);
+    // 左右キーでカメラの回転値を変更
+    if (CheckHitKey(KEY_INPUT_LEFT) == 1)
+    {
+        Rotate -= DX_PI_F / 60.0f;
+    }
+    if (CheckHitKey(KEY_INPUT_RIGHT) == 1)
+    {
+        Rotate += DX_PI_F / 60.0f;
+    }
 
-    // Ｚバッファへの書き込みを有効にする
-    SetWriteZBuffer3D(TRUE);
+    // 回転値を使用してＹ軸の回転行列を作成
+    Matrix = MGetRotY(Rotate);
 
-    int rabbitModel = MV1LoadModel("data/rabbit.mv1");
-    int groundModel = MV1LoadModel("data/tile.mv1");
+    // 回転行列をビュー行列としてセット
+    SetCameraViewMatrix(Matrix);
+}
 
+// マテリアル描画
+void DrawMaterial(int groundModel)
+{
     // マテリアルの自己発光色を暗い青色にする
     MATERIALPARAM Material;
     Material.Diffuse = GetColorF(0.8f, 0.0f, 0.0f, 0.0f);   // 拡散光色
@@ -43,11 +53,37 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MV1SetPosition(groundModel, VGet(160.0f, 200.0f, 0.0f));
     MV1SetDifColorScale(groundModel, GetColorF(1.0f, 0.0f, 0.0f, 1.0f));
     MV1DrawModel(groundModel);
+}
 
+// プログラムは WinMain から始まります
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
+	{
+		return -1;			// エラーが起きたら直ちに終了
+	}
 
-	WaitKey();				// キー入力待ち
+    // Ｚバッファを有効にする
+    SetUseZBuffer3D(TRUE);
+    // Ｚバッファへの書き込みを有効にする
+    SetWriteZBuffer3D(TRUE);
 
-    MV1DeleteModel(rabbitModel);
+    int rabbitModel = MV1LoadModel("data/rabbit.mv1");
+    int groundModel = MV1LoadModel("data/tile.mv1");
+
+    // ゲームループ
+    while (ProcessMessage() != -1)
+    {
+        // カメラ回転
+        CameraRotate();
+
+       // 描画
+        DrawMaterial(groundModel);
+
+        WaitKey();				// キー入力待ち
+
+        MV1DeleteModel(rabbitModel);
+    }
 
 	DxLib_End();			// ＤＸライブラリ使用の終了処理
 

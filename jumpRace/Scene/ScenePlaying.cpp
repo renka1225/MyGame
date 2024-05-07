@@ -111,8 +111,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
 	{
-		FadeIn();	// フェードイン
-		return std::make_shared<SceneClear>(m_time);
+		m_pushCount = kMaxPush;
 	}
 #endif
 
@@ -187,7 +186,10 @@ void ScenePlaying::StartStaging()
 void ScenePlaying::ClearStaging()
 {
 	m_clearStagingTime--;
-	PlaySoundMem(m_pSound->GetClearStagingBgm(), DX_PLAYTYPE_BACK);
+	if (!CheckSoundMem(m_pSound->GetClearStagingBgm()))
+	{
+		PlaySoundMem(m_pSound->GetClearStagingBgm(), DX_PLAYTYPE_BACK);
+	}
 }
 
 
