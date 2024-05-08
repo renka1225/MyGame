@@ -16,19 +16,20 @@ public:
 	void Draw();
 	void CreateGroundModel();	// 地面の生成
 	void CreateTreeModel();		// 木の生成
+	void CreateGateModel();		// ゲートの生成
 
 	int GetPlayerModel() const { return m_playerModel; }
-	int GetGroundModel() const { return m_groundModel; }
-	int GetTreeModel() const { return m_treeModel; }
 
 private:
 	std::vector<std::shared_ptr<ModelBase>> m_pGroundModel;	// 地面のモデル
 	std::vector<std::shared_ptr<ModelBase>> m_pTreeModel;	// 木のモデル
+	std::shared_ptr<ModelBase> m_pGateModel;				// ゲートのモデル
 
 	int m_playerModel;	// プレイヤーの3Dモデル
 	int m_groundModel;	// 地面の3Dモデル
 	int m_desertModel;	// 地面の3Dモデル
 	int m_treeModel;	// 木の3Dモデル
+	int m_gateModel;	// ゲートの3Dモデル
 
 private:
 	static constexpr int kGroundNum = 3;				// 設置する地面の数
@@ -42,5 +43,6 @@ private:
 	static constexpr float kTreePosY = -50.0f;			// 設置する木の位置Y
 	static constexpr float kTreePosZ = -70.0f;			// 設置する木の位置Z
 	static constexpr float kTreeInitPosZ = 100.0f;		// 設置する木の初期位置Z
+	static constexpr float kGatePosZ = -100.0f;			// 設置するゲートの位置Z
 };
 

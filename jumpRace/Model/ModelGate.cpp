@@ -1,25 +1,24 @@
-#include "ModelGround.h"
-
+#include "ModelGate.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="model">3Dモデル</param>
 /// <param name="pos">表示位置</param>
-ModelGround::ModelGround(int model, VECTOR pos) :
+ModelGate::ModelGate(int model, VECTOR pos):
 	ModelBase(model)
 {
 	m_pos = pos;
-
 	// 3Dモデルの調整
-	MV1SetScale(m_model, VGet(kGroundScaleWidth, kGroundScaleHeight, kGroundScaleDepth));
+	MV1SetScale(m_model, VGet(kScale, kScale, 0.0f));
+	MV1SetPosition(m_model, m_pos);
 }
 
 
 /// <summary>
 /// デストラクタ
 /// </summary>
-ModelGround::~ModelGround()
+ModelGate::~ModelGate()
 {
 }
 
@@ -27,7 +26,6 @@ ModelGround::~ModelGround()
 /// <summary>
 /// 更新
 /// </summary>
-void ModelGround::Update()
+void ModelGate::Update()
 {
-	MV1SetPosition(m_model, m_pos);
 }

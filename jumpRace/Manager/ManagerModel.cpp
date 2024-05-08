@@ -2,6 +2,7 @@
 #include "ModelBase.h"
 #include "ModelGround.h"
 #include "ModelTree.h"
+#include "ModelGate.h"
 #include "Player.h"
 #include "DxLib.h"
 
@@ -18,6 +19,7 @@ ManagerModel::ManagerModel()
 	m_groundModel = MV1LoadModel("data/Model/tile.mv1");
 	m_desertModel = MV1LoadModel("data/Model/tileDesert.mv1");
 	m_treeModel = MV1LoadModel("data/Model/tree.mv1");
+	m_gateModel = MV1LoadModel("data/Model/gate.mv1");
 }
 
 
@@ -30,6 +32,7 @@ ManagerModel::~ManagerModel()
 	MV1DeleteModel(m_groundModel);
 	MV1DeleteModel(m_desertModel);
 	MV1DeleteModel(m_treeModel);
+	MV1DeleteModel(m_gateModel);
 }
 
 
@@ -46,6 +49,7 @@ void ManagerModel::Update()
 	{
 		model->Update();
 	}
+	m_pGateModel->Update();
 }
 
 
@@ -62,6 +66,7 @@ void ManagerModel::Draw()
 	{
 		model->Draw();
 	}
+	m_pGateModel->Draw();
 }
 
 
@@ -105,4 +110,14 @@ void ManagerModel::CreateTreeModel()
 		}
 		m_pTreeModel[i] = std::make_shared<ModelTree>(m_treeModel, pos);
 	}
+}
+
+
+/// <summary>
+/// ÉQÅ[ÉgÇÃçÏê¨
+/// </summary>
+void ManagerModel::CreateGateModel()
+{
+	VECTOR pos = VGet(0.0f, 0.0f, kGatePosZ);
+	m_pGateModel = std::make_shared<ModelGate>(m_gateModel, pos);
 }

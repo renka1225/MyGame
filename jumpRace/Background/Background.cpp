@@ -25,6 +25,7 @@ Background::Background(std::shared_ptr<ManagerModel> pModel):
 
 	m_pModel->CreateGroundModel();	// ’n–Ê‚Ì¶¬
 	m_pModel->CreateTreeModel();	// –Ø‚Ì¶¬
+	m_pModel->CreateGateModel();	// ƒQ[ƒg‚Ì¶¬
 }
 
 

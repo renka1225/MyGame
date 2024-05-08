@@ -105,8 +105,11 @@
     <ClCompile Include="Game\ConversionTime.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="ManagerLight.cpp">
+    <ClCompile Include="Manager\ManagerLight.cpp">
       <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelGate.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,8 +173,11 @@
     <ClInclude Include="Game\ConversionTime.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="ManagerLight.h">
+    <ClInclude Include="Manager\ManagerLight.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelGate.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
