@@ -14,6 +14,7 @@ public:
 	int GetCountSE() const { return m_countSE; }
 	int GetJumpSE() const { return m_jumpSE; }
 	int GetMissSE() const { return m_missSE; }
+	int GetClearSE() const { return m_clearSE; }
 	int GetTitleBgm() const { return m_titleBgm; }
 	int GetPlayBgm() const { return m_playBgm; }
 	int GetClearStagingBgm() const { return m_clearStagingBgm; }
@@ -25,6 +26,7 @@ private:
 	int m_countSE;		// スタートカウントのSE
 	int m_jumpSE;		// ジャンプのSE
 	int m_missSE;		// ボタン押しミス時のSE
+	int m_clearSE;		// クリア時のSE
 
 	int m_titleBgm;			// タイトルBGM
 	int m_playBgm;			// プレイ中BGM

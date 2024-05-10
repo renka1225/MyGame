@@ -50,6 +50,7 @@ private:
 	int m_time;				// 経過時間
 	int m_stopTime;			// 動けない時間
 	int m_pushCount;		// ボタンを押した回数
+	int m_isPush;			// ボタンを押せる状態か
 
 	int m_startCount3;		// スタートカウントのUI
 	int m_startCount2;		// スタートカウントのUI
@@ -78,7 +79,7 @@ private:	// 定数
 	static constexpr int kTimeEdgePosY = 111;		// タイムのテキスト縁取り位置Y
 
 	static constexpr int kStopTime = 30;			// ミス時に動けなくなる時間
-	static constexpr int kNextCommandTime = 10;		// 次のコマンドを表示するまでの時間
+	static constexpr int kNextCommandTime = 0;		// 次のコマンドを表示するまでの時間
 
 	static constexpr int kStartFadeAlpha = 255;		// スタート時のフェードα値
 };

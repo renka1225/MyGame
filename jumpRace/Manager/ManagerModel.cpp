@@ -49,7 +49,7 @@ void ManagerModel::Update()
 	{
 		model->Update();
 	}
-	m_pGateModel->Update();
+	//m_pGateModel->Update();
 }
 
 
@@ -66,7 +66,7 @@ void ManagerModel::Draw()
 	{
 		model->Draw();
 	}
-	m_pGateModel->Draw();
+	//m_pGateModel->Draw();
 }
 
 

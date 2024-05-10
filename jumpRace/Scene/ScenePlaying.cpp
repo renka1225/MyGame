@@ -16,13 +16,14 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-ScenePlaying::ScenePlaying(): 
+ScenePlaying::ScenePlaying() :
 	m_nowCommand(A),
 	m_startTime(kStartTime),
 	m_clearStagingTime(kClearStagingTime),
 	m_time(0),
 	m_stopTime(0),
-	m_pushCount(0)
+	m_pushCount(0),
+	m_isPush(true)
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pLight = std::make_shared<ManagerLight>();
@@ -100,13 +101,15 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// タイム更新
 	m_time++;
 	m_stopTime--;
-	if (m_stopTime < 0)
+	if (m_stopTime <= 0)
 	{
 		m_stopTime = 0;
+		m_isPush = true;
 	}
 
 	// 入力コマンドを更新
 	UpdateCommand(input);
+
 #ifdef _DEBUG
 	// MEMO:デバッグ用
 	if (input.IsTriggered("sceneChange"))
@@ -186,7 +189,11 @@ void ScenePlaying::StartStaging()
 void ScenePlaying::ClearStaging()
 {
 	m_clearStagingTime--;
-	if (!CheckSoundMem(m_pSound->GetClearStagingBgm()))
+	if (!CheckSoundMem(m_pSound->GetClearSE()))
+	{
+		PlaySoundMem(m_pSound->GetClearSE(), DX_PLAYTYPE_NORMAL);
+	}
+	if (!CheckSoundMem(m_pSound->GetClearSE()) && !CheckSoundMem(m_pSound->GetClearStagingBgm()))
 	{
 		PlaySoundMem(m_pSound->GetClearStagingBgm(), DX_PLAYTYPE_BACK);
 	}
@@ -200,7 +207,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 {
 	if (m_nowCommand == A)
 	{
-		if (input.IsTriggered("A") && m_stopTime <= 0)
+		if (input.IsTriggered("A") && m_isPush)
 		{
 			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
@@ -210,16 +217,13 @@ void ScenePlaying::UpdateCommand(Input& input)
 		}
 		else if ((input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
-			m_stopTime = kStopTime;
-			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
-			{
-				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
-			}
+			m_isPush = false;
+
 		}
 	}
 	if (m_nowCommand == B)
 	{
-		if (input.IsTriggered("B") && m_stopTime <= 0)
+		if (input.IsTriggered("B") && m_isPush)
 		{
 			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
@@ -229,16 +233,12 @@ void ScenePlaying::UpdateCommand(Input& input)
 		}
 		else if ((input.IsTriggered("A") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
-			m_stopTime = kStopTime;
-			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
-			{
-				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
-			}
+			m_isPush = false;
 		}
 	}
 	if (m_nowCommand == X)
 	{
-		if (input.IsTriggered("X") && m_stopTime <= 0)
+		if (input.IsTriggered("X") && m_isPush)
 		{
 			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
@@ -248,16 +248,12 @@ void ScenePlaying::UpdateCommand(Input& input)
 		}
 		else if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("Y"))
 		{
-			m_stopTime = kStopTime;
-			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
-			{
-				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
-			}
+			m_isPush = false;
 		}
 	}
 	if (m_nowCommand == Y)
 	{
-		if (input.IsTriggered("Y") && m_stopTime <= 0)
+		if (input.IsTriggered("Y") && m_isPush)
 		{
 			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
 			m_pushCount++;
@@ -267,11 +263,17 @@ void ScenePlaying::UpdateCommand(Input& input)
 		}
 		else if((input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X")))
 		{
-			m_stopTime = kStopTime;
-			if (m_stopTime <= 0 && !CheckSoundMem(m_pSound->GetJumpSE()) || !CheckSoundMem(m_pSound->GetMissSE()))
-			{
-				PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
-			}
+			m_isPush = false;
+		}
+	}
+
+	// ボタンを押し間違えた場合
+	if (!m_isPush && m_stopTime <= 0)
+	{
+		m_stopTime = kStopTime;
+		if (!CheckSoundMem(m_pSound->GetMissSE()))
+		{
+			PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 		}
 	}
 }
