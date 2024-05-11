@@ -35,6 +35,7 @@ SceneClear::~SceneClear()
 void SceneClear::Init(std::shared_ptr<ManagerResult> pResult)
 {
 	m_pResult = pResult;
+	PlaySoundMem(m_pSound->GetClearBgm(), DX_PLAYTYPE_LOOP);
 }
 
 

@@ -94,8 +94,15 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// クリアしたらクリア演出を行う
 	if (m_pushCount >= kMaxPush)
 	{
+		StopSoundMem(m_pSound->GetPlayBgm());
 		ClearStaging();
 		return shared_from_this();
+	}
+
+	// BGMを鳴らす
+	if (!CheckSoundMem(m_pSound->GetPlayBgm()))
+	{
+		PlaySoundMem(m_pSound->GetPlayBgm(), DX_PLAYTYPE_LOOP);
 	}
 
 	// タイム更新
@@ -154,7 +161,7 @@ void ScenePlaying::Draw()
 		DrawFade();		// フェード
 		StartStaging();	// スタート演出の表示
 	}
-	else
+	else if(m_pushCount < kMaxPush)
 	{
 		DrawCommand();	// 入力コマンドを表示
 	}
@@ -189,11 +196,11 @@ void ScenePlaying::StartStaging()
 void ScenePlaying::ClearStaging()
 {
 	m_clearStagingTime--;
-	if (!CheckSoundMem(m_pSound->GetClearSE()))
+	if (!CheckSoundMem(m_pSound->GetClearSE()) && m_clearStagingTime >= kClearSEChangeTime)
 	{
-		PlaySoundMem(m_pSound->GetClearSE(), DX_PLAYTYPE_NORMAL);
+		PlaySoundMem(m_pSound->GetClearSE(), DX_PLAYTYPE_BACK);
 	}
-	if (!CheckSoundMem(m_pSound->GetClearSE()) && !CheckSoundMem(m_pSound->GetClearStagingBgm()))
+	if (!CheckSoundMem(m_pSound->GetClearStagingBgm()) && m_clearStagingTime <= kClearSEChangeTime)
 	{
 		PlaySoundMem(m_pSound->GetClearStagingBgm(), DX_PLAYTYPE_BACK);
 	}

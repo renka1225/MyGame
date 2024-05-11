@@ -34,6 +34,7 @@ SceneResult::~SceneResult()
 void SceneResult::Init(std::shared_ptr<ManagerResult> pResult)
 {
 	m_pResult = pResult;
+	PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_LOOP);
 }
 
 

@@ -57,17 +57,18 @@ private:
 	int m_startCount1;		// スタートカウントのUI
 
 private:	// 定数
-	static constexpr int kMaxPush = 30;				// 30回ボタン入力を行う
+	static constexpr int kMaxPush = 30;		// 30回ボタン入力を行う
 
 	// スタート演出
-	static constexpr int kStartTime = 240;			// スタート時の演出時間
-	static constexpr int kStartCount1 = 180;		// 1カウント目
-	static constexpr int kStartCount2 = 120;		// 2カウント目
-	static constexpr int kStartCount3 = 60;			// 3カウント目
-	static constexpr int kStartCount4 = 0;			// startSEを鳴らす
-	static constexpr int kStartCountPosX = 600;		// カウント表示位置X
-	static constexpr int kStartCountPosY = 250;		// カウント表示位置Y
-	static constexpr int kClearStagingTime = 300;	// クリア時の演出時間
+	static constexpr int kStartTime = 240;				// スタート時の演出時間
+	static constexpr int kStartCount1 = 180;			// 1カウント目
+	static constexpr int kStartCount2 = 120;			// 2カウント目
+	static constexpr int kStartCount3 = 60;				// 3カウント目
+	static constexpr int kStartCount4 = 0;				// startSEを鳴らす
+	static constexpr int kStartCountPosX = 600;			// カウント表示位置X
+	static constexpr int kStartCountPosY = 250;			// カウント表示位置Y
+	static constexpr int kClearStagingTime = 300;		// クリア時の演出時間
+	static constexpr int kClearSEChangeTime = 270;		// クリアSEを変える時間
 
 	static constexpr int kCommandSize = 16;			// 入力コマンドのサイズ
 	static constexpr float kCommandScale = 4.0f;	// 入力コマンドの拡大率
@@ -79,7 +80,7 @@ private:	// 定数
 	static constexpr int kTimeEdgePosY = 111;		// タイムのテキスト縁取り位置Y
 
 	static constexpr int kStopTime = 30;			// ミス時に動けなくなる時間
-	static constexpr int kNextCommandTime = 0;		// 次のコマンドを表示するまでの時間
+	static constexpr int kNextCommandTime = 5;		// 次のコマンドを表示するまでの時間
 
 	static constexpr int kStartFadeAlpha = 255;		// スタート時のフェードα値
 };
