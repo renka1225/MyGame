@@ -1,11 +1,12 @@
 #include "Player.h"
 #include "ManagerModel.h"
+#include "WorldSprite.h"
 #include "Input.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Player::Player(std::shared_ptr<ManagerModel> pModel):
+Player::Player(std::shared_ptr<ManagerModel> pModel) :
 	m_pModel(pModel),
 	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ))
 {
@@ -70,6 +71,11 @@ void Player::Update(Input& input)
 /// </summary>
 void Player::Draw()
 {
+	// プレイヤーの下に影を描画する
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
+	DrawCircle(kShadowPosX, kShadowPosY, kShadowRadius, 0x008080, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 	// ３Ｄモデルの描画
 	MV1DrawModel(m_model);
 

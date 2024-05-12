@@ -23,7 +23,9 @@ void ManagerResult::Load()
 	file.open(fileName, std::ios::in | std::ios::binary);
 	if (!file.is_open()) // ファイル読み込み失敗
 	{
+#ifdef _DEBUG
 		printfDx("ファイル読み込み失敗\n");
+#endif
 	}
 	else // ファイル読み込み成功
 	{
