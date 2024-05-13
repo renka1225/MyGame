@@ -20,7 +20,7 @@ public:
 private:
 	std::shared_ptr<Player> m_pPlayer;
 
-	VECTOR m_pos;
+	VECTOR m_pos;			// ƒJƒƒ‰ˆÊ’u
 
 private:	// ’è”
 	// ‹–ìŠp

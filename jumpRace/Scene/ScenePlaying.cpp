@@ -73,8 +73,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 
 	m_pModel->Update();			// モデル更新
 	m_pBackground->Update();	// 背景更新
-	m_pPlayer->Update(input);	// プレイヤー更新
 	m_pCamera->Update();		// カメラ更新
+	m_pPlayer->Update(input);	// プレイヤー更新
 
 	// スタート演出を行う
 	if (m_startTime > 0)
@@ -95,7 +95,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_pushCount >= kMaxPush)
 	{
 		StopSoundMem(m_pSound->GetPlayBgm());
-		m_pPlayer->ClearStaging();	// プレイヤーの演出
 		ClearStaging();
 		return shared_from_this();
 	}
@@ -197,6 +196,9 @@ void ScenePlaying::StartStaging()
 void ScenePlaying::ClearStaging()
 {
 	m_clearStagingTime--;
+
+	//m_pPlayer->ClearStaging();	// プレイヤーの演出
+
 	if (!CheckSoundMem(m_pSound->GetClearSE()) && m_clearStagingTime >= kClearSEChangeTime)
 	{
 		PlaySoundMem(m_pSound->GetClearSE(), DX_PLAYTYPE_BACK);

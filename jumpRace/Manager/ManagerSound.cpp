@@ -16,6 +16,9 @@ ManagerSound::ManagerSound()
 	m_clearStagingBgm = LoadSoundMem("data/sound/clearStaging.mp3");
 	m_playBgm = LoadSoundMem("data/sound/playing.mp3");
 	m_clearBgm = LoadSoundMem("data/sound/clear.mp3");
+
+	// âπó í≤êÆ
+	ChangeVolumeSoundMem(160, m_titleBgm);
 }
 
 

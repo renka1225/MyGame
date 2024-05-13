@@ -8,7 +8,10 @@
 /// </summary>
 Player::Player(std::shared_ptr<ManagerModel> pModel) :
 	m_pModel(pModel),
-	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ))
+	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ)),
+	m_angle(0.0f),
+	m_cameraAngle(0.0f),
+	m_isClear(false)
 {
 	m_model = MV1DuplicateModel(m_pModel->GetPlayerModel());
 
@@ -71,19 +74,22 @@ void Player::Update(Input& input)
 /// </summary>
 void Player::Draw()
 {
-	// プレイヤーの下に影を描画する
-	int shadowColor;
-	if (m_pos.y > 0.0f)	// プレイヤーの高さによって影色を変える
+	// プレイ中、プレイヤーの下に影を描画する
+	if (!m_isClear)
 	{
-		shadowColor = 0x7dbd7d;
+		int shadowColor;
+		if (m_pos.y > 0.0f)	// プレイヤーの高さによって影色を変える
+		{
+			shadowColor = 0x7dbd7d;
+		}
+		else
+		{
+			shadowColor = 0x008080;
+		}
+		SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
+		DrawCircle(kShadowPosX, kShadowPosY, kShadowRadius, shadowColor, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	else
-	{
-		shadowColor = 0x008080;
-	}
-	SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
-	DrawCircle(kShadowPosX, kShadowPosY, kShadowRadius, shadowColor, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	// ３Ｄモデルの描画
 	MV1DrawModel(m_model);
@@ -109,8 +115,46 @@ void Player::Move()
 /// </summary>
 void Player::ClearStaging()
 {
-	float angle = 3.0f;
-	VECTOR move = VGet(angle, 0.0f, kMoveZ);
+	if (!m_isClear)
+	{
+		m_pos = VGet(kClearInitPosX, 0.0f, kClearInitPosZ);	// プレイヤーを移動させる
+		m_isClear = true;
+	}
+	else
+	{
+		// プレイヤーを回転させる
+		m_angle += kRotRad;
+		MATRIX scaleMtx = MGetScale(VGet(kScale, kScale, kScale));	// プレイヤーのサイズを調整
+		MATRIX transMxt = MGetTranslate(VGet(kClearInitPosX, 0.0f, kClearInitPosZ));
+		m_rotMtx = MGetRotY(m_angle);
 
-	m_pos = VAdd(m_pos, move);
+		m_modelMtx = MMult(scaleMtx, transMxt);
+		m_modelMtx = MMult(m_modelMtx, m_rotMtx);
+
+		MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
+		m_move = VTransform(m_move, mtx);
+
+		// 一定の位置でプレイヤーを移動させる
+		if (m_pos.z <= kClearInitPosZ && m_pos.z >= kClearEndPosZ)
+		{
+			m_move = VGet(0.0f, 0.0f, -kClearMove);
+		}
+		if (m_pos.z <= -kClearEndPosZ)
+		{
+			m_move.z *= -1;
+		}
+		if (m_pos.x >= -kClearInitPosX && m_pos.x <= kClearEndPosX)
+		{
+			m_move = VGet(kClearMove, 0.0f, 0.0f);
+		}
+		else
+		{
+			m_move.x *= -1;
+		}
+
+		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F / 2;
+		MV1SetMatrix(m_model, m_modelMtx);
+
+		m_pos = VAdd(m_pos, m_move);
+	}
 }
