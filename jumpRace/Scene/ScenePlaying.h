@@ -57,7 +57,7 @@ private:
 	int m_startCount1;		// スタートカウントのUI
 
 private:	// 定数
-	static constexpr int kMaxPush = 30;		// 30回ボタン入力を行う
+	static constexpr int kMaxPush = 30;	// 30回ボタン入力を行う
 
 	// スタート演出
 	static constexpr int kStartTime = 240;				// スタート時の演出時間

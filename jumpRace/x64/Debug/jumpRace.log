@@ -1,26 +1,2 @@
-﻿  Background.cpp
-  ConversionTime.cpp
-  Camera.cpp
-  Input.cpp
-  main.cpp
-  ManagerLight.cpp
-  ManagerModel.cpp
-  ManagerResult.cpp
-  ManagerFont.cpp
-  ManagerSound.cpp
-  ModelGate.cpp
-  ModelBase.cpp
-  ModelGround.cpp
-  ModelTree.cpp
-  Player.cpp
-  SceneResult.cpp
-  SceneClear.cpp
-  ScenePlaying.cpp
-  SceneTitle.cpp
-  SceneBase.cpp
-  コードを生成中...
-  コンパイル中...
-  SceneManager.cpp
-  WorldSprite.cpp
-  コードを生成中...
-  jumpRace.vcxproj -> C:\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe
+﻿  Player.cpp
+  jumpRace.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\jumpRace\x64\Debug\jumpRace.exe

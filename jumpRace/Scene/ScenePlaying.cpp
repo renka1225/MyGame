@@ -95,6 +95,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_pushCount >= kMaxPush)
 	{
 		StopSoundMem(m_pSound->GetPlayBgm());
+		m_pPlayer->ClearStaging();	// プレイヤーの演出
 		ClearStaging();
 		return shared_from_this();
 	}

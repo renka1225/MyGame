@@ -149,7 +149,6 @@
     <ClCompile Include="Manager\ManagerResult.cpp" />
     <ClCompile Include="Manager\ManagerFont.cpp" />
     <ClCompile Include="Manager\ManagerSound.cpp" />
-    <ClCompile Include="Model\ModelGate.cpp" />
     <ClCompile Include="Model\ModelBase.cpp" />
     <ClCompile Include="Model\ModelGround.cpp" />
     <ClCompile Include="Model\ModelTree.cpp" />
@@ -173,7 +172,6 @@
     <ClInclude Include="Manager\ManagerResult.h" />
     <ClInclude Include="Manager\ManagerFont.h" />
     <ClInclude Include="Manager\ManagerSound.h" />
-    <ClInclude Include="Model\ModelGate.h" />
     <ClInclude Include="Model\ModelBase.h" />
     <ClInclude Include="Model\ModelGround.h" />
     <ClInclude Include="Model\ModelTree.h" />

@@ -18,7 +18,8 @@ public:
 	void Update(Input& input);
 	void Draw();
 
-	void Move();	// プレイヤーを移動させる
+	void Move();			// プレイヤーを移動させる
+	void ClearStaging();	// クリア時の演出
 
 	VECTOR GetPos() const { return m_pos; }
 

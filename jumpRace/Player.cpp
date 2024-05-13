@@ -72,8 +72,17 @@ void Player::Update(Input& input)
 void Player::Draw()
 {
 	// プレイヤーの下に影を描画する
+	int shadowColor;
+	if (m_pos.y > 0.0f)	// プレイヤーの高さによって影色を変える
+	{
+		shadowColor = 0x7dbd7d;
+	}
+	else
+	{
+		shadowColor = 0x008080;
+	}
 	SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
-	DrawCircle(kShadowPosX, kShadowPosY, kShadowRadius, 0x008080, true);
+	DrawCircle(kShadowPosX, kShadowPosY, kShadowRadius, shadowColor, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	// ３Ｄモデルの描画
@@ -92,4 +101,16 @@ void Player::Draw()
 void Player::Move()
 {
 	m_pos = VAdd(m_pos, VGet(0.0f, kJumpHeight, kMoveZ));
+}
+
+
+/// <summary>
+/// クリア時の演出
+/// </summary>
+void Player::ClearStaging()
+{
+	float angle = 3.0f;
+	VECTOR move = VGet(angle, 0.0f, kMoveZ);
+
+	m_pos = VAdd(m_pos, move);
 }

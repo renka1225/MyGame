@@ -24,14 +24,7 @@ private:
 	std::vector<std::shared_ptr<WorldSprite>> m_sprite;
 	std::vector<int> m_bgHandle;	// ”wŒi‚Ì‰æ‘œ
 
-	float m_bgMove;		// ”wŒi‚ÌˆÚ“®—Ê
-
-	// ‰æ‘œƒTƒCƒY
-	struct Size
-	{
-		int width;
-		int height;
-	};
+	int m_lineHandle;	// ”’ü‚Ì‰æ‘œ
 
 private:	// ’è”
 	static constexpr int kBgNum = 4;				// ”wŒi‰æ‘œ‚Ì”
