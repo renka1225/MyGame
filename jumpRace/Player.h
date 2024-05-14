@@ -17,6 +17,7 @@ public:
 	void Init();
 	void Update(Input& input);
 	void Draw();
+	void DrawShadow();	// 影の描画
 
 	void Move();			// プレイヤーを移動させる
 	void ClearStaging();	// クリア時の演出
@@ -33,7 +34,8 @@ private:
 	int m_clearStagingTime;	// クリア演出の時間
 	float m_angle;			// プレイヤーが向いている方向
 
-	int m_model;	// 3Dモデル
+	int shadowMapHandle;	// 影
+	int m_model;			// 3Dモデル
 
 private:	// 定数
 	static constexpr float kScale = 0.3f;		// プレイヤーのサイズ

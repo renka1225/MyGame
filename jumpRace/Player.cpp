@@ -17,6 +17,14 @@ Player::Player(std::shared_ptr<ManagerModel> pModel) :
 
 	// 3Dモデルのサイズ決定
 	MV1SetScale(m_model, VGet(kScale, kScale, kScale));
+
+	// シャドウマップハンドルの作成
+	shadowMapHandle = MakeShadowMap(256, 256);
+
+	// シャドウマップで想定するライトの方向を設定する
+	SetShadowMapLightDirection(shadowMapHandle, VGet(0.0f, 0.0f, -3.0f));
+	// シャドウマップに描画する範囲を設定する
+	SetShadowMapDrawArea(shadowMapHandle, VGet(-1000.0f, -1.0f, -1000.0f), VGet(1000.0f, 1000.0f, 1000.0f));
 }
 
 
@@ -25,6 +33,8 @@ Player::Player(std::shared_ptr<ManagerModel> pModel) :
 /// </summary>
 Player::~Player()
 {
+	// シャドウマップの削除
+	DeleteShadowMap(shadowMapHandle);
 	MV1DeleteModel(m_model);
 }
 
