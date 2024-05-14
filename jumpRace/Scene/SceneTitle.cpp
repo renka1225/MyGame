@@ -15,6 +15,8 @@ SceneTitle::SceneTitle():
 	m_select(kStart)
 {
 	m_titleLogo = LoadGraph("data/UI/title.png");
+	m_playMovie = LoadGraph("data/play.mp4");
+	SetMovieVolumeToGraph(0, m_playMovie);
 	m_fadeAlpha = kStartFadeAlpha;
 }
 
@@ -25,6 +27,7 @@ SceneTitle::SceneTitle():
 SceneTitle::~SceneTitle()
 {
 	DeleteGraph(m_titleLogo);
+	DeleteGraph(m_playMovie);
 }
 
 
@@ -48,6 +51,12 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	FadeOut();	// フェードアウト
 	UpdateSelect(input);	// 選択状態更新
 
+	// 背景でプレイ動画を再生する
+	if (GetMovieStateToGraph(m_playMovie) != 1)
+	{
+		PlayMovieToGraph(m_playMovie);
+	}
+
 	if (input.IsTriggered("OK"))
 	{
 		FadeIn();	// フェードイン
@@ -56,15 +65,15 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		// 画面切り替え
 		if (m_select == kStart)
 		{
-			return std::make_shared<ScenePlaying>();	// ゲームシーンに移動
+			return std::make_shared<ScenePlaying>(); // ゲームシーンに移動
 		}
 		else if (m_select == kResult)
 		{
-			return std::make_shared<SceneResult>();		// 結果確認画面に移動
+			return std::make_shared<SceneResult>();	 // 結果確認画面に移動
 		}
 		else if (m_select == kEnd)
 		{
-			DxLib_End();	// ゲーム終了
+			DxLib_End(); // ゲーム終了
 		}
 	}
 
@@ -77,11 +86,18 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	// プレイ動画を描画
+	DrawExtendGraph(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_playMovie, false);
+	// 見やすいように黒い四角を薄く表示する
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 150);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 	// クレジット表記
 	DrawFormatStringToHandle(900, 670, 0xffffff, m_pFont->GetCreditFont(), "Sound/OtoLogic");
 	DrawFormatStringToHandle(900, 690, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
 
-	// タイトル表示
+	// タイトルロゴ表示
 	DrawGraph(kTitleLogoPosX, kTitleLogoPosY, m_titleLogo, true);
 
 	DrawSelect();	// 選択項目を表示

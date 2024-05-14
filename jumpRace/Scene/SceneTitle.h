@@ -30,6 +30,7 @@ private:
 
 	int m_select;		// 現在の選択状態
 
+	int m_playMovie;	// プレイ動画
 	int m_titleLogo;	// タイトルロゴ
 
 private: // 定数

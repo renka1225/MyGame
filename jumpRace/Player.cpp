@@ -10,7 +10,7 @@ Player::Player(std::shared_ptr<ManagerModel> pModel) :
 	m_pModel(pModel),
 	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ)),
 	m_angle(0.0f),
-	m_cameraAngle(0.0f),
+	m_clearStagingTime(0),
 	m_isClear(false)
 {
 	m_model = MV1DuplicateModel(m_pModel->GetPlayerModel());
@@ -44,18 +44,13 @@ void Player::Init()
 /// <param name="input">ボタン入力</param>
 void Player::Update(Input& input)
 {
-//#ifdef _DEBUG
-//	// MEMO:デバッグ移動用
-//	if (input.IsPressing("down"))
-//	{
-//		m_pos.z -= 1.0f;
-//	}
-//	if (input.IsPressing("up"))
-//	{
-//		m_pos.z += 1.0f;
-//	}
-//#endif
+	// クリア時
+	if (m_isClear)
+	{
+		m_clearStagingTime++;
+	}
 
+	// 重力を足す
 	m_pos = VAdd(m_pos, VGet(0.0f, kGravity, 0.0f));
 
 	// 地面に着地させる
@@ -120,41 +115,17 @@ void Player::ClearStaging()
 		m_pos = VGet(kClearInitPosX, 0.0f, kClearInitPosZ);	// プレイヤーを移動させる
 		m_isClear = true;
 	}
-	else
+	else if(m_clearStagingTime >= kClearStagingStartTime)
 	{
 		// プレイヤーを回転させる
 		m_angle += kRotRad;
-		MATRIX scaleMtx = MGetScale(VGet(kScale, kScale, kScale));	// プレイヤーのサイズを調整
-		MATRIX transMxt = MGetTranslate(VGet(kClearInitPosX, 0.0f, kClearInitPosZ));
-		m_rotMtx = MGetRotY(m_angle);
+		MV1SetRotationXYZ(m_model, VGet(0.0f, m_angle * DX_PI_F / 180.0f, 0.0f));
 
-		m_modelMtx = MMult(scaleMtx, transMxt);
-		m_modelMtx = MMult(m_modelMtx, m_rotMtx);
-
-		MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
-		m_move = VTransform(m_move, mtx);
-
-		// 一定の位置でプレイヤーを移動させる
-		if (m_pos.z <= kClearInitPosZ && m_pos.z >= kClearEndPosZ)
+		// 数フレームごとにジャンプさせる
+		int jumpFrame = m_clearStagingTime % 40;
+		if (jumpFrame == kJumpFrame)
 		{
-			m_move = VGet(0.0f, 0.0f, -kClearMove);
+			m_pos = VAdd(m_pos, VGet(0.0f, kJumpHeight, 0.0f));
 		}
-		if (m_pos.z <= -kClearEndPosZ)
-		{
-			m_move.z *= -1;
-		}
-		if (m_pos.x >= -kClearInitPosX && m_pos.x <= kClearEndPosX)
-		{
-			m_move = VGet(kClearMove, 0.0f, 0.0f);
-		}
-		else
-		{
-			m_move.x *= -1;
-		}
-
-		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F / 2;
-		MV1SetMatrix(m_model, m_modelMtx);
-
-		m_pos = VAdd(m_pos, m_move);
 	}
 }

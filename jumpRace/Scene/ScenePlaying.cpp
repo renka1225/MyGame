@@ -137,10 +137,11 @@ void ScenePlaying::Draw()
 	m_pBackground->Draw(); // 背景描画
 	m_pModel->Draw();	   // モデル描画
 
-	// 経過時間の描画
 	m_pConversionTime->Change(m_time);	// タイム変換
+	// 縁取り表示
 	DrawFormatStringToHandle(kTimeEdgePosX, kTimeEdgePosY, 0x2e3b40, m_pFont->GetTimeFontEdge(),
-		"%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());	// 縁取り表示
+		"%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
+	// 経過時間表示
 	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xffffff, m_pFont->GetTimeFont(),
 		"%02d:%03d", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
 
@@ -197,7 +198,7 @@ void ScenePlaying::ClearStaging()
 {
 	m_clearStagingTime--;
 
-	//m_pPlayer->ClearStaging();	// プレイヤーの演出
+	m_pPlayer->ClearStaging();	// プレイヤーの演出
 
 	if (!CheckSoundMem(m_pSound->GetClearSE()) && m_clearStagingTime >= kClearSEChangeTime)
 	{
@@ -219,27 +220,18 @@ void ScenePlaying::UpdateCommand(Input& input)
 	{
 		if (input.IsTriggered("A") && m_isPush)
 		{
-			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
-			m_pushCount++;
-			m_stopTime = kNextCommandTime;
-			m_pPlayer->Move();
-			m_nowCommand = GetRand(Y);
+			PushCorrect();
 		}
 		else if ((input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
 			m_isPush = false;
-
 		}
 	}
 	if (m_nowCommand == B)
 	{
 		if (input.IsTriggered("B") && m_isPush)
 		{
-			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
-			m_pushCount++;
-			m_stopTime = kNextCommandTime;
-			m_pPlayer->Move();
-			m_nowCommand = GetRand(Y);
+			PushCorrect();
 		}
 		else if ((input.IsTriggered("A") || input.IsTriggered("X") || input.IsTriggered("Y")))
 		{
@@ -250,11 +242,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 	{
 		if (input.IsTriggered("X") && m_isPush)
 		{
-			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
-			m_pushCount++;
-			m_stopTime = kNextCommandTime;
-			m_pPlayer->Move();
-			m_nowCommand = GetRand(Y);
+			PushCorrect();
 		}
 		else if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("Y"))
 		{
@@ -265,11 +253,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 	{
 		if (input.IsTriggered("Y") && m_isPush)
 		{
-			PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
-			m_pushCount++;
-			m_stopTime = kNextCommandTime;
-			m_pPlayer->Move();
-			m_nowCommand = GetRand(Y);
+			PushCorrect();
 		}
 		else if((input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X")))
 		{
@@ -286,6 +270,19 @@ void ScenePlaying::UpdateCommand(Input& input)
 			PlaySoundMem(m_pSound->GetMissSE(), DX_PLAYTYPE_BACK);
 		}
 	}
+}
+
+
+/// <summary>
+/// 正しいボタンを押せた際の処理
+/// </summary>
+void ScenePlaying::PushCorrect()
+{
+	PlaySoundMem(m_pSound->GetJumpSE(), DX_PLAYTYPE_BACK);
+	m_pushCount++;
+	m_stopTime = kNextCommandTime;
+	m_pPlayer->Move();
+	m_nowCommand = GetRand(Y);
 }
 
 

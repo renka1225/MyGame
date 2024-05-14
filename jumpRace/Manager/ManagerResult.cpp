@@ -85,7 +85,9 @@ void ManagerResult::Save(int time)
 	file.open(fileName, std::ios::out | std::ios::binary);
 	if (!file.is_open())	// ファイル読み込み失敗時
 	{
+#ifdef _DEBUG
 		printfDx("ファイル書き込み失敗\n");
+#endif
 	}
 	else	// ファイル読み込み成功
 	{

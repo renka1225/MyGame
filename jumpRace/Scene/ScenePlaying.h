@@ -25,6 +25,7 @@ private:
 	void StartStaging();				// スタート演出の表示
 	void ClearStaging();				// クリア演出の表示
 	void UpdateCommand(Input& input);	// 入力コマンドの更新
+	void PushCorrect();					// 正しいボタンを押せた際の処理
 	void DrawCommand();					// 入力コマンドの表示
 
 private:

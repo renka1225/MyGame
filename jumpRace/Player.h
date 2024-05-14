@@ -28,14 +28,10 @@ private:
 
 	VECTOR m_pos;	// 位置
 
-	// クリア時のプレイヤー情報
-	MATRIX m_modelMtx;
-	MATRIX m_rotMtx;
-	VECTOR m_move;
-	float m_angle;			// 向いている方向
-	float m_cameraAngle;	// カメラの向いている方向
-
-	int m_isClear;	// クリアしたかのフラグ
+	// クリア時の情報
+	int m_isClear;			// クリアしたかのフラグ
+	int m_clearStagingTime;	// クリア演出の時間
+	float m_angle;			// プレイヤーが向いている方向
 
 	int m_model;	// 3Dモデル
 
@@ -53,10 +49,11 @@ private:	// 定数
 	static constexpr int kShadowRadius = 25;	// 影の半径
 
 	// クリア演出時
-	static constexpr float kClearInitPosX = 5.0f;		// クリア時のX座標
+	static constexpr int kClearStagingStartTime = 60;	// クリア演出開始時間
+	static constexpr float kClearInitPosX = 0.0f;		// クリア時のX座標
 	static constexpr float kClearInitPosZ = -80.0f;		// クリア時のZ座標
-	static constexpr float kClearEndPosX = -5.0f;		// 移動できるX座標の範囲
-	static constexpr float kClearEndPosZ = -100.0f;		// 移動できるZ座標の範囲
-	static constexpr float kClearMove = -0.1f;			// 移動量
-	static constexpr float kRotRad = 0.1f;				// 毎フレームの回転角度
+	static constexpr float kClearMoveX = 0.5f;			// X方向の移動量
+	static constexpr float kClearMoveZ = 0.1f;			// Z方向の移動量
+	static constexpr float kRotRad = 6.0f;				// 毎フレームの回転角度
+	static constexpr int kJumpFrame = 20;				// ジャンプフレーム
 };

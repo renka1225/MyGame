@@ -29,6 +29,6 @@ private:
 	int m_clearTime;
 
 private:
-	const char* fileName = "saveData.bin";	//　ファイル名
+	const char* fileName = "data/saveData.bin";	// 保存するファイル名
 	static constexpr int kRankingNum = 10;	// 保存する順位数
 };
