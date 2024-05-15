@@ -1,34 +1,27 @@
 #pragma once
 #include "DxLib.h"
+#include <memory>
 
-/// <summary>
-/// 球
-/// </summary>
+class Sphere2;
+class Capsule2;
+
+// 球1クラス
 class Sphere
 {
 public:
-	Sphere();
-	~Sphere();
-	void Init();
+	Sphere(std::shared_ptr<Sphere2> pSphere2, std::shared_ptr<Capsule2> pCapsule2);
+	~Sphere() {};
 	void Update();
 	void Draw();
+	void HitSphere();	// 球と球の当たり判定
+	void HitCapsule();	// 球とカプセルの当たり判定
 
 private:
-	// 球との当たり判定
-	void HitSphere();
-	// カプセルとの当たり判定
-	void HitCupsule();
+	std::shared_ptr<Sphere2> m_pSphere2;
+	std::shared_ptr<Capsule2> m_pCapsule2;
 
-private:
-	VECTOR m_pos;				// 移動する球の位置
-	VECTOR m_targetSpherePos;	// 動かない球の位置
-	VECTOR m_cupsulePos1;		// カプセルの1つめの点の座標
-	VECTOR m_cupsulePos2;		// カプセルの2つめの点の座標
-	bool m_isHit;				// 当たっているか
-
-	static constexpr float kRadius = 5.0f;	// 半径
-	static constexpr int kDivNum = 32;
-
-	static constexpr float kCupsuleRadius = 5.0f;	// カプセルの当たり半径
+	VECTOR m_pos;	// 球1の表示位置
+	int m_color;	// 球の色
+	bool m_isHit;	// 当たったか
 };
 

@@ -1,86 +1,86 @@
 #include "Sphere.h"
-#include <cmath>
+#include "Sphere2.h"
+#include "Capsule2.h"
 
-Sphere::Sphere() :
-	m_pos(VGet(200.0f, 100.0f, 0.0f)),
-	m_targetSpherePos(VGet(500.0f, 300.0f, 0.0f)),
-	m_cupsulePos1(VGet(800.0f, 100.0f, 0.0f)),
-	m_cupsulePos2(VGet(900.0f, 200.0f, 10.0f)),
+/// <summary>
+/// コンストラクタ
+/// </summary>
+Sphere::Sphere(std::shared_ptr<Sphere2> pSphere2, std::shared_ptr<Capsule2> pCapsule2):
+	m_pSphere2(pSphere2),
+	m_pCapsule2(pCapsule2),
+	m_pos(VGet(-30.0f, 0.0f, 0.0f)),
+	m_color(-1),
 	m_isHit(false)
 {
 }
 
-Sphere::~Sphere()
-{
-}
 
-void Sphere::Init()
-{
-}
-
+/// <summary>
+/// 更新
+/// </summary>
 void Sphere::Update()
 {
-	if (CheckHitKey(KEY_INPUT_RIGHT))
+	/*球を移動させる*/
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT))
 	{
-		m_pos.x += 10.0f;
+		m_pos = VAdd(m_pos, VGet(2.0f, 0.0f, 0.0f));
 	}
-	if (CheckHitKey(KEY_INPUT_LEFT))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT))
 	{
-		m_pos.x -= 10.0f;
+		m_pos = VAdd(m_pos, VGet(-2.0f, 0.0f, 0.0f));
 	}
-	if (CheckHitKey(KEY_INPUT_UP))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP))
 	{
-		m_pos.y += 10.0f;
+		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, 2.0f));
 	}
-	if (CheckHitKey(KEY_INPUT_DOWN))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN))
 	{
-		m_pos.y -= 10.0f;
-	}
-	if (CheckHitKey(KEY_INPUT_A))
-	{
-		m_pos.z += 10.0f;
-	}
-	if (CheckHitKey(KEY_INPUT_Z))
-	{
-		m_pos.z -= 10.0f;
+		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, -2.0f));
 	}
 
 	// 球との当たり判定
-	HitSphere();
+	//HitSphere();
+
 	// カプセルとの当たり判定
-	//HitCupsule();
-}
-
-void Sphere::Draw()
-{
-	// 球を描画する
-	DrawSphere3D(m_targetSpherePos, kRadius, kDivNum, 0xffffff, 0xffffff, true);
-	// カプセルを描画する
-	DrawCapsule3D(m_cupsulePos1, m_cupsulePos2, kCupsuleRadius, 8, 0xffffff, 0xffffff, true);
-
-	// 当たっている時は球の色を変える
-	int color = 0x0000ff;
-	if (m_isHit)
-	{
-		color = 0xff0000;
-	}
-
-	DrawSphere3D(m_pos, kRadius, kDivNum, color, 0xffffff, true);
+	HitCapsule();
 }
 
 
 /// <summary>
-/// 球との当たり判定
+/// 描画
+/// </summary>
+void Sphere::Draw()
+{
+	if (m_isHit)
+	{
+		m_color = 0xff0000;
+	}
+	else
+	{
+		m_color = 0x0000ff;
+	}
+
+	DrawSphere3D(m_pos, 10.0f, 8, m_color, 0x000000, true);
+}
+
+
+/// <summary>
+/// 球と球の当たり判定
 /// </summary>
 void Sphere::HitSphere()
 {
-	// 相対ベクトルを計算
-	VECTOR v3Delta = VSub(m_pos, m_targetSpherePos);
-	// マグニチュード
-	float fDistanceSq = v3Delta.x * v3Delta.x + v3Delta.y * v3Delta.y + v3Delta.z * v3Delta.z;
+	// 球2の座標を取得
+	VECTOR sphere2Pos = m_pSphere2->GetPos();
 
-	// マグニチュードが半径の2乗未満の場合当たってる
-	if (fDistanceSq < ((kRadius + kRadius) * (kRadius + kRadius)))
+	// 相対ベクトル
+	VECTOR v3Delta = VSub(m_pos, sphere2Pos);
+
+	// マグニチュード
+	float fDistanceSq = VSquareSize(v3Delta);
+
+	// 当たり判定
+	// それぞれの半径を足した2乗
+	if (fDistanceSq < (10.0f + 10.0f) * (10.0f + 10.0f))
 	{
 		m_isHit = true;
 	}
@@ -92,44 +92,45 @@ void Sphere::HitSphere()
 
 
 /// <summary>
-/// カプセルとの当たり判定
+/// 球とカプセルの当たり判定
 /// </summary>
-void Sphere::HitCupsule()
+void Sphere::HitCapsule()
 {
-	// 点1から点2に向かう単位ベクトルを計算
-	VECTOR direction = VSub(m_cupsulePos2, m_cupsulePos1);
+	// カプセル2の中心座標を取得
+	VECTOR capsule2Pos = m_pCapsule2->GetPos();
+	// カプセル2の正面ベクトルを取得
+	VECTOR capsule2V3Dir = m_pCapsule2->GetDir();
 
-	// 点1から球の中心への相対ベクトルを計算
-	VECTOR v3Delta = VSub(m_pos, m_cupsulePos1);
+	// 相対ベクトル
+	// 終点から始点を引く
+	VECTOR v3DeltaPos = VSub(capsule2Pos, m_pos);
 
-	// 衝突する物体の正面ベクトルと相対ベクトルの内積を求める
-	// 点1から点2を線上に球の中心から垂線を下ろした時の点が求められる
-	float dot = VDot(direction, v3Delta);
+	// カプセルの正面ベクトルと相対ベクトルの内積
+	float dot = VDot(capsule2V3Dir, v3DeltaPos);
 
-	// 衝突物体の正面ベクトルのマグニチュード
-	float mag = VSize(v3Delta);
+	// カプセルの正面ベクトルのマグニチュード
+	float mag = VSquareSize(capsule2V3Dir);
 
-	// 点に向かう法線ベクトル(垂線)を求める
+	// tは点に向かう法線ベクトル(垂線)を求めるための係数
 	float t = dot / mag;
 
 	// 線分と点の距離を求めるためのtの制限
-	if (t < -1.0f) t = -1.0f; // tの下限
+	if (t < -1.0f) t = -1.0f;   // tの下限
 	if (t > 1.0f) t = 1.0f;   // tの上限
 
-	// p = at + c(c:線分の中点)で点との最短距離になるカプセル上の点の位置を求める
-	//VECTOR v3MinPos = VAdd(VGet(cupsulePos.x * t, cupsulePos.y * t, cupsulePos.z * t), cupsulePos);   // 最小位置を与える座標
-	direction = VGet(direction.x * t, direction.y * t, direction.z * t);
-	VECTOR v3MinPos = VAdd(m_pos, direction);   // 最小位置を与える座標
+	// p = at + c(c:線分の中点)で点との最短距離になる線分上の点の位置を求める
+	VECTOR v3MinPos = VAdd(capsule2Pos, VScale(capsule2V3Dir, t));   // 最小位置を与える座標
 
-	// pと球との距離のマグニチュード
-	float fDistSqr = VSize(VSub(v3MinPos, m_pos));
+	// pと自分との距離のマグニチュード
+	float fDistSqr = VSquareSize(VSub(m_pos, v3MinPos));
 
 	// 衝突距離の計算
-	float ar = kRadius + kCupsuleRadius;
+	// それぞれの半径を足す
+	float ar = 10.0f + 10.0f;
 
 	// 当たり判定(2乗のまま比較)
-	if (fDistSqr < (ar * ar))
-	{
+	if (fDistSqr < ar * ar)
+	{                       
 		m_isHit = true;
 	}
 	else

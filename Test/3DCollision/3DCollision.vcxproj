@@ -18,10 +18,29 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Capsule.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Cube2.cpp" />
+    <ClCompile Include="Capsule2.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Sphere2.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Capsule.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Cube2.h" />
+    <ClInclude Include="Capsule2.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="Sphere2.h" />
+    <ClInclude Include="Sphere.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2a22dc09-4824-4989-9450-3d9853732262}</ProjectGuid>
+    <ProjectGuid>{1a9977ac-b0c2-4c64-bc60-605573ae42c0}</ProjectGuid>
     <RootNamespace>_3DCollision</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -138,13 +157,6 @@
       <AdditionalLibraryDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Sphere.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

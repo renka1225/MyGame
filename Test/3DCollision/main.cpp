@@ -1,56 +1,129 @@
 #include "DxLib.h"
 #include "Sphere.h"
+#include "Sphere2.h"
+#include "Capsule.h"
+#include "Capsule2.h"
+#include <cmath>
 #include <memory>
 
-// プログラムは WinMain から始まります
+namespace
+{
+	constexpr float kCameraDist = 96;
+	constexpr float kCameraHeight = 32;
+}
+
+void DrawGrid()
+{
+	for (int x = -50; x <= 50; x += 10)
+	{
+		DrawLine3D(VGet(static_cast<float>(x), 0, -50), VGet(static_cast<float>(x), 0, 50), 0xffff00);
+	}
+	for (int z = -50; z <= 50; z += 10)
+	{
+		DrawLine3D(VGet(-50, 0, static_cast<float>(z)), VGet(50, 0, static_cast<float>(z)), 0xff0000);
+	}
+
+	// X+-,Z+-の方向が分かりやすいように表示を追加する
+	VECTOR dispPos = ConvWorldPosToScreenPos(VGet(50, 0, 0));
+	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
+	{
+		DrawStringF(dispPos.x, dispPos.y, "X+", 0xffffff);
+	}
+
+	dispPos = ConvWorldPosToScreenPos(VGet(-50, 0, 0));
+	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
+	{
+		DrawStringF(dispPos.x, dispPos.y, "X-", 0xffffff);
+	}
+
+	dispPos = ConvWorldPosToScreenPos(VGet(0, 0, 50));
+	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
+	{
+		DrawStringF(dispPos.x, dispPos.y, "Z+", 0xffffff);
+	}
+
+	dispPos = ConvWorldPosToScreenPos(VGet(0, 0, -50));
+	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
+	{
+		DrawStringF(dispPos.x, dispPos.y, "Z-", 0xffffff);
+	}
+}
+
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	// windowモード設定
 	ChangeWindowMode(true);
-	SetGraphMode(1280, 720, 32);
 
-	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
+	if (DxLib_Init() == -1)	// ＤＸライブラリ初期化処理
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
+	SetUseZBuffer3D(true);
+	SetWriteZBuffer3D(true);
+	SetUseBackCulling(true);
+
+	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	// Ｚバッファを有効にする
-	SetUseZBuffer3D(TRUE);
-	// Ｚバッファへの書き込みを有効にする
-	SetWriteZBuffer3D(TRUE);
-	// 背景色を変更する
-	SetBackgroundColor(0, 100, 100);
+	float cameraAngle = -DX_PI_F / 2;
 
-	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>();	// 球の生成
-	sphere->Init();
+	// ポインタ
+	std::shared_ptr<Sphere2> pSphere2 = std::make_shared<Sphere2>();
+	std::shared_ptr<Capsule> pCapsule = std::make_shared<Capsule>();
+	std::shared_ptr<Capsule2> pCapsule2 = std::make_shared<Capsule2>();
+	std::shared_ptr<Sphere> pSphere = std::make_shared<Sphere>(pSphere2, pCapsule2);
 
-	// ゲームループ
-	while (ProcessMessage() != -1)
+	while (ProcessMessage() == 0)
 	{
-		// このフレームの開始時刻を覚えておく
-		LONGLONG start = GetNowHiPerformanceCount();
-
-		// 描画を行う前に画面をクリアする
+		LONGLONG  time = GetNowHiPerformanceCount();
+		// 画面のクリア
 		ClearDrawScreen();
 
-		// ゲームの処理
-		sphere->Update();
-		sphere->Draw();
-
-		// 画面が切り替わるのを待つ
-		ScreenFlip();
-
-		// escキーでゲーム終了
-		if (CheckHitKey(KEY_INPUT_ESCAPE))
+		/*カメラ調整*/
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
 		{
-			break;
+			cameraAngle += 0.05f;
+		}
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
+		{
+			cameraAngle -= 0.05f;
 		}
 
-		// FPS60に固定する
-		while (GetNowHiPerformanceCount() - start < 16667)
+		SetCameraNearFar(1.0f, 180.0f);
+		VECTOR cameraPos;
+		cameraPos.x = cosf(cameraAngle) * kCameraDist;
+		cameraPos.y = kCameraHeight;
+		cameraPos.z = sinf(cameraAngle) * kCameraDist;
+		SetCameraPositionAndTarget_UpVecY(cameraPos, VGet(0, 0, 0));
+		
+		/*グリッド表示*/
+		DrawGrid();
+
+		/*3Dモデルの更新*/
+		pSphere->Update();
+
+		/*3Dモデル表示*/
+		// 球を表示
+		pSphere->Draw();
+		//pSphere2->Draw();
+
+		// カプセルを表示
+		//pCapsule->Draw();
+		pCapsule2->Draw();
+
+
+
+		//裏画面を表画面を入れ替える
+		ScreenFlip();
+
+		// escキーを押したら終了する
+		if (CheckHitKey(KEY_INPUT_ESCAPE))	break;
+
+		// fpsを60に固定
+		while (GetNowHiPerformanceCount() - time < 16667)
 		{
-			// 16.66ミリ秒(16667マイクロ秒)経過するまで待つ
 		}
 	}
 
