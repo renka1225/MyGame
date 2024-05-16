@@ -14,28 +14,29 @@ class Player
 public:
 	Player(std::shared_ptr<ManagerModel> pModel);
 	~Player();
-	void Init();
+	void Init() {};
 	void Update(Input& input);
 	void Draw();
-	void DrawShadow();	// 影の描画
 
 	void Move();			// プレイヤーを移動させる
 	void ClearStaging();	// クリア時の演出
 
-	VECTOR GetPos() const { return m_pos; }
+	VECTOR GetPos() const { return m_pos; }		// プレイヤーの位置を取得
+	VECTOR GetMove() const { return m_move; }	// プレイヤーの移動量を取得
 
 private:
 	std::shared_ptr<ManagerModel> m_pModel;
 
-	VECTOR m_pos;	// 位置
+	// プレイヤー情報
+	VECTOR m_pos;	// プレイヤー位置
+	VECTOR m_move;	// 移動量
+
+	int m_model;	// 3Dモデル
 
 	// クリア時の情報
 	int m_isClear;			// クリアしたかのフラグ
 	int m_clearStagingTime;	// クリア演出の時間
 	float m_angle;			// プレイヤーが向いている方向
-
-	int shadowMapHandle;	// 影
-	int m_model;			// 3Dモデル
 
 private:	// 定数
 	static constexpr float kScale = 0.3f;		// プレイヤーのサイズ

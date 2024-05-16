@@ -11,7 +11,8 @@
 /// コンストラクタ
 /// </summary>
 SceneBase::SceneBase():
-	m_fadeAlpha(0)
+	m_fadeAlpha(0),
+	m_soundPal(kStartSoundPal)
 {
 	m_pFont = std::make_shared<ManagerFont>();
 	m_pSound = std::make_shared<ManagerSound>();

@@ -32,11 +32,13 @@ protected:
 	std::shared_ptr<ConversionTime> m_pConversionTime;
 
 	int m_fadeAlpha;	// フェードのα値
+	int m_soundPal;		// BGMの音量
 
 	int m_frameHandle;	// 枠の画像
 	int m_buttonHandle;	// コントローラーのボタンの画像
 
 private:
-	static constexpr int kMaxFade = 255;	// フェードのα最大値
-	static constexpr int kFadeFrame = 8;	// フェード変化量
+	static constexpr int kStartSoundPal = 20;	// スタート時のBGMの音量
+	static constexpr int kMaxFade = 255;		// フェードのα最大値
+	static constexpr int kFadeFrame = 8;		// フェード変化量
 };

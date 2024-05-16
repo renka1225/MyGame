@@ -40,4 +40,5 @@ private:	// 定数
 	static constexpr int kDisplayRanking = 10;		// 表示する順位数
 
 	static constexpr int kStartFadeAlpha = 255;		// スタート時のフェードα値
+	static constexpr int kSoundPal = 4;				// BGMのフェード量
 };

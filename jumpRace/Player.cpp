@@ -9,22 +9,15 @@
 Player::Player(std::shared_ptr<ManagerModel> pModel) :
 	m_pModel(pModel),
 	m_pos(VGet(kInitPosX, kInitPosY, kInitPosZ)),
-	m_angle(0.0f),
+	m_move(VGet(0.0f, 0.0f, 0.0f)),
+	m_isClear(false),
 	m_clearStagingTime(0),
-	m_isClear(false)
+	m_angle(0.0f)
 {
 	m_model = MV1DuplicateModel(m_pModel->GetPlayerModel());
 
 	// 3Dモデルのサイズ決定
 	MV1SetScale(m_model, VGet(kScale, kScale, kScale));
-
-	// シャドウマップハンドルの作成
-	shadowMapHandle = MakeShadowMap(256, 256);
-
-	// シャドウマップで想定するライトの方向を設定する
-	SetShadowMapLightDirection(shadowMapHandle, VGet(0.0f, 0.0f, -3.0f));
-	// シャドウマップに描画する範囲を設定する
-	SetShadowMapDrawArea(shadowMapHandle, VGet(-1000.0f, -1.0f, -1000.0f), VGet(1000.0f, 1000.0f, 1000.0f));
 }
 
 
@@ -33,18 +26,7 @@ Player::Player(std::shared_ptr<ManagerModel> pModel) :
 /// </summary>
 Player::~Player()
 {
-	// シャドウマップの削除
-	DeleteShadowMap(shadowMapHandle);
 	MV1DeleteModel(m_model);
-}
-
-
-/// <summary>
-/// 初期化
-/// </summary>
-void Player::Init()
-{
-	// 処理なし
 }
 
 
@@ -61,7 +43,8 @@ void Player::Update(Input& input)
 	}
 
 	// 重力を足す
-	m_pos = VAdd(m_pos, VGet(0.0f, kGravity, 0.0f));
+	m_move = VGet(0.0f, kGravity, 0.0f);
+	m_pos = VAdd(m_pos, m_move);
 
 	// 地面に着地させる
 	if (m_pos.y < kInitPosX)
@@ -96,7 +79,7 @@ void Player::Draw()
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
 
-	// ３Ｄモデルの描画
+	// モデルの描画
 	MV1DrawModel(m_model);
 
 #ifdef _DEBUG
@@ -111,7 +94,8 @@ void Player::Draw()
 /// </summary>
 void Player::Move()
 {
-	m_pos = VAdd(m_pos, VGet(0.0f, kJumpHeight, kMoveZ));
+	m_move = VGet(0.0f, kJumpHeight, kMoveZ);
+	m_pos = VAdd(m_pos, m_move);
 }
 
 

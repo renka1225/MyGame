@@ -12,7 +12,7 @@ class SceneManager
 {
 public:
 	SceneManager();
-	virtual ~SceneManager();
+	virtual ~SceneManager() {};
 
 	void Init();
 	void Update(Input& input);

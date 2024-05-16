@@ -23,8 +23,8 @@ private:
 	std::shared_ptr<ConversionTime> m_pConversionTime;	// タイムに変換する
 
 	// ランキング
-	std::vector<int> m_ranking = {4002, 4205, 4410, 4614, 4810, 
-								5010, 5210, 5410, 5610, 5810};
+	std::vector<int> m_ranking = {3600, 3660, 3690, 3720, 3750,
+								3780, 3810, 3840, 3870, 3900};
 	// クリアタイム
 	int m_clearTime;
 

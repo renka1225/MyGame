@@ -4,15 +4,14 @@
 #include "ManagerResult.h"
 #include "Input.h"
 
+
+/// <summary>
+/// コンストラクタ
+/// </summary>
 SceneManager::SceneManager():
 	m_pScene(nullptr)
 {
 	m_pResult = std::make_shared<ManagerResult>();
-}
-
-
-SceneManager::~SceneManager()
-{
 }
 
 

@@ -17,8 +17,6 @@ Background::Background(std::shared_ptr<ManagerModel> pModel):
 		m_bgHandle[i] = LoadGraph(fileName.c_str());
 	}
 
-	m_lineHandle = LoadGraph("data/Background/line.png");
-
 	m_sprite.resize(kBgNum);
 	for (int i = 0; i < m_sprite.size(); i++)
 	{
@@ -92,7 +90,4 @@ void Background::Draw()
 	{
 		sprite->Draw();
 	}
-
-	// ƒS[ƒ‹•”•ª‚É”’ü‚ğ•`‰æ‚·‚é
-	//DrawBillboard3D(VGet(0.0f, 5.0f, -70.0f), 0.0f, 0.0f, 00.0f, 0.0f, m_lineHandle, true);
 }

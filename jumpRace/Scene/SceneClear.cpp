@@ -22,14 +22,6 @@ SceneClear::SceneClear(int time):
 
 
 /// <summary>
-/// デストラクタ
-/// </summary>
-SceneClear::~SceneClear()
-{
-}
-
-
-/// <summary>
 /// 初期化
 /// </summary>
 void SceneClear::Init(std::shared_ptr<ManagerResult> pResult)

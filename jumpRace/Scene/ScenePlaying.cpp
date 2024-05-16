@@ -11,7 +11,6 @@
 #include "Background.h"
 #include "Input.h"
 #include "Game.h"
-#include "DxLib.h"
 
 /// <summary>
 /// コンストラクタ
@@ -23,7 +22,10 @@ ScenePlaying::ScenePlaying() :
 	m_time(0),
 	m_stopTime(0),
 	m_pushCount(0),
-	m_isPush(true)
+	m_isPush(true),
+	m_shadowMapHandle(-1),
+	m_shadowMapMinPos(VGet(kShadowMapMinPosX, kShadowMapMinPosY, kShadowMapMinPosZ)),
+	m_shadowMapMaxPos(VGet(kShadowMapMaxPosX, kShadowMapMaxPosY, kShadowMapMaxPosZ))
 {
 	m_pModel = std::make_shared<ManagerModel>();
 	m_pLight = std::make_shared<ManagerLight>();
@@ -46,6 +48,9 @@ ScenePlaying::ScenePlaying() :
 ScenePlaying::~ScenePlaying()
 {
 	m_pLight->DeleteDirLight();
+
+	// シャドウマップの削除
+	DeleteShadowMap(m_shadowMapHandle);
 }
 
 
@@ -59,17 +64,25 @@ void ScenePlaying::Init(std::shared_ptr<ManagerResult> pResult)
 	m_pResult->Load();
 	m_nowCommand = GetRand(Y);
 	PlaySoundMem(m_pSound->GetCountSE(), DX_PLAYTYPE_BACK);	// カウントダウン
+
+	// シャドウマップハンドルを作成
+	m_shadowMapHandle = MakeShadowMap(kMakeShadowMapSize, kMakeShadowMapSize);
+	// シャドウマップが想定するライトの方向をセット
+	SetShadowMapLightDirection(m_shadowMapHandle, VGet(kShadowMapLightDirX, kShadowMapLightDirY, kShadowMapLightDirZ));
+
+	// シャドウマップに描画する範囲を設定
+	SetShadowMapDrawArea(m_shadowMapHandle, m_shadowMapMinPos, m_shadowMapMaxPos);
 }
 
 
 /// <summary>
 /// 更新
 /// </summary>
-/// <param name="input">ボタン入力</param>
+/// <param name="input">入力コマンド</param>
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
-	FadeOut();		// フェードアウト
+	FadeOut();	// フェードアウト
 
 	m_pModel->Update();			// モデル更新
 	m_pBackground->Update();	// 背景更新
@@ -134,8 +147,26 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-	m_pBackground->Draw(); // 背景描画
-	m_pModel->Draw();	   // モデル描画
+	// 背景描画
+	m_pBackground->Draw();
+
+	// シャドウマップへの描画の準備
+	ShadowMap_DrawSetup(m_shadowMapHandle);
+	// モデル描画
+	m_pModel->Draw();
+	// プレイヤー描画
+	m_pPlayer->Draw();
+	// シャドウマップへの描画を終了
+	ShadowMap_DrawEnd();
+
+	// 描画に使用するシャドウマップを設定
+	SetUseShadowMap(0, m_shadowMapHandle);
+	// モデル描画
+	m_pModel->Draw();
+	// プレイヤー描画
+	m_pPlayer->Draw();
+	// 描画に使用するシャドウマップの設定を解除
+	SetUseShadowMap(0, -1);
 
 	m_pConversionTime->Change(m_time);	// タイム変換
 	// 縁取り表示
@@ -152,6 +183,9 @@ void ScenePlaying::Draw()
 	DrawLine3D(VGet(0.0f, -lineSize, 0.0f), VGet(0.0f, lineSize, 0.0f), 0x00ff00);
 	DrawLine3D(VGet(0.0f, 0.0f, -lineSize), VGet(0.0f, 0.0f, lineSize), 0x0000ff);
 
+	// MEMO:画面左上にシャドウマップをテスト描画
+	TestDrawShadowMap(m_shadowMapHandle, 0, 0, 320, 240);
+
 	// MEMO:デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
 	DrawFormatString(0, 20, 0xffffff, "入力回数:%d", m_pushCount);
@@ -166,8 +200,6 @@ void ScenePlaying::Draw()
 	{
 		DrawCommand();	// 入力コマンドを表示
 	}
-
-	m_pPlayer->Draw();	// プレイヤーの描画
 }
 
 
@@ -216,7 +248,7 @@ void ScenePlaying::ClearStaging()
 /// </summary>
 void ScenePlaying::UpdateCommand(Input& input)
 {
-	if (m_nowCommand == A)
+	if (m_nowCommand == A) // Aボタンを押したとき
 	{
 		if (input.IsTriggered("A") && m_isPush)
 		{
@@ -227,7 +259,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_isPush = false;
 		}
 	}
-	if (m_nowCommand == B)
+	if (m_nowCommand == B) // Bボタンを押したとき
 	{
 		if (input.IsTriggered("B") && m_isPush)
 		{
@@ -238,7 +270,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_isPush = false;
 		}
 	}
-	if (m_nowCommand == X)
+	if (m_nowCommand == X) // Xボタンを押したとき
 	{
 		if (input.IsTriggered("X") && m_isPush)
 		{
@@ -249,7 +281,7 @@ void ScenePlaying::UpdateCommand(Input& input)
 			m_isPush = false;
 		}
 	}
-	if (m_nowCommand == Y)
+	if (m_nowCommand == Y) // Yボタンを押したとき
 	{
 		if (input.IsTriggered("Y") && m_isPush)
 		{
@@ -283,6 +315,11 @@ void ScenePlaying::PushCorrect()
 	m_stopTime = kNextCommandTime;
 	m_pPlayer->Move();
 	m_nowCommand = GetRand(Y);
+
+	// 影の位置を更新
+	m_shadowMapMinPos = VAdd(m_shadowMapMinPos, VGet(0.0f, 0.0f, m_pPlayer->GetMove().z));
+	m_shadowMapMaxPos = VAdd(m_shadowMapMaxPos, VGet(0.0f, 0.0f, m_pPlayer->GetMove().z));
+	SetShadowMapDrawArea(m_shadowMapHandle, m_shadowMapMinPos, m_shadowMapMaxPos);
 }
 
 

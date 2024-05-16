@@ -8,7 +8,7 @@ class SceneClear : public SceneBase
 {
 public:
 	SceneClear(int time);
-	virtual ~SceneClear();
+	virtual ~SceneClear() {};
 
 	virtual void Init(std::shared_ptr<ManagerResult> pResult);
 	virtual std::shared_ptr<SceneBase> Update(Input& input);

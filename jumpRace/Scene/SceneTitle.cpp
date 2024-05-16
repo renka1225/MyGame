@@ -37,7 +37,6 @@ SceneTitle::~SceneTitle()
 void SceneTitle::Init(std::shared_ptr<ManagerResult> pResult)
 {
 	m_pResult = pResult;
-	PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_LOOP);
 }
 
 
@@ -55,6 +54,13 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	if (GetMovieStateToGraph(m_playMovie) != 1)
 	{
 		PlayMovieToGraph(m_playMovie);
+	}
+
+	m_soundPal += kSoundPal;
+	ChangeVolumeSoundMem(m_soundPal, m_pSound->GetTitleBgm());
+	if (!CheckSoundMem(m_pSound->GetTitleBgm()))
+	{
+		PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_LOOP);
 	}
 
 	if (input.IsTriggered("OK"))
@@ -88,14 +94,14 @@ void SceneTitle::Draw()
 {
 	// プレイ動画を描画
 	DrawExtendGraph(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_playMovie, false);
-	// 見やすいように黒い四角を薄く表示する
+	// 背景に黒い四角を薄く表示する
 	SetDrawBlendMode(DX_BLENDMODE_MULA, 150);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	// クレジット表記
-	DrawFormatStringToHandle(900, 670, 0xffffff, m_pFont->GetCreditFont(), "Sound/OtoLogic");
-	DrawFormatStringToHandle(900, 690, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
+	DrawFormatStringToHandle(kCreditPosX, kCreditPosY, 0xffffff, m_pFont->GetCreditFont(), "Sound/OtoLogic");
+	DrawFormatStringToHandle(kCreditPosX, kCreditPos2Y, 0xffffff, m_pFont->GetCreditFont(), "利用ソフト/VOICEVOX:ナースロボ＿タイプＴ");
 
 	// タイトルロゴ表示
 	DrawGraph(kTitleLogoPosX, kTitleLogoPosY, m_titleLogo, true);

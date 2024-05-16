@@ -19,24 +19,6 @@ Camera::Camera(std::shared_ptr<Player> pPlayer):
 
 
 /// <summary>
-/// デストラクタ
-/// </summary>
-Camera::~Camera()
-{
-	// 処理なし
-}
-
-
-/// <summary>
-/// 初期化
-/// </summary>
-void Camera::Init()
-{
-	// 処理なし
-}
-
-
-/// <summary>
 /// 更新
 /// </summary>
 void Camera::Update()

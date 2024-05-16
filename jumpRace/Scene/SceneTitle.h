@@ -52,5 +52,11 @@ private: // 定数
 	static constexpr int kEndTextPosX = 600;	// ゲーム終了表示位置X
 	static constexpr int kEndTextPosY = 620;	// ゲーム終了表示位置Y
 
+	// クレジット表記位置
+	static constexpr int kCreditPosX = 900;		// クレジット表記位置X
+	static constexpr int kCreditPosY = 670;		// クレジット表記位置Y
+	static constexpr int kCreditPos2Y = 690;	// クレジット表記位置Y
+
 	static constexpr int kStartFadeAlpha = 200;		// スタート時のフェードα値
+	static constexpr int kSoundPal = 3;				// BGMのフェード量
 };

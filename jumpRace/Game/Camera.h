@@ -11,8 +11,8 @@ class Camera
 {
 public:
 	Camera(std::shared_ptr<Player> pPlayer);
-	virtual ~Camera();
-	void Init();
+	virtual ~Camera() {};
+	void Init() {};
 	void Update();
 
 	VECTOR GetPos() const { return m_pos; }		// ƒJƒƒ‰ˆÊ’u‚ğæ“¾

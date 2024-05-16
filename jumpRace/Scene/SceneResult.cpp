@@ -34,7 +34,6 @@ SceneResult::~SceneResult()
 void SceneResult::Init(std::shared_ptr<ManagerResult> pResult)
 {
 	m_pResult = pResult;
-	PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_LOOP);
 }
 
 
@@ -46,6 +45,13 @@ void SceneResult::Init(std::shared_ptr<ManagerResult> pResult)
 std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 {
 	FadeOut();	// フェードアウト
+
+	m_soundPal += kSoundPal;
+	ChangeVolumeSoundMem(m_soundPal, m_pSound->GetTitleBgm());
+	if (!CheckSoundMem(m_pSound->GetTitleBgm()))
+	{
+		PlaySoundMem(m_pSound->GetTitleBgm(), DX_PLAYTYPE_LOOP);
+	}
 
 	if (input.IsTriggered("back"))
 	{
@@ -115,6 +121,5 @@ void SceneResult::DrawRanking()
 		// タイム表示
 		DrawFormatStringToHandle(timePosX, timePosY, 0xffffff, m_pFont->GetResultTimeFont(),
 			"%02d:%03d\n", m_pConversionTime->GetSec(), m_pConversionTime->GetMilliSec());
-	
 	}
 }

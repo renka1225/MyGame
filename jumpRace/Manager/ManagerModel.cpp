@@ -54,6 +54,7 @@ void ManagerModel::Update()
 /// </summary>
 void ManagerModel::Draw()
 {
+	// 3Dƒ‚ƒfƒ‹•`‰æ
 	for (auto& model : m_pGroundModel)
 	{
 		model->Draw();
