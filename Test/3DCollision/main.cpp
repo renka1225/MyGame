@@ -71,8 +71,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ポインタ
 	std::shared_ptr<Sphere2> pSphere2 = std::make_shared<Sphere2>();
-	std::shared_ptr<Capsule> pCapsule = std::make_shared<Capsule>();
 	std::shared_ptr<Capsule2> pCapsule2 = std::make_shared<Capsule2>();
+	std::shared_ptr<Capsule> pCapsule = std::make_shared<Capsule>(pCapsule2);
 	std::shared_ptr<Sphere> pSphere = std::make_shared<Sphere>(pSphere2, pCapsule2);
 
 	while (ProcessMessage() == 0)
@@ -82,11 +82,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ClearDrawScreen();
 
 		/*カメラ調整*/
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_5))
 		{
 			cameraAngle += 0.05f;
 		}
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_6))
 		{
 			cameraAngle -= 0.05f;
 		}
@@ -102,15 +102,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawGrid();
 
 		/*3Dモデルの更新*/
-		pSphere->Update();
+		//pSphere->Update();
+		pCapsule->Update();
 
 		/*3Dモデル表示*/
 		// 球を表示
-		pSphere->Draw();
+		//pSphere->Draw();
 		//pSphere2->Draw();
 
 		// カプセルを表示
-		//pCapsule->Draw();
+		pCapsule->Draw();
 		pCapsule2->Draw();
 
 

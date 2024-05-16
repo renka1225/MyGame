@@ -9,6 +9,7 @@ Sphere::Sphere(std::shared_ptr<Sphere2> pSphere2, std::shared_ptr<Capsule2> pCap
 	m_pSphere2(pSphere2),
 	m_pCapsule2(pCapsule2),
 	m_pos(VGet(-30.0f, 0.0f, 0.0f)),
+	m_radius(kRadius),
 	m_color(-1),
 	m_isHit(false)
 {
@@ -31,9 +32,17 @@ void Sphere::Update()
 	}
 	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP))
 	{
-		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, 2.0f));
+		m_pos = VAdd(m_pos, VGet(0.0f, 2.0f, 0.0f));
 	}
 	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN))
+	{
+		m_pos = VAdd(m_pos, VGet(0.0f, -2.0f, 0.0f));
+	}
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
+	{
+		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, 2.0f));
+	}
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
 	{
 		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, -2.0f));
 	}
@@ -60,7 +69,7 @@ void Sphere::Draw()
 		m_color = 0x0000ff;
 	}
 
-	DrawSphere3D(m_pos, 10.0f, 8, m_color, 0x000000, true);
+	DrawSphere3D(m_pos, m_radius, 8, m_color, 0x000000, true);
 }
 
 
@@ -80,7 +89,7 @@ void Sphere::HitSphere()
 
 	// 当たり判定
 	// それぞれの半径を足した2乗
-	if (fDistanceSq < (10.0f + 10.0f) * (10.0f + 10.0f))
+	if (fDistanceSq < (m_radius + 10.0f) * (m_radius + 10.0f))
 	{
 		m_isHit = true;
 	}
@@ -119,14 +128,14 @@ void Sphere::HitCapsule()
 	if (t > 1.0f) t = 1.0f;   // tの上限
 
 	// p = at + c(c:線分の中点)で点との最短距離になる線分上の点の位置を求める
-	VECTOR v3MinPos = VAdd(capsule2Pos, VScale(capsule2V3Dir, t));   // 最小位置を与える座標
+	VECTOR v3MinPos = VAdd(VScale(capsule2V3Dir, t), capsule2Pos);   // 最小位置を与える座標
 
 	// pと自分との距離のマグニチュード
 	float fDistSqr = VSquareSize(VSub(m_pos, v3MinPos));
 
 	// 衝突距離の計算
-	// それぞれの半径を足す
-	float ar = 10.0f + 10.0f;
+	// 球の半径とカプセルの幅を足す
+	float ar = kRadius + m_pCapsule2->GetRadius();
 
 	// 当たり判定(2乗のまま比較)
 	if (fDistSqr < ar * ar)
@@ -135,6 +144,20 @@ void Sphere::HitCapsule()
 	}
 	else
 	{
-		m_isHit = false;
+		// 端の円の部分との判定
+		// カプセルの端の位置を計算
+		VECTOR capsule2Pos1 = m_pCapsule2->GetPos1();
+		VECTOR capsule2Pos2 = m_pCapsule2->GetPos2();
+		float distSqrToEnd1 = VSquareSize(VSub(m_pos, capsule2Pos1));
+		float distSqrToEnd2 = VSquareSize(VSub(m_pos, capsule2Pos2));
+
+		if (distSqrToEnd1 < ar * ar || distSqrToEnd2 < ar * ar)
+		{
+			m_isHit = true;
+		}
+		else
+		{
+			m_isHit = false;
+		}
 	}
 }
