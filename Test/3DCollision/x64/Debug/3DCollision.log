@@ -1,10 +1,4 @@
 ﻿  Capsule.cpp
-  Cube.cpp
-  Cube2.cpp
-  Capsule2.cpp
-  main.cpp
-  Plane.cpp
-  Sphere2.cpp
   Sphere.cpp
   コードを生成中...
-  3DCollision.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\3DCollision\x64\Debug\3DCollision.exe
+  3DCollision.vcxproj -> C:\GitHub\MyGame\Test\3DCollision\x64\Debug\3DCollision.exe

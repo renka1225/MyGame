@@ -3,6 +3,7 @@
 #include "Sphere2.h"
 #include "Capsule.h"
 #include "Capsule2.h"
+#include "Triangle.h"
 #include <cmath>
 #include <memory>
 
@@ -73,7 +74,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	std::shared_ptr<Sphere2> pSphere2 = std::make_shared<Sphere2>();
 	std::shared_ptr<Capsule2> pCapsule2 = std::make_shared<Capsule2>();
 	std::shared_ptr<Capsule> pCapsule = std::make_shared<Capsule>(pCapsule2);
-	std::shared_ptr<Sphere> pSphere = std::make_shared<Sphere>(pSphere2, pCapsule2);
+	std::shared_ptr<Triangle> pTriangle = std::make_shared<Triangle>();
+	std::shared_ptr<Sphere> pSphere = std::make_shared<Sphere>(pSphere2, pCapsule2, pTriangle);
 
 	while (ProcessMessage() == 0)
 	{
@@ -102,19 +104,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawGrid();
 
 		/*3Dモデルの更新*/
-		//pSphere->Update();
-		pCapsule->Update();
+		pSphere->Update();
+		//pCapsule->Update();
 
 		/*3Dモデル表示*/
 		// 球を表示
-		//pSphere->Draw();
+		pSphere->Draw();
 		//pSphere2->Draw();
 
 		// カプセルを表示
-		pCapsule->Draw();
-		pCapsule2->Draw();
+		//pCapsule->Draw();
+		//pCapsule2->Draw();
 
-
+		// 三角形を表示
+		pTriangle->Draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();

@@ -31,19 +31,19 @@ void Capsule::Update()
 	{
 		m_centerPos = VAdd(m_centerPos, VGet(-2.0f, 0.0f, 0.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
 	{
 		m_centerPos = VAdd(m_centerPos, VGet(0.0f, 2.0f, 0.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
 	{
 		m_centerPos = VAdd(m_centerPos, VGet(0.0f, -2.0f, 0.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP))
 	{
 		m_centerPos = VAdd(m_centerPos, VGet(0.0f, 0.0f, 2.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN))
 	{
 		m_centerPos = VAdd(m_centerPos, VGet(0.0f, 0.0f, -2.0f));
 	}

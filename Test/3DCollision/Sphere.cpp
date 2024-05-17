@@ -1,13 +1,15 @@
 #include "Sphere.h"
 #include "Sphere2.h"
 #include "Capsule2.h"
+#include "Triangle.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Sphere::Sphere(std::shared_ptr<Sphere2> pSphere2, std::shared_ptr<Capsule2> pCapsule2):
+Sphere::Sphere(std::shared_ptr<Sphere2> pSphere2, std::shared_ptr<Capsule2> pCapsule2, std::shared_ptr<Triangle> pTriangle):
 	m_pSphere2(pSphere2),
 	m_pCapsule2(pCapsule2),
+	m_pTriangle(pTriangle),
 	m_pos(VGet(-30.0f, 0.0f, 0.0f)),
 	m_radius(kRadius),
 	m_color(-1),
@@ -30,19 +32,19 @@ void Sphere::Update()
 	{
 		m_pos = VAdd(m_pos, VGet(-2.0f, 0.0f, 0.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
 	{
 		m_pos = VAdd(m_pos, VGet(0.0f, 2.0f, 0.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
 	{
 		m_pos = VAdd(m_pos, VGet(0.0f, -2.0f, 0.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_1))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP))
 	{
 		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, 2.0f));
 	}
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_2))
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN))
 	{
 		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, -2.0f));
 	}
@@ -51,7 +53,10 @@ void Sphere::Update()
 	//HitSphere();
 
 	// カプセルとの当たり判定
-	HitCapsule();
+	//HitCapsule();
+	
+	// 三角形との当たり判定
+	HitTriangle();
 }
 
 
@@ -159,5 +164,60 @@ void Sphere::HitCapsule()
 		{
 			m_isHit = false;
 		}
+	}
+}
+
+
+/// <summary>
+/// 球と三角形の当たり判定
+/// </summary>
+void Sphere::HitTriangle()
+{
+	VECTOR v3TriVec0, v3TriVec1, v3TriVec2;
+	VECTOR v3HitVec0, v3HitVec1, v3HitVec2;
+	float fCross0, fCross1, fCross2;
+	
+	// 三角形サイクルベクトル
+	v3TriVec0 = VSub(m_pTriangle->GetPos2(), m_pTriangle->GetPos1());
+	v3TriVec1 = VSub(m_pTriangle->GetPos3(), m_pTriangle->GetPos2());
+	v3TriVec2 = VSub(m_pTriangle->GetPos1(), m_pTriangle->GetPos3());
+
+	// 三角形頂点からターゲットへのベクトル
+	v3HitVec0 = VSub(m_pos, m_pTriangle->GetPos1());
+	v3HitVec1 = VSub(m_pos, m_pTriangle->GetPos2());
+	v3HitVec2 = VSub(m_pos, m_pTriangle->GetPos3());
+
+	// それぞれの外積
+	fCross0 = v3TriVec0.z * v3HitVec0.x - v3TriVec0.x * v3HitVec0.z;
+	fCross1 = v3TriVec1.z * v3HitVec1.x - v3TriVec1.x * v3HitVec1.z;
+	fCross2 = v3TriVec2.z * v3HitVec2.x - v3TriVec2.x * v3HitVec2.z;
+
+	// 当たっているかのフラグ変数
+	bool bHit = false;
+
+	// 全て同じ側にいるかの判定
+	if (fCross0 >= 0.0f)
+	{
+		if ((fCross1 >= 0.0f) && (fCross2 >= 0.0f))
+		{
+			bHit = true;
+		}
+	}
+	else
+	{
+		if ((fCross1 < 0.0f) && (fCross2 < 0.0f))
+		{
+			bHit = true;
+		}
+	}
+
+	// 当たっていた時の処理
+	if (bHit)
+	{
+		m_isHit = true;
+	}
+	else
+	{
+		m_isHit = false;
 	}
 }

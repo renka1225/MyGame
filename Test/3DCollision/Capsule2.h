@@ -9,9 +9,9 @@ public:
 	~Capsule2() {};
 	void Draw();
 
-	// カプセル2の始点を習得
+	// カプセル2の始点を取得
 	VECTOR GetPos1() const { return m_pos1; }
-	// カプセル2の終点を習得]
+	// カプセル2の終点を取得
 	VECTOR GetPos2() const { return m_pos2; }
 	// カプセル2の方向ベクトルを取得
 	VECTOR GetDir() const { return m_v3Direction; }
