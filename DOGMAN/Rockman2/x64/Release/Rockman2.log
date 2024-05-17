@@ -1,0 +1,41 @@
+﻿  BgTutorial.cpp
+  BgStage1.cpp
+  Bg.cpp
+  EnemyBear.cpp
+  EnemyBird.cpp
+  EnemyCat.cpp
+  EnemyBase.cpp
+  FontManager.cpp
+  main.cpp
+  Pad.cpp
+  RecoveryFullHp.cpp
+  RecoveryLife.cpp
+  RecoveryGreatShot.cpp
+  RecoveryGreatHp.cpp
+  RecoverySmallShot.cpp
+  RecoverySmallHp.cpp
+  RecoveryBase.cpp
+  SceneTutorial.cpp
+  SceneStage1.cpp
+  SceneOption.cpp
+  コンパイル中...
+  SceneClear.cpp
+  SceneStageSelect.cpp
+  ScenePause.cpp
+  SceneGameOver.cpp
+  SceneTitle.cpp
+  Player.cpp
+  ShotLineMove.cpp
+  ShotFire.cpp
+  ShotMetal.cpp
+  ShotBuster.cpp
+  ShotBase.cpp
+  Rect.cpp
+  SceneManager.cpp
+  SceneMain.cpp
+  Vec2.cpp
+  コード生成しています。
+  Previous IPDB not found, fall back to full compilation.
+  All 517 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\ROCKMAN2\Rockman2\x64\Release\Rockman2.exe

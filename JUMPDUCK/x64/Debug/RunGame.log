@@ -1,0 +1,21 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (RunGame.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+  Background.cpp
+  Camera.cpp
+  Enemy.cpp
+  Input.cpp
+  main.cpp
+  ManagerSound.cpp
+  ManagerFont.cpp
+  ManagerModel.cpp
+  Map.cpp
+  Player.cpp
+  Rect.cpp
+  SceneBase.cpp
+  SceneClear.cpp
+  SceneGameover.cpp
+  SceneManager.cpp
+  ScenePlaying.cpp
+  SceneTitle.cpp
+  WorldSprite.cpp
+  コードを生成中...
+  RunGame.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\RunGame\x64\Debug\JUMPDUCK.exe
