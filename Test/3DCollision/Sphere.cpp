@@ -49,14 +49,14 @@ void Sphere::Update()
 		m_pos = VAdd(m_pos, VGet(0.0f, 0.0f, -2.0f));
 	}
 
-	// 球との当たり判定
+	/*球との当たり判定*/
 	//HitSphere();
 
-	// カプセルとの当たり判定
+	/*カプセルとの当たり判定*/
 	//HitCapsule();
 	
-	// 三角形との当たり判定
-	HitTriangle();
+	/*三角形との当たり判定*/
+	//HitTriangle();
 }
 
 

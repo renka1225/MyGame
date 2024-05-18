@@ -1,9 +1,12 @@
 #include "DxLib.h"
+#include "Cube.h"
+#include "Cube2.h"
 #include "Sphere.h"
 #include "Sphere2.h"
 #include "Capsule.h"
 #include "Capsule2.h"
 #include "Triangle.h"
+#include "Plane.h"
 #include <cmath>
 #include <memory>
 
@@ -71,6 +74,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	float cameraAngle = -DX_PI_F / 2;
 
 	// ポインタ
+	std::shared_ptr<Plane> pPlane = std::make_shared<Plane>();
+	std::shared_ptr<Cube> pCube = std::make_shared<Cube>(pPlane);
+	std::shared_ptr<Cube2> pCube2 = std::make_shared<Cube2>();
 	std::shared_ptr<Sphere2> pSphere2 = std::make_shared<Sphere2>();
 	std::shared_ptr<Capsule2> pCapsule2 = std::make_shared<Capsule2>();
 	std::shared_ptr<Capsule> pCapsule = std::make_shared<Capsule>(pCapsule2);
@@ -104,12 +110,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawGrid();
 
 		/*3Dモデルの更新*/
-		pSphere->Update();
+		pCube->Update();
+		//pSphere->Update();
 		//pCapsule->Update();
+		pPlane->Update();
 
 		/*3Dモデル表示*/
+		// 立方体を表示
+		pCube->Draw();
+
 		// 球を表示
-		pSphere->Draw();
+		//pSphere->Draw();
 		//pSphere2->Draw();
 
 		// カプセルを表示
@@ -117,7 +128,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//pCapsule2->Draw();
 
 		// 三角形を表示
-		pTriangle->Draw();
+		//pTriangle->Draw();
+
+		// 平面を表示
+		pPlane->Draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();

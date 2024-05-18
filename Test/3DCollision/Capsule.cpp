@@ -22,7 +22,7 @@ Capsule::Capsule(std::shared_ptr<Capsule2> pCapsule2):
 /// </summary>
 void Capsule::Update()
 {
-	// カプセルを移動させる
+	/*カプセルを移動させる*/
 	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT))
 	{
 		m_centerPos = VAdd(m_centerPos, VGet(2.0f, 0.0f, 0.0f));
@@ -52,7 +52,7 @@ void Capsule::Update()
 	m_pos1 = VSub(m_centerPos, VGet(0.0f, 0.0f, 0.0f));
 	m_pos2 = VAdd(m_centerPos, VGet(-30.0f, 0.0f, 10.0f));
 
-	// カプセルとの当たり判定
+	/*カプセルとの当たり判定*/
 	HitCapsule();
 }
 
