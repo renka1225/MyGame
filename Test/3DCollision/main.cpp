@@ -75,8 +75,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ポインタ
 	std::shared_ptr<Plane> pPlane = std::make_shared<Plane>();
-	std::shared_ptr<Cube> pCube = std::make_shared<Cube>(pPlane);
 	std::shared_ptr<Cube2> pCube2 = std::make_shared<Cube2>();
+	std::shared_ptr<Cube> pCube = std::make_shared<Cube>(pPlane, pCube2);
 	std::shared_ptr<Sphere2> pSphere2 = std::make_shared<Sphere2>();
 	std::shared_ptr<Capsule2> pCapsule2 = std::make_shared<Capsule2>();
 	std::shared_ptr<Capsule> pCapsule = std::make_shared<Capsule>(pCapsule2);
@@ -118,6 +118,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		/*3Dモデル表示*/
 		// 立方体を表示
 		pCube->Draw();
+		//pCube2->Draw();
 
 		// 球を表示
 		//pSphere->Draw();
