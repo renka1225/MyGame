@@ -47,6 +47,12 @@ std::shared_ptr<SceneBase> SceneResult::Update(Input& input)
 	FadeOut();	// フェードアウト
 
 	m_soundPal += kSoundPal;
+	// BGMの音量調整
+	m_soundPal += kSoundPal;
+	if (m_soundPal >= kMaxSoundPal)
+	{
+		m_soundPal = kMaxSoundPal;
+	}
 	ChangeVolumeSoundMem(m_soundPal, m_pSound->GetTitleBgm());
 	if (!CheckSoundMem(m_pSound->GetTitleBgm()))
 	{

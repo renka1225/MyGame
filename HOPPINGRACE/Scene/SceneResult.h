@@ -41,4 +41,5 @@ private:	// 定数
 
 	static constexpr int kStartFadeAlpha = 255;		// スタート時のフェードα値
 	static constexpr int kSoundPal = 4;				// BGMのフェード量
+	static constexpr int kMaxSoundPal = 160;		// BGMの最大音量
 };

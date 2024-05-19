@@ -1,2 +1,3 @@
 C:\GitHub\MyGame\RunGame\x64\Release\RunGame.exe
 C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\RunGame\x64\Release\JUMPDUCK.exe
+C:\GitHub\MyGame\JUMPDUCK\x64\Release\JUMPDUCK.exe

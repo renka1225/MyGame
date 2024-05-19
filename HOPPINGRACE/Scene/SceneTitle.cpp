@@ -56,7 +56,12 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		PlayMovieToGraph(m_playMovie);
 	}
 
+	// BGM‚Ì‰¹—Ê’²®
 	m_soundPal += kSoundPal;
+	if (m_soundPal >= kMaxSoundPal)
+	{
+		m_soundPal = kMaxSoundPal;
+	}
 	ChangeVolumeSoundMem(m_soundPal, m_pSound->GetTitleBgm());
 	if (!CheckSoundMem(m_pSound->GetTitleBgm()))
 	{
