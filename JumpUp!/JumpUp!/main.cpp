@@ -1,4 +1,7 @@
 #include "DxLib.h"
+#include "Game.h"
+#include "Player.h"
+#include <memory>
 #include <cmath>
 
 namespace
@@ -44,17 +47,20 @@ void DrawGrid()
 	}
 }
 
-// プログラムは WinMain から始まります
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	// windowモード設定
 	ChangeWindowMode(true);
+	// 画面サイズ変更
+	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
 
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
+	// Zバッファの設定
 	SetUseZBuffer3D(true);
 	SetWriteZBuffer3D(true);
 	SetUseBackCulling(true);
@@ -62,7 +68,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	// カメラ
+	// TODO:後でカメラクラスに移動させる
 	float cameraAngle = -DX_PI_F / 2;
+
+	// TODO:とりあえずプレイヤーの作成
+	std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
+	pPlayer->Init();
 
 	while (ProcessMessage() == 0)
 	{
@@ -79,7 +91,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			cameraAngle -= 0.05f;
 		}
 
-
 		SetCameraNearFar(1.0f, 180.0f);
 		VECTOR cameraPos;
 		cameraPos.x = cosf(cameraAngle) * kCameraDist;
@@ -88,6 +99,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		SetCameraPositionAndTarget_UpVecY(cameraPos, VGet(0, 0, 0));
 
 		DrawGrid();
+
+		// 更新
+		pPlayer->Update();
+		// 描画
+		pPlayer->Draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
