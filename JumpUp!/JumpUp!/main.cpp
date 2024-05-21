@@ -1,5 +1,7 @@
 #include "DxLib.h"
+#include "SceneManager.h"
 #include "Game.h"
+#include "Input.h"
 #include "Player.h"
 #include <memory>
 #include <cmath>
@@ -68,6 +70,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	// SceneManagerを生成
+	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
+	pScene->Init();
+
+	// 入力状態を取得
+	Input input;
+
 	// カメラ
 	// TODO:後でカメラクラスに移動させる
 	float cameraAngle = -DX_PI_F / 2;
@@ -101,6 +110,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawGrid();
 
 		// 更新
+		input.Update();
+		pScene->Update(input);
 		pPlayer->Update();
 		// 描画
 		pPlayer->Draw();
