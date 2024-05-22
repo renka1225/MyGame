@@ -1,6 +1,8 @@
 #pragma once
 #include "SceneBase.h"
 
+class Player;
+
 /// <summary>
 /// プレイ中のシーンクラス
 /// </summary>
@@ -12,5 +14,8 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
+
+private:
+	std::shared_ptr<Player> m_pPlayer;
 };
 

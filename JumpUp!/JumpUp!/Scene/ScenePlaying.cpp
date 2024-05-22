@@ -1,4 +1,5 @@
 #include "ScenePlaying.h"
+#include "Player.h"
 #include "DxLib.h"
 
 /// <summary>
@@ -6,6 +7,7 @@
 /// </summary>
 ScenePlaying::ScenePlaying()
 {
+	m_pPlayer = std::make_shared<Player>();
 }
 
 
@@ -22,6 +24,7 @@ ScenePlaying::~ScenePlaying()
 /// </summary>
 void ScenePlaying::Init()
 {
+	m_pPlayer->Init();
 }
 
 
@@ -32,7 +35,10 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
-	return std::shared_ptr<SceneBase>();
+	// プレイヤー更新
+	m_pPlayer->Update(input);
+
+	return shared_from_this();	// 自身のshared_ptrを返す
 }
 
 
@@ -41,6 +47,9 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
+	// プレイヤー描画
+	m_pPlayer->Draw();
+
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");

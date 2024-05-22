@@ -38,6 +38,10 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	{
 		return std::make_shared<ScenePlaying>(); // ゲームシーンに移動
 	}
+	else if (input.IsTriggered("debug"))
+	{
+		DxLib_End(); // ゲーム終了
+	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }

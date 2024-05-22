@@ -81,21 +81,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// TODO:後でカメラクラスに移動させる
 	float cameraAngle = -DX_PI_F / 2;
 
-	// TODO:とりあえずプレイヤーの作成
-	std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
-	pPlayer->Init();
-
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
 		// 画面のクリア
 		ClearDrawScreen();
 
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT))
+		if (input.IsPressing("rotateL"))
 		{
 			cameraAngle += 0.05f;
 		}
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT))
+		if (input.IsPressing("rotateR"))
 		{
 			cameraAngle -= 0.05f;
 		}
@@ -112,9 +108,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 更新
 		input.Update();
 		pScene->Update(input);
-		pPlayer->Update();
+
 		// 描画
-		pPlayer->Draw();
 		pScene->Draw();
 
 		//裏画面を表画面を入れ替える

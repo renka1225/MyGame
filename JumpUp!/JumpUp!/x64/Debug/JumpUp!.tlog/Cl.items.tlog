@@ -1,3 +1,7 @@
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Game\Input.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Input.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\main.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\main.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Player.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Player.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneTitle.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\ScenePlaying.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneBase.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneBase.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneManager.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneManager.obj

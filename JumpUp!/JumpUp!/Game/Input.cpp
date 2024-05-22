@@ -140,6 +140,16 @@ Input::Input()
 	m_commandTable["right"] = { {InputType::keybd, KEY_INPUT_RIGHT},
 							   {InputType::pad, PAD_INPUT_RIGHT} };
 
+	m_commandTable["jump"] = { {InputType::keybd, KEY_INPUT_SPACE},
+						   {InputType::pad, PAD_INPUT_A} };
+
+	// ÉJÉÅÉââÒì]
+	m_commandTable["rotateL"] = { {InputType::keybd, KEY_INPUT_S},
+						   {InputType::pad, PAD_INPUT_5} };
+
+	m_commandTable["rotateR"] = { {InputType::keybd, KEY_INPUT_D},
+						   {InputType::pad, PAD_INPUT_6} };
+
 	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_P},
 						   {InputType::pad, PAD_INPUT_R} };
 
