@@ -42,8 +42,11 @@
     <ClCompile Include="Scene\SceneBase.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ScenePlaying.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Scene\ScenePlaying.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneTitle.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,8 +65,11 @@
     <ClInclude Include="Scene\SceneBase.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ScenePlaying.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Scene\ScenePlaying.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneTitle.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

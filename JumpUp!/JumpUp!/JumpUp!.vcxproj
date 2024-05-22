@@ -22,7 +22,8 @@
     <ClCompile Include="Game\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ScenePlaying.cpp" />
+    <ClCompile Include="Scene\SceneTitle.cpp" />
+    <ClCompile Include="Scene\ScenePlaying.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
   </ItemGroup>
@@ -30,7 +31,8 @@
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Input.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="ScenePlaying.h" />
+    <ClInclude Include="Scene\SceneTitle.h" />
+    <ClInclude Include="Scene\ScenePlaying.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
   </ItemGroup>

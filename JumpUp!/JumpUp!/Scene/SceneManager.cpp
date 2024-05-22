@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 #include "SceneBase.h"
+#include "SceneTitle.h"
+#include "ScenePlaying.h"
 #include "Input.h"
 
 
@@ -17,6 +19,7 @@ SceneManager::SceneManager():
 /// </summary>
 void SceneManager::Init()
 {
+	m_pScene = std::make_shared<SceneTitle>();
 	m_pScene->Init();
 }
 

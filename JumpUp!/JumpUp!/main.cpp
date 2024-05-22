@@ -115,6 +115,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		pPlayer->Update();
 		// •`‰æ
 		pPlayer->Draw();
+		pScene->Draw();
 
 		//— ‰æ–Ê‚ð•\‰æ–Ê‚ð“ü‚ê‘Ö‚¦‚é
 		ScreenFlip();
