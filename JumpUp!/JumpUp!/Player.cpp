@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "DrawDebug.h"
 #include "Input.h"
 
 
@@ -78,9 +79,15 @@ void Player::Update(Input& input)
 /// <summary>
 /// •`‰æ
 /// </summary>
-void Player::Draw()
+void Player::Draw(DrawDebug& drawDebug)
 {
 	MV1DrawModel(m_modelHandle);
+
+#ifdef _DEBUG
+	// “–‚½‚è”»’è•`‰æ
+	drawDebug.DrawCubeCol(VGet(m_pos.x, m_pos.y + kCenterPosY, m_pos.z), kWidth, kHeight, kDepth, 0x00ffff);
+#endif
+
 }
 
 
@@ -149,5 +156,4 @@ void Player::Jump(Input& input)
 
 	// d—Í‚ğ‘«‚·
 	m_move = VAdd(m_move, VGet(0.0f, kGravity, 0.0f));
-
 }

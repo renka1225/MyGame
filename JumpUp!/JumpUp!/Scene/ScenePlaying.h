@@ -1,7 +1,9 @@
 #pragma once
 #include "SceneBase.h"
+#include "DrawDebug.h"
 
 class Player;
+class DrawDebug;
 
 /// <summary>
 /// プレイ中のシーンクラス
@@ -17,5 +19,5 @@ public:
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
+	DrawDebug m_pDrawDebug;
 };
-

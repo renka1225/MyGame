@@ -1,6 +1,6 @@
+#include "DxLib.h"
 #include "ScenePlaying.h"
 #include "Player.h"
-#include "DxLib.h"
 
 /// <summary>
 /// コンストラクタ
@@ -48,7 +48,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 void ScenePlaying::Draw()
 {
 	// プレイヤー描画
-	m_pPlayer->Draw();
+	m_pPlayer->Draw(m_pDrawDebug);
 
 #ifdef _DEBUG
 	// デバッグ表示

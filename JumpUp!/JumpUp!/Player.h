@@ -2,6 +2,7 @@
 #include "DxLib.h"
 
 class Input;
+class DrawDebug;
 
 /// <summary>
 /// プレイヤークラス
@@ -13,7 +14,7 @@ public:
 	~Player();
 	void Init();
 	void Update(Input& input);
-	void Draw();
+	void Draw(DrawDebug& drawDebug);
 
 private:
 	void Move(Input& input);	// プレイヤーの移動処理
@@ -26,11 +27,18 @@ private:
 	bool m_isJump;		// ジャンプフラグ true:ジャンプ中
 	int m_modelHandle;	// プレイヤーの3Dモデル
 
-private:
+private:	// 定数
+	// プレイヤーの情報
 	static constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	static constexpr float kMove = 1.0f;		// プレイヤー移動量
 	static constexpr float kVelocity = 15.0f;	// ジャンプの高さ
 	static constexpr float kGravity = -1.8f;	// 重力
+
+	// 当たり判定
+	static constexpr float kCenterPosY = 12.0f;	// プレイヤーの中心点を調整
+	static constexpr float kWidth = 10.0f;		// 横幅
+	static constexpr float kHeight = 24.0f;		// 縦幅
+	static constexpr float kDepth = 5.0f;		// 奥行きの幅
 
 	// ジャンプフレーム
 	static constexpr int kLittleJumpFrame = 10;			// 小ジャンプ
