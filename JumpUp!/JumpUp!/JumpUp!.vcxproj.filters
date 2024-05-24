@@ -25,6 +25,12 @@
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{6c49d90a-5513-403e-8ffd-b82827547b83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\MyLib">
+      <UniqueIdentifier>{e76040e9-3387-414c-bdc4-e87c0339370d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\MyLib">
+      <UniqueIdentifier>{263ae213-1c5d-4621-937f-62d57d9cea37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,8 +54,23 @@
     <ClCompile Include="Scene\SceneTitle.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="DrawDebug.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLib\DrawDebug.cpp">
+      <Filter>ソース ファイル\MyLib</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLib\Rigidbody.cpp">
+      <Filter>ソース ファイル\MyLib</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLib\Physics.cpp">
+      <Filter>ソース ファイル\MyLib</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLib\Collidable.cpp">
+      <Filter>ソース ファイル\MyLib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,8 +95,26 @@
     <ClInclude Include="Scene\SceneTitle.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="DrawDebug.h">
+    <ClInclude Include="Camera.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLib\DrawDebug.h">
+      <Filter>ヘッダー ファイル\MyLib</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLib\MyLib.h">
+      <Filter>ヘッダー ファイル\MyLib</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLib\Rigidbody.h">
+      <Filter>ヘッダー ファイル\MyLib</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLib\Physics.h">
+      <Filter>ヘッダー ファイル\MyLib</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLib\Collidable.h">
+      <Filter>ヘッダー ファイル\MyLib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

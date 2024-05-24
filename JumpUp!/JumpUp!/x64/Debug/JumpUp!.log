@@ -1,2 +1,25 @@
-﻿  DrawDebug.cpp
-  JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
+﻿  Collidable.cpp
+  Physics.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(13,9): error C3646: 'GetPos': 不明なオーバーライド指定子です
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(13,15): error C2059: 構文エラー: '('
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(13,24): error C2334: '{' の前に予期しないトークンがありました。関数の本体は無視されます
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(14,9): error C3646: 'GetDir': 不明なオーバーライド指定子です
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(14,15): error C2059: 構文エラー: '('
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(14,24): error C2334: '{' の前に予期しないトークンがありました。関数の本体は無視されます
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(15,9): error C3646: 'Getvelocity': 不明なオーバーライド指定子です
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(15,20): error C2059: 構文エラー: '('
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(15,29): error C2334: '{' の前に予期しないトークンがありました。関数の本体は無視されます
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(17,26): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(17,26): error C2143: 構文エラー: ',' が '&' の前にありません。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(18,31): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(18,31): error C2143: 構文エラー: ',' が '&' の前にありません。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(21,9): error C3646: 'm_pos': 不明なオーバーライド指定子です
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(21,14): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(22,9): error C3646: 'm_dir': 不明なオーバーライド指定子です
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(22,14): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(23,9): error C3646: 'm_velocity': 不明なオーバーライド指定子です
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(23,19): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(17,35): error C2065: 'm_pos': 定義されていない識別子です。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.h(17,43): error C2065: 'set': 定義されていない識別子です。
+  Rigidbody.cpp
+  コードを生成中...

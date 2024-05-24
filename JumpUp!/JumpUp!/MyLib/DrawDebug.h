@@ -7,8 +7,12 @@
 class DrawDebug
 {
 public:
-	DrawDebug();
-	~DrawDebug();
+	// グリッド表示
+	void DrawGrid();
+
+	// プレイヤーの情報を描画
+	void DrawPlayerInfo(VECTOR pos);
+
 	// 直方体の当たり判定を描画
 	void DrawCubeCol(VECTOR pos, float width, float height, float depth, int color);
 };

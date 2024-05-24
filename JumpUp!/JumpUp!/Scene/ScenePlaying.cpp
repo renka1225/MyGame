@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "ScenePlaying.h"
 #include "Player.h"
+#include "Camera.h"
+#include "Stage.h"
 
 /// <summary>
 /// コンストラクタ
@@ -8,6 +10,8 @@
 ScenePlaying::ScenePlaying()
 {
 	m_pPlayer = std::make_shared<Player>();
+	m_pCamera = std::make_shared<Camera>();
+	m_pStage = std::make_shared<Stage>();
 }
 
 
@@ -25,6 +29,8 @@ ScenePlaying::~ScenePlaying()
 void ScenePlaying::Init()
 {
 	m_pPlayer->Init();
+	m_pCamera->Init();
+	m_pStage->Init();
 }
 
 
@@ -35,7 +41,11 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
+	// カメラ更新
+	m_pCamera->Update(input);
+
 	// プレイヤー更新
+	m_pPlayer->SetCameraAngle(m_pCamera->GetAngle());
 	m_pPlayer->Update(input);
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -47,12 +57,16 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-	// プレイヤー描画
-	m_pPlayer->Draw(m_pDrawDebug);
-
-#ifdef _DEBUG
-	// デバッグ表示
+#ifdef _DEBUG		// デバッグ表示
+	// 現在のシーン
 	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
+	// グリッド表示
+	m_pDrawDebug.DrawGrid();
 #endif
 
+	// ステージ描画
+	m_pStage->Draw();
+
+	// プレイヤー描画
+	m_pPlayer->Draw(m_pDrawDebug);
 }

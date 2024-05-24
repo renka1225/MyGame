@@ -16,16 +16,23 @@ public:
 	void Update(Input& input);
 	void Draw(DrawDebug& drawDebug);
 
+	void SetCameraAngle(float angle) { m_cameraAngle = angle; }
+
 private:
 	void Move(Input& input);	// プレイヤーの移動処理
 	void Jump(Input& input);	// プレイヤーのジャンプ処理
 
 private:
+	// プレイヤー情報
 	VECTOR m_pos;		// プレイヤー位置
 	VECTOR m_move;		// 移動量
+	float m_angle;		// 向いている方向
 	int m_jumpFrame;	// ジャンプフレーム
 	bool m_isJump;		// ジャンプフラグ true:ジャンプ中
 	int m_modelHandle;	// プレイヤーの3Dモデル
+
+	// カメラ情報
+	float m_cameraAngle;
 
 private:	// 定数
 	// プレイヤーの情報

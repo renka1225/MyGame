@@ -3,6 +3,8 @@
 #include "DrawDebug.h"
 
 class Player;
+class Camera;
+class Stage;
 class DrawDebug;
 
 /// <summary>
@@ -19,5 +21,7 @@ public:
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
+	std::shared_ptr<Camera> m_pCamera;
+	std::shared_ptr<Stage> m_pStage;
 	DrawDebug m_pDrawDebug;
 };

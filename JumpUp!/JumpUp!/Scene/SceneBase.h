@@ -2,6 +2,7 @@
 #include <memory>
 
 class Input;
+class DrawDebug;
 
 /// <summary>
 /// シーン基底クラス
