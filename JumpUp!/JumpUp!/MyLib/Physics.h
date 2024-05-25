@@ -13,11 +13,14 @@ public:
 	void Entry(Collidable* collidable);
 	// Õ“Ë•¨‚Ì“o˜^‰ğœ
 	void Exit(Collidable* collidable);
-
 	void Update();
 
 private:
+	// ’¼•û‘Ì‚Æ’¼•û‘Ì‚Ì“–‚½‚è”»’è‚ğs‚¤
+	bool HitCube();
+
+private:
 	// “o˜^‚³‚ê‚½Collidable‚ÌƒŠƒXƒg
-	std::list<Collidable*> Collidables;
+	std::list<Collidable*> m_collidables;
 };
 

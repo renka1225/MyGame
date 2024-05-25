@@ -1,8 +1,13 @@
-C:\GitHub\MyGame\JumpUp!\JumpUp!\DrawDebug.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\DrawDebug.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Camera.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Camera.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Collidable.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Collidable.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\DrawDebug.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\DrawDebug.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Game\Input.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Input.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\main.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\main.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Physics.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Physics.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Player.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Player.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\MyLib\Rigidbody.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Rigidbody.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneTitle.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\ScenePlaying.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneBase.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneBase.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneManager.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneManager.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Stage.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Stage.obj
