@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
+#include <memory>
 
+class Stage;
 class Input;
 class DrawDebug;
 
@@ -13,7 +15,7 @@ public:
 	Player();
 	~Player();
 	void Init();
-	void Update(Input& input);
+	void Update(Input& input, std::shared_ptr<Stage> stage);
 	void Draw(DrawDebug& drawDebug);
 
 	void SetCameraAngle(float angle) { m_cameraAngle = angle; }
@@ -21,8 +23,12 @@ public:
 private:
 	void Move(Input& input);	// プレイヤーの移動処理
 	void Jump(Input& input);	// プレイヤーのジャンプ処理
+	void UpdateRotate();		// プレイヤーの傾きを調整する
+	void HitPlane();			// 地面に当たった際の処理
 
 private:
+	std::shared_ptr<Stage> m_stage;
+
 	// プレイヤー情報
 	VECTOR m_pos;		// プレイヤー位置
 	VECTOR m_move;		// 移動量

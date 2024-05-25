@@ -44,9 +44,12 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	// カメラ更新
 	m_pCamera->Update(input);
 
+	// ステージ更新
+	m_pStage->Update();
+
 	// プレイヤー更新
 	m_pPlayer->SetCameraAngle(m_pCamera->GetAngle());
-	m_pPlayer->Update(input);
+	m_pPlayer->Update(input, m_pStage);
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }

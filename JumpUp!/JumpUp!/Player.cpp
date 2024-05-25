@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Stage.h"
 #include "DrawDebug.h"
 #include "Input.h"
 
@@ -41,10 +42,20 @@ void Player::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update(Input& input)
+void Player::Update(Input& input, std::shared_ptr<Stage> stage)
 {
+	m_stage = stage;
+
 	// プレイヤーの移動処理
 	Move(input);
+
+	// MEMO:HitPlane()より先にするとプレイヤーが傾くが、移動すると変な方向を向いてしまう
+// プレイヤー位置を更新
+	m_pos = VAdd(m_pos, m_move);
+	MV1SetPosition(m_modelHandle, m_pos);
+	//MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
+
+	UpdateRotate();
 
 	// ジャンプ処理
 	if (m_isJump)	// ジャンプ中
@@ -54,7 +65,11 @@ void Player::Update(Input& input)
 	else
 	{
 		m_jumpFrame = 0;
-		m_isJump = false;
+
+		// プレイヤーの着地処理
+		HitPlane();
+		// プレイヤーの傾きを調整する
+		//UpdateRotate();
 
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
@@ -69,14 +84,9 @@ void Player::Update(Input& input)
 	if (m_pos.y < 0.0f)
 	{
 		m_isJump = false;
-		m_pos = VGet(m_pos.x, 0.0f, m_pos.z);
-		m_move = VGet(m_move.x, 0.0f, m_move.z);
+		//m_pos = VGet(m_pos.x, 0.0f, m_pos.z);
+		//m_move = VGet(m_move.x, 0.0f, m_move.z);
 	}
-
-	// プレイヤー位置を更新
-	m_pos = VAdd(m_pos, m_move);
-	MV1SetPosition(m_modelHandle, m_pos);
-	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
 }
 
 
@@ -85,7 +95,7 @@ void Player::Update(Input& input)
 /// </summary>
 void Player::Draw(DrawDebug& drawDebug)
 {
-#ifdef _DEBUG	// デバック表示
+#ifdef _DEBUG	// デバッグ表示
 	// プレイヤー位置表示
 	drawDebug.DrawPlayerInfo(m_pos);
 	// 当たり判定描画
@@ -173,4 +183,46 @@ void Player::Jump(Input& input)
 
 	// 重力を足す
 	m_move = VAdd(m_move, VGet(0.0f, kGravity, 0.0f));
+}
+
+
+/// <summary>
+/// プレイヤーの傾きを調整する
+/// </summary>
+void Player::UpdateRotate()
+{
+	// プレイヤーを地面に沿って傾ける
+	// 基底ベクトルを作成
+	// y軸
+	VECTOR v3Up = VCross(m_stage->GetV3Vec1(), m_stage->GetV3Vec2());
+	v3Up = VNorm(v3Up);
+
+	// z軸(ターゲット方向)
+	VECTOR v3Forward = VGet(cosf(m_angle), 0.0f, sinf(m_angle));
+
+	// x軸
+	VECTOR v3Side = VCross(v3Up, v3Forward);
+	v3Side = VNorm(v3Side);
+
+	// ベクトルを直交させる
+	v3Forward = VCross(v3Side, v3Up);
+	v3Forward = VNorm(v3Forward);
+
+	// z軸とy軸の方向をセットする
+	MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
+
+	// プレイヤーの回転値をセットする
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
+}
+
+
+/// <summary>
+/// 地面に当たった際の処理
+/// </summary>
+void Player::HitPlane()
+{
+	// 地面の傾斜の外積を計算する
+	VECTOR v3Normal = VCross(m_stage->GetV3Vec1(), m_stage->GetV3Vec2());
+	// y座標を求める
+	m_pos.y = (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
 }

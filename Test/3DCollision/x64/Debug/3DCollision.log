@@ -1,13 +1,2 @@
-﻿  Capsule.cpp
-  Cube.cpp
-  Cube2.cpp
-  Capsule2.cpp
-  main.cpp
-  Plane.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\3DCollision\Plane.cpp(57,34): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\3DCollision\Plane.cpp(59,33): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  Sphere2.cpp
-  Sphere.cpp
-  Triangle.cpp
-  コードを生成中...
-  3DCollision.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\3DCollision\x64\Debug\3DCollision.exe
+﻿  Cube.cpp
+  3DCollision.vcxproj -> C:\GitHub\MyGame\Test\3DCollision\x64\Debug\3DCollision.exe

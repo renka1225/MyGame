@@ -128,7 +128,7 @@ void Cube::HitPlane()
 	m_pos.y = (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y + 5.0f;
 
 	// ‹‚ß‚½’l‚ğ‘ã“ü‚·‚é
-	m_pos = VGet(m_pos.x, m_pos.y, m_pos.z);
+	//m_pos = VGet(m_pos.x, m_pos.y, m_pos.z);
 
 
 	/*—§•û‘Ì‚ğÎ–Ê‚É‰ˆ‚Á‚ÄŒX‚¯‚é*/
