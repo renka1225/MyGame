@@ -23,8 +23,8 @@ public:
 private:
 	void Move(Input& input);	// プレイヤーの移動処理
 	void Jump(Input& input);	// プレイヤーのジャンプ処理
-	void UpdateRotate();		// プレイヤーの傾きを調整する
 	void HitPlane();			// 地面に当たった際の処理
+	void UpdateRotate();		// プレイヤーの傾きを調整する
 
 private:
 	std::shared_ptr<Stage> m_stage;
