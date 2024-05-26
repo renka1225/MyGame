@@ -50,16 +50,14 @@ void Player::Update(Input& input, std::shared_ptr<Stage> stage)
 	Move(input);
 
 	// ジャンプ処理
-	if (m_isJump)	// ジャンプ中
+	if (m_isJump)	// ジャンプ中の場合
 	{
 		Jump(input);
 	}
-	else
+	else // 地面に接地している場合
 	{
 		m_jumpFrame = 0;
-
-		// プレイヤーの着地処理
-		HitPlane();
+		m_pos = VGet(m_pos.x, GroundHeight(), m_pos.z);
 
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
@@ -71,18 +69,19 @@ void Player::Update(Input& input, std::shared_ptr<Stage> stage)
 	}
 	
 	// 着地処理
-	if (m_pos.y < 0.0f)
+	if (m_pos.y + m_move.y < GroundHeight())
 	{
+		m_pos.y = GroundHeight();
 		m_isJump = false;
 	}
 
-	// プレイヤー位置を更新
+	// プレイヤー位置、角度を更新
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
 
 	// プレイヤーの傾きを調整する
-	UpdateRotate();
+	UpdateAngle();
 }
 
 
@@ -183,21 +182,9 @@ void Player::Jump(Input& input)
 
 
 /// <summary>
-/// 地面に当たった際の処理
-/// </summary>
-void Player::HitPlane()
-{
-	// 地面の傾斜の外積を計算する
-	VECTOR v3Normal = VCross(m_stage->GetV3Vec1(), m_stage->GetV3Vec2());
-	// y座標を求める
-	m_pos.y = (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
-}
-
-
-/// <summary>
 /// プレイヤーの傾きを調整する
 /// </summary>
-void Player::UpdateRotate()
+void Player::UpdateAngle()
 {
 	// プレイヤーを地面に沿って傾ける
 	// 基底ベクトルを作成
@@ -220,4 +207,17 @@ void Player::UpdateRotate()
 
 	// z軸とy軸の方向をセットする
 	MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
+}
+
+
+/// <summary>
+/// 地面の高さからプレイヤーのY座標を求める
+/// </summary>
+/// <returns>地面の高さ</returns>
+float Player::GroundHeight()
+{
+	// 地面の傾斜の外積を計算する
+	VECTOR v3Normal = VCross(m_stage->GetV3Vec1(), m_stage->GetV3Vec2());
+	// y座標を求める
+	return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
 }

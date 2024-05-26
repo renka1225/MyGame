@@ -23,8 +23,8 @@ public:
 private:
 	void Move(Input& input);	// プレイヤーの移動処理
 	void Jump(Input& input);	// プレイヤーのジャンプ処理
-	void HitPlane();			// 地面に当たった際の処理
-	void UpdateRotate();		// プレイヤーの傾きを調整する
+	void UpdateAngle();			// プレイヤーの傾きを調整する
+	float GroundHeight();		// 地面の高さを計算する
 
 private:
 	std::shared_ptr<Stage> m_stage;
@@ -45,7 +45,7 @@ private:	// 定数
 	static constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	static constexpr float kMove = 1.0f;		// プレイヤー移動量
 	static constexpr float kVelocity = 15.0f;	// ジャンプの高さ
-	static constexpr float kGravity = -1.8f;	// 重力
+	static constexpr float kGravity = -1.5f;	// 重力
 
 	// 当たり判定
 	static constexpr float kCenterPosY = 12.0f;	// プレイヤーの中心点を調整

@@ -57,14 +57,37 @@ void Physics::Update()
 #endif
 
 		item->m_rigidbody.SetPos(nextPos);
+	}
 
-		// プレイヤーが障害物に当たったら
-		if (HitCube())
+	// 衝突通知、ポジション補正を行う
+	bool doCheck = true;
+	int checkCount = 0;	// チェック回数
+	while (doCheck)
+	{
+		doCheck = false;
+		checkCount++;
+
+		// 2重ループで全オブジェクトの当たり判定
+		for (auto item1 : m_collidables)
 		{
-			// ポジションを補正する
+			for (auto item2 : m_collidables)
+			{
+				if (item1 != item2)
+				{
+					// プレイヤーが障害物に当たったら
+					if (HitCube())
+					{
+						auto pos1 = item1->m_rigidbody.GetPos();
+						auto pos2 = item2->m_rigidbody.GetPos();
 
-			// 衝突通知を行う
-			item->OnCollide();
+						// ポジションを補正する
+						item1->m_rigidbody.SetPos(VSub(pos1, pos2));
+
+						// 衝突通知を行う
+						item1->OnCollide();
+					}
+				}
+			}
 		}
 	}
 }

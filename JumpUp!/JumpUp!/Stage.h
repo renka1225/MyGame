@@ -20,7 +20,7 @@ public:
 private:
 	// 床の情報
 	VECTOR m_floorPos;
-	int m_floorHandle;	// 床の3Dモデル
+	int m_floorHandle;	// 床のモデル
 
 	// 頂点データ
 	VERTEX3D Vertex[4];
@@ -31,15 +31,15 @@ private:
 	// Y方向の傾斜
 	VECTOR m_v3Vec2;
 
-	// 経過時間
-	int m_time;
-	// 表示画像
-	int m_handle;
+	// ステージの情報
+	VECTOR m_stagePos;
+	// ステージの3Dモデル
+	int m_stageHandle;
 
 private:	// 定数
 	// 床の拡大率
-	static constexpr float kFloorScaleX = 50.0f;
-	static constexpr float kFloorScaleY = 1.0f;
-	static constexpr float kFloorScaleZ = 50.0f;
+	static constexpr float kFloorScaleX = 30.0f;
+	static constexpr float kFloorScaleY = 10.0f;
+	static constexpr float kFloorScaleZ = 20.0f;
 };
 

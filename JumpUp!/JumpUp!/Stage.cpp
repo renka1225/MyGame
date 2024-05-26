@@ -9,7 +9,7 @@ Stage::Stage():
 	m_floorPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_v3Vec1(VGet(0.0f, 0.8f, 0.0f)),
 	m_v3Vec2(VGet(0.0f, 0.0f, 0.0f)),
-    m_time(0)
+    m_stagePos(VGet(0.0f, 0.0f, -30.0f))
 {
     // ４頂点分のデータをセット
     Vertex[0].pos = VGet(-30.0f, 0.0f, 40.0f);
@@ -42,8 +42,8 @@ Stage::Stage():
     Index[4] = 2;
     Index[5] = 1;
 
-	m_floorHandle = MV1LoadModel("data/model/floor.mv1");
-    m_handle = LoadGraph("data/plane.png");
+    m_floorHandle = LoadGraph("data/plane.png");
+    m_stageHandle = MV1LoadModel("data/model/stage.mv1");
 }
 
 /// <summary>
@@ -59,8 +59,8 @@ Stage::~Stage()
 /// </summary>
 void Stage::Init()
 {
-	MV1SetPosition(m_floorHandle, VGet(0.0f, 0.0f, 0.0f));
-	MV1SetScale(m_floorHandle, VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ));
+	MV1SetPosition(m_stageHandle, m_stagePos);
+	MV1SetScale(m_stageHandle, VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ));
 }
 
 /// <summary>
@@ -68,13 +68,11 @@ void Stage::Init()
 /// </summary>
 void Stage::Update()
 {
-    m_time++;
-
     // 地面の傾斜変更
     // X方向
-    m_v3Vec1 = VGet(40.0f, 10.0f * sin(m_time * 0.5f * DX_PI_F / 100.0f), 0.0f);
+    m_v3Vec1 = VGet(40.0f, 10.0f * sin(0.5f * DX_PI_F / 2.0f), 0.0f);
     // Y方向
-    m_v3Vec2 = VGet(0.0f, 15.0f * sin(m_time * 0.5f * DX_PI_F / 120.0f), 50.0f);
+    m_v3Vec2 = VGet(0.0f, 15.0f * sin(0.5f * DX_PI_F / 2.0f), 50.0f);
 
     // 平面を動かす
     Vertex[0].pos = VAdd(VScale(m_v3Vec1, -1), m_v3Vec2);
@@ -89,7 +87,8 @@ void Stage::Update()
 void Stage::Draw()
 {
 	// 床を描画する
-	MV1DrawModel(m_floorHandle);
+    DrawPolygonIndexed3D(Vertex, 4, Index, 2, m_floorHandle, true);
 
-    DrawPolygonIndexed3D(Vertex, 4, Index, 2, m_handle, true);
+    // ステージ描画
+    MV1DrawModel(m_stageHandle);
 }
