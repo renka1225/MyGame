@@ -8,9 +8,8 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Player::Player(std::shared_ptr<Physics> physics):
+Player::Player():
 	Collidable(Tag::Player),
-	m_pPhysics(physics),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
@@ -35,10 +34,15 @@ Player::~Player()
 /// <summary>
 /// 初期化
 /// </summary>
-void Player::Init()
+void Player::Init(std::shared_ptr<Physics> physics)
 {
 	// 自身の物理情報登録
-	m_pPhysics->Entry(this);
+	physics->Entry(this);
+	// 物理挙動の初期化
+	m_rigidbody.Init();
+	m_rigidbody.SetPos(m_pos);
+	m_rigidbody.SetScale(VGet(kScale, kScale, kScale));
+
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
 }
@@ -47,10 +51,10 @@ void Player::Init()
 /// <summary>
 /// 初期化
 /// </summary>
-void Player::End()
+void Player::Final(std::shared_ptr<Physics> physics)
 {
 	// 物理情報登録解除
-	m_pPhysics->Exit(this);
+	physics->Exit(this);
 }
 
 
@@ -94,6 +98,8 @@ void Player::Update(Input& input, Stage& stage)
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
+
+	m_rigidbody.SetPos(m_pos);
 
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
@@ -246,5 +252,7 @@ float Player::GroundHeight(Stage& stage)
 /// </summary>
 void Player::OnCollide()
 {
-	printfDx("プレイヤー当たった！\n");
+#ifdef _DEBUG
+	DrawString(0, 40, "当たった", 0xffffff);
+#endif
 }

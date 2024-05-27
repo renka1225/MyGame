@@ -1,4 +1,5 @@
 #pragma once
+#include "Rigidbody.h"
 
 class Rigidbody;
 class Physics;

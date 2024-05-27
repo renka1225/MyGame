@@ -75,8 +75,9 @@ void Physics::Update()
 				if (player != ground)
 				{
 					// プレイヤーが障害物に当たったら
-					if (HitCube())
+					if (HitCube(player, ground))
 					{
+						printfDx("当たった\n");
 						auto pos1 = player->m_rigidbody.GetPos();
 						auto pos2 = player->m_rigidbody.GetPos();
 
@@ -102,11 +103,30 @@ void Physics::Update()
 /// <summary>
 /// 直方体と直方体の衝突判定を行う
 /// </summary>
-bool Physics::HitCube()
+bool Physics::HitCube(Collidable* player, Collidable* ground)
 {
-	// 衝突しているか判定
-	bool isHit = false;
+	// TODO:ここら辺のGetが上手く行ってないので調整
+	/*プレイヤーと地面の当たり判定*/
+	// 相対ベクトルを求める
+	VECTOR v3SubAbs = VSub(player->m_rigidbody.GetPos(), ground->m_rigidbody.GetPos());
+	v3SubAbs = VGet(abs(v3SubAbs.x), abs(v3SubAbs.y), abs(v3SubAbs.z));
 
-	return isHit;
+	// 衝突距離を求める
+	// 衝突距離はそれぞれの対応した辺の長さを足して2で割ったもの
+	VECTOR v3AddScale = VScale(VAdd(player->m_rigidbody.GetScale(), ground->m_rigidbody.GetScale()), 0.5f);
+
+	// 各成分の当たり判定
+	bool isXHit = v3SubAbs.x < v3AddScale.x;
+	bool isYHit = v3SubAbs.y < v3AddScale.y;
+	bool isZHit = v3SubAbs.z < v3AddScale.z;
+
+	if (isXHit && isYHit && isZHit)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 
 }

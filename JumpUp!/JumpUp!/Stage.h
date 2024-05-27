@@ -1,16 +1,22 @@
 #pragma once
+#include "Collidable.h"
+#include <memory>
+
+class Collidable;
 
 /// <summary>
 /// ステージの描画等を行うクラス
 /// </summary>
-class Stage
+class Stage : public Collidable
 {
 public:
 	Stage();
-	~Stage();
-	void Init();
+	virtual ~Stage();
+	void Init(std::shared_ptr<Physics> physics);
+	void Final(std::shared_ptr<Physics> physics);
 	void Update();
 	void Draw();
+	virtual void OnCollide()override;	// 衝突したとき
 
 	// 平面のX方向の傾斜を取得
 	VECTOR GetV3Vec1() const { return m_v3Vec1; }

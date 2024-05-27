@@ -15,7 +15,7 @@ public:
 
 private:
 	// ’¼•û‘Ì‚Æ’¼•û‘Ì‚Ì“–‚½‚è”»’è‚ğs‚¤
-	bool HitCube();
+	bool HitCube(Collidable* player, Collidable* ground);
 
 private:
 	// “o˜^‚³‚ê‚½Collidable‚ÌƒŠƒXƒg

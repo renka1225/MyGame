@@ -6,7 +6,8 @@
 Rigidbody::Rigidbody():
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_dir(VGet(0.0f, 0.0f, 0.0f)),
-	m_velocity(VGet(0.0f, 0.0f, 0.0f))
+	m_velocity(VGet(0.0f, 0.0f, 0.0f)),
+	m_scale(VGet(0.0f, 0.0f, 0.0f))
 {
 }
 

@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "MyLib.h"
 #include "Stage.h"
 #include <math.h>
 
@@ -6,6 +7,7 @@
 /// コンストラクタ
 /// </summary>
 Stage::Stage():
+    Collidable(Tag::Ground),
 	m_floorPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_v3Vec1(VGet(0.0f, 0.8f, 0.0f)),
 	m_v3Vec2(VGet(0.0f, 0.0f, 0.0f)),
@@ -57,10 +59,25 @@ Stage::~Stage()
 /// <summary>
 /// 初期化
 /// </summary>
-void Stage::Init()
+void Stage::Init(std::shared_ptr<Physics> physics)
 {
+    // 自身の物理情報を登録する
+    physics->Entry(this);
+    m_rigidbody.Init();
+    m_rigidbody.SetPos(m_stagePos);
+    m_rigidbody.SetScale(VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ));
+
 	MV1SetPosition(m_stageHandle, m_stagePos);
 	MV1SetScale(m_stageHandle, VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ));
+}
+
+
+/// <summary>
+/// 終了処理
+/// </summary>
+void Stage::Final(std::shared_ptr<Physics> physics)
+{
+    physics->Exit(this);
 }
 
 /// <summary>
@@ -70,9 +87,9 @@ void Stage::Update()
 {
     // 地面の傾斜変更
     // X方向
-    m_v3Vec1 = VGet(40.0f, 10.0f * sin(0.5f * DX_PI_F / 2.0f), 0.0f);
+    m_v3Vec1 = VGet(40.0f, 10.0f * static_cast<float>(sin(0.5f * DX_PI_F / 2.0f)), 0.0f);
     // Y方向
-    m_v3Vec2 = VGet(0.0f, 15.0f * sin(0.5f * DX_PI_F / 2.0f), 50.0f);
+    m_v3Vec2 = VGet(0.0f, 15.0f * static_cast<float>(sin(0.5f * DX_PI_F / 2.0f)), 50.0f);
 
     // 平面を動かす
     Vertex[0].pos = VAdd(VScale(m_v3Vec1, -1), m_v3Vec2);
@@ -91,4 +108,15 @@ void Stage::Draw()
 
     // ステージ描画
     MV1DrawModel(m_stageHandle);
+}
+
+
+/// <summary>
+///  プレイヤーが衝突したとき
+/// </summary>
+void Stage::OnCollide()
+{
+#ifdef _DEBUG
+    DrawString(0, 40, "当たった", 0xffffff);
+#endif
 }

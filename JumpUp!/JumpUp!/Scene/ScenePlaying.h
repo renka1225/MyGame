@@ -17,6 +17,7 @@ public:
 	ScenePlaying();
 	virtual ~ScenePlaying();
 	virtual void Init();
+	void Final();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
