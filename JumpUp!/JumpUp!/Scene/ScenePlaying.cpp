@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "MyLib.h"
 #include "ScenePlaying.h"
 #include "Player.h"
 #include "Camera.h"
@@ -9,7 +10,8 @@
 /// </summary>
 ScenePlaying::ScenePlaying()
 {
-	m_pPlayer = std::make_shared<Player>();
+	m_pPhysics = std::make_shared<Physics>();
+	m_pPlayer = std::make_shared<Player>(m_pPhysics);
 	m_pCamera = std::make_shared<Camera>();
 	m_pStage = std::make_shared<Stage>();
 }
@@ -20,6 +22,7 @@ ScenePlaying::ScenePlaying()
 /// </summary>
 ScenePlaying::~ScenePlaying()
 {
+	// 処理なし
 }
 
 
@@ -42,14 +45,14 @@ void ScenePlaying::Init()
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 	// カメラ更新
-	m_pCamera->Update(input);
+	m_pCamera->Update(input, *m_pPlayer);
 
 	// ステージ更新
 	m_pStage->Update();
 
 	// プレイヤー更新
 	m_pPlayer->SetCameraAngle(m_pCamera->GetAngle());
-	m_pPlayer->Update(input, m_pStage);
+	m_pPlayer->Update(input, *m_pStage);
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }

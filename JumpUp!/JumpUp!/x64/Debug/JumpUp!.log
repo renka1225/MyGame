@@ -1,7 +1,2 @@
 ﻿  Player.cpp
-  ScenePlaying.cpp
-  Stage.cpp
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Stage.cpp(73,34): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Stage.cpp(75,33): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  コードを生成中...
-  JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
+  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe

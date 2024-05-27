@@ -9,10 +9,8 @@ class Collidable;
 class Physics
 {
 public:
-	// Õ“Ë•¨‚Ì“o˜^
-	void Entry(Collidable* collidable);
-	// Õ“Ë•¨‚Ì“o˜^‰ğœ
-	void Exit(Collidable* collidable);
+	void Entry(Collidable* collidable);		// Õ“Ë•¨‚Ì“o˜^
+	void Exit(Collidable* collidable);		// Õ“Ë•¨‚Ì“o˜^‰ğœ
 	void Update();
 
 private:

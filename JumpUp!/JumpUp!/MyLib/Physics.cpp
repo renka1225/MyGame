@@ -68,23 +68,29 @@ void Physics::Update()
 		checkCount++;
 
 		// 2重ループで全オブジェクトの当たり判定
-		for (auto item1 : m_collidables)
+		for (auto player : m_collidables)
 		{
-			for (auto item2 : m_collidables)
+			for (auto ground : m_collidables)
 			{
-				if (item1 != item2)
+				if (player != ground)
 				{
 					// プレイヤーが障害物に当たったら
 					if (HitCube())
 					{
-						auto pos1 = item1->m_rigidbody.GetPos();
-						auto pos2 = item2->m_rigidbody.GetPos();
+						auto pos1 = player->m_rigidbody.GetPos();
+						auto pos2 = player->m_rigidbody.GetPos();
 
 						// ポジションを補正する
-						item1->m_rigidbody.SetPos(VSub(pos1, pos2));
+						player->m_rigidbody.SetPos(VSub(pos1, pos2));
 
 						// 衝突通知を行う
-						item1->OnCollide();
+						player->OnCollide();
+						ground->OnCollide();
+
+						if (ground->GetTag() == Collidable::Tag::Ground)
+						{
+							player->m_rigidbody.SetPos(VAdd(player->m_rigidbody.GetPos(), VSub(player->m_rigidbody.GetPos(), ground->m_rigidbody.GetPos())));
+						}
 					}
 				}
 			}

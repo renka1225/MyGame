@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Camera.h"
+#include "Player.h"
 #include "Input.h"
 #include <cmath>
 
@@ -33,7 +34,7 @@ void Camera::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(Input& input)
+void Camera::Update(Input& input, Player& player)
 {
 	if (input.IsPressing("rotateL"))
 	{
@@ -44,8 +45,12 @@ void Camera::Update(Input& input)
 		m_angle -= kAngle;
 	}
 
-	m_pos.x = cosf(m_angle) * kDist;
+	// プレイヤー位置を取得
+	VECTOR playerPos = player.GetPos();
+
+	// カメラ位置調整
+	m_pos.x = cosf(m_angle) * kDist + playerPos.x;
 	m_pos.y = kHeight;
-	m_pos.z = sinf(m_angle) * kDist;
+	m_pos.z = sinf(m_angle) * kDist + playerPos.z;
 	SetCameraPositionAndTarget_UpVecY(m_pos, VGet(0, 0, 0));
 }

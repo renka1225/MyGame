@@ -1,7 +1,10 @@
 #pragma once
 #include "DxLib.h"
+#include "MyLib.h"
 #include <memory>
 
+class Collidable;
+class Physics;
 class Stage;
 class Input;
 class DrawDebug;
@@ -9,25 +12,29 @@ class DrawDebug;
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-class Player
+class Player : public Collidable
 {
 public:
-	Player();
-	~Player();
+	Player(std::shared_ptr<Physics> physics);
+	virtual ~Player();
 	void Init();
-	void Update(Input& input, std::shared_ptr<Stage> stage);
+	void End();
+	void Update(Input& input, Stage& stage);
 	void Draw(DrawDebug& drawDebug);
+	void OnCollide();	// 衝突したとき
 
 	void SetCameraAngle(float angle) { m_cameraAngle = angle; }
 
-private:
-	void Move(Input& input);	// プレイヤーの移動処理
-	void Jump(Input& input);	// プレイヤーのジャンプ処理
-	void UpdateAngle();			// プレイヤーの傾きを調整する
-	float GroundHeight();		// 地面の高さを計算する
+	VECTOR GetPos() const { return m_pos; }
 
 private:
-	std::shared_ptr<Stage> m_stage;
+	void Move(Input& input);			// プレイヤーの移動処理
+	void Jump(Input& input);			// プレイヤーのジャンプ処理
+	void UpdateAngle(Stage& stage);		// プレイヤーの傾きを調整する
+	float GroundHeight(Stage& stage);	// 地面の高さを計算する
+
+private:
+	std::shared_ptr<Physics> m_pPhysics;
 
 	// プレイヤー情報
 	VECTOR m_pos;		// プレイヤー位置

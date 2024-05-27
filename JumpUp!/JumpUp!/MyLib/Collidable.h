@@ -6,14 +6,15 @@ class Physics;
 /// <summary>
 /// 衝突できる物体の基底クラス
 /// </summary>
-class Collidable
+class Collidable abstract
 {
 public:
 	// 当たったものの判別を行う
 	enum class Tag
 	{
 		Player,	// プレイヤー
-		Floor	// 床
+		Floor,	// 床
+		Ground	// 地面
 	};
 
 	Collidable(Tag tag);
