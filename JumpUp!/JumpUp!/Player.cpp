@@ -39,9 +39,9 @@ void Player::Init(std::shared_ptr<Physics> physics)
 	// 自身の物理情報登録
 	physics->Entry(this);
 	// 物理挙動の初期化
-	m_rigidbody.Init();
-	m_rigidbody.SetPos(m_pos);
-	m_rigidbody.SetScale(VGet(kScale, kScale, kScale));
+	//m_rigidbody.Init();
+	//m_rigidbody.SetPos(m_pos);
+	//m_rigidbody.SetScale(VGet(kScale, kScale, kScale));
 
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
@@ -66,15 +66,33 @@ void Player::Update(Input& input, Stage& stage)
 	// プレイヤーの移動処理
 	Move(input);
 
-	// ジャンプ処理
 	if (m_isJump)	// ジャンプ中の場合
 	{
+		// ジャンプ処理を行う
 		Jump(input);
+		// 着地処理を行う
+		if (m_pos.y + m_move.y < GroundHeight(stage))
+		{
+			m_pos.y = GroundHeight(stage);
+			m_isJump = false;
+		}
 	}
 	else // 地面に接地している場合
 	{
 		m_jumpFrame = 0;
-		m_pos = VGet(m_pos.x, GroundHeight(stage), m_pos.z);
+		if (HitStage(stage)) // 3Dモデルの地面に当たった場合
+		{
+			// TODO:横から当たった時の当たり判定を作る
+			if (m_pos.y < stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y)
+			{
+				m_pos.y = stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y;
+			}
+		}
+		else // 平面の地面に当たった場合
+		{
+			m_pos = VGet(m_pos.x, GroundHeight(stage), m_pos.z);
+		}
+		
 
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
@@ -84,20 +102,11 @@ void Player::Update(Input& input, Stage& stage)
 			m_isJump = true;
 		}
 	}
-	
-	// 着地処理
-	if (m_pos.y + m_move.y < GroundHeight(stage))
-	{
-		m_pos.y = GroundHeight(stage);
-		m_isJump = false;
-	}
 
 	// プレイヤー位置、角度を更新
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
-
-	//m_rigidbody.SetPos(m_pos);
 
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
@@ -118,9 +127,9 @@ void Player::Draw(DrawDebug& drawDebug)
 {
 #ifdef _DEBUG	// デバッグ表示
 	// プレイヤー位置表示
-	drawDebug.DrawPlayerInfo(m_rigidbody.GetPos());
+	drawDebug.DrawPlayerInfo(m_pos);
 	// 当たり判定描画
-	drawDebug.DrawCubeCol(VGet(m_rigidbody.GetPos().x, m_rigidbody.GetPos().y + kCenterPosY, m_rigidbody.GetPos().z), kWidth, kHeight, kDepth, 0x00ffff);
+	drawDebug.DrawCubeCol(VGet(m_pos.x, m_pos.y + kCenterPosY, m_pos.z), kWidth, kHeight, kDepth, 0x00ffff);
 #endif
 
 	// 3Dモデル表示
@@ -273,10 +282,7 @@ bool Player::HitStage(Stage& stage)
 	bool isYHit = v3SubAbs.y < v3AddScale.y;
 	bool isZHit = v3SubAbs.z < v3AddScale.z;
 
-	if (isXHit && isYHit && isZHit)
-	{
-		return true;
-	}
+	if (isXHit && isYHit && isZHit) return true;
 	
 	return false;
 }

@@ -50,7 +50,7 @@ private:	// 定数
 	// プレイヤーの情報
 	static constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	static constexpr float kMove = 1.0f;		// プレイヤー移動量
-	static constexpr float kVelocity = 15.0f;	// ジャンプの高さ
+	static constexpr float kVelocity = 20.0f;	// ジャンプの高さ
 	static constexpr float kGravity = -1.5f;	// 重力
 
 	// 当たり判定
