@@ -150,14 +150,20 @@ Input::Input()
 	m_commandTable["rotateR"] = { {InputType::keybd, KEY_INPUT_D},
 						   {InputType::pad, PAD_INPUT_6} };
 
-	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_P},
-						   {InputType::pad, PAD_INPUT_R} };
-
 	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 						{InputType::pad, PAD_INPUT_C} };
 
 	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
 						   {InputType::pad, PAD_INPUT_Y} };
+
+
+	// デバッグ機能
+	m_commandTable["debug_pause"] = { {InputType::keybd, KEY_INPUT_P},
+					   {InputType::pad, PAD_INPUT_R} };
+
+	m_commandTable["debug_enter"] = { {InputType::keybd, KEY_INPUT_RETURN},
+				   {InputType::pad, PAD_INPUT_R} };
+
 
 	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_X},
 							   {InputType::pad, PAD_INPUT_R} };

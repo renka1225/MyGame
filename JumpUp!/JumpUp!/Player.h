@@ -31,6 +31,7 @@ private:
 	void Jump(Input& input);			// プレイヤーのジャンプ処理
 	void UpdateAngle(Stage& stage);		// プレイヤーの傾きを調整する
 	float GroundHeight(Stage& stage);	// 地面の高さを計算する
+	bool HitStage(Stage& stage);		// ステージとの当たり判定
 
 private:
 

@@ -11,7 +11,8 @@ Stage::Stage():
 	m_floorPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_v3Vec1(VGet(0.0f, 0.8f, 0.0f)),
 	m_v3Vec2(VGet(0.0f, 0.0f, 0.0f)),
-    m_stagePos(VGet(0.0f, 0.0f, -30.0f))
+    m_stagePos(VGet(0.0f, -10.0f, -30.0f)),
+    m_stageScale(VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ))
 {
     // ４頂点分のデータをセット
     Vertex[0].pos = VGet(-30.0f, 0.0f, 40.0f);
@@ -65,10 +66,10 @@ void Stage::Init(std::shared_ptr<Physics> physics)
     physics->Entry(this);
     m_rigidbody.Init();
     m_rigidbody.SetPos(m_stagePos);
-    m_rigidbody.SetScale(VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ));
+    m_rigidbody.SetScale(m_stageScale);
 
 	MV1SetPosition(m_stageHandle, m_stagePos);
-	MV1SetScale(m_stageHandle, VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ));
+	MV1SetScale(m_stageHandle, m_stageScale);
 }
 
 
@@ -101,8 +102,13 @@ void Stage::Update()
 /// <summary>
 /// 描画
 /// </summary>
-void Stage::Draw()
+void Stage::Draw(DrawDebug& drawDebug)
 {
+#ifdef _DEBUG	// デバッグ表示
+    // 当たり判定描画
+    drawDebug.DrawCubeCol(VGet(m_stagePos.x, m_stagePos.y + kCenterPosY, m_stagePos.z), kFloorScaleX, kFloorScaleY, kFloorScaleZ, 0xff0000);
+#endif
+
 	// 床を描画する
     DrawPolygonIndexed3D(Vertex, 4, Index, 2, m_floorHandle, true);
 
@@ -117,6 +123,6 @@ void Stage::Draw()
 void Stage::OnCollide()
 {
 #ifdef _DEBUG
-    DrawString(0, 40, "当たった", 0xffffff);
+    DrawString(0, 40, "プレイヤーが当たった", 0xffffff);
 #endif
 }

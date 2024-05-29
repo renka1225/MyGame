@@ -27,4 +27,14 @@ private:
 	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Stage> m_pStage;
 	DrawDebug m_pDrawDebug;
+
+#ifdef _DEBUG
+	// デバッグ状況
+	enum class DebugState
+	{
+		Normal,	// 通常
+		Pause	// ポーズ
+	};
+	DebugState debugState = DebugState::Normal;
+#endif
 };

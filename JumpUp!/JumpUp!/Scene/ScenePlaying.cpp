@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
+#include "Input.h"
 
 /// <summary>
 /// コンストラクタ
@@ -54,18 +55,34 @@ void ScenePlaying::Final()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
-	// カメラ更新
-	m_pCamera->Update(input, *m_pPlayer);
+#ifdef _DEBUG
+	// デバッグモード
+	// Pキーでポーズ、ポーズ中にPでコマ送り
+	if (debugState == DebugState::Normal && input.IsPressing("debug_pause"))
+	{
+		debugState = DebugState::Pause;
+	}
+	if (debugState == DebugState::Pause && input.IsPressing("debug_enter"))
+	{
+		debugState = DebugState::Normal;
+	}
+	if(debugState != DebugState::Pause || input.IsPressing("debug_pause"))
+	{
+#endif
 
-	// ステージ更新
-	m_pStage->Update();
+		// カメラ更新
+		m_pCamera->Update(input, *m_pPlayer);
 
-	// プレイヤー更新
-	m_pPlayer->SetCameraAngle(m_pCamera->GetAngle());
-	m_pPlayer->Update(input, *m_pStage);
+		// ステージ更新
+		m_pStage->Update();
 
-	// 物理挙動更新
-	m_pPhysics->Update();
+		// プレイヤー更新
+		m_pPlayer->SetCameraAngle(m_pCamera->GetAngle());
+		m_pPlayer->Update(input, *m_pStage);
+
+		// 物理挙動更新
+		m_pPhysics->Update();
+	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }
@@ -84,7 +101,7 @@ void ScenePlaying::Draw()
 #endif
 
 	// ステージ描画
-	m_pStage->Draw();
+	m_pStage->Draw(m_pDrawDebug);
 
 	// プレイヤー描画
 	m_pPlayer->Draw(m_pDrawDebug);

@@ -85,8 +85,6 @@ void Player::Update(Input& input, Stage& stage)
 		}
 	}
 	
-
-	// TODO:ここからはPhysicsが行う
 	// 着地処理
 	if (m_pos.y + m_move.y < GroundHeight(stage))
 	{
@@ -99,10 +97,17 @@ void Player::Update(Input& input, Stage& stage)
 	MV1SetPosition(m_modelHandle, m_pos);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
 
-	m_rigidbody.SetPos(m_pos);
+	//m_rigidbody.SetPos(m_pos);
 
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
+
+	// ステージとの当たり判定
+	if (HitStage(stage))
+	{
+		OnCollide();
+	}
+
 }
 
 
@@ -244,6 +249,36 @@ float Player::GroundHeight(Stage& stage)
 	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
 	// y座標を求める
 	return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
+}
+
+
+/// <summary>
+/// ステージとの当たり判定
+/// </summary>
+bool Player::HitStage(Stage& stage)
+{
+	/*プレイヤーと地面の当たり判定*/
+	// 相対ベクトルを求める
+	VECTOR v3SubAbs = VSub(m_pos, stage.GetStagePos());
+	v3SubAbs = VGet(abs(v3SubAbs.x), abs(v3SubAbs.y), abs(v3SubAbs.z));
+
+	// 衝突距離を求める
+	// 衝突距離はそれぞれの対応した辺の長さを足して2で割ったもの
+	VECTOR v3AddScale = VScale(VAdd(MV1GetScale(m_modelHandle), MV1GetScale(stage.GetStageHandle())), 0.5f);
+	// TODO;当たり判定の範囲を広げる(仮実装)
+	v3AddScale = VAdd(v3AddScale, VGet(0.0f, 20.0f, 0.0f));
+
+	// 各成分の当たり判定
+	bool isXHit = v3SubAbs.x < v3AddScale.x;
+	bool isYHit = v3SubAbs.y < v3AddScale.y;
+	bool isZHit = v3SubAbs.z < v3AddScale.z;
+
+	if (isXHit && isYHit && isZHit)
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 

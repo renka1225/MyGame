@@ -1,4 +1,4 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (jumpRace.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (jumpRace.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
   Background.cpp
   ConversionTime.cpp
   Camera.cpp
@@ -23,4 +23,4 @@
   コンパイル中...
   WorldSprite.cpp
   コードを生成中...
-  jumpRace.vcxproj -> C:\GitHub\MyGame\HOPPINGRACE\x64\Debug\HOPPINGRACE.exe
+  jumpRace.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\HOPPINGRACE\x64\Debug\HOPPINGRACE.exe
