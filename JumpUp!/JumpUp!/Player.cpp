@@ -80,6 +80,7 @@ void Player::Update(Input& input, Stage& stage)
 	else // 地面に接地している場合
 	{
 		m_jumpFrame = 0;
+		// プレイヤーの位置を調整
 		m_pos = VGet(m_pos.x, FixPosY(stage), m_pos.z);
 		
 		// ボタンを押したらジャンプ状態にする
@@ -94,7 +95,6 @@ void Player::Update(Input& input, Stage& stage)
 	// プレイヤー位置、角度を更新
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
-	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle, 0.0f));
 
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
@@ -166,7 +166,7 @@ void Player::Move(Input& input)
 	m_move = VTransform(m_move, mtx);
 
 	// 移動方向からプレイヤーの向く方向を決定する
-	if (VSquareSize(m_move) > 0.0f)
+	if (!m_isJump && VSquareSize(m_move) > 0.0f)
 	{
 		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
 	}
@@ -212,6 +212,9 @@ void Player::Jump(Input& input)
 /// </summary>
 void Player::UpdateAngle(Stage& stage)
 {
+	// ジャンプ中は傾きを更新しない
+	if (m_isJump) return;
+
 	// プレイヤーを地面に沿って傾ける
 	// 基底ベクトルを作成
 	// y軸
@@ -230,12 +233,14 @@ void Player::UpdateAngle(Stage& stage)
 	v3Forward = VNorm(v3Forward);
 
 	// z軸とy軸の方向をセットする
-	if (HitStage(stage))	// ステージの上面に当たった場合はプレイヤーを傾けない
+	if (HitStage(stage))
 	{
-		//MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, DX_PI_F);
+		// 平面部分に当たった場合はプレイヤーを傾けない
+		MV1SetRotationZYAxis(m_modelHandle, v3Forward, VGet(0.0f, 1.0f, 0.0f), 0.0f);
 	}
 	else
 	{
+		// 斜面に当たった場合はプレイヤーを斜面に沿って傾ける
 		// 上下反転させる
 		v3Up = VScale(v3Up, -1);
 		MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
