@@ -71,29 +71,17 @@ void Player::Update(Input& input, Stage& stage)
 		// ジャンプ処理を行う
 		Jump(input);
 		// 着地処理を行う
-		if (m_pos.y + m_move.y < GroundHeight(stage))
+		if (m_pos.y + m_move.y < FixPosY(stage))
 		{
-			m_pos.y = GroundHeight(stage);
+			m_pos.y = FixPosY(stage);
 			m_isJump = false;
 		}
 	}
 	else // 地面に接地している場合
 	{
 		m_jumpFrame = 0;
-		if (HitStage(stage)) // 3Dモデルの地面に当たった場合
-		{
-			// TODO:横から当たった時の当たり判定を作る
-			if (m_pos.y < stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y)
-			{
-				m_pos.y = stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y;
-			}
-		}
-		else // 平面の地面に当たった場合
-		{
-			m_pos = VGet(m_pos.x, GroundHeight(stage), m_pos.z);
-		}
+		m_pos = VGet(m_pos.x, FixPosY(stage), m_pos.z);
 		
-
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
 		{
@@ -229,8 +217,6 @@ void Player::UpdateAngle(Stage& stage)
 	// y軸
 	VECTOR v3Up = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
 	v3Up = VNorm(v3Up);
-	// 上下反転させる
-	v3Up = VScale(v3Up, -1);
 
 	// z軸
 	VECTOR v3Forward = VGet(cosf(-m_angle), 0.0f, sinf(-m_angle));
@@ -244,25 +230,40 @@ void Player::UpdateAngle(Stage& stage)
 	v3Forward = VNorm(v3Forward);
 
 	// z軸とy軸の方向をセットする
-	MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
+	if (HitStage(stage))	// ステージの上面に当たった場合はプレイヤーを傾けない
+	{
+		//MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, DX_PI_F);
+	}
+	else
+	{
+		// 上下反転させる
+		v3Up = VScale(v3Up, -1);
+		MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
+	}
 }
 
 
 /// <summary>
-/// 地面の高さからプレイヤーのY座標を求める
+/// 地面の位置からプレイヤーのY座標を求める
 /// </summary>
 /// <returns>地面の高さ</returns>
-float Player::GroundHeight(Stage& stage)
+float Player::FixPosY(Stage& stage)
 {
 	// 地面の傾斜の外積を計算する
 	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
-	// y座標を求める
-	return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
+	if (HitStage(stage)) // ステージの上面に当たった場合
+	{
+		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y;
+	}
+	else // 地面に当たった場合
+	{
+		return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
+	}
 }
 
 
 /// <summary>
-/// ステージとの当たり判定
+/// ステージとの衝突判定を行う
 /// </summary>
 bool Player::HitStage(Stage& stage)
 {
@@ -289,11 +290,13 @@ bool Player::HitStage(Stage& stage)
 
 
 /// <summary>
-/// 衝突したとき
+/// 衝突したときの処理
 /// </summary>
 void Player::OnCollide()
 {
 #ifdef _DEBUG
 	DrawString(0, 40, "当たった", 0xffffff);
 #endif
+
+	// TODO:当たった場所によって位置を変える
 }

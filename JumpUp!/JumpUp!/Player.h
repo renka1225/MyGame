@@ -30,7 +30,7 @@ private:
 	void Move(Input& input);			// プレイヤーの移動処理
 	void Jump(Input& input);			// プレイヤーのジャンプ処理
 	void UpdateAngle(Stage& stage);		// プレイヤーの傾きを調整する
-	float GroundHeight(Stage& stage);	// 地面の高さを計算する
+	float FixPosY(Stage& stage);		// 地面の位置からプレイヤーのY座標の位置を求める
 	bool HitStage(Stage& stage);		// ステージとの当たり判定
 
 private:
