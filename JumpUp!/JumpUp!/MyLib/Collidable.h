@@ -20,7 +20,7 @@ public:
 
 	Collidable(Tag tag);
 	// Õ“Ë‚µ‚½Û‚Ìˆ—
-	virtual void OnCollide() = 0;
+	//virtual void OnCollide() = 0;
 
 	Tag GetTag() const { return m_tag; }
 

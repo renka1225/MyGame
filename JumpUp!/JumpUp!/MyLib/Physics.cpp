@@ -85,8 +85,8 @@ void Physics::Update()
 						player->m_rigidbody.SetPos(VSub(pos1, pos2));
 
 						// Õ“Ë’Ê’m‚ğs‚¤
-						player->OnCollide();
-						ground->OnCollide();
+						//player->OnCollide();
+						//ground->OnCollide();
 
 						if (ground->GetTag() == Collidable::Tag::Ground)
 						{

@@ -44,7 +44,7 @@ void ScenePlaying::Init()
 void ScenePlaying::Final()
 {
 	m_pPlayer->Final(m_pPhysics);
-	m_pPlayer->Final(m_pPhysics);
+	m_pStage->Final(m_pPhysics);
 }
 
 

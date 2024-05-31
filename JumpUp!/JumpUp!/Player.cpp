@@ -71,9 +71,9 @@ void Player::Update(Input& input, Stage& stage)
 		// ジャンプ処理を行う
 		Jump(input);
 		// 着地処理を行う
-		if (m_pos.y + m_move.y < FixPosY(stage))
+		if (m_pos.y + m_move.y < OnHitFloor(stage))
 		{
-			m_pos.y = FixPosY(stage);
+			m_pos.y = OnHitFloor(stage);
 			m_isJump = false;
 		}
 	}
@@ -81,13 +81,13 @@ void Player::Update(Input& input, Stage& stage)
 	{
 		m_jumpFrame = 0;
 		// プレイヤーの位置を調整
-		m_pos = VGet(m_pos.x, FixPosY(stage), m_pos.z);
+		m_pos = VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
 		
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
 		{
 			// 初速度を足す
-			m_move = VAdd(m_move, VGet(0.0f, kVelocity, 0.0f));
+			m_move = VAdd(m_move, VGet(0.0f, 0.0f, 0.0f));
 			m_isJump = true;
 		}
 	}
@@ -100,11 +100,10 @@ void Player::Update(Input& input, Stage& stage)
 	UpdateAngle(stage);
 
 	// ステージとの当たり判定
-	if (HitStage(stage))
+	if (IsHitStage(stage))
 	{
-		OnCollide();
+		OnHit(stage);
 	}
-
 }
 
 
@@ -186,7 +185,7 @@ void Player::Jump(Input& input)
 	if (input.IsReleased("jump"))
 	{
 		// ジャンプの高さを決める
-		float jumpHeight;
+		float jumpHeight = kVelocity;
 		if (m_jumpFrame < kLittleJumpFrame)
 		{
 			jumpHeight = kLittleJumpHeight;
@@ -199,7 +198,8 @@ void Player::Jump(Input& input)
 		{
 			jumpHeight = kBigJumpHeight;
 		}
-		m_move = VScale(VGet(0.0f, m_move.y, 0.0f), jumpHeight);
+		//m_move = VScale(VGet(0.0f, m_move.y, 0.0f), jumpHeight);
+		m_move = VGet(0, jumpHeight, 0);
 	}
 
 	// 重力を足す
@@ -233,18 +233,19 @@ void Player::UpdateAngle(Stage& stage)
 	v3Forward = VNorm(v3Forward);
 
 	// z軸とy軸の方向をセットする
-	if (HitStage(stage))
+	if (IsHitStage(stage))
 	{
 		// 平面部分に当たった場合はプレイヤーを傾けない
-		MV1SetRotationZYAxis(m_modelHandle, v3Forward, VGet(0.0f, 1.0f, 0.0f), 0.0f);
+		v3Up = VGet(0.0f, 1.0f, 0.0f);
 	}
 	else
 	{
 		// 斜面に当たった場合はプレイヤーを斜面に沿って傾ける
 		// 上下反転させる
 		v3Up = VScale(v3Up, -1);
-		MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
 	}
+
+	MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
 }
 
 
@@ -252,11 +253,11 @@ void Player::UpdateAngle(Stage& stage)
 /// 地面の位置からプレイヤーのY座標を求める
 /// </summary>
 /// <returns>地面の高さ</returns>
-float Player::FixPosY(Stage& stage)
+float Player::OnHitFloor(Stage& stage)
 {
 	// 地面の傾斜の外積を計算する
 	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
-	if (HitStage(stage)) // ステージの上面に当たった場合
+	if (IsHitStage(stage)) // ステージの上面に当たった場合
 	{
 		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y;
 	}
@@ -270,7 +271,7 @@ float Player::FixPosY(Stage& stage)
 /// <summary>
 /// ステージとの衝突判定を行う
 /// </summary>
-bool Player::HitStage(Stage& stage)
+bool Player::IsHitStage(Stage& stage)
 {
 	/*プレイヤーと地面の当たり判定*/
 	// 相対ベクトルを求める
@@ -297,11 +298,37 @@ bool Player::HitStage(Stage& stage)
 /// <summary>
 /// 衝突したときの処理
 /// </summary>
-void Player::OnCollide()
+void Player::OnHit(Stage& stage)
 {
 #ifdef _DEBUG
 	DrawString(0, 40, "当たった", 0xffffff);
 #endif
 
 	// TODO:当たった場所によって位置を変える
+
+	// ステージ位置を取得する
+	VECTOR stagePos = stage.GetStagePos();
+
+	// 横から当たったかチェックする
+	m_pos.x += m_move.x;
+	if (m_move.x > 0.0f)
+	{
+		m_pos.x = stagePos.x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
+	}
+	else if (m_move.x < 0.0f)
+	{
+		m_pos.x = stagePos.x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
+	}
+
+	// 縦から当たったかチェックする
+	/*m_pos.y += m_move.y;
+	if (m_move.y > 0.0f)
+	{
+		m_pos.y = stagePos.y - MV1GetScale(stage.GetStageHandle()).y * 0.5f;
+		m_move.y *= -1.0f;
+	}
+	else if (m_move.y < 0.0f)
+	{
+		m_pos.y = stagePos.y + MV1GetScale(stage.GetStageHandle()).y * 0.5f;
+	}*/
 }

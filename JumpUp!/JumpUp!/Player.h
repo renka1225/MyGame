@@ -20,28 +20,38 @@ public:
 	void Final(std::shared_ptr<Physics> physics);
 	void Update(Input& input, Stage& stage);
 	void Draw(DrawDebug& drawDebug);
-	virtual void OnCollide() override;	// 衝突したとき
+	void OnHit(Stage& stage);	// 衝突したとき
 
 	void SetCameraAngle(float angle) { m_cameraAngle = angle; }
 
 	VECTOR GetPos() const { return m_pos; }
 
+	// プレイヤーの状態
+	enum class PlayerState
+	{
+		Idle,	// 待機
+		Run,	// 移動
+		Jump,	// ジャンプ中
+		Fall,	// 落下中
+	};
+
 private:
 	void Move(Input& input);			// プレイヤーの移動処理
 	void Jump(Input& input);			// プレイヤーのジャンプ処理
 	void UpdateAngle(Stage& stage);		// プレイヤーの傾きを調整する
-	float FixPosY(Stage& stage);		// 地面の位置からプレイヤーのY座標の位置を求める
-	bool HitStage(Stage& stage);		// ステージとの当たり判定
+	float OnHitFloor(Stage& stage);		// 地面の位置からプレイヤーのY座標の位置を求める
+	bool IsHitStage(Stage& stage);		// ステージとの当たり判定
 
 private:
 
 	// プレイヤー情報
-	VECTOR m_pos;		// プレイヤー位置
-	VECTOR m_move;		// 移動量
-	float m_angle;		// 向いている方向
-	int m_jumpFrame;	// ジャンプフレーム
-	bool m_isJump;		// ジャンプフラグ true:ジャンプ中
-	int m_modelHandle;	// プレイヤーの3Dモデル
+	VECTOR m_pos;				// プレイヤー位置
+	VECTOR m_move;				// 移動量
+	float m_angle;				// 向いている方向
+	int m_jumpFrame;			// ジャンプフレーム
+	bool m_isJump;				// ジャンプフラグ true:ジャンプ中
+	int m_modelHandle;			// プレイヤーの3Dモデル
+	PlayerState m_currentState;	// 現在の状態
 
 	// カメラ情報
 	float m_cameraAngle;
