@@ -58,13 +58,17 @@ void Player::Update(Input& input, Stage& stage)
 {
 	// プレイヤーの移動処理
 	Move(input);
-	// 当たり判定をして、新しい座標を保存する
-	//m_pos = stage.CheckCollision(*this, m_move);
+	// 当たり判定をして座標を保存
+	/*if (IsHitStage(stage) && m_currentState != State::Jump)
+	{
+		OnHit(stage);
+	}*/
 
 	// 地面に接地している場合
 	if(m_currentState != State::Jump)
 	{
 		m_jumpFrame = 0;
+		m_move.y = kGravity;
 
 		// 着地処理を行う
 		if (m_pos.y + m_jumpPower < OnHitFloor(stage))
@@ -76,7 +80,6 @@ void Player::Update(Input& input, Stage& stage)
 		if (input.IsTriggered("jump"))
 		{
 			// y軸方向の速度をセット
-			//m_jumpPower = kVelocity;
 			m_currentState = State::Jump;
 			m_isJump = true;
 		}
@@ -89,6 +92,8 @@ void Player::Update(Input& input, Stage& stage)
 	}
 
 	// プレイヤー位置、角度を更新
+	m_move.y = m_jumpPower;
+
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
 
@@ -98,7 +103,7 @@ void Player::Update(Input& input, Stage& stage)
 	// ステージとの当たり判定
 	if (IsHitStage(stage))
 	{
-		//OnHit(stage);
+		OnHit(stage);
 	}
 }
 
@@ -210,9 +215,6 @@ void Player::Jump(Input& input, Stage& stage)
 		m_currentState = State::Idle;
 		m_isJump = false;
 	}
-
-	// Y軸方向の移動速度を反映する
-	m_move.y = m_jumpPower * 0.5f;
 }
 
 
@@ -309,37 +311,39 @@ bool Player::IsHitStage(Stage& stage)
 /// </summary>
 void Player::OnHit(Stage& stage)
 {
-#ifdef _DEBUG
-	DrawString(0, 40, "当たった", 0xffffff);
-#endif
-
 	// TODO:当たった場所によって位置を変える
 
-	// ステージ位置を取得する
-	VECTOR stagePos = stage.GetStagePos();
-
 	// 横から当たったかチェックする
-	m_pos.x += m_move.x;
-	if (m_move.x > 0.0f)
+	VECTOR nextPos = VAdd(m_pos, m_move);	// 次の位置
+	VECTOR stagePos = stage.GetStagePos();	// ステージの位置取得
+	VECTOR stageScale = MV1GetScale(stage.GetStageHandle());
+	VECTOR playerScale = MV1GetScale(m_modelHandle);
+
+	// 左から当たった場合
+	if (nextPos.x - playerScale.x * 0.5f < stagePos.x - stageScale.x * 0.5f)
 	{
-		m_pos.x = stagePos.x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
+		nextPos.x = stagePos.x - stageScale.x * 0.5f + playerScale.x * 0.5f;
+		m_move.x = 0.0f;
 	}
-	else if (m_move.x < 0.0f)
+	else if (nextPos.x + playerScale.x * 0.5f > stagePos.x + stageScale.x * 0.5f)
 	{
-		m_pos.x = stagePos.x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
+		nextPos.x = stagePos.x + stageScale.x * 0.5f - playerScale.x * 0.5f;
+		m_move.x = 0.0f;
 	}
 
 	// 縦から当たったかチェックする
-	/*m_pos.y += m_move.y;
-	if (m_move.y > 0.0f)
-	{
-		m_pos.y = stagePos.y - MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-		m_move.y *= -1.0f;
-	}
-	else if (m_move.y < 0.0f)
-	{
-		m_pos.y = stagePos.y + MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-	}*/
+	//if (nextPos.y - playerScale.y * 0.5f < stagePos.y - stageScale.y * 0.5f)
+	//{
+	//	nextPos.y = stagePos.y - stageScale.y * 0.5f + playerScale.y * 0.5f;
+	//	m_move.y = 0.0f;
+	//}
+	//else if (nextPos.y + playerScale.y * 0.5f > stagePos.y + stageScale.y * 0.5f)
+	//{
+	//	nextPos.y = stagePos.y + stageScale.y * 0.5f - playerScale.y * 0.5f;
+	//	m_move.y = 0.0f;
+	//}
+
+	m_pos = nextPos;
 }
 
 

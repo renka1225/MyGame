@@ -12,7 +12,7 @@ Stage::Stage():
 	m_floorPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_v3Vec1(VGet(0.0f, 0.8f, 0.0f)),
 	m_v3Vec2(VGet(0.0f, 0.0f, 0.0f)),
-    m_stagePos(VGet(0.0f, -10.0f, -30.0f)),
+    m_stagePos(VGet(0.0f, 3.0f, -30.0f)),
     m_stageScale(VGet(kFloorScaleX, kFloorScaleY, kFloorScaleZ))
 {
     // ４頂点分のデータをセット
