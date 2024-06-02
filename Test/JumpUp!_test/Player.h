@@ -42,11 +42,11 @@ public:
 	VECTOR GetMove() const { return m_move; }			// プレイヤーの移動量取得
 
 private:
-	void Move(Input& input);			// プレイヤーの移動処理
-	void Jump(Input& input);			// プレイヤーのジャンプ処理
-	void UpdateAngle(Stage& stage);		// プレイヤーの傾きを調整する
-	float OnHitFloor(Stage& stage);		// 地面の位置からプレイヤーのY座標の位置を求める
-	bool IsHitStage(Stage& stage);		// ステージとの当たり判定
+	void Move(Input& input);				// プレイヤーの移動処理
+	void Jump(Input& input, Stage& state);	// プレイヤーのジャンプ処理
+	void UpdateAngle(Stage& stage);			// プレイヤーの傾きを調整する
+	float OnHitFloor(Stage& stage);			// 地面の位置からプレイヤーのY座標の位置を求める
+	bool IsHitStage(Stage& stage);			// ステージとの当たり判定
 
 private:
 
@@ -54,8 +54,9 @@ private:
 	VECTOR m_pos;				// プレイヤー位置
 	VECTOR m_move;				// 移動量
 	float m_angle;				// 向いている方向
+	float m_jumpPower;			// Y軸方向の速度
 	int m_jumpFrame;			// ジャンプフレーム
-	bool m_isJump;				// ジャンプフラグ true:ジャンプ中
+	bool m_isJump;				// ジャンプ中かどうか(true:ジャンプ中)
 	int m_modelHandle;			// プレイヤーの3Dモデル
 	State m_currentState;		// 現在の状態
 
@@ -66,8 +67,8 @@ private:	// 定数
 	// プレイヤーの情報
 	static constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	static constexpr float kMove = 1.0f;		// プレイヤー移動量
-	static constexpr float kVelocity = 20.0f;	// ジャンプの高さ
-	static constexpr float kGravity = -1.5f;	// 重力
+	static constexpr float kVelocity = 3.0f;	// ジャンプの高さ
+	static constexpr float kGravity = -0.2f;	// 重力
 
 	// 当たり判定
 	static constexpr float kCenterPosY = 12.0f;	// プレイヤーの中心点を調整

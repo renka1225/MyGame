@@ -13,6 +13,7 @@ Player::Player():
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
+	m_jumpPower(0.0f),
 	m_jumpFrame(0),
 	m_isJump(false),
 	m_cameraAngle(0.0f),
@@ -37,13 +38,6 @@ Player::~Player()
 /// </summary>
 void Player::Init(std::shared_ptr<Physics> physics)
 {
-	// 自身の物理情報登録
-	physics->Entry(this);
-	// 物理挙動の初期化
-	//m_rigidbody.Init();
-	//m_rigidbody.SetPos(m_pos);
-	//m_rigidbody.SetScale(VGet(kScale, kScale, kScale));
-
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
 }
@@ -54,8 +48,6 @@ void Player::Init(std::shared_ptr<Physics> physics)
 /// </summary>
 void Player::Final(std::shared_ptr<Physics> physics)
 {
-	// 物理情報登録解除
-	physics->Exit(this);
 }
 
 
@@ -67,32 +59,33 @@ void Player::Update(Input& input, Stage& stage)
 	// プレイヤーの移動処理
 	Move(input);
 	// 当たり判定をして、新しい座標を保存する
-	m_pos = stage.CheckCollision(*this, m_move);
+	//m_pos = stage.CheckCollision(*this, m_move);
 
-	if (m_isJump)	// ジャンプ中の場合
-	{
-		// ジャンプ処理を行う
-		Jump(input);
-		// 着地処理を行う
-		if (m_pos.y + m_move.y < OnHitFloor(stage))
-		{
-			m_pos.y = OnHitFloor(stage);
-			m_isJump = false;
-		}
-	}
-	else // 地面に接地している場合
+	// 地面に接地している場合
+	if(m_currentState != State::Jump)
 	{
 		m_jumpFrame = 0;
-		// プレイヤーの位置を調整
-		m_pos = VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
+
+		// 着地処理を行う
+		if (m_pos.y + m_jumpPower < OnHitFloor(stage))
+		{
+			m_pos = VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
+		}
 		
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
 		{
-			// 初速度を足す
-			//m_move = VAdd(m_move, VGet(0.0f, kVelocity, 0.0f));
+			// y軸方向の速度をセット
+			//m_jumpPower = kVelocity;
+			m_currentState = State::Jump;
 			m_isJump = true;
 		}
+	}
+
+	// ジャンプ処理を行う
+	if (m_currentState == State::Jump)
+	{
+		Jump(input, stage);
 	}
 
 	// プレイヤー位置、角度を更新
@@ -160,15 +153,12 @@ void Player::Move(Input& input)
 		m_move = VScale(m_move, kMove);
 	}
 
-	// 速度をセットする
-	m_rigidbody.SetVelocity(m_move);
-
 	// 移動方向を決定する
 	MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
 	m_move = VTransform(m_move, mtx);
 
 	// 移動方向からプレイヤーの向く方向を決定する
-	if (!m_isJump && VSquareSize(m_move) > 0.0f)
+	if (VSquareSize(m_move) > 0.0f)
 	{
 		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
 	}
@@ -179,34 +169,50 @@ void Player::Move(Input& input)
 /// ジャンプ処理
 /// </summary>
 /// <param name="input">入力</param>
-void Player::Jump(Input& input)
+void Player::Jump(Input& input, Stage& stage)
 {
-	// ジャンプフレームを増やす
-	m_jumpFrame++;
-
-	// ボタンを離した瞬間ジャンプ
-	if (input.IsReleased("jump"))
+	// 1回だけジャンプする
+	if (m_isJump)
 	{
-		// ジャンプの高さを決める
-		float jumpHeight = kVelocity;
-		if (m_jumpFrame < kLittleJumpFrame)
+		// ジャンプフレームを増やす
+		m_jumpFrame++;
+
+		// ジャンプの高さを調整する
+		if (input.IsReleased("jump"))
 		{
-			jumpHeight = kLittleJumpHeight;
+			float jumpHeight = 1.0f;
+			if (m_jumpFrame < kLittleJumpFrame)
+			{
+				jumpHeight = kLittleJumpHeight;
+			}
+			else if (m_jumpFrame < kMediumJumpFrame)
+			{
+				jumpHeight = kMediumJumpHeight;
+			}
+			else
+			{
+				jumpHeight = kBigJumpHeight;
+			}
 		}
-		else if (m_jumpFrame < kMediumJumpFrame)
-		{
-   			jumpHeight = kMediumJumpHeight;
-		}
-		else
-		{
-			jumpHeight = kBigJumpHeight;
-		}
-		m_move = VScale(VGet(0.0f, m_move.y, 0.0f), jumpHeight);
-		//m_move = VGet(0, jumpHeight, 0);
+
+		// ジャンプ力を決める
+		m_jumpPower = kVelocity;
+		m_isJump = false;
 	}
 
 	// 重力を足す
-	m_move = VAdd(m_move, VGet(0.0f, kGravity, 0.0f));
+	m_jumpPower += kGravity;
+
+	// 着地処理を行う
+	if (m_pos.y + m_jumpPower < OnHitFloor(stage))
+	{
+		m_pos.y = OnHitFloor(stage);
+		m_currentState = State::Idle;
+		m_isJump = false;
+	}
+
+	// Y軸方向の移動速度を反映する
+	m_move.y = m_jumpPower * 0.5f;
 }
 
 
@@ -216,7 +222,7 @@ void Player::Jump(Input& input)
 void Player::UpdateAngle(Stage& stage)
 {
 	// ジャンプ中は傾きを更新しない
-	if (m_isJump) return;
+	if (m_currentState == State::Jump) return;
 
 	// プレイヤーを地面に沿って傾ける
 	// 基底ベクトルを作成
@@ -262,11 +268,11 @@ float Player::OnHitFloor(Stage& stage)
 	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
 	if (IsHitStage(stage)) // ステージの上面に当たった場合
 	{
-		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y;
+		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y - m_jumpPower;
 	}
 	else // 地面に当たった場合
 	{
-		return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
+		return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y - m_jumpPower;
 	}
 }
 
