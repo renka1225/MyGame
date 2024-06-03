@@ -4,6 +4,16 @@
 #include "Input.h"
 #include <cmath>
 
+// 定数
+namespace
+{
+	constexpr float kNear = 1.0f;		// カメラの手前クリップ距離
+	constexpr float kFar = 180.0f;		// カメラの奥クリップ距離
+	constexpr float kDist = 96.0f;		// カメラの距離
+	constexpr float kHeight = 32.0f;	// カメラの高さ
+	constexpr float kAngle = 0.05f;		// カメラを動かす角度
+}
+
 /// <summary>
 /// コンストラクタ
 /// </summary>

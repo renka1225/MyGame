@@ -100,6 +100,19 @@ void Player::Update(Input& input, Stage& stage)
 	{
 		Jump(input, stage);
 	}
+	
+	// ステージの横部分の当たり判定処理
+	//if (m_pos.x + m_move.x < stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x)
+	//{
+	//	if (m_move.x > 0.0f)
+	//	{
+	//		m_move.x = stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x;
+	//	}
+	//	else if (m_move.x < 0.0f)
+	//	{
+	//		m_move.x = stage.GetStagePos().x + MV1GetScale(stage.GetStageHandle()).x;
+	//	}
+	//}
 
 	// プレイヤー位置を更新
 	m_move.y = m_jumpPower;

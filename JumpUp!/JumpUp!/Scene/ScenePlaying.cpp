@@ -46,15 +46,15 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 #ifdef _DEBUG
 	// デバッグモード
 	// Pキーでポーズ、ポーズ中にPでコマ送り
-	if (debugState == DebugState::Normal && input.IsPressing("debug_pause"))
+	if (m_debugState == DebugState::Normal && input.IsPressing("debug_pause"))
 	{
-		debugState = DebugState::Pause;
+		m_debugState = DebugState::Pause;
 	}
-	if (debugState == DebugState::Pause && input.IsPressing("debug_enter"))
+	if (m_debugState == DebugState::Pause && input.IsPressing("debug_enter"))
 	{
-		debugState = DebugState::Normal;
+		m_debugState = DebugState::Normal;
 	}
-	if(debugState != DebugState::Pause || input.IsPressing("debug_pause"))
+	if(m_debugState != DebugState::Pause || input.IsPressing("debug_pause"))
 	{
 #endif
 
@@ -79,10 +79,15 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 void ScenePlaying::Draw()
 {
 #ifdef _DEBUG		// デバッグ表示
-	// 現在のシーン
-	DrawFormatString(0, 0, 0xffffff, "プレイ画面");
 	// グリッド表示
 	m_pDrawDebug.DrawGrid();
+	// 現在のシーン
+	DrawString(0, 0, "プレイ画面", 0xffffff);
+	// ポーズ表示
+	if (m_debugState == DebugState::Pause)
+	{
+		DrawString(0, 20, "ポーズ中", 0xffffff);
+	}
 #endif
 
 	// ステージ描画

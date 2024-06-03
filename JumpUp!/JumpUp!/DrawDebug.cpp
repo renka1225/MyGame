@@ -47,7 +47,7 @@ void DrawDebug::DrawGrid()
 /// <param name="pos">プレイヤーの座標</param>
 void DrawDebug::DrawPlayerInfo(VECTOR pos)
 {
-	DrawFormatString(0, 20, 0xffffff, "Player座標(x:%f, y:%f, z:%f)", pos.x, pos.y, pos.z);
+	DrawFormatString(0, 40, 0xffffff, "Player座標(x:%f, y:%f, z:%f)", pos.x, pos.y, pos.z);
 }
 
 
@@ -62,19 +62,8 @@ void DrawDebug::DrawCubeCol(int handle, float angle, int color)
 	VECTOR scale = MV1GetScale(handle);			// サイズ
 	VECTOR halfScale = VScale(scale, 0.5f);		// 半径
 
-	VECTOR pos1 = VScale(VSub(pos, halfScale), angle);	// 左上手前の座標
-	VECTOR pos2 = VScale(VAdd(pos, halfScale), angle);	// 右下奥の座標
+	VECTOR pos1 = VSub(pos, halfScale);	// 左上手前の座標
+	VECTOR pos2 = VAdd(pos, halfScale);	// 右下奥の座標
 
 	DrawCube3D(pos1, pos2, color, 0x000000, false);
 }
-
-
-// VECTOR pos, VECTOR scale, float angle, int color
-//// 直方体の左上手前の座標を求める
-//VECTOR pos1 = VGet(pos.x - scale.x * 0.5f, pos.y + scale.y * 0.5f, pos.z - scale.z * 0.5f);
-//pos1 = VScale(pos1, angle);
-//// 直方体の右下奥の座標を求める
-//VECTOR pos2 = VGet(pos.x + scale.x * 0.5f, pos.y - scale.z * 0.5f, pos.z + scale.z * 0.5f);
-//pos2 = VScale(pos2, angle);
-//
-//DrawCube3D(pos1, pos2, color, 0x000000, false);

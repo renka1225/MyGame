@@ -32,6 +32,6 @@ private:
 		Normal,	// í èÌ
 		Pause	// É|Å[ÉY
 	};
-	DebugState debugState = DebugState::Normal;
+	DebugState m_debugState = DebugState::Normal;
 #endif
 };
