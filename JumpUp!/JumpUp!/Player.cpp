@@ -1,18 +1,42 @@
+#include "DxLib.h"
 #include "Player.h"
-#include "MyLib.h"
 #include "Stage.h"
-#include "DrawDebug.h"
 #include "Input.h"
+#include "DrawDebug.h"
 
+// 定数
+namespace
+{
+	// プレイヤーの情報
+	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
+	constexpr float kMove = 1.0f;		// プレイヤー移動量
+	constexpr float kVelocity = 3.0f;	// ジャンプの高さ
+	constexpr float kGravity = -0.2f;	// 重力
+
+	// 当たり判定
+	constexpr float kCenterPosY = 12.0f;	// プレイヤーの中心点を調整
+	constexpr float kWidth = 10.0f;			// 横幅
+	constexpr float kHeight = 24.0f;		// 縦幅
+	constexpr float kDepth = 5.0f;			// 奥行きの幅
+
+	// ジャンプフレーム
+	constexpr int kLittleJumpFrame = 10;	// 小ジャンプ
+	constexpr int kMediumJumpFrame = 30;	// 中ジャンプ
+	// ジャンプの高さ
+	constexpr float kLittleJumpHeight = 0.5f;	// 小ジャンプ
+	constexpr float kMediumJumpHeight = 0.8f;	// 中ジャンプ
+	constexpr float kBigJumpHeight = 1.0f;		// 大ジャンプ
+}
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Player::Player():
-	Collidable(Tag::Player),
+	m_currentState(State::Idle),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_move(VGet(0.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
+	m_jumpPower(0.0f),
 	m_jumpFrame(0),
 	m_isJump(false),
 	m_cameraAngle(0.0f)
@@ -27,72 +51,58 @@ Player::Player():
 Player::~Player()
 {
 	MV1DeleteModel(m_modelHandle);
-	m_modelHandle = -1;
 }
 
 
 /// <summary>
 /// 初期化
 /// </summary>
-void Player::Init(std::shared_ptr<Physics> physics)
+void Player::Init()
 {
-	// 自身の物理情報登録
-	physics->Entry(this);
-	// 物理挙動の初期化
-	//m_rigidbody.Init();
-	//m_rigidbody.SetPos(m_pos);
-	//m_rigidbody.SetScale(VGet(kScale, kScale, kScale));
-
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 
 /// <summary>
-/// 初期化
-/// </summary>
-void Player::Final(std::shared_ptr<Physics> physics)
-{
-	// 物理情報登録解除
-	physics->Exit(this);
-}
-
-
-/// <summary>
 /// 更新
 /// </summary>
+/// <param name="input">入力コマンド</param>
+/// <param name="stage">ステージ情報を参照</param>
 void Player::Update(Input& input, Stage& stage)
 {
 	// プレイヤーの移動処理
 	Move(input);
 
-	if (m_isJump)	// ジャンプ中の場合
-	{
-		// ジャンプ処理を行う
-		Jump(input);
-		// 着地処理を行う
-		if (m_pos.y + m_move.y < OnHitFloor(stage))
-		{
-			m_pos.y = OnHitFloor(stage);
-			m_isJump = false;
-		}
-	}
-	else // 地面に接地している場合
+	// 地面に接地している場合
+	if (m_currentState != State::Jump)
 	{
 		m_jumpFrame = 0;
-		// プレイヤーの位置を調整
-		m_pos = VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
-		
+		m_move.y = kGravity;
+
+		// 着地処理を行う
+		if (m_pos.y + m_jumpPower < OnHitFloor(stage))
+		{
+			m_pos = VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
+		}
+
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
 		{
-			// 初速度を足す
-			m_move = VAdd(m_move, VGet(0.0f, 0.0f, 0.0f));
+			// y軸方向の速度をセット
+			m_currentState = State::Jump;
 			m_isJump = true;
 		}
 	}
 
-	// プレイヤー位置、角度を更新
+	// ジャンプ処理を行う
+	if (m_currentState == State::Jump)
+	{
+		Jump(input, stage);
+	}
+
+	// プレイヤー位置を更新
+	m_move.y = m_jumpPower;
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
 
@@ -100,27 +110,40 @@ void Player::Update(Input& input, Stage& stage)
 	UpdateAngle(stage);
 
 	// ステージとの当たり判定
-	if (IsHitStage(stage))
-	{
-		OnHit(stage);
-	}
+	//if (IsHitStage(stage))
+	//{
+	//	OnHit(stage);
+	//}
 }
-
 
 /// <summary>
 /// 描画
 /// </summary>
+/// <param name="drawDebug"></param>
 void Player::Draw(DrawDebug& drawDebug)
 {
+	// 3Dモデル表示
+	MV1DrawModel(m_modelHandle);
+
 #ifdef _DEBUG	// デバッグ表示
 	// プレイヤー位置表示
 	drawDebug.DrawPlayerInfo(m_pos);
 	// 当たり判定描画
-	drawDebug.DrawCubeCol(VGet(m_pos.x, m_pos.y + kCenterPosY, m_pos.z), kWidth, kHeight, kDepth, 0x00ffff);
+	drawDebug.DrawCubeCol(m_modelHandle, m_angle, 0x00ffff);
+#endif
+}
+
+
+/// <summary>
+/// 当たった際の処理
+/// </summary>
+/// <param name="stage"></param>
+void Player::OnHit(Stage& stage)
+{
+#ifdef _DEBUG
+	DrawString(0, 0, "当たった", 0xffffff);
 #endif
 
-	// 3Dモデル表示
-	MV1DrawModel(m_modelHandle);
 }
 
 
@@ -157,15 +180,12 @@ void Player::Move(Input& input)
 		m_move = VScale(m_move, kMove);
 	}
 
-	// 速度をセットする
-	m_rigidbody.SetVelocity(m_move);
-
 	// 移動方向を決定する
 	MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
 	m_move = VTransform(m_move, mtx);
 
 	// 移動方向からプレイヤーの向く方向を決定する
-	if (!m_isJump && VSquareSize(m_move) > 0.0f)
+	if (VSquareSize(m_move) > 0.0f)
 	{
 		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
 	}
@@ -176,34 +196,47 @@ void Player::Move(Input& input)
 /// ジャンプ処理
 /// </summary>
 /// <param name="input">入力</param>
-void Player::Jump(Input& input)
+void Player::Jump(Input& input, Stage& stage)
 {
-	// ジャンプフレームを増やす
-	m_jumpFrame++;
-
-	// ボタンを離した瞬間ジャンプ
-	if (input.IsReleased("jump"))
+	// 1回だけジャンプする
+	if (m_isJump)
 	{
-		// ジャンプの高さを決める
-		float jumpHeight = kVelocity;
-		if (m_jumpFrame < kLittleJumpFrame)
+		// ジャンプフレームを増やす
+		m_jumpFrame++;
+
+		// ジャンプの高さを調整する
+		if (input.IsReleased("jump"))
 		{
-			jumpHeight = kLittleJumpHeight;
+			float jumpHeight = 1.0f;
+			if (m_jumpFrame < kLittleJumpFrame)
+			{
+				jumpHeight = kLittleJumpHeight;
+			}
+			else if (m_jumpFrame < kMediumJumpFrame)
+			{
+				jumpHeight = kMediumJumpHeight;
+			}
+			else
+			{
+				jumpHeight = kBigJumpHeight;
+			}
 		}
-		else if (m_jumpFrame < kMediumJumpFrame)
-		{
-   			jumpHeight = kMediumJumpHeight;
-		}
-		else
-		{
-			jumpHeight = kBigJumpHeight;
-		}
-		//m_move = VScale(VGet(0.0f, m_move.y, 0.0f), jumpHeight);
-		m_move = VGet(0, jumpHeight, 0);
+
+		// ジャンプ力を決める
+		m_jumpPower = kVelocity;
+		m_isJump = false;
 	}
 
 	// 重力を足す
-	m_move = VAdd(m_move, VGet(0.0f, kGravity, 0.0f));
+	m_jumpPower += kGravity;
+
+	// 着地処理を行う
+	if (m_pos.y + m_jumpPower < OnHitFloor(stage))
+	{
+		m_pos.y = OnHitFloor(stage);
+		m_currentState = State::Idle;
+		m_isJump = false;
+	}
 }
 
 
@@ -213,7 +246,7 @@ void Player::Jump(Input& input)
 void Player::UpdateAngle(Stage& stage)
 {
 	// ジャンプ中は傾きを更新しない
-	if (m_isJump) return;
+	if (m_currentState == State::Jump) return;
 
 	// プレイヤーを地面に沿って傾ける
 	// 基底ベクトルを作成
@@ -259,11 +292,11 @@ float Player::OnHitFloor(Stage& stage)
 	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
 	if (IsHitStage(stage)) // ステージの上面に当たった場合
 	{
-		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y;
+		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y - m_jumpPower;
 	}
 	else // 地面に当たった場合
 	{
-		return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y;
+		return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y - m_jumpPower;
 	}
 }
 
@@ -290,45 +323,6 @@ bool Player::IsHitStage(Stage& stage)
 	bool isZHit = v3SubAbs.z < v3AddScale.z;
 
 	if (isXHit && isYHit && isZHit) return true;
-	
+
 	return false;
-}
-
-
-/// <summary>
-/// 衝突したときの処理
-/// </summary>
-void Player::OnHit(Stage& stage)
-{
-#ifdef _DEBUG
-	DrawString(0, 40, "当たった", 0xffffff);
-#endif
-
-	// TODO:当たった場所によって位置を変える
-
-	// ステージ位置を取得する
-	VECTOR stagePos = stage.GetStagePos();
-
-	// 横から当たったかチェックする
-	m_pos.x += m_move.x;
-	if (m_move.x > 0.0f)
-	{
-		m_pos.x = stagePos.x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	}
-	else if (m_move.x < 0.0f)
-	{
-		m_pos.x = stagePos.x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	}
-
-	// 縦から当たったかチェックする
-	/*m_pos.y += m_move.y;
-	if (m_move.y > 0.0f)
-	{
-		m_pos.y = stagePos.y - MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-		m_move.y *= -1.0f;
-	}
-	else if (m_move.y < 0.0f)
-	{
-		m_pos.y = stagePos.y + MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-	}*/
 }

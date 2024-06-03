@@ -1,2 +1,15 @@
-﻿  Stage.cpp
-  JumpUp!.vcxproj -> C:\GitHub\MyGame\Test\JumpUp!_test\x64\Debug\JumpUp!.exe
+﻿  Camera.cpp
+  Collidable.cpp
+  DrawDebug.cpp
+  Input.cpp
+  main.cpp
+  Physics.cpp
+  Player.cpp
+  Rigidbody.cpp
+  SceneTitle.cpp
+  ScenePlaying.cpp
+  SceneBase.cpp
+  SceneManager.cpp
+  Stage.cpp
+  コードを生成中...
+  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\JumpUp!_test\x64\Debug\JumpUp!.exe

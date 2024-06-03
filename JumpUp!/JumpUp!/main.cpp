@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// fpsを60に固定
 		while (GetNowHiPerformanceCount() - time < 16667) {}
-	} 
+	}
 
 	return 0;				// ソフトの終了 
 }
