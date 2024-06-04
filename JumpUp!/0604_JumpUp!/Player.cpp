@@ -114,20 +114,12 @@ void Player::Update(Input& input, Stage& stage)
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
 
-<<<<<<< HEAD
-	// ステージとの当たり判定
-	if (IsHitStage(stage))
-	{
-		OnHit(stage);
-	}
-=======
 	// 移動パラメータを設定する
 	//VECTOR	upMoveVec;		// 方向ボタン「↑」を入力をしたときのプレイヤーの移動方向ベクトル
 	//VECTOR	leftMoveVec;	// 方向ボタン「←」を入力をしたときのプレイヤーの移動方向ベクトル
 	//VECTOR	moveVec;		// このフレームの移動ベクトル
 	//State prevState = m_currentState;
 	//m_currentState = UpdateMoveParameterWithPad(input, upMoveVec, leftMoveVec, moveVec);
->>>>>>> 48b68eb914d25c2411502e517f3fad5a22adb007
 }
 
 /// <summary>
@@ -158,41 +150,6 @@ void Player::OnHit(Stage& stage)
 	DrawString(0, 0, "当たった", 0xffffff);
 #endif
 
-	// プレイヤーの移動後の位置
-	VECTOR nextPos = VAdd(m_pos, m_move);
-	// ステージの左側のX座標
-	float stageLeftPosX = stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの右側の座標
-	float stageRightPosX = stage.GetStagePos().x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの手側のZ座標
-	float stageFrontPosZ = stage.GetStagePos().z - MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの奥側のZ座標
-	float stageBackPosZ = stage.GetStagePos().z + MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-
-	// ステージの横部分の衝突処理
-	// TODO:地面に乗っているときはこの判定は行わないようにする
-	if (nextPos.x > stageLeftPosX && m_move.x > 0.0f)
-	{
-		m_pos.x = stageLeftPosX - m_move.x;
-		m_move.x = 0.0f;
-	}
-	else if (nextPos.x < stageRightPosX && m_move.x < 0.0f)
-	{
-		m_pos.x = stageRightPosX - m_move.x;
-		m_move.x = 0.0f;
-	}
-
-	// ステージの手前と奥部分の衝突処理
-	if (nextPos.z > stageFrontPosZ && m_move.z > 0.0f)
-	{
-		m_pos.z = stageFrontPosZ - m_move.z;
-		m_move.z = 0.0f;
-	}
-	else if (nextPos.z < stageBackPosZ && m_move.z < 0.0f)
-	{
-		m_pos.z = stageBackPosZ - m_move.z;
-		m_move.z = 0.0f;
-	}
 }
 
 
