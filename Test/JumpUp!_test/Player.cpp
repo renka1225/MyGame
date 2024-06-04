@@ -58,14 +58,14 @@ void Player::Update(Input& input, Stage& stage)
 {
 	// プレイヤーの移動処理
 	Move(input);
-	// 当たり判定をして座標を保存
-	/*if (IsHitStage(stage) && m_currentState != State::Jump)
+	// 移動方向からプレイヤーの向く方向を決定する
+	if (VSquareSize(m_move) > 0.0f)
 	{
-		OnHit(stage);
-	}*/
+		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
+	}
 
 	// 地面に接地している場合
-	if(m_currentState != State::Jump)
+	if (m_currentState != State::Jump)
 	{
 		m_jumpFrame = 0;
 		m_move.y = kGravity;
@@ -75,7 +75,7 @@ void Player::Update(Input& input, Stage& stage)
 		{
 			m_pos = VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
 		}
-		
+
 		// ボタンを押したらジャンプ状態にする
 		if (input.IsTriggered("jump"))
 		{
@@ -91,20 +91,13 @@ void Player::Update(Input& input, Stage& stage)
 		Jump(input, stage);
 	}
 
-	// プレイヤー位置、角度を更新
+	// プレイヤー位置を更新
 	m_move.y = m_jumpPower;
-
 	m_pos = VAdd(m_pos, m_move);
 	MV1SetPosition(m_modelHandle, m_pos);
 
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
-
-	// ステージとの当たり判定
-	if (IsHitStage(stage))
-	{
-		OnHit(stage);
-	}
 }
 
 

@@ -113,12 +113,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		pCube->Update();
 		//pSphere->Update();
 		//pCapsule->Update();
-		pPlane->Update();
+		//pPlane->Update();
 
 		/*3Dモデル表示*/
 		// 立方体を表示
 		pCube->Draw();
-		//pCube2->Draw();
+		pCube2->Draw();
 
 		// 球を表示
 		//pSphere->Draw();
@@ -132,7 +132,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//pTriangle->Draw();
 
 		// 平面を表示
-		pPlane->Draw();
+		//pPlane->Draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();

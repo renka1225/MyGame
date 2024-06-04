@@ -27,6 +27,10 @@ public:
 	void Draw(DrawDebug& drawDebug);
 	void OnHit(Stage& stage);	// 衝突したとき
 
+	void OnHitRoof();	// 天井に当たった時
+	void OnHitFloor();	// 床に当たった時
+	void OnFall();		// 落下が確定したとき
+
 	void SetCameraAngle(float angle) { m_cameraAngle = angle; }
 
 	VECTOR GetPos() const { return m_pos; }				// プレイヤーの現在地取得
@@ -34,7 +38,9 @@ public:
 	VECTOR GetMove() const { return m_move; }			// プレイヤーの移動量取得
 
 private:
-	void Move(Input& input);				// プレイヤーの移動処理
+	// パッド入力によって移動パラメータを設定する
+	State UpdateMoveParameterWithPad(const Input& input, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	void Move(Input& input, Stage& stage);	// プレイヤーの移動処理
 	void Jump(Input& input, Stage& state);	// プレイヤーのジャンプ処理
 	void UpdateAngle(Stage& stage);			// プレイヤーの傾きを調整する
 	float OnHitFloor(Stage& stage);			// 地面の位置からプレイヤーのY座標の位置を求める

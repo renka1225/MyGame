@@ -142,7 +142,7 @@ VECTOR Stage::CheckCollision(Player& player, const VECTOR& moveVector)
     // 床ポリゴンとの当たり判定をチェックし、プレイヤーの移動ベクトルを補正する
     nextPos = CheckHitWithFloor(player, nextPos);
 
-    return VECTOR();
+    return nextPos;
 }
 
 

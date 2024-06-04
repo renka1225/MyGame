@@ -54,10 +54,10 @@ void Cube::Update()
 	MV1SetPosition(m_handle, m_pos);
 
 	/*—§•û‘Ì‚Æ‚Ì“–‚½‚è”»’è*/
-	//HitCube();
+	HitCube();
 
 	/*•½–Ê‚Æ‚Ì“–‚½‚è”»’è*/
-	HitPlane();
+	//HitPlane();
 }
 
 

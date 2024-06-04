@@ -72,7 +72,12 @@ void Player::Init()
 void Player::Update(Input& input, Stage& stage)
 {
 	// プレイヤーの移動処理
-	Move(input);
+	Move(input, stage);
+	// 移動方向からプレイヤーの向く方向を決定する
+	if (VSquareSize(m_move) > 0.0f)
+	{
+		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
+	}
 
 	// 地面に接地している場合
 	if (m_currentState != State::Jump)
@@ -100,19 +105,6 @@ void Player::Update(Input& input, Stage& stage)
 	{
 		Jump(input, stage);
 	}
-	
-	// ステージの横部分の当たり判定処理
-	//if (m_pos.x + m_move.x < stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x)
-	//{
-	//	if (m_move.x > 0.0f)
-	//	{
-	//		m_move.x = stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x;
-	//	}
-	//	else if (m_move.x < 0.0f)
-	//	{
-	//		m_move.x = stage.GetStagePos().x + MV1GetScale(stage.GetStageHandle()).x;
-	//	}
-	//}
 
 	// プレイヤー位置を更新
 	m_move.y = m_jumpPower;
@@ -122,11 +114,12 @@ void Player::Update(Input& input, Stage& stage)
 	// プレイヤーの傾きを調整する
 	UpdateAngle(stage);
 
-	// ステージとの当たり判定
-	//if (IsHitStage(stage))
-	//{
-	//	OnHit(stage);
-	//}
+	// 移動パラメータを設定する
+	//VECTOR	upMoveVec;		// 方向ボタン「↑」を入力をしたときのプレイヤーの移動方向ベクトル
+	//VECTOR	leftMoveVec;	// 方向ボタン「←」を入力をしたときのプレイヤーの移動方向ベクトル
+	//VECTOR	moveVec;		// このフレームの移動ベクトル
+	//State prevState = m_currentState;
+	//m_currentState = UpdateMoveParameterWithPad(input, upMoveVec, leftMoveVec, moveVec);
 }
 
 /// <summary>
@@ -161,10 +154,58 @@ void Player::OnHit(Stage& stage)
 
 
 /// <summary>
+/// 天井に当たった際の処理
+/// </summary>
+void Player::OnHitRoof()
+{
+	// Y軸方向の速度を反転
+	m_jumpPower = -m_jumpPower;
+}
+
+
+/// <summary>
+/// 床に当たった際の処理
+/// </summary>
+void Player::OnHitFloor()
+{
+	m_currentState = State::Idle;
+	m_isJump = false;
+}
+
+
+/// <summary>
+/// 落下中の処理
+/// </summary>
+void Player::OnFall()
+{
+	if (m_currentState != State::Jump)
+	{
+		// ジャンプ中(落下中）にする
+		m_currentState = State::Jump;
+	}
+}
+
+
+/// <summary>
+/// 現在の状態を設定する
+/// </summary>
+/// <param name="input"></param>
+/// <param name="upMoveVec"></param>
+/// <param name="leftMoveVec"></param>
+/// <param name="moveVec"></param>
+/// <returns></returns>
+Player::State Player::UpdateMoveParameterWithPad(const Input& input, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
+{
+
+
+	return State();
+}
+
+/// <summary>
 /// 移動処理
 /// </summary>
 /// <param name="input">入力</param>
-void Player::Move(Input& input)
+void Player::Move(Input& input, Stage& stage)
 {
 	m_move = VGet(0.0f, 0.0f, 0.0f);
 
@@ -197,11 +238,11 @@ void Player::Move(Input& input)
 	MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
 	m_move = VTransform(m_move, mtx);
 
-	// 移動方向からプレイヤーの向く方向を決定する
-	if (VSquareSize(m_move) > 0.0f)
-	{
-		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
-	}
+	// 当たり判定をして、新しい座標を保存する
+	m_pos = stage.CheckCollision(*this, m_move);
+
+	// プレイヤーのモデルの座標を更新する
+	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 
@@ -220,7 +261,7 @@ void Player::Jump(Input& input, Stage& stage)
 		// ジャンプの高さを調整する
 		if (input.IsReleased("jump"))
 		{
-			float jumpHeight = 1.0f;
+			static float jumpHeight = 0.0f;
 			if (m_jumpFrame < kLittleJumpFrame)
 			{
 				jumpHeight = kLittleJumpHeight;
@@ -303,7 +344,9 @@ float Player::OnHitFloor(Stage& stage)
 {
 	// 地面の傾斜の外積を計算する
 	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
-	if (IsHitStage(stage)) // ステージの上面に当たった場合
+
+	// ステージの上面に当たった場合
+	if (IsHitStage(stage))
 	{
 		return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y - m_jumpPower;
 	}
