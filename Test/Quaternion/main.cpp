@@ -69,12 +69,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	/*Cube情報*/
 	int m_handle = MV1LoadModel("data/cube.mv1");
-	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
+	VECTOR m_pos = VGet(1.0f, 1.0f, 1.0f);
 	// 回転角度
-	float m_angle = 2 * DX_PI_F / 0.001f;
+	float m_angle = 2 * DX_PI_F / 0.002f;
 	// 回転軸
 	VECTOR m_axis = VGet(1.0f, 1.0f, 1.0f);
-	// 単位行列に直す
+	// 正規化
 	VNorm(m_axis);
 
 	// 回転クォータニオン作成
@@ -83,7 +83,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	q.x = m_axis.x * sin(m_angle / 2.0f);
 	q.y = m_axis.y * sin(m_angle / 2.0f);
 	q.z = m_axis.z * sin(m_angle / 2.0f);
-
 
 	MV1SetScale(m_handle, VGet(kScale, kScale, kScale));
 
