@@ -39,12 +39,14 @@ public:
 
 private:
 	// パッド入力によって移動パラメータを設定する
-	State UpdateMoveParameterWithPad(const Input& input, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	//State UpdateMoveParameterWithPad(const Input& input, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	void Move(Input& input, Stage& stage);	// プレイヤーの移動処理
 	void Jump(Input& input, Stage& state);	// プレイヤーのジャンプ処理
 	void UpdateAngle(Stage& stage);			// プレイヤーの傾きを調整する
 	float OnHitFloor(Stage& stage);			// 地面の位置からプレイヤーのY座標の位置を求める
-	bool IsHitStage(Stage& stage);			// ステージとの当たり判定
+	VECTOR HitStage(Stage& stage);			// ステージとの衝突処理を行う
+
+	void CheckHitStage(Stage& stage); // 当たり判定テスト用
 
 
 private:
