@@ -9,7 +9,7 @@ Cube::Cube(std::shared_ptr<Plane> pPlane, std::shared_ptr<Cube2> pCube2):
 	m_pPlane(pPlane),
 	m_pCube2(pCube2),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_scale(VGet(0.05f, 0.05f, 0.05f)),
+	m_scale(VGet(0.05f, 0.05f, 0.1f)),
 	m_angle(DX_PI_F / 180.0f),
 	m_isHit(false)
 {

@@ -1,9 +1,11 @@
 #pragma once
+#include "Collision3DBox.h"
 #include <memory>
 
 class Stage;
 class Input;
 class DrawDebug;
+class Collision3DBox;
 
 /// <summary>
 /// プレイヤークラス
@@ -46,10 +48,12 @@ private:
 	float OnHitFloor(Stage& stage);			// 地面の位置からプレイヤーのY座標の位置を求める
 	VECTOR HitStage(Stage& stage);			// ステージとの衝突処理を行う
 
-	void CheckHitStage(Stage& stage); // 当たり判定テスト用
+	void CheckHitStage(Stage& stage, Collision3DBox col3DBox); // 当たり判定テスト用
 
 
 private:
+	Collision3DBox m_Col3DBox;
+
 	// プレイヤー情報
 	State m_currentState;		// 現在の状態
 	VECTOR m_pos;				// プレイヤー位置

@@ -1,3 +1,3 @@
 ﻿  Player.cpp
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Player.cpp(485): warning C4715: 'Player::HitStage': 値を返さないコントロール パスがあります。
-  JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Player.cpp(485): warning C4715: 'Player::HitStage': 値を返さないコントロール パスがあります。
+  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe

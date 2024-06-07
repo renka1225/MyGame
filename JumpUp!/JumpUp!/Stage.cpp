@@ -375,3 +375,34 @@ VECTOR Stage::CheckHitWithFloor(Player& player, const VECTOR& checkPosition)
 
     return fixedPos;
 }
+
+
+/// <summary>
+/// プレイヤーと当たっているか判定
+/// </summary>
+/// <returns>当たったか</returns>
+bool Stage::IsCollision(Collision3DBox col3DBox, Collision3DBox& col3DMap)
+{
+    // 相対ベクトルを求める
+    VECTOR v3SubAbs = VSub(col3DBox.GetCenter(), col3DBox.m_centerPos);
+    v3SubAbs = VGet(abs(v3SubAbs.x), abs(v3SubAbs.y), abs(v3SubAbs.z));
+
+    // 衝突距離を求める
+    // 衝突距離はそれぞれの対応した辺の長さを足して2で割ったもの
+    float col3DSizeX = col3DBox.m_right - col3DBox.m_left;
+    float col3DSizeY = col3DBox.m_top - col3DBox.m_bottom;
+    float col3DSizeZ = col3DBox.m_back - col3DBox.m_front;
+
+    VECTOR v3AddScale = VScale(VAdd(VGet(col3DSizeX, col3DSizeY, col3DSizeZ), VGet(5.0f, 0.0f, 0.0f)), 0.5f);
+    // TODO;当たり判定の範囲を広げる(仮実装)
+    v3AddScale = VAdd(v3AddScale, VGet(0.0f, 20.0f, 0.0f));
+
+    // 各成分の当たり判定
+    bool isXHit = v3SubAbs.x < v3AddScale.x;
+    bool isYHit = v3SubAbs.y < v3AddScale.y;
+    bool isZHit = v3SubAbs.z < v3AddScale.z;
+
+    if (isXHit && isYHit && isZHit) return true;
+
+    return false;
+}

@@ -1,4 +1,5 @@
 #pragma once
+#include "Collision3DBox.h"
 
 class Player;
 class DrawDebug;
@@ -16,6 +17,9 @@ public:
 	void Draw(DrawDebug& drawDebug);
 	// 当たり判定をして、補正した移動先のポジションを返す
 	VECTOR CheckCollision(Player& player, const VECTOR& moveVector);
+
+	// 指定した直方体と当たっているか判定
+	bool IsCollision(Collision3DBox col3DBox, Collision3DBox& col3DMap);
 
 	// 平面のX方向の傾斜を取得
 	VECTOR GetV3Vec1() const { return m_v3Vec1; }
