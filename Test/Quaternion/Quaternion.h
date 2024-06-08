@@ -45,7 +45,7 @@ VECTOR operator*(Quaternion qRot, VECTOR right)
 	VECTOR vPos = VGet(0.0f, 0.0f, 0.0f);
 
 	//回転後のクオータニオンの作成
-	qPos = qRot * qPos * qInv;
+	qPos = qPos * qInv;
 
 	//３次元座標に戻す
 	vPos.x = qPos.x;

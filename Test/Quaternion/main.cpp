@@ -69,11 +69,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	/*CubeèÓïÒ*/
 	int m_handle = MV1LoadModel("data/cube.mv1");
-	VECTOR m_pos = VGet(1.0f, 1.0f, 1.0f);
+	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
 	// âÒì]äpìx
-	float m_angle = 2 * DX_PI_F / 0.002f;
+	float m_angle = 2 * DX_PI_F * 0.02f;
 	// âÒì]é≤
-	VECTOR m_axis = VGet(1.0f, 1.0f, 1.0f);
+	VECTOR m_axis = VGet(10.0f, 10.0f, 10.0f);
 	// ê≥ãKâª
 	VNorm(m_axis);
 
@@ -113,6 +113,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawGrid();
 
 		// ÉQÅ[ÉÄÇÃèàóù
+		// âÒì]äpìx
+		m_angle += 2 * DX_PI_F * 0.02f;
+
+		// âÒì]ÉNÉHÅ[É^ÉjÉIÉìçÏê¨
+		q.w = cos(m_angle / 2.0f);
+		q.x = m_axis.x * sin(m_angle / 2.0f);
+		q.y = m_axis.y * sin(m_angle / 2.0f);
+		q.z = m_axis.z * sin(m_angle / 2.0f);
+
 		m_pos = q * m_pos;
 		MV1SetPosition(m_handle, m_pos);
 		MV1DrawModel(m_handle);

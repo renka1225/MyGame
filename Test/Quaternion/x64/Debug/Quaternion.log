@@ -3,4 +3,8 @@ C:\GitHub\MyGame\Test\Quaternion\main.cpp(82,11): warning C4244: '=': 'double' �
 C:\GitHub\MyGame\Test\Quaternion\main.cpp(83,17): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\Test\Quaternion\main.cpp(84,17): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
 C:\GitHub\MyGame\Test\Quaternion\main.cpp(85,17): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Test\Quaternion\main.cpp(120,12): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Test\Quaternion\main.cpp(121,18): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Test\Quaternion\main.cpp(122,18): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Test\Quaternion\main.cpp(123,18): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   Quaternion.vcxproj -> C:\GitHub\MyGame\Test\Quaternion\x64\Debug\Quaternion.exe
