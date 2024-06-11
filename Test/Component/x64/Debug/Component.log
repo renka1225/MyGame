@@ -1,43 +1,15 @@
 ﻿  GameObject.cpp
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,22): error C2039: 'make_shared': 'std' のメンバーではありません
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\string(24,1): message : 'std' の宣言を確認してください
-C:\GitHub\MyGame\Test\Component\GameObject.h(9,7): message : コンパイラでのこの診断により関数 'void GameObject::AddComponent(void)' が生成されました。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C3861: 'list': 識別子が見つかりませんでした
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,22): error C2039: 'make_shared': 'std' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\string(24,1): message : 'std' の宣言を確認してください
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C3861: 'list': 識別子が見つかりませんでした
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C2065: 'list': 定義されていない識別子です。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C2065: 'list': 定義されていない識別子です。
   main.cpp
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,6): error C2665: 'std::list<GameObject,std::allocator<GameObject>>::push_back': オーバーロードされた関数ですべての引数の型を変換できませんでした
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(1258,10): message : 'void std::list<GameObject,std::allocator<GameObject>>::push_back(const _Ty &)' の可能性があります
-          with
-          [
-              _Ty=GameObject
-          ]
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,6): message : 'void std::list<GameObject,std::allocator<GameObject>>::push_back(const _Ty &)': 引数 1 を 'std::shared_ptr<UI>' から 'const _Ty &' へ変換できません。
-          with
-          [
-              _Ty=GameObject
-          ]
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,36): message : 理由: 'std::shared_ptr<UI>' から 'const _Ty' へは変換できません。
-          with
-          [
-              _Ty=GameObject
-          ]
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,36): message : この変換を実行可能なユーザー定義変換演算子がないか、または演算子を呼び出せません。
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(973,10): message : または 'void std::list<GameObject,std::allocator<GameObject>>::push_back(_Ty &&)'
-          with
-          [
-              _Ty=GameObject
-          ]
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,6): message : 'void std::list<GameObject,std::allocator<GameObject>>::push_back(_Ty &&)': 引数 1 を 'std::shared_ptr<UI>' から '_Ty &&' へ変換できません。
-          with
-          [
-              _Ty=GameObject
-          ]
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,36): message : 理由: 'std::shared_ptr<UI>' から '_Ty' へは変換できません。
-          with
-          [
-              _Ty=GameObject
-          ]
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,36): message : この変換を実行可能なユーザー定義変換演算子がないか、または演算子を呼び出せません。
-C:\GitHub\MyGame\Test\Component\GameObject.h(19,6): message : 引数リスト '(std::shared_ptr<UI>)' を一致させようとしているとき
-C:\GitHub\MyGame\Test\Component\main.cpp(11,6): message : コンパイル対象の関数 テンプレート インスタンス化 'void GameObject::AddComponent<UI>(void)' のリファレンスを確認してください
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C3861: 'list': 識別子が見つかりませんでした
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C3861: 'list': 識別子が見つかりませんでした
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C2065: 'list': 定義されていない識別子です。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C2065: 'list': 定義されていない識別子です。
   Pos.cpp
   Text.cpp
   UI.cpp

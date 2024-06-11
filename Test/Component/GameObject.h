@@ -1,6 +1,5 @@
 #pragma once
 #include <list>
-#include <string>
 
 class GameObject
 {
@@ -17,7 +16,7 @@ private:
 };
 
 template<typename T>
-inline void GameObject::AddComponent()
+T AddComponent()
 {
 	list.push_back(std::make_shared<T>(list));
 }
