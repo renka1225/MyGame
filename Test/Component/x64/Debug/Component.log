@@ -1,16 +1,113 @@
 ﻿  GameObject.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C3861: 'list': 識別子が見つかりませんでした
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,22): error C2039: 'make_shared': 'std' のメンバーではありません
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\string(24,1): message : 'std' の宣言を確認してください
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C3861: 'list': 識別子が見つかりませんでした
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C2065: 'list': 定義されていない識別子です。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C2065: 'list': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,7): error C2039: 'shared_ptr': 'std' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(24,1): message : 'std' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,17): error C2988: 認識できないテンプレートの宣言または定義です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,17): error C2143: 構文エラー: ';' が '<' の前にありません。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,2): error C2238: ';' の前に無効なトークンがあります。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,17): error C2059: 構文エラー: '<'
+C:\GitHub\MyGame\Test\Component\GameObject.h(16,2): error C2334: '{' の前に予期しないトークンがありました。関数の本体は無視されます
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,17): error C2039: 'shared_ptr': 'std' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(24,1): message : 'std' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,17): error C2065: 'shared_ptr': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,28): error C2275: 'Component': 型の代わりに式が必要です
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,7): error C2974: 'std::list': テンプレート 引数が '_Ty' に対して無効です。型が必要です
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(756,1): message : 'std::list' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,7): error C2976: 'std::list': 引数 テンプレート が少なすぎます
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(756,1): message : 'std::list' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,37): error C2059: 構文エラー: '>'
+C:\GitHub\MyGame\Test\Component\GameObject.h(50,44): error C2238: ';' の前に無効なトークンがあります。
+C:\GitHub\MyGame\Test\Component\GameObject.h(51,7): error C2039: 'string': 'std' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\list(24,1): message : 'std' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\GameObject.h(51,14): error C3646: 'objName': 不明なオーバーライド指定子です
+C:\GitHub\MyGame\Test\Component\GameObject.h(51,22): error C2059: 構文エラー: '='
+C:\GitHub\MyGame\Test\Component\GameObject.h(51,31): error C2238: ';' の前に無効なトークンがあります。
+C:\GitHub\MyGame\Test\Component\GameObject.h(11,3): error C2065: 'list': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(9,10): message : コンパイラでのこの診断により関数 'void GameObject::AddComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(11,38): error C2760: 構文エラー: ')' は予期しないエラーでした。'式' が必要です
+C:\GitHub\MyGame\Test\Component\GameObject.h(9,10): message : コンパイラでのこの診断により関数 'void GameObject::AddComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(11,38): error C2760: 構文エラー: ')' は予期しないエラーでした。';' が必要です
+C:\GitHub\MyGame\Test\Component\GameObject.h(9,10): message : コンパイラでのこの診断により関数 'void GameObject::AddComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(11,38): error C3878: 構文エラー: 予期しないトークン ')' ('expression_statement' の後)
+C:\GitHub\MyGame\Test\Component\GameObject.h(9,10): message : コンパイラでのこの診断により関数 'void GameObject::AddComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(11,38): message : エラーの回復がスキップされました: ') )'
+C:\GitHub\MyGame\Test\Component\GameObject.h(9,10): message : コンパイラでのこの診断により関数 'void GameObject::AddComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(30,26): error C3861: 'components': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(32,8): error C3861: 'item': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,5): error C3861: 'obj': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,26): error C3861: 'item': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(37,3): error C3861: 'list': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(37,15): error C3861: 'obj': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(30,26): error C2065: 'components': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(32,8): error C2065: 'item': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,5): error C2065: 'obj': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,26): error C2065: 'item': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(37,3): error C2065: 'list': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(37,15): error C2065: 'obj': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(43,26): error C3861: 'components': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(41,7): message : コンパイラでのこの診断により関数 'void GameObject::ShowComponents(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(43,26): error C2065: 'components': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(41,7): message : コンパイラでのこの診断により関数 'void GameObject::ShowComponents(void)' が生成されました。
   main.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C3861: 'list': 識別子が見つかりませんでした
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C3861: 'list': 識別子が見つかりませんでした
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,2): error C2065: 'list': 定義されていない識別子です。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\Component\GameObject.h(22,37): error C2065: 'list': 定義されていない識別子です。
-  Pos.cpp
-  Text.cpp
-  UI.cpp
+C:\GitHub\MyGame\Test\Component\GameObject.h(17,26): error C3861: 'components': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(19,8): error C3861: 'item': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(21,5): error C3861: 'obj': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(21,26): error C3861: 'item': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(24,10): error C3861: 'obj': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(17,26): error C2065: 'components': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(19,8): error C2065: 'item': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(21,5): error C2065: 'obj': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(21,26): error C2065: 'item': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(24,10): error C2065: 'obj': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(15,21): message : コンパイラでのこの診断により関数 'std::shared_ptr<_Ty> GameObject::GetComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(30,26): error C3861: 'components': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(32,8): error C3861: 'item': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,5): error C3861: 'obj': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,26): error C3861: 'item': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(37,15): error C3861: 'obj': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(30,26): error C2065: 'components': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(32,8): error C2065: 'item': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,5): error C2065: 'obj': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(34,26): error C2065: 'item': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(37,15): error C2065: 'obj': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(28,7): message : コンパイラでのこの診断により関数 'void GameObject::DelComponent(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(43,26): error C3861: 'components': 識別子が見つかりませんでした
+C:\GitHub\MyGame\Test\Component\GameObject.h(41,7): message : コンパイラでのこの診断により関数 'void GameObject::ShowComponents(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\GameObject.h(43,26): error C2065: 'components': 定義されていない識別子です。
+C:\GitHub\MyGame\Test\Component\GameObject.h(41,7): message : コンパイラでのこの診断により関数 'void GameObject::ShowComponents(void)' が生成されました。
+C:\GitHub\MyGame\Test\Component\main.cpp(20,11): error C2039: 'ShowComponentName': 'std::shared_ptr<UI>' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\memory(1562,1): message : 'std::shared_ptr<UI>' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\main.cpp(22,11): error C2039: 'ShowComponentName': 'std::shared_ptr<Text>' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\memory(1562,1): message : 'std::shared_ptr<Text>' の宣言を確認してください
+C:\GitHub\MyGame\Test\Component\main.cpp(24,11): error C2039: 'ShowComponentName': 'std::shared_ptr<Pos>' のメンバーではありません
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\memory(1562,1): message : 'std::shared_ptr<Pos>' の宣言を確認してください
   コードを生成中...

@@ -1,7 +1,9 @@
 #pragma once
-class Pos
+#include "Component.h"
+
+class Pos : public Component
 {
 public:
-	void ShowComponentName();
+	virtual void ShowComponentName();
 };
 

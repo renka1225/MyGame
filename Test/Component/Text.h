@@ -1,7 +1,9 @@
 #pragma once
-class Text
+#include "Component.h"
+
+class Text : public Component
 {
 public:
-	void ShowComponentName();
+	virtual void ShowComponentName();
 };
 

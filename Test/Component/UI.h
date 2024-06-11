@@ -1,7 +1,9 @@
 #pragma once
-class UI
+#include "Component.h"
+
+class UI : public Component
 {
 public:
-	void ShowComponentName();
+	virtual void ShowComponentName();
 };
 
