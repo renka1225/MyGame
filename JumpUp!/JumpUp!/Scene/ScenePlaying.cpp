@@ -32,7 +32,6 @@ void ScenePlaying::Init()
 {
 	m_pPlayer->Init();
 	m_pCamera->Init();
-	m_pStage->Init();
 }
 
 
@@ -43,8 +42,7 @@ void ScenePlaying::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
-#ifdef _DEBUG
-	// デバッグモード
+#ifdef _DEBUG	// デバッグモード
 	// Pキーでポーズ、ポーズ中にPでコマ送り
 	if (m_debugState == DebugState::Normal && input.IsPressing("debug_pause"))
 	{
@@ -57,9 +55,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if(m_debugState != DebugState::Pause || input.IsPressing("debug_pause"))
 #endif
 	{
-		// ステージ更新
-		m_pStage->Update();
-
 		// プレイヤー更新
 		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 
@@ -76,7 +71,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 /// </summary>
 void ScenePlaying::Draw()
 {
-#ifdef _DEBUG		// デバッグ表示
+#ifdef _DEBUG	// デバッグ表示
 	// グリッド表示
 	m_pDrawDebug.DrawGrid();
 	// 現在のシーン
@@ -89,7 +84,7 @@ void ScenePlaying::Draw()
 #endif
 
 	// ステージ描画
-	m_pStage->Draw(m_pDrawDebug);
+	m_pStage->Draw();
 
 	// プレイヤー描画
 	m_pPlayer->Draw(m_pDrawDebug);
