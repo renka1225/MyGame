@@ -38,7 +38,7 @@ private:
 	// 壁ポリゴンとの当たりをチェックし、プレイヤーの補正すべき移動ベクトルを返す
 	VECTOR CheckHitWithWall(Player& player, const VECTOR& checkPosition);
 	// 床ポリゴンとの当たりをチェックし、プレイヤーの補正すべき移動ベクトルを返す
-	VECTOR CheckHitWithFloor(Player& player, const VECTOR& checkPosition);
+	//VECTOR CheckHitWithFloor(Player& player, const VECTOR& checkPosition);
 
 private:
 	// 床の情報

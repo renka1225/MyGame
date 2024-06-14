@@ -7,19 +7,23 @@
 // 定数
 namespace
 {
-	constexpr float kNear = 1.0f;		// カメラの手前クリップ距離
-	constexpr float kFar = 180.0f;		// カメラの奥クリップ距離
-	constexpr float kDist = 96.0f;		// カメラの距離
-	constexpr float kHeight = 32.0f;	// カメラの高さ
-	constexpr float kAngle = 0.05f;		// カメラを動かす角度
+	constexpr float kNear = 1.0f;							// カメラの手前クリップ距離
+	constexpr float kFar = 1000.0f;							// カメラの奥クリップ距離
+	constexpr float kDist = 96.0f;							// カメラの距離
+	constexpr float kHeight = 40.0f;						// カメラの注視点
+	constexpr float kAngle = 0.03f;							// カメラを動かす角度
+	constexpr float kMinAngleV = DX_PI_F * 0.5f - 0.6f;		// 最小の垂直角度
+	constexpr float kMaxAngleV = -DX_PI_F * 0.5f + 0.6f;	// 最大の垂直角度
 }
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Camera::Camera():
-	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_angle(-DX_PI_F / 2)
+	m_pos(VGet(0.0f, kHeight, 0.0f)),
+	m_target(VGet(0.0f, 0.0f, 0.0f)),
+	m_angleH(-DX_PI_F / 2),
+	m_angleV(0.0f)
 {
 }
 
@@ -44,23 +48,63 @@ void Camera::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(Input& input, Player& player)
+void Camera::Update(Input& input, const Player& player)
 {
+	// 左入力
 	if (input.IsPressing("rotateL"))
 	{
-		m_angle += kAngle;
+		m_angleH -= kAngle;
 	}
+	// 右入力
 	if (input.IsPressing("rotateR"))
 	{
-		m_angle -= kAngle;
+		m_angleH += kAngle;
+	}
+	// 上入力
+	if (input.IsPressing("rotateU"))
+	{
+		m_angleV -= kAngle;
+		// ある一定角度以上にならないようにする
+		m_angleV = std::max(m_angleV, kMaxAngleV);
+	}
+	// 下入力
+	if (input.IsPressing("rotateD"))
+	{
+		m_angleV += kAngle;
+		// ある一定角度以下にならないようにする
+		m_angleV = std::min(kMinAngleV, m_angleV);
 	}
 
-	// プレイヤー位置を取得
-	VECTOR playerPos = player.GetPos();
+	// カメラの注視点を設定する
+	m_target = VAdd(player.GetPos(), VGet(0.0f, kHeight, 0.0f));
 
-	// カメラ位置調整
-	m_pos.x = cosf(m_angle) * kDist + playerPos.x;
-	m_pos.y = kHeight;
-	m_pos.z = sinf(m_angle) * kDist + playerPos.z;
-	SetCameraPositionAndTarget_UpVecY(m_pos, VGet(0, 0, 0));
+	// カメラ位置補正
+	FixCameraPos();
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_target);
+}
+
+
+/// <summary>
+/// カメラ位置を補正する
+/// </summary>
+void Camera::FixCameraPos()
+{
+	// 水平方向の回転はY軸回転
+	auto rotY = MGetRotY(m_angleH);
+	// 垂直方向の回転はＺ軸回転
+	auto rotZ = MGetRotZ(m_angleV);
+
+	// カメラからプレイヤーまでの距離をセットする
+	float cameraToPlayerLength = kDist;
+
+	// カメラの座標を求める
+	// 1.X軸にカメラからプレイヤーまでの距離分伸びたベクトルを垂直方向に回転する(Z軸回転)
+	// 2.水平方向(Y軸回転)に回転する
+	// 3.注視点の座標を足す
+	m_pos = VAdd(VTransform(VTransform(VGet(-cameraToPlayerLength, 0.0f, 0.0f), rotZ), rotY), m_target);
+
+	// ポリゴンに当たる距離をセット
+	float hitLength = cameraToPlayerLength;
+
+	// TODO:注視点からカメラの座標までの間にステージのポリゴンがあるか調べる
 }

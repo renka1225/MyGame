@@ -1,48 +1,34 @@
 #include "DxLib.h"
-#include "Player.h"
 #include "Stage.h"
+#include "Camera.h"
 #include "Input.h"
 #include "DrawDebug.h"
+#include "Player.h"
 
 // 定数
 namespace
 {
-	// プレイヤーの情報
 	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	constexpr float kMove = 1.0f;		// プレイヤー移動量
+	constexpr float kAngleSpeed = 0.2f;	// プレイヤー角度の変化速度
 	constexpr float kVelocity = 3.0f;	// ジャンプの高さ
 	constexpr float kGravity = -0.2f;	// 重力
-
-	// 当たり判定
-	constexpr float kCenterPosY = 12.0f;	// プレイヤーの中心点を調整
-	constexpr float kWidth = 10.0f;			// 横幅
-	constexpr float kHeight = 24.0f;		// 縦幅
-	constexpr float kDepth = 5.0f;			// 奥行きの幅
-
-	// ジャンプフレーム
-	constexpr int kLittleJumpFrame = 10;	// 小ジャンプ
-	constexpr int kMediumJumpFrame = 30;	// 中ジャンプ
-	// ジャンプの高さ
-	constexpr float kLittleJumpHeight = 0.5f;	// 小ジャンプ
-	constexpr float kMediumJumpHeight = 0.8f;	// 中ジャンプ
-	constexpr float kBigJumpHeight = 1.0f;		// 大ジャンプ
 }
+
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Player::Player():
-	m_currentState(State::Idle),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_move(VGet(0.0f, 0.0f, 0.0f)),
+	m_isMove(false),
+	m_targetMoveDir(VGet(0.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
 	m_jumpPower(0.0f),
-	m_jumpFrame(0),
-	m_isJump(false),
-	m_cameraAngle(0.0f)
+	m_modelHandle(-1),
+	m_currentState(State::kStand)
 {
 	m_modelHandle = MV1LoadModel("data/model/player.mv1");
-	m_Col3DBox.CreateBoundingBox(m_modelHandle);
 }
 
 
@@ -69,504 +55,236 @@ void Player::Init()
 /// 更新
 /// </summary>
 /// <param name="input">入力コマンド</param>
-/// <param name="stage">ステージ情報を参照</param>
-void Player::Update(Input& input, Stage& stage)
+/// <param name="stage">ステージ情報参照</param>
+void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 {
-	// プレイヤーの移動処理
-	Move(input, stage);
-	// 移動方向からプレイヤーの向く方向を決定する
-	if (VSquareSize(m_move) > 0.0f)
-	{
-		m_angle = -atan2f(m_move.z, m_move.x) - DX_PI_F;
-	}
+	// パッド入力によって移動パラメータを設定する
+	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
+	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
+	VECTOR	moveVec;		// このフレームの移動ベクトル
+	State prevState = m_currentState;
+	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 
-	// 地面接地していない場合
-	if (m_currentState == State::Jump)
-	{
-		// ジャンプ処理を行う
-		Jump(input, stage);
-		m_move.y += kGravity;
-		
-		// ステージとの当たり判定
-		Collision3DBox col3DBox; // 当たったステージの直方体
-		// ステージとの当たり判定
-		CheckHitStage(stage, col3DBox);
-	}
-	// 地面に接地している場合
-	else if (m_currentState != State::Jump)
-	{
-		m_jumpFrame = 0;
-		m_isJump = false;
-		m_currentState = State::Idle;
+	// TODO:アニメーションステートの更新
 
-		// ボタンを押したらジャンプ状態にする
-		if (input.IsTriggered("jump"))
-		{
-			// y軸方向の速度をセット
-			m_currentState = State::Jump;
-			m_isJump = true;
-		}
+	// プレイヤーの移動方向を設定
+	UpdateAngle();
 
-		// ステージとの当たり判定
-		Collision3DBox col3DBox; // 当たったステージの直方体
-		// ステージとの当たり判定
-		CheckHitStage(stage, col3DBox);
-	}
+	// 移動ベクトルを元にプレイヤーを移動させる
+	Move(moveVec, stage);
 
-	// 着地処理
-	if (m_pos.y - m_jumpPower < 0.0f)
-	{
-		m_pos.y = 0.0f;
-		m_isJump = false;
-		m_currentState = State::Idle;
-	}
-
-	// プレイヤー位置を更新
-	//m_move.y = m_jumpPower;
-	m_pos = VAdd(m_pos, m_move);
-	MV1SetPosition(m_modelHandle, m_pos);
-	m_Col3DBox.SetCenter(m_pos, VGet(kWidth, kHeight, kDepth));
-	// プレイヤーの傾きを調整する
-	UpdateAngle(stage);
+	// TODO:アニメーション処理
+	UpdateAnim();
 }
+
 
 /// <summary>
 /// 描画
 /// </summary>
-/// <param name="drawDebug"></param>
 void Player::Draw(DrawDebug& drawDebug)
 {
-	// 3Dモデル表示
 	MV1DrawModel(m_modelHandle);
 
 #ifdef _DEBUG	// デバッグ表示
 	// プレイヤー位置表示
 	drawDebug.DrawPlayerInfo(m_pos);
-	// 当たり判定描画
-	drawDebug.DrawCubeCol(m_modelHandle, m_angle, 0x00ffff);
-	m_Col3DBox.Draw(0xff0000, m_pos, VGet(kWidth, kHeight, kDepth));
 #endif
 }
 
 
 /// <summary>
-/// 当たった際の処理
-/// </summary>
-/// <param name="stage"></param>
-void Player::OnHit(Stage& stage)
-{
-#ifdef _DEBUG
-	DrawString(0, 0, "当たった", 0xffffff);
-#endif
-
-	// プレイヤーの移動後の位置
-	VECTOR nextPos = VAdd(m_pos, m_move);
-
-	// ステージの左側のX座標
-	float stageLeftPosX = stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの右側の座標
-	float stageRightPosX = stage.GetStagePos().x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの手側のZ座標
-	float stageFrontPosZ = stage.GetStagePos().z - MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの奥側のZ座標
-	float stageBackPosZ = stage.GetStagePos().z + MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの上面のY座標
-	float stageUpPosY = stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-	// ステージの下面のY座標
-	float stageBottomPosY = stage.GetStagePos().y - MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-
-	// ステージの横部分の衝突処理
-	// TODO:地面に乗っているときはこの判定は行わないようにする
-	if (nextPos.x > stageLeftPosX && m_move.x > 0.0f)
-	{
-		m_pos.x = stageLeftPosX - kWidth * 0.5f;
-		m_move.x = 0.0f;
-	}
-	else if (nextPos.x < stageRightPosX && m_move.x < 0.0f)
-	{
-		m_pos.x = stageRightPosX + kWidth * 0.5f;
-		m_move.x = 0.0f;
-	}
-
-	// ステージの手前と奥部分の衝突処理
-	if (nextPos.z > stageFrontPosZ && m_move.z > 0.0f)
-	{
-		m_pos.z = stageFrontPosZ - kDepth * 0.5f;
-		m_move.z = 0.0f;
-	}
-	else if (nextPos.z < stageBackPosZ && m_move.z < 0.0f)
-	{
-		m_pos.z = stageBackPosZ + kDepth * 0.5f;
-		m_move.z = 0.0f;
-	}
-
-	// ステージ上面と下面の衝突処理
-	if (nextPos.y < stageUpPosY  && m_move.y < 0.0f)
-	{
-		nextPos.y = OnHitFloor(stage);
-		m_move.y = 0.0f;
-	}
-	else if (nextPos.y > stageBottomPosY && m_move.y > 0.0f)
-	{
-		m_move.y *= -1;
-	}
-
-}
-
-
-/// <summary>
-/// 天井に当たった際の処理
+/// 天井に当たった時
 /// </summary>
 void Player::OnHitRoof()
 {
-	// Y軸方向の速度を反転
-	m_jumpPower = -m_jumpPower;
 }
 
 
 /// <summary>
-/// 床に当たった際の処理
+/// 床に当たったとき
 /// </summary>
 void Player::OnHitFloor()
 {
-	m_currentState = State::Idle;
-	m_isJump = false;
 }
 
 
 /// <summary>
-/// 落下中の処理
+/// 落下中
 /// </summary>
 void Player::OnFall()
 {
-	if (m_currentState != State::Jump)
-	{
-		// ジャンプ中(落下中）にする
-		m_currentState = State::Jump;
-	}
 }
 
+
+
 /// <summary>
-/// 移動処理
+/// プレイヤーの移動処理
 /// </summary>
-/// <param name="input">入力</param>
-void Player::Move(Input& input, Stage& stage)
+void Player::Move(const VECTOR& MoveVector, Stage& stage)
 {
-	m_move = VGet(0.0f, 0.0f, 0.0f);
-
-	// ボタンを押したら移動
-	if (input.IsPressing("up"))
+	if (fabs(MoveVector.x) > 0.01f || fabs(MoveVector.z) > 0.01f)
 	{
-		m_move = VAdd(m_move, VGet(0.0f, 0.0f, kMove));
+		m_isMove = true;
 	}
-	if (input.IsPressing("down"))
+	else
 	{
-		m_move = VAdd(m_move, VGet(0.0f, 0.0f, -kMove));
-	}
-	if (input.IsPressing("left"))
-	{
-		m_move = VAdd(m_move, VGet(-kMove, 0.0f, 0.0f));
-	}
-	if (input.IsPressing("right"))
-	{
-		m_move = VAdd(m_move, VGet(kMove, 0.0f, 0.0f));
+		m_isMove = false;
 	}
 
-	// 斜めの移動速度を一定にする
-	if (VSize(m_move) > 0.0f)
-	{
-		m_move = VNorm(m_move);
-		m_move = VScale(m_move, kMove);
-	}
+	// 当たり判定を行って座標を保存する
+	m_pos = stage.CheckCollision(*this, MoveVector);
 
-	// 移動方向を決定する
-	MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
-	m_move = VTransform(m_move, mtx);
-
-	// 当たり判定をして、新しい座標を保存する
-	//m_pos = stage.CheckCollision(*this, m_move);
-
-	// プレイヤーのモデルの座標を更新する
+	// プレイヤーの座標を更新する
 	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 
 /// <summary>
-/// ジャンプ処理
+/// 移動パラメータを設定する
 /// </summary>
-/// <param name="input">入力</param>
-void Player::Jump(Input& input, Stage& stage)
+/// <returns></returns>
+Player::State Player::UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
 {
-	// 1回だけジャンプする
-	if (m_isJump)
-	{
-		// ジャンプフレームを増やす
-		m_jumpFrame++;
+	State nextState = m_currentState;
 
-		// ジャンプの高さを調整する
-		if (input.IsReleased("jump"))
+	// プレイヤーの移動方向ベクトルを求める
+
+	// 上ボタンを押したとき
+	upMoveVec = VSub(camera.GetAngle(), camera.GetPos());
+	upMoveVec.y = 0.0f;
+
+	// 左ボタンを押したとき
+	leftMoveVec = VCross(upMoveVec, VGet(0.0f, 1.0f, 0.0f));
+
+	// ベクトルの正規化
+	upMoveVec = VNorm(upMoveVec);
+	leftMoveVec = VNorm(leftMoveVec);
+
+	// このフレームでの移動ベクトルを初期化
+	moveVec = VGet(0.0f, 0.0f, 0.0f);
+
+	// 移動したか(true:移動した)
+	bool isPressMove = false;
+
+	// ボタンを押したら移動
+	if (input.IsPressing("up"))
+	{
+		moveVec = VAdd(moveVec, upMoveVec);
+		isPressMove = true;
+	}
+	if (input.IsPressing("down"))
+	{
+		moveVec = VAdd(moveVec, VScale(upMoveVec, -1.0f));
+		isPressMove = true;
+	}
+	if (input.IsPressing("left"))
+	{
+		moveVec = VAdd(moveVec, leftMoveVec);
+		isPressMove = true;
+	}
+	if (input.IsPressing("right"))
+	{
+		moveVec = VAdd(moveVec, VScale(leftMoveVec, -1.0f));
+		isPressMove = true;
+	}
+
+	// プレイヤーがジャンプ中でなく、ボタンが押されたらジャンプする
+	if (m_currentState != State::kJump && input.IsTriggered("jump"))
+	{
+		// Y軸方向の速度をセット
+		m_jumpPower = kVelocity;
+
+		// 状態を「ジャンプ」にする
+		nextState = State::kJump;
+	}
+
+	// ジャンプ中は重力を反映する
+	if (m_currentState == State::kJump)
+	{
+		m_jumpPower += kGravity;
+	}
+
+	// 移動ボタンが押されている場合
+	if (isPressMove)
+	{
+		// 待機状態だった場合
+		if (m_currentState == State::kStand)
 		{
-			static float jumpHeight = 0.0f;
-			if (m_jumpFrame < kLittleJumpFrame)
-			{
-				jumpHeight = kLittleJumpHeight;
-			}
-			else if (m_jumpFrame < kMediumJumpFrame)
-			{
-				jumpHeight = kMediumJumpHeight;
-			}
-			else
-			{
-				jumpHeight = kBigJumpHeight;
-			}
+			// 移動状態にする
+			nextState = State::kRun;
 		}
 
-		// ジャンプ力を決める
-		m_jumpPower += kVelocity;
-		m_isJump = false;
+		// プレイヤーが向く方向を設定する
+		m_targetMoveDir = VNorm(moveVec);
+		// プレイヤーの移動ベクトルを設定する
+		moveVec = VScale(m_targetMoveDir, kMove);
 	}
-
-	// 重力を足す
-	m_jumpPower += kGravity;
-
-	// 着地処理を行う
-	if (m_pos.y + m_jumpPower < 0.0f)
+	// 移動しない場合
+	else
 	{
-		m_pos.y = 0.0f;
-		m_currentState = State::Idle;
-		m_isJump = false;
+		// 移動状態だったら
+		if (m_currentState == State::kRun)
+		{
+			// 待機状態にする
+			nextState = State::kStand;
+		}
 	}
+
+	// 移動ベクトルのY成分をY軸方向の速度にする
+	moveVec.y = m_jumpPower;
+
+	return nextState;
 }
 
 
 /// <summary>
-/// プレイヤーの傾きを調整する
+/// プレイヤーの回転を制御する
 /// </summary>
-void Player::UpdateAngle(Stage& stage)
+void Player::UpdateAngle()
 {
-	// ジャンプ中は傾きを更新しない
-	if (m_currentState == State::Jump) return;
+	// プレイヤーの角度を調整する
+	float targetAngle;	// 目標角度
+	float difference;	// 目標角度と現在の角度との差
 
-	// プレイヤーを地面に沿って傾ける
-	// 基底ベクトルを作成
-	// y軸
-	VECTOR v3Up = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
-	v3Up = VNorm(v3Up);
+	// 目標の方向ベクトルから角度を求める
+	targetAngle = atan2f(m_targetMoveDir.x, m_targetMoveDir.z);
 
-	// z軸
-	VECTOR v3Forward = VGet(cosf(-m_angle), 0.0f, sinf(-m_angle));
+	// 目標の角度と現在の角度の差を求める
+	difference = targetAngle - m_angle;
 
-	// x軸
-	VECTOR v3Side = VCross(v3Up, v3Forward);
-	v3Side = VNorm(v3Side);
-
-	// ベクトルを直交させる
-	v3Forward = VCross(v3Side, v3Up);
-	v3Forward = VNorm(v3Forward);
-
-	// z軸とy軸の方向をセットする
-	//if (IsHitStage(stage))
-	//{
-		// 平面部分に当たった場合はプレイヤーを傾けない
-		//v3Up = VGet(0.0f, 1.0f, 0.0f);
-	//}
-	//else
-	//{
-		// 斜面に当たった場合はプレイヤーを斜面に沿って傾ける
-		// 上下反転させる
-		v3Up = VScale(v3Up, -1);
-	//}
-
-	MV1SetRotationZYAxis(m_modelHandle, v3Forward, v3Up, 0.0f);
-}
-
-
-/// <summary>
-/// 地面の位置からプレイヤーのY座標を求める
-/// </summary>
-/// <returns>地面の高さ</returns>
-float Player::OnHitFloor(Stage& stage)
-{
-	// 地面の傾斜の外積を計算する
-	VECTOR v3Normal = VCross(stage.GetV3Vec1(), stage.GetV3Vec2());
-
-	// ステージの上面に当たった場合
-	//if (IsHitStage(stage))
-	//{
-	//	return stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y - m_jumpPower;
-	//}
-	//else // 地面に当たった場合
-	//{
-		return (-v3Normal.x * m_pos.x - v3Normal.z * m_pos.z) / v3Normal.y - m_jumpPower;
-	//}
-}
-
-
-/// <summary>
-/// ステージとの衝突判定を行う
-/// </summary>
-VECTOR Player::HitStage(Stage& stage)
-{
-	/*プレイヤーと地面の当たり判定*/
-	// 相対ベクトルを求める
-	VECTOR v3SubAbs = VSub(m_pos, stage.GetStagePos());
-	v3SubAbs = VGet(abs(v3SubAbs.x), abs(v3SubAbs.y), abs(v3SubAbs.z));
-
-	// 衝突距離を求める
-	// 衝突距離はそれぞれの対応した辺の長さを足して2で割ったもの
-	VECTOR v3AddScale = VScale(VAdd(MV1GetScale(m_modelHandle), MV1GetScale(stage.GetStageHandle())), 0.5f);
-	// TODO;当たり判定の範囲を広げる(仮実装)
-	v3AddScale = VAdd(v3AddScale, VGet(0.0f, 20.0f, 0.0f));
-
-	// 各成分の当たり判定
-	bool isXHit = v3SubAbs.x < v3AddScale.x;
-	bool isYHit = v3SubAbs.y < v3AddScale.y;
-	bool isZHit = v3SubAbs.z < v3AddScale.z;
-
-	//if (isXHit && isYHit && isZHit) return true;
-
-	// 地面の上に当たった場合
-	bool isGroundHit = (isXHit || isYHit) && isYHit;
-	// 横に当たった場合
-	bool isSideHit = (isYHit || isZHit) && isXHit;
-	// 前後に当たった場合
-	bool isDepthHit = (isXHit || isYHit) && isZHit;
-
-	// プレイヤーの移動後の位置
-	VECTOR nextPos = VAdd(m_pos, m_move);
-
-	// ステージの左側のX座標
-	float stageLeftPosX = stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの右側の座標
-	float stageRightPosX = stage.GetStagePos().x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの手側のZ座標
-	float stageFrontPosZ = stage.GetStagePos().z - MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの奥側のZ座標
-	float stageBackPosZ = stage.GetStagePos().z + MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの上面のY座標
-	float stageUpPosY = stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-	// ステージの下面のY座標
-	float stageBottomPosY = stage.GetStagePos().y - MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-
-	// 上面に当たった場合
-	if (isGroundHit)
+	// 差が180度以上にならないように調整する
+	if (difference < -DX_PI_F)
 	{
-		return VGet(m_pos.x, OnHitFloor(stage), m_pos.z);
+		difference += DX_TWO_PI_F;
 	}
-	// 横面に当たった場合
-	else if (isSideHit)
+	else if (difference > DX_PI_F)
 	{
-		if (nextPos.x > stageLeftPosX && m_move.x > 0.0f)
-		{
-			m_move.x = 0.0f;
-			return VGet(stageLeftPosX - kWidth * 0.5f, m_pos.y, m_pos.z);
-		}
-		else if (nextPos.x < stageRightPosX && m_move.x < 0.0f)
-		{
-			m_move.x = 0.0f;
-			return VGet(m_pos.x, stageRightPosX + kWidth * 0.5f, m_pos.z);
-			
-		}
-	}
-	// 手前または奥面に当たった場合
-	else if (isDepthHit)
-	{
-		if (nextPos.z > stageFrontPosZ && m_move.z > 0.0f)
-		{
-			m_move.z = 0.0f;
-			return VGet(m_pos.x, m_pos.y, stageFrontPosZ - kDepth * 0.5f);
-		}
-		else if (nextPos.z < stageBackPosZ && m_move.z < 0.0f)
-		{
-			m_move.z = 0.0f;
-			return VGet(m_pos.x, m_pos.y, stageBackPosZ + kDepth * 0.5f);
-		}
-	}
-}
-
-
-/// <summary>
-/// マップに当たった際の処理
-/// </summary>
-/// <param name="stage"></param>
-void Player::CheckHitStage(Stage& stage, Collision3DBox col3DBox)
-{
-	/*プレイヤーと地面の当たり判定*/
-	// 相対ベクトルを求める
-	VECTOR v3SubAbs = VSub(m_pos, stage.GetStagePos());
-	v3SubAbs = VGet(abs(v3SubAbs.x), abs(v3SubAbs.y), abs(v3SubAbs.z));
-
-	// 衝突距離を求める
-	// 衝突距離はそれぞれの対応した辺の長さを足して2で割ったもの
-	VECTOR v3AddScale = VScale(VAdd(MV1GetScale(m_modelHandle), MV1GetScale(stage.GetStageHandle())), 0.5f);
-	// TODO;当たり判定の範囲を広げる(仮実装)
-	v3AddScale = VAdd(v3AddScale, VGet(0.0f, 20.0f, 0.0f));
-
-	// 各成分の当たり判定
-	bool isXHit = v3SubAbs.x < v3AddScale.x;
-	bool isYHit = v3SubAbs.y < v3AddScale.y;
-	bool isZHit = v3SubAbs.z < v3AddScale.z;
-
-	// ステージの左側のX座標
-	float stageLeftPosX = stage.GetStagePos().x - MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの右側の座標
-	float stageRightPosX = stage.GetStagePos().x + MV1GetScale(stage.GetStageHandle()).x * 0.5f;
-	// ステージの手側のZ座標
-	float stageFrontPosZ = stage.GetStagePos().z - MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの奥側のZ座標
-	float stageBackPosZ = stage.GetStagePos().z + MV1GetScale(stage.GetStageHandle()).z * 0.5f;
-	// ステージの上面のY座標
-	float stageUpPosY = stage.GetStagePos().y + MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-	// ステージの下面のY座標
-	float stageBottomPosY = stage.GetStagePos().y - MV1GetScale(stage.GetStageHandle()).y * 0.5f;
-
-	// 横から当たったかチェックする
-	m_pos.x += m_move.x;
-	if (stage.IsCollision(m_Col3DBox, col3DBox))
-	{
-		if (m_move.x > 0.0f)
-		{
-			m_pos.x = stageLeftPosX - kWidth * 0.5f;
-		}
-		else if (m_move.x < 0.0f)
-		{
-			m_pos.x = stageRightPosX + kWidth * 0.5f;
-		}
+		difference -= DX_TWO_PI_F;
 	}
 
-	// 手前または奥から当たったかチェックする
-	m_pos.z += m_move.z;
-	if (stage.IsCollision(m_Col3DBox, col3DBox))
+	// 角度の差を0に近づける
+	if (difference > 0.0f)
 	{
-		if (m_move.z > 0.0f)
-		{
-			m_pos.z = stageFrontPosZ - kDepth * 0.5f;
-		}
-		else if (m_move.z < 0.0f)
-		{
-			m_pos.z = stageBackPosZ + kDepth * 0.5f;
-		}
-	}
-
-	// 縦から当たったかチェックする
-	m_pos.y += m_move.y;
-	if (stage.IsCollision(m_Col3DBox, col3DBox))
-	{
-		if (m_move.y > 0.0f)
-		{
-			m_pos.y = stageUpPosY - kHeight * 0.5f;
-			m_move.y *= -1.0f;
-		}
-		else if (m_move.y < 0.0f)
-		{
-			m_pos.y = stageBottomPosY + kHeight * 0.5f;
-			m_isJump = false;
-			m_currentState = State::Idle;
-		}
+		// 差がプラスの場合は引く
+		difference -= kAngleSpeed;
+		difference = std::min(0.0f, difference);
 	}
 	else
 	{
-		m_isJump = true;
-		m_currentState = State::Jump;
+		// 差がマイナスの場合は足す
+		difference += kAngleSpeed;
+		difference = std::max(difference, 0.0f);
 	}
+
+	// プレイヤーの角度を更新
+	m_angle = targetAngle - difference;
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
+}
+
+
+/// <summary>
+/// アニメーション処理
+/// </summary>
+void Player::UpdateAnim()
+{
 }

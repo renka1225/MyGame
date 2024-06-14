@@ -11,6 +11,8 @@ public:
 	void DrawGrid();
 	// プレイヤーの情報を描画
 	void DrawPlayerInfo(VECTOR pos);
+	// カメラの情報を描画
+	void DrawCameraInfo(VECTOR pos, VECTOR target);
 	// 直方体の当たり判定を描画
 	void DrawCubeCol(int handle, float angle, int color);
 };

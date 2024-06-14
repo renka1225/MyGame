@@ -52,6 +52,18 @@ void DrawDebug::DrawPlayerInfo(VECTOR pos)
 
 
 /// <summary>
+/// カメラの情報を描画
+/// </summary>
+/// <param name="pos">カメラ座標</param>
+/// <param name="target">カメラの注視点座標</param>
+void DrawDebug::DrawCameraInfo(VECTOR pos, VECTOR target)
+{
+	DrawFormatString(0, 60, 0xffffff, "カメラ座標(x:%f, y:%f, z:%f)", pos.x, pos.y, pos.z);
+	DrawFormatString(0, 80, 0xffffff, "注視点座標(x:%f, y:%f, z:%f)", target.x, target.y, target.z);
+}
+
+
+/// <summary>
 /// 直方体の当たり判定を描画
 /// </summary>
 /// <param name="handle">モデルのハンドル</param>

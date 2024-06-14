@@ -143,21 +143,27 @@ Input::Input()
 	m_commandTable["jump"] = { {InputType::keybd, KEY_INPUT_SPACE},
 						   {InputType::pad, PAD_INPUT_A} };
 
-	// カメラ回転
-	m_commandTable["rotateL"] = { {InputType::keybd, KEY_INPUT_S},
-						   {InputType::pad, PAD_INPUT_5} };
-
-	m_commandTable["rotateR"] = { {InputType::keybd, KEY_INPUT_D},
-						   {InputType::pad, PAD_INPUT_6} };
-
 	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 						{InputType::pad, PAD_INPUT_C} };
 
 	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
 						   {InputType::pad, PAD_INPUT_Y} };
 
+	/*カメラ回転*/
+	// 左
+	m_commandTable["rotateL"] = { {InputType::keybd, KEY_INPUT_A},
+						   {InputType::pad, PAD_INPUT_5} };
+	// 右
+	m_commandTable["rotateR"] = { {InputType::keybd, KEY_INPUT_D},
+						   {InputType::pad, PAD_INPUT_6} };
+	// 上
+	m_commandTable["rotateU"] = { {InputType::keybd, KEY_INPUT_W},
+					   {InputType::pad, PAD_INPUT_7} };
+	// 下
+	m_commandTable["rotateD"] = { {InputType::keybd, KEY_INPUT_S},
+					   {InputType::pad, PAD_INPUT_8} };
 
-	// デバッグ機能
+	/*デバッグ機能*/
 	m_commandTable["debug_pause"] = { {InputType::keybd, KEY_INPUT_P},
 					   {InputType::pad, PAD_INPUT_R} };
 

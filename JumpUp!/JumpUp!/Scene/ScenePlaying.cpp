@@ -55,18 +55,16 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		m_debugState = DebugState::Normal;
 	}
 	if(m_debugState != DebugState::Pause || input.IsPressing("debug_pause"))
-	{
 #endif
-
-		// カメラ更新
-		m_pCamera->Update(input, *m_pPlayer);
-
+	{
 		// ステージ更新
 		m_pStage->Update();
 
 		// プレイヤー更新
-		m_pPlayer->SetCameraAngle(m_pCamera->GetAngle());
-		m_pPlayer->Update(input, *m_pStage);
+		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+
+		// カメラ更新
+		m_pCamera->Update(input, *m_pPlayer);
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
