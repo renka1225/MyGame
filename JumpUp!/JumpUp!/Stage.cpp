@@ -8,16 +8,14 @@
 namespace
 {
     // マップサイズ
-    constexpr float kWidth = 100.0f;  // 横幅
-    constexpr float kHeight = 3.0f;   // 縦幅
-    constexpr float kDepth = 100.0f;   // 奥行き
+    constexpr float kScale = 0.1f;
 
     // 当たり判定
     constexpr float kDefaultSize = 200.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
-    constexpr float kHitWidth = 50.0f;	    // 当たり判定カプセルの半径
-    constexpr float kHitHeight = 100.0f;	// 当たり判定カプセルの高さ
+    constexpr float kHitWidth = 10.0f;	    // 当たり判定カプセルの半径
+    constexpr float kHitHeight = 20.0f;	    // 当たり判定カプセルの高さ
     constexpr int kHitTryNum = 16;		    // 壁押し出し処理の最大試行回数
-    constexpr float kHitSlideLength = 5.0f;	// 一度の壁押し出し処理でスライドさせる距離
+    constexpr float kHitSlideLength = 1.0f;	// 一度の壁押し出し処理でスライドさせる距離
 }
 
 
@@ -29,7 +27,7 @@ Stage::Stage():
     m_floorNum(0)
 {
 	m_stageHandle = MV1LoadModel("data/model/stage.mv1");
-    MV1SetScale(m_stageHandle, VGet(kWidth, kHeight, kDepth));
+    MV1SetScale(m_stageHandle, VGet(kScale, kScale, kScale));
 
     // モデル全体のコリジョン情報のセットアップ
     MV1SetupCollInfo(m_stageHandle, -1);

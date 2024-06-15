@@ -11,8 +11,8 @@ namespace
 	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	constexpr float kMove = 1.0f;		// プレイヤー移動量
 	constexpr float kAngleSpeed = 0.2f;	// プレイヤー角度の変化速度
-	constexpr float kVelocity = 3.0f;	// ジャンプの高さ
-	constexpr float kGravity = -0.2f;	// 重力
+	constexpr float kVelocity = 8.0f;	// ジャンプの高さ
+	constexpr float kGravity = -0.3f;	// 重力
 }
 
 
@@ -97,6 +97,8 @@ void Player::Draw(DrawDebug& drawDebug)
 /// </summary>
 void Player::OnHitRoof()
 {
+	// Y軸方向の速度を反転する
+	m_jumpPower *= -1;
 }
 
 
@@ -105,6 +107,23 @@ void Player::OnHitRoof()
 /// </summary>
 void Player::OnHitFloor()
 {
+	m_jumpPower = 0.0f;
+
+	// ジャンプ中の場合
+	if (m_currentState == State::kJump)
+	{
+		// 移動中の場合
+		if (m_isMove)
+		{
+			// 移動状態にする
+			m_currentState = State::kRun;
+		}
+		else
+		{
+			// 待機状態にする
+			m_currentState = State::kStand;
+		}
+	}
 }
 
 
@@ -113,8 +132,12 @@ void Player::OnHitFloor()
 /// </summary>
 void Player::OnFall()
 {
+	if (m_currentState != State::kJump)
+	{
+		// ジャンプ中(落下中)にする
+		m_currentState = State::kJump;
+	}
 }
-
 
 
 /// <summary>
