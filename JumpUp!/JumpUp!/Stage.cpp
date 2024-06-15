@@ -11,9 +11,11 @@ namespace
     constexpr float kScale = 0.1f;
 
     // 当たり判定
-    constexpr float kDefaultSize = 200.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
+    constexpr float kDefaultSize = 100.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
     constexpr float kHitWidth = 10.0f;	    // 当たり判定カプセルの半径
     constexpr float kHitHeight = 20.0f;	    // 当たり判定カプセルの高さ
+    constexpr float kHitBottom = -1.0f;	    // 当たり判定カプセルの位置
+    constexpr float kHitBottom2 = -40.0f;	// 当たり判定カプセルの位置
     constexpr int kHitTryNum = 16;		    // 壁押し出し処理の最大試行回数
     constexpr float kHitSlideLength = 1.0f;	// 一度の壁押し出し処理でスライドさせる距離
 }
@@ -157,22 +159,23 @@ VECTOR Stage::CheckHitWithWall(Player& player, const VECTOR& checkPosition)
             // i番目の壁ポリゴンのアドレスを壁ポリゴンポインタ配列から取得
             auto poly = m_wall[i];
 
-            // 壁の位置
-            VECTOR CapPos2 = VGet(0.0f, kHitHeight, 0.0f);
+            // プレイヤーの終点
+            VECTOR fixedEndPos = VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f));
+            // プレイヤーが壁に当たっているか
+            bool isHit = HitCheck_Capsule_Triangle(fixedPos, fixedEndPos, kHitWidth, poly->Position[0], poly->Position[1], poly->Position[2]);
 
-            // カプセルと三角形の当たり判定
-            if (HitCheck_Capsule_Triangle(fixedPos, VAdd(fixedPos, CapPos2), 20.0f, poly->Position[0], poly->Position[1], poly->Position[2]))
+            // プレイヤーと当たっている場合
+            if (isHit)
             {
                 // プレイヤーを壁の法線方向に移動させる
-                // 移動後の位置を補正
-                fixedPos = VAdd(fixedPos, VScale(poly->Normal, 5.0f));
+                fixedPos = VAdd(fixedPos, VScale(poly->Normal, kHitSlideLength));
 
                 // 移動した壁ポリゴンと接触しているかどうか判定する
                 for (int j = 0; j < m_wallNum; j++)
                 {
                     // 当たっていたらループを抜ける
-                    poly = m_wall[i];
-                    if (HitCheck_Capsule_Triangle(fixedPos, VAdd(fixedPos, CapPos2), 20.0f, poly->Position[0], poly->Position[1], poly->Position[2]))
+                    poly = m_wall[j];
+                    if (isHit)
                     {
                         isHitWall = true;
                         break;
@@ -253,20 +256,25 @@ VECTOR Stage::CheckHitWithFloor(Player& player, const VECTOR& checkPosition)
         {
             auto poly = m_floor[i]; // i番目の床ポリゴンのアドレス
 
-            // ジャンプ中かどうか
             HITRESULT_LINE lineResult;  // 線分とポリゴンとの当たり判定の結果を代入する構造体
+            VECTOR topPos = VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f));       // プレイヤーの頭の先の位置
+            VECTOR bottomPos = VAdd(fixedPos, VGet(0.0f, kHitBottom, 0.0f));    // プレイヤーの足元より少し低い位置
+            VECTOR bottomPos2 = VAdd(fixedPos, VGet(0.0f, kHitBottom2, 0.0f));  // プレイヤーの足元よりさらに低い位置
+
+            // ジャンプ中の場合
             if (player.GetState() == Player::State::kJump)
             {
-                // ジャンプ中の場合は頭の先から足先より少し低い位置の間で当たっているかを判定
-                lineResult = HitCheck_Line_Triangle(VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f)), VAdd(fixedPos, VGet(0.0f, -1.0f, 0.0f)), poly->Position[0], poly->Position[1], poly->Position[2]);
+                // 頭の先から足先より少し低い位置の間で当たっているかを判定する
+                lineResult = HitCheck_Line_Triangle(topPos, bottomPos, poly->Position[0], poly->Position[1], poly->Position[2]);
             }
+            // 移動中の場合
             else
             {
-                // 走っている場合は頭の先からそこそこ低い位置の間で当たっているかを判定(傾斜で落下状態に移行してしまわない為)
-                lineResult = HitCheck_Line_Triangle(VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f)), VAdd(fixedPos, VGet(0.0f, -40.0f, 0.0f)), poly->Position[0], poly->Position[1], poly->Position[2]);
+                // 頭の先からそこそこ低い位置の間で当たっているかを判定する
+                lineResult = HitCheck_Line_Triangle(topPos, bottomPos2, poly->Position[0], poly->Position[1], poly->Position[2]);
             }
 
-            // 既に当たったポリゴンがあり、且つ今まで検出した床ポリゴンより低い場合は何もしない
+            // 既に当たったポリゴンがあり、検出した床ポリゴンより低い場合何もしない
             if (lineResult.HitFlag)
             {
                 if (!(isHitFloor && maxY > lineResult.Position.y))
@@ -278,10 +286,10 @@ VECTOR Stage::CheckHitWithFloor(Player& player, const VECTOR& checkPosition)
             }
         }
 
-        // 床ポリゴンに当たった
-        if (isHitFloor == true)
+        // 床ポリゴンに当たった場合
+        if (isHitFloor)
         {
-            // 接触したポリゴンで一番高いＹ座標をプレイヤーのＹ座標にする
+            // プレイヤーを床に接触させる
             fixedPos.y = maxY;
 
             // 床に当たった処理を行う

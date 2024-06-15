@@ -11,7 +11,7 @@ namespace
 	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	constexpr float kMove = 1.0f;		// プレイヤー移動量
 	constexpr float kAngleSpeed = 0.2f;	// プレイヤー角度の変化速度
-	constexpr float kVelocity = 8.0f;	// ジャンプの高さ
+	constexpr float kVelocity = 7.0f;	// ジャンプの高さ
 	constexpr float kGravity = -0.3f;	// 重力
 }
 
@@ -265,42 +265,8 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 /// </summary>
 void Player::UpdateAngle()
 {
-	// プレイヤーの角度を調整する
-	float targetAngle;	// 目標角度
-	float difference;	// 目標角度と現在の角度との差
-
-	// 目標の方向ベクトルから角度を求める
-	targetAngle = atan2f(m_targetMoveDir.x, m_targetMoveDir.z);
-
-	// 目標の角度と現在の角度の差を求める
-	difference = targetAngle - m_angle;
-
-	// 差が180度以上にならないように調整する
-	if (difference < -DX_PI_F)
-	{
-		difference += DX_TWO_PI_F;
-	}
-	else if (difference > DX_PI_F)
-	{
-		difference -= DX_TWO_PI_F;
-	}
-
-	// 角度の差を0に近づける
-	if (difference > 0.0f)
-	{
-		// 差がプラスの場合は引く
-		difference -= kAngleSpeed;
-		difference = std::min(0.0f, difference);
-	}
-	else
-	{
-		// 差がマイナスの場合は足す
-		difference += kAngleSpeed;
-		difference = std::max(difference, 0.0f);
-	}
-
 	// プレイヤーの角度を更新
-	m_angle = targetAngle - difference;
+	m_angle = atan2f(m_targetMoveDir.x, m_targetMoveDir.z);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
 }
 
