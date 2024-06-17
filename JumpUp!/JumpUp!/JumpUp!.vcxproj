@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Util\Collision3DBox.cpp" />
     <ClCompile Include="DrawDebug.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Util\Input.cpp" />
@@ -153,7 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Util\Collision3DBox.h" />
     <ClInclude Include="DrawDebug.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Util\Game.h" />

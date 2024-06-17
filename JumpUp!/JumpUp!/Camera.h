@@ -2,6 +2,7 @@
 
 class Input;
 class Player;
+class Stage;
 
 /// <summary>
 /// カメラクラス
@@ -12,13 +13,13 @@ public:
 	Camera();
 	~Camera();
 	void Init();
-	void Update(Input& input, const Player& player);
+	void Update(Input& input, const Player& player, const Stage& stage);
 
 	VECTOR GetAngle() const { return m_target; }
 	VECTOR GetPos() const { return m_pos; }
 
 private:
-	void FixCameraPos();	// カメラ位置補正
+	void FixCameraPos(const Stage& stage);	// カメラ位置補正
 
 private:
 	VECTOR m_pos;	 // カメラ座標

@@ -48,7 +48,7 @@ void Camera::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(Input& input, const Player& player)
+void Camera::Update(Input& input, const Player& player, const Stage& stage)
 {
 	// 左入力
 	if (input.IsPressing("rotateL"))
@@ -79,7 +79,7 @@ void Camera::Update(Input& input, const Player& player)
 	m_target = VAdd(player.GetPos(), VGet(0.0f, kHeight, 0.0f));
 
 	// カメラ位置補正
-	FixCameraPos();
+	FixCameraPos(stage);
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_target);
 }
 
@@ -87,11 +87,11 @@ void Camera::Update(Input& input, const Player& player)
 /// <summary>
 /// カメラ位置を補正する
 /// </summary>
-void Camera::FixCameraPos()
+void Camera::FixCameraPos(const Stage& stage)
 {
-	// 水平方向の回転はY軸回転
+	// 水平方向の回転
 	auto rotY = MGetRotY(m_angleH);
-	// 垂直方向の回転はＺ軸回転
+	// 垂直方向の回転
 	auto rotZ = MGetRotZ(m_angleV);
 
 	// カメラからプレイヤーまでの距離をセットする
@@ -103,8 +103,11 @@ void Camera::FixCameraPos()
 	// 3.注視点の座標を足す
 	m_pos = VAdd(VTransform(VTransform(VGet(-cameraToPlayerLength, 0.0f, 0.0f), rotZ), rotY), m_target);
 
-	// ポリゴンに当たる距離をセット
-	float hitLength = cameraToPlayerLength;
-
-	// TODO:注視点からカメラの座標までの間にステージのポリゴンがあるか調べる
+	// 注視点からカメラの座標までの間にステージのポリゴンがあるか調べる
+	float notHitLength = 0.0f;				// ポリゴンに当たらない距離
+	float hitLength = cameraToPlayerLength;	// ポリゴンに当たる距離
+	// 当たるかどうか
+	float testLength = notHitLength + (hitLength - notHitLength) * 0.5f;
+	// テスト用のカメラ座標を算出
+	auto testPosition = VAdd(VTransform(VTransform(VGet(-testLength, 0.0f, 0.0f), rotZ), rotY), m_target);
 }

@@ -11,8 +11,8 @@ namespace
 	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
 	constexpr float kMove = 1.0f;		// プレイヤー移動量
 	constexpr float kAngleSpeed = 0.2f;	// プレイヤー角度の変化速度
-	constexpr float kVelocity = 7.0f;	// ジャンプの高さ
-	constexpr float kGravity = -0.3f;	// 重力
+	constexpr float kVelocity = 6.0f;	// ジャンプの高さ
+	constexpr float kGravity = -0.25f;	// 重力
 }
 
 

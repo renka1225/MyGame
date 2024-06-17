@@ -59,7 +59,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 
 		// カメラ更新
-		m_pCamera->Update(input, *m_pPlayer);
+		m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
