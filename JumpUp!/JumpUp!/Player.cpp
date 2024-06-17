@@ -9,10 +9,14 @@
 namespace
 {
 	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
-	constexpr float kMove = 1.0f;		// プレイヤー移動量
+	constexpr float kMove = 1.3f;		// プレイヤー移動量
 	constexpr float kAngleSpeed = 0.2f;	// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;	// ジャンプの高さ
 	constexpr float kGravity = -0.25f;	// 重力
+	const VECTOR kInitPos = VGet(100.0f, 20.0f, -79.0f); // 初期位置
+
+	constexpr float kAnimBlendMax = 1.0f;	// アニメーションブレンドの最大値
+	constexpr float kAnimBlendSpeed = 0.1f;	// アニメーションブレンドの変化速度
 }
 
 
@@ -20,13 +24,18 @@ namespace
 /// コンストラクタ
 /// </summary>
 Player::Player():
-	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_pos(kInitPos),
 	m_isMove(false),
 	m_targetMoveDir(VGet(0.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
 	m_jumpPower(0.0f),
 	m_modelHandle(-1),
-	m_currentState(State::kStand)
+	m_currentState(State::kStand),
+	m_currentPlayAnim(-1),
+	m_currentAnimCount(0.0f),
+	m_prevPlayAnim(-1),
+	m_prevAnimCount(0.0f),
+	m_animBlendRate(1.0f)
 {
 	m_modelHandle = MV1LoadModel("data/model/player.mv1");
 }
@@ -65,7 +74,8 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 	State prevState = m_currentState;
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 
-	// TODO:アニメーションステートの更新
+	// アニメーション状態の更新
+	UpdateAnimState(prevState);
 
 	// プレイヤーの移動方向を設定
 	UpdateAngle();
@@ -73,7 +83,7 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 	// 移動ベクトルを元にプレイヤーを移動させる
 	Move(moveVec, stage);
 
-	// TODO:アニメーション処理
+	// アニメーション処理
 	UpdateAnim();
 }
 
@@ -272,8 +282,100 @@ void Player::UpdateAngle()
 
 
 /// <summary>
-/// アニメーション処理
+/// アニメーション状態の更新
+/// </summary>
+/// <param name="prevState">現在の状態</param>
+void Player::UpdateAnimState(State prevState)
+{
+	// 待機状態から移動に変わった場合
+	if (prevState == State::kStand && m_currentState == State::kRun)
+	{
+		// 移動アニメーションを再生する
+		PlayAnim(State::kRun);
+	}
+	// 移動から待機状態に変わった場合
+	else if (prevState == State::kRun && m_currentState == State::kStand)
+	{
+		// 待機アニメーションを再生する
+		PlayAnim(State::kStand);
+	}
+	// ジャンプ中の場合
+	else if (m_currentState == State::kJump)
+	{
+		// 落下していて、再生中のアニメーションが上昇中用だった場合
+		if (m_jumpPower < 0.0f)
+		{
+			// 落下アニメーションを再生する
+			if (MV1GetAttachAnim(m_modelHandle, m_currentPlayAnim) == static_cast<int>(State::kJump))
+			{
+				PlayAnim(State::kFall);
+			}
+		}
+		else
+		{
+			PlayAnim(State::kJump);
+		}
+	}
+}
+
+
+/// <summary>
+/// TODO:アニメーション処理
 /// </summary>
 void Player::UpdateAnim()
 {
+	float animTotalTime; // 再生中のアニメーション時間
+
+	// ブレンド率が1以下の場合
+	if (m_animBlendRate < kAnimBlendMax)
+	{
+		m_animBlendRate += kAnimBlendSpeed;
+		if (m_animBlendRate > kAnimBlendMax)
+		{
+			m_animBlendRate = kAnimBlendMax;
+		}
+	}
+
+	// 現在再生中のアニメーションの処理
+	if (m_currentPlayAnim != -1)
+	{
+	}
+
+	// 1つ前に再生していたアニメーションの処理
+	if (m_prevPlayAnim != -1)
+	{
+	}
+}
+
+
+/// <summary>
+/// アニメーションを再生する
+/// </summary>
+/// <param name="playAnim">再生するアニメーション状態</param>
+void Player::PlayAnim(State playAnim)
+{
+	// 1つ前のアニメーションがある場合削除する
+	if (m_prevPlayAnim != -1)
+	{
+		MV1DetachAnim(m_modelHandle, m_prevPlayAnim);
+		m_prevPlayAnim = -1;
+	}
+
+	// 再生中だったアニメーションを1つ前に移動する
+	m_prevPlayAnim = m_currentPlayAnim;
+	m_prevAnimCount = m_currentAnimCount;
+
+	// 新たにアニメーションをアタッチする
+	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(playAnim));
+	m_currentAnimCount = 0.0f;
+
+	// ブレンド率はPrevが有効でない場合、1.0にする
+	if (m_prevPlayAnim == -1)
+	{
+		m_animBlendRate = kAnimBlendMax;
+	}
+	else
+	{
+		m_animBlendRate = 0.0f;
+	}
 }

@@ -43,8 +43,12 @@ private:
 	State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの回転を制御する
 	void UpdateAngle();
+	// アニメーションステートの更新
+	void UpdateAnimState(State prevState);
 	// アニメーション処理
 	void UpdateAnim();
+	// アニメーションを再生する
+	void PlayAnim(State playAnim);
 
 private:
 	// プレイヤー情報
@@ -55,5 +59,12 @@ private:
 	float m_jumpPower;			// Y軸方向の速度
 	int m_modelHandle;			// プレイヤーの3Dモデル
 	State m_currentState;		// 現在の状態
+
+	// アニメーション情報
+	int m_currentPlayAnim;		// 再生中のアニメーションのアタッチ番号
+	float m_currentAnimCount;	// 再生中のアニメーションの再生時間
+	int m_prevPlayAnim;			// 前の再生アニメーションのアタッチ番号
+	float m_prevAnimCount;		// 前の再生アニメーションの再生時間
+	float m_animBlendRate;		// 現在と過去のアニメーションのブレンド率
 };
 
