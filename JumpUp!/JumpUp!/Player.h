@@ -14,10 +14,10 @@ public:
 	// プレイヤーの状態
 	enum class State
 	{
-		kStand,	// 待機
-		kRun,	// 移動
-		kJump,	// ジャンプ中
-		kFall,	// 落下中
+		kStand = 36, // 待機
+		kFall = 40,	 // 落下中
+		kJump = 42,	 // ジャンプ中
+		kRun = 48	 // 移動
 	};
 
 	Player();
@@ -48,7 +48,7 @@ private:
 	// アニメーション処理
 	void UpdateAnim();
 	// アニメーションを再生する
-	void PlayAnim(State playAnim);
+	void PlayAnim(int PlayAnimIndex);
 
 private:
 	// プレイヤー情報

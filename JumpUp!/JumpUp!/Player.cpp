@@ -15,8 +15,15 @@ namespace
 	constexpr float kGravity = -0.25f;	// 重力
 	const VECTOR kInitPos = VGet(100.0f, 20.0f, -79.0f); // 初期位置
 
-	constexpr float kAnimBlendMax = 1.0f;	// アニメーションブレンドの最大値
-	constexpr float kAnimBlendSpeed = 0.1f;	// アニメーションブレンドの変化速度
+	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
+	constexpr float kAnimBlendSpeed = 0.1f;	 // アニメーションブレンドの変化速度
+	constexpr float kPlayAnimSpeed = 0.5f; // アニメーションの速度
+
+	// アニメーション番号
+	constexpr int kStandAnimIndex = 36;	// 待機
+	constexpr int kFallAnimIndex = 40;	// 落下
+	constexpr int kJumpAnimIndex = 42;	// ジャンプ
+	constexpr int kRunAnimIndex = 48;	// 移動
 }
 
 
@@ -35,7 +42,7 @@ Player::Player():
 	m_currentAnimCount(0.0f),
 	m_prevPlayAnim(-1),
 	m_prevAnimCount(0.0f),
-	m_animBlendRate(1.0f)
+	m_animBlendRate(kAnimBlendMax)
 {
 	m_modelHandle = MV1LoadModel("data/model/player.mv1");
 }
@@ -57,6 +64,7 @@ void Player::Init()
 {
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
+	PlayAnim(kStandAnimIndex);
 }
 
 
@@ -83,7 +91,7 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 	// 移動ベクトルを元にプレイヤーを移動させる
 	Move(moveVec, stage);
 
-	// アニメーション処理
+	// アニメーション処理の更新
 	UpdateAnim();
 }
 
@@ -133,6 +141,9 @@ void Player::OnHitFloor()
 			// 待機状態にする
 			m_currentState = State::kStand;
 		}
+
+		// 着地時はアニメーションのブレンドは行わない
+		m_animBlendRate = kAnimBlendMax;
 	}
 }
 
@@ -291,13 +302,13 @@ void Player::UpdateAnimState(State prevState)
 	if (prevState == State::kStand && m_currentState == State::kRun)
 	{
 		// 移動アニメーションを再生する
-		PlayAnim(State::kRun);
+		PlayAnim(kRunAnimIndex);
 	}
 	// 移動から待機状態に変わった場合
 	else if (prevState == State::kRun && m_currentState == State::kStand)
 	{
 		// 待機アニメーションを再生する
-		PlayAnim(State::kStand);
+		PlayAnim(kStandAnimIndex);
 	}
 	// ジャンプ中の場合
 	else if (m_currentState == State::kJump)
@@ -308,19 +319,19 @@ void Player::UpdateAnimState(State prevState)
 			// 落下アニメーションを再生する
 			if (MV1GetAttachAnim(m_modelHandle, m_currentPlayAnim) == static_cast<int>(State::kJump))
 			{
-				PlayAnim(State::kFall);
+				PlayAnim(kFallAnimIndex);
 			}
 		}
 		else
 		{
-			PlayAnim(State::kJump);
+			PlayAnim(kJumpAnimIndex);
 		}
 	}
 }
 
 
 /// <summary>
-/// TODO:アニメーション処理
+/// アニメーション処理
 /// </summary>
 void Player::UpdateAnim()
 {
@@ -330,7 +341,7 @@ void Player::UpdateAnim()
 	if (m_animBlendRate < kAnimBlendMax)
 	{
 		m_animBlendRate += kAnimBlendSpeed;
-		if (m_animBlendRate > kAnimBlendMax)
+		if (m_animBlendRate >= kAnimBlendMax)
 		{
 			m_animBlendRate = kAnimBlendMax;
 		}
@@ -339,11 +350,39 @@ void Player::UpdateAnim()
 	// 現在再生中のアニメーションの処理
 	if (m_currentPlayAnim != -1)
 	{
+		// アニメーションの総時間を取得する
+		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
+		m_currentPlayAnim += kPlayAnimSpeed;
+
+		// アニメーションの再生時間をループ
+		if (m_currentPlayAnim > animTotalTime)
+		{
+			m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
+		}
+
+		// 再生時間を更新
+		MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
+		// アニメーションのブレンド率を設定する
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
 	}
 
 	// 1つ前に再生していたアニメーションの処理
 	if (m_prevPlayAnim != -1)
 	{
+		// アニメーションの総時間を取得する
+		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
+		m_prevPlayAnim += kPlayAnimSpeed;
+
+		// アニメーションの再生時間をループ
+		if (m_prevPlayAnim > animTotalTime)
+		{
+			m_prevAnimCount = static_cast<float>(fmod(m_prevAnimCount, animTotalTime));
+		}
+
+		// 再生時間を更新
+		MV1SetAttachAnimTime(m_modelHandle, m_prevPlayAnim, m_prevAnimCount);
+		// アニメーションのブレンド率を設定する
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
 	}
 }
 
@@ -352,9 +391,9 @@ void Player::UpdateAnim()
 /// アニメーションを再生する
 /// </summary>
 /// <param name="playAnim">再生するアニメーション状態</param>
-void Player::PlayAnim(State playAnim)
+void Player::PlayAnim(int PlayAnimIndex)
 {
-	// 1つ前のアニメーションがある場合削除する
+	// 1つ前のアニメーションがアタッチされている場合削除する
 	if (m_prevPlayAnim != -1)
 	{
 		MV1DetachAnim(m_modelHandle, m_prevPlayAnim);
@@ -366,7 +405,7 @@ void Player::PlayAnim(State playAnim)
 	m_prevAnimCount = m_currentAnimCount;
 
 	// 新たにアニメーションをアタッチする
-	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(playAnim));
+	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, PlayAnimIndex, -1, false);
 	m_currentAnimCount = 0.0f;
 
 	// ブレンド率はPrevが有効でない場合、1.0にする
