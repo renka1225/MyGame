@@ -45,9 +45,28 @@ void DrawDebug::DrawGrid()
 /// プレイヤーの情報を描画
 /// </summary>
 /// <param name="pos">プレイヤーの座標</param>
-void DrawDebug::DrawPlayerInfo(VECTOR pos)
+///  <param name="state">現在のプレイヤーの状態</param>
+void DrawDebug::DrawPlayerInfo(VECTOR pos, Player::State state)
 {
 	DrawFormatString(0, 40, 0xffffff, "Player座標(x:%f, y:%f, z:%f)", pos.x, pos.y, pos.z);
+
+	// 現在の状態を描画
+	if (state == Player::State::kStand)
+	{
+		DrawString(0, 60, "待機中", 0xffffff);
+	}
+	if (state == Player::State::kRun)
+	{
+		DrawString(0, 60, "移動中", 0xffffff);
+	}
+	if (state == Player::State::kJump)
+	{
+		DrawString(0, 60, "ジャンプ中", 0xffffff);
+	}
+	if (state == Player::State::kFall)
+	{
+		DrawString(0, 60, "落下中", 0xffffff);
+	}
 }
 
 
@@ -60,22 +79,4 @@ void DrawDebug::DrawCameraInfo(VECTOR pos, VECTOR target)
 {
 	DrawFormatString(0, 60, 0xffffff, "カメラ座標(x:%f, y:%f, z:%f)", pos.x, pos.y, pos.z);
 	DrawFormatString(0, 80, 0xffffff, "注視点座標(x:%f, y:%f, z:%f)", target.x, target.y, target.z);
-}
-
-
-/// <summary>
-/// 直方体の当たり判定を描画
-/// </summary>
-/// <param name="handle">モデルのハンドル</param>
-void DrawDebug::DrawCubeCol(int handle, float angle, int color)
-{
-	// モデルの情報を取得
-	VECTOR pos = MV1GetPosition(handle);		// 座標
-	VECTOR scale = MV1GetScale(handle);			// サイズ
-	VECTOR halfScale = VScale(scale, 0.5f);		// 半径
-
-	VECTOR pos1 = VSub(pos, halfScale);	// 左上手前の座標
-	VECTOR pos2 = VAdd(pos, halfScale);	// 右下奥の座標
-
-	DrawCube3D(pos1, pos2, color, 0x000000, false);
 }

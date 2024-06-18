@@ -8,22 +8,20 @@
 // 定数
 namespace
 {
-	constexpr float kScale = 0.1f;		// プレイヤーモデルの拡大率
-	constexpr float kMove = 1.3f;		// プレイヤー移動量
-	constexpr float kAngleSpeed = 0.2f;	// プレイヤー角度の変化速度
-	constexpr float kVelocity = 6.0f;	// ジャンプの高さ
-	constexpr float kGravity = -0.25f;	// 重力
+	// プレイヤー情報
+	constexpr float kScale = 0.12f;			// プレイヤーモデルの拡大率
+	constexpr float kMaxSpeed = 2.0f;		// プレイヤーの最大移動速度
+	constexpr float kAcceleration = 0.2f;	// プレイヤーの加速度
+	constexpr float kDeceleration = 0.2f;	// プレイヤーの減速度
+	constexpr float kAngleSpeed = 0.2f;		// プレイヤー角度の変化速度
+	constexpr float kVelocity = 6.0f;		// ジャンプの高さ
+	constexpr float kGravity = -0.25f;		// 重力
 	const VECTOR kInitPos = VGet(100.0f, 20.0f, -79.0f); // 初期位置
 
+	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
-	constexpr float kAnimBlendSpeed = 0.1f;	 // アニメーションブレンドの変化速度
-	constexpr float kPlayAnimSpeed = 0.5f; // アニメーションの速度
-
-	// アニメーション番号
-	constexpr int kStandAnimIndex = 36;	// 待機
-	constexpr int kFallAnimIndex = 40;	// 落下
-	constexpr int kJumpAnimIndex = 42;	// ジャンプ
-	constexpr int kRunAnimIndex = 48;	// 移動
+	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
+	constexpr float kPlayAnimSpeed = 0.3f;	 // アニメーションの速度
 }
 
 
@@ -36,6 +34,7 @@ Player::Player():
 	m_targetMoveDir(VGet(0.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
 	m_jumpPower(0.0f),
+	m_moveSpeed(0.0f),
 	m_modelHandle(-1),
 	m_currentState(State::kStand),
 	m_currentPlayAnim(-1),
@@ -64,7 +63,7 @@ void Player::Init()
 {
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
-	PlayAnim(kStandAnimIndex);
+	PlayAnim(AnimKind::kStand);
 }
 
 
@@ -75,10 +74,12 @@ void Player::Init()
 /// <param name="stage">ステージ情報参照</param>
 void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 {
-	// パッド入力によって移動パラメータを設定する
+	/*パッド入力によって移動パラメータを設定する*/
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	moveVec;		// このフレームの移動ベクトル
+
+	// プレイヤーの状態を更新
 	State prevState = m_currentState;
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 
@@ -105,7 +106,7 @@ void Player::Draw(DrawDebug& drawDebug)
 
 #ifdef _DEBUG	// デバッグ表示
 	// プレイヤー位置表示
-	drawDebug.DrawPlayerInfo(m_pos);
+	drawDebug.DrawPlayerInfo(m_pos, m_currentState);
 #endif
 }
 
@@ -134,11 +135,13 @@ void Player::OnHitFloor()
 		if (m_isMove)
 		{
 			// 移動状態にする
+			PlayAnim(AnimKind::kRun);
 			m_currentState = State::kRun;
 		}
 		else
 		{
 			// 待機状態にする
+			PlayAnim(AnimKind::kStand);
 			m_currentState = State::kStand;
 		}
 
@@ -157,6 +160,9 @@ void Player::OnFall()
 	{
 		// ジャンプ中(落下中)にする
 		m_currentState = State::kJump;
+
+		// アニメーションは落下中のものにする
+		PlayAnim(AnimKind::kFall);
 	}
 }
 
@@ -166,7 +172,7 @@ void Player::OnFall()
 /// </summary>
 void Player::Move(const VECTOR& MoveVector, Stage& stage)
 {
-	if (fabs(MoveVector.x) > 0.01f || fabs(MoveVector.z) > 0.01f)
+	if (fabs(MoveVector.x) > 0.0f || fabs(MoveVector.z) > 0.0f)
 	{
 		m_isMove = true;
 	}
@@ -191,8 +197,7 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 {
 	State nextState = m_currentState;
 
-	// プレイヤーの移動方向ベクトルを求める
-
+	/*プレイヤーの移動方向ベクトルを求める*/
 	// 上ボタンを押したとき
 	upMoveVec = VSub(camera.GetAngle(), camera.GetPos());
 	upMoveVec.y = 0.0f;
@@ -232,7 +237,7 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 		isPressMove = true;
 	}
 
-	// プレイヤーがジャンプ中でなく、ボタンが押されたらジャンプする
+	// ボタンが押されたらジャンプする
 	if (m_currentState != State::kJump && input.IsTriggered("jump"))
 	{
 		// Y軸方向の速度をセット
@@ -242,7 +247,7 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 		nextState = State::kJump;
 	}
 
-	// ジャンプ中は重力を反映する
+	// 重力を反映する
 	if (m_currentState == State::kJump)
 	{
 		m_jumpPower += kGravity;
@@ -260,8 +265,15 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 
 		// プレイヤーが向く方向を設定する
 		m_targetMoveDir = VNorm(moveVec);
+
+		// プレイヤーの加速度を設定する
+		if (m_moveSpeed < kMaxSpeed)
+		{
+			m_moveSpeed += kAcceleration;
+			m_moveSpeed = std::min(m_moveSpeed, kMaxSpeed);
+		}
 		// プレイヤーの移動ベクトルを設定する
-		moveVec = VScale(m_targetMoveDir, kMove);
+		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
 	}
 	// 移動しない場合
 	else
@@ -271,7 +283,16 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 		{
 			// 待機状態にする
 			nextState = State::kStand;
+			m_moveSpeed = 0.0f;
 		}
+
+		// プレイヤーを減速させる
+		if (m_moveSpeed > 0.0f)
+		{
+			m_moveSpeed -= kDeceleration;
+			m_moveSpeed = std::max(0.0f, m_moveSpeed);
+		}
+		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
 	}
 
 	// 移動ベクトルのY成分をY軸方向の速度にする
@@ -302,13 +323,25 @@ void Player::UpdateAnimState(State prevState)
 	if (prevState == State::kStand && m_currentState == State::kRun)
 	{
 		// 移動アニメーションを再生する
-		PlayAnim(kRunAnimIndex);
+		PlayAnim(AnimKind::kRun);
+	}
+	// 待機状態からジャンプ状態に変わった場合
+	else if (prevState == State::kStand && m_currentState == State::kJump)
+	{
+		// ジャンプ状態を再生する
+		PlayAnim(AnimKind::kJump);
 	}
 	// 移動から待機状態に変わった場合
 	else if (prevState == State::kRun && m_currentState == State::kStand)
 	{
 		// 待機アニメーションを再生する
-		PlayAnim(kStandAnimIndex);
+		PlayAnim(AnimKind::kStand);
+	}
+	// 移動状態からジャンプ状態に変わった場合
+	else if (prevState == State::kRun && m_currentState == State::kJump)
+	{
+		// ジャンプアニメーションを再生する
+		PlayAnim(AnimKind::kJump);
 	}
 	// ジャンプ中の場合
 	else if (m_currentState == State::kJump)
@@ -319,12 +352,12 @@ void Player::UpdateAnimState(State prevState)
 			// 落下アニメーションを再生する
 			if (MV1GetAttachAnim(m_modelHandle, m_currentPlayAnim) == static_cast<int>(State::kJump))
 			{
-				PlayAnim(kFallAnimIndex);
+				PlayAnim(AnimKind::kFall);
 			}
 		}
 		else
 		{
-			PlayAnim(kJumpAnimIndex);
+			PlayAnim(AnimKind::kJump);
 		}
 	}
 }
@@ -352,10 +385,10 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
-		m_currentPlayAnim += kPlayAnimSpeed;
+		m_currentAnimCount += kPlayAnimSpeed;
 
 		// アニメーションの再生時間をループ
-		if (m_currentPlayAnim > animTotalTime)
+		if (m_currentAnimCount > animTotalTime)
 		{
 			m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
 		}
@@ -391,7 +424,7 @@ void Player::UpdateAnim()
 /// アニメーションを再生する
 /// </summary>
 /// <param name="playAnim">再生するアニメーション状態</param>
-void Player::PlayAnim(int PlayAnimIndex)
+void Player::PlayAnim(AnimKind playAnimIndex)
 {
 	// 1つ前のアニメーションがアタッチされている場合削除する
 	if (m_prevPlayAnim != -1)
@@ -400,12 +433,12 @@ void Player::PlayAnim(int PlayAnimIndex)
 		m_prevPlayAnim = -1;
 	}
 
-	// 再生中だったアニメーションを1つ前に移動する
+	// 現在再生中のアニメーションを1つ前に移動する
 	m_prevPlayAnim = m_currentPlayAnim;
 	m_prevAnimCount = m_currentAnimCount;
 
 	// 新たにアニメーションをアタッチする
-	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, PlayAnimIndex, -1, false);
+	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(playAnimIndex), -1, false);
 	m_currentAnimCount = 0.0f;
 
 	// ブレンド率はPrevが有効でない場合、1.0にする

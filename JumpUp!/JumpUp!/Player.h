@@ -14,10 +14,21 @@ public:
 	// プレイヤーの状態
 	enum class State
 	{
-		kStand = 36, // 待機
-		kFall = 40,	 // 落下中
-		kJump = 42,	 // ジャンプ中
-		kRun = 48	 // 移動
+		kStand, // 待機
+		kFall,	// 落下中
+		kJump,	// ジャンプ中
+		kRun	// 移動
+	};
+
+	// アニメーション種別
+	enum class AnimKind
+	{
+		kNone = -1,		// なし
+		kUnKnown = 0,	// 不明
+		kStand = 36,	// 待機
+		kFall = 40,		// 落下
+		kJump = 42,		// ジャンプ
+		kRun = 48,		// 移動
 	};
 
 	Player();
@@ -48,7 +59,7 @@ private:
 	// アニメーション処理
 	void UpdateAnim();
 	// アニメーションを再生する
-	void PlayAnim(int PlayAnimIndex);
+	void PlayAnim(AnimKind PlayAnimIndex);
 
 private:
 	// プレイヤー情報
@@ -57,6 +68,7 @@ private:
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 	float m_angle;				// 向いている方向の角度
 	float m_jumpPower;			// Y軸方向の速度
+	float m_moveSpeed;			// 移動速度
 	int m_modelHandle;			// プレイヤーの3Dモデル
 	State m_currentState;		// 現在の状態
 
