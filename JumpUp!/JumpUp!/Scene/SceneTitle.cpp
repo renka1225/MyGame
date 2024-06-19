@@ -3,6 +3,26 @@
 #include "ScenePlaying.h"
 #include "Input.h"
 
+// 定数
+namespace
+{
+	constexpr int kTitleLogoPosX = 350;	// タイトルロゴ位置X
+	constexpr int kTitleLogoPosY = 100;	// タイトルロゴ位置Y
+
+	constexpr int kTextColor = 0xffffff; // テキストの色
+	constexpr int kStartPosX = 1000;	 // スタート表示位置X
+	constexpr int kStartPosY = 700;		 // スタート表示位置Y
+	constexpr int kEndPosX = 1000;		 // ゲーム終了表示位置X
+	constexpr int kEndPosY = 900;		 // ゲーム終了表示位置Y
+
+	constexpr int kSelectColor = 0xffffff;		// 選択中カーソルの色
+	static constexpr int kNowSelectPosX = 900;	// 選択中表示位置X
+	static constexpr int kNowSelectPosY = 690;	// 選択中表示位置Y
+	static constexpr int kNowSelectWidth = 210;	// 選択中表示の横幅
+	static constexpr int kNowSelectHeight = 61;	// 選択中表示の縦幅
+	static constexpr int kSelectMove = 80;		// 選択表示の移動量
+}
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -64,6 +84,15 @@ void SceneTitle::Draw()
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
 #endif
+
+	// 選択中の項目に色をつける
+	int nowSelectPosY = kNowSelectPosY + kSelectMove * m_select;
+	DrawBox(kNowSelectPosX, nowSelectPosY, kNowSelectPosX + kNowSelectWidth, nowSelectPosY + kNowSelectHeight,
+		kSelectColor, true);
+
+	// 選択項目表示
+	DrawString(kStartPosX, kStartPosY, "Start\n", kTextColor);
+	DrawString(kEndPosX, kEndPosY, "End\n", kTextColor);
 }
 
 
@@ -79,6 +108,6 @@ void SceneTitle::UpdateSelect(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select - 1) % kSelectNum;	// 選択状態を1つ上げる
+		m_select = (m_select - 1) % 1;	// 選択状態を1つ上げる
 	}
 }
