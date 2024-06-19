@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DrawDebug.cpp" />
+    <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Util\Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DrawDebug.h" />
+    <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />

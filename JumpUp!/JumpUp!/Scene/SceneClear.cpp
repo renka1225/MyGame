@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "SceneClear.h"
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
 #include "Input.h"
@@ -6,7 +7,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneTitle::SceneTitle() :
+SceneClear::SceneClear():
 	m_select(Select::kStart)
 {
 }
@@ -15,7 +16,7 @@ SceneTitle::SceneTitle() :
 /// <summary>
 /// デストラクタ
 /// </summary>
-SceneTitle::~SceneTitle()
+SceneClear::~SceneClear()
 {
 }
 
@@ -23,7 +24,7 @@ SceneTitle::~SceneTitle()
 /// <summary>
 /// 初期化
 /// </summary>
-void SceneTitle::Init()
+void SceneClear::Init()
 {
 }
 
@@ -32,8 +33,8 @@ void SceneTitle::Init()
 /// 更新
 /// </summary>
 /// <param name="input">入力</param>
-/// <returns>遷移先のクラス</returns>
-std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
+/// <returns>遷移先のシーン</returns>
+std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
 	// 選択状態を更新
 	UpdateSelect(input);
@@ -45,9 +46,9 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		{
 			return std::make_shared<ScenePlaying>(); // ゲームシーンに移動
 		}
-		else if (m_select == Select::kEnd)
+		else if (m_select == Select::kTitle)
 		{
-			DxLib_End(); // ゲーム終了
+			return std::make_shared<SceneTitle>();	// タイトル画面に移動
 		}
 	}
 
@@ -58,20 +59,20 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// <summary>
 /// 描画
 /// </summary>
-void SceneTitle::Draw()
+void SceneClear::Draw()
 {
-#ifdef _DEBUG
-	// デバッグ表示
-	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
+#ifdef _DEBUG	// デバッグ表示
+	// 現在のシーン
+	DrawString(0, 0, "クリア画面", 0xffffff);
 #endif
 }
 
 
 /// <summary>
-/// 選択状態を更新する
+/// 選択状態を更新
 /// </summary>
-/// <param name="input">入力状態</param>
-void SceneTitle::UpdateSelect(Input& input)
+/// <param name="input">入力</param>
+void SceneClear::UpdateSelect(Input& input)
 {
 	if (input.IsTriggered("down"))
 	{

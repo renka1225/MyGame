@@ -1,3 +1,7 @@
-﻿  Player.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Player.cpp(24,33): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+﻿  SceneBase.cpp
+  SceneClear.cpp
+  SceneManager.cpp
+  ScenePlaying.cpp
+  SceneTitle.cpp
+  コードを生成中...
   JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe

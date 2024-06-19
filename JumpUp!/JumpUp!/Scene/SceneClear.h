@@ -2,13 +2,13 @@
 #include "SceneBase.h"
 
 /// <summary>
-/// タイトル画面クラス
+/// クリア画面クラス
 /// </summary>
-class SceneTitle : public SceneBase
+class SceneClear : public SceneBase
 {
 public:
-	SceneTitle();
-	virtual ~SceneTitle();
+	SceneClear();
+	virtual ~SceneClear();
 
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
@@ -21,11 +21,11 @@ private:
 	// 選択項目の種類
 	enum Select
 	{
-		kStart,		// ゲームスタート
-		kEnd,		// ゲーム終了
+		kStart,		// 再プレイ
+		kTitle,		// タイトルに戻る
 		kSelectNum	// 選択数
 	};
 
 	int m_select;	// 現在の選択状態
-
 };
+

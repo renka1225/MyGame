@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "ScenePlaying.h"
+#include "SceneClear.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -43,6 +44,10 @@ void ScenePlaying::Init()
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 #ifdef _DEBUG	// デバッグモード
+	if (input.IsPressing("sceneChange"))
+	{
+		return std::make_shared<SceneClear>();	// クリア画面に移動
+	}
 	// Pキーでポーズ、ポーズ中にPでコマ送り
 	if (m_debugState == DebugState::Normal && input.IsPressing("debug_pause"))
 	{
