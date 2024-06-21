@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Game.h"
 #include "Input.h"
+#include "Font.h"
 #include <memory>
 #include <cmath>
 
@@ -35,6 +36,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 入力状態を取得
 	Input input;
 
+	// フォントの読み込み
+	Font::Load();
+
 	SetLightPosition(VGet(0.0f, 100.0f, 0.0f));
 
 	while (ProcessMessage() == 0)
@@ -59,6 +63,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// fpsを60に固定
 		while (GetNowHiPerformanceCount() - time < 16667) {}
 	}
+
+	// フォントの解放
+	Font::UnLoad();
+
+	DxLib_End();				// ＤＸライブラリ使用の終了処理
 
 	return 0;				// ソフトの終了 
 }

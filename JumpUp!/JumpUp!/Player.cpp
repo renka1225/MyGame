@@ -21,7 +21,7 @@ namespace
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
-	constexpr float kPlayAnimSpeed = 0.3f;	 // アニメーションの速度
+	constexpr float kPlayAnimSpeed = 0.6f;	 // アニメーションの速度
 }
 
 
@@ -43,7 +43,7 @@ Player::Player():
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(kAnimBlendMax)
 {
-	m_modelHandle = MV1LoadModel("data/model/player.mv1");
+	m_modelHandle = MV1LoadModel("data/Model/player.mv1");
 }
 
 

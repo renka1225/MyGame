@@ -28,7 +28,7 @@ Stage::Stage():
     m_wallNum(0),
     m_floorNum(0)
 {
-	m_stageHandle = MV1LoadModel("data/model/stage.mv1");
+	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
     MV1SetScale(m_stageHandle, VGet(kScale, kScale, kScale));
 
     // モデル全体のコリジョン情報のセットアップ

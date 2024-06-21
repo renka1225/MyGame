@@ -1,0 +1,120 @@
+#include "DxLib.h"
+#include "Font.h"
+#include <vector>
+
+namespace
+{
+	// 読み込むフォントファイル名
+	const LPCSTR kFontDataPath[] =
+	{
+		"data/Font/TsunagiGothic.ttf",
+	};
+
+	// フォントのデータ
+	struct FontData
+	{
+		const char* name;	// フォント名
+		int size;			// フォントサイズ
+		int thick;			// フォントの太さ(-1:デフォルト)
+		int type;			// フォントのタイプ(-1:デフォルト)
+	};
+
+	// フォントのハンドル
+	std::vector<int> fontHandle(static_cast<int>(Font::FontId::kNum));
+
+	constexpr FontData data[] =
+	{
+		// Size96_4
+		{
+			"Tsunagi Gothic Black",
+			96,
+			4,
+			-1
+		},
+		// Size64_4
+		{
+			"Tsunagi Gothic Black",
+			64,
+			4,
+			-1
+		},
+		// Size48_4
+		{
+			"Tsunagi Gothic Black",
+			48,
+			4,
+			-1
+		},
+		// Size32_4
+		{
+			"Tsunagi Gothic Black",
+			32,
+			4,
+			-1
+		},
+		// Size24_4
+		{
+			"Tsunagi Gothic Black",
+			24,
+			4,
+			-1
+		},
+		// Size16_4
+		{
+			"Tsunagi Gothic Black",
+			16,
+			4,
+			-1
+		},
+		// Normal
+		{
+			"ＭＳ　ゴシック",
+			16,
+			-1,
+			-1
+		},
+	};
+}
+
+namespace Font
+{
+	/// <summary>
+	/// フォントのロード
+	/// </summary>
+	void Font::Load()
+	{
+		for (auto& fontPath : kFontDataPath)
+		{
+			if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0) {
+			}
+			else
+			{
+				// フォント読込エラー処理
+				MessageBox(NULL, "フォント読込失敗", "", MB_OK);
+			}
+		}
+
+		// フォントデータ生成
+		for (int i = 0; i < static_cast<int>(Font::FontId::kNum); i++)
+		{
+			fontHandle[i] = CreateFontToHandle(data[i].name, data[i].size, data[i].thick, data[i].type);
+		}
+	}
+
+
+	/// <summary>
+	/// フォントのアンロード
+	/// </summary>
+	void Font::UnLoad()
+	{
+		// フォントのアンロード
+		for (auto& fontPath : kFontDataPath)
+		{
+			if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL)) {
+			}
+			else {
+				MessageBox(NULL, "remove failure", "", MB_OK);
+			}
+		}
+	}
+}

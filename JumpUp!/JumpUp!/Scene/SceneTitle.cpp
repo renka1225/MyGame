@@ -1,26 +1,26 @@
 #include "DxLib.h"
+#include "Game.h"
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
+#include "Font.h"
 #include "Input.h"
 
 // 定数
 namespace
 {
-	constexpr int kTitleLogoPosX = 350;	// タイトルロゴ位置X
-	constexpr int kTitleLogoPosY = 100;	// タイトルロゴ位置Y
-
-	constexpr int kTextColor = 0xffffff; // テキストの色
-	constexpr int kStartPosX = 1000;	 // スタート表示位置X
-	constexpr int kStartPosY = 700;		 // スタート表示位置Y
-	constexpr int kEndPosX = 1000;		 // ゲーム終了表示位置X
-	constexpr int kEndPosY = 900;		 // ゲーム終了表示位置Y
-
-	constexpr int kSelectColor = 0xffffff;		// 選択中カーソルの色
-	static constexpr int kNowSelectPosX = 900;	// 選択中表示位置X
-	static constexpr int kNowSelectPosY = 690;	// 選択中表示位置Y
-	static constexpr int kNowSelectWidth = 210;	// 選択中表示の横幅
-	static constexpr int kNowSelectHeight = 61;	// 選択中表示の縦幅
-	static constexpr int kSelectMove = 80;		// 選択表示の移動量
+	// UI表示関連
+	constexpr int kTitleLogoPosX = 510;		// タイトルロゴ位置X
+	constexpr int kTitleLogoPosY = 150;		// タイトルロゴ位置Y
+	constexpr int kFramePosX = 760;			// 枠表示位置X
+	constexpr int kFramePosY = 550;			// 枠表示位置Y
+	constexpr int kSelectMove = 200;		// 選択表示の移動量
+	
+	// テキスト関連
+	constexpr int kTextColor = 0x000000;	// テキストの色
+	constexpr int kStartPosX = 800;			// スタート表示位置X
+	constexpr int kStartPosY = 600;			// スタート表示位置Y
+	constexpr int kEndPosX = 1000;			// ゲーム終了表示位置X
+	constexpr int kEndPosY = 900;			// ゲーム終了表示位置Y
 }
 
 /// <summary>
@@ -29,6 +29,9 @@ namespace
 SceneTitle::SceneTitle() :
 	m_select(Select::kStart)
 {
+	m_titleHandle = LoadGraph("data/UI/titleLogo.png");
+	m_frameHandle = LoadGraph("data/UI/frame.png");
+	m_selectFrameHandle = LoadGraph("data/UI/selectFrame.png");
 }
 
 
@@ -37,6 +40,9 @@ SceneTitle::SceneTitle() :
 /// </summary>
 SceneTitle::~SceneTitle()
 {
+	DeleteGraph(m_titleHandle);
+	DeleteGraph(m_frameHandle);
+	DeleteGraph(m_selectFrameHandle);
 }
 
 
@@ -80,19 +86,43 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	// TODO:背景にステージを回転させて表示しておく
+	// 背景表示
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x2d6676, true);
+
+	// タイトル表示
+	DrawGraph(kTitleLogoPosX, kTitleLogoPosY, m_titleHandle, true);
+
+	// 枠表示
+	for (int i = 0; i < kSelectNum; i++)
+	{
+		// 選択状態によって枠の画像を変更する
+		int displayHandle = -1;
+		if (m_select == i)
+		{
+			displayHandle = m_selectFrameHandle;
+		}
+		else
+		{
+			displayHandle = m_frameHandle;
+		}
+		DrawGraph(kFramePosX, kFramePosY + kSelectMove * i, displayHandle, true);
+	}
+
+	// 文字表示
+	DrawFormatStringToHandle(kStartPosX, kStartPosY,
+		kTextColor, static_cast<int>(Font::FontId::kSize32_4), "START");
+	DrawFormatStringToHandle(kEndPosX, kEndPosY,
+		kTextColor, static_cast<int>(Font::FontId::kSize32_4), "END");
+	//DrawString(kStartPosX, kStartPosY, "Start\n", kTextColor);
+	//DrawString(kEndPosX, kEndPosY, "End\n", kTextColor);
+
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
+	// 中心線
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
 #endif
-
-	// 選択中の項目に色をつける
-	int nowSelectPosY = kNowSelectPosY + kSelectMove * m_select;
-	DrawBox(kNowSelectPosX, nowSelectPosY, kNowSelectPosX + kNowSelectWidth, nowSelectPosY + kNowSelectHeight,
-		kSelectColor, true);
-
-	// 選択項目表示
-	DrawString(kStartPosX, kStartPosY, "Start\n", kTextColor);
-	DrawString(kEndPosX, kEndPosY, "End\n", kTextColor);
 }
 
 
@@ -108,6 +138,6 @@ void SceneTitle::UpdateSelect(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select - 1) % 1;	// 選択状態を1つ上げる
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }

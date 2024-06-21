@@ -60,6 +60,9 @@
     <ClCompile Include="Scene\SceneClear.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Util\Font.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Scene\SceneClear.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Font.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
-﻿  Player.cpp
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Player.cpp(24,33): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
-  JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
+﻿  SceneTitle.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(124,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(124,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
