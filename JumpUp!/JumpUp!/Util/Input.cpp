@@ -164,13 +164,12 @@ Input::Input()
 					   {InputType::pad, PAD_INPUT_8} };
 
 	/*デバッグ機能*/
+	m_commandTable["shift"] = { {InputType::keybd, KEY_INPUT_LSHIFT},
+				   {InputType::pad, PAD_INPUT_R} };
 	m_commandTable["debug_pause"] = { {InputType::keybd, KEY_INPUT_P},
 					   {InputType::pad, PAD_INPUT_R} };
-
 	m_commandTable["debug_enter"] = { {InputType::keybd, KEY_INPUT_RETURN},
 				   {InputType::pad, PAD_INPUT_R} };
-
-
 	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_X},
 							   {InputType::pad, PAD_INPUT_R} };
 }

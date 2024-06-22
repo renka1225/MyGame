@@ -25,10 +25,12 @@ private:
 		kEnd,		// ゲーム終了
 		kSelectNum	// 選択数
 	};
-
 	int m_select;	// 現在の選択状態
+
+	int m_stageRotate;
 
 	int m_titleHandle;		 // タイトルロゴの画像
 	int m_frameHandle;		 // 枠の画像
 	int m_selectFrameHandle; // 現在選択中の枠の画像
+	int m_stageHandle;		 // ステージの3Dモデル
 };

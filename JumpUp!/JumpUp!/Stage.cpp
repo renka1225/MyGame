@@ -7,8 +7,11 @@
 // 定数
 namespace
 {
-    // マップサイズ
-    constexpr float kScale = 0.1f;
+    constexpr float kStageScale = 0.1f;     // ステージサイズ
+    constexpr float kFragScale = 30.0f;     // フラッグのサイズ
+
+    // フラッグの位置
+    const VECTOR kFragPos = VGet(0.0f, 430.0f, 0.0f);
 
     // 当たり判定
     constexpr float kDefaultSize = 100.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
@@ -29,10 +32,15 @@ Stage::Stage():
     m_floorNum(0)
 {
 	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
-    MV1SetScale(m_stageHandle, VGet(kScale, kScale, kScale));
+    m_flagHandle = MV1LoadModel("data/Model/flag.mv1");
+
+    MV1SetScale(m_stageHandle, VGet(kStageScale, kStageScale, kStageScale));
+    MV1SetScale(m_flagHandle, VGet(kFragScale, kFragScale, kFragScale));
+    MV1SetPosition(m_flagHandle, kFragPos);
 
     // モデル全体のコリジョン情報のセットアップ
     MV1SetupCollInfo(m_stageHandle, -1);
+    MV1SetupCollInfo(m_flagHandle, -1);
 }
 
 
@@ -42,6 +50,7 @@ Stage::Stage():
 Stage::~Stage()
 {
     MV1DeleteModel(m_stageHandle);
+    MV1DeleteModel(m_flagHandle);
 }
 
 
@@ -52,6 +61,7 @@ void Stage::Draw()
 {
     // ステージ描画
     MV1DrawModel(m_stageHandle);
+    MV1DrawModel(m_flagHandle);
 }
 
 
@@ -82,6 +92,28 @@ VECTOR Stage::CheckCollision(Player& player, const VECTOR& moveVector)
     MV1CollResultPolyDimTerminate(hitDim);
 
     return nextPos;
+}
+
+
+/// <summary>
+/// ゴールフラッグとの当たり判定をチェックする
+/// </summary>
+/// <param name="player">プレイヤー参照</param>
+/// <param name="checkPosition">プレイヤーの移動量</param>
+/// <returns>フラッグに当たったかどうか</returns>
+bool Stage::CheckHitFlag(Player& player, const VECTOR& checkPosition)
+{
+    // プレイヤーの周囲にあるポリゴンを取得する
+    auto hitDim = MV1CollCheck_Capsule(m_flagHandle, -1, player.GetPos(), checkPosition, kHitHeight);
+
+    if (hitDim.HitNum >= 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 

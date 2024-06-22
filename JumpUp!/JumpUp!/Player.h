@@ -35,7 +35,7 @@ public:
 	~Player();
 
 	void Init();
-	void Update(const Input& input,const Camera& camera, Stage& stage);
+	void Update(const Input& input, const Camera& camera, Stage& stage);
 	void Draw(DrawDebug& drawDebug);
 
 	void OnHitRoof();	// 天井に当たった時
@@ -46,6 +46,7 @@ public:
 	bool GetIsMove() const { return m_isMove; }			// 移動中かどうか取得
 	State GetState() const { return m_currentState; }	// プレイヤーの現在の状態を取得
 	float GetJumpPower() const { return m_jumpPower; }	// プレイヤーのジャンプ量取得
+	bool GetIsGoal() const { return m_isGoal; }			// プレイヤーがゴールしたか取得する
 
 private:
 	// 移動処理
@@ -69,6 +70,7 @@ private:
 	float m_angle;				// 向いている方向の角度
 	float m_jumpPower;			// Y軸方向の速度
 	float m_moveSpeed;			// 移動速度
+	bool m_isGoal;				// プレイヤーがゴールしたか
 	int m_modelHandle;			// プレイヤーの3Dモデル
 	State m_currentState;		// 現在の状態
 

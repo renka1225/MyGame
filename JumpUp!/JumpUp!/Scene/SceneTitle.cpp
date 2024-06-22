@@ -21,17 +21,24 @@ namespace
 	constexpr int kStartPosY = 600;			// スタート表示位置Y
 	constexpr int kEndPosX = 1000;			// ゲーム終了表示位置X
 	constexpr int kEndPosY = 900;			// ゲーム終了表示位置Y
+
+	// ステージモデル
+	constexpr float kScale = 0.1f;							// 拡大率
+	constexpr float kRotate = 1.0f;							// 3Dモデルの回転量
+	const VECTOR kStagePos = VGet(1000.0f, 100.0f, 0.0f);	// 初期位置
 }
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 SceneTitle::SceneTitle() :
-	m_select(Select::kStart)
+	m_select(Select::kStart),
+	m_stageRotate(0.0f)
 {
 	m_titleHandle = LoadGraph("data/UI/titleLogo.png");
 	m_frameHandle = LoadGraph("data/UI/frame.png");
 	m_selectFrameHandle = LoadGraph("data/UI/selectFrame.png");
+	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
 }
 
 
@@ -43,6 +50,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_titleHandle);
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_selectFrameHandle);
+	DeleteGraph(m_stageHandle);
 }
 
 
@@ -51,6 +59,9 @@ SceneTitle::~SceneTitle()
 /// </summary>
 void SceneTitle::Init()
 {
+	// ステージモデルの調整
+	MV1SetPosition(m_stageHandle, kStagePos);
+	MV1SetScale(m_stageHandle, VGet(kScale, kScale, kScale));
 }
 
 
@@ -61,6 +72,10 @@ void SceneTitle::Init()
 /// <returns>遷移先のクラス</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	// ステージを回転させる
+	m_stageRotate += kRotate;
+	MV1SetRotationXYZ(m_stageHandle, VGet(0.0f, m_stageRotate * DX_PI_F / 360.0f, 0.0f));
+
 	// 選択状態を更新
 	UpdateSelect(input);
 
@@ -86,9 +101,11 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
-	// TODO:背景にステージを回転させて表示しておく
 	// 背景表示
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x2d6676, true);
+
+	// ステージ表示
+	MV1DrawModel(m_stageHandle);
 
 	// タイトル表示
 	DrawGraph(kTitleLogoPosX, kTitleLogoPosY, m_titleHandle, true);

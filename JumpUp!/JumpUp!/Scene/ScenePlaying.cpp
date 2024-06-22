@@ -65,6 +65,12 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 
 		// カメラ更新
 		m_pCamera->Update(input, *m_pPlayer, *m_pStage);
+
+		// プレイヤーがゴールしたらクリア画面に移動
+		if (m_pPlayer->GetIsGoal())
+		{
+			return std::make_shared<SceneClear>();
+		}
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す

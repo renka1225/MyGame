@@ -21,7 +21,7 @@ namespace
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
-	constexpr float kPlayAnimSpeed = 0.6f;	 // アニメーションの速度
+	constexpr float kPlayAnimSpeed = 0.5f;	 // アニメーションの速度
 }
 
 
@@ -35,6 +35,7 @@ Player::Player():
 	m_angle(0.0f),
 	m_jumpPower(0.0f),
 	m_moveSpeed(0.0f),
+	m_isGoal(false),
 	m_modelHandle(-1),
 	m_currentState(State::kStand),
 	m_currentPlayAnim(-1),
@@ -94,6 +95,11 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 
 	// アニメーション処理の更新
 	UpdateAnim();
+
+	if (stage.CheckHitFlag(*this, m_pos))
+	{
+		m_isGoal = true;
+	}
 }
 
 

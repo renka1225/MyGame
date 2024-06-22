@@ -14,6 +14,8 @@ public:
 	void Draw();
 	// 当たり判定をして、補正した移動先のポジションを返す
 	VECTOR CheckCollision(Player& player, const VECTOR& moveVector);
+	// ゴールフラッグとの当たり判定をチェックする
+	bool CheckHitFlag(Player& player, const VECTOR& checkPosition);
 
 	// ステージモデルを取得
 	int GetStageHandle() const { return m_stageHandle; }
@@ -31,6 +33,7 @@ private:
 	int m_wallNum;		// 壁ポリゴンの数
 	int	m_floorNum;		// 床ポリゴンの数
 	int m_stageHandle;	// ステージの3Dモデル
+	int m_flagHandle;	// フラッグの3Dモデル
 
 	static const int MaxHitColl = 2048;			// 処理するコリジョンポリゴンの最大数
 	MV1_COLL_RESULT_POLY* m_wall[MaxHitColl];	// 壁ポリゴンの構造体のアドレスを保存しておくためのポインタ配列

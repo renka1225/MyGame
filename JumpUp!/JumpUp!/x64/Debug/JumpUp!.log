@@ -1,4 +1,6 @@
 ﻿  SceneTitle.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(124,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(124,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(36,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(27,26): warning C4244: '+=': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(141,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneTitle.cpp(141,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+  JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
