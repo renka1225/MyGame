@@ -143,8 +143,8 @@ Input::Input()
 	m_commandTable["jump"] = { {InputType::keybd, KEY_INPUT_SPACE},
 						   {InputType::pad, PAD_INPUT_A} };
 
-	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
-						{InputType::pad, PAD_INPUT_C} };
+	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_TAB},
+						{InputType::pad, PAD_INPUT_R} };
 
 	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
 						   {InputType::pad, PAD_INPUT_Y} };
@@ -172,4 +172,6 @@ Input::Input()
 				   {InputType::pad, PAD_INPUT_R} };
 	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_X},
 							   {InputType::pad, PAD_INPUT_R} };
+	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
+					{InputType::pad, PAD_INPUT_10} };
 }

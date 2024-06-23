@@ -57,17 +57,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
 
-		// escキーを押したら終了する
-		if (CheckHitKey(KEY_INPUT_ESCAPE))	break;
-
 		// fpsを60に固定
 		while (GetNowHiPerformanceCount() - time < 16667) {}
+
+#ifdef _DEBUG
+		if (input.IsPressing("end"))
+		{
+			DxLib_End();
+		}
+#endif
+
 	}
 
-	// フォントの解放
-	Font::UnLoad();
+	Font::UnLoad();	// フォントの解放
 
-	DxLib_End();				// ＤＸライブラリ使用の終了処理
+	DxLib_End();	// ＤＸライブラリ使用の終了処理
 
-	return 0;				// ソフトの終了 
+	return 0;		// ソフトの終了 
 }

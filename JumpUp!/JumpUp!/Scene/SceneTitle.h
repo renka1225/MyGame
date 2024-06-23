@@ -2,7 +2,7 @@
 #include "SceneBase.h"
 
 /// <summary>
-/// タイトル画面クラス
+/// タイトル画面
 /// </summary>
 class SceneTitle : public SceneBase
 {
