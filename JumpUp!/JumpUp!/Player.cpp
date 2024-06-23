@@ -410,7 +410,7 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
-		m_prevPlayAnim += kPlayAnimSpeed;
+		m_prevPlayAnim += static_cast<int>(kPlayAnimSpeed);
 
 		// アニメーションの再生時間をループ
 		if (m_prevPlayAnim > animTotalTime)

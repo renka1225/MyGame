@@ -25,7 +25,11 @@ private:
 		kTitle,		// タイトルに戻る
 		kSelectNum	// 選択数
 	};
+	int m_select;			// 現在の選択状態
 
-	int m_select;	// 現在の選択状態
+	float m_frameAnimTime;	// 枠のアニメーション時間
+
+	int m_clearHandle;		// クリアの文字の画像
+	int m_frameHandle;		// 枠の画像
 };
 

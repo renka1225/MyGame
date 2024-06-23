@@ -19,11 +19,13 @@ namespace Font
 
 		// 使うフォントを指定する
 		// SceneTitle
-		TitleMenu = kSize64_4,
+		kTitleMenu = kSize64_4,
 
 		// ScenePlaying
+		kPauseMenu = kSize48_4,
 
 		// SceneClear
+		kClearMenu = kSize64_4,
 	};
 
 	// フォントのロード、アンロード
