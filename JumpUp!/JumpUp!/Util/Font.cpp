@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "Font.h"
-#include <vector>
 
 namespace
 {
@@ -18,71 +17,38 @@ namespace
 		int thick;			// フォントの太さ(-1:デフォルト)
 		int type;			// フォントのタイプ(-1:デフォルト)
 	};
-
-	// フォントのハンドル
-	std::vector<int> fontHandle(static_cast<int>(Font::FontId::kNum));
-
-	constexpr FontData data[] =
-	{
-		// Size96_4
-		{
-			"Tsunagi Gothic Black",
-			96,
-			4,
-			-1
-		},
-		// Size64_4
-		{
-			"Tsunagi Gothic Black",
-			64,
-			4,
-			-1
-		},
-		// Size48_4
-		{
-			"Tsunagi Gothic Black",
-			48,
-			4,
-			-1
-		},
-		// Size32_4
-		{
-			"Tsunagi Gothic Black",
-			32,
-			4,
-			-1
-		},
-		// Size24_4
-		{
-			"Tsunagi Gothic Black",
-			24,
-			4,
-			-1
-		},
-		// Size16_4
-		{
-			"Tsunagi Gothic Black",
-			16,
-			4,
-			-1
-		},
-		// Normal
-		{
-			"ＭＳ　ゴシック",
-			16,
-			-1,
-			-1
-		},
-	};
 }
 
 namespace Font
 {
+	std::vector<int> m_fontHandle;
+
+	FontData data[] =
+	{
+		// Size96_4
+		{"Tsunagi Gothic Black", 96, 4, -1},
+		// Size64_4
+		{"Tsunagi Gothic Black", 64, 4, -1},
+		// Size48_4
+		{"Tsunagi Gothic Black", 48, 4, -1},
+		// Size32_4
+		{"Tsunagi Gothic Black", 32, 4, -1},
+		// Size24_4
+		{"Tsunagi Gothic Black", 24, 4, -1},
+		// Size16_4
+		{"Tsunagi Gothic Black", 16, 4, -1},
+		// Normal
+		{"ＭＳ　ゴシック", 16, -1, -1},
+	};
+
+
 	/// <summary>
 	/// フォントのロード
 	/// </summary>
 	void Font::Load()
 	{
+		Font::m_fontHandle.resize(static_cast<int>(Font::FontId::kNum));
+
 		for (auto& fontPath : kFontDataPath)
 		{
 			if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0) {
@@ -95,9 +61,9 @@ namespace Font
 		}
 
 		// フォントデータ生成
-		for (int i = 0; i < static_cast<int>(Font::FontId::kNum); i++)
+		for (int i = 0; i < Font::m_fontHandle.size(); i++)
 		{
-			fontHandle[i] = CreateFontToHandle(data[i].name, data[i].size, data[i].thick, data[i].type);
+			Font::m_fontHandle[i] = CreateFontToHandle(data[i].name, data[i].size, data[i].thick, data[i].type);
 		}
 	}
 
@@ -107,14 +73,21 @@ namespace Font
 	/// </summary>
 	void Font::UnLoad()
 	{
-		// フォントのアンロード
 		for (auto& fontPath : kFontDataPath)
 		{
-			if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL)) {
+			if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL))
+			{
 			}
-			else {
-				MessageBox(NULL, "remove failure", "", MB_OK);
+			else
+			{
+				MessageBox(NULL, "フォント削除失敗", "", MB_OK);
 			}
+		}
+
+		// フォントデータ削除
+		for (const auto& handle : m_fontHandle)
+		{
+			DeleteFontToHandle(handle);
 		}
 	}
 }

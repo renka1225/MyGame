@@ -1,9 +1,9 @@
 #pragma once
+#include <vector>
 
 // フォント関連
 namespace Font
 {
-
 	// フォントの種類
 	enum class FontId
 	{
@@ -19,7 +19,7 @@ namespace Font
 
 		// 使うフォントを指定する
 		// SceneTitle
-		TitleMenu = kSize48_4,
+		TitleMenu = kSize64_4,
 
 		// ScenePlaying
 
@@ -29,5 +29,9 @@ namespace Font
 	// フォントのロード、アンロード
 	void Load();
 	void UnLoad();
+
+	// フォントのハンドル
+	// MEMO:externを使用して変数を共有する
+	extern std::vector<int> m_fontHandle;
 }
 

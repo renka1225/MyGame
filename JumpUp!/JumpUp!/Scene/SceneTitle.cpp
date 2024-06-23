@@ -11,21 +11,21 @@ namespace
 	// UI表示関連
 	constexpr int kTitleLogoPosX = 510;		// タイトルロゴ位置X
 	constexpr int kTitleLogoPosY = 150;		// タイトルロゴ位置Y
-	constexpr int kFramePosX = 760;			// 枠表示位置X
-	constexpr int kFramePosY = 550;			// 枠表示位置Y
-	constexpr int kSelectMove = 200;		// 選択表示の移動量
+	constexpr int kFramePosX = 350;			// 枠表示位置X
+	constexpr int kFramePosY = 750;			// 枠表示位置Y
+	constexpr int kSelectMove = 700;		// 選択表示の移動量
 	
 	// テキスト関連
 	constexpr int kTextColor = 0x000000;	// テキストの色
-	constexpr int kStartPosX = 800;			// スタート表示位置X
-	constexpr int kStartPosY = 600;			// スタート表示位置Y
-	constexpr int kEndPosX = 1000;			// ゲーム終了表示位置X
-	constexpr int kEndPosY = 900;			// ゲーム終了表示位置Y
+	constexpr int kStartPosX = 500;			// スタート表示位置X
+	constexpr int kStartPosY = 780;			// スタート表示位置Y
+	constexpr int kEndPosX = 1220;			// ゲーム終了表示位置X
+	constexpr int kEndPosY = 780;			// ゲーム終了表示位置Y
 
 	// ステージモデル
 	constexpr float kScale = 0.1f;							// 拡大率
 	constexpr float kRotate = 1.0f;							// 3Dモデルの回転量
-	const VECTOR kStagePos = VGet(1000.0f, 100.0f, 0.0f);	// 初期位置
+	const VECTOR kStagePos = VGet(1000.0f,200.0f, 0.0f);	// 初期位置
 }
 
 /// <summary>
@@ -114,23 +114,24 @@ void SceneTitle::Draw()
 	for (int i = 0; i < kSelectNum; i++)
 	{
 		// 選択状態によって枠の画像を変更する
-		int displayHandle = -1;
+		int frameHandle = -1;
 		if (m_select == i)
 		{
-			displayHandle = m_selectFrameHandle;
+			frameHandle = m_selectFrameHandle;
 		}
 		else
 		{
-			displayHandle = m_frameHandle;
+			frameHandle = m_frameHandle;
 		}
-		DrawGraph(kFramePosX, kFramePosY + kSelectMove * i, displayHandle, true);
+		DrawGraph(kFramePosX + kSelectMove * i, kFramePosY, frameHandle, true);
 	}
 
 	// 文字表示
 	DrawFormatStringToHandle(kStartPosX, kStartPosY,
-		kTextColor, static_cast<int>(Font::FontId::kSize32_4), "START");
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::TitleMenu)], "START");
 	DrawFormatStringToHandle(kEndPosX, kEndPosY,
-		kTextColor, static_cast<int>(Font::FontId::kSize32_4), "END");
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::TitleMenu)], "END");
+
 	//DrawString(kStartPosX, kStartPosY, "Start\n", kTextColor);
 	//DrawString(kEndPosX, kEndPosY, "End\n", kTextColor);
 
@@ -149,12 +150,12 @@ void SceneTitle::Draw()
 /// <param name="input">入力状態</param>
 void SceneTitle::UpdateSelect(Input& input)
 {
-	if (input.IsTriggered("down"))
+	if (input.IsTriggered("right"))
 	{
-		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
+		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ右にする
 	}
-	if (input.IsTriggered("up"))
+	if (input.IsTriggered("left"))
 	{
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ左にする
 	}
 }
