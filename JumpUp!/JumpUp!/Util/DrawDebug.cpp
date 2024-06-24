@@ -1,4 +1,5 @@
 #include "DrawDebug.h"
+#include "ConversionTime.h"
 
 /// <summary>
 /// グリッド表示
@@ -79,4 +80,15 @@ void DrawDebug::DrawCameraInfo(VECTOR pos, VECTOR target)
 {
 	DrawFormatString(0, 60, 0xffffff, "カメラ座標(x:%f, y:%f, z:%f)", pos.x, pos.y, pos.z);
 	DrawFormatString(0, 80, 0xffffff, "注視点座標(x:%f, y:%f, z:%f)", target.x, target.y, target.z);
+}
+
+
+/// <summary>
+/// タイムを表示する
+/// </summary>
+/// <param name="time">経過時間</param>
+void DrawDebug::DrawTime(int frame)
+{
+	DrawFormatString(0, 80, 0xffffff, "タイム:%02d:%02d:%03d", 
+		Conversion::ChangeMin(frame), Conversion::ChangeSec(frame), Conversion::ChangeMilliSec(frame));
 }

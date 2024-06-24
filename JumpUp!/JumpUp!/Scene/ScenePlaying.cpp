@@ -52,7 +52,7 @@ namespace
 ScenePlaying::ScenePlaying():
 	m_select(Select::kBack),
 	m_isPause(false),
-	m_time(0.0f),
+	m_frame(0),
 	m_frameAnimTime(0.0f)
 {
 	m_pPlayer = std::make_shared<Player>();
@@ -94,7 +94,9 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 #ifdef _DEBUG	// デバッグモード
 	if (input.IsPressing("sceneChange"))
 	{
-		return std::make_shared<SceneClear>();	// クリア画面に移動
+		auto sceneClear = std::make_shared<SceneClear>();
+		sceneClear->SetClearTime(m_frame);
+		return sceneClear;	// クリア画面に移動
 	}
 	// Pキーでポーズ、ポーズ中にPでコマ送り
 	if (m_debugState == DebugState::Normal && input.IsPressing("debug_pause"))
@@ -135,7 +137,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		}
 		else
 		{
-			m_time++;	// 経過時間
+			m_frame++;	// 経過フレーム数を更新
 
 			// ボタンを押したらポーズ画面を表示する
 			if (input.IsPressing("pause"))
@@ -152,7 +154,10 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		// プレイヤーがゴールしたらクリア画面に移動
 		if (m_pPlayer->GetIsGoal())
 		{
-			return std::make_shared<SceneClear>();
+			auto sceneClear = std::make_shared<SceneClear>();
+			sceneClear->SetClearTime(m_frame);
+
+			return sceneClear;
 		}
 	}
 
@@ -185,6 +190,8 @@ void ScenePlaying::Draw()
 	//m_pDrawDebug.DrawGrid();
 	// 現在のシーン
 	DrawString(0, 0, "プレイ画面", 0xffffff);
+	// タイム表示
+	m_pDrawDebug.DrawTime(m_frame);
 #endif
 }
 

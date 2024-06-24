@@ -140,7 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DrawDebug.cpp" />
+    <ClCompile Include="Util\ConversionTime.cpp" />
+    <ClCompile Include="Util\DrawDebug.cpp" />
     <ClCompile Include="Util\Font.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -154,7 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="DrawDebug.h" />
+    <ClInclude Include="Util\ConversionTime.h" />
+    <ClInclude Include="Util\DrawDebug.h" />
     <ClInclude Include="Util\Font.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Stage.h" />

@@ -41,7 +41,7 @@ private:
 	int m_select;	// 現在の選択状態
 	bool m_isPause;	// ポーズ画面を開いているか(true:開いている)
 
-	float m_time;		// 経過時間
+	int m_frame;	// 経過フレーム数
 
 	float m_frameAnimTime;	// 枠のアニメーション時間
 	int m_frameHandle;		// ポーズ画面の枠の画像

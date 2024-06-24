@@ -3,6 +3,7 @@
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
 #include "Font.h"
+#include "ConversionTime.h"
 #include "Game.h"
 #include "Input.h"
 
@@ -32,6 +33,7 @@ namespace
 /// </summary>
 SceneClear::SceneClear():
 	m_select(Select::kStart),
+	m_clearTime(0.0f),
 	m_frameAnimTime(0.0f)
 {
 	m_clearHandle = LoadGraph("data/UI/clear.png");
@@ -98,6 +100,16 @@ void SceneClear::Draw()
 	// クリアの文字表示
 	DrawGraph(kClearPosX, kClearPosY, m_clearHandle, true);
 
+	// クリアタイムをフレーム数から秒数に変換
+	int min = Conversion::ChangeMin(m_clearTime);
+	int sec = Conversion::ChangeSec(m_clearTime);
+	int milliSec = Conversion::ChangeMilliSec(m_clearTime);
+
+	// クリアタイム表示
+	DrawFormatStringToHandle(700, 300,
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)],
+		"クリア時間 %02d:%02d:%03d", min, sec, milliSec);
+
 	// 枠表示
 	for (int i = 0; i < kSelectNum; i++)
 	{
@@ -134,8 +146,10 @@ void SceneClear::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "クリア画面", 0xffffff);
+	// クリアタイム
+	DrawFormatString(0, 40, 0xffffff, "クリアタイム:%d", m_clearTime);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
 }
 

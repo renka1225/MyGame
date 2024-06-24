@@ -1,5 +1,6 @@
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Camera.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Camera.obj
-C:\GitHub\MyGame\JumpUp!\JumpUp!\DrawDebug.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\DrawDebug.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Util\ConversionTime.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\ConversionTime.obj
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Util\DrawDebug.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\DrawDebug.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Util\Font.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Font.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneClear.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\SceneClear.obj
 C:\GitHub\MyGame\JumpUp!\JumpUp!\Stage.cpp;C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\Stage.obj

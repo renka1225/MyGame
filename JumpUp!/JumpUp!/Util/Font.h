@@ -36,7 +36,7 @@ namespace Font
 	void UnLoad();
 
 	// フォントのハンドル
-	// MEMO:externを使用して変数を共有する
+	// MEMO:externを使用して異なるソースファイルで変数を共有できるようにする
 	extern std::vector<int> m_fontHandle;
 }
 

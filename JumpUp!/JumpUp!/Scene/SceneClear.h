@@ -13,6 +13,7 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
+	void SetClearTime(int frame) { m_clearTime = frame; }
 
 private:
 	void UpdateSelect(Input& input);	// 選択状態を更新
@@ -27,9 +28,10 @@ private:
 	};
 	int m_select;			// 現在の選択状態
 
+	int m_clearTime;		// クリア時間
 	float m_frameAnimTime;	// 枠のアニメーション時間
 
-	int m_clearHandle;		// クリアの文字の画像
+	float m_clearHandle;	// クリアの文字の画像
 	int m_frameHandle;		// 枠の画像
 };
 

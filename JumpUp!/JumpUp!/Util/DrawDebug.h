@@ -16,4 +16,6 @@ public:
 	void DrawPlayerInfo(VECTOR pos, Player::State state);
 	// カメラの情報を描画
 	void DrawCameraInfo(VECTOR pos, VECTOR target);
+	// タイム表示
+	void DrawTime(int frame);
 };
