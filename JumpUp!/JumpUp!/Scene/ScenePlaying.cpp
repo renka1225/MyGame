@@ -11,28 +11,39 @@
 // 定数
 namespace
 {
-	// ポーズ画面
-	constexpr int kPausePosX = 600;		// 表示位置X
-	constexpr int kPausePosY = 100;		// 表示位置Y
-	constexpr int kPauseWidth = 800;	// 横幅
-	constexpr int kPauseHeight = 400;	// 縦幅
+	/*オプション画面*/
+	constexpr int kOptionPosX = 40;			// 操作説明表示位置X
+	constexpr int kOptionPosY = 300;		// 操作説明表示位置X
+	constexpr int kOptionWidth = 400;		// 操作説明の横幅
+	constexpr int kOptionHeight = 800;		// 操作説明の縦幅
+	constexpr int kOptionColor = 0x000000;	// 操作説明の背景色
+
+	/*ポーズ画面*/
+	constexpr int kPausePosX = 650;			// 枠表示位置X
+	constexpr int kPausePosY = 200;			// 枠表示位置Y
+	constexpr int kPauseBackPosX = 670;		// 背景表示位置X
+	constexpr int kPauseBackPosY = 210;		// 背景表示位置Y
+	constexpr int kPauseWidth = 620;		// 背景の横幅
+	constexpr int kPauseHeight = 700;		// 背景の縦幅
+	constexpr int kPauseColor = 0x040a15;	// ポーズ画面の背景色
+	constexpr int kPauseAlpha = 180;		// ポーズ画面のα値
 
 	// UI表示関連
-	constexpr int kSelectMove = 200;		// 選択表示の移動量
-	constexpr int kFramePosX = 600;			// 枠表示位置X
+	constexpr int kFramePosX = 780;			// 枠表示位置X
 	constexpr int kFramePosY = 300;			// 枠表示位置Y
+	constexpr int kSelectMove = 200;		// 選択表示の移動量
 	constexpr float kFrameAnim = 0.05f;		// 枠の拡大縮小アニメーション再生時間
 	constexpr float kFrameScale = 1.0f;		// 元の枠のサイズ
 	constexpr float kFrameChange = 0.1f;	// 枠のサイズの変化量
 
 	// テキスト関連
 	constexpr int kTextColor = 0x000000;	// テキストの色
-	constexpr int kBackPosX = 700;			// ゲームに戻る表示位置X
-	constexpr int kBackPosY = 590;			// ゲームに戻る表示位置Y
-	constexpr int kRetryPosX = 700;			// リトライ表示位置X
-	constexpr int kRetryPosY = 780;			// リトライ表示位置Y
-	constexpr int kTitlePosX = 700;			// タイトルに戻る表示位置Y
-	constexpr int kTitlePosY = 780;			// タイトルに戻る表示位置Y
+	constexpr int kBackPosX = 830;			// "ゲームに戻る"表示位置X
+	constexpr int kBackPosY = 340;			// "ゲームに戻る"表示位置Y
+	constexpr int kRetryPosX = 890;			// "リトライ"表示位置X
+	constexpr int kRetryPosY = 540;			// "リトライ"表示位置Y
+	constexpr int kTitlePosX = 810;			// "タイトルに戻る"表示位置Y
+	constexpr int kTitlePosY = 740;			// "タイトルに戻る"表示位置Y
 }
 
 /// <summary>
@@ -41,6 +52,7 @@ namespace
 ScenePlaying::ScenePlaying():
 	m_select(Select::kBack),
 	m_isPause(false),
+	m_time(0.0f),
 	m_frameAnimTime(0.0f)
 {
 	m_pPlayer = std::make_shared<Player>();
@@ -48,6 +60,7 @@ ScenePlaying::ScenePlaying():
 	m_pStage = std::make_shared<Stage>();
 
 	m_frameHandle = LoadGraph("data/UI/frame.png");
+	m_pauseBackHandle = LoadGraph("data/UI/pauseBack.png");
 }
 
 
@@ -57,6 +70,7 @@ ScenePlaying::ScenePlaying():
 ScenePlaying::~ScenePlaying()
 {
 	DeleteGraph(m_frameHandle);
+	DeleteGraph(m_pauseBackHandle);
 }
 
 
@@ -107,7 +121,7 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			{
 				if (m_select == Select::kBack)
 				{
-					m_isPause = false;
+					m_isPause = false;	// ゲームに戻る
 				}
 				else if (m_select == Select::kRetry)
 				{
@@ -118,16 +132,12 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 					return std::make_shared<SceneTitle>();	// タイトル画面に移動
 				}
 			}
-
-			// ポーズ画面を閉じる
-			if (input.IsTriggered("pause"))
-			{
-				m_isPause = false;
-			}
 		}
 		else
 		{
-			// ポーズ画面を表示
+			m_time++;	// 経過時間
+
+			// ボタンを押したらポーズ画面を表示する
 			if (input.IsPressing("pause"))
 			{
 				m_isPause = true;
@@ -135,7 +145,6 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 
 			// プレイヤー更新
 			m_pPlayer->Update(input, *m_pCamera, *m_pStage);
-
 			// カメラ更新
 			m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 		}
@@ -161,6 +170,9 @@ void ScenePlaying::Draw()
 
 	// プレイヤー描画
 	m_pPlayer->Draw(m_pDrawDebug);
+
+	// 操作説明表示
+	DrawOption();
 
 	// ポーズ画面表示
 	if (m_isPause)
@@ -189,9 +201,26 @@ void ScenePlaying::UpdateSelect(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select - 1) % kSelectNum;	// 選択状態を1つ上げる
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;;	// 選択状態を1つ上げる
 	}
 }
+
+
+/// <summary>
+/// 操作説明を表示
+/// </summary>
+void ScenePlaying::DrawOption()
+{
+	// 背景を薄く表示する
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kPauseAlpha);
+	DrawBox(kOptionPosX, kOptionPosY, kOptionWidth, kOptionHeight, kOptionColor, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
+	// 文字表示
+	DrawFormatStringToHandle(50, 350,
+		0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)], "操作説明");
+}
+
 
 /// <summary>
 /// ポーズ画面を表示
@@ -199,9 +228,10 @@ void ScenePlaying::UpdateSelect(Input& input)
 void ScenePlaying::DrawPause()
 {
 	// ポーズ画面を表示
-	SetDrawBlendMode(DX_BLENDMODE_MULA, 200);
-	DrawBox(kPausePosX, kPausePosY, kPausePosX + kPauseWidth, kPausePosX + kPauseHeight, 0x0f00dd, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kPauseAlpha);
+	DrawBox(kPauseBackPosX, kPauseBackPosY, kPauseBackPosX + kPauseWidth, kPauseBackPosY + kPauseHeight, kPauseColor, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	DrawGraph(kPausePosX, kPausePosY, m_pauseBackHandle, true);
 
 	// 枠表示
 	for (int i = 0; i < kSelectNum; i++)
@@ -236,9 +266,9 @@ void ScenePlaying::DrawPause()
 	DrawFormatStringToHandle(kRetryPosX, kRetryPosY,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kPauseMenu)], "リトライ");
 	DrawFormatStringToHandle(kTitlePosX, kTitlePosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kPauseMenu)], "リトライ");
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kPauseMenu)], "タイトルにもどる");
 
 #ifdef _DEBUG
 	DrawString(0, 10, "ポーズ中", 0xffffff);
-#endif // _DEBUG
+#endif
 }

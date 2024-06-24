@@ -11,19 +11,19 @@ namespace
 	// UI表示関連
 	constexpr int kTitleLogoPosX = 510;		// タイトルロゴ位置X
 	constexpr int kTitleLogoPosY = 130;		// タイトルロゴ位置Y
-	constexpr int kSelectMove = 200;		// 選択表示の移動量
 	constexpr int kFramePosX = 1250;		// 枠表示位置X
 	constexpr int kFramePosY = 550;			// 枠表示位置Y
+	constexpr int kSelectMove = 200;		// 選択表示の移動量
 	constexpr float kFrameAnim = 0.05f;		// 枠の拡大縮小アニメーション再生時間
 	constexpr float kFrameScale = 1.0f;		// 元の枠のサイズ
 	constexpr float kFrameChange = 0.1f;	// 枠のサイズの変化量
 	
 	// テキスト関連
 	constexpr int kTextColor = 0x000000;	// テキストの色
-	constexpr int kStartPosX = 1350;		// スタート表示位置X
-	constexpr int kStartPosY = 590;			// スタート表示位置Y
-	constexpr int kEndPosX = 1350;			// ゲーム終了表示位置X
-	constexpr int kEndPosY = 780;			// ゲーム終了表示位置Y
+	constexpr int kStartPosX = 1320;		// "はじめる"表示位置X
+	constexpr int kStartPosY = 580;			// "はじめる"表示位置Y
+	constexpr int kEndPosX = 1350;			// "おわる"表示位置X
+	constexpr int kEndPosY = 780;			// "おわる"表示位置Y
 
 	// ステージモデル
 	constexpr float kScale = 0.1f;						// 拡大率
@@ -145,15 +145,15 @@ void SceneTitle::Draw()
 
 	// 文字表示
 	DrawFormatStringToHandle(kStartPosX, kStartPosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "START");
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "はじめる");
 	DrawFormatStringToHandle(kEndPosX, kEndPosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "END");
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "おわる");
 
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
 	// 中心線
-	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xfffff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
 }
 
@@ -166,10 +166,10 @@ void SceneTitle::UpdateSelect(Input& input)
 {
 	if (input.IsTriggered("down"))
 	{
-		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下にする
+		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上にする
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }

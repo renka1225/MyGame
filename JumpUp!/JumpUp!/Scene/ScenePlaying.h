@@ -20,8 +20,9 @@ public:
 	virtual void Draw();
 
 private:
-	void UpdateSelect(Input& input);
-	void DrawPause(); // ポーズ画面を表示
+	void UpdateSelect(Input& input); // 選択状態を更新
+	void DrawOption();				 // 操作説明を表示
+	void DrawPause();				 // ポーズ画面を表示
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
@@ -40,8 +41,11 @@ private:
 	int m_select;	// 現在の選択状態
 	bool m_isPause;	// ポーズ画面を開いているか(true:開いている)
 
+	float m_time;		// 経過時間
+
 	float m_frameAnimTime;	// 枠のアニメーション時間
 	int m_frameHandle;		// ポーズ画面の枠の画像
+	int m_pauseBackHandle;	// ポーズ画面の背景画像
 
 #ifdef _DEBUG
 	// デバッグ状況

@@ -10,21 +10,21 @@
 namespace
 {
 	// UI表示関連
-	constexpr int kClearPosX = 510;			// クリア位置X
-	constexpr int kClearPosY = 130;			// クリア位置Y
+	constexpr int kClearPosX = 570;			// クリアの文字位置X
+	constexpr int kClearPosY = 130;			// クリアの文字位置Y
+	constexpr int kFramePosX = 780;			// 枠表示位置X
+	constexpr int kFramePosY = 600;			// 枠表示位置Y
 	constexpr int kSelectMove = 200;		// 選択表示の移動量
-	constexpr int kFramePosX = 1250;		// 枠表示位置X
-	constexpr int kFramePosY = 550;			// 枠表示位置Y
 	constexpr float kFrameAnim = 0.05f;		// 枠の拡大縮小アニメーション再生時間
 	constexpr float kFrameScale = 1.0f;		// 元の枠のサイズ
 	constexpr float kFrameChange = 0.1f;	// 枠のサイズの変化量
 
 	// テキスト関連
 	constexpr int kTextColor = 0x000000;	// テキストの色
-	constexpr int kStartPosX = 1350;		// もう1回プレイ位置X
-	constexpr int kStartPosY = 590;			// もう1回プレイ位置Y
-	constexpr int kTitlePosX = 1350;		// タイトルに戻る表示位置X
-	constexpr int kTitlePosY = 780;			// タイトルに戻る表示位置Y
+	constexpr int kStartPosX = 840;			// "もう1回プレイ"位置X
+	constexpr int kStartPosY = 640;			// "もう1回プレイ"位置Y
+	constexpr int kTitlePosX = 810;			// "タイトルに戻る"表示位置X
+	constexpr int kTitlePosY = 840;			// "タイトルに戻る"表示位置Y
 }
 
 /// <summary>
@@ -134,6 +134,8 @@ void SceneClear::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "クリア画面", 0xffffff);
+	// 中心線
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
 }
 
@@ -150,6 +152,6 @@ void SceneClear::UpdateSelect(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select - 1) % kSelectNum;	// 選択状態を1つ上げる
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }

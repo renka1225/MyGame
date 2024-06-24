@@ -39,7 +39,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ÉtÉHÉìÉgÇÃì«Ç›çûÇ›
 	Font::Load();
 
-	SetLightPosition(VGet(0.0f, 10.0f, 0.0f));
+	SetLightPosition(VGet(0.0f, 100.0f, 0.0f));
+	SetLightDirection(VGet(0.0f, -10.0f, 0.0f));
 
 	while (ProcessMessage() == 0)
 	{

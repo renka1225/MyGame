@@ -31,6 +31,8 @@ namespace Font
 		{"Tsunagi Gothic Black", 64, 4, -1},
 		// Size48_4
 		{"Tsunagi Gothic Black", 48, 4, -1},
+		// Size42_4
+		{"Tsunagi Gothic Black", 42, 4, -1},
 		// Size32_4
 		{"Tsunagi Gothic Black", 32, 4, -1},
 		// Size24_4

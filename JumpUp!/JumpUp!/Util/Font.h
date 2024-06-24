@@ -11,6 +11,7 @@ namespace Font
 		kSize96_4,
 		kSize64_4,
 		kSize48_4,
+		kSize42_4,
 		kSize32_4,
 		kSize24_4,
 		kSize16_4,
@@ -22,10 +23,12 @@ namespace Font
 		kTitleMenu = kSize64_4,
 
 		// ScenePlaying
-		kPauseMenu = kSize48_4,
+		kOption = kSize24_4,
+		kPauseMenu = kSize42_4,
+		kMenuTitle = kSize42_4,
 
 		// SceneClear
-		kClearMenu = kSize64_4,
+		kClearMenu = kSize42_4,
 	};
 
 	// フォントのロード、アンロード
