@@ -11,6 +11,7 @@ namespace Conversion
 	{
 		return (frame / 60) / 60;
 	}
+
 	/// <summary>
 	/// •b‚É•ÏŠ·‚·‚é
 	/// </summary>

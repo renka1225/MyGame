@@ -13,7 +13,7 @@ namespace
 	// UI表示関連
 	constexpr int kClearPosX = 570;			// クリアの文字位置X
 	constexpr int kClearPosY = 130;			// クリアの文字位置Y
-	constexpr int kFramePosX = 780;			// 枠表示位置X
+	constexpr int kFramePosX = 760;			// 枠表示位置X
 	constexpr int kFramePosY = 600;			// 枠表示位置Y
 	constexpr int kSelectMove = 200;		// 選択表示の移動量
 	constexpr float kFrameAnim = 0.05f;		// 枠の拡大縮小アニメーション再生時間
@@ -22,9 +22,11 @@ namespace
 
 	// テキスト関連
 	constexpr int kTextColor = 0x000000;	// テキストの色
-	constexpr int kStartPosX = 840;			// "もう1回プレイ"位置X
+	constexpr int kTimePosX = 750;			// タイム表示位置X
+	constexpr int kTimePosY = 450;			// タイム表示位置Y
+	constexpr int kStartPosX = 820;			// "もう1回プレイ"位置X
 	constexpr int kStartPosY = 640;			// "もう1回プレイ"位置Y
-	constexpr int kTitlePosX = 810;			// "タイトルに戻る"表示位置X
+	constexpr int kTitlePosX = 790;			// "タイトルに戻る"表示位置X
 	constexpr int kTitlePosY = 840;			// "タイトルに戻る"表示位置Y
 }
 
@@ -106,7 +108,7 @@ void SceneClear::Draw()
 	int milliSec = Conversion::ChangeMilliSec(m_clearTime);
 
 	// クリアタイム表示
-	DrawFormatStringToHandle(700, 300,
+	DrawFormatStringToHandle(kTimePosX, kTimePosY,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)],
 		"クリア時間 %02d:%02d:%03d", min, sec, milliSec);
 
@@ -149,7 +151,7 @@ void SceneClear::Draw()
 	// クリアタイム
 	DrawFormatString(0, 40, 0xffffff, "クリアタイム:%d", m_clearTime);
 	// 中心線
-	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
 }
 

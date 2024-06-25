@@ -31,7 +31,7 @@ private:
 	int m_clearTime;		// クリア時間
 	float m_frameAnimTime;	// 枠のアニメーション時間
 
-	float m_clearHandle;	// クリアの文字の画像
+	int m_clearHandle;		// クリアの文字の画像
 	int m_frameHandle;		// 枠の画像
 };
 
