@@ -133,7 +133,7 @@ Input::Input()
 
 	m_commandTable["down"] = { {InputType::keybd, KEY_INPUT_DOWN},
 							   {InputType::pad, PAD_INPUT_DOWN} };
-
+	
 	m_commandTable["left"] = { {InputType::keybd, KEY_INPUT_LEFT},
 							   {InputType::pad, PAD_INPUT_LEFT} };
 
@@ -147,21 +147,21 @@ Input::Input()
 						{InputType::pad, PAD_INPUT_R} };
 
 	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
-						   {InputType::pad, PAD_INPUT_Y} };
+						   {InputType::pad, PAD_INPUT_10} };
 
 	/*カメラ回転*/
 	// 左
 	m_commandTable["rotateL"] = { {InputType::keybd, KEY_INPUT_A},
-						   {InputType::pad, PAD_INPUT_5} };
+						   {InputType::pad, PAD_INPUT_Y} };
 	// 右
 	m_commandTable["rotateR"] = { {InputType::keybd, KEY_INPUT_D},
-						   {InputType::pad, PAD_INPUT_6} };
+						   {InputType::pad, PAD_INPUT_Z} };
 	// 上
 	m_commandTable["rotateU"] = { {InputType::keybd, KEY_INPUT_W},
-					   {InputType::pad, PAD_INPUT_7} };
+					   {InputType::pad, PAD_INPUT_10} };
 	// 下
 	m_commandTable["rotateD"] = { {InputType::keybd, KEY_INPUT_S},
-					   {InputType::pad, PAD_INPUT_8} };
+					   {InputType::pad, PAD_INPUT_10} };
 
 	/*デバッグ機能*/
 	m_commandTable["shift"] = { {InputType::keybd, KEY_INPUT_LSHIFT},

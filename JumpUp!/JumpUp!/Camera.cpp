@@ -16,7 +16,7 @@ namespace
 	constexpr float kInitAngleV = 0.3f;						// カメラの初期垂直角度
 	constexpr float kMinAngleV = DX_PI_F * 0.5f - 0.6f;		// 最小の垂直角度
 	constexpr float kMaxAngleV = -DX_PI_F * 0.5f + 0.6f;	// 最大の垂直角度
-	constexpr float kColSize = 10.0f;						// カメラの当たり判定サイズ
+	constexpr float kColSize = 3.0f;						// カメラの当たり判定サイズ
 	constexpr float kHitLength = 0.1f;						// カメラがステージに当たったか判定する距離
 }
 

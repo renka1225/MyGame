@@ -31,7 +31,7 @@ namespace
 Player::Player():
 	m_pos(kInitPos),
 	m_isMove(false),
-	m_targetMoveDir(VGet(0.0f, 0.0f, 0.0f)),
+	m_targetMoveDir(VGet(-1.0f, 0.0f, 0.0f)),
 	m_angle(0.0f),
 	m_jumpPower(0.0f),
 	m_moveSpeed(0.0f),
