@@ -26,7 +26,7 @@ namespace
 Camera::Camera():
 	m_pos(VGet(0.0f, kHeight, 0.0f)),
 	m_target(VGet(0.0f, 0.0f, 0.0f)),
-	m_angleH(-DX_PI_F / 2),
+	m_angleH(-DX_PI_F),
 	m_angleV(-kInitAngleV)
 {
 }

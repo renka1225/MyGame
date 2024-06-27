@@ -10,13 +10,13 @@ namespace
 {
 	// プレイヤー情報
 	constexpr float kScale = 0.12f;			// プレイヤーモデルの拡大率
-	constexpr float kMaxSpeed = 2.0f;		// プレイヤーの最大移動速度
+	constexpr float kMaxSpeed = 3.0f;		// プレイヤーの最大移動速度
 	constexpr float kAcceleration = 0.2f;	// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;	// プレイヤーの減速度
 	constexpr float kAngleSpeed = 0.2f;		// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;		// ジャンプの高さ
 	constexpr float kGravity = -0.25f;		// 重力
-	const VECTOR kInitPos = VGet(100.0f, 20.0f, -79.0f); // 初期位置
+	const VECTOR kInitPos = VGet(-20.0f, 20.0f, -200.0f); // 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値

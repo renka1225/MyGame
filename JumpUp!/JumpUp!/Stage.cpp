@@ -11,7 +11,7 @@ namespace
     constexpr float kFragScale = 30.0f;     // フラッグのサイズ
 
     // フラッグの位置
-    const VECTOR kFragPos = VGet(0.0f, 430.0f, 0.0f);
+    const VECTOR kFragPos = VGet(0.0f, 856.0f, 0.0f);
 
     // 当たり判定
     constexpr float kDefaultSize = 100.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ

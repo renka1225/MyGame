@@ -1,5 +1,4 @@
-﻿  SceneClear.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneClear.cpp(38,13): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneClear.cpp(154,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\SceneClear.cpp(154,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+﻿  Player.cpp
+  Stage.cpp
+  コードを生成中...
   JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
