@@ -25,10 +25,15 @@ namespace
 	constexpr int kEndPosX = 1350;			// "おわる"表示位置X
 	constexpr int kEndPosY = 780;			// "おわる"表示位置Y
 
-	// ステージモデル
-	constexpr float kScale = 0.1f;						// 拡大率
+	// ステージモデル関連
+	constexpr float kScale = 0.05f;						// 拡大率
 	constexpr float kRotate = 1.0f;						// 3Dモデルの回転量
 	const VECTOR kStagePos = VGet(0.0f,0.0f, 0.0f);		// 初期位置
+
+	// カメラ関連
+	const VECTOR kCameraPos = VGet(0.0f, 70.0f, -200.0f);	// カメラ位置
+	const VECTOR kCameraTarget = VGet(0.0f, 40.0f, 100.0f);	// カメラの視線方向
+
 }
 
 /// <summary>
@@ -37,11 +42,12 @@ namespace
 SceneTitle::SceneTitle() :
 	m_select(Select::kStart),
 	m_stageRotate(0.0f),
-	m_frameAnimTime(0.0f)
+	m_frameAnimTime(0.0f),
+	m_stageHandle(-1)
 {
 	m_titleHandle = LoadGraph("data/UI/titleLogo.png");
 	m_frameHandle = LoadGraph("data/UI/frame.png");
-	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
+	m_stageHandle = MV1LoadModel("data/Model/title.mv1");
 }
 
 
@@ -64,6 +70,10 @@ void SceneTitle::Init()
 	// ステージモデルの調整
 	MV1SetPosition(m_stageHandle, kStagePos);
 	MV1SetScale(m_stageHandle, VGet(kScale, kScale, kScale));
+	m_stageRotate = 0.0f;
+
+	// カメラ位置設定
+	SetCameraPositionAndTarget_UpVecY(kCameraPos, kCameraTarget);
 }
 
 
@@ -75,10 +85,8 @@ void SceneTitle::Init()
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
 	// ステージを回転させる
-	MV1SetPosition(m_stageHandle, kStagePos);
-	MV1SetScale(m_stageHandle, VGet(kScale, kScale, kScale));
 	m_stageRotate += kRotate;
-	MV1SetRotationXYZ(m_stageHandle, VGet(0.0f, m_stageRotate * DX_PI_F / 360.0f, 0.0f));
+	MV1SetRotationXYZ(m_stageHandle, VGet(0.0f, m_stageRotate * -DX_PI_F / 360.0f, 0.0f));
 
 	m_frameAnimTime += kFrameAnim;
 

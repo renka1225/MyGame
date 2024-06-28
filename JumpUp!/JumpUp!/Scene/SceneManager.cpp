@@ -14,6 +14,14 @@ SceneManager::SceneManager():
 
 
 /// <summary>
+/// デストラクタ
+/// </summary>
+SceneManager::~SceneManager()
+{
+}
+
+
+/// <summary>
 /// 初期化
 /// </summary>
 void SceneManager::Init()
@@ -37,7 +45,6 @@ void SceneManager::Update(Input& input)
 		m_pScene = pNext;
 		m_pScene->Init();
 	}
-
 }
 
 
