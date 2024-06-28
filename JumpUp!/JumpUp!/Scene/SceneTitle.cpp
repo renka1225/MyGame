@@ -3,6 +3,7 @@
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
 #include "Font.h"
+#include "Sound.h"
 #include "Input.h"
 
 // 定数
@@ -33,7 +34,6 @@ namespace
 	// カメラ関連
 	const VECTOR kCameraPos = VGet(0.0f, 70.0f, -200.0f);	// カメラ位置
 	const VECTOR kCameraTarget = VGet(0.0f, 40.0f, 100.0f);	// カメラの視線方向
-
 }
 
 /// <summary>
@@ -84,6 +84,12 @@ void SceneTitle::Init()
 /// <returns>遷移先のクラス</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	// BGMを鳴らす
+	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)], DX_PLAYTYPE_LOOP);
+	}
+
 	// ステージを回転させる
 	m_stageRotate += kRotate;
 	MV1SetRotationXYZ(m_stageHandle, VGet(0.0f, m_stageRotate * -DX_PI_F / 360.0f, 0.0f));
@@ -96,6 +102,8 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// シーン切り替え
 	if (input.IsTriggered("OK"))
 	{
+		PlaySoundMem(static_cast<int>(Sound::SoundKind::kSelectSE), DX_PLAYTYPE_BACK);	// SEを鳴らす
+
 		if (m_select == Select::kStart)
 		{
 			return std::make_shared<ScenePlaying>(); // ゲームシーンに移動
@@ -175,9 +183,11 @@ void SceneTitle::UpdateSelect(Input& input)
 	if (input.IsTriggered("down"))
 	{
 		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK);	// SEを鳴らす
 	}
 	if (input.IsTriggered("up"))
 	{
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK);	// SEを鳴らす
 	}
 }

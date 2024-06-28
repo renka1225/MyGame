@@ -6,7 +6,7 @@ namespace
 	// 読み込むフォントファイル名
 	const LPCSTR kFontDataPath[] =
 	{
-		"data/Font/TsunagiGothic.ttf",
+		"data/font/TsunagiGothic.ttf",
 	};
 
 	// フォントのデータ

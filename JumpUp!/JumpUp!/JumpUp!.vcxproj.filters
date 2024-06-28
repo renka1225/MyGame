@@ -66,6 +66,9 @@
     <ClCompile Include="Util\ConversionTime.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
+    <ClCompile Include="Util\Sound.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -105,6 +108,9 @@
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
     <ClInclude Include="Util\ConversionTime.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Sound.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
   </ItemGroup>
