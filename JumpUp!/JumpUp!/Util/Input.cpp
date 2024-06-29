@@ -146,6 +146,9 @@ Input::Input()
 	m_commandTable["pause"] = { {InputType::keybd, KEY_INPUT_TAB},
 						{InputType::pad, PAD_INPUT_R} };
 
+	m_commandTable["operation"] = { {InputType::keybd, KEY_INPUT_Q},
+					{InputType::pad, PAD_INPUT_L} };
+
 	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
 						   {InputType::pad, PAD_INPUT_10} };
 

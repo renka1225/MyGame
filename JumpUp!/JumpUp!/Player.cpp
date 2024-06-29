@@ -2,6 +2,7 @@
 #include "Stage.h"
 #include "Camera.h"
 #include "Input.h"
+#include "Sound.h"
 #include "DrawDebug.h"
 #include "Player.h"
 
@@ -246,10 +247,13 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 	// ボタンが押されたらジャンプする
 	if (m_currentState != State::kJump && input.IsTriggered("jump"))
 	{
+		// ジャンプSEを鳴らす
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kJumpSE)], DX_PLAYTYPE_BACK);
+
 		// Y軸方向の速度をセット
 		m_jumpPower = kVelocity;
 
-		// 状態を「ジャンプ」にする
+		// ジャンプ状態にする
 		nextState = State::kJump;
 	}
 

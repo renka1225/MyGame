@@ -13,6 +13,7 @@ namespace Font
 		kSize48_4,
 		kSize42_4,
 		kSize32_4,
+		kSize28_4,
 		kSize24_4,
 		kSize16_4,
 		kNormal,
@@ -23,7 +24,8 @@ namespace Font
 		kTitleMenu = kSize64_4,
 
 		// ScenePlaying
-		kOption = kSize24_4,
+		kOperation = kSize28_4,		// "操作説明"の文字サイズ
+		kOperationMenu = kSize24_4,	// 操作説明部分の文字サイズ
 		kPauseMenu = kSize42_4,
 		kMenuTitle = kSize42_4,
 

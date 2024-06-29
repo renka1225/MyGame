@@ -38,14 +38,17 @@ private:
 		kTitle,		// タイトルに戻る
 		kSelectNum	// 選択数
 	};
-	int m_select;	// 現在の選択状態
-	bool m_isPause;	// ポーズ画面を開いているか(true:開いている)
+	int m_select;		// 現在の選択状態
+	bool m_isOperation;	// 操作説明画面を開いているか(true:開いている)
+	bool m_isPause;		// ポーズ画面を開いているか(true:開いている)
 
 	int m_frame;	// 経過フレーム数
-
 	float m_frameAnimTime;	// 枠のアニメーション時間
+
 	int m_frameHandle;		// ポーズ画面の枠の画像
 	int m_pauseBackHandle;	// ポーズ画面の背景画像
+	int m_padHandle;		// コントローラーのボタンの画像
+
 
 #ifdef _DEBUG
 	// デバッグ状況

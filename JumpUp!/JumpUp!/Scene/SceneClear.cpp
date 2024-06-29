@@ -3,6 +3,7 @@
 #include "SceneTitle.h"
 #include "ScenePlaying.h"
 #include "Font.h"
+#include "Sound.h"
 #include "ConversionTime.h"
 #include "Game.h"
 #include "Input.h"
@@ -35,7 +36,7 @@ namespace
 /// </summary>
 SceneClear::SceneClear():
 	m_select(Select::kStart),
-	m_clearTime(0.0f),
+	m_clearTime(0),
 	m_frameAnimTime(0.0f)
 {
 	m_clearHandle = LoadGraph("data/UI/clear.png");
@@ -48,6 +49,7 @@ SceneClear::SceneClear():
 /// </summary>
 SceneClear::~SceneClear()
 {
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]);
 	DeleteGraph(m_clearHandle);
 	DeleteGraph(m_frameHandle);
 }
@@ -69,6 +71,12 @@ void SceneClear::Init()
 /// <returns>遷移先のシーン</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	// BGMを鳴らす
+	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)], DX_PLAYTYPE_LOOP);
+	}
+
 	m_frameAnimTime += kFrameAnim;
 
 	// 選択状態を更新
@@ -77,6 +85,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 	// シーン切り替え
 	if (input.IsTriggered("OK"))
 	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK); // SEを鳴らす
 		if (m_select == Select::kStart)
 		{
 			return std::make_shared<ScenePlaying>(); // ゲームシーンに移動
@@ -151,7 +160,7 @@ void SceneClear::Draw()
 	// クリアタイム
 	DrawFormatString(0, 40, 0xffffff, "クリアタイム:%d", m_clearTime);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
 }
 
@@ -164,10 +173,12 @@ void SceneClear::UpdateSelect(Input& input)
 {
 	if (input.IsTriggered("down"))
 	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK); // SEを鳴らす
 		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
 	}
 	if (input.IsTriggered("up"))
 	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK); // SEを鳴らす
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }

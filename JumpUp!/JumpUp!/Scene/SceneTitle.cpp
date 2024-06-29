@@ -56,6 +56,7 @@ SceneTitle::SceneTitle() :
 /// </summary>
 SceneTitle::~SceneTitle()
 {
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)]);
 	DeleteGraph(m_titleHandle);
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_stageHandle);
@@ -102,7 +103,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// ƒV[ƒ“Ø‚è‘Ö‚¦
 	if (input.IsTriggered("OK"))
 	{
-		PlaySoundMem(static_cast<int>(Sound::SoundKind::kSelectSE), DX_PLAYTYPE_BACK);	// SE‚ğ–Â‚ç‚·
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK);	// SE‚ğ–Â‚ç‚·
 
 		if (m_select == Select::kStart)
 		{
