@@ -1,2 +1,10 @@
-﻿  ScenePlaying.cpp
+﻿  SceneClear.cpp
+  ScenePlaying.cpp
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(294,37): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(299,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(304,37): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(309,37): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(314,39): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  SceneTitle.cpp
+  コードを生成中...
   JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe

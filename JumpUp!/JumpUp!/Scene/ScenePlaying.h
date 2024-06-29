@@ -21,7 +21,7 @@ public:
 
 private:
 	void UpdateSelect(Input& input); // 選択状態を更新
-	void DrawOption();				 // 操作説明を表示
+	void DrawOperation();				 // 操作説明を表示
 	void DrawPause();				 // ポーズ画面を表示
 
 private:
@@ -38,6 +38,20 @@ private:
 		kTitle,		// タイトルに戻る
 		kSelectNum	// 選択数
 	};
+
+	// ボタンの種類
+	enum Button
+	{
+		kAButton,	// Aボタン
+		kBButton,	// Bボタン
+		kLBButton,	// LBボタン
+		kRBButton,	// RBボタン
+		kLSButton,	// 左側のアナログスティック
+		kLineButton,// 三本線ボタン
+		kViewButton,// ビューボタン 
+		kButtonNum	// ボタンの数
+	};
+
 	int m_select;		// 現在の選択状態
 	bool m_isOperation;	// 操作説明画面を開いているか(true:開いている)
 	bool m_isPause;		// ポーズ画面を開いているか(true:開いている)

@@ -34,6 +34,12 @@ namespace
 	constexpr int kPausePosX = 50;				// "ポーズ"表示位置X
 	constexpr int kPausePosY = 700;				// "ポーズ"表示位置Y
 	constexpr int kOperationColor = 0x00fdff;	// "操作説明"の文字色
+	// ボタン画像
+	constexpr int kButtonSize = 32;				// ボタン1つのサイズ
+	constexpr float kButtonScale = 1.5f;		// ボタンの拡大率
+	constexpr int kButtonPosX = 50;				// ボタンの表示位置X
+	constexpr int kButtonPosY = 370;			// ボタンの表示位置Y
+	constexpr int kButtonInterval = 50;			// ボタンの表示間隔
 
 	/*ポーズ画面*/
 	constexpr int kPauseFramePosX = 650;	// 枠表示位置X
@@ -59,8 +65,6 @@ namespace
 	constexpr int kRetryPosY = 540;			// "リトライ"表示位置Y
 	constexpr int kTitlePosX = 810;			// "タイトルに戻る"表示位置Y
 	constexpr int kTitlePosY = 740;			// "タイトルに戻る"表示位置Y
-
-
 }
 
 /// <summary>
@@ -79,7 +83,7 @@ ScenePlaying::ScenePlaying():
 
 	m_frameHandle = LoadGraph("data/UI/frame.png");
 	m_pauseBackHandle = LoadGraph("data/UI/pauseBack.png");
-	m_padHandle = LoadGraph("data/UI/test.png");
+	m_padHandle = LoadGraph("data/UI/pad.png");
 }
 
 
@@ -222,7 +226,7 @@ void ScenePlaying::Draw()
 	m_pPlayer->Draw(m_pDrawDebug);
 
 	// 操作説明表示
-	DrawOption();
+	DrawOperation();
 
 	// ポーズ画面表示
 	if (m_isPause)
@@ -263,7 +267,7 @@ void ScenePlaying::UpdateSelect(Input& input)
 /// <summary>
 /// 操作説明を表示
 /// </summary>
-void ScenePlaying::DrawOption()
+void ScenePlaying::DrawOperation()
 {
 	// 開いているとき
 	if (m_isOperation)
@@ -285,8 +289,31 @@ void ScenePlaying::DrawOption()
 		DrawFormatStringToHandle(kPausePosX, kPausePosY,
 			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "ポーズ");
 
-		// パッドのボタン表示
-		DrawRectRotaGraph(50, 500, 0, 0, 32, 32, 1.2f, 0.0f, m_padHandle, true);
+		// LSアナログスティック
+		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLSButton,
+			kButtonSize * Button::kLSButton, 0.0f,
+			kButtonSize, kButtonSize, kButtonScale, 0.0f,
+			m_padHandle, true);
+		// Aボタン
+		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kAButton,
+			kButtonSize * Button::kAButton, 0.0f,
+			kButtonSize, kButtonSize, kButtonScale, 0.0f,
+			m_padHandle, true);
+		// LBボタン
+		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLBButton,
+			kButtonSize * Button::kLBButton, 0.0f,
+			kButtonSize, kButtonSize, kButtonScale, 0.0f,
+			m_padHandle, true);
+		// LRボタン
+		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kRBButton,
+			kButtonSize * Button::kRBButton, 0.0f,
+			kButtonSize, kButtonSize, kButtonScale, 0.0f,
+			m_padHandle, true);
+		// 三本線ボタン
+		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLineButton,
+			kButtonSize * Button::kLineButton, 0.0f,
+			kButtonSize, kButtonSize, kButtonScale, 0.0f,
+			m_padHandle, true);
 	}
 	// 閉じているとき
 	else
@@ -297,6 +324,10 @@ void ScenePlaying::DrawOption()
 
 	DrawFormatStringToHandle(kOperationPosX, kOperationPosY,
 		kOperationColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)], "操作説明");
+
+	// ビューボタン
+	DrawRectRotaGraph(kButtonPosX, kButtonPosY,
+		kButtonSize, kButtonSize, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_padHandle, true);
 }
 
 
