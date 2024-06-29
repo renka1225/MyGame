@@ -16,30 +16,32 @@ namespace
 	constexpr int kOperationFramePosX = 40;			// 枠表示位置X
 	constexpr int kOperationFramePosY = 300;		// 枠表示位置Y
 	constexpr int kOperationWidth = 200;			// 枠の横幅
-	constexpr int kOperationHeight = 800;			// 枠の縦幅
+	constexpr int kOperationHeight = 780;			// 枠の縦幅
 	constexpr int kOperationBackColor = 0x000000;	// 枠の背景色
 	// テキスト
-	constexpr int kOpenPosX = 90;				// "ひらく"表示位置X
-	constexpr int kOpenPosY = 390;				// "ひらく"表示位置Y
-	constexpr int kClosePosX = 90;				// "とじる"表示位置X
-	constexpr int kClosePosY = 770;				// "とじる"表示位置Y
+	constexpr int kOpenClosePosX = 90;			// "ひらく、とじる"表示位置X
+	constexpr int kOpenClosePosY = 390;			// "ひらく、とじる"表示位置Y
 	constexpr int kOperationPosX = 50;			// "操作説明"表示位置X
 	constexpr int kOperationPosY = 350;			// "操作説明"表示位置Y
 	constexpr int kMovePosX = 50;				// "移動"表示位置X
-	constexpr int kMovePosY = 400;				// "移動"表示位置Y
+	constexpr int kMovePosY = 450;				// "移動"表示位置Y
 	constexpr int kJumpPosX = 50;				// "ジャンプ"表示位置X
-	constexpr int kJumpPosY = 500;				// "ジャンプ"表示位置Y
+	constexpr int kJumpPosY = 530;				// "ジャンプ"表示位置Y
 	constexpr int kMoveCameraPosX = 50;			// "カメラ移動"表示位置X
-	constexpr int kMoveCameraPosY = 600;		// "カメラ移動"表示位置Y
+	constexpr int kMoveCameraPosY = 610;		// "カメラ移動"表示位置Y
 	constexpr int kPausePosX = 50;				// "ポーズ"表示位置X
-	constexpr int kPausePosY = 700;				// "ポーズ"表示位置Y
-	constexpr int kOperationColor = 0x00fdff;	// "操作説明"の文字色
+	constexpr int kPausePosY = 690;				// "ポーズ"表示位置Y
+	constexpr int kOperationColor = 0x34a3f8;	// "操作説明"の文字色
 	// ボタン画像
 	constexpr int kButtonSize = 32;				// ボタン1つのサイズ
-	constexpr float kButtonScale = 1.5f;		// ボタンの拡大率
-	constexpr int kButtonPosX = 50;				// ボタンの表示位置X
-	constexpr int kButtonPosY = 370;			// ボタンの表示位置Y
-	constexpr int kButtonInterval = 50;			// ボタンの表示間隔
+	constexpr float kButtonScale = 1.3f;		// ボタンの拡大率
+	constexpr int kButtonPosX = 110;			// ボタンの表示位置X
+	constexpr int kButtonPosY = 500;			// ボタンの表示位置Y
+	constexpr int kLRButtonPosX = 120;			// LB,RBボタンの表示位置X
+	constexpr int kViewButtonPosX = 70;			// ビューボタンの表示位置X
+	constexpr int kViewButtonPosY = 400;		// ビューボタンの表示位置Y
+	constexpr float kViewButtonScale = 1.0f;	// ビューボタンの拡大率
+	constexpr int kButtonInterval = 80;			// ボタンの表示間隔
 
 	/*ポーズ画面*/
 	constexpr int kPauseFramePosX = 650;	// 枠表示位置X
@@ -278,7 +280,7 @@ void ScenePlaying::DrawOperation()
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 		// 文字表示
-		DrawFormatStringToHandle(kClosePosX, kClosePosY,
+		DrawFormatStringToHandle(kOpenClosePosX, kOpenClosePosY,
 			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "でとじる");
 		DrawFormatStringToHandle(kMovePosX, kMovePosY,
 			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "移動");
@@ -299,26 +301,21 @@ void ScenePlaying::DrawOperation()
 			kButtonSize * Button::kAButton, 0.0f,
 			kButtonSize, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
-		// LBボタン
-		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLBButton,
-			kButtonSize * Button::kLBButton, 0.0f,
-			kButtonSize, kButtonSize, kButtonScale, 0.0f,
-			m_padHandle, true);
-		// LRボタン
-		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kRBButton,
-			kButtonSize * Button::kRBButton, 0.0f,
-			kButtonSize, kButtonSize, kButtonScale, 0.0f,
+		// LB,RBボタン
+		DrawRectRotaGraph(kLRButtonPosX, kButtonPosY + kButtonInterval * Button::kLRButton,
+			kButtonSize * (Button::kLRButton), 0.0f,
+			kButtonSize * 2, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
 		// 三本線ボタン
 		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLineButton,
-			kButtonSize * Button::kLineButton, 0.0f,
+			kButtonSize * (Button::kLineButton + 1), 0.0f,
 			kButtonSize, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
 	}
 	// 閉じているとき
 	else
 	{
-		DrawFormatStringToHandle(kOpenPosX, kOpenPosY,
+		DrawFormatStringToHandle(kOpenClosePosX, kOpenClosePosY,
 			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "でひらく");
 	}
 
@@ -326,8 +323,9 @@ void ScenePlaying::DrawOperation()
 		kOperationColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)], "操作説明");
 
 	// ビューボタン
-	DrawRectRotaGraph(kButtonPosX, kButtonPosY,
-		kButtonSize, kButtonSize, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_padHandle, true);
+	DrawRectRotaGraph(kViewButtonPosX, kViewButtonPosY,
+		kButtonSize * (Button::kViewButton + 1), 0.0f,
+		kButtonSize, kButtonSize, kViewButtonScale, 0.0f, m_padHandle, true);
 }
 
 

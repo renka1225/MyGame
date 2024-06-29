@@ -42,14 +42,13 @@ private:
 	// ボタンの種類
 	enum Button
 	{
-		kAButton,	// Aボタン
-		kBButton,	// Bボタン
-		kLBButton,	// LBボタン
-		kRBButton,	// RBボタン
-		kLSButton,	// 左側のアナログスティック
-		kLineButton,// 三本線ボタン
-		kViewButton,// ビューボタン 
-		kButtonNum	// ボタンの数
+		kLSButton = 0,	// 左側のアナログスティック
+		kAButton = 1,	// Aボタン
+		kBButton = 6,	// Bボタン
+		kLRButton = 2,	// LB,RBボタン
+		kLineButton = 3,// 三本線ボタン
+		kViewButton = 4,// ビューボタン 
+		kButtonNum = 5	// ボタンの数
 	};
 
 	int m_select;		// 現在の選択状態
