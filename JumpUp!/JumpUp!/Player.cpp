@@ -17,7 +17,7 @@ namespace
 	constexpr float kAngleSpeed = 0.2f;		// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;		// ジャンプの高さ
 	constexpr float kGravity = -0.25f;		// 重力
-	const VECTOR kInitPos = VGet(-20.0f, 20.0f, -200.0f); // 初期位置
+	const VECTOR kInitPos = VGet(-20.0f, 50.0f, -200.0f); // 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値

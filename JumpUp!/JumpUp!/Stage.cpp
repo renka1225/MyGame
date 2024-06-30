@@ -1,17 +1,17 @@
 #include "DxLib.h"
 #include "Stage.h"
 #include "Player.h"
+#include "Game.h"
 #include "DrawDebug.h"
 #include <cmath>
 
 // 定数
 namespace
 {
-    constexpr float kStageScale = 0.1f;     // ステージサイズ
-    constexpr float kFragScale = 30.0f;     // フラッグのサイズ
-
-    // フラッグの位置
-    const VECTOR kFragPos = VGet(0.0f, 856.0f, 0.0f);
+    constexpr float kStageScale = 0.1f;                // ステージサイズ
+    constexpr float kFragScale = 30.0f;                // フラッグのサイズ
+    const VECTOR kFragPos = VGet(0.0f, 856.0f, 0.0f);  // フラッグの位置
+    constexpr int kBgColor = 0x2d6676;                 // 背景色
 
     // 当たり判定
     constexpr float kDefaultSize = 100.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
@@ -59,6 +59,9 @@ Stage::~Stage()
 /// </summary>
 void Stage::Draw()
 {
+    // 背景描画
+    DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBgColor, true);
+
     // ステージ描画
     MV1DrawModel(m_stageHandle);
     MV1DrawModel(m_flagHandle);

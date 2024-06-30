@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Util\Sound.h" />
     <ClInclude Include="Util\ConversionTime.h" />
     <ClInclude Include="Util\DrawDebug.h" />

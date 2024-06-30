@@ -1,12 +1,12 @@
 #include "DxLib.h"
 #include "SceneManager.h"
+#include "Light.h"
 #include "Game.h"
 #include "Input.h"
 #include "Font.h"
 #include "Sound.h"
 #include <memory>
 #include <cmath>
-
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -30,17 +30,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	Input input;	// 入力状態を取得
-	Font::Load();	// フォントの読み込み
-	Sound::Load();	// サウンドの読み込み
+	Input input;		// 入力状態を取得
+	Font::Load();		// フォントの読み込み
+	Sound::Load();		// サウンドの読み込み
+	Light::SetLight();	// ライトの調整
 
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
 	pScene->Init();
-
-	// ライト位置調整
-	SetLightPosition(VGet(0.0f, 100.0f, 0.0f));
-	SetLightDirection(VGet(0.0f, -10.0f, 0.0f));
 
 	while (ProcessMessage() == 0)
 	{
@@ -67,7 +64,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DxLib_End();
 		}
 #endif
-
 	}
 
 	Font::UnLoad();		// フォントの解放

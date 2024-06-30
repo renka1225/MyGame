@@ -113,5 +113,8 @@
     <ClInclude Include="Util\Sound.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -30,7 +30,7 @@ namespace
 	constexpr float kScale = 0.05f;						// 拡大率
 	constexpr float kRotate = 1.0f;						// 3Dモデルの回転量
 	const VECTOR kStagePos = VGet(0.0f,0.0f, 0.0f);		// 初期位置
-
+	constexpr int kBgColor = 0x2d6676;					// 背景色
 	// カメラ関連
 	const VECTOR kCameraPos = VGet(0.0f, 70.0f, -200.0f);	// カメラ位置
 	const VECTOR kCameraTarget = VGet(0.0f, 40.0f, 100.0f);	// カメラの視線方向
@@ -125,7 +125,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 void SceneTitle::Draw()
 {
 	// 背景表示
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x2d6676, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBgColor, true);
 
 	// ステージ表示
 	MV1DrawModel(m_stageHandle);

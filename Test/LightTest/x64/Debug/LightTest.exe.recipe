@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\GitHub\MyGame\LightTest\x64\Debug\LightTest.exe</FullPath>
+      <FullPath>C:\GitHub\MyGame\Test\LightTest\x64\Debug\LightTest.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
