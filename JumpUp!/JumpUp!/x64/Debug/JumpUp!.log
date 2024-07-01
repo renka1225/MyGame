@@ -1,4 +1,21 @@
-﻿  SceneTitle.cpp
+﻿  Camera.cpp
+  Sound.cpp
+  ConversionTime.cpp
+  DrawDebug.cpp
+  Font.cpp
+  SceneClear.cpp
   Stage.cpp
+  Input.cpp
+  main.cpp
+  Player.cpp
+  SceneBase.cpp
+  SceneManager.cpp
+  ScenePlaying.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(296,37): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(301,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(306,39): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(311,45): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(327,44): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  SceneTitle.cpp
   コードを生成中...
-  JumpUp!.vcxproj -> C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
+  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
