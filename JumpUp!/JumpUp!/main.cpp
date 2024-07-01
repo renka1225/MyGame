@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "SceneManager.h"
-#include "Light.h"
 #include "Game.h"
 #include "Input.h"
 #include "Font.h"
@@ -33,7 +32,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Input input;		// 入力状態を取得
 	Font::Load();		// フォントの読み込み
 	Sound::Load();		// サウンドの読み込み
-	Light::SetLight();	// ライトの調整
 
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();

@@ -15,6 +15,8 @@ public:
 	virtual void Draw();
 
 private:
+	virtual void FadeIn() override;		// フェードインの処理
+	virtual void FadeOut() override;	// フェードアウトの処理
 	void UpdateSelect(Input& input);	// 選択状態を更新
 
 private:

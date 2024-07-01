@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
+#include "Light.h"
 #include "Font.h"
 #include "Sound.h"
 #include "Input.h"
@@ -12,11 +13,26 @@
 // 定数
 namespace
 {	
+	/*フェード*/
+	constexpr int kFadeFrame = 8;			// フェード変化量
+	constexpr int kStartFadeAlpha = 200;	// スタート時のフェードα値
+
+	/*スタート時の説明*/
+	constexpr int kStartOperationFramePosLTX = 600;		// 枠の左上表示位置X
+	constexpr int kStartOperationFramePosLTY = 300;		// 枠の左上表示位置Y
+	constexpr int kStartOperationFramePosRBX = 1320;	// 枠の右下表示位置X
+	constexpr int kStartOperationFramePosRBY = 800;		// 枠の右下表示位置Y
+	// テキスト
+	constexpr int kStartTextPosX = 600;					// 表示テキスト位置X
+	constexpr int kStartTextPosY = 600;					// 表示テキスト位置Y
+	constexpr int kStartCloseTextPosX = 1100;			// "とじる"表示位置X
+	constexpr int kStartCloseTextPosY = 850;			// "とじる"表示位置Y
+
 	/*操作説明画面*/
 	constexpr int kOperationFramePosX = 40;			// 枠表示位置X
-	constexpr int kOperationFramePosY = 300;		// 枠表示位置Y
+	constexpr int kOperationFramePosY = 340;		// 枠表示位置Y
 	constexpr int kOperationWidth = 200;			// 枠の横幅
-	constexpr int kOperationHeight = 780;			// 枠の縦幅
+	constexpr int kOperationHeight = 770;			// 枠の縦幅
 	constexpr int kOperationBackColor = 0x000000;	// 枠の背景色
 	// テキスト
 	constexpr int kOpenClosePosX = 90;			// "ひらく、とじる"表示位置X
@@ -74,11 +90,13 @@ namespace
 /// </summary>
 ScenePlaying::ScenePlaying():
 	m_select(Select::kBack),
+	m_isStartOperation(true),
 	m_isOperation(true),
 	m_isPause(false),
 	m_frame(0),
 	m_frameAnimTime(0.0f)
 {
+	m_fadeAlpha = kStartFadeAlpha;
 	m_pPlayer = std::make_shared<Player>();
 	m_pCamera = std::make_shared<Camera>();
 	m_pStage = std::make_shared<Stage>();
@@ -108,6 +126,7 @@ void ScenePlaying::Init()
 {
 	m_pPlayer->Init();
 	m_pCamera->Init();
+	Light::SetLight();	// ライトの調整
 }
 
 
@@ -137,6 +156,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
+		FadeOut(); // フェードアウト
+
 		// BGMを鳴らす
 		if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kPlayBGM)]))
 		{
@@ -154,8 +175,8 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 			// シーン切り替え
 			if (input.IsTriggered("OK"))
 			{
-				// SEを鳴らす
-				PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK);
+				FadeIn(); // フェードイン
+				PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK); // SEを鳴らす
 				
 				if (m_select == Select::kBack)
 				{
@@ -173,33 +194,27 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		}
 		else
 		{
-			m_frame++;	// 経過フレーム数を更新
-
-			// 操作説明画面の表示非表示
-			if (input.IsTriggered("operation"))
-			{
-				if (m_isOperation)
-				{
-					m_isOperation = false;
-				}
-				else
-				{
-					m_isOperation = true;
-				}
-			}
-
-			// ボタンを押したらポーズ画面を表示する
-			if (input.IsTriggered("pause"))
-			{
-				// SEを鳴らす
-				PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK);
-				m_isPause = true;
-			}
-
 			// プレイヤー更新
 			m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 			// カメラ更新
 			m_pCamera->Update(input, *m_pPlayer, *m_pStage);
+
+			// 最初に操作説明を表示する
+			if (m_isStartOperation)
+			{
+				// ボタンを押したら説明を閉じる
+				if (input.IsTriggered("OK"))
+				{
+					m_isStartOperation = false;
+				}
+				return shared_from_this();
+			}
+
+			// 表示状態を更新する
+			UpdateOperation(input);
+			UpdatePause(input);
+
+			m_frame++;	// 経過フレーム数を更新
 		}
 
 		// プレイヤーがゴールしたらクリア画面に移動
@@ -236,6 +251,15 @@ void ScenePlaying::Draw()
 		DrawPause();
 	}
 
+	// 開始時に操作説明を表示
+	if (m_isStartOperation)
+	{
+		DrawStartOperation();
+	}
+
+	// フェードインアウト描画
+	DrawFade();
+
 #ifdef _DEBUG	// デバッグ表示
 	// グリッド表示
 	//m_pDrawDebug.DrawGrid();
@@ -244,6 +268,24 @@ void ScenePlaying::Draw()
 	// タイム表示
 	m_pDrawDebug.DrawTime(m_frame);
 #endif
+}
+
+
+/// <summary>
+/// フェードイン処理
+/// </summary>
+void ScenePlaying::FadeIn()
+{
+	m_fadeAlpha += kFadeFrame;
+}
+
+
+/// <summary>
+/// フェードアウト処理
+/// </summary>
+void ScenePlaying::FadeOut()
+{
+	m_fadeAlpha -= kFadeFrame;
 }
 
 
@@ -263,6 +305,72 @@ void ScenePlaying::UpdateSelect(Input& input)
 		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK); //SEを鳴らす
 		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;;	// 選択状態を1つ上げる
 	}
+}
+
+
+/// <summary>
+/// 操作説明の表示状態を更新
+/// </summary>
+/// <param name="input"></param>
+void ScenePlaying::UpdateOperation(Input& input)
+{
+	// 操作説明画面の表示非表示
+	if (input.IsTriggered("operation"))
+	{
+		if (m_isOperation)
+		{
+			m_isOperation = false;
+		}
+		else
+		{
+			m_isOperation = true;
+		}
+	}
+}
+
+
+/// <summary>
+/// ポーズ画面の表示状態を更新
+/// </summary>
+/// <param name="input"></param>
+void ScenePlaying::UpdatePause(Input& input)
+{
+	// ボタンを押したらポーズ画面を表示する
+	if (input.IsTriggered("pause"))
+	{
+		// SEを鳴らす
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK);
+		m_isPause = true;
+	}
+}
+
+
+/// <summary>
+/// 開始時に説明を表示する
+/// </summary>
+void ScenePlaying::DrawStartOperation()
+{
+	// 背景を薄く表示する
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kPauseAlpha);
+	DrawBox(kStartOperationFramePosLTX, kStartOperationFramePosLTY, kStartOperationFramePosRBX, kStartOperationFramePosRBY,
+		kOperationBackColor, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
+	// 枠表示
+	DrawExtendGraph(kStartOperationFramePosLTX, kStartOperationFramePosLTY, kStartOperationFramePosRBX, kStartOperationFramePosRBY,
+		m_pauseBackHandle, true);
+	
+	// ボタン表示
+	DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kBButton,
+		kButtonSize * Button::kBButton, 0.0f,
+		kButtonSize, kButtonSize, kButtonScale, 0.0f,
+		m_padHandle, true);
+
+	// 文字表示
+	DrawStringToHandle(kStartTextPosX, kStartTextPosY, "すばやくゴールをめざせ！\n",
+		0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
+	DrawStringToHandle(kStartCloseTextPosX, kStartCloseTextPosY, "でとじる\n",
+		0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
 }
 
 

@@ -11,7 +11,11 @@
 // 定数
 namespace
 {
-	// UI表示関連
+	/*フェード*/
+	constexpr int kFadeFrame = 5;			// フェード変化量
+	constexpr int kStartFadeAlpha = 200;	// スタート時のフェードα値
+
+	/*UI表示*/
 	constexpr int kClearPosX = 570;			// クリアの文字位置X
 	constexpr int kClearPosY = 130;			// クリアの文字位置Y
 	constexpr int kFramePosX = 760;			// 枠表示位置X
@@ -21,7 +25,7 @@ namespace
 	constexpr float kFrameScale = 1.0f;		// 元の枠のサイズ
 	constexpr float kFrameChange = 0.1f;	// 枠のサイズの変化量
 
-	// テキスト関連
+	/*テキスト*/
 	constexpr int kTextColor = 0x000000;	// テキストの色
 	constexpr int kTimePosX = 750;			// タイム表示位置X
 	constexpr int kTimePosY = 450;			// タイム表示位置Y
@@ -39,6 +43,7 @@ SceneClear::SceneClear():
 	m_clearTime(0),
 	m_frameAnimTime(0.0f)
 {
+	m_fadeAlpha = kStartFadeAlpha;
 	m_clearHandle = LoadGraph("data/UI/clear.png");
 	m_frameHandle = LoadGraph("data/UI/frame.png");
 }
@@ -71,6 +76,8 @@ void SceneClear::Init()
 /// <returns>遷移先のシーン</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	FadeOut(); // フェードアウト
+
 	// BGMを鳴らす
 	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]))
 	{
@@ -85,7 +92,9 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 	// シーン切り替え
 	if (input.IsTriggered("OK"))
 	{
+		FadeIn();	// フェードイン
 		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK); // SEを鳴らす
+
 		if (m_select == Select::kStart)
 		{
 			return std::make_shared<ScenePlaying>(); // ゲームシーンに移動
@@ -154,6 +163,9 @@ void SceneClear::Draw()
 	DrawFormatStringToHandle(kTitlePosX, kTitlePosY,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)], "タイトルにもどる");
 
+	// フェードインアウト描画
+	DrawFade();
+
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "クリア画面", 0xffffff);
@@ -162,6 +174,24 @@ void SceneClear::Draw()
 	// 中心線
 	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
+}
+
+
+/// <summary>
+/// フェードイン処理
+/// </summary>
+void SceneClear::FadeIn()
+{
+	m_fadeAlpha += kFadeFrame;
+}
+
+
+/// <summary>
+/// フェードアウト処理
+/// </summary>
+void SceneClear::FadeOut()
+{
+	m_fadeAlpha -= kFadeFrame;
 }
 
 

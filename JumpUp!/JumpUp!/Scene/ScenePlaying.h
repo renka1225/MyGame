@@ -20,9 +20,14 @@ public:
 	virtual void Draw();
 
 private:
-	void UpdateSelect(Input& input); // 選択状態を更新
-	void DrawOperation();				 // 操作説明を表示
-	void DrawPause();				 // ポーズ画面を表示
+	virtual void FadeIn() override;			// フェードインの処理
+	virtual void FadeOut() override;		// フェードアウトの処理
+	void UpdateSelect(Input& input);		// 選択状態を更新
+	void UpdateOperation(Input& input);		// 操作説明の表示状態を更新
+	void UpdatePause(Input& input);			// ポーズ画面の表示状態を更新
+	void DrawStartOperation();				// 開始時に説明を表示
+	void DrawOperation();					// 操作説明を表示
+	void DrawPause();						// ポーズ画面を表示
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
@@ -51,11 +56,12 @@ private:
 		kButtonNum = 5	// ボタンの数
 	};
 
-	int m_select;		// 現在の選択状態
-	bool m_isOperation;	// 操作説明画面を開いているか(true:開いている)
-	bool m_isPause;		// ポーズ画面を開いているか(true:開いている)
+	int m_select;			 // 現在の選択状態
+	bool m_isStartOperation; // 最初の説明画面が開いた状態か(true:開いている)
+	bool m_isOperation;		 // 操作説明画面を開いているか(true:開いている)
+	bool m_isPause;			 // ポーズ画面を開いているか(true:開いている)
 
-	int m_frame;	// 経過フレーム数
+	int m_frame;			// 経過フレーム数
 	float m_frameAnimTime;	// 枠のアニメーション時間
 
 	int m_frameHandle;		// ポーズ画面の枠の画像

@@ -9,7 +9,11 @@
 // 定数
 namespace
 {
-	// UI表示関連
+	/*フェード*/
+	constexpr int kFadeFrame = 8;			// フェード変化量
+	constexpr int kStartFadeAlpha = 200;	// スタート時のフェードα値
+
+	/*UI表示*/
 	constexpr int kTitleLogoPosX = 510;		// タイトルロゴ位置X
 	constexpr int kTitleLogoPosY = 130;		// タイトルロゴ位置Y
 	constexpr int kFramePosX = 1250;		// 枠表示位置X
@@ -19,19 +23,20 @@ namespace
 	constexpr float kFrameScale = 1.0f;		// 元の枠のサイズ
 	constexpr float kFrameChange = 0.1f;	// 枠のサイズの変化量
 	
-	// テキスト関連
+	/*テキスト*/
 	constexpr int kTextColor = 0x000000;	// テキストの色
 	constexpr int kStartPosX = 1320;		// "はじめる"表示位置X
 	constexpr int kStartPosY = 580;			// "はじめる"表示位置Y
 	constexpr int kEndPosX = 1350;			// "おわる"表示位置X
 	constexpr int kEndPosY = 780;			// "おわる"表示位置Y
 
-	// ステージモデル関連
-	constexpr float kScale = 0.05f;						// 拡大率
-	constexpr float kRotate = 1.0f;						// 3Dモデルの回転量
-	const VECTOR kStagePos = VGet(0.0f,0.0f, 0.0f);		// 初期位置
-	constexpr int kBgColor = 0x2d6676;					// 背景色
-	// カメラ関連
+	/*ステージモデル*/
+	constexpr float kScale = 0.013f;						// 拡大率
+	constexpr float kRotate = 1.0f;							// 3Dモデルの回転量
+	const VECTOR kStagePos = VGet(-70.0f, -25.0f, -5.0f);	// 初期位置
+	constexpr int kBgColor = 0x2d6676;						// 背景色
+
+	/*カメラ*/
 	const VECTOR kCameraPos = VGet(0.0f, 70.0f, -200.0f);	// カメラ位置
 	const VECTOR kCameraTarget = VGet(0.0f, 40.0f, 100.0f);	// カメラの視線方向
 }
@@ -45,9 +50,10 @@ SceneTitle::SceneTitle() :
 	m_frameAnimTime(0.0f),
 	m_stageHandle(-1)
 {
+	m_fadeAlpha = kStartFadeAlpha;
 	m_titleHandle = LoadGraph("data/UI/titleLogo.png");
 	m_frameHandle = LoadGraph("data/UI/frame.png");
-	m_stageHandle = MV1LoadModel("data/Model/title.mv1");
+	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
 }
 
 
@@ -85,6 +91,8 @@ void SceneTitle::Init()
 /// <returns>遷移先のクラス</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	FadeOut(); 	// フェードアウト
+
 	// BGMを鳴らす
 	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)]))
 	{
@@ -97,13 +105,13 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 
 	m_frameAnimTime += kFrameAnim;
 
-	// 選択状態を更新
-	UpdateSelect(input);
+	UpdateSelect(input); // 選択状態を更新
 
 	// シーン切り替え
 	if (input.IsTriggered("OK"))
 	{
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK);	// SEを鳴らす
+		FadeIn();	// フェードイン
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK); // SEを鳴らす
 
 		if (m_select == Select::kStart)
 		{
@@ -166,12 +174,32 @@ void SceneTitle::Draw()
 	DrawFormatStringToHandle(kEndPosX, kEndPosY,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "おわる");
 
+	// フェードインアウト
+	DrawFade();
+
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 0, 0xffffff, "タイトル画面");
 	// 中心線
 	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0xffffff);
 #endif
+}
+
+
+/// <summary>
+/// フェードイン処理
+/// </summary>
+void SceneTitle::FadeIn()
+{
+	m_fadeAlpha += kFadeFrame;
+}
+
+/// <summary>
+/// フェードアウト処理
+/// </summary>
+void SceneTitle::FadeOut()
+{
+	m_fadeAlpha -= kFadeFrame;
 }
 
 
