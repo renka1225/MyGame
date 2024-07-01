@@ -33,8 +33,8 @@ namespace Font
 		{"Tsunagi Gothic Black", 48, 4, -1},
 		// Size42_4
 		{"Tsunagi Gothic Black", 42, 4, -1},
-		// Size32_4
-		{"Tsunagi Gothic Black", 32, 4, -1},
+		// Size40_4
+		{"Tsunagi Gothic Black", 40, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size28_4
 		{"Tsunagi Gothic Black", 28, 4, -1},
 		// Size24_4

@@ -12,7 +12,7 @@ namespace Font
 		kSize64_4,
 		kSize48_4,
 		kSize42_4,
-		kSize32_4,
+		kSize40_4,
 		kSize28_4,
 		kSize24_4,
 		kSize16_4,
@@ -21,16 +21,17 @@ namespace Font
 
 		// 使うフォントを指定する
 		// SceneTitle
-		kTitleMenu = kSize64_4,
+		kTitleMenu = kSize64_4,		// タイトルで使う文字サイズ
 
 		// ScenePlaying
-		kOperation = kSize28_4,		// "操作説明"の文字サイズ
-		kOperationMenu = kSize24_4,	// 操作説明部分の文字サイズ
-		kPauseMenu = kSize42_4,
+		kTask = kSize40_4,				 // 左上に表示する文字サイズ
+		kOperation = kSize28_4,			 // "操作説明"の文字サイズ
+		kOperationMenu = kSize24_4,		 // 操作説明部分の文字サイズ
+		kPauseMenu = kSize42_4,			 // ポーズ画面の文字サイズ
 		kMenuTitle = kSize42_4,
 
 		// SceneClear
-		kClearMenu = kSize42_4,
+		kClearMenu = kSize42_4,		// クリアで使う文字サイズ
 	};
 
 	// フォントのロード、アンロード

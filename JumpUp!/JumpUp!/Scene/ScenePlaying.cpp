@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Stage.h"
 #include "Light.h"
+#include "Confetti.h"
 #include "Font.h"
 #include "Sound.h"
 #include "Input.h"
@@ -17,24 +18,17 @@ namespace
 	constexpr int kFadeFrame = 8;			// フェード変化量
 	constexpr int kStartFadeAlpha = 200;	// スタート時のフェードα値
 
-	/*スタート時の説明*/
-	constexpr int kStartOperationFramePosLTX = 600;		// 枠の左上表示位置X
-	constexpr int kStartOperationFramePosLTY = 300;		// 枠の左上表示位置Y
-	constexpr int kStartOperationFramePosRBX = 1320;	// 枠の右下表示位置X
-	constexpr int kStartOperationFramePosRBY = 800;		// 枠の右下表示位置Y
-	// テキスト
-	constexpr int kStartTextPosX = 600;					// 表示テキスト位置X
-	constexpr int kStartTextPosY = 600;					// 表示テキスト位置Y
-	constexpr int kStartCloseTextPosX = 1100;			// "とじる"表示位置X
-	constexpr int kStartCloseTextPosY = 850;			// "とじる"表示位置Y
-
 	/*操作説明画面*/
 	constexpr int kOperationFramePosX = 40;			// 枠表示位置X
 	constexpr int kOperationFramePosY = 340;		// 枠表示位置Y
 	constexpr int kOperationWidth = 200;			// 枠の横幅
 	constexpr int kOperationHeight = 770;			// 枠の縦幅
 	constexpr int kOperationBackColor = 0x000000;	// 枠の背景色
+
 	// テキスト
+	constexpr int kTaskPosX = 40;				// タスク表示位置X
+	constexpr int kTaskPosY = 50;				// タスク表示位置Y
+	constexpr int kTaskColor = 0xffffff;		// タスクの文字色
 	constexpr int kOpenClosePosX = 90;			// "ひらく、とじる"表示位置X
 	constexpr int kOpenClosePosY = 390;			// "ひらく、とじる"表示位置Y
 	constexpr int kOperationPosX = 50;			// "操作説明"表示位置X
@@ -83,18 +77,23 @@ namespace
 	constexpr int kRetryPosY = 540;			// "リトライ"表示位置Y
 	constexpr int kTitlePosX = 810;			// "タイトルに戻る"表示位置Y
 	constexpr int kTitlePosY = 740;			// "タイトルに戻る"表示位置Y
+
+	/*クリア演出*/
+	constexpr float kClearStagingTime = 240.0f;	 // クリア演出の時間
+	constexpr float kClearSETime = 180.0f;		 // クリアSEを止める時間
+	constexpr float kClearCheersSETime = 200.0f; // 歓声のSEを再生する時間
 }
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-ScenePlaying::ScenePlaying():
+ScenePlaying::ScenePlaying() :
 	m_select(Select::kBack),
-	m_isStartOperation(true),
 	m_isOperation(true),
 	m_isPause(false),
 	m_frame(0),
-	m_frameAnimTime(0.0f)
+	m_frameAnimTime(0.0f),
+	m_clearStagingTime(kClearStagingTime)
 {
 	m_fadeAlpha = kStartFadeAlpha;
 	m_pPlayer = std::make_shared<Player>();
@@ -113,9 +112,11 @@ ScenePlaying::ScenePlaying():
 ScenePlaying::~ScenePlaying()
 {
 	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kPlayBGM)]);
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearCheersSE)]);
 	DeleteGraph(m_frameHandle);
 	DeleteGraph(m_pauseBackHandle);
 	DeleteGraph(m_padHandle);
+	Light::DeleteLight();
 }
 
 
@@ -126,7 +127,8 @@ void ScenePlaying::Init()
 {
 	m_pPlayer->Init();
 	m_pCamera->Init();
-	Light::SetLight();	// ライトの調整
+	Light::SetLight();
+	Confetti::CreateCofetti();
 }
 
 
@@ -140,9 +142,13 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 #ifdef _DEBUG	// デバッグモード
 	if (input.IsPressing("sceneChange"))
 	{
-		auto sceneClear = std::make_shared<SceneClear>();
-		sceneClear->SetClearTime(m_frame);
-		return sceneClear;	// クリア画面に移動
+		ClearStaging();	// クリア演出を行う
+		if (m_clearStagingTime <= 0.0f)
+		{
+			auto sceneClear = std::make_shared<SceneClear>();
+			sceneClear->SetClearTime(m_frame);
+			return sceneClear;
+		}
 	}
 	// Pキーでポーズ、ポーズ中にPでコマ送り
 	if (m_debugState == DebugState::Normal && input.IsTriggered("debug_pause"))
@@ -194,36 +200,31 @@ std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 		}
 		else
 		{
+			m_frame++;	// 経過フレーム数を更新
+
 			// プレイヤー更新
 			m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 			// カメラ更新
 			m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 
-			// 最初に操作説明を表示する
-			if (m_isStartOperation)
-			{
-				// ボタンを押したら説明を閉じる
-				if (input.IsTriggered("OK"))
-				{
-					m_isStartOperation = false;
-				}
-				return shared_from_this();
-			}
-
 			// 表示状態を更新する
-			UpdateOperation(input);
-			UpdatePause(input);
-
-			m_frame++;	// 経過フレーム数を更新
+			if (!m_pPlayer->GetIsGoal())
+			{
+				UpdateOperation(input);
+				UpdatePause(input);
+			}
 		}
 
 		// プレイヤーがゴールしたらクリア画面に移動
 		if (m_pPlayer->GetIsGoal())
 		{
-			auto sceneClear = std::make_shared<SceneClear>();
-			sceneClear->SetClearTime(m_frame);
-
-			return sceneClear;
+			ClearStaging();	// クリア演出を行う
+			if (m_clearStagingTime <= 0.0f)
+			{
+				auto sceneClear = std::make_shared<SceneClear>();
+				sceneClear->SetClearTime(m_frame);
+				return sceneClear;
+			}
 		}
 	}
 
@@ -251,10 +252,10 @@ void ScenePlaying::Draw()
 		DrawPause();
 	}
 
-	// 開始時に操作説明を表示
-	if (m_isStartOperation)
+	// クリア演出描画
+	if (m_pPlayer->GetIsGoal())
 	{
-		DrawStartOperation();
+		DrawClearStaging();
 	}
 
 	// フェードインアウト描画
@@ -346,31 +347,22 @@ void ScenePlaying::UpdatePause(Input& input)
 
 
 /// <summary>
-/// 開始時に説明を表示する
+/// クリア時の演出	
 /// </summary>
-void ScenePlaying::DrawStartOperation()
+void ScenePlaying::ClearStaging()
 {
-	// 背景を薄く表示する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kPauseAlpha);
-	DrawBox(kStartOperationFramePosLTX, kStartOperationFramePosLTY, kStartOperationFramePosRBX, kStartOperationFramePosRBY,
-		kOperationBackColor, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	m_clearStagingTime--;
 
-	// 枠表示
-	DrawExtendGraph(kStartOperationFramePosLTX, kStartOperationFramePosLTY, kStartOperationFramePosRBX, kStartOperationFramePosRBY,
-		m_pauseBackHandle, true);
-	
-	// ボタン表示
-	DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kBButton,
-		kButtonSize * Button::kBButton, 0.0f,
-		kButtonSize, kButtonSize, kButtonScale, 0.0f,
-		m_padHandle, true);
+	Confetti::UpdateCofetti();
 
-	// 文字表示
-	DrawStringToHandle(kStartTextPosX, kStartTextPosY, "すばやくゴールをめざせ！\n",
-		0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
-	DrawStringToHandle(kStartCloseTextPosX, kStartCloseTextPosY, "でとじる\n",
-		0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
+	if (m_clearStagingTime >= kClearSETime && !CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearSE)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearSE)], DX_PLAYTYPE_BACK);		  // SEを鳴らす
+	}
+	else if (m_clearStagingTime <= kClearCheersSETime && !CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearCheersSE)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearCheersSE)], DX_PLAYTYPE_LOOP); // SEを鳴らす
+	}
 }
 
 
@@ -388,16 +380,16 @@ void ScenePlaying::DrawOperation()
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 		// 文字表示
-		DrawFormatStringToHandle(kOpenClosePosX, kOpenClosePosY,
-			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "でとじる");
-		DrawFormatStringToHandle(kMovePosX, kMovePosY,
-			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "移動");
-		DrawFormatStringToHandle(kJumpPosX, kJumpPosY,
-			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "ジャンプ");
-		DrawFormatStringToHandle(kMoveCameraPosX, kMoveCameraPosY,
-			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "カメラ移動");
-		DrawFormatStringToHandle(kPausePosX, kPausePosY,
-			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "ポーズ");
+		DrawStringToHandle(kOpenClosePosX, kOpenClosePosY, "でとじる",
+			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
+		DrawStringToHandle(kMovePosX, kMovePosY, "移動",
+			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
+		DrawStringToHandle(kJumpPosX, kJumpPosY, "ジャンプ",
+			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
+		DrawStringToHandle(kMoveCameraPosX, kMoveCameraPosY, "カメラ移動",
+			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
+		DrawStringToHandle(kPausePosX, kPausePosY, "ポーズ",
+			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
 
 		// LSアナログスティック
 		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLSButton,
@@ -423,17 +415,21 @@ void ScenePlaying::DrawOperation()
 	// 閉じているとき
 	else
 	{
-		DrawFormatStringToHandle(kOpenClosePosX, kOpenClosePosY,
-			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)], "でひらく");
+		DrawStringToHandle(kOpenClosePosX, kOpenClosePosY, "でひらく",
+			0xffffff, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperationMenu)]);
 	}
 
-	DrawFormatStringToHandle(kOperationPosX, kOperationPosY,
-		kOperationColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)], "操作説明");
+	DrawStringToHandle(kOperationPosX, kOperationPosY, "操作説明",
+		kOperationColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
 
 	// ビューボタン
 	DrawRectRotaGraph(kViewButtonPosX, kViewButtonPosY,
 		kButtonSize * (Button::kViewButton + 1), 0.0f,
 		kButtonSize, kButtonSize, kViewButtonScale, 0.0f, m_padHandle, true);
+
+	// 文字表示
+	DrawStringToHandle(kTaskPosX, kTaskPosY, "ジャンプですばやく\nゴールをめざせ！\n",
+		kTaskColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTask)]);
 }
 
 
@@ -486,4 +482,13 @@ void ScenePlaying::DrawPause()
 #ifdef _DEBUG
 	DrawString(0, 10, "ポーズ中", 0xffffff);
 #endif
+}
+
+
+/// <summary>
+/// クリア時の演出描画
+/// </summary>
+void ScenePlaying::DrawClearStaging()
+{
+	Confetti::DrawCofetti();
 }

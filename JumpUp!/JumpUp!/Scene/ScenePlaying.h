@@ -25,9 +25,10 @@ private:
 	void UpdateSelect(Input& input);		// 選択状態を更新
 	void UpdateOperation(Input& input);		// 操作説明の表示状態を更新
 	void UpdatePause(Input& input);			// ポーズ画面の表示状態を更新
-	void DrawStartOperation();				// 開始時に説明を表示
+	void ClearStaging();					// クリア時の演出
 	void DrawOperation();					// 操作説明を表示
 	void DrawPause();						// ポーズ画面を表示
+	void DrawClearStaging();				// クリア時の演出描画
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
@@ -57,12 +58,12 @@ private:
 	};
 
 	int m_select;			 // 現在の選択状態
-	bool m_isStartOperation; // 最初の説明画面が開いた状態か(true:開いている)
 	bool m_isOperation;		 // 操作説明画面を開いているか(true:開いている)
 	bool m_isPause;			 // ポーズ画面を開いているか(true:開いている)
 
-	int m_frame;			// 経過フレーム数
-	float m_frameAnimTime;	// 枠のアニメーション時間
+	int m_frame;				// 経過フレーム数
+	float m_frameAnimTime;		// 枠のアニメーション時間
+	float m_clearStagingTime;	// クリア演出時間
 
 	int m_frameHandle;		// ポーズ画面の枠の画像
 	int m_pauseBackHandle;	// ポーズ画面の背景画像

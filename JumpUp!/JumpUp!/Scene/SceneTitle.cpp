@@ -169,10 +169,10 @@ void SceneTitle::Draw()
 	}
 
 	// 文字表示
-	DrawFormatStringToHandle(kStartPosX, kStartPosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "はじめる");
-	DrawFormatStringToHandle(kEndPosX, kEndPosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)], "おわる");
+	DrawStringToHandle(kStartPosX, kStartPosY, "はじめる",
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)]);
+	DrawStringToHandle(kEndPosX, kEndPosY, "おわる",
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleMenu)]);
 
 	// フェードインアウト
 	DrawFade();

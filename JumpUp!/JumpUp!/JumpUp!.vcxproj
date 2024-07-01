@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Util\Confetti.cpp" />
     <ClCompile Include="Util\Sound.cpp" />
     <ClCompile Include="Util\ConversionTime.cpp" />
     <ClCompile Include="Util\DrawDebug.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Confetti.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Util\Sound.h" />
     <ClInclude Include="Util\ConversionTime.h" />

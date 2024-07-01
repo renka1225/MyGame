@@ -158,10 +158,10 @@ void SceneClear::Draw()
 	}
 
 	// 文字表示
-	DrawFormatStringToHandle(kStartPosX, kStartPosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)], "もう1回プレイ");
-	DrawFormatStringToHandle(kTitlePosX, kTitlePosY,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)], "タイトルにもどる");
+	DrawStringToHandle(kStartPosX, kStartPosY, "もう1回プレイ",
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)]);
+	DrawStringToHandle(kTitlePosX, kTitlePosY, "タイトルにもどる",
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearMenu)]);
 
 	// フェードインアウト描画
 	DrawFade();

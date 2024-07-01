@@ -31,6 +31,9 @@ namespace
 /// </summary>
 namespace Light
 {
+	/// <summary>
+	///	ライトセット
+	/// </summary>
 	void SetLight()
 	{
 		// ライト位置調整
@@ -44,4 +47,12 @@ namespace Light
 		int spotLight = CreateSpotLightHandle(kSpotLightPos, kSpotLightDir, kSpotLightOutAngle, kSpotLightInAngle,
 			kSpotLightRange, kSpotLighAtten0, kSpotLighAtten1, kSpotLighAtten2);
 	};
+
+	/// <summary>
+	/// ライト削除
+	/// </summary>
+	void DeleteLight()
+	{
+		DeleteLightHandleAll();
+	}
 }

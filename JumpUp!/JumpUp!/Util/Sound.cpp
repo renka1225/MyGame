@@ -21,6 +21,7 @@ namespace Sound
 		{"data/sound/select.mp3"},
 		{"data/sound/jump.mp3"},
 		{"data/sound/clear.wav"},
+		{"data/sound/clearCheers.mp3"},
 		{"data/sound/titleBGM.mp3"},
 		{"data/sound/gameBGM.mp3"},
 		{"data/sound/clearBGM.mp3"},
