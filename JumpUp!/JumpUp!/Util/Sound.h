@@ -22,6 +22,7 @@ namespace Sound
 
 	void Load();
 	void UnLode();
+	void ChangeVol(); // ‰¹—Ê‚ğ•ÏX‚·‚é
 
 	extern std::vector<int> m_soundHandle;
 };

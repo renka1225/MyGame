@@ -6,9 +6,10 @@
 /// </summary>
 namespace Confetti
 {
-	void CreateCofetti();	// 紙吹雪の作成
-	void UpdateCofetti();	// 紙吹雪の更新
-	void DrawCofetti();		// 紙吹雪の描画
+	void CreateCofetti();	// 作成
+	void DeleteCofetti();	// 削除
+	void UpdateCofetti();	// 更新
+	void DrawCofetti();		// 描画
 
 	struct ConfettiInfo
 	{
@@ -18,7 +19,6 @@ namespace Confetti
 		int speed;	// 落下速度
 		int color;	// 色
 	};
-	ConfettiInfo confettiInfo;
 
 	extern std::vector<ConfettiInfo> confettis;
 }

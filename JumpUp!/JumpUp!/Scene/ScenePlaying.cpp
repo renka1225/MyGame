@@ -82,6 +82,7 @@ namespace
 	constexpr float kClearStagingTime = 240.0f;	 // クリア演出の時間
 	constexpr float kClearSETime = 180.0f;		 // クリアSEを止める時間
 	constexpr float kClearCheersSETime = 200.0f; // 歓声のSEを再生する時間
+	constexpr int kAddPal = 200;				 // 加算ブレンドの値
 }
 
 /// <summary>
@@ -117,6 +118,7 @@ ScenePlaying::~ScenePlaying()
 	DeleteGraph(m_pauseBackHandle);
 	DeleteGraph(m_padHandle);
 	Light::DeleteLight();
+	Confetti::DeleteCofetti();
 }
 
 
@@ -393,22 +395,22 @@ void ScenePlaying::DrawOperation()
 
 		// LSアナログスティック
 		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLSButton,
-			kButtonSize * Button::kLSButton, 0.0f,
+			kButtonSize * Button::kLSButton, 0,
 			kButtonSize, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
 		// Aボタン
 		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kAButton,
-			kButtonSize * Button::kAButton, 0.0f,
+			kButtonSize * Button::kAButton, 0,
 			kButtonSize, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
 		// LB,RBボタン
 		DrawRectRotaGraph(kLRButtonPosX, kButtonPosY + kButtonInterval * Button::kLRButton,
-			kButtonSize * (Button::kLRButton), 0.0f,
+			kButtonSize * (Button::kLRButton), 0,
 			kButtonSize * 2, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
 		// 三本線ボタン
 		DrawRectRotaGraph(kButtonPosX, kButtonPosY + kButtonInterval * Button::kLineButton,
-			kButtonSize * (Button::kLineButton + 1), 0.0f,
+			kButtonSize * (Button::kLineButton + 1), 0,
 			kButtonSize, kButtonSize, kButtonScale, 0.0f,
 			m_padHandle, true);
 	}
@@ -424,7 +426,7 @@ void ScenePlaying::DrawOperation()
 
 	// ビューボタン
 	DrawRectRotaGraph(kViewButtonPosX, kViewButtonPosY,
-		kButtonSize * (Button::kViewButton + 1), 0.0f,
+		kButtonSize * (Button::kViewButton + 1), 0,
 		kButtonSize, kButtonSize, kViewButtonScale, 0.0f, m_padHandle, true);
 
 	// 文字表示
@@ -490,5 +492,7 @@ void ScenePlaying::DrawPause()
 /// </summary>
 void ScenePlaying::DrawClearStaging()
 {
+	SetDrawBlendMode(DX_BLENDMODE_ADD, kAddPal);
 	Confetti::DrawCofetti();
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }

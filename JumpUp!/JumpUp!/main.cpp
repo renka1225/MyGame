@@ -32,6 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Input input;		// 入力状態を取得
 	Font::Load();		// フォントの読み込み
 	Sound::Load();		// サウンドの読み込み
+	Sound::ChangeVol();	// サウンドの音量を変更する
 
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();

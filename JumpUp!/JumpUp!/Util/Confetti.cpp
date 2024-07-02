@@ -5,7 +5,12 @@
 // 定数
 namespace
 {
-    constexpr int kNum = 600; // 紙吹雪の作成数
+    constexpr int kNum = 600;         // 紙吹雪の作成数
+    constexpr int kMinSize = 6;       // 最小のサイズ
+    constexpr int kRandSize = 15;     // サイズ
+    constexpr int kMinSpeed = 1;      // 落下速度の最小値
+    constexpr int kRandSpeed = 7;     // 落下速度
+    constexpr int kRandColor = 256;    // 色
 }
 
 namespace Confetti
@@ -13,20 +18,29 @@ namespace Confetti
     std::vector<ConfettiInfo> confettis;
 
     /// <summary>
-    /// 紙吹雪の作成
+    /// 作成
     /// </summary>
-    /// <param name="num">紙吹雪の数</param>
     void CreateCofetti()
     {
         for (int i = 0; i < kNum; i++)
         {
-            confettiInfo.x = std::rand() % 800;
-            confettiInfo.y = std::rand() % 600 - 600;
-            confettiInfo.size = 6 + std::rand() % 10;
-            confettiInfo.speed = 1 + std::rand() % 5;
-            confettiInfo.color = GetColor(std::rand() % 256, std::rand() % 256, std::rand() % 256);
+            ConfettiInfo confettiInfo;
+            confettiInfo.x = std::rand() % Game::kScreenWidth;
+            confettiInfo.y = std::rand() % Game::kScreenHeight - Game::kScreenHeight;
+            confettiInfo.size = kMinSize + std::rand() % kRandSize;
+            confettiInfo.speed = kMinSpeed + std::rand() % kRandSpeed;
+            confettiInfo.color = GetColor(std::rand() % kRandColor, std::rand() % kRandColor, std::rand() % kRandColor);
             confettis.push_back(confettiInfo);
         }
+    }
+
+
+    /// <summary>
+    /// 削除
+    /// </summary>
+    void DeleteCofetti()
+    {
+        confettis.clear();
     }
 
 
@@ -42,10 +56,10 @@ namespace Confetti
             // 画面下に出たら再生成する
             if (c.y > Game::kScreenHeight)
             {
-                c.x = std::rand() % 800;
+                c.x = std::rand() % Game::kScreenWidth;
                 c.y = -c.size;
-                c.speed = 1 + std::rand() % 5;
-                c.color = GetColor(std::rand() % 256, std::rand() % 256, std::rand() % 256);
+                c.speed = kMinSize + std::rand() % kRandSize;
+                c.color = GetColor(std::rand() % kRandColor, std::rand() % kRandColor, std::rand() % kRandColor);
             }
         }
     }

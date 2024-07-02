@@ -10,17 +10,16 @@
 namespace
 {
 	// プレイヤー情報
-	constexpr float kScale = 0.12f;			// プレイヤーモデルの拡大率
-	constexpr float kMaxSpeed = 3.0f;		// プレイヤーの最大移動速度
-	constexpr float kAcceleration = 0.2f;	// プレイヤーの加速度
-	constexpr float kDeceleration = 0.2f;	// プレイヤーの減速度
-	constexpr float kAngleSpeed = 0.2f;		// プレイヤー角度の変化速度
-	constexpr float kVelocity = 6.0f;		// ジャンプの高さ
-	constexpr float kGravity = -0.25f;		// 重力
-	//const VECTOR kInitPos = VGet(-160.0f, 50.0f, -350.0f); // 初期位置
-	const VECTOR kInitPos = VGet(0.0f, 1000.0f, 0.0f); // 初期位置
-	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);	   // 初期方向
-
+	constexpr float kScale = 0.12f;							// プレイヤーモデルの拡大率
+	constexpr float kMaxSpeed = 3.0f;						// プレイヤーの最大移動速度
+	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
+	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
+	constexpr float kAngleSpeed = 0.2f;						// プレイヤー角度の変化速度
+	constexpr float kVelocity = 6.0f;						// ジャンプの高さ
+	constexpr float kGravity = -0.25f;						// 重力
+	const VECTOR kInitPos = VGet(-160.0f, 50.0f, -350.0f);	// 初期位置
+	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
+		
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度

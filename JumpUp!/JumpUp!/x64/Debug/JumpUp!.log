@@ -1,8 +1,4 @@
-﻿  ScenePlaying.cpp
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(396,37): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(401,36): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(406,39): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(411,45): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\JumpUp!\JumpUp!\Scene\ScenePlaying.cpp(427,44): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-ScenePlaying.obj : error LNK2005: "struct Confetti::ConfettiInfo Confetti::confettiInfo" (?confettiInfo@Confetti@@3UConfettiInfo@1@A) は既に Confetti.obj で定義されています。
-C:\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe : fatal error LNK1169: 1 つ以上の複数回定義されているシンボルが見つかりました。
+﻿  Player.cpp
+  ScenePlaying.cpp
+  コードを生成中...
+  JumpUp!.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\JumpUp!\JumpUp!\x64\Debug\JumpUp!.exe
