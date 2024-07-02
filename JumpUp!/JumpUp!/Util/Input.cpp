@@ -173,8 +173,8 @@ Input::Input()
 					   {InputType::pad, PAD_INPUT_R} };
 	m_commandTable["debug_enter"] = { {InputType::keybd, KEY_INPUT_RETURN},
 				   {InputType::pad, PAD_INPUT_R} };
-	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_X},
-							   {InputType::pad, PAD_INPUT_R} };
+	m_commandTable["debug"] = { {InputType::keybd, KEY_INPUT_Z},
+							   {InputType::pad, PAD_INPUT_10} };
 	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 					{InputType::pad, PAD_INPUT_10} };
 }

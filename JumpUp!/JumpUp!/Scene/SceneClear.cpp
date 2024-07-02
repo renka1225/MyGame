@@ -33,6 +33,9 @@ namespace
 	constexpr int kStartPosY = 640;			// "もう1回プレイ"位置Y
 	constexpr int kTitlePosX = 790;			// "タイトルに戻る"表示位置X
 	constexpr int kTitlePosY = 840;			// "タイトルに戻る"表示位置Y
+
+	/*背景*/
+	constexpr int kBgColor = 0x2d6676;		// 背景色
 }
 
 /// <summary>
@@ -115,7 +118,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 void SceneClear::Draw()
 {
 	// 背景表示
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x2d6676, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBgColor, true);
 
 	// クリアの文字表示
 	DrawGraph(kClearPosX, kClearPosY, m_clearHandle, true);

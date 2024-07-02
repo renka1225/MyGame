@@ -58,15 +58,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		while (GetNowHiPerformanceCount() - time < 16667) {}
 
 #ifdef _DEBUG
-		if (input.IsPressing("end"))
+		if (input.IsTriggered("end"))
 		{
 			DxLib_End();
 		}
 #endif
 	}
 
-	Font::UnLoad();		// フォントの解放
-	Sound::UnLode();	// サウンドの解放
+	Font::UnLoad();			 // フォントの解放
+	Sound::UnLode();		 // サウンドの解放
 
 	DxLib_End();	// ＤＸライブラリ使用の終了処理
 

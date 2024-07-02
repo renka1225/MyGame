@@ -17,6 +17,7 @@ namespace
 	/*フェード*/
 	constexpr int kFadeFrame = 8;			// フェード変化量
 	constexpr int kStartFadeAlpha = 200;	// スタート時のフェードα値
+	constexpr int kMaxFadeAlpha = 255;		// 最大フェードα値
 
 	/*操作説明画面*/
 	constexpr int kOperationFramePosX = 40;			// 枠表示位置X
@@ -69,6 +70,7 @@ namespace
 	constexpr float kFrameAnim = 0.05f;		// 枠の拡大縮小アニメーション再生時間
 	constexpr float kFrameScale = 1.0f;		// 元の枠のサイズ
 	constexpr float kFrameChange = 0.1f;	// 枠のサイズの変化量
+	constexpr float kHalf = 0.5f;			// 半分
 	// テキスト
 	constexpr int kTextColor = 0x000000;	// テキストの色
 	constexpr int kBackPosX = 830;			// "ゲームに戻る"表示位置X
@@ -83,6 +85,11 @@ namespace
 	constexpr float kClearSETime = 180.0f;		 // クリアSEを止める時間
 	constexpr float kClearCheersSETime = 200.0f; // 歓声のSEを再生する時間
 	constexpr int kAddPal = 200;				 // 加算ブレンドの値
+
+	/*シャドウマップ*/
+	constexpr int kShadowMapSize = 1024;							// 作成するシャドウマップのサイズ
+	const VECTOR kShadowMapMinPos = VGet(-500.0f, 0.0f, -500.0f);   // シャドウマップの範囲の最小値
+	const VECTOR kShadowMapMaxPos = VGet(500.0f, 200.0f, 500.0f);   // シャドウマップの範囲の最大値
 }
 
 /// <summary>
@@ -142,7 +149,7 @@ void ScenePlaying::Init()
 std::shared_ptr<SceneBase> ScenePlaying::Update(Input& input)
 {
 #ifdef _DEBUG	// デバッグモード
-	if (input.IsPressing("sceneChange"))
+	if (input.IsTriggered("sceneChange"))
 	{
 		ClearStaging();	// クリア演出を行う
 		if (m_clearStagingTime <= 0.0f)
@@ -241,7 +248,6 @@ void ScenePlaying::Draw()
 {
 	// ステージ描画
 	m_pStage->Draw();
-
 	// プレイヤー描画
 	m_pPlayer->Draw(m_pDrawDebug);
 
@@ -306,7 +312,7 @@ void ScenePlaying::UpdateSelect(Input& input)
 	if (input.IsTriggered("up"))
 	{
 		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK); //SEを鳴らす
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;;	// 選択状態を1つ上げる
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
 	}
 }
 
@@ -314,7 +320,7 @@ void ScenePlaying::UpdateSelect(Input& input)
 /// <summary>
 /// 操作説明の表示状態を更新
 /// </summary>
-/// <param name="input"></param>
+/// <param name="input">入力</param>
 void ScenePlaying::UpdateOperation(Input& input)
 {
 	// 操作説明画面の表示非表示
@@ -335,7 +341,7 @@ void ScenePlaying::UpdateOperation(Input& input)
 /// <summary>
 /// ポーズ画面の表示状態を更新
 /// </summary>
-/// <param name="input"></param>
+/// <param name="input">入力</param>
 void ScenePlaying::UpdatePause(Input& input)
 {
 	// ボタンを押したらポーズ画面を表示する
@@ -443,13 +449,12 @@ void ScenePlaying::DrawPause()
 	// ポーズ画面を表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kPauseAlpha);
 	DrawBox(kPauseBackPosX, kPauseBackPosY, kPauseBackPosX + kPauseWidth, kPauseBackPosY + kPauseHeight, kPauseColor, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, kMaxFadeAlpha);
 	DrawGraph(kPauseFramePosX, kPauseFramePosY, m_pauseBackHandle, true);
 
 	// 枠表示
 	for (int i = 0; i < kSelectNum; i++)
 	{
-		// 選択中のボタンを拡大縮小させる
 		if (m_select == i)
 		{
 			// 枠のサイズを1.0～1.1で変化させる
@@ -460,11 +465,12 @@ void ScenePlaying::DrawPause()
 			int scaleWidth = static_cast<int>(width * scale);
 			int scaleHeight = static_cast<int>(height * scale);
 
+			// 選択中のボタンを拡大縮小させる
 			DrawExtendGraph(
-				kFramePosX - static_cast<int>((scaleWidth - width) * 0.5f),
-				kFramePosY + kSelectMove * i - static_cast<int>((scaleHeight - height) * 0.5f),
-				kFramePosX + static_cast<int>((scaleWidth - width) * 0.5f) + width,
-				kFramePosY + static_cast<int>(kSelectMove * i + (scaleHeight - height) * 0.5f) + height,
+				kFramePosX - static_cast<int>((scaleWidth - width) * kHalf),
+				kFramePosY + kSelectMove * i - static_cast<int>((scaleHeight - height) * kHalf),
+				kFramePosX + static_cast<int>((scaleWidth - width) * kHalf) + width,
+				kFramePosY + static_cast<int>(kSelectMove * i + (scaleHeight - height) * kHalf) + height,
 				m_frameHandle, true);
 		}
 		else
@@ -494,5 +500,5 @@ void ScenePlaying::DrawClearStaging()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ADD, kAddPal);
 	Confetti::DrawCofetti();
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, kMaxFadeAlpha);
 }

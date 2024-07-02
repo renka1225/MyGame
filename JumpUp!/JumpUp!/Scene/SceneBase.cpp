@@ -35,6 +35,7 @@ void SceneBase::FadeOut()
 	m_fadeAlpha = std::max(0, m_fadeAlpha);
 }
 
+
 /// <summary>
 /// フェードインアウトの描画
 /// </summary>

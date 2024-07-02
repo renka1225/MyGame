@@ -119,7 +119,7 @@
     <ClInclude Include="Light.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Confetti.h">
+    <ClInclude Include="Util\Confetti.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
   </ItemGroup>

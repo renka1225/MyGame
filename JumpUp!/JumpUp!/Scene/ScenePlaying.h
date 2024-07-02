@@ -69,7 +69,6 @@ private:
 	int m_pauseBackHandle;	// ポーズ画面の背景画像
 	int m_padHandle;		// コントローラーのボタンの画像
 
-
 #ifdef _DEBUG
 	// デバッグ状況
 	enum class DebugState

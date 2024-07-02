@@ -14,7 +14,7 @@ namespace
 	constexpr float kHeight = 60.0f;						// カメラの注視点
 	constexpr float kAngle = 0.03f;							// カメラを動かす角度
 	constexpr float kInitAngleH = -DX_PI_F / 1.5f;			// カメラの初期平行角度
-	constexpr float kInitAngleV = -0.3f;						// カメラの初期垂直角度
+	constexpr float kInitAngleV = -0.3f;					// カメラの初期垂直角度
 	constexpr float kMinAngleV = DX_PI_F * 0.5f - 0.6f;		// 最小の垂直角度
 	constexpr float kMaxAngleV = -DX_PI_F * 0.5f + 0.6f;	// 最大の垂直角度
 	constexpr float kColSize = 3.0f;						// カメラの当たり判定サイズ
@@ -38,6 +38,7 @@ Camera::Camera():
 /// </summary>
 Camera::~Camera()
 {
+	// 処理なし
 }
 
 

@@ -17,9 +17,9 @@ namespace
 	constexpr float kAngleSpeed = 0.2f;							// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;							// ジャンプの高さ
 	constexpr float kGravity = -0.25f;							// 重力
-	const VECTOR kInitPos = VGet(-160.0f, 50.0f, -350.0f);		// 初期位置
-	//const VECTOR kInitPos = VGet(0.0f, 1000.0f, 0.0f);		// 初期位置(デバッグ用)
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);				// 初期方向
+	const VECTOR kInitPos = VGet(-160.0f, 50.0f, -350.0f);		// 初期位置
+	const VECTOR kDebugPos = VGet(0.0f, 1000.0f, 0.0f);			// プレイヤーをゴールまで移動する(デバッグ用)
 		
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -78,6 +78,11 @@ void Player::Init()
 /// <param name="stage">ステージ情報参照</param>
 void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 {
+#ifdef _DEBUG
+	// プレイヤーをゴールまで移動させる
+	if (input.IsTriggered("debug")) m_pos = kDebugPos;
+#endif
+
 	/*パッド入力によって移動パラメータを設定する*/
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
