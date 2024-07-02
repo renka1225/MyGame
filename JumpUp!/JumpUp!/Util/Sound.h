@@ -11,6 +11,7 @@ namespace Sound
 	{
 		kCursorSE,		// カーソル移動
 		kSelectSE,		// 決定
+		kRunSE,			// 移動
 		kJumpSE,		// ジャンプ
 		kClearSE,		// クリア時のSE
 		kClearCheersSE, // クリア時の歓声のSE

@@ -20,12 +20,13 @@ namespace Sound
 	{
 		{"data/sound/cursor.mp3", 255},
 		{"data/sound/select.mp3", 255},
+		{"data/sound/run.mp3", 255},
 		{"data/sound/jump.mp3", 255},
 		{"data/sound/clear.wav", 255},
 		{"data/sound/clearCheers.mp3", 255},
-		{"data/sound/titleBGM.mp3", 210},
-		{"data/sound/gameBGM.mp3", 210},
-		{"data/sound/clearBGM.mp3", 210},
+		{"data/sound/titleBGM.mp3", 200},
+		{"data/sound/gameBGM.mp3", 200},
+		{"data/sound/clearBGM.mp3", 200},
 	};
 
 	/// <summary>

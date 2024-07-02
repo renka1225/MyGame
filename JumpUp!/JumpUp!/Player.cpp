@@ -249,6 +249,7 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 	{
 		moveVec = VAdd(moveVec, VScale(leftMoveVec, -1.0f));
 		isPressMove = true;
+
 	}
 
 	// ボタンが押されたらジャンプする
@@ -291,6 +292,12 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 		}
 		// プレイヤーの移動ベクトルを設定する
 		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
+
+		// 移動SEを鳴らす
+		if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kRunSE)]))
+		{
+			PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kRunSE)], DX_PLAYTYPE_BACK);
+		}
 	}
 	// 移動しない場合
 	else
@@ -310,6 +317,9 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 			m_moveSpeed = std::max(0.0f, m_moveSpeed);
 		}
 		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
+
+		// 移動SEを止める
+		StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kRunSE)]);
 	}
 
 	// 移動ベクトルのY成分をY軸方向の速度にする
