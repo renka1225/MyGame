@@ -1,0 +1,2 @@
+﻿  main.cpp
+C:\GitHub\MyGame\Test\ExternalData\main.cpp(20,2): error C7664: '>=': ポインターと整数ゼロの順序付き比較 ('const char *const ' と 'int')
