@@ -26,8 +26,8 @@ public:
 
 	void OnHitFloor();	// 床に当たった時
 
-	const VECTOR GetPos() const { return m_pos; }		// プレイヤーの現在地取得
-	bool GetIsMove() const { return m_isMove; }			// 移動中かどうか取得
+	const VECTOR GetPos() const { return m_pos; }	// プレイヤーの現在地取得
+	bool GetIsMove() const { return m_isMove; }		// 移動中かどうか取得
 
 private:
 	// 移動処理
@@ -43,6 +43,7 @@ private:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 	float m_angle;				// 向いている方向の角度
+	float m_jumpPower;			// Y軸方向の速度
 	float m_moveSpeed;			// 移動速度
 	State m_currentState;		// 現在の状態
 	int m_modelHandle;			// プレイヤーの3Dモデル

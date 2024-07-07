@@ -16,7 +16,7 @@ namespace
 	constexpr float kVelocity = 6.0f;					// ジャンプの高さ
 	constexpr float kGravity = -0.25f;					// 重力
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);		// 初期方向
-	const VECTOR kInitPos = VGet(0.0f, 0.0f, 100.0f);	// 初期位置
+	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);		// 初期位置
 }
 
 
@@ -28,6 +28,7 @@ Player::Player():
 	m_isMove(false),
 	m_targetMoveDir(kInitDir),
 	m_angle(0.0f),
+	m_jumpPower(0.0f),
 	m_moveSpeed(0.0f),
 	m_currentState(State::kStand),
 	m_modelHandle(-1)
@@ -87,7 +88,7 @@ void Player::Draw()
 	MV1DrawModel(m_modelHandle);
 
 #ifdef _DEBUG	// デバッグ表示
-	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%f,%f,%f)", m_pos.x, m_pos.y, m_pos.z);
+	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%2f,%2f,%2f)", m_pos.x, m_pos.y, m_pos.z);
 #endif
 }
 
@@ -97,6 +98,8 @@ void Player::Draw()
 /// </summary>
 void Player::OnHitFloor()
 {
+	m_jumpPower = 0.0f;
+
 	// 移動中の場合
 	if (m_isMove)
 	{

@@ -23,7 +23,7 @@ private:
 	// 壁ポリゴンとの当たりをチェックする
 	VECTOR CheckHitWithWall(Player& player, const VECTOR& checkPosition);
 	// 床ポリゴンとの当たりをチェックする
-	//VECTOR CheckHitWithFloor(Player& player, const VECTOR& checkPosition);
+	VECTOR CheckHitWithFloor(Player& player, const VECTOR& checkPosition);
 
 private:
 	// ステージ情報

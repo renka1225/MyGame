@@ -19,6 +19,9 @@ public:
 	VECTOR GetPos() const { return m_pos; }
 
 private:
+	void FixCameraPos();	// カメラ位置補正
+
+private:
 	VECTOR m_pos;	 // カメラ座標
 	VECTOR m_target; // 注視点座標
 	float m_angleH;	 // 水平角度
