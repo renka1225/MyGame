@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Input.h"
-#include "LoadData.h"
 #include "Stage.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
@@ -29,7 +28,7 @@ SceneStage1::~SceneStage1()
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-void SceneStage1::Init(LoadData& data)
+void SceneStage1::Init()
 {
 	m_pPlayer->Init();
 	m_pCamera->Init();

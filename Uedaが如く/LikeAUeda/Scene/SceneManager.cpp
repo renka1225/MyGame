@@ -1,6 +1,5 @@
 #include "SceneManager.h"
 #include "Input.h"
-#include "LoadData.h"
 #include "SceneBase.h"
 #include "SceneTitle.h"
 
@@ -25,10 +24,10 @@ SceneManager::~SceneManager()
 /// <summary>
 /// 初期化
 /// </summary>
-void SceneManager::Init(LoadData& data)
+void SceneManager::Init()
 {
 	m_pScene = std::make_shared<SceneTitle>();
-	m_pScene->Init(data);
+	m_pScene->Init();
 }
 
 
@@ -44,7 +43,7 @@ void SceneManager::Update(Input& input)
 	{
 		// Updateが返した新しいシーンの開始処理を行う
 		m_pScene = pNext;
-		m_pScene->Init(data);
+		m_pScene->Init();
 	}
 }
 

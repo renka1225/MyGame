@@ -64,7 +64,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		for (const auto& data : m_data)
 		{
 			DrawFormatString(0, y, 0xffffff, "%f:", data);
-			y += 10;
+			y += 20;
 		}
 
 		// ‰æ–Ê‚ªØ‚è‘Ö‚í‚é‚Ì‚ğ‘Ò‚Â

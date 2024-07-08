@@ -1,6 +1,5 @@
 #include "Dxlib.h"
 #include "Input.h"
-#include "LoadData.h"
 #include "SceneTitle.h"
 #include "SceneGameover.h"
 
@@ -24,7 +23,7 @@ SceneGameover::~SceneGameover()
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-void SceneGameover::Init(LoadData& data)
+void SceneGameover::Init()
 {
 }
 

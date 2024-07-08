@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "Input.h"
-#include "LoadData.h"
 #include "SceneTitle.h"
 #include "SceneClear.h"
 
@@ -23,7 +22,7 @@ SceneClear::~SceneClear()
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-void SceneClear::Init(LoadData& data)
+void SceneClear::Init()
 {
 }
 

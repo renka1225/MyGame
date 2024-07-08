@@ -14,7 +14,7 @@ public:
 	SceneStage1() {};
 	SceneStage1(std::shared_ptr<Player> player, std::shared_ptr<Camera> camera, std::shared_ptr<Stage> pStage);
 	virtual  ~SceneStage1();
-	virtual void Init(LoadData& data);
+	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
