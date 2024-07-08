@@ -1,1 +1,3 @@
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe
+C:\Users\fko2347058\Desktop\LikeAUeda\x64\Debug\LikeAUeda.exe
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe
