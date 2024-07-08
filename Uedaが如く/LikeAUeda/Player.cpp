@@ -9,7 +9,7 @@ namespace
 {
 	// プレイヤー情報
 	constexpr float kScale = 0.3f;						// プレイヤーモデルの拡大率
-	constexpr float kMaxSpeed = 3.0f;					// プレイヤーの最大移動速度
+	constexpr float kMaxSpeed = 4.0f;					// プレイヤーの最大移動速度
 	constexpr float kAcceleration = 0.2f;				// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;				// プレイヤーの減速度
 	constexpr float kAngleSpeed = 0.2f;					// プレイヤー角度の変化速度

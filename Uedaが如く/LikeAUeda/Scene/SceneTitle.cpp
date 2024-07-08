@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Input.h"
+#include "LoadData.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -25,7 +26,7 @@ SceneTitle::~SceneTitle()
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-void SceneTitle::Init()
+void SceneTitle::Init(LoadData& data)
 {
 }
 

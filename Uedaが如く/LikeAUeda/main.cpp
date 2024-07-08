@@ -1,7 +1,8 @@
 #include "DxLib.h"
-#include "SceneManager.h"
 #include "Input.h"
+#include "LoadData.h"
 #include "Game.h"
+#include "SceneManager.h"
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -26,11 +27,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	Input input; // 入力状態を取得
+	Input input;		// 入力状態を取得
+	LoadData loadData;	// 外部ファイル読み込み
 
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
-	pScene->Init();
+	pScene->Init(loadData);
 
 	while (ProcessMessage() == 0)
 	{

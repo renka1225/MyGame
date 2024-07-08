@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+class LoadData;
 class SceneBase;
 class Input;
 
@@ -12,7 +13,7 @@ class SceneManager
 public:
 	SceneManager();
 	virtual ~SceneManager();
-	void Init();
+	void Init(LoadData& data);
 	void Update(Input& input);
 	void Draw();
 

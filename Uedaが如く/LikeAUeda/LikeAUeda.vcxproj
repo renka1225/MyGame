@@ -139,8 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LoadData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scene\SceneGameover.cpp" />
+    <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneStage1.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
@@ -150,7 +153,10 @@
     <ClCompile Include="Util\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LoadData.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Scene\SceneGameover.h" />
+    <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="Scene\SceneStage1.h" />
     <ClInclude Include="Scene\SceneBase.h" />

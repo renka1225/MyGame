@@ -1,11 +1,5 @@
 ﻿  main.cpp
-  Player.cpp
-  SceneTitle.cpp
-  SceneStage1.cpp
-  SceneBase.cpp
   SceneManager.cpp
-  Stage.cpp
-  Camera.cpp
-  Input.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneManager.cpp(13,1): error C2530: 'SceneManager::m_pLoadData': 参照が初期化されずに宣言されています。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneManager.cpp(47,18): error C2065: 'data': 定義されていない識別子です。
   コードを生成中...
-  LikeAUeda.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe

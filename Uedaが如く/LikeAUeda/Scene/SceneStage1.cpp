@@ -2,8 +2,10 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Input.h"
+#include "LoadData.h"
 #include "Stage.h"
-#include "SceneTitle.h"
+#include "SceneClear.h"
+#include "SceneGameover.h"
 #include "SceneStage1.h"
 
 /// <summary>
@@ -27,7 +29,7 @@ SceneStage1::~SceneStage1()
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
-void SceneStage1::Init()
+void SceneStage1::Init(LoadData& data)
 {
 	m_pPlayer->Init();
 	m_pCamera->Init();
@@ -42,9 +44,13 @@ void SceneStage1::Init()
 std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 {
 	// ƒV[ƒ“‘JˆÚ
-	if (input.IsTriggered("OK"))
+	if (input.IsTriggered("debug_clear"))
 	{
-		return std::make_shared<SceneTitle>();
+		return std::make_shared<SceneClear>();
+	}
+	else if (input.IsTriggered("debug_gameover"))
+	{
+		return std::make_shared<SceneGameover>();
 	}
 
 	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
