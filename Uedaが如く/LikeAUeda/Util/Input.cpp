@@ -152,6 +152,14 @@ Input::Input()
 	m_commandTable["sceneChange"] = { {InputType::keybd, KEY_INPUT_Z},
 						   {InputType::pad, PAD_INPUT_10} };
 
+	/*çUåÇ*/
+	m_commandTable["punch"] = { {InputType::keybd, KEY_INPUT_Z},
+						   {InputType::pad, PAD_INPUT_C} };
+	m_commandTable["kick"] = { {InputType::keybd, KEY_INPUT_X},
+					   {InputType::pad, PAD_INPUT_X} };
+	m_commandTable["avoidance"] = { { InputType::keybd, KEY_INPUT_C },
+							{InputType::pad, PAD_INPUT_A } },
+
 	/*ÉJÉÅÉââÒì]*/
 	// ç∂
 	m_commandTable["rotateL"] = { {InputType::keybd, KEY_INPUT_A},
@@ -173,9 +181,9 @@ Input::Input()
 					   {InputType::pad, PAD_INPUT_R} };
 	m_commandTable["debug_enter"] = { {InputType::keybd, KEY_INPUT_RETURN},
 				   {InputType::pad, PAD_INPUT_R} };
-	m_commandTable["debug_clear"] = { {InputType::keybd, KEY_INPUT_Z},
+	m_commandTable["debug_clear"] = { {InputType::keybd, KEY_INPUT_A},
 							   {InputType::pad, PAD_INPUT_10} };
-	m_commandTable["debug_gameover"] = { {InputType::keybd, KEY_INPUT_X},
+	m_commandTable["debug_gameover"] = { {InputType::keybd, KEY_INPUT_S},
 						   {InputType::pad, PAD_INPUT_10} };
 	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 					{InputType::pad, PAD_INPUT_10} };

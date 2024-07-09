@@ -18,11 +18,8 @@ Shader::Shader():
 	m_rt(-1)
 {
 	m_rt = MakeScreen(Game::kScreenWidth, Game::kScreenHeight, true);
-
-	// シェーダを定義する
-	MV1SetUseOrigShader(true);
+	m_vsH = LoadVertexShader(kVsHName);
 	m_psH = LoadPixelShader(kPsHName);
-	m_vsH = LoadPixelShader(kVsHName);
 }
 
 
@@ -31,6 +28,9 @@ Shader::Shader():
 /// </summary>
 Shader::~Shader()
 {
+	DeleteShader(m_vsH);
+	DeleteShader(m_psH);
+	DeleteShader(m_rt);
 }
 
 
@@ -39,7 +39,10 @@ Shader::~Shader()
 /// </summary>
 void Shader::Init()
 {
-
+	// シェーダを定義する
+	MV1SetUseOrigShader(true);
+	SetUseVertexShader(m_vsH);
+	SetUsePixelShader(m_psH);
 }
 
 
@@ -48,6 +51,14 @@ void Shader::Init()
 /// </summary>
 void Shader::Update()
 {
+	SetDrawScreen(m_rt);
+	ClearDrawScreen();
+
+	// 使用するシェーダをセットする
+	SetUseVertexShader(m_vsH);
+	SetUsePixelShader(m_psH);
+
+	SetRenderTargetToShader(0, m_rt);
 }
 
 
@@ -56,4 +67,20 @@ void Shader::Update()
 /// </summary>
 void Shader::Draw()
 {
+	SetDrawScreen(DX_SCREEN_BACK);
+	ClearDrawScreen();
+
+	UnLoad();
+}
+
+
+/// <summary>
+/// シェーダー解除
+/// </summary>
+void Shader::UnLoad()
+{
+	MV1SetUseOrigShader(false);
+	SetUsePixelShader(-1);
+	SetUseVertexShader(-1);
+	SetRenderTargetToShader(0, -1);
 }

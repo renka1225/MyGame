@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Stage.h"
+#include "Shader.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage1.h"
@@ -22,6 +23,7 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 /// </summary>
 SceneStage1::~SceneStage1()
 {
+	m_pShader->UnLoad();
 }
 
 
@@ -30,7 +32,8 @@ SceneStage1::~SceneStage1()
 /// </summary>
 void SceneStage1::Init()
 {
-	m_pPlayer->Init();
+	//m_pShader->Init();
+	m_pPlayer->Init(m_pShader);
 	m_pCamera->Init();
 }
 
@@ -52,6 +55,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 		return std::make_shared<SceneGameover>();
 	}
 
+	//m_pShader->Update();
 	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 	m_pCamera->Update(input, *m_pPlayer);
 
@@ -64,10 +68,13 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 /// </summary>
 void SceneStage1::Draw()
 {
+	// シェーダの描画
+	//m_pShader->Draw();
 	// ステージ描画
 	m_pStage->Draw();
 	// プレイヤー描画
 	m_pPlayer->Draw();
+
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

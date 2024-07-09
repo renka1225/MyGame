@@ -11,6 +11,7 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+	void UnLoad();
 
 private:
 	// シェーダのハンドル
@@ -18,4 +19,3 @@ private:
 	int m_vsH;
 	int m_rt;
 };
-

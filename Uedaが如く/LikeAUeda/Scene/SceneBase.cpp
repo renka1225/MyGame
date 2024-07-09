@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Game.h"
+#include "Shader.h"
 #include "SceneBase.h"
 
 
@@ -8,6 +9,7 @@
 /// </summary>
 SceneBase::SceneBase()
 {
+	m_pShader = std::make_shared<Shader>();
 }
 
 
@@ -16,4 +18,5 @@ SceneBase::SceneBase()
 /// </summary>
 SceneBase::~SceneBase()
 {
+	m_pShader->UnLoad();
 }

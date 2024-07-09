@@ -2,6 +2,7 @@
 #include <memory>
 
 class Input;
+class Shader;
 
 /// <summary>
 /// シーン基底クラス
@@ -14,5 +15,8 @@ public:
 	virtual void Init() = 0;
 	virtual std::shared_ptr<SceneBase> Update(Input& input) = 0;
 	virtual void Draw() = 0;
+
+protected:
+	std::shared_ptr<Shader> m_pShader;
 };
 

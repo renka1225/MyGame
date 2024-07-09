@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Camera.h"
 #include "Stage.h"
+#include "Shader.h"
 #include "Input.h"
 #include "Player.h"
 
@@ -53,14 +54,16 @@ Player::Player():
 Player::~Player()
 {
 	MV1DeleteModel(m_modelHandle);
+	//m_pShader->UnLoad();
 }
 
 
 /// <summary>
 /// 初期化
 /// </summary>
-void Player::Init()
+void Player::Init(std::shared_ptr<Shader> shader)
 {
+	m_pShader = shader;
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
 	PlayAnim(AnimKind::kStand);
@@ -74,6 +77,9 @@ void Player::Init()
 /// <param name="stage">ステージ情報参照</param>
 void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 {
+	// シェーダをセット
+	//m_pShader->Update();
+
 	/*パッド入力によって移動パラメータを設定する*/
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
@@ -82,6 +88,7 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 	// プレイヤーの状態を更新
 	State prevState = m_currentState;
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
+	m_currentState = Attack(input);
 
 	// アニメーション状態を更新
 	UpdateAnimState(prevState);
@@ -102,9 +109,13 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 /// </summary>
 void Player::Draw()
 {
+	// シェーダの描画
+	//m_pShader->Draw();
+
 	MV1DrawModel(m_modelHandle);
 
 #ifdef _DEBUG	// デバッグ表示
+	DrawFormatString(0, 40, 0xffffff, "状態:%d", static_cast<int>(m_currentState));
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%2f,%2f,%2f)", m_pos.x, m_pos.y, m_pos.z);
 #endif
 }
@@ -202,7 +213,6 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 
 	}
 
-
 	// 移動ボタンが押されている場合
 	if (isPressMove)
 	{
@@ -228,14 +238,13 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 	// 移動しない場合
 	else
 	{
-		// 移動状態だったら
+		// 移動状態の場合
 		if (m_currentState == State::kRun)
 		{
 			// 待機状態にする
 			nextState = State::kStand;
 			m_moveSpeed = 0.0f;
 		}
-
 		// プレイヤーを減速させる
 		if (m_moveSpeed > 0.0f)
 		{
@@ -243,6 +252,26 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 			m_moveSpeed = (std::max)(0.0f, m_moveSpeed);
 		}
 		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
+	}
+
+	return nextState;
+}
+
+
+/// <summary>
+/// 攻撃処理
+/// </summary>
+Player::State Player::Attack(const Input& input)
+{
+	State nextState = m_currentState;
+
+	if (input.IsTriggered("punch"))
+	{
+		nextState = State::kPunch;
+	}
+	else if (input.IsTriggered("kick"))
+	{
+		nextState = State::kKick;
 	}
 
 	return nextState;
@@ -272,10 +301,34 @@ void Player::UpdateAnimState(State prevState)
 		// 移動アニメーションを再生する
 		PlayAnim(AnimKind::kRun);
 	}
+	// 待機状態からパンチ状態に変わった場合
+	else if (prevState == State::kStand && m_currentState == State::kPunch)
+	{
+		// パンチ状態を再生する
+		PlayAnim(AnimKind::kPunch);
+	}
 	// 移動から待機状態に変わった場合
 	else if (prevState == State::kRun && m_currentState == State::kStand)
 	{
 		// 待機アニメーションを再生する
+		PlayAnim(AnimKind::kStand);
+	}
+	// 移動状態からパンチ状態に変わった場合
+	else if (prevState == State::kRun && m_currentState == State::kPunch)
+	{
+		// パンチアニメーションを再生する
+		PlayAnim(AnimKind::kPunch);
+	}
+	// パンチ状態から移動状態に変わった場合
+	else if (prevState == State::kPunch && m_currentState == State::kRun)
+	{
+		// 待機アニメーションを再生する
+		PlayAnim(AnimKind::kRun);
+	}
+	// パンチ状態から待機状態に変わった場合
+	else if (prevState == State::kPunch && m_currentState == State::kStand)
+	{
+		// パンチアニメーションを再生する
 		PlayAnim(AnimKind::kStand);
 	}
 }
@@ -305,8 +358,13 @@ void Player::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
 		m_currentAnimCount += kPlayAnimSpeed;
 
+		if (m_currentPlayAnim == static_cast<int>(AnimKind::kPunch) && m_currentAnimCount >= animTotalTime)
+		{
+			m_currentState = State::kStand;
+			PlayAnim(AnimKind::kStand); // 待機アニメーションを再生する
+		}
 		// アニメーションの再生時間をループ
-		if (m_currentAnimCount > animTotalTime)
+		else if (m_currentAnimCount >= animTotalTime)
 		{
 			m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
 		}
@@ -315,6 +373,8 @@ void Player::UpdateAnim()
 		MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
 		// アニメーションのブレンド率を設定する
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
+
+		
 	}
 
 	// 1つ前に再生していたアニメーションの処理

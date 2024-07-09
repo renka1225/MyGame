@@ -1,8 +1,10 @@
 #pragma once
+#include <memory>
 
 class Stage;
 class Camera;
 class Input;
+class Shader;
 
 /// <summary>
 /// プレイヤークラス
@@ -13,8 +15,10 @@ public:
 	// プレイヤーの状態
 	enum class State
 	{
-		kStand, // 待機
-		kRun	// 移動
+		kKick = 1,	// キック
+		kPunch = 2,	// パンチ
+		kRun = 3,	// 移動
+		kStand = 4, // 待機
 	};
 
 	// アニメーション種別
@@ -22,14 +26,16 @@ public:
 	{
 		kNone = -1,		// なし
 		kUnKnown = 0,	// 不明
-		kStand = 4,		// 待機
+		kKick = 1,		// キック
+		kPunch = 2,		// パンチ
 		kRun = 3,		// 移動
+		kStand = 4,		// 待機
 	};
 
 	Player();
 	~Player();
 
-	void Init();
+	void Init(std::shared_ptr<Shader> Shader);
 	void Update(const Input& input, const Camera& camera, Stage& stage);
 	void Draw();
 
@@ -43,6 +49,8 @@ private:
 	void Move(const VECTOR& MoveVector, Stage& stage);
 	// 移動パラメータを設定する
 	State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	// 攻撃処理
+	State Attack(const Input& input);
 	// プレイヤーの回転を制御する
 	void UpdateAngle();
 	// アニメーションステートの更新
@@ -53,6 +61,8 @@ private:
 	void PlayAnim(AnimKind PlayAnimIndex);
 
 private:
+	std::shared_ptr<Shader> m_pShader;
+
 	// プレイヤー情報
 	VECTOR m_pos;				// 位置
 	bool m_isMove;				// 移動したかどうか(true:移動した)
