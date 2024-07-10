@@ -27,6 +27,8 @@ Camera::Camera():
 	m_angleH(kInitAngleH),
 	m_angleV(kInitAngleV)
 {
+	AnalogInput.Rx = 0;
+	AnalogInput.Ry = 0;
 }
 
 
@@ -53,25 +55,27 @@ void Camera::Init()
 /// </summary>
 void Camera::Update(Input& input, const Player& player)
 {
+	GetJoypadDirectInputState(DX_INPUT_PAD1, &AnalogInput); // “ü—Íó‘Ô‚ğæ“¾
+
 	// ¶“ü—Í
-	if (input.IsPressing("rotateL"))
+	if (AnalogInput.Rx < 0.0f || input.IsPressing("rotateL"))
 	{
 		m_angleH -= kAngle;
 	}
 	// ‰E“ü—Í
-	if (input.IsPressing("rotateR"))
+	if (AnalogInput.Rx > 0.0f || input.IsPressing("rotateR"))
 	{
 		m_angleH += kAngle;
 	}
 	// ã“ü—Í
-	if (input.IsPressing("rotateU"))
+	if (AnalogInput.Ry > 0.0f || input.IsPressing("rotateU"))
 	{
 		m_angleV -= kAngle;
 		// ‚ ‚éˆê’èŠp“xˆÈã‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
 		m_angleV = std::max(m_angleV, kMaxAngleV);
 	}
 	// ‰º“ü—Í
-	if (input.IsPressing("rotateD"))
+	if (AnalogInput.Ry < 0.0f || input.IsPressing("rotateD"))
 	{
 		m_angleV += kAngle;
 		// ‚ ‚éˆê’èŠp“xˆÈ‰º‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é

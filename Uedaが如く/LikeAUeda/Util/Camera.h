@@ -22,9 +22,10 @@ private:
 	void FixCameraPos();	// カメラ位置補正
 
 private:
-	VECTOR m_pos;	 // カメラ座標
-	VECTOR m_target; // 注視点座標
-	float m_angleH;	 // 水平角度
-	float m_angleV;	 // 垂直角度
+	VECTOR m_pos;					// カメラ座標
+	VECTOR m_target;				// 注視点座標
+	float m_angleH;					// 水平角度
+	float m_angleV;					// 垂直角度
+	DINPUT_JOYSTATE AnalogInput; 	// パッドアナログ情報取得
 };
 
