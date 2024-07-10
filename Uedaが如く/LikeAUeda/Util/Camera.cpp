@@ -68,14 +68,14 @@ void Camera::Update(Input& input, const Player& player)
 	{
 		m_angleV -= kAngle;
 		// ある一定角度以上にならないようにする
-		m_angleV = (std::max)(m_angleV, kMaxAngleV);
+		m_angleV = std::max(m_angleV, kMaxAngleV);
 	}
 	// 下入力
 	if (input.IsPressing("rotateD"))
 	{
 		m_angleV += kAngle;
 		// ある一定角度以下にならないようにする
-		m_angleV = (std::min)(kMinAngleV, m_angleV);
+		m_angleV = std::min(kMinAngleV, m_angleV);
 	}
 
 	// カメラの注視点を設定する

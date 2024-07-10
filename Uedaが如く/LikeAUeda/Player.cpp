@@ -25,7 +25,8 @@ namespace
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
-	constexpr float kPlayAnimSpeed = 0.5f;	 // アニメーションの速度
+	constexpr float kPlayAnimSpeed = 0.5f;	 // 通常のアニメーションの速度
+	constexpr float kAttackAnimSpeed = 0.7f; // 攻撃アニメーションの速度
 }
 
 
@@ -284,15 +285,11 @@ Player::State Player::Attack(const Input& input)
 	{
 		m_isAttack = true;
 		nextState = State::kPunch;
-
-		m_hp -= 10.0f;
 	}
 	else if (input.IsTriggered("kick") && !m_isAttack)
 	{
 		m_isAttack = true;
 		nextState = State::kKick;
-
-		m_gauge -= 10.0f;
 	}
 
 	return nextState;
@@ -391,7 +388,15 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
-		m_currentAnimCount += kPlayAnimSpeed;
+		if (m_currentPlayAnim == static_cast<int>(AnimKind::kPunch) || 
+			m_currentPlayAnim == static_cast<int>(AnimKind::kKick))
+		{
+			m_currentAnimCount += kAttackAnimSpeed;
+		}
+		else
+		{
+			m_currentAnimCount += kPlayAnimSpeed;
+		}
 
 		// アニメーションの再生時間をループ
 		if (m_currentAnimCount > animTotalTime)
@@ -420,7 +425,15 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
-		m_prevAnimCount += kPlayAnimSpeed;
+		if (m_prevPlayAnim == static_cast<int>(AnimKind::kPunch) ||
+			m_prevPlayAnim == static_cast<int>(AnimKind::kKick))
+		{
+			m_prevAnimCount += kAttackAnimSpeed;
+		}
+		else
+		{
+			m_prevAnimCount += kPlayAnimSpeed;
+		}
 
 		// アニメーションの再生時間をループ
 		if (m_prevPlayAnim > animTotalTime)

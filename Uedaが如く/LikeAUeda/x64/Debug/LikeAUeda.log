@@ -1,7 +1,18 @@
-﻿  Player.cpp
-  SceneStage1.cpp
+﻿  EnemyBase.cpp
+  LoadData.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\LoadData.cpp(38,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+  main.cpp
+  Player.cpp
+  SceneGameover.cpp
+  SceneClear.cpp
   SceneTitle.cpp
+  SceneStage1.cpp
+  SceneBase.cpp
+  SceneManager.cpp
+  Shader.cpp
   Stage.cpp
+  UIBattle.cpp
   Camera.cpp
+  Input.cpp
   コードを生成中...
   LikeAUeda.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe

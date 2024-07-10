@@ -42,7 +42,8 @@ public:
 
 	void OnHitFloor();	// 床に当たった時
 
-	const VECTOR GetPos() const { return m_pos; }	// プレイヤーの現在地取得
+	const VECTOR GetPos() const { return m_pos; }	// 現在地取得
+	float GetHp() const { return m_hp; }			// 現在のHPを取得
 	bool GetIsMove() const { return m_isMove; }		// 移動中かどうか取得
 
 private:

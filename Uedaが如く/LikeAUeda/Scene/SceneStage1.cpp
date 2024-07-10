@@ -63,7 +63,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 		{
 			return std::make_shared<SceneClear>();
 		}
-		else if (input.IsTriggered("debug_gameover"))
+		else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 		{
 			return std::make_shared<SceneGameover>();
 		}
