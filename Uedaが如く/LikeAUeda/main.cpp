@@ -29,6 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 入力状態を取得
 	Input input;
+	
 	// 外部データのロード
 	std::shared_ptr<LoadData> pLoadData = std::make_shared<LoadData>();
 

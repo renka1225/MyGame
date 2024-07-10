@@ -45,19 +45,33 @@ void SceneStage1::Init()
 /// <returns></returns>
 std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 {
-	// シーン遷移
-	if (input.IsTriggered("debug_clear"))
+#ifdef _DEBUG	// デバッグモード
+	// Pキーでポーズ、ポーズ中にPでコマ送り
+	if (m_debugState == DebugState::Normal && input.IsTriggered("debug_pause"))
 	{
-		return std::make_shared<SceneClear>();
+		m_debugState = DebugState::Pause;
 	}
-	else if (input.IsTriggered("debug_gameover"))
+	if (m_debugState == DebugState::Pause && input.IsTriggered("debug_enter"))
 	{
-		return std::make_shared<SceneGameover>();
+		m_debugState = DebugState::Normal;
 	}
+	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
+#endif
+	{
+		// シーン遷移
+		if (input.IsTriggered("debug_clear"))
+		{
+			return std::make_shared<SceneClear>();
+		}
+		else if (input.IsTriggered("debug_gameover"))
+		{
+			return std::make_shared<SceneGameover>();
+		}
 
-	//m_pShader->Update();
-	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
-	m_pCamera->Update(input, *m_pPlayer);
+		//m_pShader->Update();
+		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+		m_pCamera->Update(input, *m_pPlayer);
+	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }

@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Camera.h"
 #include "Stage.h"
+#include "UIBattle.h"
 #include "Shader.h"
 #include "Input.h"
 #include "Player.h"
@@ -9,13 +10,15 @@
 namespace
 {
 	// プレイヤー情報
-	constexpr float kScale = 0.3f;						// プレイヤーモデルの拡大率
+	constexpr float kMaxHp = 100.0f;					// 最大HP
+	constexpr float kMaxGauge = 100.0f;					// 最大ゲージ量
 	constexpr float kMaxSpeed = 6.0f;					// プレイヤーの最大移動速度
 	constexpr float kAcceleration = 0.2f;				// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;				// プレイヤーの減速度
 	constexpr float kAngleSpeed = 0.2f;					// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;					// ジャンプの高さ
 	constexpr float kGravity = -0.25f;					// 重力
+	constexpr float kScale = 0.3f;						// プレイヤーモデルの拡大率
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);		// 初期方向
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);		// 初期位置
 
@@ -29,9 +32,12 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Player::Player():
+Player::Player() :
+	m_hp(kMaxHp),
+	m_gauge(kMaxGauge),
 	m_pos(kInitPos),
 	m_isMove(false),
+	m_isAttack(false),
 	m_targetMoveDir(kInitDir),
 	m_angle(0.0f),
 	m_jumpPower(0.0f),
@@ -63,6 +69,7 @@ Player::~Player()
 /// </summary>
 void Player::Init(std::shared_ptr<Shader> shader)
 {
+	m_pUIBattle = std::make_shared<UIBattle>();
 	m_pShader = shader;
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
@@ -87,8 +94,8 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 
 	// プレイヤーの状態を更新
 	State prevState = m_currentState;
-	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 	m_currentState = Attack(input);
+	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 
 	// アニメーション状態を更新
 	UpdateAnimState(prevState);
@@ -114,9 +121,13 @@ void Player::Draw()
 
 	MV1DrawModel(m_modelHandle);
 
+	// HPゲージを表示
+	m_pUIBattle->DrawPlayerHP(m_hp, kMaxHp);
+	m_pUIBattle->DrawPlayerGauge(m_gauge, kMaxGauge);
+
 #ifdef _DEBUG	// デバッグ表示
-	DrawFormatString(0, 40, 0xffffff, "状態:%d", static_cast<int>(m_currentState));
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%2f,%2f,%2f)", m_pos.x, m_pos.y, m_pos.z);
+	DrawFormatString(0, 40, 0xffffff, "hp:%f",m_hp);
 #endif
 }
 
@@ -147,7 +158,9 @@ void Player::OnHitFloor()
 /// </summary>
 void Player::Move(const VECTOR& MoveVector, Stage& stage)
 {
-	if (fabs(MoveVector.x) > 0.0f || fabs(MoveVector.z) > 0.0f)
+	// 攻撃中か
+	bool isAttackAnim = m_currentPlayAnim == static_cast<int>(State::kPunch) || m_currentPlayAnim == static_cast<int>(State::kKick);
+	if (fabs(MoveVector.x) > 0.0f || fabs(MoveVector.z) > 0.0f && isAttackAnim)
 	{
 		m_isMove = true;
 	}
@@ -190,68 +203,70 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 	// 移動したか(true:移動した)
 	bool isPressMove = false;
 
-	// ボタンを押したら移動
-	if (input.IsPressing("up"))
+	if (!m_isAttack)
 	{
-		moveVec = VAdd(moveVec, upMoveVec);
-		isPressMove = true;
-	}
-	if (input.IsPressing("down"))
-	{
-		moveVec = VAdd(moveVec, VScale(upMoveVec, -1.0f));
-		isPressMove = true;
-	}
-	if (input.IsPressing("left"))
-	{
-		moveVec = VAdd(moveVec, leftMoveVec);
-		isPressMove = true;
-	}
-	if (input.IsPressing("right"))
-	{
-		moveVec = VAdd(moveVec, VScale(leftMoveVec, -1.0f));
-		isPressMove = true;
-
-	}
-
-	// 移動ボタンが押されている場合
-	if (isPressMove)
-	{
-		// 待機状態だった場合
-		if (m_currentState == State::kStand)
+		// ボタンを押したら移動
+		if (input.IsPressing("up"))
 		{
-			// 移動状態にする
-			nextState = State::kRun;
+			moveVec = VAdd(moveVec, upMoveVec);
+			isPressMove = true;
+		}
+		if (input.IsPressing("down"))
+		{
+			moveVec = VAdd(moveVec, VScale(upMoveVec, -1.0f));
+			isPressMove = true;
+		}
+		if (input.IsPressing("left"))
+		{
+			moveVec = VAdd(moveVec, leftMoveVec);
+			isPressMove = true;
+		}
+		if (input.IsPressing("right"))
+		{
+			moveVec = VAdd(moveVec, VScale(leftMoveVec, -1.0f));
+			isPressMove = true;
 		}
 
-		// プレイヤーが向く方向を設定する
-		m_targetMoveDir = VNorm(moveVec);
+		// 移動ボタンが押されている場合
+		if (isPressMove)
+		{
+			// 待機状態の場合
+			if (m_currentState == State::kStand)
+			{
+				nextState = State::kRun; // 移動状態にする
+			}
 
-		// プレイヤーの加速度を設定する
-		if (m_moveSpeed < kMaxSpeed)
-		{
-			m_moveSpeed += kAcceleration;
-			m_moveSpeed = (std::min)(m_moveSpeed, kMaxSpeed);
+			// プレイヤーが向く方向を設定する
+			m_targetMoveDir = VNorm(moveVec);
+
+			// プレイヤーの加速度を設定する
+			if (m_moveSpeed < kMaxSpeed)
+			{
+				m_moveSpeed += kAcceleration;
+				m_moveSpeed = (std::min)(m_moveSpeed, kMaxSpeed);
+			}
+			// プレイヤーの移動ベクトルを設定する
+			moveVec = VScale(m_targetMoveDir, m_moveSpeed);
 		}
-		// プレイヤーの移動ベクトルを設定する
-		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
-	}
-	// 移動しない場合
-	else
-	{
-		// 移動状態の場合
-		if (m_currentState == State::kRun)
+		// 移動しない場合
+		else
 		{
-			// 待機状態にする
-			nextState = State::kStand;
-			m_moveSpeed = 0.0f;
+			// 移動状態の場合
+			if (m_currentState == State::kRun)
+			{
+				// 待機状態にする
+				nextState = State::kStand;
+				m_moveSpeed = 0.0f;
+			}
+
+			// プレイヤーを減速させる
+			if (m_moveSpeed > 0.0f)
+			{
+				m_moveSpeed -= kDeceleration;
+				m_moveSpeed = (std::max)(0.0f, m_moveSpeed);
+			}
+			moveVec = VScale(m_targetMoveDir, m_moveSpeed);
 		}
-		// プレイヤーを減速させる
-		if (m_moveSpeed > 0.0f)
-		{
-			m_moveSpeed -= kDeceleration;
-			m_moveSpeed = (std::max)(0.0f, m_moveSpeed);
-		}
-		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
 	}
 
 	return nextState;
@@ -265,13 +280,19 @@ Player::State Player::Attack(const Input& input)
 {
 	State nextState = m_currentState;
 
-	if (input.IsTriggered("punch"))
+	if (input.IsTriggered("punch") && !m_isAttack)
 	{
+		m_isAttack = true;
 		nextState = State::kPunch;
+
+		m_hp -= 10.0f;
 	}
-	else if (input.IsTriggered("kick"))
+	else if (input.IsTriggered("kick") && !m_isAttack)
 	{
+		m_isAttack = true;
 		nextState = State::kKick;
+
+		m_gauge -= 10.0f;
 	}
 
 	return nextState;
@@ -295,41 +316,55 @@ void Player::UpdateAngle()
 /// <param name="prevState">現在の状態</param>
 void Player::UpdateAnimState(State prevState)
 {
-	// 待機状態から移動に変わった場合
+	// 待機状態→移動
 	if (prevState == State::kStand && m_currentState == State::kRun)
 	{
-		// 移動アニメーションを再生する
-		PlayAnim(AnimKind::kRun);
+		PlayAnim(AnimKind::kRun);	// 移動アニメーションを再生
 	}
-	// 待機状態からパンチ状態に変わった場合
+	// 待機状態→パンチ状態
 	else if (prevState == State::kStand && m_currentState == State::kPunch)
 	{
-		// パンチ状態を再生する
-		PlayAnim(AnimKind::kPunch);
+		PlayAnim(AnimKind::kPunch);	// パンチ状態を再生
 	}
-	// 移動から待機状態に変わった場合
+	// 待機状態→キック状態
+	else if (prevState == State::kStand && m_currentState == State::kKick)
+	{
+		PlayAnim(AnimKind::kKick);	// キック状態を再生
+	}
+	// 移動状態→待機状態
 	else if (prevState == State::kRun && m_currentState == State::kStand)
 	{
-		// 待機アニメーションを再生する
-		PlayAnim(AnimKind::kStand);
+		PlayAnim(AnimKind::kStand);	// 待機アニメーションを再生
 	}
-	// 移動状態からパンチ状態に変わった場合
+	// 移動状態→パンチ状態
 	else if (prevState == State::kRun && m_currentState == State::kPunch)
 	{
-		// パンチアニメーションを再生する
-		PlayAnim(AnimKind::kPunch);
+		PlayAnim(AnimKind::kPunch);	// パンチアニメーションを再生
 	}
-	// パンチ状態から移動状態に変わった場合
+	// 移動状態→キック状態
+	else if (prevState == State::kRun && m_currentState == State::kKick)
+	{
+		PlayAnim(AnimKind::kKick);	// キックアニメーションを再生
+	}
+	// パンチ状態→移動状態
 	else if (prevState == State::kPunch && m_currentState == State::kRun)
 	{
-		// 待機アニメーションを再生する
-		PlayAnim(AnimKind::kRun);
+		PlayAnim(AnimKind::kRun);	// 移動アニメーションを再生
 	}
-	// パンチ状態から待機状態に変わった場合
+	// パンチ状態→待機状態
 	else if (prevState == State::kPunch && m_currentState == State::kStand)
 	{
-		// パンチアニメーションを再生する
-		PlayAnim(AnimKind::kStand);
+		PlayAnim(AnimKind::kStand);	// 待機アニメーションを再生
+	}
+	// キック状態→移動状態
+	else if (prevState == State::kKick && m_currentState == State::kRun)
+	{
+		PlayAnim(AnimKind::kStand);	// 移動アニメーションを再生
+	}
+	// キック状態→待機状態
+	else if (prevState == State::kKick && m_currentState == State::kStand)
+	{
+		PlayAnim(AnimKind::kStand);	// 待機アニメーションを再生
 	}
 }
 
@@ -358,14 +393,17 @@ void Player::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
 		m_currentAnimCount += kPlayAnimSpeed;
 
-		if (m_currentPlayAnim == static_cast<int>(AnimKind::kPunch) && m_currentAnimCount >= animTotalTime)
-		{
-			m_currentState = State::kStand;
-			PlayAnim(AnimKind::kStand); // 待機アニメーションを再生する
-		}
 		// アニメーションの再生時間をループ
-		else if (m_currentAnimCount >= animTotalTime)
+		if (m_currentAnimCount > animTotalTime)
 		{
+			// 攻撃アニメーションが終了したら待機状態に移行
+			if (m_isAttack)
+			{
+				m_isAttack = false;
+				m_currentState = State::kStand;
+				PlayAnim(AnimKind::kStand);
+			}
+
 			m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
 		}
 
@@ -382,7 +420,7 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
-		m_prevPlayAnim += static_cast<int>(kPlayAnimSpeed);
+		m_prevAnimCount += kPlayAnimSpeed;
 
 		// アニメーションの再生時間をループ
 		if (m_prevPlayAnim > animTotalTime)

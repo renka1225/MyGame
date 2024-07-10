@@ -181,9 +181,9 @@ Input::Input()
 					   {InputType::pad, PAD_INPUT_R} };
 	m_commandTable["debug_enter"] = { {InputType::keybd, KEY_INPUT_RETURN},
 				   {InputType::pad, PAD_INPUT_R} };
-	m_commandTable["debug_clear"] = { {InputType::keybd, KEY_INPUT_A},
+	m_commandTable["debug_clear"] = { {InputType::keybd, KEY_INPUT_V},
 							   {InputType::pad, PAD_INPUT_10} };
-	m_commandTable["debug_gameover"] = { {InputType::keybd, KEY_INPUT_S},
+	m_commandTable["debug_gameover"] = { {InputType::keybd, KEY_INPUT_B},
 						   {InputType::pad, PAD_INPUT_10} };
 	m_commandTable["end"] = { {InputType::keybd, KEY_INPUT_ESCAPE},
 					{InputType::pad, PAD_INPUT_10} };

@@ -22,5 +22,15 @@ private:
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Stage> m_pStage;
+
+#ifdef _DEBUG
+	// デバッグ状況
+	enum class DebugState
+	{
+		Normal,	// 通常
+		Pause	// ポーズ
+	};
+	DebugState m_debugState = DebugState::Normal;
+#endif
 };
 

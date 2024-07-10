@@ -4,6 +4,7 @@
 class Stage;
 class Camera;
 class Input;
+class UIBattle;
 class Shader;
 
 /// <summary>
@@ -61,11 +62,15 @@ private:
 	void PlayAnim(AnimKind PlayAnimIndex);
 
 private:
+	std::shared_ptr<UIBattle> m_pUIBattle;
 	std::shared_ptr<Shader> m_pShader;
 
 	// プレイヤー情報
+	float m_hp;					// HP
+	float m_gauge;				// ゲージ量
 	VECTOR m_pos;				// 位置
 	bool m_isMove;				// 移動したかどうか(true:移動した)
+	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 	float m_angle;				// 向いている方向の角度
 	float m_jumpPower;			// Y軸方向の速度
