@@ -1,24 +1,2 @@
-﻿C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Ueda���@��\LikeAUeda\Shader\PixelShader.hlsl(29,14-30): warning X3578: Output value 'main' is not completely initialized
-  
-  compilation object save succeeded; see C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\PixelShader.pso
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Ueda���@��\LikeAUeda\Shader\VertexShader.hlsl(96,5-44): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\VertexShader.vso
-  EnemyBase.cpp
-  LoadData.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\LoadData.cpp(38,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
-  main.cpp
-  Player.cpp
-  SceneGameover.cpp
-  SceneClear.cpp
-  SceneTitle.cpp
-  SceneStage1.cpp
-  SceneBase.cpp
-  SceneManager.cpp
-  Shader.cpp
-  Stage.cpp
-  UIBattle.cpp
-  Camera.cpp
-  Input.cpp
-  コードを生成中...
-  LikeAUeda.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe
+﻿  Player.cpp
+  LikeAUeda.vcxproj -> C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe

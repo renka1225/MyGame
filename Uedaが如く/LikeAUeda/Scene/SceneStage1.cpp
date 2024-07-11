@@ -32,7 +32,6 @@ SceneStage1::~SceneStage1()
 /// </summary>
 void SceneStage1::Init()
 {
-	//m_pShader->Init();
 	m_pPlayer->Init(m_pShader);
 	m_pCamera->Init();
 }
@@ -82,13 +81,10 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 /// </summary>
 void SceneStage1::Draw()
 {
-	// シェーダの描画
-	//m_pShader->Draw();
 	// ステージ描画
 	m_pStage->Draw();
 	// プレイヤー描画
 	m_pPlayer->Draw();
-
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

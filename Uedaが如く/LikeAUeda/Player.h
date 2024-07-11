@@ -16,21 +16,38 @@ public:
 	// プレイヤーの状態
 	enum class State
 	{
-		kKick = 1,	// キック
-		kPunch = 2,	// パンチ
-		kRun = 3,	// 移動
-		kStand = 4, // 待機
+		kAvoid = 0,		// 回避
+		kDown = 1,		// 倒れる
+		kFightIdle = 2, // 構え
+		kGettingUp = 3, // 起き上がる
+		kGrab = 4,		// 掴み
+		kGuard = 5,		// ガード
+		kKick = 6,		// キック
+		kPunch = 7,		// パンチ
+		kComboPunch = 8,// コンボパンチ
+		kReceive = 9,	// 攻撃を受ける
+		kRun = 10,		// 移動
+		kStand = 11,	// 待機
+		kStumble,		// 掴み失敗
 	};
 
 	// アニメーション種別
 	enum class AnimKind
 	{
 		kNone = -1,		// なし
-		kUnKnown = 0,	// 不明
-		kKick = 1,		// キック
-		kPunch = 2,		// パンチ
-		kRun = 3,		// 移動
-		kStand = 4,		// 待機
+		kAvoid = 0,		// 回避
+		kDown = 1,		// 倒れる
+		kFightIdle = 2, // 構え
+		kGettingUp = 3, // 起き上がる
+		kGrab = 4,		// 掴み
+		kGuard = 5,		// ガード
+		kKick = 6,		// キック
+		kPunch = 7,		// パンチ
+		kComboPunch = 8,// コンボパンチ
+		kReceive = 9,	// 攻撃を受ける
+		kRun = 10,		// 移動
+		kStand = 11,	// 待機
+		kStumble,		// 掴み失敗
 	};
 
 	Player();
@@ -40,7 +57,8 @@ public:
 	void Update(const Input& input, const Camera& camera, Stage& stage);
 	void Draw();
 
-	void OnHitFloor();	// 床に当たった時
+	void OnHitFloor();	// 床に当たった時の処理
+	void OnDamage();	// 攻撃を受けた際の処理
 
 	const VECTOR GetPos() const { return m_pos; }	// 現在地取得
 	float GetHp() const { return m_hp; }			// 現在のHPを取得
@@ -49,6 +67,8 @@ public:
 private:
 	// 移動処理
 	void Move(const VECTOR& MoveVector, Stage& stage);
+	// 回避処理
+	State Avoidance(const Input& input, VECTOR& moveVec);
 	// 移動パラメータを設定する
 	State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// 攻撃処理
