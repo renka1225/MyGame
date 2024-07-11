@@ -42,7 +42,7 @@ void SceneStage1::Init()
 /// 更新
 /// </summary>
 /// <param name="input">入力状態</param>
-/// <returns></returns>
+/// <returns>遷移するシーン</returns>
 std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 {
 #ifdef _DEBUG	// デバッグモード
