@@ -1,9 +1,9 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "EnemyTuto.h"
 #include "Camera.h"
 #include "Input.h"
 #include "Stage.h"
-#include "Shader.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage1.h"
@@ -14,8 +14,10 @@
 SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage):
 	m_pPlayer(pPlayer),
 	m_pCamera(pCamera),
-	m_pStage(pStage)
+	m_pStage(pStage),
+	m_pEnemy(nullptr)
 {
+	m_pEnemy = std::make_shared<EnemyTuto>();
 }
 
 /// <summary>
@@ -23,7 +25,6 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 /// </summary>
 SceneStage1::~SceneStage1()
 {
-	m_pShader->UnLoad();
 }
 
 
@@ -32,8 +33,9 @@ SceneStage1::~SceneStage1()
 /// </summary>
 void SceneStage1::Init()
 {
-	m_pPlayer->Init(m_pShader);
+	m_pPlayer->Init();
 	m_pCamera->Init();
+	m_pEnemy->Init();
 }
 
 
@@ -57,19 +59,35 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		// シーン遷移
-		if (input.IsTriggered("debug_clear"))
+		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+		m_pCamera->Update(input, *m_pPlayer);
+		m_pEnemy->Update(*m_pPlayer);
+
+
+		// 敵のHPが0になった場合
+		if (m_pEnemy->GetHp() <= 0)
 		{
 			return std::make_shared<SceneClear>();
 		}
-		else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
+		// プレイヤーのHPが0になった場合
+		if (m_pPlayer->GetHp() <= 0)
 		{
 			return std::make_shared<SceneGameover>();
 		}
-
-		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
-		m_pCamera->Update(input, *m_pPlayer);
 	}
+
+#ifdef _DEBUG
+	// シーン遷移
+	if (input.IsTriggered("debug_clear"))
+	{
+		return std::make_shared<SceneClear>();
+	}
+	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
+	{
+		return std::make_shared<SceneGameover>();
+	}
+
+#endif
 
 	return shared_from_this();	// 自身のshared_ptrを返す
 }
@@ -84,6 +102,8 @@ void SceneStage1::Draw()
 	m_pStage->Draw();
 	// プレイヤー描画
 	m_pPlayer->Draw();
+	// 敵描画
+	m_pEnemy->Draw();
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

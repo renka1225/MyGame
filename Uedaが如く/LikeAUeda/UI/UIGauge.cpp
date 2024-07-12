@@ -5,16 +5,23 @@
 namespace
 {
 	// プレイヤーUI
-	constexpr float kpHpDispL = 30.0f;		// HPバー左表示位置
-	constexpr float kpHpDispT = 40.0f;		// HPバー上表示位置
-	constexpr float kpHpWidth = 400.0f;		// HPバーの横幅
-	constexpr float kpHpHeight = 20.0f;		// HPバーの縦幅
-	constexpr int kpHpColor = 0xff0000;		// HPバーの色
+	constexpr float kPHpDispL = 30.0f;		// HPバー左表示位置
+	constexpr float kPHpDispT = 40.0f;		// HPバー上表示位置
+	constexpr float kPHpWidth = 400.0f;		// HPバーの横幅
+	constexpr float kPHpHeight = 20.0f;		// HPバーの縦幅
+	constexpr int kPHpColor = 0xff0000;		// HPバーの色
 	constexpr float kpGaugeDispL = 30.0f;	// ゲージバー左表示位置
 	constexpr float kpGaugeDispT = 80.0f;	// ゲージバー上表示位置
 	constexpr float kpGaugeWidth = 400.0f;	// ゲージバーの横幅
 	constexpr float kpGaugeHeight = 20.0f;  // ゲージバーの縦幅
 	constexpr int kpGaugeColor = 0x0000ff;	// HPバーの色
+
+	// 敵UI
+	constexpr float kEHpDispL = 550.0f;		// HPバー左表示位置
+	constexpr float kEHpDispT = 950.0f;		// HPバー上表示位置
+	constexpr float kEHpWidth = 770.0f;		// HPバーの横幅
+	constexpr float kEHpHeight = 30.0f;		// HPバーの縦幅
+	constexpr int kEHpColor = 0xff0000;		// HPバーの色
 }
 
 /// <summary>
@@ -57,11 +64,11 @@ void UIGauge::DrawPlayerHP(float currentHp, float MaxHp)
 {
 	// 表示するゲージ量を計算する
 	float hpRatio = currentHp / MaxHp;
-	float hpLength = kpHpWidth* hpRatio;
+	float hpLength = kPHpWidth* hpRatio;
 
 	// TODO:バーの背景部分は画像にする
-	DrawBoxAA(kpHpDispL, kpHpDispT, kpHpDispL + kpHpWidth, kpHpDispT + kpHpHeight, 0xffffff, false);
-	DrawBoxAA(kpHpDispL, kpHpDispT, kpHpDispL + hpLength, kpHpDispT + kpHpHeight, kpHpColor, true);
+	DrawBoxAA(kPHpDispL, kPHpDispT, kPHpDispL + kPHpWidth, kPHpDispT + kPHpHeight, 0xffffff, false);
+	DrawBoxAA(kPHpDispL, kPHpDispT, kPHpDispL + hpLength, kPHpDispT + kPHpHeight, kPHpColor, true);
 }
 
 
@@ -79,4 +86,21 @@ void UIGauge::DrawPlayerGauge(float currentGauge, float MaxGauge)
 	// TODO:バーの背景部分は画像にする
 	DrawBoxAA(kpGaugeDispL, kpGaugeDispT, kpGaugeDispL + kpGaugeWidth, kpGaugeDispT + kpGaugeHeight, 0xffffff, false);
 	DrawBoxAA(kpGaugeDispL, kpGaugeDispT, kpGaugeDispL + hpLength, kpGaugeDispT + kpGaugeHeight, kpGaugeColor, true);
+}
+
+
+/// <summary>
+/// 敵のHPバーを表示
+/// </summary>
+/// <param name="currentHp"></param>
+/// <param name="MaxHp"></param>
+void UIGauge::DrawEnemyHp(float currentHp, float MaxHp)
+{
+	// 表示するゲージ量を計算する
+	float hpRatio = currentHp / MaxHp;
+	float hpLength = kEHpWidth * hpRatio;
+
+	// TODO:バーの背景部分は画像にする
+	DrawBoxAA(kEHpDispL, kEHpDispT, kEHpDispL + kEHpWidth, kEHpDispT + kEHpHeight, 0xffffff, false);
+	DrawBoxAA(kEHpDispL, kEHpDispT, kEHpDispL + hpLength, kEHpDispT + kEHpHeight, kEHpColor, true);
 }

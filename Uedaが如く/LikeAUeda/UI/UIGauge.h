@@ -12,5 +12,6 @@ public:
 	void Update();
 	void DrawPlayerHP(float currentHp, float MaxHp);			// プレイヤーのHPバーを表示
 	void DrawPlayerGauge(float currentGauge, float MaxGauge);	// プレイヤーのゲージバーを表示
+	void DrawEnemyHp(float currentHp, float MaxHp);				// 敵のHPバーを表示
 };
 

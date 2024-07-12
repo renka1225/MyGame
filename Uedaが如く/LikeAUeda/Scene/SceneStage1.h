@@ -1,9 +1,11 @@
 #pragma once
 #include "SceneBase.h"
+#include <vector>
 
 class Player;
 class Camera;
 class Stage;
+class EnemyBase;
 
 /// <summary>
 /// ステージ1
@@ -22,6 +24,7 @@ private:
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Stage> m_pStage;
+	std::shared_ptr<EnemyBase> m_pEnemy;
 
 #ifdef _DEBUG
 	// デバッグ状況

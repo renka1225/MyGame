@@ -2,10 +2,10 @@
 #include <memory>
 
 class Stage;
+class EnemyBase;
 class Camera;
 class Input;
 class UIGauge;
-class Shader;
 
 /// <summary>
 /// プレイヤークラス
@@ -53,12 +53,13 @@ public:
 	Player();
 	~Player();
 
-	void Init(std::shared_ptr<Shader> Shader);
+	void Init();
 	void Update(const Input& input, const Camera& camera, Stage& stage);
 	void Draw();
 
-	void OnHitFloor();	// 床に当たった時の処理
-	void OnDamage();	// 攻撃を受けた際の処理
+	void OnHitFloor();										// 床に当たった時の処理
+	void OnDamage();										// 攻撃を受けた際の処理
+	void CheckCollision(EnemyBase& enemy, VECTOR enemyPos);	// 当たり判定をチェックする
 
 	const VECTOR GetPos() const { return m_pos; }	// 現在地取得
 	float GetHp() const { return m_hp; }			// 現在のHPを取得
@@ -84,7 +85,6 @@ private:
 
 private:
 	std::shared_ptr<UIGauge> m_pUIGauge;
-	std::shared_ptr<Shader> m_pShader;
 
 	// プレイヤー情報
 	float m_hp;					// HP
@@ -98,9 +98,6 @@ private:
 	float m_moveSpeed;			// 移動速度
 	State m_currentState;		// 現在の状態
 	int m_modelHandle;			// プレイヤーの3Dモデル
-
-	// 当たり判定情報
-
 
 	// アニメーション情報
 	int m_currentPlayAnim;		// 再生中のアニメーションのアタッチ番号

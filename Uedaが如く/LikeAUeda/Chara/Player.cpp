@@ -1,8 +1,8 @@
 #include "DxLib.h"
 #include "Camera.h"
 #include "Stage.h"
+#include "EnemyBase.h"
 #include "UIGauge.h"
-#include "Shader.h"
 #include "Input.h"
 #include "Player.h"
 
@@ -13,7 +13,8 @@ namespace
 	const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxHp = 100.0f;						// 最大HP
 	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
-	constexpr float kMaxSpeed = 6.0f;						// プレイヤーの最大移動速度
+	constexpr float kPunchPower = 3.0f;						// パンチの攻撃力
+	constexpr float kMaxSpeed = 5.0f;						// プレイヤーの最大移動速度
 	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
 	constexpr float kAvoidDist = 60.0f;						// 回避の距離
@@ -22,7 +23,12 @@ namespace
 	constexpr float kGravity = -0.25f;						// 重力
 	constexpr float kScale = 0.3f;							// プレイヤーモデルの拡大率
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
-	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);			// 初期位置
+	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
+
+	// コリジョン情報
+	constexpr float kHitWidth = 10.0f;	     // 当たり判定カプセルの半径
+	constexpr float kHitHeight = 40.0f;	     // 当たり判定カプセルの高さ
+	constexpr float kHitBottom = -1.0f;	     // 当たり判定カプセルの位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -54,6 +60,8 @@ Player::Player() :
 	m_animBlendRate(kAnimBlendMax)
 {
 	m_modelHandle = MV1LoadModel(kfileName);
+	// モデル全体のコリジョン情報のセットアップ
+	MV1SetupCollInfo(m_modelHandle, -1);
 }
 
 
@@ -69,10 +77,9 @@ Player::~Player()
 /// <summary>
 /// 初期化
 /// </summary>
-void Player::Init(std::shared_ptr<Shader> shader)
+void Player::Init()
 {
 	m_pUIGauge = std::make_shared<UIGauge>();
-	m_pShader = shader;
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
 	PlayAnim(AnimKind::kFightIdle);
@@ -86,9 +93,6 @@ void Player::Init(std::shared_ptr<Shader> shader)
 /// <param name="stage">ステージ情報参照</param>
 void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 {
-	// シェーダをセット
-	//m_pShader->Update();
-
 	// パッド入力によって移動パラメータを設定する
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
@@ -123,8 +127,6 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 /// </summary>
 void Player::Draw()
 {
-	// シェーダの描画
-	//m_pShader->Draw();
 
 	MV1DrawModel(m_modelHandle);
 
@@ -170,7 +172,45 @@ void Player::OnHitFloor()
 /// </summary>
 void Player::OnDamage()
 {
+	DrawString(0, 80, "当たった！", 0xfffffff);
+
 	m_hp = std::min(m_hp, kMaxHp);
+}
+
+
+/// <summary>
+/// 敵との当たり判定をチェックする
+/// </summary>
+void Player::CheckCollision(EnemyBase& enemy, VECTOR enemyPos)
+{
+	// 当たり判定カプセルの位置を計算する
+	VECTOR playerCapPosTop = VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z);
+	VECTOR playerCapPosBottom = VGet(m_pos.x, m_pos.y, m_pos.z);
+	VECTOR enemyCapPosTop = VGet(enemyPos.x, enemyPos.y + kHitHeight, enemyPos.z);
+	VECTOR enemyCapPosBottom = VGet(enemyPos.x, enemyPos.y, enemyPos.z);
+
+	// プレイヤーと敵の当たり判定を行う
+	bool hit = HitCheck_Capsule_Capsule(playerCapPosTop, playerCapPosBottom, 5.0f, enemyCapPosTop, enemyCapPosBottom, 5.0f);
+
+	DrawCapsule3D(playerCapPosTop, playerCapPosBottom, 5.0f, 8, 0xff0000, 0x000000, false);
+	DrawCapsule3D(enemyCapPosTop, enemyCapPosBottom, 5.0f, 8, 0xff0000, 0x000000, false);
+
+	// 自身の攻撃が当たった場合
+	if (hit && m_isAttack)
+	{
+		printfDx("当たった");
+		enemy.OnDamage(kPunchPower);
+	}
+	// 自身が攻撃中ではなく、敵にぶつかった場合
+	else if(hit && !m_isAttack)
+	{
+		// プレイヤーの位置を補正する
+	}
+	// 掴みが決まらなかった場合
+	else if(!hit && m_isAttack)
+	{
+		// 掴み失敗のアニメーションを再生する
+	}
 }
 
 
