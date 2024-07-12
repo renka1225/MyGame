@@ -5,8 +5,8 @@
 // 定数
 namespace
 {
-	const char* kPsHName = "Shader/PixelShader.pso";  // ピクセルシェーダ
-	const char* kVsHName = "Shader/VertexShader.vso"; // 頂点シェーダ
+	const char* kPsHName = "PixelShader.pso";  // ピクセルシェーダ
+	const char* kVsHName = "VertexShader.vso"; // 頂点シェーダ
 }
 
 /// <summary>

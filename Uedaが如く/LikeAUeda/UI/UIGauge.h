@@ -3,11 +3,11 @@
 /// <summary>
 /// バトル中に表示するUI
 /// </summary>
-class UIBattle
+class UIGauge
 {
 public:
-	UIBattle();
-	~UIBattle();
+	UIGauge();
+	~UIGauge();
 	void Init();
 	void Update();
 	void DrawPlayerHP(float currentHp, float MaxHp);			// プレイヤーのHPバーを表示

@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "Camera.h"
 #include "Stage.h"
-#include "UIBattle.h"
+#include "UIGauge.h"
 #include "Shader.h"
 #include "Input.h"
 #include "Player.h"
@@ -10,24 +10,25 @@
 namespace
 {
 	// プレイヤー情報
-	constexpr float kMaxHp = 100.0f;					// 最大HP
-	constexpr float kMaxGauge = 100.0f;					// 最大ゲージ量
-	constexpr float kMaxSpeed = 6.0f;					// プレイヤーの最大移動速度
-	constexpr float kAcceleration = 0.2f;				// プレイヤーの加速度
-	constexpr float kDeceleration = 0.2f;				// プレイヤーの減速度
-	constexpr float kAvoidDist = 40.0f;					// 回避の距離
-	constexpr float kAngleSpeed = 0.2f;					// プレイヤー角度の変化速度
-	constexpr float kVelocity = 6.0f;					// ジャンプの高さ
-	constexpr float kGravity = -0.25f;					// 重力
-	constexpr float kScale = 0.3f;						// プレイヤーモデルの拡大率
-	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);		// 初期方向
-	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);		// 初期位置
+	const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
+	constexpr float kMaxHp = 100.0f;						// 最大HP
+	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
+	constexpr float kMaxSpeed = 6.0f;						// プレイヤーの最大移動速度
+	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
+	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
+	constexpr float kAvoidDist = 60.0f;						// 回避の距離
+	constexpr float kAngleSpeed = 0.2f;						// プレイヤー角度の変化速度
+	constexpr float kVelocity = 6.0f;						// ジャンプの高さ
+	constexpr float kGravity = -0.25f;						// 重力
+	constexpr float kScale = 0.3f;							// プレイヤーモデルの拡大率
+	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
+	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);			// 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
 	constexpr float kPlayAnimSpeed = 0.5f;	 // 通常のアニメーションの速度
-	constexpr float kAttackAnimSpeed = 0.7f; // 攻撃アニメーションの速度
+	constexpr float kAttackAnimSpeed = 0.8f; // 攻撃アニメーションの速度
 }
 
 
@@ -52,7 +53,7 @@ Player::Player() :
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(kAnimBlendMax)
 {
-	m_modelHandle = MV1LoadModel("data/Model/player.mv1");
+	m_modelHandle = MV1LoadModel(kfileName);
 }
 
 
@@ -62,7 +63,6 @@ Player::Player() :
 Player::~Player()
 {
 	MV1DeleteModel(m_modelHandle);
-	//m_pShader->UnLoad();
 }
 
 
@@ -71,7 +71,7 @@ Player::~Player()
 /// </summary>
 void Player::Init(std::shared_ptr<Shader> shader)
 {
-	m_pUIBattle = std::make_shared<UIBattle>();
+	m_pUIGauge = std::make_shared<UIGauge>();
 	m_pShader = shader;
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
@@ -89,15 +89,19 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 	// シェーダをセット
 	//m_pShader->Update();
 
-	/*パッド入力によって移動パラメータを設定する*/
+	// パッド入力によって移動パラメータを設定する
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
 	VECTOR	moveVec;		// このフレームの移動ベクトル
 
 	// プレイヤーの状態を更新
 	State prevState = m_currentState;
+
+	// 攻撃処理
 	m_currentState = Attack(input);
+	// 回避処理
 	m_currentState = Avoidance(input, moveVec);
+	// 移動処理
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 
 	// アニメーション状態を更新
@@ -125,12 +129,17 @@ void Player::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	// HPゲージを表示
-	m_pUIBattle->DrawPlayerHP(m_hp, kMaxHp);
-	m_pUIBattle->DrawPlayerGauge(m_gauge, kMaxGauge);
+	m_pUIGauge->DrawPlayerHP(m_hp, kMaxHp);
+	m_pUIGauge->DrawPlayerGauge(m_gauge, kMaxGauge);
 
 #ifdef _DEBUG	// デバッグ表示
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%2f,%2f,%2f)", m_pos.x, m_pos.y, m_pos.z);
 	DrawFormatString(0, 40, 0xffffff, "hp:%f",m_hp);
+
+	// 当たり判定描画
+	VECTOR drawPos1 = VGet(m_pos.x, m_pos.y, m_pos.z);
+	VECTOR drawPos2 = VGet(m_pos.x, m_pos.y + 40.0f, m_pos.z);
+	//DrawCapsule3D(drawPos1, drawPos2, 10.0f, 20, 0x0000ff, 0xffffff, false);
 #endif
 }
 
@@ -170,9 +179,7 @@ void Player::OnDamage()
 /// </summary>
 void Player::Move(const VECTOR& MoveVector, Stage& stage)
 {
-	// 攻撃中か
-	bool isAttackAnim = m_currentPlayAnim == static_cast<int>(State::kPunch) || m_currentPlayAnim == static_cast<int>(State::kKick);
-	if (fabs(MoveVector.x) > 0.0f || fabs(MoveVector.z) > 0.0f && isAttackAnim)
+	if (fabs(MoveVector.x) > 0.0f || fabs(MoveVector.z) > 0.0f)
 	{
 		m_isMove = true;
 	}
@@ -190,7 +197,7 @@ void Player::Move(const VECTOR& MoveVector, Stage& stage)
 
 
 /// <summary>
-///  攻撃処理
+/// 攻撃処理
 /// </summary>
 /// <param name="input">入力処理</param>
 /// <returns>現在の状態</returns>
@@ -445,8 +452,7 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
-		if (m_currentPlayAnim == static_cast<int>(AnimKind::kPunch) || 
-			m_currentPlayAnim == static_cast<int>(AnimKind::kKick))
+		if (m_isAttack)
 		{
 			m_currentAnimCount += kAttackAnimSpeed;
 		}
@@ -482,8 +488,7 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
-		if (m_prevPlayAnim == static_cast<int>(AnimKind::kPunch) ||
-			m_prevPlayAnim == static_cast<int>(AnimKind::kKick))
+		if (m_isAttack)
 		{
 			m_prevAnimCount += kAttackAnimSpeed;
 		}

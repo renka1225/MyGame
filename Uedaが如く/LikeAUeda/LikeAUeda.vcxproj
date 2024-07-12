@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -93,7 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Util;$(ProjectDir)Shader;$(ProjectDir)UI;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Chara\Enemy\EnemyBase.cpp" />
     <ClCompile Include="LoadData.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Chara\Player.cpp" />
     <ClCompile Include="Scene\SceneGameover.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
@@ -151,14 +151,14 @@
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="UI\UIBattle.cpp" />
+    <ClCompile Include="UI\UIGauge.cpp" />
     <ClCompile Include="Util\Camera.cpp" />
     <ClCompile Include="Util\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy\EnemyBase.h" />
+    <ClInclude Include="Chara\Enemy\EnemyBase.h" />
     <ClInclude Include="LoadData.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="Chara\Player.h" />
     <ClInclude Include="Scene\SceneGameover.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
@@ -167,7 +167,7 @@
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Stage.h" />
-    <ClInclude Include="UI\UIBattle.h" />
+    <ClInclude Include="UI\UIGauge.h" />
     <ClInclude Include="Util\Camera.h" />
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />

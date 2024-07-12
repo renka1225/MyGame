@@ -67,7 +67,6 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			return std::make_shared<SceneGameover>();
 		}
 
-		//m_pShader->Update();
 		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 		m_pCamera->Update(input, *m_pPlayer);
 	}

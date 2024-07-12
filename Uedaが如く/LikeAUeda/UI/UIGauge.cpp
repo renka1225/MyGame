@@ -1,5 +1,5 @@
 #include "DxLib.h"
-#include "UIBattle.h"
+#include "UIGauge.h"
 
 // 定数
 namespace
@@ -20,14 +20,14 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-UIBattle::UIBattle()
+UIGauge::UIGauge()
 {
 }
 
 /// <summary>
 /// デストラクタ
 /// </summary>
-UIBattle::~UIBattle()
+UIGauge::~UIGauge()
 {
 }
 
@@ -35,7 +35,7 @@ UIBattle::~UIBattle()
 /// <summary>
 /// 初期化
 /// </summary>
-void UIBattle::Init()
+void UIGauge::Init()
 {
 }
 
@@ -43,7 +43,7 @@ void UIBattle::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void UIBattle::Update()
+void UIGauge::Update()
 {
 }
 
@@ -53,7 +53,7 @@ void UIBattle::Update()
 /// </summary>
 /// <param name="currentHp">現在のHP</param>
 /// <param name="MaxHp">最大HP</param>
-void UIBattle::DrawPlayerHP(float currentHp, float MaxHp)
+void UIGauge::DrawPlayerHP(float currentHp, float MaxHp)
 {
 	// 表示するゲージ量を計算する
 	float hpRatio = currentHp / MaxHp;
@@ -70,7 +70,7 @@ void UIBattle::DrawPlayerHP(float currentHp, float MaxHp)
 /// </summary>
 /// <param name="currentGauge">現在のゲージ量</param>
 /// <param name="MaxGauge">最大ゲージ量</param>
-void UIBattle::DrawPlayerGauge(float currentGauge, float MaxGauge)
+void UIGauge::DrawPlayerGauge(float currentGauge, float MaxGauge)
 {
 	// 表示するゲージ量を計算する
 	float hpRatio = currentGauge / MaxGauge;

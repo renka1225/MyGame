@@ -4,7 +4,7 @@
 class Stage;
 class Camera;
 class Input;
-class UIBattle;
+class UIGauge;
 class Shader;
 
 /// <summary>
@@ -83,7 +83,7 @@ private:
 	void PlayAnim(AnimKind PlayAnimIndex);
 
 private:
-	std::shared_ptr<UIBattle> m_pUIBattle;
+	std::shared_ptr<UIGauge> m_pUIGauge;
 	std::shared_ptr<Shader> m_pShader;
 
 	// プレイヤー情報
@@ -98,6 +98,9 @@ private:
 	float m_moveSpeed;			// 移動速度
 	State m_currentState;		// 現在の状態
 	int m_modelHandle;			// プレイヤーの3Dモデル
+
+	// 当たり判定情報
+
 
 	// アニメーション情報
 	int m_currentPlayAnim;		// 再生中のアニメーションのアタッチ番号
