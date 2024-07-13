@@ -18,6 +18,7 @@ public:
 	virtual void OnDamage(float damage);	// UŒ‚‚ğó‚¯‚½Û‚Ìˆ—
 
 	float GetHp() const { return m_hp; }	// “G‚ÌHP‚ğæ“¾
+	VECTOR GetPos() const { return m_pos; } // “G‚ÌÀ•W‚ğæ“¾
 
 protected:
 	std::shared_ptr<UIGauge> m_pUIGauge;

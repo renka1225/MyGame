@@ -6,10 +6,15 @@
 // 定数
 namespace
 {
+	// 敵情報
 	const char* const kfileName = "data/Model/enemy.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.25f;							// 拡大率
 	constexpr float kMaxHp = 1000.0f;						// 最大HP
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);		// 初期位置
+
+	// 当たり判定情報
+	constexpr float kHitHeight = 50.0f;	     // 当たり判定カプセルの高さ
+	constexpr float kHitRadius = 8.0f;	     // 当たり判定カプセルの半径
 }
 
 
@@ -48,7 +53,7 @@ void EnemyTuto::Init()
 void EnemyTuto::Update(Player& player)
 {
 	// プレイヤーとの当たり判定をチェックする
-	player.CheckCollision(*this, m_pos);
+	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z), m_pos, kHitRadius);
 }
 
 
@@ -69,4 +74,15 @@ void EnemyTuto::Draw()
 	DrawFormatString(0, 80, 0xffffff, "hp:%f", m_hp);
 #endif
 
+}
+
+/// <summary>
+/// プレイヤーとの当たり判定をチェックする
+/// </summary>
+/// <param name="player"></param>
+/// <param name="eCapPosTop"></param>
+/// <param name="eCapPosBottom"></param>
+/// <param name="eCapRadius"></param>
+void EnemyTuto::CheckCollision(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
+{
 }

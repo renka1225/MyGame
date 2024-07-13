@@ -12,5 +12,7 @@ public:
 	virtual void Init() override;
 	virtual void Update(Player& player) override;
 	virtual void Draw() override;
+
+	void CheckCollision(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 };
 

@@ -30,4 +30,3 @@ void EnemyBase::OnDamage(float damage)
 {
 	m_hp -= damage;
 }
-

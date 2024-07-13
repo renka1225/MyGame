@@ -1,7 +1,8 @@
-C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Enemy\EnemyBase.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\EnemyBase.obj
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Chara\Enemy\EnemyBase.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\EnemyBase.obj
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Chara\Enemy\EnemyTuto.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\EnemyTuto.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\LoadData.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LoadData.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\main.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\main.obj
-C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Player.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\Player.obj
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Chara\Player.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\Player.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneGameover.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\SceneGameover.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneClear.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\SceneClear.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneTitle.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\SceneTitle.obj
@@ -10,6 +11,6 @@ C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneBase.cpp;C:\GitHub\MyGame\Ue
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Scene\SceneManager.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\SceneManager.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Shader\Shader.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\Shader.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Stage.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\Stage.obj
-C:\GitHub\MyGame\Uedaが如く\LikeAUeda\UI\UIBattle.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\UIBattle.obj
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\UI\UIGauge.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\UIGauge.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Util\Camera.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\Camera.obj
 C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Util\Input.cpp;C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\Input.obj

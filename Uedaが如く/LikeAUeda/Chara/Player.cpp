@@ -14,6 +14,7 @@ namespace
 	constexpr float kMaxHp = 100.0f;						// 最大HP
 	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
 	constexpr float kPunchPower = 3.0f;						// パンチの攻撃力
+	constexpr float kKickPower = 5.0f;						// キックの攻撃力
 	constexpr float kMaxSpeed = 5.0f;						// プレイヤーの最大移動速度
 	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
@@ -26,9 +27,12 @@ namespace
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
 
 	// コリジョン情報
-	constexpr float kHitWidth = 10.0f;	     // 当たり判定カプセルの半径
-	constexpr float kHitHeight = 40.0f;	     // 当たり判定カプセルの高さ
-	constexpr float kHitBottom = -1.0f;	     // 当たり判定カプセルの位置
+	constexpr float kHitHeight = 43.0f;				// 当たり判定カプセルの高さ
+	constexpr float kHitRadius = 8.0f;				// 当たり判定カプセルの半径
+	constexpr float kHitAimRadius = 10.0f;			// 腕の当たり判定カプセルの長さ
+	constexpr float kHitLegRadius = 10.0f;			// 足の当たり判定カプセルの長さ
+	const VECTOR kArmPos = VGet(3.0f, 40.0f, 0.0f); // 腕の当たり判定位置
+	const VECTOR kLegPos = VGet(3.0f, 20.0f, 0.0f); // 脚の当たり判定位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -49,7 +53,6 @@ Player::Player() :
 	m_isAttack(false),
 	m_targetMoveDir(kInitDir),
 	m_angle(0.0f),
-	m_jumpPower(0.0f),
 	m_moveSpeed(0.0f),
 	m_currentState(State::kFightIdle),
 	m_modelHandle(-1),
@@ -119,6 +122,9 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 
 	// アニメーション処理の更新
 	UpdateAnim();
+
+	// 当たり判定の位置更新
+	UpdateCol();
 }
 
 
@@ -127,7 +133,6 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 /// </summary>
 void Player::Draw()
 {
-
 	MV1DrawModel(m_modelHandle);
 
 	// HPゲージを表示
@@ -139,31 +144,10 @@ void Player::Draw()
 	DrawFormatString(0, 40, 0xffffff, "hp:%f",m_hp);
 
 	// 当たり判定描画
-	VECTOR drawPos1 = VGet(m_pos.x, m_pos.y, m_pos.z);
-	VECTOR drawPos2 = VGet(m_pos.x, m_pos.y + 40.0f, m_pos.z);
-	//DrawCapsule3D(drawPos1, drawPos2, 10.0f, 20, 0x0000ff, 0xffffff, false);
+	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);
+	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, 1, 0xff00ff, 0xffffff, false);
+	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, kHitLegRadius, 1, 0xffff00, 0xffffff, false);
 #endif
-}
-
-
-/// <summary>
-/// 床に当たったとき
-/// </summary>
-void Player::OnHitFloor()
-{
-	m_jumpPower = 0.0f;
-
-	// 移動中の場合
-	if (m_isMove)
-	{
-		// 移動状態にする
-		m_currentState = State::kRun;
-	}
-	else
-	{
-		// 待機状態にする
-		m_currentState = State::kFightIdle;
-	}
 }
 
 
@@ -181,36 +165,87 @@ void Player::OnDamage()
 /// <summary>
 /// 敵との当たり判定をチェックする
 /// </summary>
-void Player::CheckCollision(EnemyBase& enemy, VECTOR enemyPos)
+/// <param name="enemy">敵の参照</param>
+/// <param name="eCapPosTop">敵のカプセルの上位置</param>
+/// <param name="eCapPosBottom">敵のカプセルの下位置</param>
+/// <param name="CapRadius">敵の当たり判定の半径</param>
+void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
 {
 	// 当たり判定カプセルの位置を計算する
-	VECTOR playerCapPosTop = VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z);
-	VECTOR playerCapPosBottom = VGet(m_pos.x, m_pos.y, m_pos.z);
-	VECTOR enemyCapPosTop = VGet(enemyPos.x, enemyPos.y + kHitHeight, enemyPos.z);
-	VECTOR enemyCapPosBottom = VGet(enemyPos.x, enemyPos.y, enemyPos.z);
+	VECTOR pCapPosTop = VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z);
 
 	// プレイヤーと敵の当たり判定を行う
-	bool hit = HitCheck_Capsule_Capsule(playerCapPosTop, playerCapPosBottom, 5.0f, enemyCapPosTop, enemyCapPosBottom, 5.0f);
+	bool hit = HitCheck_Capsule_Capsule(pCapPosTop, m_pos, kHitRadius, eCapPosTop, eCapPosBottom, kHitRadius);
+	// パンチ
+	bool hitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, eCapPosTop, eCapPosBottom, kHitRadius);
+	// キック
+	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, kHitAimRadius, eCapPosTop, eCapPosBottom, kHitRadius);
+	// キック
 
-	DrawCapsule3D(playerCapPosTop, playerCapPosBottom, 5.0f, 8, 0xff0000, 0x000000, false);
-	DrawCapsule3D(enemyCapPosTop, enemyCapPosBottom, 5.0f, 8, 0xff0000, 0x000000, false);
-
-	// 自身の攻撃が当たった場合
-	if (hit && m_isAttack)
+	// パンチが当たった場合
+	if (hitPunch && m_currentState == State::kPunch)
 	{
-		printfDx("当たった");
+		// パンチが当たった場合
 		enemy.OnDamage(kPunchPower);
+		// TODO:攻撃が当たったらゲージを増やす
+		m_gauge += 3.0f;
+
 	}
-	// 自身が攻撃中ではなく、敵にぶつかった場合
-	else if(hit && !m_isAttack)
+	// キックが当たった場合
+	else if (hitKick && m_currentState == State::kKick)
+	{
+		// キックが当たった場合
+		if (m_currentState == State::kKick)
+		{
+			enemy.OnDamage(kKickPower);
+			m_gauge += 5.0f;
+		}
+	// 攻撃中でなく、敵に当たった場合
+	else if(hit)
 	{
 		// プレイヤーの位置を補正する
+		VECTOR collisionNormal = VSub(m_pos, enemy.GetPos());
+		collisionNormal = VNorm(collisionNormal);
+
+		const float kAdj = 1.0f;
+		m_pos = VAdd(m_pos, VScale(collisionNormal, kAdj));
 	}
+	}
+
 	// 掴みが決まらなかった場合
-	else if(!hit && m_isAttack)
+	if(!hit && m_currentState == State::kGrab)
 	{
 		// 掴み失敗のアニメーションを再生する
 	}
+
+	// ゲージ量の調整
+	m_gauge = std::min(m_gauge, kMaxHp);
+}
+
+
+/// <summary>
+/// プレイヤーの当たり判定の位置を更新する
+/// </summary>
+void Player::UpdateCol()
+{
+	// プレイヤーの向きをもとに回転行列を取得する
+	MATRIX rotationMatrix = MGetRotY(m_angle);
+
+	// プレイヤー全体の当たり判定位置を更新
+	m_col.hitTopPos = VAdd(m_pos, VTransform(VGet(0.0f, kHitHeight, 0.0f), rotationMatrix));
+	m_col.hitBottomPos = m_pos;
+
+	// 腕の当たり判定位置を更新
+	VECTOR armOffset = VGet(5.0f, 40.0f, 2.0f);  // 腕のオフセット
+	VECTOR armEndOffset = VGet(0.0f, 0.0f, 3.0f);  // 腕の終了位置オフセット
+	m_col.armStartPos = VAdd(m_pos, VTransform(armOffset, rotationMatrix));
+	m_col.armEndPos = VAdd(m_col.armStartPos, VTransform(armEndOffset, rotationMatrix));
+
+	// 脚の当たり判定位置を更新
+	VECTOR legOffset = VGet(-2.0f, -5.0f, 0.0f);  // 足のオフセット
+	VECTOR legEndOffset = VGet(0.0f, 0.0f, -3.0f);  // 足の終了位置オフセット
+	m_col.legStartPos = VAdd(m_pos, VTransform(legOffset, rotationMatrix));
+	m_col.legEndPos = VAdd(m_col.legStartPos, VTransform(legEndOffset, rotationMatrix));
 }
 
 
@@ -245,22 +280,23 @@ Player::State Player::Attack(const Input& input)
 {
 	State nextState = m_currentState;
 
-	if (input.IsTriggered("punch") && !m_isAttack)
+	if (!m_isAttack)
 	{
-		m_isAttack = true;
-		nextState = State::kPunch;
-
-		m_gauge += 3.0f;
+		// パンチ攻撃
+		if (input.IsTriggered("punch"))
+		{
+			m_isAttack = true;
+			nextState = State::kPunch;
+			PlayAnim(AnimKind::kPunch);
+		}
+		// キック攻撃
+		else if (input.IsTriggered("kick"))
+		{
+			m_isAttack = true;
+			nextState = State::kKick;
+			PlayAnim(AnimKind::kKick);
+		}
 	}
-	else if (input.IsTriggered("kick") && !m_isAttack)
-	{
-		m_isAttack = true;
-		nextState = State::kKick;
-
-		m_gauge += 5.0f;
-	}
-
-	m_gauge = std::min(m_gauge, kMaxHp);
 
 	return nextState;
 }
@@ -273,6 +309,9 @@ Player::State Player::Attack(const Input& input)
 /// <returns>現在の状態</returns>
 Player::State Player::Avoidance(const Input& input, VECTOR& moveVec)
 {
+	// 攻撃中の場合は何もしない
+	if (m_currentState == State::kPunch || m_currentState == State::kKick) return m_currentState;
+
 	State nextState = m_currentState;
 
 	if (input.IsTriggered("avoidance") && !m_isAttack)
@@ -320,6 +359,7 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 	// 移動したか(true:移動した)
 	bool isPressMove = false;
 
+	// 攻撃中でない場合
 	if (!m_isAttack)
 	{
 		// ボタンを押したら移動
@@ -407,6 +447,9 @@ void Player::UpdateAngle()
 /// <param name="prevState">現在のアニメーション状態</param>
 void Player::UpdateAnimState(State prevState)
 {
+	// 攻撃中は状態を更新しない
+	if (m_isAttack) return;
+
 	// 待機状態から
 	if (prevState == State::kFightIdle)
 	{

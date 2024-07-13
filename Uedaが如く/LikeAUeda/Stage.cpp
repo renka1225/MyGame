@@ -241,9 +241,6 @@ VECTOR Stage::CheckHitWithFloor(Player& player, const VECTOR& checkPosition)
     {
         // プレイヤーを床に接触させる
         fixedPos.y = maxY;
-
-        // 床に当たった処理を行う
-        player.OnHitFloor();
     }
 
     return fixedPos;
