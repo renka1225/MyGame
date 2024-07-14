@@ -1,4 +1,5 @@
 #pragma once
+#include "CharacterBase.h"
 #include <memory>
 
 class Player;
@@ -7,7 +8,7 @@ class UIGauge;
 /// <summary>
 /// 敵の基底クラス
 /// </summary>
-class EnemyBase
+class EnemyBase : public CharacterBase
 {
 public:
 	EnemyBase();
@@ -24,7 +25,6 @@ protected:
 	std::shared_ptr<UIGauge> m_pUIGauge;
 
 	VECTOR m_pos;		// 位置
-	float m_hp;			// HP
 	int m_modelHandle;	// 敵の3Dモデル
 };
 

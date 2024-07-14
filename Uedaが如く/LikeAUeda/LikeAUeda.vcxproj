@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chara\CharacterBase.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyTuto.cpp" />
     <ClCompile Include="LoadData.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Util\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chara\CharacterBase.h" />
     <ClInclude Include="Chara\Enemy\EnemyBase.h" />
     <ClInclude Include="Chara\Enemy\EnemyTuto.h" />
     <ClInclude Include="LoadData.h" />

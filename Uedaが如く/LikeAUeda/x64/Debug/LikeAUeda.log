@@ -1,3 +1,12 @@
-﻿  main.cpp
+﻿  CharacterBase.cpp
+  EnemyBase.cpp
+  EnemyTuto.cpp
+  Player.cpp
+  SceneStage1.cpp
+  SceneTitle.cpp
+  Stage.cpp
+  Camera.cpp
+  main.cpp
 C:\EffekseerForDXLib_170e_324b\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  コードを生成中...
   LikeAUeda.vcxproj -> C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe

@@ -93,6 +93,9 @@
     <ClCompile Include="Chara\Enemy\EnemyTuto.cpp">
       <Filter>ソース ファイル\Chara\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Chara\CharacterBase.cpp">
+      <Filter>ソース ファイル\Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util\Game.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Chara\Enemy\EnemyTuto.h">
       <Filter>ヘッダー ファイル\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Chara\CharacterBase.h">
+      <Filter>ヘッダー ファイル\Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

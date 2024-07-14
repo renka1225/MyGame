@@ -1,4 +1,5 @@
 #pragma once
+#include "CharacterBase.h"
 #include <memory>
 
 class Stage;
@@ -10,7 +11,7 @@ class UIGauge;
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-class Player
+class Player : public CharacterBase 
 {
 public:
 	// プレイヤーの状態
@@ -90,7 +91,6 @@ private:
 	std::shared_ptr<UIGauge> m_pUIGauge;
 
 	// プレイヤー情報
-	float m_hp;					// HP
 	float m_gauge;				// ゲージ量
 	VECTOR m_pos;				// 位置
 	bool m_isMove;				// 移動したかどうか(true:移動した)

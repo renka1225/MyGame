@@ -47,8 +47,7 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Player::Player() :
-	m_hp(kMaxHp),
+Player::Player():
 	m_gauge(0.0f),
 	m_pos(kInitPos),
 	m_isMove(false),
@@ -64,6 +63,7 @@ Player::Player() :
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(kAnimBlendMax)
 {
+	m_hp = kMaxHp;
 	m_modelHandle = MV1LoadModel(kfileName);
 	// モデル全体のコリジョン情報のセットアップ
 	MV1SetupCollInfo(m_modelHandle, -1);

@@ -8,9 +8,9 @@
 /// </summary>
 EnemyBase::EnemyBase():
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_hp(0.0f),
 	m_modelHandle(-1)
 {
+	m_hp = 0.0f;
 	m_pUIGauge = std::make_shared<UIGauge>();
 }
 
