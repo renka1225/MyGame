@@ -1,10 +1,10 @@
 #include "DxLib.h"
+#include "EffekseerForDXLib.h"
 #include "Input.h"
 #include "Game.h"
-#include "LoadData.h"
 #include "SceneManager.h"
 
-// プログラムは WinMain から始まります
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	SetMainWindowText("Uedaが如く");
@@ -19,6 +19,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
+	// Effekseerの初期化
+	Effekseer_Init(8000);
+
+	// フルスクリーン切り替え時におかしくならないように
+	SetChangeScreenModeGraphicsSystemResetFlag(false);
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+
 	// Zバッファの設定
 	SetUseZBuffer3D(true);
 	SetWriteZBuffer3D(true);
@@ -29,9 +36,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 入力状態を取得
 	Input input;
-	
-	// 外部データのロード
-	std::shared_ptr<LoadData> pLoadData = std::make_shared<LoadData>();
 
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
@@ -49,7 +53,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// 描画
 		pScene->Draw();
-		//pLoadData->Draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
@@ -59,15 +62,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 		}
 
+
 #ifdef _DEBUG
+		// デバッグ時はESCキーで終了できるようにする
 		if (input.IsTriggered("end"))
 		{
+			Effkseer_End();
 			DxLib_End();
 		}
 #endif
 	}
 
-	DxLib_End(); // ＤＸライブラリ使用の終了処理
+	Effkseer_End();	// Effekseerの終了処理
 
-	return 0;	 // ソフトの終了 
+	DxLib_End();	// Dxライブラリ使用の終了処理
+
+	return 0;		// ソフトの終了 
 }
