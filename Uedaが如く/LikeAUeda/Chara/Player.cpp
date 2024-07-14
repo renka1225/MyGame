@@ -27,12 +27,14 @@ namespace
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
 
 	// コリジョン情報
-	constexpr float kHitHeight = 43.0f;				// 当たり判定カプセルの高さ
-	constexpr float kHitRadius = 8.0f;				// 当たり判定カプセルの半径
-	constexpr float kHitAimRadius = 10.0f;			// 腕の当たり判定カプセルの長さ
-	constexpr float kHitLegRadius = 10.0f;			// 足の当たり判定カプセルの長さ
-	const VECTOR kArmPos = VGet(3.0f, 40.0f, 0.0f); // 腕の当たり判定位置
-	const VECTOR kLegPos = VGet(3.0f, 20.0f, 0.0f); // 脚の当たり判定位置
+	constexpr float kHitHeight = 43.0f;						// 当たり判定カプセルの高さ
+	constexpr float kHitRadius = 8.0f;						// 当たり判定カプセルの半径
+	constexpr float kHitAimRadius = 4.0f;					// 腕の当たり判定カプセルの長さ
+	constexpr float kHitLegRadius = 5.0f;					// 足の当たり判定カプセルの長さ
+	const VECTOR kArmOffset = VGet(3.0f, 35.0f, 0.0f);		// 腕の当たり判定位置
+	const VECTOR kArmEndOffset = VGet(-10.0f, 0.0f, 20.0f);	// 腕の当たり判定終了位置
+	const VECTOR kLegOffset = VGet(3.0f, 30.0f, 10.0f);		// 脚の当たり判定位置
+	const VECTOR kLegEndOffset = VGet(3.0f, 5.0f, 28.0f);	// 脚の当たり判定終了位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -171,11 +173,8 @@ void Player::OnDamage()
 /// <param name="CapRadius">敵の当たり判定の半径</param>
 void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
 {
-	// 当たり判定カプセルの位置を計算する
-	VECTOR pCapPosTop = VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z);
-
 	// プレイヤーと敵の当たり判定を行う
-	bool hit = HitCheck_Capsule_Capsule(pCapPosTop, m_pos, kHitRadius, eCapPosTop, eCapPosBottom, kHitRadius);
+	bool hit = HitCheck_Capsule_Capsule(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, eCapPosTop, eCapPosBottom, kHitRadius);
 	// パンチ
 	bool hitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, eCapPosTop, eCapPosBottom, kHitRadius);
 	// キック
@@ -228,24 +227,20 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 /// </summary>
 void Player::UpdateCol()
 {
-	// プレイヤーの向きをもとに回転行列を取得する
+	// プレイヤーの向きをもとに当たり判定の位置を調整する
 	MATRIX rotationMatrix = MGetRotY(m_angle);
 
 	// プレイヤー全体の当たり判定位置を更新
-	m_col.hitTopPos = VAdd(m_pos, VTransform(VGet(0.0f, kHitHeight, 0.0f), rotationMatrix));
+	m_col.hitTopPos = VAdd(m_pos, (VTransform(VGet(0.0f, kHitHeight, 0.0f), rotationMatrix)));
 	m_col.hitBottomPos = m_pos;
 
 	// 腕の当たり判定位置を更新
-	VECTOR armOffset = VGet(5.0f, 40.0f, 2.0f);  // 腕のオフセット
-	VECTOR armEndOffset = VGet(0.0f, 0.0f, 3.0f);  // 腕の終了位置オフセット
-	m_col.armStartPos = VAdd(m_pos, VTransform(armOffset, rotationMatrix));
-	m_col.armEndPos = VAdd(m_col.armStartPos, VTransform(armEndOffset, rotationMatrix));
+	m_col.armStartPos = VAdd(m_pos, (VTransform(kArmOffset, rotationMatrix)));
+	m_col.armEndPos = VAdd(m_col.armStartPos, (VTransform(kArmEndOffset, rotationMatrix)));
 
 	// 脚の当たり判定位置を更新
-	VECTOR legOffset = VGet(-2.0f, -5.0f, 0.0f);  // 足のオフセット
-	VECTOR legEndOffset = VGet(0.0f, 0.0f, -3.0f);  // 足の終了位置オフセット
-	m_col.legStartPos = VAdd(m_pos, VTransform(legOffset, rotationMatrix));
-	m_col.legEndPos = VAdd(m_col.legStartPos, VTransform(legEndOffset, rotationMatrix));
+	m_col.legStartPos = VAdd(m_pos, (VTransform(kLegOffset, rotationMatrix)));
+	m_col.legEndPos = VAdd(m_col.legStartPos, (VTransform(kLegEndOffset, rotationMatrix)));
 }
 
 

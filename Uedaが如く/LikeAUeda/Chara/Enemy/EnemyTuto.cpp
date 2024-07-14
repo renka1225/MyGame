@@ -72,6 +72,9 @@ void EnemyTuto::Draw()
 	// 敵座標デバッグ表示
 	DrawFormatString(0, 60, 0xffffff, "敵座標(x:%f, y:%f, z:%f)", m_pos.x, m_pos.y, m_pos.z);
 	DrawFormatString(0, 80, 0xffffff, "hp:%f", m_hp);
+
+	// 当たり判定描画
+	DrawCapsule3D(m_pos, VGet(m_pos.x, m_pos.y + kHitHeight , m_pos.z), kHitRadius, 1, 0x0000ff, 0xffffff, false);
 #endif
 
 }
