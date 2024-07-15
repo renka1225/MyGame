@@ -13,8 +13,14 @@ namespace
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);		// 初期位置
 
 	// 当たり判定情報
-	constexpr float kHitHeight = 50.0f;	     // 当たり判定カプセルの高さ
-	constexpr float kHitRadius = 8.0f;	     // 当たり判定カプセルの半径
+	constexpr float kHitHeight = 50.0f;						// 当たり判定カプセルの高さ
+	constexpr float kHitRadius = 8.0f;						// 当たり判定カプセルの半径
+	constexpr float kHitAimRadius = 4.0f;					// 腕の当たり判定カプセルの長さ
+	constexpr float kHitLegRadius = 5.0f;					// 足の当たり判定カプセルの長さ
+	const VECTOR kArmOffset = VGet(0.0f, 0.0f, 0.0f);		// 腕の当たり判定位置
+	const VECTOR kArmEndOffset = VGet(0.0f, 0.0f, 0.0f);	// 腕の当たり判定終了位置
+	const VECTOR kLegOffset = VGet(0.0f, 0.0f, 0.0f);		// 脚の当たり判定位置
+	const VECTOR kLegEndOffset = VGet(0.0f, 0.0f, 0.0f);	// 脚の当たり判定終了位置
 }
 
 
@@ -24,6 +30,7 @@ namespace
 EnemyTuto::EnemyTuto()
 {
 	m_hp = kMaxHp;
+	m_pos = kInitPos;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 }
@@ -52,6 +59,12 @@ void EnemyTuto::Init()
 /// </summary>
 void EnemyTuto::Update(Player& player)
 {
+	// 角度を更新
+	UpdateAngle(player);
+
+	// 当たり判定の位置更新
+	UpdateCol();
+
 	// プレイヤーとの当たり判定をチェックする
 	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z), m_pos, kHitRadius);
 }
@@ -74,18 +87,31 @@ void EnemyTuto::Draw()
 	DrawFormatString(0, 80, 0xffffff, "hp:%f", m_hp);
 
 	// 当たり判定描画
-	DrawCapsule3D(m_pos, VGet(m_pos.x, m_pos.y + kHitHeight , m_pos.z), kHitRadius, 1, 0x0000ff, 0xffffff, false);
+	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
+	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, 1, 0xff00ff, 0xffffff, false);	// 腕
+	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, kHitLegRadius, 1, 0xffff00, 0xffffff, false);	// 脚
 #endif
 
 }
 
+
 /// <summary>
-/// プレイヤーとの当たり判定をチェックする
+/// 当たり判定位置の更新
 /// </summary>
-/// <param name="player"></param>
-/// <param name="eCapPosTop"></param>
-/// <param name="eCapPosBottom"></param>
-/// <param name="eCapRadius"></param>
-void EnemyTuto::CheckCollision(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
+void EnemyTuto::UpdateCol()
 {
+	// プレイヤーの向きをもとに当たり判定の位置を調整する
+	MATRIX rotationMatrix = MGetRotY(m_angle);
+
+	// プレイヤー全体の当たり判定位置を更新
+	m_col.hitTopPos = VAdd(m_pos, (VTransform(VGet(0.0f, kHitHeight, 0.0f), rotationMatrix)));
+	m_col.hitBottomPos = m_pos;
+
+	// 腕の当たり判定位置を更新
+	m_col.armStartPos = VAdd(m_pos, (VTransform(kArmOffset, rotationMatrix)));
+	m_col.armEndPos = VAdd(m_col.armStartPos, (VTransform(kArmEndOffset, rotationMatrix)));
+
+	// 脚の当たり判定位置を更新
+	m_col.legStartPos = VAdd(m_pos, (VTransform(kLegOffset, rotationMatrix)));
+	m_col.legEndPos = VAdd(m_col.legStartPos, (VTransform(kLegEndOffset, rotationMatrix)));
 }

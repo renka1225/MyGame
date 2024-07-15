@@ -54,12 +54,12 @@ public:
 	Player();
 	~Player();
 
-	void Init();
+	virtual void Init() override;
 	void Update(const Input& input, const Camera& camera, Stage& stage);
-	void Draw();
+	virtual void Draw() override;
 
 	// 攻撃を受けた際の処理
-	void OnDamage();
+	virtual void OnDamage(float damage) override;
 	// 当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
@@ -88,37 +88,13 @@ private:
 	void PlayAnim(AnimKind PlayAnimIndex);
 
 private:
-	std::shared_ptr<UIGauge> m_pUIGauge;
-
 	// プレイヤー情報
 	float m_gauge;				// ゲージ量
-	VECTOR m_pos;				// 位置
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
-	float m_angle;				// 向いている方向の角度
 	float m_moveSpeed;			// 移動速度
 	State m_currentState;		// 現在の状態
-	int m_modelHandle;			// プレイヤーの3Dモデル
 
-	// アニメーション情報
-	int m_currentPlayAnim;		// 再生中のアニメーションのアタッチ番号
-	float m_currentAnimCount;	// 再生中のアニメーションの再生時間
-	int m_prevPlayAnim;			// 前の再生アニメーションのアタッチ番号
-	float m_prevAnimCount;		// 前の再生アニメーションの再生時間
-	float m_animBlendRate;		// 現在と過去のアニメーションのブレンド率
-
-	// プレイヤーの当たり判定情報
-	struct CollisionInfo
-	{
-		VECTOR hitTopPos;		// プレイヤー全体の当たり判定の上部分
-		VECTOR hitBottomPos;	// プレイヤー全体の当たり判定の下部分
-		VECTOR armTopPos;		// プレイヤーの腕の先端位置
-		VECTOR armStartPos;		// プレイヤーの腕の位置
-		VECTOR armEndPos;		// プレイヤーの腕の位置
-		VECTOR legStartPos;		// プレイヤーの脚の位置
-		VECTOR legEndPos;		// プレイヤーの脚の位置
-	};
-	CollisionInfo m_col;
 };
 

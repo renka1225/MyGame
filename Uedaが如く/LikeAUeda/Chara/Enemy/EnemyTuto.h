@@ -13,6 +13,7 @@ public:
 	virtual void Update(Player& player) override;
 	virtual void Draw() override;
 
-	void CheckCollision(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
+private:
+	void UpdateCol();	// “–‚½‚è”»’èˆÊ’u‚ÌXV
 };
 

@@ -26,7 +26,7 @@ namespace
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
 
-	// コリジョン情報
+	// 当たり判定情報
 	constexpr float kHitHeight = 43.0f;						// 当たり判定カプセルの高さ
 	constexpr float kHitRadius = 8.0f;						// 当たり判定カプセルの半径
 	constexpr float kHitAimRadius = 4.0f;					// 腕の当たり判定カプセルの長さ
@@ -49,22 +49,19 @@ namespace
 /// </summary>
 Player::Player():
 	m_gauge(0.0f),
-	m_pos(kInitPos),
 	m_isMove(false),
 	m_isAttack(false),
 	m_targetMoveDir(kInitDir),
-	m_angle(0.0f),
 	m_moveSpeed(0.0f),
-	m_currentState(State::kFightIdle),
-	m_modelHandle(-1),
-	m_currentPlayAnim(-1),
-	m_currentAnimCount(0.0f),
-	m_prevPlayAnim(-1),
-	m_prevAnimCount(0.0f),
-	m_animBlendRate(kAnimBlendMax)
+	m_currentState(State::kFightIdle)
 {
 	m_hp = kMaxHp;
+	m_pos = kInitPos;
+	m_angle = 0.0f;
 	m_modelHandle = MV1LoadModel(kfileName);
+
+	m_animBlendRate = kAnimBlendMax;
+
 	// モデル全体のコリジョン情報のセットアップ
 	MV1SetupCollInfo(m_modelHandle, -1);
 }
@@ -84,7 +81,6 @@ Player::~Player()
 /// </summary>
 void Player::Init()
 {
-	m_pUIGauge = std::make_shared<UIGauge>();
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
 	PlayAnim(AnimKind::kFightIdle);
@@ -146,9 +142,9 @@ void Player::Draw()
 	DrawFormatString(0, 40, 0xffffff, "hp:%f",m_hp);
 
 	// 当たり判定描画
-	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);
-	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, 1, 0xff00ff, 0xffffff, false);
-	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, kHitLegRadius, 1, 0xffff00, 0xffffff, false);
+	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
+	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, 1, 0xff00ff, 0xffffff, false);	// 腕
+	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, kHitLegRadius, 1, 0xffff00, 0xffffff, false);	// 脚
 #endif
 }
 
@@ -156,9 +152,9 @@ void Player::Draw()
 /// <summary>
 /// ダメージを受けたとき
 /// </summary>
-void Player::OnDamage()
+void Player::OnDamage(float damage)
 {
-	DrawString(0, 80, "当たった！", 0xfffffff);
+	DrawString(0, 80, "プレイヤーがダメージ！", 0xfffffff);
 
 	m_hp = std::min(m_hp, kMaxHp);
 }
