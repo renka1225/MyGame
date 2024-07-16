@@ -6,6 +6,7 @@ class Player;
 class Camera;
 class Stage;
 class EnemyBase;
+class CharacterBase;
 
 /// <summary>
 /// ステージ1

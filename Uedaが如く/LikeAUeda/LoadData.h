@@ -1,25 +1,21 @@
 #pragma once
 #include <vector>
 
+class CharacterBase;
+
 /// <summary>
-/// 外部ファイル読み込み
+/// csvファイル読み込み
 /// </summary>
 class LoadData
 {
 public:
-	LoadData();
+	LoadData() {};
+	LoadData(CharacterBase& data, int charType);
 	~LoadData();
 	void Draw();
 
-	struct PlayerData
-	{
-		float maxHP;		// 最大HP
-		float maxHeatGauge;	// 最大ヒートゲージ量
-		float attack;		// 攻撃力
-		float maxMoveSpeed; // 最大移動速度
-		float acceleration; // 加速度
-		float deceleration;	// 減速度
-	};
+	// キャラクターのデータを読み込む
+	void LoadCharaData(CharacterBase& data, int charType);
 
 private:
 	std::vector<float> m_data;

@@ -3,14 +3,21 @@
 #include "Stage.h"
 #include "EnemyBase.h"
 
+// 定数
+namespace
+{
+	constexpr float kApproachRange = 70.0f;	// プレイヤーに近づく範囲
+}
+
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 EnemyBase::EnemyBase():
-	m_isMove(false)
+	m_isMove(false),
+	m_isAttack(false),
+	m_currentState(EnemyState::kFightIdle)
 {
-	m_hp = 0.0f;
 }
 
 
@@ -27,9 +34,9 @@ EnemyBase::~EnemyBase()
 /// </summary>
 /// <param name="MoveVec"></param>
 /// <param name="stage"></param>
-void EnemyBase::Move(const VECTOR& MoveVec, Player& player, Stage& stage)
+void EnemyBase::Move(const VECTOR& moveVec, Player& player, Stage& stage)
 {
-	if (fabs(MoveVec.x) > 0.0f || fabs(MoveVec.z) > 0.0f)
+	if (fabs(moveVec.x) > 0.0f || fabs(moveVec.z) > 0.0f)
 	{
 		m_isMove = true;
 	}
@@ -38,11 +45,8 @@ void EnemyBase::Move(const VECTOR& MoveVec, Player& player, Stage& stage)
 		m_isMove = false;
 	}
 
-	// プレイヤーの方向に向かう
-	VECTOR dir = VSub(player.GetPos(), m_pos);
-
 	// 当たり判定を行って座標を保存する
-	m_pos = stage.CheckEnemyCol(*this, MoveVec);
+	m_pos = stage.CheckEnemyCol(*this, moveVec);
 
 	// プレイヤーの座標を更新する
 	MV1SetPosition(m_modelHandle, m_pos);
@@ -50,19 +54,35 @@ void EnemyBase::Move(const VECTOR& MoveVec, Player& player, Stage& stage)
 
 
 /// <summary>
-/// 移動処理
+/// 移動パラメータを設定する
 /// </summary>
+/// <param name="player">プレイヤー参照</param>
 /// <param name="upMoveVec">上方向への移動ベクトル</param>
 /// <param name="leftMoveVec">左方向への移動ベクトル</param>
 /// <param name="moveVec">移動ベクトル</param>
 /// <returns>現在の状態</returns>
-EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
+EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
 {
 	EnemyState nextState = m_currentState;
-
+	
 	// このフレームでの移動ベクトルを初期化
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
+	// 攻撃中でない場合
+	if (!m_isAttack)
+	{
+		// エネミーとプレイヤーの距離を計算
+		VECTOR dir = VSub(player.GetPos(), m_pos);
+		float distance = VSize(dir);
+
+		// プレイヤーが範囲内に入った場合
+		if (distance > kApproachRange)
+		{
+			// プレイヤーに近づく
+			dir = VNorm(dir);
+			moveVec = VScale(dir, m_moveSpeed);
+		}
+	}
 
 	return nextState;
 }

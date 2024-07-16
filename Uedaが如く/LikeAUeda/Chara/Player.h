@@ -71,7 +71,7 @@ private:
 	// 当たり判定の位置更新
 	void UpdateCol();
 	// 移動処理
-	void Move(const VECTOR& MoveVec, Stage& stage);
+	void Move(const VECTOR& moveVec, Stage& stage);
 	// 回避処理
 	PlayerState Avoidance(const Input& input, VECTOR& moveVec);
 	// 移動パラメータを設定する
@@ -93,7 +93,6 @@ private:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
-	float m_moveSpeed;			// 移動速度
-	PlayerState m_currentState;		// 現在の状態
+	PlayerState m_currentState;	// 現在の状態
 
 };

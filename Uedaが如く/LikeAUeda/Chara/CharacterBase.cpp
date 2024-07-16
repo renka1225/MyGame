@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "LoadData.h"
 #include "UIGauge.h"
 #include "CharacterBase.h"
 
@@ -8,6 +9,7 @@
 CharacterBase::CharacterBase():
 	m_hp(0.0f),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_moveSpeed(0.0f),
 	m_angle(0.0f),
 	m_modelHandle(-1),
 	m_currentPlayAnim(-1),

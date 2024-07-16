@@ -4,6 +4,7 @@
 #include "EnemyBase.h"
 #include "UIGauge.h"
 #include "Input.h"
+#include "LoadData.h"
 #include "Player.h"
 
 // 定数
@@ -52,11 +53,14 @@ Player::Player():
 	m_isMove(false),
 	m_isAttack(false),
 	m_targetMoveDir(kInitDir),
-	m_moveSpeed(0.0f),
 	m_currentState(PlayerState::kFightIdle)
 {
-	m_hp = kMaxHp;
+	// キャラクター情報を読み込む
+	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kPlayer));
+
+	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
+	m_moveSpeed = 0.0f;
 	m_angle = 0.0f;
 	m_modelHandle = MV1LoadModel(kfileName);
 
@@ -245,9 +249,9 @@ void Player::UpdateCol()
 /// </summary>
 /// <param name="MoveVec">移動ベクトル</param>
 /// <param name="stage">ステージ参照</param>
-void Player::Move(const VECTOR& MoveVec, Stage& stage)
+void Player::Move(const VECTOR& moveVec, Stage& stage)
 {
-	if (fabs(MoveVec.x) > 0.0f || fabs(MoveVec.z) > 0.0f)
+	if (fabs(moveVec.x) > 0.0f || fabs(moveVec.z) > 0.0f)
 	{
 		m_isMove = true;
 	}
@@ -257,7 +261,7 @@ void Player::Move(const VECTOR& MoveVec, Stage& stage)
 	}
 
 	// 当たり判定を行って座標を保存する
-	m_pos = stage.CheckPlayerCol(*this, MoveVec);
+	m_pos = stage.CheckPlayerCol(*this, moveVec);
 
 	// プレイヤーの座標を更新する
 	MV1SetPosition(m_modelHandle, m_pos);

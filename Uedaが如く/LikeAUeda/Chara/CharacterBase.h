@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+class LoadData;
 class UIGauge;
 
 /// <summary>
@@ -9,6 +10,23 @@ class UIGauge;
 class CharacterBase
 {
 public:
+	// キャラクターの種類
+	enum class CharaType
+	{
+		kPlayer,	// プレイヤー
+		kEnemyTuto,	// チュートリアルの敵
+	};
+
+	// キャラクターのステータス
+	struct Status
+	{
+		float maxHp;			// 最大HP
+		float punchPower;		// パンチの攻撃力
+		float kickPower;		// キックの攻撃力
+		float moveSpeed;		// 移動速度
+	};
+	Status m_status;
+
 	CharacterBase();
 	~CharacterBase() {};
 	virtual void Init() = 0;
@@ -16,10 +34,12 @@ public:
 	virtual void OnDamage(float damage);	// ダメージを受けた際の処理
 
 protected:
+	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得
 	std::shared_ptr<UIGauge> m_pUIGauge;	// バトル中に表示するHPのゲージ
 
 	float m_hp;			// HP
 	VECTOR m_pos;		// 位置
+	float m_moveSpeed;	// 移動速度
 	float m_angle;		// 向いている方向の角度
 	int m_modelHandle;	// キャラクターの3Dモデル
 

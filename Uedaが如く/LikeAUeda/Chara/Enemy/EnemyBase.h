@@ -40,9 +40,9 @@ public:
 
 protected:
 	// 移動処理
-	void Move(const VECTOR& MoveVec, Player& player, Stage& stage);
+	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
 	// 移動パラメータを設定する
-	EnemyState UpdateMoveParameter(VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	EnemyState UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// 敵の角度を更新
 	void UpdateAngle(Player& player);
 	// プレイヤーとの当たり判定をチェックする
@@ -50,6 +50,7 @@ protected:
 
 protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
+	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	EnemyState m_currentState;	// エネミーの現在の状態
 };
 

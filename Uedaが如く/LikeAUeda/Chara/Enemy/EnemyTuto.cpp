@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Stage.h"
 #include "UIGauge.h"
+#include "LoadData.h"
 #include "EnemyTuto.h"
 
 // 定数
@@ -11,6 +12,7 @@ namespace
 	const char* const kfileName = "data/Model/enemy.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.25f;							// 拡大率
 	constexpr float kMaxHp = 1000.0f;						// 最大HP
+	constexpr float kMaxSpeed = 3.0f;						// 移動速度
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);		// 初期位置
 
 	// 当たり判定情報
@@ -30,8 +32,12 @@ namespace
 /// </summary>
 EnemyTuto::EnemyTuto()
 {
-	m_hp = kMaxHp;
+	// キャラクター情報を読み込む
+	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kEnemyTuto));
+
+	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
+	m_moveSpeed = kMaxSpeed;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 }
@@ -69,7 +75,7 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	EnemyState prevState = m_currentState;
 
 	// 移動処理
-	m_currentState = UpdateMoveParameter(upMoveVec, leftMoveVec, moveVec);
+	m_currentState = UpdateMoveParameter(player, upMoveVec, leftMoveVec, moveVec);
 
 	// プレイヤーとの当たり判定をチェックする
 	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z), m_pos, kHitRadius);
