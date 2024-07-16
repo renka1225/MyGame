@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "Stage.h"
 #include "UIGauge.h"
 #include "EnemyTuto.h"
 
@@ -57,16 +58,30 @@ void EnemyTuto::Init()
 /// <summary>
 /// 更新
 /// </summary>
-void EnemyTuto::Update(Player& player)
+void EnemyTuto::Update(Player& player, Stage& stage)
 {
+	// 移動パラメータを設定する
+	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
+	VECTOR	leftMoveVec;	// 左ボタンを入力をしたときのプレイヤーの移動方向ベクトル
+	VECTOR	moveVec;		// このフレームの移動ベクトル
+
+	// エネミーの状態を更新
+	EnemyState prevState = m_currentState;
+
+	// 移動処理
+	m_currentState = UpdateMoveParameter(upMoveVec, leftMoveVec, moveVec);
+
+	// プレイヤーとの当たり判定をチェックする
+	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z), m_pos, kHitRadius);
+
+	// 移動ベクトルを元にエネミーを移動させる
+	Move(moveVec, player, stage);
+
 	// 角度を更新
 	UpdateAngle(player);
 
 	// 当たり判定の位置更新
 	UpdateCol();
-
-	// プレイヤーとの当たり判定をチェックする
-	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z), m_pos, kHitRadius);
 }
 
 

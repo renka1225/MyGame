@@ -15,7 +15,7 @@ class Player : public CharacterBase
 {
 public:
 	// プレイヤーの状態
-	enum class State
+	enum class PlayerState
 	{
 		kAvoid = 0,		// 回避
 		kDown = 1,		// 倒れる
@@ -71,17 +71,17 @@ private:
 	// 当たり判定の位置更新
 	void UpdateCol();
 	// 移動処理
-	void Move(const VECTOR& MoveVector, Stage& stage);
+	void Move(const VECTOR& MoveVec, Stage& stage);
 	// 回避処理
-	State Avoidance(const Input& input, VECTOR& moveVec);
+	PlayerState Avoidance(const Input& input, VECTOR& moveVec);
 	// 移動パラメータを設定する
-	State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	PlayerState UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// 攻撃処理
-	State Attack(const Input& input);
+	PlayerState Attack(const Input& input);
 	// プレイヤーの回転を制御する
 	void UpdateAngle();
 	// アニメーションステートの更新
-	void UpdateAnimState(State prevState);
+	void UpdateAnimState(PlayerState prevState);
 	// アニメーション処理
 	void UpdateAnim();
 	// アニメーションを再生する
@@ -94,7 +94,6 @@ private:
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 	float m_moveSpeed;			// 移動速度
-	State m_currentState;		// 現在の状態
+	PlayerState m_currentState;		// 現在の状態
 
 };
-

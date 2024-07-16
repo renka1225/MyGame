@@ -10,10 +10,11 @@ public:
 	EnemyTuto();
 	virtual ~EnemyTuto();
 	virtual void Init() override;
-	virtual void Update(Player& player) override;
+	virtual void Update(Player& player, Stage& stage) override;
 	virtual void Draw() override;
 
 private:
-	void UpdateCol();	// 当たり判定位置の更新
+	// 当たり判定位置の更新
+	void UpdateCol();
 };
 

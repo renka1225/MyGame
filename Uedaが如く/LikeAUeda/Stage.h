@@ -1,6 +1,7 @@
 #pragma once
 
 class Player;
+class EnemyBase;
 
 /// <summary>
 /// ステージの更新と描画を行うクラス
@@ -11,8 +12,10 @@ public:
 	Stage();
 	virtual ~Stage();
 	void Draw();
-	// 当たり判定をして、補正した移動先のポジションを返す
-	VECTOR CheckCollision(Player& player, const VECTOR& moveVector);
+	// プレイヤーと当たり判定をして、補正した移動先のポジションを返す
+	VECTOR CheckPlayerCol(Player& player, const VECTOR& moveVec);
+	// エネミーと当たり判定をして、補正した移動先のポジションを返す
+	VECTOR CheckEnemyCol(EnemyBase& enemy, const VECTOR& moveVec);
 
 	// ステージモデルを取得
 	int GetStageHandle() const { return m_stageHandle; }
@@ -20,10 +23,14 @@ public:
 private:
 	// 検出されたポリゴンが壁ポリゴンか床ポリゴンかを判断する
 	void AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const VECTOR& checkPosition);
-	// 壁ポリゴンとの当たりをチェックする
-	VECTOR CheckHitWithWall(Player& player, const VECTOR& checkPosition);
-	// 床ポリゴンとの当たりをチェックする
-	VECTOR CheckHitWithFloor(Player& player, const VECTOR& checkPosition);
+	// プレイヤーと壁ポリゴンとの当たりをチェックする
+	VECTOR CheckHitPlayerWithWall(Player& player, const VECTOR& checkPosition);
+	// プレイヤーと床ポリゴンとの当たりをチェックする
+	VECTOR CheckHitPlayerWithFloor(Player& player, const VECTOR& checkPosition);
+	// エネミーと壁ポリゴンとの当たりをチェックする
+	VECTOR CheckHitEnemyWithWall(EnemyBase& enemy, const VECTOR& checkPosition);
+	// エネミーと床ポリゴンとの当たりをチェックする
+	VECTOR CheckHitEnemyWithFloor(EnemyBase& enemy, const VECTOR& checkPosition);
 
 private:
 	// ステージ情報

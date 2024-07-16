@@ -3,6 +3,7 @@
 #include <memory>
 
 class Player;
+class Stage;
 
 /// <summary>
 /// 敵の基底クラス
@@ -10,17 +11,45 @@ class Player;
 class EnemyBase : public CharacterBase
 {
 public:
+	// エネミーの状態
+	enum class EnemyState
+	{
+		kAvoid = 0,		// 回避
+		kDown = 1,		// 倒れる
+		kFightIdle = 2, // 構え
+		kGettingUp = 3, // 起き上がる
+		kGrab = 4,		// 掴み
+		kGuard = 5,		// ガード
+		kKick = 6,		// キック
+		kPunch = 7,		// パンチ
+		kComboPunch = 8,// コンボパンチ
+		kReceive = 9,	// 攻撃を受ける
+		kRun = 10,		// 移動
+		kStand = 11,	// 待機
+		kStumble,		// 掴み失敗
+	};
+
 	EnemyBase();
 	virtual ~EnemyBase();
 	virtual void Init() = 0;
-	virtual void Update(Player& player) = 0;
+	virtual void Update(Player& player, Stage& stage) = 0;
 	virtual void Draw() = 0;
 
 	float GetHp() const { return m_hp; }	// 敵のHPを取得
 	VECTOR GetPos() const { return m_pos; } // 敵の座標を取得
 
 protected:
-	virtual void UpdateAngle(Player& player);	// 敵の角度を更新
+	// 移動処理
+	void Move(const VECTOR& MoveVec, Player& player, Stage& stage);
+	// 移動パラメータを設定する
+	EnemyState UpdateMoveParameter(VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	// 敵の角度を更新
+	void UpdateAngle(Player& player);
+	// プレイヤーとの当たり判定をチェックする
 	void CheckCollision(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
+
+protected:
+	bool m_isMove;				// 移動したかどうか(true:移動した)
+	EnemyState m_currentState;	// エネミーの現在の状態
 };
 

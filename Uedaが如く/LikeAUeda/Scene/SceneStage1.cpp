@@ -61,7 +61,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	{
 		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 		m_pCamera->Update(input, *m_pPlayer);
-		m_pEnemy->Update(*m_pPlayer);
+		m_pEnemy->Update(*m_pPlayer, *m_pStage);
 
 
 		// “G‚ÌHP‚ª0‚É‚È‚Á‚½ê‡
