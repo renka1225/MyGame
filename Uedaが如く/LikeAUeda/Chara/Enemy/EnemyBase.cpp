@@ -87,6 +87,12 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 			{
 				dir = VNorm(dir);
 				moveVec = VScale(dir, m_moveSpeed);
+
+				// 待機状態の場合
+				if (m_currentState == EnemyState::kFightIdle)
+				{
+					nextState = EnemyState::kRun; // 移動状態にする
+				}
 			}
 			else
 			{
@@ -95,8 +101,8 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 		}
 		else
 		{
-			// 停止時間をランダムで計算する
-			m_stopFrame = kStopMinTime + GetRand(kStopMaxTime);
+			m_stopFrame = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
+			nextState = EnemyState::kFightIdle;	// 待機状態にする
 		}
 	}
 

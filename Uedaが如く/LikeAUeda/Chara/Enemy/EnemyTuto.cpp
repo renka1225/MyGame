@@ -9,12 +9,12 @@
 namespace
 {
 	// 敵情報
-	const char* const kfileName = "data/Model/enemy.mv1";	// 敵のファイル名
-	constexpr float kScale = 0.25f;							// 拡大率
+	const char* const kfileName = "data/Model/enemyTuto.mv1";	// 敵のファイル名
+	constexpr float kScale = 0.3f;							// 拡大率
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);		// 初期位置
 
 	// 当たり判定情報
-	constexpr float kHitHeight = 50.0f;						// 当たり判定カプセルの高さ
+	constexpr float kHitHeight = 45.0f;						// 当たり判定カプセルの高さ
 	constexpr float kHitRadius = 8.0f;						// 当たり判定カプセルの半径
 	constexpr float kHitAimRadius = 4.0f;					// 腕の当たり判定カプセルの長さ
 	constexpr float kHitLegRadius = 5.0f;					// 足の当たり判定カプセルの長さ
@@ -82,11 +82,17 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	// プレイヤーとの当たり判定をチェックする
 	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + kHitHeight, m_pos.z), m_pos, kHitRadius);
 
-	// 移動ベクトルを元にエネミーを移動させる
-	Move(moveVec, player, stage);
+	// アニメーション状態を更新
+	UpdateAnimState(prevState);
 
 	// 角度を更新
 	UpdateAngle(player);
+
+	// 移動ベクトルを元にエネミーを移動させる
+	Move(moveVec, player, stage);
+
+	// アニメーション処理の更新
+	UpdateAnim();
 
 	// 当たり判定の位置更新
 	UpdateCol();
@@ -108,6 +114,7 @@ void EnemyTuto::Draw()
 	// 敵座標デバッグ表示
 	DrawFormatString(0, 60, 0xffffff, "敵座標(%0.2f,%0.2f,%0.2f)", m_pos.x, m_pos.y, m_pos.z);
 	DrawFormatString(0, 80, 0xffffff, "hp:%0.2f", m_hp);
+	DrawFormatString(0, 100, 0xffffff, "敵状態:%d", m_currentState);
 
 	// 当たり判定描画
 	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
