@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "SceneBase.h"
 #include "SceneTitle.h"
+#include "SceneDebug.h"
 
 
 /// <summary>
@@ -26,8 +27,14 @@ SceneManager::~SceneManager()
 /// </summary>
 void SceneManager::Init()
 {
+#ifdef _DEBUG
+	m_pScene = std::make_shared<SceneDebug>();
+	m_pScene->Init();
+#else
+
 	m_pScene = std::make_shared<SceneTitle>();
 	m_pScene->Init();
+#endif
 }
 
 
