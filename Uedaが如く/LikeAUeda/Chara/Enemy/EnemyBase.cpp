@@ -7,6 +7,8 @@
 namespace
 {
 	constexpr float kApproachRange = 70.0f;	// プレイヤーに近づく範囲
+	constexpr int kStopMinTime = 30;		// 最小の停止時間
+	constexpr int kStopMaxTime = 150;		// 最大の停止時間
 }
 
 
@@ -16,6 +18,7 @@ namespace
 EnemyBase::EnemyBase():
 	m_isMove(false),
 	m_isAttack(false),
+	m_stopFrame(0.0f),
 	m_currentState(EnemyState::kFightIdle)
 {
 }
@@ -68,6 +71,7 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 	// このフレームでの移動ベクトルを初期化
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
+
 	// 攻撃中でない場合
 	if (!m_isAttack)
 	{
@@ -75,12 +79,24 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 		VECTOR dir = VSub(player.GetPos(), m_pos);
 		float distance = VSize(dir);
 
-		// プレイヤーが範囲内に入った場合
+		// プレイヤーが一定距離離れた場合
 		if (distance > kApproachRange)
 		{
-			// プレイヤーに近づく
-			dir = VNorm(dir);
-			moveVec = VScale(dir, m_moveSpeed);
+			// 数秒たったらエネミーを移動させる
+			if (m_stopFrame <= 0)
+			{
+				dir = VNorm(dir);
+				moveVec = VScale(dir, m_moveSpeed);
+			}
+			else
+			{
+				m_stopFrame--;
+			}
+		}
+		else
+		{
+			// 停止時間をランダムで計算する
+			m_stopFrame = kStopMinTime + GetRand(kStopMaxTime);
 		}
 	}
 

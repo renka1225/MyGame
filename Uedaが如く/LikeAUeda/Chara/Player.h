@@ -63,8 +63,6 @@ public:
 	// 当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
-	const VECTOR GetPos() const { return m_pos; }	// 現在地取得
-	float GetHp() const { return m_hp; }			// 現在のHPを取得
 	bool GetIsMove() const { return m_isMove; }		// 移動中かどうか取得
 
 private:

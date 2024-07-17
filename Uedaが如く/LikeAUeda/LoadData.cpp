@@ -87,7 +87,7 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 		data.m_status.maxHp = m_data[0];
 		data.m_status.punchPower = m_data[1];
 		data.m_status.kickPower = m_data[2];
-		data.m_status.moveSpeed = m_data[3];
+		data.m_status.maxMoveSpeed = m_data[3];
 	}
 	// チュートリアル敵
 	else if (charType == static_cast<int>(CharacterBase::CharaType::kEnemyTuto))
@@ -95,6 +95,6 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 		data.m_status.maxHp = m_data[4];
 		data.m_status.punchPower = m_data[5];
 		data.m_status.kickPower = m_data[6];
-		data.m_status.moveSpeed = m_data[7];
+		data.m_status.maxMoveSpeed = m_data[7];
 	}
 }

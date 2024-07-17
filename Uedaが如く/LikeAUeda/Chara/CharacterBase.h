@@ -23,7 +23,7 @@ public:
 		float maxHp;			// 最大HP
 		float punchPower;		// パンチの攻撃力
 		float kickPower;		// キックの攻撃力
-		float moveSpeed;		// 移動速度
+		float maxMoveSpeed;		// 最大の移動速度
 	};
 	Status m_status;
 
@@ -32,6 +32,17 @@ public:
 	virtual void Init() = 0;
 	virtual void Draw() = 0;
 	virtual void OnDamage(float damage);	// ダメージを受けた際の処理
+
+	VECTOR GetPos() const { return m_pos; }	// 現在地取得
+	float GetHp() const { return m_hp; }	// 現在のHPを取得
+
+protected:
+	//// アニメーションステートの更新
+	//void UpdateAnimState(State prevState);
+	//// アニメーション処理
+	//void UpdateAnim();
+	//// アニメーションを再生する
+	//void PlayAnim(AnimKind PlayAnimIndex);
 
 protected:
 	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得

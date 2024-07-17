@@ -12,11 +12,7 @@ namespace
 {
 	// プレイヤー情報
 	const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
-	constexpr float kMaxHp = 100.0f;						// 最大HP
 	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
-	constexpr float kPunchPower = 0.3f;						// パンチの攻撃力
-	constexpr float kKickPower = 0.5f;						// キックの攻撃力
-	constexpr float kMaxSpeed = 5.0f;						// プレイヤーの最大移動速度
 	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
 	constexpr float kAvoidDist = 60.0f;						// 回避の距離
@@ -138,12 +134,12 @@ void Player::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	// HPゲージを表示
-	m_pUIGauge->DrawPlayerHP(m_hp, kMaxHp);
+	m_pUIGauge->DrawPlayerHP(m_hp, m_status.maxHp);
 	m_pUIGauge->DrawPlayerGauge(m_gauge, kMaxGauge);
 
 #ifdef _DEBUG	// デバッグ表示
-	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%2f,%2f,%2f)", m_pos.x, m_pos.y, m_pos.z);
-	DrawFormatString(0, 40, 0xffffff, "hp:%f",m_hp);
+	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%0.2f,%0.2f,%0.2f)", m_pos.x, m_pos.y, m_pos.z);
+	DrawFormatString(0, 40, 0xffffff, "hp:%0.2f",m_hp);
 
 	// 当たり判定描画
 	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
@@ -160,7 +156,7 @@ void Player::OnDamage(float damage)
 {
 	DrawString(0, 80, "プレイヤーがダメージ！", 0xfffffff);
 
-	m_hp = std::min(m_hp, kMaxHp);
+	m_hp = std::min(m_hp, m_status.maxHp);
 }
 
 
@@ -185,7 +181,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	if (hitPunch && m_currentState == PlayerState::kPunch)
 	{
 		// パンチが当たった場合
-		enemy.OnDamage(kPunchPower);
+		enemy.OnDamage(m_status.punchPower);
 		// TODO:攻撃が当たったらゲージを増やす
 		m_gauge += 3.0f;
 
@@ -196,7 +192,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 		// キックが当たった場合
 		if (m_currentState == PlayerState::kKick)
 		{
-			enemy.OnDamage(kKickPower);
+			enemy.OnDamage(m_status.kickPower);
 			m_gauge += 5.0f;
 		}
 	// 攻撃中でなく、敵に当たった場合
@@ -218,7 +214,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	}
 
 	// ゲージ量の調整
-	m_gauge = std::min(m_gauge, kMaxHp);
+	m_gauge = std::min(m_gauge, m_status.maxHp);
 }
 
 
@@ -394,10 +390,10 @@ Player::PlayerState Player::UpdateMoveParameter(const Input& input, const Camera
 			m_targetMoveDir = VNorm(moveVec);
 
 			// プレイヤーの加速度を設定する
-			if (m_moveSpeed < kMaxSpeed)
+			if (m_moveSpeed < m_status.maxMoveSpeed)
 			{
 				m_moveSpeed += kAcceleration;
-				m_moveSpeed = (std::min)(m_moveSpeed, kMaxSpeed);
+				m_moveSpeed = (std::min)(m_moveSpeed, m_status.maxMoveSpeed);
 			}
 			// プレイヤーの移動ベクトルを設定する
 			moveVec = VScale(m_targetMoveDir, m_moveSpeed);

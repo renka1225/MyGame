@@ -11,8 +11,6 @@ namespace
 	// 敵情報
 	const char* const kfileName = "data/Model/enemy.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.25f;							// 拡大率
-	constexpr float kMaxHp = 1000.0f;						// 最大HP
-	constexpr float kMaxSpeed = 3.0f;						// 移動速度
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);		// 初期位置
 
 	// 当たり判定情報
@@ -37,7 +35,7 @@ EnemyTuto::EnemyTuto()
 
 	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
-	m_moveSpeed = kMaxSpeed;
+	m_moveSpeed = m_status.maxMoveSpeed;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 }
@@ -100,12 +98,12 @@ void EnemyTuto::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	// HPゲージを表示
-	m_pUIGauge->DrawEnemyHp(m_hp, kMaxHp);
+	m_pUIGauge->DrawEnemyHp(m_hp, m_status.maxHp);
 
 #ifdef _DEBUG
 	// 敵座標デバッグ表示
-	DrawFormatString(0, 60, 0xffffff, "敵座標(x:%f, y:%f, z:%f)", m_pos.x, m_pos.y, m_pos.z);
-	DrawFormatString(0, 80, 0xffffff, "hp:%f", m_hp);
+	DrawFormatString(0, 60, 0xffffff, "敵座標(%0.2f,%0.2f,%0.2f)", m_pos.x, m_pos.y, m_pos.z);
+	DrawFormatString(0, 80, 0xffffff, "hp:%0.2f", m_hp);
 
 	// 当たり判定描画
 	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);	// 全身

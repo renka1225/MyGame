@@ -52,5 +52,7 @@ protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	EnemyState m_currentState;	// エネミーの現在の状態
+
+	int m_stopFrame;			// 停止する時間
 };
 
