@@ -1,14 +1,26 @@
 #include "DxLib.h"
-#include "SceneTitle.h"
-#include "SceneStage1.h"
-#include "SceneDebug.h"
+#include "Player.h"
+#include "Camera.h"
+#include "Stage.h"
 #include "Input.h"
+#include "SceneTitle.h"
+#include "SceneSelectStage.h"
+#include "SceneOption.h"
+#include "SceneStage1.h"
+#include "SceneStage2.h"
+#include "SceneDebug.h"
+
+// 定数
+namespace
+{
+	constexpr int kTextColor = 0xffffff;		// 文字色
+	constexpr int kSelectTextColor = 0xff0000;	// 選択中の文字色
+}
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneDebug::SceneDebug():
-	m_select(Select::kTitle)
+SceneDebug::SceneDebug()
 {
 }
 
@@ -20,30 +32,35 @@ SceneDebug::SceneDebug():
 /// <returns></returns>
 std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 {
-	UpdateSelect(input);
+	// 選択状態更新
+	UpdateSelect(input, kSelectNum);
 
 	// 遷移
-	if (input.IsTriggered("debug_enter"))
+	if (input.IsTriggered("OK"))
 	{
-		if (m_select == Select::kTitle)
+		std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
+		std::shared_ptr<Camera> pCamera = std::make_shared<Camera>();
+		std::shared_ptr<Stage> pStage = std::make_shared<Stage>();
+
+		if (m_select == SelectScene::kTitle)
 		{
 			return std::make_shared<SceneTitle>();
 		}
-		else if (m_select == Select::kStageSelect)
+		else if (m_select == SelectScene::kStageSelect)
 		{
-			//return std::make_shared<SceneSelect>();
+			return std::make_shared<SceneSelectStage>();
 		}
-		else if (m_select == Select::kOption)
+		else if (m_select == SelectScene::kOption)
 		{
-			//return std::make_shared<SceneOption>();
+			return std::make_shared<SceneOption>();
 		}
-		else if (m_select == Select::kStage1)
+		else if (m_select == SelectScene::kStage1)
 		{
-			return std::make_shared<SceneStage1>();
+			return std::make_shared<SceneStage1>(pPlayer, pCamera, pStage);
 		}
-		else if (m_select == Select::kStage2)
+		else if (m_select == SelectScene::kStage2)
 		{
-			//return std::make_shared<SceneStage2>();
+			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);
 		}
 	}
 
@@ -55,26 +72,21 @@ std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 /// </summary>
 void SceneDebug::Draw()
 {
-	DrawString(0, 20, "タイトル", 0xffffff);
-	DrawString(0, 40, "ステージ選択", 0xffffff);
-	DrawString(0, 60, "オプション", 0xffffff);
-	DrawString(0, 80, "ステージ1", 0xffffff);
-	DrawString(0, 100, "ステージ2", 0xffffff);
-}
+	int titleColor = kTextColor;
+	int stageselectColor = kTextColor;
+	int optionColor = kTextColor;
+	int stage1Color = kTextColor;
+	int stage2Color = kTextColor;
 
+	if (m_select == SelectScene::kTitle)	titleColor = kSelectTextColor;
+	if (m_select == SelectScene::kStageSelect) stageselectColor = kSelectTextColor;
+	if (m_select == SelectScene::kOption) optionColor = kSelectTextColor;
+	if (m_select == SelectScene::kStage1) stage1Color = kSelectTextColor;
+	if (m_select == SelectScene::kStage2) stage2Color = kSelectTextColor;
 
-/// <summary>
-/// 選択状態更新
-/// </summary>
-/// <param name="input">入力状態</param>
-void SceneDebug::UpdateSelect(Input& input)
-{
-	if (input.IsTriggered("down"))
-	{
-		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
-	}
-	if (input.IsTriggered("up"))
-	{
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
-	}
+	DrawString(0, 20, "タイトル", titleColor);
+	DrawString(0, 40, "ステージ選択", stageselectColor);
+	DrawString(0, 60, "オプション", optionColor);
+	DrawString(0, 80, "ステージ1", stage1Color);
+	DrawString(0, 100, "ステージ2", stage2Color);
 }

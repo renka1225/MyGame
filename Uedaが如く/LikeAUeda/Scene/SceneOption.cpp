@@ -1,12 +1,12 @@
 #include "DxLib.h"
 #include "Input.h"
-#include "SceneSelectStage.h"
-#include "SceneTitle.h"
+#include "SceneOption.h"
+
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneTitle::SceneTitle()
+SceneOption::SceneOption()
 {
 }
 
@@ -14,7 +14,7 @@ SceneTitle::SceneTitle()
 /// <summary>
 /// デストラクタ
 /// </summary>
-SceneTitle::~SceneTitle()
+SceneOption::~SceneOption()
 {
 }
 
@@ -22,7 +22,7 @@ SceneTitle::~SceneTitle()
 /// <summary>
 /// 初期化
 /// </summary>
-void SceneTitle::Init()
+void SceneOption::Init()
 {
 }
 
@@ -30,16 +30,10 @@ void SceneTitle::Init()
 /// <summary>
 /// 更新
 /// </summary>
-/// <param name="input">入力状態</param>
+/// <param name="input"></param>
 /// <returns></returns>
-std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
+std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 {
-	// シーン遷移
-	if (input.IsTriggered("OK"))
-	{
-		return std::make_shared<SceneSelectStage>();
-	}
-
 	return shared_from_this();	// 自身のshared_ptrを返す
 }
 
@@ -47,10 +41,10 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// <summary>
 /// 描画
 /// </summary>
-void SceneTitle::Draw()
+void SceneOption::Draw()
 {
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
-	DrawString(0, 0, "タイトル画面", 0xffffff);
+	DrawString(0, 0, "オプション画面", 0xffffff);
 #endif
 }

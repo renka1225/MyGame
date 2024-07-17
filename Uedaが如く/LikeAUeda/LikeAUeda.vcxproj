@@ -145,6 +145,9 @@
     <ClCompile Include="LoadData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Chara\Player.cpp" />
+    <ClCompile Include="Scene\SceneOption.cpp" />
+    <ClCompile Include="Scene\SceneStage2.cpp" />
+    <ClCompile Include="Scene\SceneSelectStage.cpp" />
     <ClCompile Include="Scene\SceneDebug.cpp" />
     <ClCompile Include="Scene\SceneGameover.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
@@ -164,6 +167,9 @@
     <ClInclude Include="Chara\Enemy\EnemyTuto.h" />
     <ClInclude Include="LoadData.h" />
     <ClInclude Include="Chara\Player.h" />
+    <ClInclude Include="Scene\SceneOption.h" />
+    <ClInclude Include="Scene\SceneStage2.h" />
+    <ClInclude Include="Scene\SceneSelectStage.h" />
     <ClInclude Include="Scene\SceneDebug.h" />
     <ClInclude Include="Scene\SceneGameover.h" />
     <ClInclude Include="Scene\SceneClear.h" />

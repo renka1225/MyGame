@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe</FullPath>
+      <FullPath>C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Release\LikeAUeda.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>

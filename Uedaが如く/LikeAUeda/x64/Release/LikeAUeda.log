@@ -1,0 +1,36 @@
+﻿C:\GitHub\MyGame\Ueda���@��\LikeAUeda\Shader\PixelShader.hlsl(29,14-30): warning X3578: Output value 'main' is not completely initialized
+  
+  compilation object save succeeded; see C:\GitHub\MyGame\Uedaが如く\LikeAUeda\PixelShader.pso
+C:\GitHub\MyGame\Ueda���@��\LikeAUeda\Shader\VertexShader.hlsl(96,5-44): warning X3206: implicit truncation of vector type
+  
+  compilation object save succeeded; see C:\GitHub\MyGame\Uedaが如く\LikeAUeda\VertexShader.vso
+  CharacterBase.cpp
+  EnemyBase.cpp
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\Chara\Enemy\EnemyBase.cpp(21,13): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  EnemyTuto.cpp
+  LoadData.cpp
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\LoadData.cpp(81,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+C:\GitHub\MyGame\Uedaが如く\LikeAUeda\LoadData.cpp(134,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+  main.cpp
+C:\EffekseerForDXLib_170e_324b\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  Player.cpp
+  SceneStage2.cpp
+  SceneSelectStage.cpp
+  SceneDebug.cpp
+  SceneGameover.cpp
+  SceneClear.cpp
+  SceneTitle.cpp
+  SceneStage1.cpp
+  SceneBase.cpp
+  SceneManager.cpp
+  Shader.cpp
+  Stage.cpp
+  UIGauge.cpp
+  Camera.cpp
+  Input.cpp
+  コード生成しています。
+  Previous IPDB not found, fall back to full compilation.
+  All 1330 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+EffekseerForDXLib_vs2019_x64.lib(EffekseerForDXLib.obj) : warning LNK4099: PDB '' が 'EffekseerForDXLib_vs2019_x64.lib(EffekseerForDXLib.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+  LikeAUeda.vcxproj -> C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Release\LikeAUeda.exe

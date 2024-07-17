@@ -1,4 +1,8 @@
-﻿  SceneDebug.cpp
+﻿  SceneOption.cpp
+  SceneDebug.cpp
+  SceneGameover.cpp
+  SceneClear.cpp
+  SceneTitle.cpp
   SceneManager.cpp
   コードを生成中...
 EffekseerForDXLib_vs2019_x64_d.lib(EffekseerForDXLib.obj) : warning LNK4099: PDB '' が 'EffekseerForDXLib_vs2019_x64_d.lib(EffekseerForDXLib.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
@@ -81,4 +85,4 @@ EffekseerRendererDX11_vs2019_x64_d.lib(EffekseerMaterialCompilerDX11.obj) : warn
 Effekseer_vs2019_x64_d.lib(ModelLoader.obj) : warning LNK4099: PDB '' が 'Effekseer_vs2019_x64_d.lib(ModelLoader.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 Effekseer_vs2019_x64_d.lib(Effekseer.MaterialFile.obj) : warning LNK4099: PDB '' が 'Effekseer_vs2019_x64_d.lib(Effekseer.MaterialFile.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 Effekseer_vs2019_x64_d.lib(Effekseer.CompiledMaterial.obj) : warning LNK4099: PDB '' が 'Effekseer_vs2019_x64_d.lib(Effekseer.CompiledMaterial.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-  LikeAUeda.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe
+  LikeAUeda.vcxproj -> C:\GitHub\MyGame\Uedaが如く\LikeAUeda\x64\Debug\LikeAUeda.exe

@@ -14,11 +14,8 @@ public:
 	virtual void Draw();
 
 private:
-	void UpdateSelect(Input& input);	// 選択状態を更新
-
-private:
 	// シーンの種類
-	enum Select
+	enum SelectScene
 	{
 		kTitle,			// タイトル
 		kStageSelect,	// ステージ選択
@@ -27,7 +24,5 @@ private:
 		kStage2,		// ステージ2
 		kSelectNum		// シーンの数
 	};
-
-	int m_select;		// 現在の選択状態
 };
 

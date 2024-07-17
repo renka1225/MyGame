@@ -18,7 +18,7 @@ namespace
 EnemyBase::EnemyBase():
 	m_isMove(false),
 	m_isAttack(false),
-	m_stopFrame(0.0f),
+	m_stopFrame(0),
 	m_currentState(EnemyState::kFightIdle)
 {
 }
