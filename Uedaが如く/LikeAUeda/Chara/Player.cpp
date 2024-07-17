@@ -36,8 +36,6 @@ namespace
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
-	constexpr float kPlayAnimSpeed = 0.5f;	 // 通常のアニメーションの速度
-	constexpr float kAttackAnimSpeed = 0.8f; // 攻撃アニメーションの速度
 }
 
 
@@ -47,7 +45,6 @@ namespace
 Player::Player():
 	m_gauge(0.0f),
 	m_isMove(false),
-	m_isAttack(false),
 	m_targetMoveDir(kInitDir),
 	m_currentState(PlayerState::kFightIdle)
 {
@@ -530,11 +527,11 @@ void Player::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
 		if (m_isAttack)
 		{
-			m_currentAnimCount += kAttackAnimSpeed;
+			m_currentAnimCount += m_animSpeed.punch;
 		}
 		else
 		{
-			m_currentAnimCount += kPlayAnimSpeed;
+			m_currentAnimCount += m_animSpeed.fightIdle;
 		}
 
 		// アニメーションの再生時間をループ
@@ -566,11 +563,11 @@ void Player::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
 		if (m_isAttack)
 		{
-			m_prevAnimCount += kAttackAnimSpeed;
+			m_prevAnimCount += m_animSpeed.punch;
 		}
 		else
 		{
-			m_prevAnimCount += kPlayAnimSpeed;
+			m_prevAnimCount += m_animSpeed.fightIdle;
 		}
 
 		// アニメーションの再生時間をループ
@@ -587,34 +584,34 @@ void Player::UpdateAnim()
 }
 
 
-/// <summary>
-/// アニメーションを再生する
-/// </summary>
-/// <param name="playAnim">再生するアニメーション状態</param>
-void Player::PlayAnim(AnimKind playAnimIndex)
-{
-	// 1つ前のアニメーションがアタッチされている場合削除する
-	if (m_prevPlayAnim != -1)
-	{
-		MV1DetachAnim(m_modelHandle, m_prevPlayAnim);
-		m_prevPlayAnim = -1;
-	}
-
-	// 現在再生中のアニメーションを1つ前に移動する
-	m_prevPlayAnim = m_currentPlayAnim;
-	m_prevAnimCount = m_currentAnimCount;
-
-	// 新たにアニメーションをアタッチする
-	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(playAnimIndex), -1, false);
-	m_currentAnimCount = 0.0f;
-
-	// ブレンド率はPrevが有効でない場合、1.0にする
-	if (m_prevPlayAnim == -1)
-	{
-		m_animBlendRate = kAnimBlendMax;
-	}
-	else
-	{
-		m_animBlendRate = 0.0f;
-	}
-}
+///// <summary>
+///// アニメーションを再生する
+///// </summary>
+///// <param name="playAnim">再生するアニメーション状態</param>
+//void Player::PlayAnim(AnimKind playAnimIndex)
+//{
+//	// 1つ前のアニメーションがアタッチされている場合削除する
+//	if (m_prevPlayAnim != -1)
+//	{
+//		MV1DetachAnim(m_modelHandle, m_prevPlayAnim);
+//		m_prevPlayAnim = -1;
+//	}
+//
+//	// 現在再生中のアニメーションを1つ前に移動する
+//	m_prevPlayAnim = m_currentPlayAnim;
+//	m_prevAnimCount = m_currentAnimCount;
+//
+//	// 新たにアニメーションをアタッチする
+//	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(playAnimIndex), -1, false);
+//	m_currentAnimCount = 0.0f;
+//
+//	// ブレンド率はPrevが有効でない場合、1.0にする
+//	if (m_prevPlayAnim == -1)
+//	{
+//		m_animBlendRate = kAnimBlendMax;
+//	}
+//	else
+//	{
+//		m_animBlendRate = 0.0f;
+//	}
+//}

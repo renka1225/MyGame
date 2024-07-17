@@ -17,6 +17,10 @@ public:
 	// キャラクターのデータを読み込む
 	void LoadCharaData(CharacterBase& data, int charType);
 
+	// アニメーション速度のデータを読み込む
+	void LoadAnimSpeedData(CharacterBase& data, int charType);
+
 private:
-	std::vector<float> m_data;
+	std::vector<float> m_charData;		// キャラクターのステータス
+	std::vector<float> m_animSpeedData;	// アニメーション速度
 };

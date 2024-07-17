@@ -16,5 +16,9 @@ public:
 private:
 	// 当たり判定位置の更新
 	void UpdateCol();
+	// アニメーションステートの更新
+	void UpdateAnimState(EnemyState prevState);
+	// アニメーション処理
+	virtual void UpdateAnim() override;
 };
 

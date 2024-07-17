@@ -32,25 +32,6 @@ public:
 		kStumble,		// 掴み失敗
 	};
 
-	// アニメーション種別
-	enum class AnimKind
-	{
-		kNone = -1,		// なし
-		kAvoid = 0,		// 回避
-		kDown = 1,		// 倒れる
-		kFightIdle = 2, // 構え
-		kGettingUp = 3, // 起き上がる
-		kGrab = 4,		// 掴み
-		kGuard = 5,		// ガード
-		kKick = 6,		// キック
-		kPunch = 7,		// パンチ
-		kComboPunch = 8,// コンボパンチ
-		kReceive = 9,	// 攻撃を受ける
-		kRun = 10,		// 移動
-		kStand = 11,	// 待機
-		kStumble,		// 掴み失敗
-	};
-
 	Player();
 	~Player();
 
@@ -81,15 +62,12 @@ private:
 	// アニメーションステートの更新
 	void UpdateAnimState(PlayerState prevState);
 	// アニメーション処理
-	void UpdateAnim();
-	// アニメーションを再生する
-	void PlayAnim(AnimKind PlayAnimIndex);
+	virtual void UpdateAnim() override;
 
 private:
 	// プレイヤー情報
 	float m_gauge;				// ゲージ量
 	bool m_isMove;				// 移動したかどうか(true:移動した)
-	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 	PlayerState m_currentState;	// 現在の状態
 
