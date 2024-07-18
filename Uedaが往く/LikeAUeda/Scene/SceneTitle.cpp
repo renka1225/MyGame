@@ -2,6 +2,15 @@
 #include "Input.h"
 #include "SceneSelectStage.h"
 #include "SceneTitle.h"
+#include "Game.h"
+
+// 定数
+namespace
+{
+	constexpr int kTitleLogoPosX = 950;
+	constexpr int kTitleLogoPosY = 400;
+	constexpr float kTitleLogoScale = 0.5f;
+}
 
 /// <summary>
 /// コンストラクタ
@@ -51,7 +60,9 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
-	DrawRectRotaGraph(1000, 400, 0, 0, 1920, 1080, 0.5f, 0.0f, m_titleLogo, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xffffff, true);
+
+	DrawRectRotaGraph(kTitleLogoPosX, kTitleLogoPosY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, kTitleLogoScale, 0.0f, m_titleLogo, true);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
