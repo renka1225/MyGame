@@ -1,3 +1,3 @@
-﻿キャラクター名,最大HP,パンチ力,キック力,移動速度
-プレイヤー,100,0.3,0.5,5
-チュートリアル敵,1000,0.3,0.5,2
+﻿Char,MaxHP,PunchPower,KickPower,MoveSpeed
+Player,100,0.3,0.5,5
+EnemyTuto,1000,0.3,0.5,3

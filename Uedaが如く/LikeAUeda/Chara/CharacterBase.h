@@ -75,6 +75,22 @@ public:
 	};
 	Status m_status;
 
+	// 当たり判定情報
+	struct CollisionInfo
+	{
+		float bodyHeight;		// 全身の当たり判定の高さ
+		float bodyRadius;		// 全身の当たり判定の半径
+		float aimRadius;		// 腕の当たり判定の半径
+		float legRadius;		// 脚の当たり判定の半径
+		VECTOR armStartPos;		// 腕の当たり判定始点
+		VECTOR armEndPos;		// 腕の当たり判定終点
+		VECTOR legStartPos;		// 脚の当たり判定始点
+		VECTOR legEndPos;		// 脚の当たり判定終点
+		VECTOR bodyTopPos;		// 全身の当たり判定始点
+		VECTOR bodyBottomPos;	// 全身の当たり判定終点
+	};
+	CollisionInfo m_colInfo;
+
 protected:
 	// アニメーション処理
 	virtual void UpdateAnim() = 0;
@@ -99,18 +115,14 @@ protected:
 	float m_prevAnimCount;		// 前の再生アニメーションの再生時間
 	float m_animBlendRate;		// 現在と過去のアニメーションのブレンド率
 
-	// 当たり判定情報
-	struct CollisionInfo
+	struct Collision
 	{
-		// 全身の当たり判定
-		VECTOR hitTopPos;
-		VECTOR hitBottomPos;
-		// 腕部分の当たり判定
-		VECTOR armStartPos;
-		VECTOR armEndPos;
-		// 脚部分の当たり判定
-		VECTOR legStartPos;
-		VECTOR legEndPos;
+		VECTOR armStartPos;		// 腕の当たり判定始点
+		VECTOR armEndPos;		// 腕の当たり判定終点
+		VECTOR legStartPos;		// 脚の当たり判定始点
+		VECTOR legEndPos;		// 脚の当たり判定終点
+		VECTOR bodyTopPos;		// 全身の当たり判定始点
+		VECTOR bodyBottomPos;	// 全身の当たり判定終点
 	};
-	CollisionInfo m_col;
+	Collision m_col;
 };

@@ -7,7 +7,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	SetMainWindowText("Ueda‚ª”@‚­");
+	SetMainWindowText("Ueda‚ª‰‚­");
 
 	// windowƒ‚[ƒhİ’è
 	ChangeWindowMode(true);

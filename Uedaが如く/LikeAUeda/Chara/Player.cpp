@@ -23,16 +23,6 @@ namespace
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
 
-	// 当たり判定情報
-	constexpr float kHitHeight = 43.0f;						// 当たり判定カプセルの高さ
-	constexpr float kHitRadius = 8.0f;						// 当たり判定カプセルの半径
-	constexpr float kHitAimRadius = 4.0f;					// 腕の当たり判定カプセルの長さ
-	constexpr float kHitLegRadius = 5.0f;					// 足の当たり判定カプセルの長さ
-	const VECTOR kArmOffset = VGet(3.0f, 35.0f, 0.0f);		// 腕の当たり判定位置
-	const VECTOR kArmEndOffset = VGet(-10.0f, 0.0f, 20.0f);	// 腕の当たり判定終了位置
-	const VECTOR kLegOffset = VGet(3.0f, 30.0f, 10.0f);		// 脚の当たり判定位置
-	const VECTOR kLegEndOffset = VGet(3.0f, 5.0f, 28.0f);	// 脚の当たり判定終了位置
-
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
@@ -139,9 +129,9 @@ void Player::Draw()
 	DrawFormatString(0, 40, 0xffffff, "hp:%0.2f",m_hp);
 
 	// 当たり判定描画
-	DrawCapsule3D(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
-	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, 1, 0xff00ff, 0xffffff, false);	// 腕
-	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, kHitLegRadius, 1, 0xffff00, 0xffffff, false);	// 脚
+	DrawCapsule3D(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
+	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, 1, 0xff00ff, 0xffffff, false);		// 腕
+	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, 1, 0xffff00, 0xffffff, false);		// 脚
 #endif
 }
 
@@ -167,12 +157,11 @@ void Player::OnDamage(float damage)
 void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
 {
 	// プレイヤーと敵の当たり判定を行う
-	bool hit = HitCheck_Capsule_Capsule(m_col.hitTopPos, m_col.hitBottomPos, kHitRadius, eCapPosTop, eCapPosBottom, kHitRadius);
+	bool hit = HitCheck_Capsule_Capsule(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 	// パンチ
-	bool hitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, kHitAimRadius, eCapPosTop, eCapPosBottom, kHitRadius);
+	bool hitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 	// キック
-	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, kHitAimRadius, eCapPosTop, eCapPosBottom, kHitRadius);
-	// キック
+	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 
 	// パンチが当たった場合
 	if (hitPunch && m_currentState == PlayerState::kPunch)
@@ -224,16 +213,16 @@ void Player::UpdateCol()
 	MATRIX rotationMatrix = MGetRotY(m_angle);
 
 	// プレイヤー全体の当たり判定位置を更新
-	m_col.hitTopPos = VAdd(m_pos, (VTransform(VGet(0.0f, kHitHeight, 0.0f), rotationMatrix)));
-	m_col.hitBottomPos = m_pos;
+	m_col.bodyTopPos = VAdd(m_pos, (VTransform(VGet(0.0f, m_colInfo.bodyHeight, 0.0f), rotationMatrix)));
+	m_col.bodyBottomPos = m_pos;
 
 	// 腕の当たり判定位置を更新
-	m_col.armStartPos = VAdd(m_pos, (VTransform(kArmOffset, rotationMatrix)));
-	m_col.armEndPos = VAdd(m_col.armStartPos, (VTransform(kArmEndOffset, rotationMatrix)));
+	m_col.armStartPos = VAdd(m_pos, (VTransform(m_colInfo.armStartPos, rotationMatrix)));
+	m_col.armEndPos = VAdd(m_col.armStartPos, (VTransform(m_colInfo.armEndPos, rotationMatrix)));
 
 	// 脚の当たり判定位置を更新
-	m_col.legStartPos = VAdd(m_pos, (VTransform(kLegOffset, rotationMatrix)));
-	m_col.legEndPos = VAdd(m_col.legStartPos, (VTransform(kLegEndOffset, rotationMatrix)));
+	m_col.legStartPos = VAdd(m_pos, (VTransform(m_colInfo.legStartPos, rotationMatrix)));
+	m_col.legEndPos = VAdd(m_col.legStartPos, (VTransform(m_colInfo.legEndPos, rotationMatrix)));
 }
 
 

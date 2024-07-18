@@ -16,11 +16,13 @@ public:
 
 	// キャラクターのデータを読み込む
 	void LoadCharaData(CharacterBase& data, int charType);
-
 	// アニメーション速度のデータを読み込む
 	void LoadAnimSpeedData(CharacterBase& data, int charType);
+	// 当たり判定のデータを読み込む
+	void LoadColData(CharacterBase& data, int charType);
 
 private:
-	std::vector<float> m_charData;		// キャラクターのステータス
-	std::vector<float> m_animSpeedData;	// アニメーション速度
+	std::vector<float> m_charData;		// キャラクターのステータス情報
+	std::vector<float> m_animSpeedData;	// アニメーション速度情報
+	std::vector<float> m_colData;		// 当たり判定情報
 };

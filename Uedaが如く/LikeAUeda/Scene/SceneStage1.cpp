@@ -86,7 +86,6 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	{
 		return std::make_shared<SceneGameover>();
 	}
-
 #endif
 
 	return shared_from_this();	// ©g‚Ìshared_ptr‚ğ•Ô‚·
