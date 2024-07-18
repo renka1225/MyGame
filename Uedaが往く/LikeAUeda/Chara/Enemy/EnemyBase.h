@@ -43,16 +43,21 @@ protected:
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
 	// 移動パラメータを設定する
 	EnemyState UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	// 攻撃処理
+	EnemyState Attack();
 	// 敵の角度を更新
 	void UpdateAngle(Player& player);
 	// プレイヤーとの当たり判定をチェックする
-	void CheckCollision(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
+	void CheckHitPlayerColl(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
+	// アニメーションステートの更新
+	void UpdateAnimState(EnemyState prevState);
+	// アニメーション処理
+	virtual void UpdateAnim() override;
 
 protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
-	EnemyState m_currentState;	// エネミーの現在の状態
-
 	int m_stopFrame;			// 停止する時間
+	EnemyState m_currentState;	// エネミーの現在の状態
 };
 

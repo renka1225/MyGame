@@ -14,7 +14,7 @@ public:
 	~CharacterBase() {};
 	virtual void Init() = 0;
 	virtual void Draw() = 0;
-	virtual void OnDamage(float damage);	// ダメージを受けた際の処理
+	void OnDamage(float damage);		// ダメージを受けた際の処理
 
 	VECTOR GetPos() const { return m_pos; }	// 現在地取得
 	float GetHp() const { return m_hp; }	// 現在のHPを取得
@@ -92,11 +92,13 @@ public:
 	CollisionInfo m_colInfo;
 
 protected:
-	// アニメーション処理
-	virtual void UpdateAnim() = 0;
+	// 当たり判定位置の更新
+	void UpdateCol();
 	// アニメーションを再生する
 	void PlayAnim(AnimKind playAnimIndex);
-
+	// アニメーション処理
+	virtual void UpdateAnim() = 0;
+	
 protected:
 	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得
 	std::shared_ptr<UIGauge> m_pUIGauge;	// バトル中に表示するHPのゲージ

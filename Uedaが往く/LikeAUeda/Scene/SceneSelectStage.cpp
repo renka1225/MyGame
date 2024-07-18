@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Stage.h"
 #include "SceneStage1.h"
+#include "SceneStage2.h"
 #include "SceneSelectStage.h"
 
 
@@ -55,7 +56,7 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 		}
 		else if (m_select == SelectScene::kStage2)
 		{
-			return std::make_shared<SceneStage1>(pPlayer, pCamera, pStage);
+			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);
 		}
 	}
 

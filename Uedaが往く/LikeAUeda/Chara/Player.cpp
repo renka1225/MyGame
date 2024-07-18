@@ -13,6 +13,7 @@ namespace
 	// プレイヤー情報
 	const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
+	constexpr float kGaugeCharge = 0.3f;					// 1回の攻撃で増えるゲージ量
 	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
 	constexpr float kAvoidDist = 60.0f;						// 回避の距離
@@ -137,17 +138,6 @@ void Player::Draw()
 
 
 /// <summary>
-/// ダメージを受けたとき
-/// </summary>
-void Player::OnDamage(float damage)
-{
-	DrawString(0, 80, "プレイヤーがダメージ！", 0xfffffff);
-
-	m_hp = std::min(m_hp, m_status.maxHp);
-}
-
-
-/// <summary>
 /// 敵との当たり判定をチェックする
 /// </summary>
 /// <param name="enemy">敵の参照</param>
@@ -169,7 +159,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 		// パンチが当たった場合
 		enemy.OnDamage(m_status.punchPower);
 		// TODO:攻撃が当たったらゲージを増やす
-		m_gauge += 3.0f;
+		m_gauge += kGaugeCharge;
 
 	}
 	// キックが当たった場合
@@ -179,8 +169,9 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 		if (m_currentState == PlayerState::kKick)
 		{
 			enemy.OnDamage(m_status.kickPower);
-			m_gauge += 5.0f;
+			m_gauge += kGaugeCharge;
 		}
+	}
 	// 攻撃中でなく、敵に当たった場合
 	else if(hit)
 	{
@@ -191,7 +182,6 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 		const float kAdj = 1.0f;
 		m_pos = VAdd(m_pos, VScale(collisionNormal, kAdj));
 	}
-	}
 
 	// 掴みが決まらなかった場合
 	if(!hit && m_currentState == PlayerState::kGrab)
@@ -201,28 +191,6 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 
 	// ゲージ量の調整
 	m_gauge = std::min(m_gauge, m_status.maxHp);
-}
-
-
-/// <summary>
-/// プレイヤーの当たり判定の位置を更新する
-/// </summary>
-void Player::UpdateCol()
-{
-	// プレイヤーの向きをもとに当たり判定の位置を調整する
-	MATRIX rotationMatrix = MGetRotY(m_angle);
-
-	// プレイヤー全体の当たり判定位置を更新
-	m_col.bodyTopPos = VAdd(m_pos, (VTransform(VGet(0.0f, m_colInfo.bodyHeight, 0.0f), rotationMatrix)));
-	m_col.bodyBottomPos = m_pos;
-
-	// 腕の当たり判定位置を更新
-	m_col.armStartPos = VAdd(m_pos, (VTransform(m_colInfo.armStartPos, rotationMatrix)));
-	m_col.armEndPos = VAdd(m_col.armStartPos, (VTransform(m_colInfo.armEndPos, rotationMatrix)));
-
-	// 脚の当たり判定位置を更新
-	m_col.legStartPos = VAdd(m_pos, (VTransform(m_colInfo.legStartPos, rotationMatrix)));
-	m_col.legEndPos = VAdd(m_col.legStartPos, (VTransform(m_colInfo.legEndPos, rotationMatrix)));
 }
 
 

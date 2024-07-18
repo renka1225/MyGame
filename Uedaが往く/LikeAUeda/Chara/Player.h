@@ -39,16 +39,12 @@ public:
 	void Update(const Input& input, const Camera& camera, Stage& stage);
 	virtual void Draw() override;
 
-	// 攻撃を受けた際の処理
-	virtual void OnDamage(float damage) override;
-	// 当たり判定をチェックする
+	// エネミーとの当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
 	bool GetIsMove() const { return m_isMove; }		// 移動中かどうか取得
 
 private:
-	// 当たり判定の位置更新
-	void UpdateCol();
 	// 移動処理
 	void Move(const VECTOR& moveVec, Stage& stage);
 	// 回避処理
