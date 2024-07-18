@@ -12,5 +12,8 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
+
+private:
+	int m_titleLogo;	// ƒ^ƒCƒgƒ‹ƒƒS‚Ì‰æ‘œ
 };
 

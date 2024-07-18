@@ -8,6 +8,7 @@
 /// </summary>
 SceneTitle::SceneTitle()
 {
+	m_titleLogo = LoadGraph("data/UI/titleLogo.png");
 }
 
 
@@ -16,6 +17,7 @@ SceneTitle::SceneTitle()
 /// </summary>
 SceneTitle::~SceneTitle()
 {
+	DeleteGraph(m_titleLogo);
 }
 
 
@@ -49,6 +51,8 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	DrawRectRotaGraph(1000, 400, 0, 0, 1920, 1080, 0.5f, 0.0f, m_titleLogo, true);
+
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "タイトル画面", 0xffffff);
