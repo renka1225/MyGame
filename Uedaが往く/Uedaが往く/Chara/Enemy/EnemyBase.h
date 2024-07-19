@@ -35,6 +35,9 @@ public:
 	virtual void Update(Player& player, Stage& stage) = 0;
 	virtual void Draw() = 0;
 
+	// プレイヤーとの当たり判定をチェックする
+	void CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
+
 	float GetHp() const { return m_hp; }	// 敵のHPを取得
 	VECTOR GetPos() const { return m_pos; } // 敵の座標を取得
 
@@ -47,8 +50,6 @@ protected:
 	EnemyState Attack();
 	// 敵の角度を更新
 	void UpdateAngle(Player& player);
-	// プレイヤーとの当たり判定をチェックする
-	void CheckHitPlayerColl(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 	// アニメーションステートの更新
 	void UpdateAnimState(EnemyState prevState);
 	// アニメーション処理
@@ -57,7 +58,8 @@ protected:
 protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
-	int m_stopFrame;			// 停止する時間
+	int m_stopFrame;			// 停止するフレーム数
+	int m_angleFrame;			// 角度を更新するフレーム数
 	EnemyState m_currentState;	// エネミーの現在の状態
 };
 

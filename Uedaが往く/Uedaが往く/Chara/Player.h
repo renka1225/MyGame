@@ -36,7 +36,7 @@ public:
 	~Player();
 
 	virtual void Init() override;
-	void Update(const Input& input, const Camera& camera, Stage& stage);
+	void Update(const Input& input, const Camera& camera, EnemyBase& enemy, Stage& stage);
 	virtual void Draw() override;
 
 	// エネミーとの当たり判定をチェックする

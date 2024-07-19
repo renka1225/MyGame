@@ -6,9 +6,14 @@
 // 定数
 namespace
 {
-	constexpr float kApproachRange = 70.0f;	// プレイヤーに近づく範囲
-	constexpr int kStopMinTime = 30;		// 最小の停止時間
-	constexpr int kStopMaxTime = 150;		// 最大の停止時間
+	constexpr float kApproachRange = 70.0f;	 // プレイヤーに近づく範囲
+	constexpr float kAttackRange = 100.0f;	 // プレイヤーを攻撃する範囲
+	constexpr int kStopMinTime = 30;		 // 最小の停止時間
+	constexpr int kStopMaxTime = 150;		 // 最大の停止時間
+
+	constexpr int kMaxProb = 100;			 // 最大確率%
+	constexpr int kChangeAngleProb = 30;	 // 角度を更新する確率%
+	constexpr int kChangeAngleFrame = 30;	 // 角度を更新するフレーム数
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -23,6 +28,7 @@ EnemyBase::EnemyBase():
 	m_isMove(false),
 	m_isAttack(false),
 	m_stopFrame(0),
+	m_angleFrame(0),
 	m_currentState(EnemyState::kFightIdle)
 {
 }
@@ -52,7 +58,7 @@ void EnemyBase::Move(const VECTOR& moveVec, Player& player, Stage& stage)
 		m_isMove = false;
 	}
 
-	// 当たり判定を行って座標を保存する
+	// ステージと当たり判定を行って座標を保存する
 	m_pos = stage.CheckEnemyCol(*this, moveVec);
 
 	// プレイヤーの座標を更新する
@@ -102,11 +108,18 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 				m_stopFrame--;
 			}
 		}
+		// プレイヤーが攻撃範囲に入った場合
+		else if(distance <= kAttackRange)
+		{
+			nextState = EnemyState::kKick;	// 攻撃状態にする
+		}
 		else
 		{
 			m_stopFrame = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
 			nextState = EnemyState::kFightIdle;	// 待機状態にする
 		}
+
+		DrawFormatString(0, 160, 0xffffff, "%f", distance);
 	}
 
 	return nextState;
@@ -123,19 +136,19 @@ EnemyBase::EnemyState EnemyBase::Attack()
 	EnemyState nextState = m_currentState;
 
 	// TODO:ランダムで攻撃を行う
-	if (!m_isAttack)
+	if (!m_isAttack && m_currentState != EnemyState::kRun)
 	{
-		int randNum = GetRand(10);
-
+		int randNum = GetRand(kMaxProb);
+		
 		// パンチ攻撃
-		if (randNum <= 5)
+		if (randNum <= 30)
 		{
 			m_isAttack = true;
 			nextState = EnemyState::kPunch;
 			PlayAnim(AnimKind::kPunch);
 		}
 		// キック攻撃
-		else
+		else if(randNum <= 60)
 		{
 			m_isAttack = true;
 			nextState = EnemyState::kKick;
@@ -152,9 +165,24 @@ EnemyBase::EnemyState EnemyBase::Attack()
 /// </summary>
 void EnemyBase::UpdateAngle(Player& player)
 {
-	// 敵の位置からプレイヤーの位置のベクトルを求める
+	m_angleFrame++;
+
+	// 敵の位置からプレイヤー位置までのベクトルを求める
 	VECTOR dir = VSub(player.GetPos(), m_pos);
-	m_angle = atan2f(dir.x, dir.z);
+
+	// 一定時間たったらエネミーの角度を更新する
+	if (m_angleFrame >= kChangeAngleFrame)
+	{
+		// ランダムでプレイヤーの方向を向く
+		int randNum = GetRand(kMaxProb);
+		if (randNum <= kChangeAngleProb)
+		{
+			m_angle = atan2f(dir.x, dir.z);
+		}
+
+		m_angleFrame = 0;
+	}
+
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
 }
 
@@ -166,7 +194,7 @@ void EnemyBase::UpdateAngle(Player& player)
 /// <param name="eCapPosTop">当たり判定カプセルの頂点位置</param>
 /// <param name="eCapPosBottom">当たり判定カプセルの頂点位置</param>
 /// <param name="eCapRadius">当たり判定カプセルの半径</param>
-void EnemyBase::CheckHitPlayerColl(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
+void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
 {
 	// プレイヤーと敵の当たり判定を行う
 	bool hit = HitCheck_Capsule_Capsule(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, eCapPosTop, eCapPosBottom, eCapRadius);

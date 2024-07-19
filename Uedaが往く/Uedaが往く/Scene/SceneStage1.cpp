@@ -59,7 +59,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 		m_pCamera->Update(input, *m_pPlayer);
 		m_pEnemy->Update(*m_pPlayer, *m_pStage);
 

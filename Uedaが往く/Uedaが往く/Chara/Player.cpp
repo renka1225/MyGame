@@ -80,7 +80,7 @@ void Player::Init()
 /// </summary>
 /// <param name="input">入力コマンド</param>
 /// <param name="stage">ステージ情報参照</param>
-void Player::Update(const Input& input, const Camera& camera, Stage& stage)
+void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, Stage& stage)
 {
 	// パッド入力によって移動パラメータを設定する
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
@@ -96,6 +96,9 @@ void Player::Update(const Input& input, const Camera& camera, Stage& stage)
 	m_currentState = Avoidance(input, moveVec);
 	// 移動処理
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
+
+	// エネミーとの当たり判定をチェックする
+	enemy.CheckHitPlayerCol(*this, VGet(m_pos.x, m_pos.y + m_colInfo.bodyHeight, m_pos.z), m_pos, m_colInfo.bodyRadius);
 
 	// アニメーション状態を更新
 	UpdateAnimState(prevState);

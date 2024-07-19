@@ -7,7 +7,7 @@
 // 定数
 namespace
 {
-	const char* const kCharStatusFileName = "data/csv/charStatus.csv";	// キャラクターデータのファイル名
+	const char* const kCharStatusFileName = "data/csv/charaStatus.csv";	// キャラクターデータのファイル名
 	const char* const kAnimSpeedFileName = "data/csv/animSpeed.csv";	// アニメーション速度データのファイル名
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
 

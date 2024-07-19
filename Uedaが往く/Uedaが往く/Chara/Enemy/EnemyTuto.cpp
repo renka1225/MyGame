@@ -62,8 +62,9 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	// エネミーの状態を更新
 	EnemyState prevState = m_currentState;
 
-	// 移動処理
+	// 攻撃処理
 	m_currentState = Attack();
+	// 移動処理
 	m_currentState = UpdateMoveParameter(player, upMoveVec, leftMoveVec, moveVec);
 
 	// プレイヤーとの当たり判定をチェックする
