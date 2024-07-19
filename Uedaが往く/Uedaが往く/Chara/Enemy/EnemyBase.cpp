@@ -179,7 +179,6 @@ void EnemyBase::UpdateAngle(Player& player)
 		{
 			m_angle = atan2f(dir.x, dir.z);
 		}
-
 		m_angleFrame = 0;
 	}
 

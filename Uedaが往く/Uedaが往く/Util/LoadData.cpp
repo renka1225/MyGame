@@ -79,7 +79,7 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 		{
 			try
 			{
-				// 文字列をfloatに変換してm_dataに追加する
+				// 文字列をfloatに変換して追加する
 				m_charData.push_back(std::stof(field));
 			}
 			catch (const std::invalid_argument& e)
@@ -89,7 +89,7 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 		}
 	}
 
-	// 値を代入する
+	// 外部ファイルの情報を入れる
 	data.m_status.maxHp = m_charData[0 + charType * kStatusNum];
 	data.m_status.punchPower = m_charData[1 + charType * kStatusNum];
 	data.m_status.kickPower = m_charData[2 + charType * kStatusNum];
@@ -131,7 +131,7 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 		}
 	}
 
-	// 値を代入する
+	// 外部ファイルの情報を入れる
 	data.m_animSpeed.none = m_animSpeedData[0 + charType * kAnimNum];
 	data.m_animSpeed.avoid = m_animSpeedData[1 + charType * kAnimNum];
 	data.m_animSpeed.down = m_animSpeedData[2 + charType * kAnimNum];
@@ -183,7 +183,7 @@ void LoadData::LoadColData(CharacterBase& data, int charType)
 		}
 	}
 
-	// 値を代入する
+	// 外部ファイルの情報を入れる
 	data.m_colInfo.bodyHeight = m_colData[0 + charType * kColNum];
 	data.m_colInfo.bodyRadius = m_colData[1 + charType * kColNum];
 	data.m_colInfo.aimRadius = m_colData[2 + charType * kColNum];

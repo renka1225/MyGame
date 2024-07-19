@@ -23,7 +23,8 @@
     <ClCompile Include="Chara\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyTuto.cpp" />
     <ClCompile Include="Chara\Player.cpp" />
-    <ClCompile Include="LoadData.cpp" />
+    <ClCompile Include="Shader\ToonShader.cpp" />
+    <ClCompile Include="Util\LoadData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
@@ -45,7 +46,8 @@
     <ClInclude Include="Chara\Enemy\EnemyBase.h" />
     <ClInclude Include="Chara\Enemy\EnemyTuto.h" />
     <ClInclude Include="Chara\Player.h" />
-    <ClInclude Include="LoadData.h" />
+    <ClInclude Include="Shader\ToonShader.h" />
+    <ClInclude Include="Util\LoadData.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneClear.h" />
     <ClInclude Include="Scene\SceneDebug.h" />
@@ -120,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Shader</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -137,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Shader</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -154,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Shader</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -171,7 +173,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Shader</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

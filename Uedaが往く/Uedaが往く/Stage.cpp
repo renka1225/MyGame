@@ -30,6 +30,7 @@ Stage::Stage():
     m_floorNum(0)
 {
 	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
+	//m_stageHandle = MV1LoadModel("data/Model/city.mv1");
 
     MV1SetScale(m_stageHandle, kStageScale);
 

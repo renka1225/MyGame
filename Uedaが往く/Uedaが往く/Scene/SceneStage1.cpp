@@ -20,6 +20,7 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pEnemy = std::make_shared<EnemyTuto>();
 }
 
+
 /// <summary>
 /// デストラクタ
 /// </summary>

@@ -193,7 +193,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	}
 
 	// ГQБ[ГWЧ╩В╠Т▓Ро
-	m_gauge = std::min(m_gauge, m_status.maxHp);
+	m_gauge = std::min(m_gauge, kMaxGauge);
 }
 
 
