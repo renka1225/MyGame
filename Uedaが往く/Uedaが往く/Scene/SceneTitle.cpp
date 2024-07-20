@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Vec2.h"
 #include "Input.h"
 #include "SceneSelectStage.h"
 #include "SceneTitle.h"
@@ -7,8 +8,7 @@
 // 定数
 namespace
 {
-	constexpr int kTitleLogoPosX = 950;
-	constexpr int kTitleLogoPosY = 400;
+	const Vec2 kTitleLogoPos = { 950, 400 };
 	constexpr float kTitleLogoScale = 0.5f;
 }
 
@@ -61,8 +61,8 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 void SceneTitle::Draw()
 {
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xffffff, true);
-
-	DrawRectRotaGraph(kTitleLogoPosX, kTitleLogoPosY, 0, 0, Game::kScreenWidth, Game::kScreenHeight, kTitleLogoScale, 0.0f, m_titleLogo, true);
+	// タイトルロゴ表示
+	DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, kTitleLogoScale, 0.0f, m_titleLogo, true);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

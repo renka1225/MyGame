@@ -5,7 +5,11 @@
       <FullPath>C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\GitHub\MyGame\Uedaが往く\Uedaが往く\VertexShader3D.vso</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>

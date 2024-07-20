@@ -13,4 +13,3 @@ public:
 private:
 	int m_graphHandle;	// ‰æ‘œƒnƒ“ƒhƒ‹
 };
-

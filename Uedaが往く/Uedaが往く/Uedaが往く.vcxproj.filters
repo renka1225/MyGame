@@ -34,9 +34,6 @@
     <Filter Include="ソース ファイル\UI">
       <UniqueIdentifier>{a98ad60b-bbc3-46b2-9e2c-c2811b57da2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\UI">
-      <UniqueIdentifier>{66b395e9-3c76-462e-bede-68986c393feb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Util">
       <UniqueIdentifier>{c307b53e-f06b-40ba-8023-dc2bdb969442}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Shader">
       <UniqueIdentifier>{260f52bb-42ec-4bff-b9b2-92039fe27827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Util\UI">
+      <UniqueIdentifier>{66b395e9-3c76-462e-bede-68986c393feb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +114,9 @@
     <ClCompile Include="Shader\ToonShader.cpp">
       <Filter>ソース ファイル\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Util\Vec2.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chara\CharacterBase.h">
@@ -159,7 +162,7 @@
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UI\UIGauge.h">
-      <Filter>ヘッダー ファイル\UI</Filter>
+      <Filter>ヘッダー ファイル\Util\UI</Filter>
     </ClInclude>
     <ClInclude Include="Util\Game.h">
       <Filter>ヘッダー ファイル\Util</Filter>
@@ -179,5 +182,11 @@
     <ClInclude Include="Shader\ToonShader.h">
       <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Util\Vec2.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader3D.hlsl" />
   </ItemGroup>
 </Project>

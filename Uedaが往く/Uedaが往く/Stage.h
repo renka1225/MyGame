@@ -41,5 +41,8 @@ private:
 	static const int MaxHitColl = 2048;			// 処理するコリジョンポリゴンの最大数
 	MV1_COLL_RESULT_POLY* m_wall[MaxHitColl];	// 壁ポリゴンの構造体のアドレスを保存しておくためのポインタ配列
 	MV1_COLL_RESULT_POLY* m_floor[MaxHitColl];	// 床ポリゴンの構造体のアドレスを保存しておくためのポインタ配列
+
+	// シェーダー情報
+	int m_vertexShader;
 };
 
