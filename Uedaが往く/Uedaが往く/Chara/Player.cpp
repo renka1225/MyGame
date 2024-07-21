@@ -16,7 +16,12 @@ namespace
 	constexpr float kGaugeCharge = 0.3f;					// 1回の攻撃で増えるゲージ量
 	constexpr float kAcceleration = 0.2f;					// プレイヤーの加速度
 	constexpr float kDeceleration = 0.2f;					// プレイヤーの減速度
-	constexpr float kAvoidDist = 60.0f;						// 回避の距離
+	constexpr int kMaxPunchCount = 3;						// 最大コンボ数
+	constexpr int kPunchComboTime = 40;						// パンチコンボの入力受付時間
+	constexpr int kPunchCoolTime = 20;						// パンチできるようになるまでの時間
+	constexpr float kAvoidDist = 30.0f;						// 回避の距離
+	constexpr int kMaxAvoidCount = 3;						// 連続で回避できる回数
+	constexpr int kAvoidCoolTime = 30;						// 回避できるようになるまでの時間
 	constexpr float kAngleSpeed = 0.2f;						// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;						// ジャンプの高さ
 	constexpr float kGravity = -0.25f;						// 重力
@@ -35,6 +40,11 @@ namespace
 /// </summary>
 Player::Player():
 	m_gauge(0.0f),
+	m_punchCount(0),
+	m_punchComboTime(0),
+	m_punchCoolTime(0),
+	m_avoidCount(0),
+	m_avoidCoolTime(0),
 	m_isMove(false),
 	m_targetMoveDir(kInitDir),
 	m_currentState(PlayerState::kFightIdle)
@@ -91,7 +101,8 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	PlayerState prevState = m_currentState;
 
 	// 攻撃処理
-	m_currentState = Attack(input);
+	m_currentState = Punch(input);
+	m_currentState = Kick(input);
 	// 回避処理
 	m_currentState = Avoidance(input, moveVec);
 	// 移動処理
@@ -131,6 +142,7 @@ void Player::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%0.2f,%0.2f,%0.2f)", m_pos.x, m_pos.y, m_pos.z);
 	DrawFormatString(0, 40, 0xffffff, "hp:%0.2f",m_hp);
+	DrawFormatString(0, 180, 0xffffff, "パンチ回数:%d",m_punchCount);
 
 	// 当たり判定描画
 	DrawCapsule3D(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
@@ -222,30 +234,76 @@ void Player::Move(const VECTOR& moveVec, Stage& stage)
 
 
 /// <summary>
-/// 攻撃処理
+/// パンチ処理
 /// </summary>
 /// <param name="input">入力処理</param>
 /// <returns>現在の状態</returns>
-Player::PlayerState Player::Attack(const Input& input)
+Player::PlayerState Player::Punch(const Input& input)
 {
 	PlayerState nextState = m_currentState;
 
-	if (!m_isAttack)
+	// 攻撃中はスキップ
+	if (m_isAttack) return nextState;
+
+	// パンチできない場合
+	if (m_punchCoolTime > 0)
 	{
-		// パンチ攻撃
-		if (input.IsTriggered("punch"))
+		m_punchCoolTime--;
+		return nextState;
+	}
+
+	// コンボ入力の受付時間の更新
+	m_punchComboTime--;
+
+	if (input.IsTriggered("punch"))
+	{
+		// コンボ入力受付時間内にボタンが押された場合
+		if (m_punchComboTime > 0)
 		{
+			m_punchCount++;
+		}
+		else
+		{
+			m_punchCount = 0;
+		}
+
+		// コンボ数が最大になった場合
+		if (m_punchCount > kMaxPunchCount)
+		{
+			m_punchCount = 0;
+			m_punchCoolTime = kPunchCoolTime;	// クールダウンタイムを設定
+		}
+		else
+		{
+			m_punchComboTime = kPunchComboTime; // コンボ入力の受付時間をリセット
 			m_isAttack = true;
 			nextState = PlayerState::kPunch;
 			PlayAnim(AnimKind::kPunch);
 		}
-		// キック攻撃
-		else if (input.IsTriggered("kick"))
-		{
-			m_isAttack = true;
-			nextState = PlayerState::kKick;
-			PlayAnim(AnimKind::kKick);
-		}
+	}
+
+	return nextState;
+}
+
+
+/// <summary>
+/// キック処理
+/// </summary>
+/// <param name="input">入力処理</param>
+/// <returns>現在の状態</returns>
+Player::PlayerState Player::Kick(const Input& input)
+{
+	PlayerState nextState = m_currentState;
+
+	// 攻撃中はスキップ
+	if (m_isAttack) return nextState;
+
+	// キック攻撃
+	else if (input.IsTriggered("kick"))
+	{
+		m_isAttack = true;
+		nextState = PlayerState::kKick;
+		PlayAnim(AnimKind::kKick);
 	}
 
 	return nextState;
@@ -259,19 +317,31 @@ Player::PlayerState Player::Attack(const Input& input)
 /// <returns>現在の状態</returns>
 Player::PlayerState Player::Avoidance(const Input& input, VECTOR& moveVec)
 {
-	// 攻撃中の場合は何もしない
-	if (m_currentState == PlayerState::kPunch || m_currentState == PlayerState::kKick) return m_currentState;
-
 	PlayerState nextState = m_currentState;
 
-	if (input.IsTriggered("avoidance") && !m_isAttack)
+	// 回避できない場合
+	if (m_avoidCoolTime > 0)
 	{
-		m_isAttack = true;
-		nextState = PlayerState::kAvoid;
+		m_avoidCoolTime--;
+		return nextState;
+	}
 
-		// 移動ベクトルを設定する
-		VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
-		m_pos = VAdd(m_pos, VScale(backMoveVec, kAvoidDist));
+	if (input.IsTriggered("avoidance"))
+	{
+		m_avoidCount++;
+		// 回避数が最大になった場合
+		if (m_avoidCount > kMaxAvoidCount)
+		{
+			m_avoidCount = 0;
+			m_avoidCoolTime = kAvoidCoolTime;	// クールダウンタイムを設定
+		}
+		else
+		{
+			nextState = PlayerState::kAvoid;
+			// 移動ベクトルを設定する
+			VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
+			m_pos = VAdd(m_pos, VScale(backMoveVec, kAvoidDist));
+		}
 	}
 
 	return nextState;
@@ -474,10 +544,7 @@ void Player::UpdateAnim()
 	if (m_animBlendRate < kAnimBlendMax)
 	{
 		m_animBlendRate += kAnimBlendSpeed;
-		if (m_animBlendRate >= kAnimBlendMax)
-		{
-			m_animBlendRate = kAnimBlendMax;
-		}
+		m_animBlendRate = std::min(m_animBlendRate, kAnimBlendMax);
 	}
 
 	// 現在再生中のアニメーションの処理
@@ -485,16 +552,34 @@ void Player::UpdateAnim()
 	{
 		// アニメーションの総時間を取得する
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
-		if (m_isAttack)
+
+		// アニメーションによって再生スピードを変える
+		if (m_currentState == PlayerState::kPunch)
 		{
 			m_currentAnimCount += m_animSpeed.punch;
+		}
+		else if (m_currentState == PlayerState::kKick)
+		{
+			m_currentAnimCount += m_animSpeed.kick;
+		}
+		else if(m_currentState == PlayerState::kAvoid)
+		{
+			m_currentAnimCount += m_animSpeed.avoid;
 		}
 		else
 		{
 			m_currentAnimCount += m_animSpeed.fightIdle;
 		}
 
-		// アニメーションの再生時間をループ
+		
+		// パンチコンボの場合
+		if (m_currentAnimCount >= kPunchComboTime && m_punchCount > 0 && m_currentState == PlayerState::kPunch)
+		{
+			// パンチコンボの場合
+			m_currentAnimCount = 0.0f;
+			m_punchCount--;
+			PlayAnim(AnimKind::kPunch);
+		}
 		if (m_currentAnimCount > animTotalTime)
 		{
 			// 攻撃アニメーションが終了したら待機状態に移行
@@ -504,16 +589,23 @@ void Player::UpdateAnim()
 				m_currentState = PlayerState::kFightIdle;
 				PlayAnim(AnimKind::kFightIdle);
 			}
-
-			m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
+			// 回避アニメーションが終わったら待機状態に移行
+			else if (m_currentState == PlayerState::kAvoid)
+			{
+				m_currentState = PlayerState::kFightIdle;
+				PlayAnim(AnimKind::kFightIdle);
+			}
+			else
+			{
+				// アニメーションの再生時間をループ
+				m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
+			}
 		}
 
 		// 再生時間を更新
 		MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
 		// アニメーションのブレンド率を設定する
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
-
-		
 	}
 
 	// 1つ前に再生していたアニメーションの処理
@@ -542,36 +634,3 @@ void Player::UpdateAnim()
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
 	}
 }
-
-
-///// <summary>
-///// アニメーションを再生する
-///// </summary>
-///// <param name="playAnim">再生するアニメーション状態</param>
-//void Player::PlayAnim(AnimKind playAnimIndex)
-//{
-//	// 1つ前のアニメーションがアタッチされている場合削除する
-//	if (m_prevPlayAnim != -1)
-//	{
-//		MV1DetachAnim(m_modelHandle, m_prevPlayAnim);
-//		m_prevPlayAnim = -1;
-//	}
-//
-//	// 現在再生中のアニメーションを1つ前に移動する
-//	m_prevPlayAnim = m_currentPlayAnim;
-//	m_prevAnimCount = m_currentAnimCount;
-//
-//	// 新たにアニメーションをアタッチする
-//	m_currentPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(playAnimIndex), -1, false);
-//	m_currentAnimCount = 0.0f;
-//
-//	// ブレンド率はPrevが有効でない場合、1.0にする
-//	if (m_prevPlayAnim == -1)
-//	{
-//		m_animBlendRate = kAnimBlendMax;
-//	}
-//	else
-//	{
-//		m_animBlendRate = 0.0f;
-//	}
-//}

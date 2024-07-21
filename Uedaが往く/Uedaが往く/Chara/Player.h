@@ -47,12 +47,14 @@ public:
 private:
 	// 移動処理
 	void Move(const VECTOR& moveVec, Stage& stage);
+	// パンチ処理
+	PlayerState Punch(const Input& input);
+	// キック処理
+	PlayerState Kick(const Input& input);
 	// 回避処理
 	PlayerState Avoidance(const Input& input, VECTOR& moveVec);
 	// 移動パラメータを設定する
 	PlayerState UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
-	// 攻撃処理
-	PlayerState Attack(const Input& input);
 	// プレイヤーの回転を制御する
 	void UpdateAngle();
 	// アニメーションステートの更新
@@ -63,8 +65,12 @@ private:
 private:
 	// プレイヤー情報
 	float m_gauge;				// ゲージ量
+	int m_punchCount;			// 現在のパンチのコンボ数
+	int m_punchComboTime;		// コンボ入力受付時間
+	int m_punchCoolTime;		// パンチできない時間
+	int m_avoidCount;			// 回避した回数
+	int m_avoidCoolTime;		// 回避できない時間
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 	PlayerState m_currentState;	// 現在の状態
-
 };
