@@ -136,16 +136,17 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 	data.m_animSpeed.avoid = m_animSpeedData[1 + charType * kAnimNum];
 	data.m_animSpeed.down = m_animSpeedData[2 + charType * kAnimNum];
 	data.m_animSpeed.fightIdle = m_animSpeedData[3 + charType * kAnimNum];
-	data.m_animSpeed.gettingUp = m_animSpeedData[4 + charType * kAnimNum];
-	data.m_animSpeed.grab = m_animSpeedData[5 + charType * kAnimNum];
-	data.m_animSpeed.guard = m_animSpeedData[6 + charType * kAnimNum];
-	data.m_animSpeed.kick = m_animSpeedData[7 + charType * kAnimNum];
-	data.m_animSpeed.punch = m_animSpeedData[8 + charType * kAnimNum];
-	data.m_animSpeed.comboPunch = m_animSpeedData[9 + charType * kAnimNum];
-	data.m_animSpeed.receive = m_animSpeedData[10 + charType * kAnimNum];
-	data.m_animSpeed.run = m_animSpeedData[11 + charType * kAnimNum];
-	data.m_animSpeed.stand = m_animSpeedData[12 + charType * kAnimNum];
-	data.m_animSpeed.Stumble = m_animSpeedData[13 + charType * kAnimNum];
+	data.m_animSpeed.fightWalk = m_animSpeedData[4 + charType * kAnimNum];
+	data.m_animSpeed.gettingUp = m_animSpeedData[5 + charType * kAnimNum];
+	data.m_animSpeed.grab = m_animSpeedData[6 + charType * kAnimNum];
+	data.m_animSpeed.guard = m_animSpeedData[7 + charType * kAnimNum];
+	data.m_animSpeed.kick = m_animSpeedData[8 + charType * kAnimNum];
+	data.m_animSpeed.punch = m_animSpeedData[9 + charType * kAnimNum];
+	data.m_animSpeed.comboPunch = m_animSpeedData[10 + charType * kAnimNum];
+	data.m_animSpeed.receive = m_animSpeedData[11 + charType * kAnimNum];
+	data.m_animSpeed.run = m_animSpeedData[12 + charType * kAnimNum];
+	data.m_animSpeed.stand = m_animSpeedData[13 + charType * kAnimNum];
+	data.m_animSpeed.Stumble = m_animSpeedData[14 + charType * kAnimNum];
 }
 
 

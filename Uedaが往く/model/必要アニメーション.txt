@@ -2,7 +2,7 @@
 
 ・待機	Stand	　	  〇
 ・構え	FightIdle	  〇
-・構えながら移動
+・構えながら移動	　〇(Boxingで調べたほうが出てくる)
 ・走り	Running		  〇
 ・パンチ(単発) Punch  　  〇
 ・パンチ(連続) PunchCombo 〇
