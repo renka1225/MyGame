@@ -43,7 +43,8 @@ public:
 	// エネミーとの当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
-	bool GetIsMove() const { return m_isMove; }		// 移動中かどうか取得
+	bool GetIsMove() const { return m_isMove; }			// 移動中かどうか取得
+	VECTOR GetDir() const { return m_targetMoveDir; }	// プレイヤーの向きベクトルを取得
 
 private:
 	// 移動処理
@@ -56,6 +57,8 @@ private:
 	PlayerState Avoidance(const Input& input, VECTOR& moveVec);
 	// 構え処理
 	PlayerState Fighting(const Input& input);
+	// ガード処理
+	PlayerState Guard(const Input& input);
 	// 移動パラメータを設定する
 	PlayerState UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの回転を制御する

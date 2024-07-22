@@ -16,8 +16,9 @@ public:
 	virtual void Draw() = 0;
 	void OnDamage(float damage);		// ダメージを受けた際の処理
 
-	VECTOR GetPos() const { return m_pos; }	// 現在地取得
-	float GetHp() const { return m_hp; }	// 現在のHPを取得
+	VECTOR GetPos() const { return m_pos; }			// 現在地取得
+	float GetHp() const { return m_hp; }			// 現在のHPを取得
+	bool GetIsGuard() const { return m_isGuard; }	// ガード中かどうか取得
 
 	// キャラクターの種類
 	enum class CharaType
@@ -110,6 +111,7 @@ protected:
 	float m_moveSpeed;	// 移動速度
 	float m_angle;		// 向いている方向の角度
 	bool m_isAttack;	// 攻撃中かどうか(true:攻撃中)
+	bool m_isGuard;		// ガード中かどうか(ture:ガード中)
 	int m_modelHandle;	// キャラクターの3Dモデル
 
 	// アニメーション情報

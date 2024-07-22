@@ -202,19 +202,36 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	// キック
 	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 
+	// プレイヤーとエネミーの位置ベクトルを求める
+	VECTOR pToEVec = VSub(m_pos, player.GetPos());
+	pToEVec = VNorm(pToEVec);
+	// 背後から攻撃したか
+	bool isBackAttack = VDot(player.GetDir(), pToEVec) < 0.0f;
+
 	// パンチが当たった場合
 	if (hitPunch && m_currentState == EnemyState::kPunch)
 	{
-		// パンチが当たった場合
-		player.OnDamage(m_status.punchPower);
+		// プレイヤーがガードしていないか、背後から攻撃した場合
+		if (isBackAttack || !player.GetIsGuard())
+		{
+			player.OnDamage(m_status.punchPower);
+		}
+		else
+		{
+			player.OnDamage(0.0f);
+		}
 	}
 	// キックが当たった場合
 	else if (hitKick && m_currentState == EnemyState::kKick)
 	{
 		// キックが当たった場合
-		if (m_currentState == EnemyState::kKick)
+		if (player.GetIsGuard())
 		{
 			player.OnDamage(m_status.kickPower);
+		}
+		else
+		{
+			player.OnDamage(0.0f);
 		}
 	}
 	// 攻撃中でなく、プレイヤーに当たった場合

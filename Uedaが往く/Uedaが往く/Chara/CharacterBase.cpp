@@ -20,6 +20,7 @@ CharacterBase::CharacterBase():
 	m_moveSpeed(0.0f),
 	m_angle(0.0f),
 	m_isAttack(false),
+	m_isGuard(false),
 	m_modelHandle(-1),
 	m_currentPlayAnim(-1),
 	m_currentAnimCount(0.0f),
@@ -37,6 +38,7 @@ CharacterBase::CharacterBase():
 void CharacterBase::OnDamage(float damage)
 {
 	m_hp -= damage;
+	m_isGuard = false;
 }
 
 

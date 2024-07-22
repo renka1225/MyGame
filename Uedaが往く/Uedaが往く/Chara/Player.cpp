@@ -23,6 +23,7 @@ namespace
 	constexpr int kMaxAvoidCount = 3;						// 連続で回避できる回数
 	constexpr int kAvoidCoolTime = 30;						// 回避できるようになるまでの時間
 	constexpr float kFightWalkSpeed = 1.8f;					// 構え中の移動速度
+	constexpr float kGuardAnimTime = 10.0f;					// ガード中のアニメーションを止める時間
 	constexpr float kAngleSpeed = 0.2f;						// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;						// ジャンプの高さ
 	constexpr float kGravity = -0.25f;						// 重力
@@ -109,6 +110,8 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	m_currentState = Avoidance(input, moveVec);
 	// 構え処理
 	m_currentState = Fighting(input);
+	// ガード処理
+	m_currentState = Guard(input);
 	// 移動処理
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec);
 
@@ -379,6 +382,32 @@ Player::PlayerState Player::Fighting(const Input& input)
 
 
 /// <summary>
+/// ガード処理
+/// </summary>
+/// <param name="input">入力処理</param>
+/// <returns>現在の状態</returns>
+Player::PlayerState Player::Guard(const Input& input)
+{
+	PlayerState nextState = m_currentState;
+
+	if (input.IsTriggered("guard"))
+	{
+		m_isGuard = true;
+		nextState = PlayerState::kGuard;
+		PlayAnim(AnimKind::kGuard);
+	}
+	else if (input.IsReleased("guard"))
+	{
+		m_isGuard = false;
+		nextState = PlayerState::kFightIdle;
+		PlayAnim(AnimKind::kFightIdle);
+	}
+
+	return nextState;
+}
+
+
+/// <summary>
 /// 移動パラメータを設定する
 /// </summary>
 /// <param name="input">入力処理</param>
@@ -409,8 +438,8 @@ Player::PlayerState Player::UpdateMoveParameter(const Input& input, const Camera
 	// 移動したか(true:移動した)
 	bool isPressMove = false;
 
-	// 攻撃中でない場合
-	if (!m_isAttack)
+	// 攻撃中、ガード中でない場合
+	if (!m_isAttack && !m_isGuard)
 	{
 		// ボタンを押したら移動
 		if (input.IsPressing("up"))
@@ -530,6 +559,8 @@ void Player::UpdateAnimState(PlayerState prevState)
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
 		if(m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
 	}
 	// 移動状態から
 	else if (prevState == PlayerState::kRun)
@@ -544,6 +575,8 @@ void Player::UpdateAnimState(PlayerState prevState)
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
 		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
 	}
 	// パンチ状態から
 	else if (prevState == PlayerState::kPunch)
@@ -558,6 +591,8 @@ void Player::UpdateAnimState(PlayerState prevState)
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
 		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
 	}
 	// キック状態から
 	else if (prevState == PlayerState::kKick)
@@ -572,6 +607,8 @@ void Player::UpdateAnimState(PlayerState prevState)
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
 		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
 	}
 	// 回避状態から
 	else if (prevState == PlayerState::kAvoid)
@@ -586,9 +623,10 @@ void Player::UpdateAnimState(PlayerState prevState)
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 構えアニメーションを再生
 		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
 	}
 	// 構え状態から
-	// 回避状態から
 	else if (prevState == PlayerState::kFightWalk)
 	{
 		// 待機アニメーションを再生
@@ -601,6 +639,24 @@ void Player::UpdateAnimState(PlayerState prevState)
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// ガード状態から
+	else if (prevState == PlayerState::kGuard)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == PlayerState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
+		// パンチアニメーションを再生
+		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch);
+		// キックアニメーションを再生
+		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
 	}
 }
 
@@ -637,6 +693,31 @@ void Player::UpdateAnim()
 		else if(m_currentState == PlayerState::kAvoid)
 		{
 			m_currentAnimCount += m_animSpeed.avoid;
+		}
+		else if (m_currentState == PlayerState::kFightWalk)
+		{
+			// 移動時のみアニメーションを再生
+			if (m_isMove)
+			{
+				m_currentAnimCount += m_animSpeed.fightWalk;
+			}
+			else
+			{
+				m_currentAnimCount = 0.0f;
+			}
+		}
+		else if (m_currentState == PlayerState::kGuard)
+		{
+			// 一度のみアニメーションを再生
+			m_currentAnimCount += m_animSpeed.guard;
+			m_currentAnimCount = std::min(m_currentAnimCount, kGuardAnimTime);
+
+			// ガードアニメーションが終わったら待機状態に移行
+			if (!m_isGuard)
+			{
+				m_currentState = PlayerState::kFightIdle;
+				PlayAnim(AnimKind::kFightIdle);
+			}
 		}
 		else
 		{

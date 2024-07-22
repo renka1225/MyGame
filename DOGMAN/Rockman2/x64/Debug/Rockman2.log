@@ -1,1 +1,12 @@
-﻿  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\DOGMAN\Rockman2\x64\Debug\Rockman2.exe
+﻿  Player.cpp
+  EnemyBase.cpp
+  RecoveryBase.cpp
+  SceneMain.cpp
+  SceneManager.cpp
+  SceneStage1.cpp
+  SceneTutorial.cpp
+  ShotBuster.cpp
+  ShotFire.cpp
+  ShotMetal.cpp
+  コードを生成中...
+  Rockman2.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\DOGMAN\Rockman2\x64\Debug\Rockman2.exe

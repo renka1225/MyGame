@@ -161,6 +161,8 @@ Input::Input()
 									{InputType::pad, PAD_INPUT_A } },
 	m_commandTable["fighting"] = { { InputType::keybd, KEY_INPUT_SPACE },
 									{InputType::pad, PAD_INPUT_Z } },
+	m_commandTable["guard"] = { { InputType::keybd, KEY_INPUT_Q },
+									{InputType::pad, PAD_INPUT_Y } },
 	m_commandTable["grab"] = { { InputType::keybd, KEY_INPUT_V },
 									{InputType::pad, PAD_INPUT_B } },
 

@@ -2,12 +2,12 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe</FullPath>
+      <FullPath>C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\GitHub\MyGame\Uedaが往く\Uedaが往く\VertexShader3D.vso</FullPath>
+      <FullPath>C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\VertexShader3D.vso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
