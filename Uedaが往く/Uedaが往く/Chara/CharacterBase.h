@@ -14,7 +14,7 @@ public:
 	~CharacterBase() {};
 	virtual void Init() = 0;
 	virtual void Draw() = 0;
-	void OnDamage(float damage);		// ダメージを受けた際の処理
+	virtual void OnDamage(float damage);		// ダメージを受けた際の処理
 
 	VECTOR GetPos() const { return m_pos; }			// 現在地取得
 	float GetHp() const { return m_hp; }			// 現在のHPを取得
@@ -75,6 +75,10 @@ public:
 		float punchPower;		// パンチの攻撃力
 		float kickPower;		// キックの攻撃力
 		float maxMoveSpeed;		// 最大の移動速度
+		float fightWalkSpeed;	// 構え時の移動速度
+		float acceleration;		// 加速度
+		float deceleration;		// 減速度
+		float avoidDist;		// 回避の距離
 	};
 	Status m_status;
 

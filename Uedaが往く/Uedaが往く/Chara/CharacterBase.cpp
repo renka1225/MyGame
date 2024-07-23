@@ -35,10 +35,10 @@ CharacterBase::CharacterBase():
 /// <summary>
 /// ダメージを受けた際の処理
 /// </summary>
+/// <param name="damage">ダメージ量</param>
 void CharacterBase::OnDamage(float damage)
 {
 	m_hp -= damage;
-	m_isGuard = false;
 }
 
 

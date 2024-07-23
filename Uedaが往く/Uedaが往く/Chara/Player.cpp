@@ -22,7 +22,7 @@ namespace
 	constexpr float kAvoidDist = 30.0f;						// 回避の距離
 	constexpr int kMaxAvoidCount = 3;						// 連続で回避できる回数
 	constexpr int kAvoidCoolTime = 30;						// 回避できるようになるまでの時間
-	constexpr float kFightWalkSpeed = 1.8f;					// 構え中の移動速度
+	constexpr float kFightWalkSpeed = 2.3f;					// 構え中の移動速度
 	constexpr float kGuardAnimTime = 10.0f;					// ガード中のアニメーションを止める時間
 	constexpr float kAngleSpeed = 0.2f;						// プレイヤー角度の変化速度
 	constexpr float kVelocity = 6.0f;						// ジャンプの高さ
@@ -132,6 +132,9 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 
 	// 当たり判定の位置更新
 	UpdateCol();
+
+	// HPバーの更新
+	m_pUIGauge->UpdatePlayerHp();
 }
 
 
@@ -155,6 +158,24 @@ void Player::Draw()
 	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, 1, 0xff00ff, 0xffffff, false);		// 腕
 	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, 1, 0xffff00, 0xffffff, false);		// 脚
 #endif
+}
+
+
+/// <summary>
+/// ダメージを受けた際の処理
+/// </summary>
+/// <param name="damage">ダメージ量</param>
+void Player::OnDamage(float damage)
+{
+	m_hp -= damage;
+
+	m_pUIGauge->SetDamageTimer();
+
+	// ガード状態の場合
+	if (m_currentState == PlayerState::kGuard)
+	{
+		OffGuard();
+	}
 }
 
 
@@ -408,6 +429,17 @@ Player::PlayerState Player::Guard(const Input& input)
 
 
 /// <summary>
+/// ガード状態を解除する
+/// </summary>
+void Player::OffGuard()
+{
+	m_isGuard = false;
+	m_currentState = PlayerState::kFightIdle;
+	PlayAnim(AnimKind::kFightIdle);
+}
+
+
+/// <summary>
 /// 移動パラメータを設定する
 /// </summary>
 /// <param name="input">入力処理</param>
@@ -485,7 +517,7 @@ Player::PlayerState Player::UpdateMoveParameter(const Input& input, const Camera
 			// 構え中は移動速度を遅くする
 			if (m_isFighting)
 			{
-				moveVec = VScale(m_targetMoveDir, kFightWalkSpeed);
+				moveVec = VScale(m_targetMoveDir, m_status.fightWalkSpeed);
 			}
 			else
 			{
@@ -711,13 +743,6 @@ void Player::UpdateAnim()
 			// 一度のみアニメーションを再生
 			m_currentAnimCount += m_animSpeed.guard;
 			m_currentAnimCount = std::min(m_currentAnimCount, kGuardAnimTime);
-
-			// ガードアニメーションが終わったら待機状態に移行
-			if (!m_isGuard)
-			{
-				m_currentState = PlayerState::kFightIdle;
-				PlayAnim(AnimKind::kFightIdle);
-			}
 		}
 		else
 		{

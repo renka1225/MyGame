@@ -11,7 +11,7 @@ namespace
 	const char* const kAnimSpeedFileName = "data/csv/animSpeed.csv";	// アニメーション速度データのファイル名
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
 
-	constexpr int kStatusNum = 4;	// 1キャラクターのステータス数
+	constexpr int kStatusNum = 8;	// 1キャラクターのステータス数
 	constexpr int kAnimNum = 14;	// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;		// 1キャラクターの当たり判定の情報数
 }
@@ -94,6 +94,10 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 	data.m_status.punchPower = m_charData[1 + charType * kStatusNum];
 	data.m_status.kickPower = m_charData[2 + charType * kStatusNum];
 	data.m_status.maxMoveSpeed = m_charData[3 + charType * kStatusNum];
+	data.m_status.fightWalkSpeed = m_charData[4 + charType * kStatusNum];
+	data.m_status.acceleration = m_charData[5 + charType * kStatusNum];
+	data.m_status.deceleration = m_charData[6 + charType * kStatusNum];
+	data.m_status.avoidDist = m_charData[7 + charType * kStatusNum];
 }
 
 

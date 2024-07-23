@@ -35,11 +35,12 @@ public:
 
 	Player();
 	~Player();
-
 	virtual void Init() override;
 	void Update(const Input& input, const Camera& camera, EnemyBase& enemy, Stage& stage);
 	virtual void Draw() override;
 
+	// ダメージを受けた際の処理
+	virtual void OnDamage(float damage) override;
 	// エネミーとの当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
@@ -59,6 +60,8 @@ private:
 	PlayerState Fighting(const Input& input);
 	// ガード処理
 	PlayerState Guard(const Input& input);
+	// ガード状態を解除する
+	void OffGuard();
 	// 移動パラメータを設定する
 	PlayerState UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの回転を制御する

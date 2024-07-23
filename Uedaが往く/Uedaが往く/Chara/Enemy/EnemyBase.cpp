@@ -187,7 +187,7 @@ void EnemyBase::UpdateAngle(Player& player)
 
 
 /// <summary>
-///  プレイヤーとの当たり判定をチェックする
+/// プレイヤーとの当たり判定をチェックする
 /// </summary>
 /// <param name="player">プレイヤー参照</param>
 /// <param name="eCapPosTop">当たり判定カプセルの頂点位置</param>
