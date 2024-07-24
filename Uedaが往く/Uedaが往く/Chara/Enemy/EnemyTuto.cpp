@@ -50,8 +50,10 @@ void EnemyTuto::Init()
 
 
 /// <summary>
-/// 更新
+///  更新
 /// </summary>
+/// <param name="player">プレイヤー参照</param>
+/// <param name="stage">ステージ参照</param>
 void EnemyTuto::Update(Player& player, Stage& stage)
 {
 	// 移動パラメータを設定する

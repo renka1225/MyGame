@@ -16,6 +16,8 @@ public:
 	VECTOR CheckPlayerCol(Player& player, const VECTOR& moveVec);
 	// エネミーと当たり判定をして、補正した移動先のポジションを返す
 	VECTOR CheckEnemyCol(EnemyBase& enemy, const VECTOR& moveVec);
+	// ステージの配置データを取得する
+
 
 	// ステージモデルを取得
 	int GetStageHandle() const { return m_stageHandle; }

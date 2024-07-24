@@ -43,6 +43,8 @@ public:
 	VECTOR GetPos() const { return m_pos; } // 敵の座標を取得
 
 protected:
+	// 敵の次の行動を決める
+	void DecideNextAction();
 	// 移動処理
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
 	// 移動パラメータを設定する

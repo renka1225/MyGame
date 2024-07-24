@@ -43,6 +43,14 @@ EnemyBase::~EnemyBase()
 
 
 /// <summary>
+/// 次の行動を決める
+/// </summary>
+void EnemyBase::DecideNextAction()
+{
+}
+
+
+/// <summary>
 /// 移動処理
 /// </summary>
 /// <param name="MoveVec"></param>
@@ -118,8 +126,6 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 			m_stopFrame = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
 			nextState = EnemyState::kFightIdle;	// 待機状態にする
 		}
-
-		DrawFormatString(0, 160, 0xffffff, "%f", distance);
 	}
 
 	return nextState;
