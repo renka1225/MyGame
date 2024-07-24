@@ -27,8 +27,9 @@ namespace
 EnemyBase::EnemyBase():
 	m_isMove(false),
 	m_isAttack(false),
-	m_stopFrame(0),
-	m_angleFrame(0),
+	m_stopTime(0),
+	m_angleIntervalTime(0),
+	m_intervalTime(0),
 	m_currentState(EnemyState::kFightIdle)
 {
 }
@@ -38,14 +39,6 @@ EnemyBase::EnemyBase():
 /// デストラクタ
 /// </summary>
 EnemyBase::~EnemyBase()
-{
-}
-
-
-/// <summary>
-/// 次の行動を決める
-/// </summary>
-void EnemyBase::DecideNextAction()
 {
 }
 
@@ -100,7 +93,7 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 		if (distance > kApproachRange)
 		{
 			// 数秒たったらエネミーを移動させる
-			if (m_stopFrame <= 0)
+			if (m_stopTime <= 0)
 			{
 				dir = VNorm(dir);
 				moveVec = VScale(dir, m_moveSpeed);
@@ -113,7 +106,7 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 			}
 			else
 			{
-				m_stopFrame--;
+				m_stopTime--;
 			}
 		}
 		// プレイヤーが攻撃範囲に入った場合
@@ -123,7 +116,7 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 		}
 		else
 		{
-			m_stopFrame = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
+			m_stopTime = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
 			nextState = EnemyState::kFightIdle;	// 待機状態にする
 		}
 	}
@@ -133,36 +126,24 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 
 
 /// <summary>
-/// 攻撃処理
+/// パンチ攻撃
 /// </summary>
-/// <param name="input">入力状態</param>
-/// <returns>現在の状態</returns>
-EnemyBase::EnemyState EnemyBase::Attack()
+void EnemyBase::Punch()
 {
-	EnemyState nextState = m_currentState;
+	m_isAttack = true;
+	m_currentState = EnemyState::kPunch;
+	PlayAnim(AnimKind::kPunch);
+}
 
-	// TODO:ランダムで攻撃を行う
-	if (!m_isAttack && m_currentState != EnemyState::kRun)
-	{
-		int randNum = GetRand(kMaxProb);
-		
-		// パンチ攻撃
-		if (randNum <= 30)
-		{
-			m_isAttack = true;
-			nextState = EnemyState::kPunch;
-			PlayAnim(AnimKind::kPunch);
-		}
-		// キック攻撃
-		else if(randNum <= 60)
-		{
-			m_isAttack = true;
-			nextState = EnemyState::kKick;
-			PlayAnim(AnimKind::kKick);
-		}
-	}
 
-	return nextState;
+/// <summary>
+/// キック攻撃
+/// </summary>
+void EnemyBase::kick()
+{
+	m_isAttack = true;
+	m_currentState = EnemyState::kKick;
+	PlayAnim(AnimKind::kKick);
 }
 
 
@@ -171,13 +152,13 @@ EnemyBase::EnemyState EnemyBase::Attack()
 /// </summary>
 void EnemyBase::UpdateAngle(Player& player)
 {
-	m_angleFrame++;
+	m_angleIntervalTime++;
 
 	// 敵の位置からプレイヤー位置までのベクトルを求める
 	VECTOR dir = VSub(player.GetPos(), m_pos);
 
 	// 一定時間たったらエネミーの角度を更新する
-	if (m_angleFrame >= kChangeAngleFrame)
+	if (m_angleIntervalTime >= kChangeAngleFrame)
 	{
 		// ランダムでプレイヤーの方向を向く
 		int randNum = GetRand(kMaxProb);
@@ -185,7 +166,7 @@ void EnemyBase::UpdateAngle(Player& player)
 		{
 			m_angle = atan2f(dir.x, dir.z);
 		}
-		m_angleFrame = 0;
+		m_angleIntervalTime = 0;
 	}
 
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));

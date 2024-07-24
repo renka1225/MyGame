@@ -15,8 +15,6 @@ public:
 	virtual void Draw() override;
 
 private:
-	//// 状態遷移用関数ポインタ
-	//typedef void (EnemyTuto:: *UpdateFunc)();
-	//UpdateFunc m_updater;
-	//std::vector<UpdateFunc> m_updateFuncTbl;
+	// 次の行動を決める
+	void DecideNextAction();
 };

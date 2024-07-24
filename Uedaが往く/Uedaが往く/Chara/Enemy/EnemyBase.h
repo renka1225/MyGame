@@ -43,14 +43,14 @@ public:
 	VECTOR GetPos() const { return m_pos; } // 敵の座標を取得
 
 protected:
-	// 敵の次の行動を決める
-	void DecideNextAction();
 	// 移動処理
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
 	// 移動パラメータを設定する
 	EnemyState UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
-	// 攻撃処理
-	EnemyState Attack();
+	// パンチ処理
+	void Punch();
+	// キック処理
+	void kick();
 	// 敵の角度を更新
 	void UpdateAngle(Player& player);
 	// アニメーションステートの更新
@@ -61,8 +61,9 @@ protected:
 protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
-	int m_stopFrame;			// 停止するフレーム数
-	int m_angleFrame;			// 角度を更新するフレーム数
+	int m_stopTime;				// 停止する時間
+	int m_angleIntervalTime;	// 角度を更新するまでの時間
+	int m_intervalTime;			// 次の状態を更新するまでの時間
 	EnemyState m_currentState;	// エネミーの現在の状態
 };
 

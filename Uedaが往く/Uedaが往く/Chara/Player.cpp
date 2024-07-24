@@ -30,6 +30,7 @@ namespace
 	constexpr float kScale = 0.3f;							// プレイヤーモデルの拡大率
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
+	//const VECTOR kInitPos = VGet(5000.0f, 100.0f, -1000.0f);	// 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -134,7 +135,7 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	UpdateCol();
 
 	// HPバーの更新
-	m_pUIGauge->UpdatePlayerHp();
+	m_pUIGauge->UpdateHpBar();
 }
 
 
@@ -168,8 +169,11 @@ void Player::Draw()
 void Player::OnDamage(float damage)
 {
 	m_hp -= damage;
-
-	m_pUIGauge->SetDamageTimer();
+	// HPバーを更新
+	if (damage > 0.0f)
+	{
+		m_pUIGauge->OnDamage(damage);
+	}
 
 	// ガード状態の場合
 	if (m_currentState == PlayerState::kGuard)

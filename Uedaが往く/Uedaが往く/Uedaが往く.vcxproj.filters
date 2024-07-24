@@ -46,7 +46,7 @@
     <Filter Include="ヘッダー ファイル\Shader">
       <UniqueIdentifier>{260f52bb-42ec-4bff-b9b2-92039fe27827}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Util\UI">
+    <Filter Include="ヘッダー ファイル\UI">
       <UniqueIdentifier>{66b395e9-3c76-462e-bede-68986c393feb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -162,7 +162,7 @@
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UI\UIGauge.h">
-      <Filter>ヘッダー ファイル\Util\UI</Filter>
+      <Filter>ヘッダー ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Util\Game.h">
       <Filter>ヘッダー ファイル\Util</Filter>

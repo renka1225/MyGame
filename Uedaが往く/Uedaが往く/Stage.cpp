@@ -9,8 +9,8 @@
 namespace
 {
     // ステージサイズ
-   // const VECTOR kStageScale = VGet(100.0f, 10.0f, 100.0f);
-    const VECTOR kStageScale = VGet(30.0f, 30.0f, 30.0f);
+    const VECTOR kStageScale = VGet(100.0f, 10.0f, 100.0f);
+    //const VECTOR kStageScale = VGet(30.0f, 30.0f, 30.0f);
 
     // 当たり判定
     constexpr float kDefaultSize = 100.0f;	 // 周囲のポリゴン検出に使用する球の初期サイズ
@@ -30,8 +30,8 @@ Stage::Stage():
     m_wallNum(0),
     m_floorNum(0)
 {
-	//m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
-	m_stageHandle = MV1LoadModel("data/Model/city.mv1");
+	m_stageHandle = MV1LoadModel("data/Model/stage.mv1");
+	//m_stageHandle = MV1LoadModel("data/Model/city.mv1");
 
     MV1SetScale(m_stageHandle, kStageScale);
 

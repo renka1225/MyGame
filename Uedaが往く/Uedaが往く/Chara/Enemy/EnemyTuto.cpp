@@ -11,7 +11,12 @@ namespace
 	// 敵情報
 	const char* const kfileName = "data/Model/enemyTuto.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.3f;								// 拡大率
+	constexpr int kIntervalTime = 120;							// 状態を更新するまでの時間
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);			// 初期位置
+
+	constexpr int kMaxProb = 100;			// 最大確率%
+	constexpr int kPunchProb = 50;			// パンチを行う確率
+	constexpr int kKickProb = 30;			// キックを行う確率
 }
 
 
@@ -64,8 +69,10 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	// エネミーの状態を更新
 	EnemyState prevState = m_currentState;
 
-	// 攻撃処理
-	m_currentState = Attack();
+	// 次の行動を決める
+	DecideNextAction();
+	m_intervalTime--;
+
 	// 移動処理
 	m_currentState = UpdateMoveParameter(player, upMoveVec, leftMoveVec, moveVec);
 
@@ -111,4 +118,33 @@ void EnemyTuto::Draw()
 	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, 1, 0xff00ff, 0xffffff, false);		// 腕
 	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, 1, 0xffff00, 0xffffff, false);		// 脚
 #endif
+}
+
+
+/// <summary>
+/// 次の行動を決める
+/// </summary>
+void EnemyTuto::DecideNextAction()
+{
+	if (m_intervalTime > 0) return;
+
+	// 攻撃中かつ移動中でない場合
+	if (!m_isAttack && m_currentState != EnemyState::kRun)
+	{
+		// 確率で攻撃を行う
+		int randNum = GetRand(kMaxProb);
+
+		// キック攻撃
+		if (randNum <= kKickProb)
+		{
+			kick();
+		}
+		// パンチ攻撃
+		if (randNum <= kPunchProb)
+		{
+			Punch();
+		}
+
+		m_intervalTime = kIntervalTime;
+	}
 }

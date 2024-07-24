@@ -6,15 +6,20 @@
 class UIGauge
 {
 public:
-	UIGauge();
+	UIGauge(float maxHp);
 	~UIGauge();
-	void UpdatePlayerHp();
-	void DrawPlayerHP(float currentHp, float MaxHp);			// プレイヤーのHPバーを表示
+	void UpdateHpBar();
+	void DrawPlayerHP(float currentHp, float damage);			// プレイヤーのHPバーを表示
 	void DrawPlayerGauge(float currentGauge, float MaxGauge);	// プレイヤーのゲージバーを表示
-	void DrawEnemyHp(float currentHp, float MaxHp);				// 敵のHPバーを表示
-	void SetDamageTimer();										// ダメージを受けた際にタイマーをセットする
+	void DrawEnemyHp(float currentHp, float damage);			// 敵のHPバーを表示
+
+	void SetDamageTimer();			// ダメージを受けた際にタイマーをセットする
+	void OnDamage(float damage);	// 受けたダメージ量を計算する
 
 private:
-	int m_hpBarDecreaseTime;	// HPバーが減少するまでの時間
-	float m_decreaseHp;			// 減少するHP量
+	float m_decreaseHp;			// ダメージを受けた後のHP
+	float m_currentHp;			// 現在のHP
+	float m_damage;				// 受けたダメージ量
+	float m_maxHp;				// 最大HP
+	int m_intervalTime;			// HPバーが減少するまでの時間
 };
