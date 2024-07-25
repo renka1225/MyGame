@@ -55,6 +55,7 @@ Player::Player():
 {
 	// キャラクター情報を読み込む
 	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kPlayer));
+	m_pUIGauge = std::make_shared<UIGauge>(m_status.maxHp);
 
 	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
@@ -147,7 +148,7 @@ void Player::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	// HPゲージを表示
-	m_pUIGauge->DrawPlayerHP(m_hp, m_status.maxHp);
+	m_pUIGauge->DrawPlayerHP(m_hp);
 	m_pUIGauge->DrawPlayerGauge(m_gauge, kMaxGauge);
 
 #ifdef _DEBUG	// デバッグ表示

@@ -27,6 +27,7 @@ EnemyTuto::EnemyTuto()
 {
 	// キャラクター情報を読み込む
 	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kEnemyTuto));
+	m_pUIGauge = std::make_shared<UIGauge>(m_status.maxHp);
 
 	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
@@ -93,6 +94,9 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 
 	// 当たり判定の位置更新
 	UpdateCol();
+
+	// HPバーの更新
+	m_pUIGauge->UpdateHpBar();
 }
 
 
@@ -105,7 +109,7 @@ void EnemyTuto::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	// HPゲージを表示
-	m_pUIGauge->DrawEnemyHp(m_hp, m_status.maxHp);
+	m_pUIGauge->DrawEnemyHp(m_hp);
 
 #ifdef _DEBUG
 	// 敵座標デバッグ表示

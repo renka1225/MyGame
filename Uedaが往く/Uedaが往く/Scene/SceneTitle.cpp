@@ -8,12 +8,15 @@
 // 定数
 namespace
 {
-	const Vec2 kTitleLogoPos = { 950, 400 };
-	const Vec2 kTitleBackPos = { 950,400 };
-	constexpr float kTitleLogoScale = 0.5f;
-	constexpr int kTitleTime = 10;			// タイトルを表示するまでの時間
-	constexpr int kTextTime = 60;			// テキストを表示するまでの時間
-	constexpr int kTextDisplayTime = 100;	// テキストを表示する間隔
+	const Vec2 kTitleLogoPos = { 950.0f, 400.0f };	// タイトルロゴ表示位置
+	constexpr float kTitleLogoScale = 0.5f;			// タイトルロゴのサイズ
+	const Vec2 kTextPos = { 500.0f, 800.0f };		// "PRESS ANY BUTTON"のテキスト位置
+	constexpr int kTitleTime = 10;					// タイトルを表示するまでの時間
+	constexpr int kTextTime = 60;					// テキストを表示するまでの時間
+	constexpr int kTextDisplayTime = 2;				// テキストを表示する間隔
+	constexpr int kTextDisplayAnimTime = 240;		// テキストアニメーションの時間
+	constexpr int kMaxAlpha = 255;					// 最大アルファ値
+	constexpr int kMinAlpha = 30;					// 最小アルファ値
 }
 
 /// <summary>
@@ -22,10 +25,12 @@ namespace
 SceneTitle::SceneTitle():
 	m_titleTime(kTitleTime),
 	m_textTime(kTextTime),
-	m_textDisplayTime(0)
+	m_textDisplayTime(0),
+	m_textAlpha(0)
 {
 	m_titleLogo = LoadGraph("data/UI/title.png");
 	m_titleLogoBack = LoadGraph("data/UI/titleBack.png");
+	m_textHandle = LoadGraph("data/UI/PRESS.png");
 }
 
 
@@ -36,6 +41,7 @@ SceneTitle::~SceneTitle()
 {
 	DeleteGraph(m_titleLogo);
 	DeleteGraph(m_titleLogoBack);
+	DeleteGraph(m_textHandle);
 }
 
 
@@ -56,7 +62,13 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
 	m_titleTime--;
 	m_textTime--;
-	m_textDisplayTime++;
+	m_textDisplayTime += kTextDisplayTime;
+
+	// テキストのアルファ値を調整する
+	m_textDisplayTime %= kTextDisplayAnimTime;
+	// MEMO:sin波を使って0～1の範囲にする
+	float sinAlpha = 0.5f + 0.5f * sinf(static_cast<float>(m_textDisplayTime) / kTextDisplayAnimTime * DX_PI_F);
+	m_textAlpha = kMinAlpha + static_cast<int>((kMaxAlpha - kMinAlpha) * sinAlpha);
 
 	// シーン遷移
 	if (input.IsTriggered("OK"))
@@ -73,19 +85,20 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 /// </summary>
 void SceneTitle::Draw()
 {
+	// 背景描画
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xffffff, true);
+
 	// タイトルロゴ表示
-	DrawRectRotaGraphF(kTitleBackPos.x, kTitleBackPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, kTitleLogoScale, 0.0f, m_titleLogoBack, true);
+	DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, kTitleLogoScale, 0.0f, m_titleLogoBack, true);
 	if (m_titleTime < 0)
 	{
 		DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, kTitleLogoScale, 0.0f, m_titleLogo, true);
 	}
 
-	if (m_textTime < 0)
-	{
-		if (m_textDisplayTime % 180 >= kTextDisplayTime) return;
-		DrawString(900, 800, "PRESS ANY BUTTON", 0x000000);
-	}
+	// 文字を点滅させる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_textAlpha);
+	DrawGraph(kTextPos.x, kTextPos.y, m_textHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

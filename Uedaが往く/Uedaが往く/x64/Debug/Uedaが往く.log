@@ -1,2 +1,5 @@
 ﻿  SceneTitle.cpp
-  Uedaが往く.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneTitle.cpp(100,32): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneTitle.cpp(100,20): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+EffekseerForDXLib_vs2019_x64_d.lib(EffekseerForDXLib.obj) : warning LNK4099: PDB '' が 'EffekseerForDXLib_vs2019_x64_d.lib(EffekseerForDXLib.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+  Uedaが往く.vcxproj -> C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe

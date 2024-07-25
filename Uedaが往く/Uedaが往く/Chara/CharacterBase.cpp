@@ -28,7 +28,6 @@ CharacterBase::CharacterBase():
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(0.0f)
 {
-	m_pUIGauge = std::make_shared<UIGauge>(100.0f);
 }
 
 

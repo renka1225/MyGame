@@ -1,26 +1,30 @@
 #include "DxLib.h"
+#include "Vec2.h"
 #include "UIGauge.h"
 
 // 定数
 namespace
 {
 	// プレイヤーUI
-	constexpr float kPHpDispL = 30.0f;		 // HPバー左表示位置
-	constexpr float kPHpDispT = 40.0f;		 // HPバー上表示位置
-	constexpr float kPHpWidth = 400.0f;		 // HPバーの横幅
-	constexpr float kPHpHeight = 20.0f;		 // HPバーの縦幅
-
-	constexpr float kpGaugeDispL = 30.0f;	 // ゲージバー左表示位置
-	constexpr float kpGaugeDispT = 80.0f;	 // ゲージバー上表示位置
-	constexpr float kpGaugeWidth = 400.0f;	 // ゲージバーの横幅
-	constexpr float kpGaugeHeight = 20.0f;   // ゲージバーの縦幅
-	constexpr int kpGaugeColor = 0x0000ff;	 // ゲージバーの色
+	const Vec2 kPlayerHpBarLT = { 25.0f, 40.0f };			// HPバー左上位置
+	const Vec2 kPlayerHpBarRB = { 600.0f, 100.0f };			// HPバー右下位置
+	const Vec2 kPlayerCurrentHpLT = { 40.0f, 55.0f };		// 現在のHP左上位置
+	constexpr float kPlayerHpWidth = 540.0f;				// HPバーの横幅
+	constexpr float kPlayerHpHeight = 32.0f;				// HPバーの縦幅
+		
+	const Vec2 kPlayerGaugeBarLT = { 25.0f, 110.0f };		// ゲージバー左上位置
+	const Vec2 kPlayerGaugeBarRB = { 600.0f, 140.0f };		// ゲージバー右下位置
+	const Vec2 kPlayerCurrentGaugeLT = { 40.0f, 118.0f };	// 現在のゲージ量左上位置
+	constexpr float kPlayerGaugeWidth = 520.0f;				// ゲージバーの横幅
+	constexpr float kPlayerGaugeHeight = 16.0f;				// ゲージバーの縦幅
+	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
 
 	// 敵UI
-	constexpr float kEHpDispL = 550.0f;		 // HPバー左表示位置
-	constexpr float kEHpDispT = 950.0f;		 // HPバー上表示位置
-	constexpr float kEHpWidth = 770.0f;		 // HPバーの横幅
-	constexpr float kEHpHeight = 30.0f;		 // HPバーの縦幅
+	const Vec2 kEnemyHpBarLT = { 535.0f, 935.0f };		// HPバー左上位置
+	const Vec2 kEnemyHpBarRB = { 1300.0f, 1000.0f };	// HPバー右下位置
+	const Vec2 kEnemyCurrentHpLT = { 560.0f, 952.0f };	// 現在のHP左上位置
+	constexpr float kEnemyHpWidth = 710.0f;				// HPバーの横幅
+	constexpr float kEnemyHpHeight = 32.0f;				// HPバーの縦幅
 
 	constexpr int kHpColor = 0xff0000;		 // HPバーの色
 	constexpr int kDamageHpColor = 0xffd700; // ダメージ時のHPバーの色
@@ -40,6 +44,7 @@ UIGauge::UIGauge(float maxHp):
 	m_damage(0.0f),
 	m_intervalTime(0)
 {
+	m_gaugeBarHandle = LoadGraph("data/UI/Gauge.png");
 }
 
 
@@ -48,6 +53,7 @@ UIGauge::UIGauge(float maxHp):
 /// </summary>
 UIGauge::~UIGauge()
 {
+	DeleteGraph(m_gaugeBarHandle);
 }
 
 
@@ -73,30 +79,23 @@ void UIGauge::UpdateHpBar()
 /// </summary>
 /// <param name="currentHp">現在のHP</param>
 /// <param name="MaxHp">最大HP</param>
-void UIGauge::DrawPlayerHP(float currentHp, float damage)
+void UIGauge::DrawPlayerHP(float currentHp)
 {
 	// 表示するゲージ量を計算する
-	// TODO:m_intervalTimeが0になったら赤バーの長さを変更する
 	float hpRatio = currentHp / m_maxHp;
 	float decreaseHpRatio = (currentHp + m_damage) / m_maxHp;
-	float hpLength = kpGaugeWidth * hpRatio;
-	float decreaseHpLength = kPHpWidth * decreaseHpRatio;
+	float hpLength = kPlayerHpWidth * hpRatio;
+	float decreaseHpLength = kPlayerHpWidth * decreaseHpRatio;
 
-	// TODO:バーの背景部分は画像にする
 	// バーの背景部分
-	DrawBoxAA(kPHpDispL, kPHpDispT, kPHpDispL + kPHpWidth, kPHpDispT + kPHpHeight, 0xffffff, false);
+	DrawExtendGraphF(kPlayerHpBarLT.x, kPlayerHpBarLT.y, kPlayerHpBarRB.x, kPlayerHpBarRB.y, m_gaugeBarHandle, true);
 	// ダメージを受けた分のバー
 	if (m_intervalTime > 0)
 	{
-		DrawBoxAA(kPHpDispL, kPHpDispT, kPHpDispL + decreaseHpLength, kPHpDispT + kPHpHeight, kDamageHpColor, true);
+		DrawBoxAA(kPlayerCurrentHpLT.x, kPlayerCurrentHpLT.y, kPlayerCurrentHpLT.x + decreaseHpLength, kPlayerCurrentHpLT.y + kPlayerHpHeight, kDamageHpColor, true);
 	}
 	// 現在のHPバー
-	DrawBoxAA(kPHpDispL, kPHpDispT, kPHpDispL + hpLength, kPHpDispT + kPHpHeight, kHpColor, true);
-
-#ifdef _DEBUG
-	DrawFormatString(0, 160, 0xffffff, "ダメージ量:%f", m_damage);
-	DrawFormatString(0, 180, 0xffffff, "バーの長さ:%f", decreaseHpLength);
-#endif
+	DrawBoxAA(kPlayerCurrentHpLT.x, kPlayerCurrentHpLT.y, kPlayerCurrentHpLT.x + hpLength, kPlayerCurrentHpLT.y + kPlayerHpHeight, kHpColor, true);
 }
 
 
@@ -109,10 +108,11 @@ void UIGauge::DrawPlayerGauge(float currentGauge, float MaxGauge)
 {
 	// 表示するゲージ量を計算する
 	float hpRatio = currentGauge / MaxGauge;
-	float hpLength = kpGaugeWidth * hpRatio;
+	float hpLength = kPlayerGaugeWidth * hpRatio;
 
-	DrawBoxAA(kpGaugeDispL, kpGaugeDispT, kpGaugeDispL + kpGaugeWidth, kpGaugeDispT + kpGaugeHeight, 0xffffff, false);
-	DrawBoxAA(kpGaugeDispL, kpGaugeDispT, kpGaugeDispL + hpLength, kpGaugeDispT + kpGaugeHeight, kpGaugeColor, true);
+	// バーの背景部分
+	DrawExtendGraphF(kPlayerGaugeBarLT.x, kPlayerGaugeBarLT.y, kPlayerGaugeBarRB.x, kPlayerGaugeBarRB.y, m_gaugeBarHandle, true);
+	DrawBoxAA(kPlayerCurrentGaugeLT.x, kPlayerCurrentGaugeLT.y, kPlayerCurrentGaugeLT.x + hpLength, kPlayerCurrentGaugeLT.y + kPlayerGaugeHeight, kpGaugeColor, true);
 }
 
 
@@ -121,21 +121,22 @@ void UIGauge::DrawPlayerGauge(float currentGauge, float MaxGauge)
 /// </summary>
 /// <param name="currentHp"></param>
 /// <param name="MaxHp"></param>
-void UIGauge::DrawEnemyHp(float currentHp, float damage)
+void UIGauge::DrawEnemyHp(float currentHp)
 {
 	// 表示するゲージ量を計算する
 	float hpRatio = currentHp / m_maxHp;
-	float hpLength = kEHpWidth * hpRatio;
-	float decreaseHpRatio = m_decreaseHp / m_maxHp;
-	float decreaseHpLength = kPHpWidth * decreaseHpRatio;
+	float decreaseHpRatio = (currentHp + m_damage) / m_maxHp;
+	float hpLength = kEnemyHpWidth * hpRatio;
+	float decreaseHpLength = kEnemyHpWidth * decreaseHpRatio;
 
-	DrawBoxAA(kEHpDispL, kEHpDispT, kEHpDispL + kEHpWidth, kEHpDispT + kEHpHeight, 0xffffff, false);
+	// バーの背景部分
+	DrawExtendGraphF(kEnemyHpBarLT.x, kEnemyHpBarLT.y, kEnemyHpBarRB.x, kEnemyHpBarRB.y, m_gaugeBarHandle, true);
 	// ダメージを受けた分のバー
 	if (m_intervalTime > 0)
 	{
-		DrawBoxAA(kEHpDispL, kEHpDispT, kEHpDispL + decreaseHpLength, kEHpDispT + kEHpHeight, kDamageHpColor, true);
+		DrawBoxAA(kEnemyCurrentHpLT.x, kEnemyCurrentHpLT.y, kEnemyCurrentHpLT.x + decreaseHpLength, kEnemyCurrentHpLT.y + kEnemyHpHeight, kDamageHpColor, true);
 	}
-	DrawBoxAA(kEHpDispL, kEHpDispT, kEHpDispL + hpLength, kEHpDispT + kEHpHeight, kHpColor, true);
+	DrawBoxAA(kEnemyCurrentHpLT.x, kEnemyCurrentHpLT.y, kEnemyCurrentHpLT.x + hpLength, kEnemyCurrentHpLT.y + kEnemyHpHeight, kHpColor, true);
 }
 
 
