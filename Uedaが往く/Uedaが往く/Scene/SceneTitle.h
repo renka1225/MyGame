@@ -14,6 +14,10 @@ public:
 	virtual void Draw();
 
 private:
-	int m_titleLogo;	// タイトルロゴの画像
+	int m_titleLogo;		// タイトルロゴの画像
+	int m_titleLogoBack;	// タイトルロゴの後ろに表示する画像
+	int m_titleTime;		// タイトルを表示するまでの時間
+	int m_textTime;			// テキストを表示するまでの時間
+	int m_textDisplayTime;	// テキストを表示する時間
 };
 
