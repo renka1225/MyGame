@@ -40,14 +40,14 @@
     <Filter Include="ヘッダー ファイル\Util">
       <UniqueIdentifier>{6ad1df79-ac0f-4be7-8e4e-12c496b3a878}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Shader">
-      <UniqueIdentifier>{c58137a3-c076-47b3-9270-65632bc6cb4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Shader">
-      <UniqueIdentifier>{260f52bb-42ec-4bff-b9b2-92039fe27827}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\UI">
       <UniqueIdentifier>{66b395e9-3c76-462e-bede-68986c393feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage">
+      <UniqueIdentifier>{19e93519-4967-4ad3-bbd7-2c5a87a7366d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Stage">
+      <UniqueIdentifier>{40dbb347-510a-4ee6-bfd3-d8866db0475e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,19 +102,19 @@
     <ClCompile Include="Util\Input.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Util\LoadData.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\ToonShader.cpp">
-      <Filter>ソース ファイル\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Util\Vec2.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Stage.cpp">
+      <Filter>ソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\ConversionTime.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,20 +173,20 @@
     <ClInclude Include="Util\Input.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Util\LoadData.h">
       <Filter>ヘッダー ファイル\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\ToonShader.h">
-      <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Util\Vec2.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="VertexShader3D.hlsl" />
+    <ClInclude Include="Stage\Stage.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Light.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\ConversionTime.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

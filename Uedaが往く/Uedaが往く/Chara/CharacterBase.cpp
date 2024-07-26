@@ -15,6 +15,9 @@ namespace
 /// コンストラクタ
 /// </summary>
 CharacterBase::CharacterBase():
+	m_animSpeed{0.0f},
+	m_status{0.0f},
+	m_colInfo{0.0f},
 	m_hp(0.0f),
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_moveSpeed(0.0f),

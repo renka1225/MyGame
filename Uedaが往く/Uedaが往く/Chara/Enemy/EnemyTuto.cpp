@@ -126,6 +126,21 @@ void EnemyTuto::Draw()
 
 
 /// <summary>
+/// ダメージを受けた際の処理
+/// </summary>
+/// <param name="damage">ダメージ量</param>
+void EnemyTuto::OnDamage(float damage)
+{
+	m_hp -= damage;
+	// HPバーを更新
+	if (damage > 0.0f)
+	{
+		m_pUIGauge->OnDamage(damage);
+	}
+}
+
+
+/// <summary>
 /// 次の行動を決める
 /// </summary>
 void EnemyTuto::DecideNextAction()

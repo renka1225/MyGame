@@ -9,7 +9,7 @@ namespace
 	const VECTOR kDirLightDir = VGet(0.0f, -1.0f, 0.0f);	 // 方向
 
 	/*ポイントライト*/
-	const VECTOR kPointLightPos = VGet(0.0f, 100.0f, 0.0f); // 位置
+	const VECTOR kPointLightPos = VGet(0.0f, 100.0f, 0.0f);  // 位置
 	constexpr float kPointLightRange = 1000.0f;				 // 有効距離
 	constexpr float kPointLightAtten0 = 0.0f;				 // 距離減衰パラメータ0
 	constexpr float kPointLightAtten1 = 0.002f;				 // 距離減衰パラメータ1

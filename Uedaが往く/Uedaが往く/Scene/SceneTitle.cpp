@@ -97,7 +97,7 @@ void SceneTitle::Draw()
 
 	// 文字を点滅させる
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_textAlpha);
-	DrawGraph(kTextPos.x, kTextPos.y, m_textHandle, true);
+	DrawGraphF(kTextPos.x, kTextPos.y, m_textHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #ifdef _DEBUG	// デバッグ表示

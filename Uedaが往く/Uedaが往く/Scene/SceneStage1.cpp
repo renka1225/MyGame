@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Stage.h"
+#include "Light.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage1.h"
@@ -26,6 +27,7 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 /// </summary>
 SceneStage1::~SceneStage1()
 {
+	Light::DeleteLight();
 }
 
 
@@ -37,6 +39,7 @@ void SceneStage1::Init()
 	m_pPlayer->Init();
 	m_pCamera->Init();
 	m_pEnemy->Init();
+	Light::SetLight();
 }
 
 

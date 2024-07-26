@@ -255,9 +255,9 @@ void EnemyBase::UpdateAnimState(EnemyState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch)PlayAnim(AnimKind::kPunch);
+		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch);
 		// キックアニメーションを再生
-		if (m_currentState == EnemyState::kKick)	PlayAnim(AnimKind::kKick);
+		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
 		if (m_currentState == EnemyState::kAvoid) PlayAnim(AnimKind::kAvoid);
 	}

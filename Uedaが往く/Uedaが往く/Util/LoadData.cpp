@@ -136,7 +136,7 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 	}
 
 	// 外部ファイルの情報を入れる
-	data.m_animSpeed.none = m_animSpeedData[0 + charType * kAnimNum];
+	data.m_animSpeed.none = m_animSpeedData[0+ charType * kAnimNum];
 	data.m_animSpeed.avoid = m_animSpeedData[1 + charType * kAnimNum];
 	data.m_animSpeed.down = m_animSpeedData[2 + charType * kAnimNum];
 	data.m_animSpeed.fightIdle = m_animSpeedData[3 + charType * kAnimNum];
