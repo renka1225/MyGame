@@ -11,8 +11,7 @@
 namespace
 {
 	// プレイヤー情報
-	//const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
-	const char* const kfileName = "data/Model/_player.mv1";	// プレイヤーのファイル名
+	const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
 	constexpr float kGaugeCharge = 0.3f;					// 1回の攻撃で増えるゲージ量
 	constexpr float kAcceleration = 0.7f;					// プレイヤーの加速度
