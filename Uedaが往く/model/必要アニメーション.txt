@@ -8,7 +8,7 @@
 ・パンチ(連続) PunchCombo 〇
 ・キック Kick		　〇
 ・回避	Avoid		  〇
-・敵掴み Grab		　
+・敵掴み Grab(Torch)	　
 ・掴み失敗 Stumble	　〇
 ・ガード Guard		　〇
 ・攻撃受ける Recive	　〇
