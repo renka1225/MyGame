@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Chara\CharacterBase.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Chara\Enemy\EnemyNinja.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyTuto.cpp" />
     <ClCompile Include="Chara\Player.cpp" />
     <ClCompile Include="Util\ConversionTime.cpp" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <ClInclude Include="Chara\CharacterBase.h" />
     <ClInclude Include="Chara\Enemy\EnemyBase.h" />
+    <ClInclude Include="Chara\Enemy\EnemyNinja.h" />
     <ClInclude Include="Chara\Enemy\EnemyTuto.h" />
     <ClInclude Include="Chara\Player.h" />
     <ClInclude Include="Stage\Light.h" />

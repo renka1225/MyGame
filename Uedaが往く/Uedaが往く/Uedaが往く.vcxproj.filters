@@ -117,6 +117,9 @@
     <ClCompile Include="Util\ConversionTime.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
+    <ClCompile Include="Chara\Enemy\EnemyNinja.cpp">
+      <Filter>ソース ファイル\Chara\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chara\CharacterBase.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="Util\ConversionTime.h">
       <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Chara\Enemy\EnemyNinja.h">
+      <Filter>ヘッダー ファイル\Chara\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

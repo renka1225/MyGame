@@ -23,8 +23,11 @@ public:
 	// キャラクターの種類
 	enum class CharaType
 	{
-		kPlayer,	// プレイヤー
-		kEnemyTuto,	// チュートリアルの敵
+		kPlayer,		// プレイヤー
+		kEnemyTuto,		// チュートリアルの敵
+		kEnemyNinja,	// 忍者
+		kEnemyChef,		// シェフ
+		kEnemyAbe,		// Abe
 	};
 
 	// アニメーション種別

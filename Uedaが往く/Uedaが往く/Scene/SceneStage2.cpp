@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Player.h"
 #include "EnemyTuto.h"
+#include "EnemyNinja.h"
 #include "Camera.h"
 #include "Input.h"
 #include "Stage.h"
@@ -14,7 +15,7 @@
 /// <param name="player"></param>
 /// <param name="camera"></param>
 /// <param name="pStage"></param>
-SceneStage2::SceneStage2(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage):
+SceneStage2::SceneStage2(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage) :
 	m_pPlayer(pPlayer),
 	m_pCamera(pCamera),
 	m_pStage(pStage),
@@ -71,7 +72,16 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		// “G‚ÌHP‚ª0‚É‚È‚Á‚½ê‡
 		if (m_pEnemy->GetHp() <= 0)
 		{
-			return std::make_shared<SceneClear>();
+			// Ÿ‚Ì“G‚ğ“oê‚³‚¹‚é
+			//if(m_pEnemy == )
+			{
+				m_pEnemy = nullptr;
+				m_pEnemy = std::make_shared<EnemyNinja>();
+			}
+
+			// ‚·‚×‚Ä‚Ì“G‚ğ“|‚µ‚½‚çƒNƒŠƒA‰æ–Ê‚É‘JˆÚ‚·‚é
+
+			//return std::make_shared<SceneClear>();
 		}
 		// ƒvƒŒƒCƒ„[‚ÌHP‚ª0‚É‚È‚Á‚½ê‡
 		if (m_pPlayer->GetHp() <= 0)
