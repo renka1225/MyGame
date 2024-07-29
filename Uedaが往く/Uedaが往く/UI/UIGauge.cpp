@@ -7,10 +7,10 @@ namespace
 {
 	// プレイヤーUI
 	const Vec2 kPlayerHpBarLT = { 25.0f, 40.0f };			// HPバー左上位置
-	const Vec2 kPlayerHpBarRB = { 600.0f, 100.0f };			// HPバー右下位置
+	const Vec2 kPlayerHpBarRB = { 600.0f, 80.0f };			// HPバー右下位置
 	const Vec2 kPlayerCurrentHpLT = { 40.0f, 55.0f };		// 現在のHP左上位置
 	constexpr float kPlayerHpWidth = 540.0f;				// HPバーの横幅
-	constexpr float kPlayerHpHeight = 32.0f;				// HPバーの縦幅
+	constexpr float kPlayerHpHeight = 30.0f;				// HPバーの縦幅
 		
 	const Vec2 kPlayerGaugeBarLT = { 25.0f, 110.0f };		// ゲージバー左上位置
 	const Vec2 kPlayerGaugeBarRB = { 600.0f, 140.0f };		// ゲージバー右下位置
@@ -88,7 +88,8 @@ void UIGauge::DrawPlayerHP(float currentHp)
 	float decreaseHpLength = kPlayerHpWidth * decreaseHpRatio;
 
 	// バーの背景部分
-	DrawExtendGraphF(kPlayerHpBarLT.x, kPlayerHpBarLT.y, kPlayerHpBarRB.x, kPlayerHpBarRB.y, m_gaugeBarHandle, true);
+	//DrawExtendGraphF(kPlayerHpBarLT.x, kPlayerHpBarLT.y, kPlayerHpBarRB.x, kPlayerHpBarRB.y, m_gaugeBarHandle, true);
+	DrawGraph(20, 50, m_gaugeBarHandle, true);
 	// ダメージを受けた分のバー
 	if (m_intervalTime > 0)
 	{
@@ -130,7 +131,8 @@ void UIGauge::DrawEnemyHp(float currentHp)
 	float decreaseHpLength = kEnemyHpWidth * decreaseHpRatio;
 
 	// バーの背景部分
-	DrawExtendGraphF(kEnemyHpBarLT.x, kEnemyHpBarLT.y, kEnemyHpBarRB.x, kEnemyHpBarRB.y, m_gaugeBarHandle, true);
+	//DrawExtendGraphF(kEnemyHpBarLT.x, kEnemyHpBarLT.y, kEnemyHpBarRB.x, kEnemyHpBarRB.y, m_gaugeBarHandle, true);
+	DrawTurnGraph(800,1000, m_gaugeBarHandle, true);
 	// ダメージを受けた分のバー
 	if (m_intervalTime > 0)
 	{
