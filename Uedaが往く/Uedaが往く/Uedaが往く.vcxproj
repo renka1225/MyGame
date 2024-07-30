@@ -24,6 +24,7 @@
     <ClCompile Include="Chara\Enemy\EnemyNinja.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyTuto.cpp" />
     <ClCompile Include="Chara\Player.cpp" />
+    <ClCompile Include="Scene\SceneStageBase.cpp" />
     <ClCompile Include="Util\ConversionTime.cpp" />
     <ClCompile Include="Util\LoadData.cpp" />
     <ClCompile Include="main.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="Chara\Enemy\EnemyNinja.h" />
     <ClInclude Include="Chara\Enemy\EnemyTuto.h" />
     <ClInclude Include="Chara\Player.h" />
+    <ClInclude Include="Scene\SceneStageBase.h" />
     <ClInclude Include="Stage\Light.h" />
     <ClInclude Include="Util\ConversionTime.h" />
     <ClInclude Include="Util\LoadData.h" />

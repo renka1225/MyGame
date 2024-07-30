@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Player.h"
-#include "EnemyTuto.h"
+#include "DxLib.h"
+#include "Player.h"
 #include "EnemyNinja.h"
 #include "Camera.h"
 #include "Input.h"
@@ -9,19 +10,24 @@
 #include "SceneGameover.h"
 #include "SceneStage2.h"
 
+namespace
+{
+	constexpr int kMaxBattleNum = 3;	// 最大バトル数
+}
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
-/// <param name="player"></param>
-/// <param name="camera"></param>
-/// <param name="pStage"></param>
-SceneStage2::SceneStage2(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage) :
-	m_pPlayer(pPlayer),
-	m_pCamera(pCamera),
-	m_pStage(pStage),
-	m_pEnemy(nullptr)
+/// <param name="player">プレイヤー参照</param>
+/// <param name="camera">カメラ参照</param>
+/// <param name="pStage">ステージ参照</param>
+SceneStage2::SceneStage2(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage)
 {
-	m_pEnemy = std::make_shared<EnemyTuto>();
+	m_pPlayer = pPlayer;
+	m_pCamera = pCamera;
+	m_pStage = pStage;
+	m_pEnemy = std::make_shared<EnemyNinja>();
+	m_battleNum = 0;
 }
 
 
@@ -38,9 +44,7 @@ SceneStage2::~SceneStage2()
 /// </summary>
 void SceneStage2::Init()
 {
-	m_pPlayer->Init();
-	m_pCamera->Init();
-	m_pEnemy->Init();
+	SceneStageBase::Init();
 }
 
 
@@ -73,16 +77,27 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		if (m_pEnemy->GetHp() <= 0)
 		{
 			// 次の敵を登場させる
-			//if(m_pEnemy == )
+			switch (m_battleNum)
 			{
+			case 0:	// 2戦目
 				m_pEnemy = nullptr;
 				m_pEnemy = std::make_shared<EnemyNinja>();
+				break;
+			case 1:	// 3戦目
+				m_pEnemy = nullptr;
+				m_pEnemy = std::make_shared<EnemyNinja>();
+				break;
+			case 2: // 敵をすべて倒したら
+				// TODO:クリア処理に移行する
+				return std::make_shared<SceneClear>();
+				break;
+			default:
+				break;
 			}
 
-			// すべての敵を倒したらクリア画面に遷移する
-
-			//return std::make_shared<SceneClear>();
+			m_battleNum++;
 		}
+
 		// プレイヤーのHPが0になった場合
 		if (m_pPlayer->GetHp() <= 0)
 		{
@@ -112,12 +127,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 /// </summary>
 void SceneStage2::Draw()
 {
-	// ステージ描画
-	m_pStage->Draw();
-	// プレイヤー描画
-	m_pPlayer->Draw();
-	// 敵描画
-	m_pEnemy->Draw();
+	SceneStageBase::Draw();
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

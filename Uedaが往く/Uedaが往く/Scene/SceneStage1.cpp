@@ -4,21 +4,25 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Stage.h"
-#include "Light.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage1.h"
 
+namespace
+{
+	constexpr int kMaxBattleNum = 1;	// 最大バトル数
+}
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage):
-	m_pPlayer(pPlayer),
-	m_pCamera(pCamera),
-	m_pStage(pStage),
-	m_pEnemy(nullptr)
+SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage)
 {
+	m_pPlayer = pPlayer;
+	m_pCamera = pCamera;
+	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyTuto>();
+	m_battleNum = kMaxBattleNum;
 }
 
 
@@ -27,7 +31,6 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 /// </summary>
 SceneStage1::~SceneStage1()
 {
-	Light::DeleteLight();
 }
 
 
@@ -36,10 +39,7 @@ SceneStage1::~SceneStage1()
 /// </summary>
 void SceneStage1::Init()
 {
-	m_pPlayer->Init();
-	m_pCamera->Init();
-	m_pEnemy->Init();
-	Light::SetLight();
+	SceneStageBase::Init();
 }
 
 
@@ -100,12 +100,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 /// </summary>
 void SceneStage1::Draw()
 {
-	// ステージ描画
-	m_pStage->Draw();
-	// プレイヤー描画
-	m_pPlayer->Draw();
-	// 敵描画
-	m_pEnemy->Draw();
+	SceneStageBase::Draw();
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
