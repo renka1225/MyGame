@@ -132,7 +132,7 @@ void EnemyBase::Punch()
 {
 	m_isAttack = true;
 	m_currentState = EnemyState::kPunch;
-	PlayAnim(AnimKind::kPunch);
+	PlayAnim(AnimKind::kPunch1);
 }
 
 
@@ -255,7 +255,7 @@ void EnemyBase::UpdateAnimState(EnemyState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -267,7 +267,7 @@ void EnemyBase::UpdateAnimState(EnemyState prevState)
 		// 待機アニメーションを再生
 		if (m_currentState == EnemyState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
 		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -293,7 +293,7 @@ void EnemyBase::UpdateAnimState(EnemyState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// 回避アニメーションを再生
 		if (m_currentState == EnemyState::kAvoid) PlayAnim(AnimKind::kAvoid);
 	}
@@ -305,7 +305,7 @@ void EnemyBase::UpdateAnimState(EnemyState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
 	}
@@ -336,7 +336,7 @@ void EnemyBase::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
 		if (m_isAttack)
 		{
-			m_currentAnimCount += m_animSpeed.punch;
+			m_currentAnimCount += m_animSpeed.punch1;
 		}
 		else
 		{
@@ -372,7 +372,7 @@ void EnemyBase::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
 		if (m_isAttack)
 		{
-			m_prevAnimCount += m_animSpeed.punch;
+			m_prevAnimCount += m_animSpeed.punch1;
 		}
 		else
 		{

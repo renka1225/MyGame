@@ -9,7 +9,7 @@
 namespace
 {
 	// 敵情報
-	const char* const kfileName = "data/Model/enemyTuto.mv1";	// 敵のファイル名
+	const char* const kfileName = "data/Model/Chara/Ninja.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.3f;								// 拡大率
 	constexpr int kIntervalTime = 120;							// 状態を更新するまでの時間
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);			// 初期位置

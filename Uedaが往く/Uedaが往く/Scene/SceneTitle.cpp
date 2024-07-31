@@ -50,6 +50,7 @@ SceneTitle::~SceneTitle()
 /// </summary>
 void SceneTitle::Init()
 {
+	// 処理なし
 }
 
 
@@ -57,7 +58,7 @@ void SceneTitle::Init()
 /// 更新
 /// </summary>
 /// <param name="input">入力状態</param>
-/// <returns></returns>
+/// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
 	m_titleTime--;

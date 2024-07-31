@@ -11,8 +11,8 @@ namespace
 	const char* const kAnimSpeedFileName = "data/csv/animSpeed.csv";	// アニメーション速度データのファイル名
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
 
-	constexpr int kStatusNum = 8;	// 1キャラクターのステータス数
-	constexpr int kAnimNum = 14;	// 1キャラクターのアニメーションの数
+	constexpr int kStatusNum = 10;	// 1キャラクターのステータス数
+	constexpr int kAnimNum = 16;	// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;		// 1キャラクターの当たり判定の情報数
 }
 
@@ -92,12 +92,14 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 	// 外部ファイルの情報を入れる
 	data.m_status.maxHp = m_charData[0 + charType * kStatusNum];
 	data.m_status.punchPower = m_charData[1 + charType * kStatusNum];
-	data.m_status.kickPower = m_charData[2 + charType * kStatusNum];
-	data.m_status.maxMoveSpeed = m_charData[3 + charType * kStatusNum];
-	data.m_status.fightWalkSpeed = m_charData[4 + charType * kStatusNum];
-	data.m_status.acceleration = m_charData[5 + charType * kStatusNum];
-	data.m_status.deceleration = m_charData[6 + charType * kStatusNum];
-	data.m_status.avoidDist = m_charData[7 + charType * kStatusNum];
+	data.m_status.secondPunchPower = m_charData[2 + charType * kStatusNum];
+	data.m_status.thirdPunchPower = m_charData[3 + charType * kStatusNum];
+	data.m_status.kickPower = m_charData[4 + charType * kStatusNum];
+	data.m_status.maxMoveSpeed = m_charData[5 + charType * kStatusNum];
+	data.m_status.fightWalkSpeed = m_charData[6 + charType * kStatusNum];
+	data.m_status.acceleration = m_charData[7 + charType * kStatusNum];
+	data.m_status.deceleration = m_charData[8 + charType * kStatusNum];
+	data.m_status.avoidDist = m_charData[9 + charType * kStatusNum];
 }
 
 
@@ -145,12 +147,13 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 	data.m_animSpeed.grab = m_animSpeedData[6 + charType * kAnimNum];
 	data.m_animSpeed.guard = m_animSpeedData[7 + charType * kAnimNum];
 	data.m_animSpeed.kick = m_animSpeedData[8 + charType * kAnimNum];
-	data.m_animSpeed.punch = m_animSpeedData[9 + charType * kAnimNum];
-	data.m_animSpeed.comboPunch = m_animSpeedData[10 + charType * kAnimNum];
-	data.m_animSpeed.receive = m_animSpeedData[11 + charType * kAnimNum];
-	data.m_animSpeed.run = m_animSpeedData[12 + charType * kAnimNum];
-	data.m_animSpeed.stand = m_animSpeedData[13 + charType * kAnimNum];
-	data.m_animSpeed.Stumble = m_animSpeedData[14 + charType * kAnimNum];
+	data.m_animSpeed.punch1 = m_animSpeedData[9 + charType * kAnimNum];
+	data.m_animSpeed.punch2 = m_animSpeedData[10 + charType * kAnimNum];
+	data.m_animSpeed.punch3 = m_animSpeedData[11 + charType * kAnimNum];
+	data.m_animSpeed.receive = m_animSpeedData[12 + charType * kAnimNum];
+	data.m_animSpeed.run = m_animSpeedData[13 + charType * kAnimNum];
+	data.m_animSpeed.stand = m_animSpeedData[14 + charType * kAnimNum];
+	data.m_animSpeed.Stumble = m_animSpeedData[15 + charType * kAnimNum];
 }
 
 

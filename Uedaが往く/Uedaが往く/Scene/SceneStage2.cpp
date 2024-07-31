@@ -3,6 +3,8 @@
 #include "DxLib.h"
 #include "Player.h"
 #include "EnemyNinja.h"
+#include "EnemyChef.h"
+#include "EnemyAbe.h"
 #include "Camera.h"
 #include "Input.h"
 #include "Stage.h"
@@ -81,11 +83,11 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 			{
 			case 0:	// 2í–Ú
 				m_pEnemy = nullptr;
-				m_pEnemy = std::make_shared<EnemyNinja>();
+				m_pEnemy = std::make_shared<EnemyChef>();
 				break;
 			case 1:	// 3í–Ú
 				m_pEnemy = nullptr;
-				m_pEnemy = std::make_shared<EnemyNinja>();
+				m_pEnemy = std::make_shared<EnemyAbe>();
 				break;
 			case 2: // “G‚ğ‚·‚×‚Ä“|‚µ‚½‚ç
 				// TODO:ƒNƒŠƒAˆ—‚ÉˆÚs‚·‚é

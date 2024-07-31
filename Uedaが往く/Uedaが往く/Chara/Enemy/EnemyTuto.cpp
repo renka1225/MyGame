@@ -9,14 +9,14 @@
 namespace
 {
 	// 敵情報
-	const char* const kfileName = "data/Model/enemyTuto.mv1";	// 敵のファイル名
-	constexpr float kScale = 0.3f;								// 拡大率
-	constexpr int kIntervalTime = 120;							// 状態を更新するまでの時間
-	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);			// 初期位置
+	const char* const kfileName = "data/Model/Chara/EnemyTuto.mv1";	// 敵のファイル名
+	constexpr float kScale = 0.3f;									// 拡大率
+	constexpr int kIntervalTime = 120;								// 状態を更新するまでの時間
+	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);				// 初期位置
 
 	constexpr int kMaxProb = 100;			// 最大確率%
-	constexpr int kPunchProb = 50;			// パンチを行う確率
-	constexpr int kKickProb = 30;			// キックを行う確率
+	constexpr int kPunchProb = 20;			// パンチを行う確率
+	constexpr int kKickProb = 10;			// キックを行う確率
 }
 
 
@@ -56,7 +56,7 @@ void EnemyTuto::Init()
 
 
 /// <summary>
-///  更新
+/// 更新
 /// </summary>
 /// <param name="player">プレイヤー参照</param>
 /// <param name="stage">ステージ参照</param>

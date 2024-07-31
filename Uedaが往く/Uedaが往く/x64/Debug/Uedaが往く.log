@@ -1,2 +1,5 @@
-﻿  SceneStage2.cpp
-  Uedaが往く.vcxproj -> C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe
+﻿  LoadData.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(85,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(133,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(187,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+  Uedaが往く.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe

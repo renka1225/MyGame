@@ -27,7 +27,7 @@ public:
 		kEnemyTuto,		// チュートリアルの敵
 		kEnemyNinja,	// 忍者
 		kEnemyChef,		// シェフ
-		kEnemyAbe,		// Abe
+		kEnemyAbe,		// 爺さん
 	};
 
 	// アニメーション種別
@@ -42,12 +42,13 @@ public:
 		kGrab = 5,		// 掴み
 		kGuard = 6,		// ガード
 		kKick = 7,		// キック
-		kPunch = 8,		// パンチ
-		kComboPunch = 9,// コンボパンチ
-		kReceive = 10,	// 攻撃を受ける
-		kRun = 11,		// 移動
-		kStand = 12,	// 待機
-		kStumble = 13,	// 掴み失敗
+		kPunch1 = 8,	// パンチ(1コンボ)
+		kPunch2 = 9,	// パンチ(2コンボ)
+		kPunch3 = 10,	// パンチ(3コンボ)
+		kReceive = 11,	// 攻撃を受ける
+		kRun = 12,		// 移動
+		kStand = 13,	// 待機
+		kStumble = 14,	// 掴み失敗
 	};
 
 	// アニメーション速度
@@ -62,7 +63,9 @@ public:
 		float grab;			// 掴み
 		float guard;		// ガード
 		float kick;			// キック
-		float punch;		// パンチ
+		float punch1;		// パンチ(1コンボ)
+		float punch2;		// パンチ(2コンボ)
+		float punch3;		// パンチ(3コンボ)
 		float comboPunch;	// コンボパンチ
 		float receive;		// 攻撃を受ける
 		float run;			// 移動
@@ -76,6 +79,8 @@ public:
 	{
 		float maxHp;			// 最大HP
 		float punchPower;		// パンチの攻撃力
+		float secondPunchPower;	// パンチ2コンボ目の攻撃力
+		float thirdPunchPower;	// パンチ3コンボ目の攻撃力
 		float kickPower;		// キックの攻撃力
 		float maxMoveSpeed;		// 最大の移動速度
 		float fightWalkSpeed;	// 構え時の移動速度

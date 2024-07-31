@@ -10,7 +10,7 @@ namespace
 	const Vec2 kPlayerHpBarRB = { 1000.0f, 80.0f };			// HPバー右下位置
 	const Vec2 kPlayerCurrentHpLT = { 50.0f, 56.0f };		// 現在のHP左上位置
 	constexpr float kPlayerHpWidth = 907.0f;				// HPバーの横幅
-	constexpr float kPlayerHpHeight = 17.0f;				// HPバーの縦幅
+	constexpr float kPlayerHpHeight = 18.0f;				// HPバーの縦幅
 		
 	const Vec2 kPlayerGaugeBarLT = { 25.0f, 95.0f };		// ゲージバー左上位置
 	const Vec2 kPlayerGaugeBarRB = { 800.0f, 120.0f };		// ゲージバー右下位置

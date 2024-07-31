@@ -11,26 +11,26 @@
 namespace
 {
 	// プレイヤー情報
-	const char* const kfileName = "data/Model/player.mv1";	// プレイヤーのファイル名
-	constexpr float kMaxGauge = 100.0f;						// 最大ゲージ量
-	constexpr float kGaugeCharge = 0.3f;					// 1回の攻撃で増えるゲージ量
-	constexpr float kAcceleration = 0.7f;					// プレイヤーの加速度
-	constexpr float kDeceleration = 0.7f;					// プレイヤーの減速度
-	constexpr int kMaxPunchCount = 3;						// 最大コンボ数
-	constexpr int kPunchComboTime = 40;						// パンチコンボの入力受付時間
-	constexpr int kPunchCoolTime = 20;						// パンチできるようになるまでの時間
-	constexpr float kAvoidDist = 30.0f;						// 回避の距離
-	constexpr int kMaxAvoidCount = 3;						// 連続で回避できる回数
-	constexpr int kAvoidCoolTime = 30;						// 回避できるようになるまでの時間
-	constexpr float kFightWalkSpeed = 2.3f;					// 構え中の移動速度
-	constexpr float kGuardAnimTime = 10.0f;					// ガード中のアニメーションを止める時間
-	constexpr float kAngleSpeed = 0.2f;						// プレイヤー角度の変化速度
-	constexpr float kVelocity = 6.0f;						// ジャンプの高さ
-	constexpr float kGravity = -0.25f;						// 重力
-	constexpr float kScale = 0.3f;							// プレイヤーモデルの拡大率
-	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);			// 初期方向
-	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);		// 初期位置
-	//const VECTOR kInitPos = VGet(5000.0f, 100.0f, -1000.0f);	// 初期位置
+	const char* const kfileName = "data/Model/Chara/Player.mv1";	// プレイヤーのファイル名
+	constexpr float kMaxGauge = 100.0f;								// 最大ゲージ量
+	constexpr float kGaugeCharge = 0.3f;							// 1回の攻撃で増えるゲージ量
+	constexpr float kAcceleration = 0.7f;							// プレイヤーの加速度
+	constexpr float kDeceleration = 0.7f;							// プレイヤーの減速度
+	constexpr int kMaxPunchCount = 3;								// 最大コンボ数
+	constexpr int kPunchComboTime = 40;								// パンチコンボの入力受付時間
+	constexpr int kPunchCoolTime = 20;								// パンチできるようになるまでの時間
+	constexpr float kAvoidDist = 30.0f;								// 回避の距離
+	constexpr int kMaxAvoidCount = 3;								// 連続で回避できる回数
+	constexpr int kAvoidCoolTime = 30;								// 回避できるようになるまでの時間
+	constexpr float kFightWalkSpeed = 2.3f;							// 構え中の移動速度
+	constexpr float kGuardAnimTime = 10.0f;							// ガード中のアニメーションを止める時間
+	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
+	constexpr float kVelocity = 6.0f;								// ジャンプの高さ
+	constexpr float kGravity = -0.25f;								// 重力
+	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
+	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
+	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);				// 初期位置
+	//const VECTOR kInitPos = VGet(5000.0f, 100.0f, -1000.0f);		// 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -310,7 +310,7 @@ Player::PlayerState Player::Punch(const Input& input)
 			m_punchComboTime = kPunchComboTime; // コンボ入力の受付時間をリセット
 			m_isAttack = true;
 			nextState = PlayerState::kPunch;
-			PlayAnim(AnimKind::kPunch);
+			PlayAnim(AnimKind::kPunch1);
 		}
 	}
 
@@ -589,7 +589,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if(m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch)PlayAnim(AnimKind::kPunch);
+		if (m_currentState == PlayerState::kPunch)PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick)	PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -605,7 +605,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 待機アニメーションを再生
 		if(m_currentState == PlayerState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -639,7 +639,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// 回避アニメーションを再生
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
@@ -655,7 +655,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 構えアニメーションを再生
@@ -671,7 +671,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -687,7 +687,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch);
+		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -721,7 +721,7 @@ void Player::UpdateAnim()
 		// アニメーションによって再生スピードを変える
 		if (m_currentState == PlayerState::kPunch)
 		{
-			m_currentAnimCount += m_animSpeed.punch;
+			m_currentAnimCount += m_animSpeed.punch1;
 		}
 		else if (m_currentState == PlayerState::kKick)
 		{
@@ -761,7 +761,7 @@ void Player::UpdateAnim()
 			// パンチコンボの場合
 			m_currentAnimCount = 0.0f;
 			m_punchCount--;
-			PlayAnim(AnimKind::kPunch);
+			PlayAnim(AnimKind::kPunch1);
 		}
 		if (m_currentAnimCount > animTotalTime)
 		{
@@ -798,7 +798,7 @@ void Player::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
 		if (m_isAttack)
 		{
-			m_prevAnimCount += m_animSpeed.punch;
+			m_prevAnimCount += m_animSpeed.punch1;
 		}
 		else
 		{
