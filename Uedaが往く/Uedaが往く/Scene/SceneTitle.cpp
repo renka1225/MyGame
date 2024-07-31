@@ -8,7 +8,7 @@
 // 定数
 namespace
 {
-	const Vec2 kTitleLogoPos = { 950.0f, 400.0f };	// タイトルロゴ表示位置
+	const Vec2 kTitleLogoPos = { 950.0f, 500.0f };	// タイトルロゴ表示位置
 	constexpr float kTitleLogoScale = 0.5f;			// タイトルロゴのサイズ
 	const Vec2 kTextPos = { 500.0f, 800.0f };		// "PRESS ANY BUTTON"のテキスト位置
 	constexpr int kTitleTime = 10;					// タイトルを表示するまでの時間

@@ -20,5 +20,8 @@ public:
 	virtual void Init() override;
 	virtual std::shared_ptr<SceneBase> Update(Input& input) override;
 	virtual void Draw() override;
+
+private:
+	void UpdateNextBattle();	// “G‚ğ“|‚µ‚ÄŸ‡‚ªn‚Ü‚é‘O‚Ìˆ—
 };
 

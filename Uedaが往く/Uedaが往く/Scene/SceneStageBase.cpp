@@ -9,6 +9,12 @@
 #include "SceneGameover.h"
 #include "SceneStageBase.h"
 
+// 定数
+namespace
+{
+	const char* const kFightTextPath = "data/UI/Fight!.png"; // "Fight"のテキスト画像のファイル位置
+}
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -20,8 +26,10 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_pCamera(pCamera),
 	m_pStage(pStage),
 	m_pEnemy(nullptr),
-	m_battleNum(0)
+	m_battleNum(0),
+	m_nextBattleTime(0)
 {
+	m_fightTextHandle = LoadGraph(kFightTextPath);
 }
 
 
@@ -30,6 +38,7 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 /// </summary>
 SceneStageBase::~SceneStageBase()
 {
+	DeleteGraph(m_fightTextHandle);
 	Light::DeleteLight();
 }
 

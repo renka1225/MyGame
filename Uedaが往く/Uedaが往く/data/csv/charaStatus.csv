@@ -1,6 +1,6 @@
 ﻿Chara,MaxHP,PunchPower,SecondPunchPower,ThirdPunchPower,KickPower,MoveSpeed,FightWalkSpeed,Acceleration,Deceleration,AvoidDist
-Player,10000,3,4,5,5,6,2.3,0.7,0.7,30
-Tuto,1000,2,4,5,3,3,2,0.7,0.7,20
-Ninja,2000,2,4,5,3,3,2,0.7,0.7,20
-Chef,1000,2,4,5,3,3,2,0.7,0.7,20
-Abe,1000,2,4,5,3,3,2,0.7,0.7,20
+Player,10000,15,20,23,20,6,2.3,0.7,0.7,30
+Tuto,1000,5,7,10,10,3,2,0.7,0.7,20
+Ninja,7000,20,24,30,25,3,2,0.7,0.7,20
+Chef,10000,8,12,17,32,3,2,0.7,0.7,20
+Abe,15000,17,22,27,30,3,2,0.7,0.7,20

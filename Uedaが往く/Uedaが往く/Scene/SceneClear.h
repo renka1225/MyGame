@@ -13,5 +13,7 @@ public:
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
+private:
+	int m_textHandle;	// テキストの画像
 };
 

@@ -8,6 +8,8 @@
 #include "SceneOption.h"
 #include "SceneStage1.h"
 #include "SceneStage2.h"
+#include "SceneClear.h"
+#include "SceneGameover.h"
 #include "SceneDebug.h"
 
 // 定数
@@ -62,6 +64,14 @@ std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 		{
 			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);
 		}
+		else if (m_select == SelectScene::kClear)
+		{
+			return std::make_shared<SceneClear>();
+		}
+		else if (m_select == SelectScene::kGameover)
+		{
+			return std::make_shared<SceneGameover>();
+		}
 	}
 
 	return shared_from_this();
@@ -77,16 +87,22 @@ void SceneDebug::Draw()
 	int optionColor = kTextColor;
 	int stage1Color = kTextColor;
 	int stage2Color = kTextColor;
+	int clearColor = kTextColor;
+	int gameoverColor = kTextColor;
 
 	if (m_select == SelectScene::kTitle)	titleColor = kSelectTextColor;
 	if (m_select == SelectScene::kStageSelect) stageselectColor = kSelectTextColor;
 	if (m_select == SelectScene::kOption) optionColor = kSelectTextColor;
 	if (m_select == SelectScene::kStage1) stage1Color = kSelectTextColor;
 	if (m_select == SelectScene::kStage2) stage2Color = kSelectTextColor;
+	if (m_select == SelectScene::kClear) clearColor = kSelectTextColor;
+	if (m_select == SelectScene::kGameover) gameoverColor = kSelectTextColor;
 
 	DrawString(0, 20, "タイトル", titleColor);
 	DrawString(0, 40, "ステージ選択", stageselectColor);
 	DrawString(0, 60, "オプション", optionColor);
 	DrawString(0, 80, "ステージ1", stage1Color);
 	DrawString(0, 100, "ステージ2", stage2Color);
+	DrawString(0, 120, "クリア", clearColor);
+	DrawString(0, 140, "ゲームオーバー", gameoverColor);
 }

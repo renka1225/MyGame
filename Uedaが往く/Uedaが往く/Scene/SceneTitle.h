@@ -22,4 +22,3 @@ private:
 	int m_textHandle;		// テキストの画像
 	int m_textAlpha;		// テキストのアルファ値
 };
-

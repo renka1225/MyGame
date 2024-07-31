@@ -1,14 +1,37 @@
 #include "Dxlib.h"
 #include "Input.h"
+#include "Vec2.h"
+#include "Game.h"
+#include "Player.h"
+#include "Camera.h"
+#include "Stage.h"
 #include "SceneTitle.h"
+#include "SceneSelectStage.h"
+#include "SceneStage2.h"
 #include "SceneGameover.h"
+
+// 定数
+namespace
+{
+	const char* const kHaibokuTextPath = "data/UI/haiboku.png";	// 敗北のテキスト画像のファイル位置
+	const char* const kCursorPath = "data/UI/cursor.png";		// カーソル画像のファイル位置
+	const Vec2 kHaibokuTextPos = { 670, 100 };					// 敗北のテキスト画像表示位置
+	const Vec2 kRetryTextPos = { 650, 600 };					// "リトライ"表示位置
+	const Vec2 kStageTextPos = { 650, 700 };					// "ステージ選択にもどる"表示位置
+	const Vec2 kTitleTextPos = { 650, 800 };					// "タイトルにもどる"表示位置
+	const Vec2 kCursorPos = { 600, 590 };						// カーソル表示位置
+	constexpr float kCursorMove = 100.0f;						// カーソルの移動量
+}
 
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneGameover::SceneGameover()
+SceneGameover::SceneGameover():
+	m_select(Select::kRetry)
 {
+	m_textHandle = LoadGraph(kHaibokuTextPath);
+	m_cursorHandle = LoadGraph(kCursorPath);
 }
 
 
@@ -17,6 +40,8 @@ SceneGameover::SceneGameover()
 /// </summary>
 SceneGameover::~SceneGameover()
 {
+	DeleteGraph(m_textHandle);
+	DeleteGraph(m_cursorHandle);
 }
 
 
@@ -35,9 +60,25 @@ void SceneGameover::Init()
 /// <returns></returns>
 std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 {
+	UpdateSelect(input);	// 選択状態更新
+
 	if (input.IsTriggered("OK"))
 	{
-		return std::make_shared<SceneTitle>();
+		if (m_select == kRetry)
+		{
+			std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
+			std::shared_ptr<Camera> pCamera = std::make_shared<Camera>();
+			std::shared_ptr<Stage> pStage = std::make_shared<Stage>();
+			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);	// プレイ画面に移動
+		}
+		else if (m_select == kStageSelect)
+		{
+			return std::make_shared<SceneSelectStage>(); // ステージ選択画面に移動
+		}
+		else if (m_select == kTitle)
+		{
+			return std::make_shared<SceneTitle>();	// タイトル画面に移動
+		}
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -49,8 +90,40 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 /// </summary>
 void SceneGameover::Draw()
 {
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x1a1a1a, true);
+
+	// 敗北の文字を表示
+	DrawGraphF(kHaibokuTextPos.x, kHaibokuTextPos.y, m_textHandle, true);
+
+	// カーソル表示
+	DrawGraphF(kCursorPos.x, kCursorPos.y + kCursorMove * m_select, m_cursorHandle, true);
+
+	// 選択項目を表示
+	DrawStringF(kRetryTextPos.x, kRetryTextPos.y, "リトライ", 0xffffff);
+	DrawStringF(kStageTextPos.x, kStageTextPos.y, "ステージ選択にもどる", 0xffffff);
+	DrawStringF(kTitleTextPos.x, kTitleTextPos.y, "タイトルにもどる", 0xffffff);
+
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ゲームオーバー画面", 0xffffff);
+	// 中心線
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
+}
+
+
+/// <summary>
+/// 選択状態を更新する
+/// </summary>
+/// <param name="input">入力状態</param>
+void SceneGameover::UpdateSelect(Input& input)
+{
+	if (input.IsTriggered("down"))
+	{
+		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
+	}
+	if (input.IsTriggered("up"))
+	{
+		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ上げる
+	}
 }

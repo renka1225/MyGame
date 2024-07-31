@@ -41,6 +41,8 @@ public:
 
 	// ダメージを受けた際の処理
 	virtual void OnDamage(float damage) override;
+	// 回復処理
+	void Recovery();
 	// エネミーとの当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 

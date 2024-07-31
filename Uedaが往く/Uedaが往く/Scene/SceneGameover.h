@@ -12,5 +12,22 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
+
+private:
+	void UpdateSelect(Input& input);	// 選択状態の更新
+
+private:
+	// 選択項目
+	enum Select
+	{
+		kRetry,			// リトライ
+		kStageSelect,	// ステージ選択
+		kTitle,			// タイトル
+		kSelectNum,		// 選択数
+	};
+	int m_select;	// 現在の選択状態
+
+	int m_textHandle;	// テキストの画像
+	int m_cursorHandle;	// カーソルの画像
 };
 

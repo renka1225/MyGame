@@ -14,12 +14,10 @@ namespace
 	const char* const kfileName = "data/Model/Chara/Player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxGauge = 100.0f;								// 最大ゲージ量
 	constexpr float kGaugeCharge = 0.3f;							// 1回の攻撃で増えるゲージ量
-	constexpr float kAcceleration = 0.7f;							// プレイヤーの加速度
-	constexpr float kDeceleration = 0.7f;							// プレイヤーの減速度
 	constexpr int kMaxPunchCount = 3;								// 最大コンボ数
+	constexpr float kHPRecoveryRate = 0.3;							// プレイヤーのHPが回復する割合
 	constexpr int kPunchComboTime = 40;								// パンチコンボの入力受付時間
 	constexpr int kPunchCoolTime = 20;								// パンチできるようになるまでの時間
-	constexpr float kAvoidDist = 30.0f;								// 回避の距離
 	constexpr int kMaxAvoidCount = 3;								// 連続で回避できる回数
 	constexpr int kAvoidCoolTime = 30;								// 回避できるようになるまでの時間
 	constexpr float kFightWalkSpeed = 2.3f;							// 構え中の移動速度
@@ -181,6 +179,16 @@ void Player::OnDamage(float damage)
 	{
 		OffGuard();
 	}
+}
+
+
+/// <summary>
+/// 回復処理
+/// </summary>
+void Player::Recovery()
+{
+	// 次試合の前にHPを回復する
+	m_hp = std::min(m_hp + m_hp * kHPRecoveryRate, m_status.maxHp);
 }
 
 
@@ -372,7 +380,7 @@ Player::PlayerState Player::Avoidance(const Input& input, VECTOR& moveVec)
 			nextState = PlayerState::kAvoid;
 			// 移動ベクトルを設定する
 			VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
-			m_pos = VAdd(m_pos, VScale(backMoveVec, kAvoidDist));
+			m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.avoidDist));
 		}
 	}
 
@@ -515,7 +523,7 @@ Player::PlayerState Player::UpdateMoveParameter(const Input& input, const Camera
 			// プレイヤーの加速度を設定する
 			if (m_moveSpeed < m_status.maxMoveSpeed)
 			{
-				m_moveSpeed += kAcceleration;
+				m_moveSpeed += m_status.acceleration;
 				m_moveSpeed = (std::min)(m_moveSpeed, m_status.maxMoveSpeed);
 			}
 			// プレイヤーの移動ベクトルを設定する
@@ -543,7 +551,7 @@ Player::PlayerState Player::UpdateMoveParameter(const Input& input, const Camera
 			// プレイヤーを減速させる
 			if (m_moveSpeed > 0.0f)
 			{
-				m_moveSpeed -= kDeceleration;
+				m_moveSpeed -= m_status.deceleration;
 				m_moveSpeed = (std::max)(0.0f, m_moveSpeed);
 			}
 			moveVec = VScale(m_targetMoveDir, m_moveSpeed);

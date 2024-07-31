@@ -5,6 +5,7 @@
 #include "Stage.h"
 #include "SceneStage1.h"
 #include "SceneStage2.h"
+#include "SceneTitle.h"
 #include "SceneSelectStage.h"
 
 
@@ -58,6 +59,10 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 		{
 			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);
 		}
+		else if (m_select == kTitle)
+		{
+			return std::make_shared<SceneTitle>();
+		}
 	}
 
 	return shared_from_this();
@@ -75,10 +80,13 @@ void SceneSelectStage::Draw()
 
 	int stage1Color = 0xffffff;
 	int stage2Color = 0xffffff;
+	int titleColor = 0xffffff;
 	if(m_select == SelectScene::kStage1) stage1Color = 0xff0000;
 	if (m_select == SelectScene::kStage2) stage2Color = 0xff0000;
+	if (m_select == SelectScene::kTitle) titleColor = 0xff0000;
 	DrawString(0, 20, "ステージ1", stage1Color);
 	DrawString(0, 40, "ステージ2", stage2Color);
+	DrawString(0, 60, "タイトル", titleColor);
 #endif
 }
 

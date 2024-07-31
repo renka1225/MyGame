@@ -22,6 +22,8 @@ private:
 		kOption,		// オプション
 		kStage1,		// ステージ1
 		kStage2,		// ステージ2
+		kClear,			// クリア
+		kGameover,		// ゲームオーバー
 		kSelectNum		// シーンの数
 	};
 };

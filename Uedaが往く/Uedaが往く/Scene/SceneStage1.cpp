@@ -3,6 +3,7 @@
 #include "EnemyTuto.h"
 #include "Camera.h"
 #include "Input.h"
+#include "Vec2.h"
 #include "Stage.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
@@ -10,7 +11,13 @@
 
 namespace
 {
-	constexpr int kMaxBattleNum = 1;	// 最大バトル数
+	const char* const kFightTextPath = "data/UI/Fight!.png";	// "Fight"のテキスト画像のファイル位置
+	const Vec2 kFightTextPos = { 900, 500 };					// "Fight"のテキスト位置
+	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
+	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
+
+	constexpr int kMaxBattleNum = 1;							// 最大バトル数
+	constexpr int kNextBattleTime = 150;						// 次の試合が始まるまでの時間
 }
 
 /// <summary>
@@ -23,6 +30,8 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyTuto>();
 	m_battleNum = kMaxBattleNum;
+	m_nextBattleTime = kNextBattleTime;
+	m_fightTextHandle = LoadGraph(kFightTextPath);
 }
 
 
@@ -101,6 +110,13 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 void SceneStage1::Draw()
 {
 	SceneStageBase::Draw();
+
+	if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
+	{
+		int sizeW, sizeH;
+		GetGraphSize(m_fightTextHandle, &sizeW, &sizeH);
+		DrawRectRotaGraphF(kFightTextPos.x, kFightTextPos.y, 0, 0, sizeW, sizeH, kFightTextScele, 0.0f, m_fightTextHandle, true);
+	}
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

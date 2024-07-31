@@ -1,6 +1,6 @@
 ﻿Character,BodyHeight,BodyRadius,AimRadius,LegRadius,ArmStartPosX,ArmStartPosY,ArmStartPosZ,ArmEndtPosX,ArmEndPosY,ArmEndPosZ,LegStartPosX,LegStartPosY,LegStartPosZ,LegEndtPosX,LegEndtPosY,LegEndtPosZ
-Player,43,8,10,5,3,35,0,-3,0,20,3,30,10,3,5,28
-EnemyTuto,45,8,4,5,3,35,0,-10,0,20,3,30,10,3,5,28
-Ninja,45,8,4,5,3,35,0,-10,0,20,3,30,10,3,5,28
-Chef,45,8,4,5,3,35,0,-10,0,20,3,30,10,3,5,28
-Abe,45,8,4,5,3,35,0,-10,0,20,3,30,10,3,5,28
+Player,43,8,10,7,3,35,10,-3,0,25,3,30,10,3,0,35
+EnemyTuto,45,8,4,5,3,35,0,-3,0,25,3,30,10,3,5,30
+Ninja,45,8,4,5,3,35,0,-3,0,25,3,30,10,3,5,28
+Chef,45,8,4,5,3,35,0,-3,0,25,3,30,10,3,5,28
+Abe,45,8,4,5,3,35,0,-3,0,25,3,30,10,3,5,28
