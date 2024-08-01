@@ -15,13 +15,12 @@ namespace
 	const char* const kfileName = "data/Model/Chara/Player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxGauge = 100.0f;								// 最大ゲージ量
 	constexpr float kGaugeCharge = 0.3f;							// 1回の攻撃で増えるゲージ量
-	constexpr float kHPRecoveryRate = 0.3;							// プレイヤーのHPが回復する割合
-	constexpr float kGuardAnimTime = 10.0f;							// ガード中のアニメーションを止める時間
+	constexpr float kHPRecoveryRate = 0.3f;							// プレイヤーのHPが回復する割合
 	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
 	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
 
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
-	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);				// 初期位置
+	const VECTOR kInitPos = VGet(0.0f, 0.0f, -40.0f);				// 初期位置
 	//const VECTOR kInitPos = VGet(5000.0f, 100.0f, -1000.0f);		// 初期位置
 
 	// アニメーション情報
@@ -35,13 +34,6 @@ namespace
 /// </summary>
 Player::Player():
 	m_gauge(0.0f),
-	m_punchCount(0),
-	m_punchComboTime(0),
-	m_punchCoolTime(0),
-	m_avoidCoolTime(0),
-	m_avoidCount(0),
-	m_isMove(false),
-	m_isFighting(false),
 	m_targetMoveDir(kInitDir)
 {
 	// キャラクター情報を読み込む
@@ -52,13 +44,15 @@ Player::Player():
 	m_pos = kInitPos;
 	m_moveSpeed = 0.0f;
 	m_angle = 0.0f;
+	m_punchCount = 0;
+	m_punchComboTime = 0;
+	m_punchCoolTime = 0;
+	m_avoidCoolTime = 0;
+	m_avoidCount = 0;
+	m_isMove = false;
+	m_isFighting = false;
 	m_modelHandle = MV1LoadModel(kfileName);
 	m_currentState = CharacterBase::State::kFightIdle;
-
-	m_animBlendRate = kAnimBlendMax;
-
-	// モデル全体のコリジョン情報のセットアップ
-	MV1SetupCollInfo(m_modelHandle, -1);
 }
 
 
@@ -78,7 +72,12 @@ void Player::Init()
 {
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	MV1SetPosition(m_modelHandle, m_pos);
+	m_currentState = CharacterBase::State::kFightIdle;
+	m_animBlendRate = kAnimBlendMax;
 	PlayAnim(AnimKind::kFightIdle);
+
+	// モデル全体のコリジョン情報のセットアップ
+	MV1SetupCollInfo(m_modelHandle, -1);
 }
 
 
@@ -176,7 +175,7 @@ void Player::OnDamage(float damage)
 void Player::Recovery()
 {
 	// 次試合の前にHPを回復する
-	m_hp = std::min(m_hp + m_hp * kHPRecoveryRate, m_status.maxHp);
+	m_hp = std::min(m_hp + m_status.maxHp * kHPRecoveryRate, m_status.maxHp);
 }
 
 
@@ -312,18 +311,21 @@ void Player::Punch(const Input& input)
 		case 0:
 			m_punchComboTime = m_status.punchReceptionTime; // コンボ入力の受付時間をリセット
 			m_isAttack = true;
+			m_isFighting = false;
 			m_currentState = CharacterBase::State::kPunch1;
 			PlayAnim(AnimKind::kPunch1);
 			break;
 		case 1:
 			m_punchComboTime = m_status.punchReceptionTime;
 			m_isAttack = true;
+			m_isFighting = false;
 			m_currentState = CharacterBase::State::kPunch2;
 			PlayAnim(AnimKind::kPunch2);
 			break;
 		case 2:
 			m_punchComboTime = m_status.punchReceptionTime;
 			m_isAttack = true;
+			m_isFighting = false;
 			m_currentState = CharacterBase::State::kPunch3;
 			PlayAnim(AnimKind::kPunch3);
 			break;
@@ -352,6 +354,7 @@ void Player::Kick(const Input& input)
 	else if (input.IsTriggered("kick"))
 	{
 		m_isAttack = true;
+		m_isFighting = false;
 		m_currentState = CharacterBase::State::kKick;
 		PlayAnim(AnimKind::kKick);
 	}
@@ -374,6 +377,7 @@ void Player::Avoidance(const Input& input, VECTOR& moveVec)
 
 	if (input.IsTriggered("avoidance"))
 	{
+		m_isFighting = false;
 		m_avoidCount++;
 		// 回避数が最大になった場合
 		if (m_avoidCount > m_status.maxAvoidCount)
@@ -575,132 +579,4 @@ void Player::UpdateAngle(EnemyBase& enemy)
 		m_angle = atan2f(m_targetMoveDir.x, m_targetMoveDir.z);
 	}
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
-}
-
-
-/// <summary>
-/// アニメーション処理
-/// </summary>
-void Player::UpdateAnim()
-{
-	float animTotalTime; // 再生中のアニメーション時間
-
-	// ブレンド率が1以下の場合
-	if (m_animBlendRate < kAnimBlendMax)
-	{
-		m_animBlendRate += kAnimBlendSpeed;
-		m_animBlendRate = std::min(m_animBlendRate, kAnimBlendMax);
-	}
-
-	// 現在再生中のアニメーションの処理
-	if (m_currentPlayAnim != -1)
-	{
-		// アニメーションの総時間を取得する
-		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
-
-		// アニメーションによって再生スピードを変える
-		if (m_currentState == CharacterBase::State::kPunch1)
-		{
-			m_currentAnimCount += m_animSpeed.punch1;
-		}
-		else if (m_currentState == CharacterBase::State::kPunch2)
-		{
-			m_currentAnimCount += m_animSpeed.punch2;
-		}
-		else if (m_currentState == CharacterBase::State::kPunch3)
-		{
-			m_currentAnimCount += m_animSpeed.punch3;
-		}
-		else if (m_currentState == CharacterBase::State::kKick)
-		{
-			m_currentAnimCount += m_animSpeed.kick;
-		}
-		else if(m_currentState == CharacterBase::State::kAvoid)
-		{
-			m_currentAnimCount += m_animSpeed.avoid;
-		}
-		else if (m_currentState == CharacterBase::State::kFightWalk)
-		{
-			// 移動時のみアニメーションを再生
-			if (m_isMove)
-			{
-				m_currentAnimCount += m_animSpeed.fightWalk;
-			}
-			else
-			{
-				m_currentAnimCount = 0.0f;
-			}
-		}
-		else if (m_currentState == CharacterBase::State::kGuard)
-		{
-			// 一度のみアニメーションを再生
-			m_currentAnimCount += m_animSpeed.guard;
-			m_currentAnimCount = std::min(m_currentAnimCount, kGuardAnimTime);
-		}
-		else
-		{
-			m_currentAnimCount += m_animSpeed.fightIdle;
-		}
-		
-		// パンチコンボの場合はアニメーションループしない
-		if (m_currentAnimCount >= m_status.punchReceptionTime && m_punchCount > 0 && m_currentState == CharacterBase::State::kPunch1)
-		{
-			// パンチコンボの場合
-			m_currentAnimCount = 0.0f;
-			m_punchCount--;
-			PlayAnim(AnimKind::kPunch1);
-		}
-		if (m_currentAnimCount > animTotalTime)
-		{
-			// 攻撃アニメーションが終了したら待機状態に移行
-			if (m_isAttack)
-			{
-				m_isAttack = false;
-				m_currentState = CharacterBase::State::kFightIdle;
-				PlayAnim(AnimKind::kFightIdle);
-			}
-			// 回避アニメーションが終わったら待機状態に移行
-			else if (m_currentState == CharacterBase::State::kAvoid)
-			{
-				m_currentState = CharacterBase::State::kFightIdle;
-				PlayAnim(AnimKind::kFightIdle);
-			}
-			else
-			{
-				// アニメーションの再生時間をループ
-				m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
-			}
-		}
-
-		// 再生時間を更新
-		MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
-		// アニメーションのブレンド率を設定する
-		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
-	}
-
-	// 1つ前に再生していたアニメーションの処理
-	if (m_prevPlayAnim != -1)
-	{
-		// アニメーションの総時間を取得する
-		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
-		if (m_isAttack)
-		{
-			m_prevAnimCount += m_animSpeed.punch1;
-		}
-		else
-		{
-			m_prevAnimCount += m_animSpeed.fightIdle;
-		}
-
-		// アニメーションの再生時間をループ
-		if (m_prevPlayAnim > animTotalTime)
-		{
-			m_prevAnimCount = static_cast<float>(fmod(m_prevAnimCount, animTotalTime));
-		}
-
-		// 再生時間を更新
-		MV1SetAttachAnimTime(m_modelHandle, m_prevPlayAnim, m_prevAnimCount);
-		// アニメーションのブレンド率を設定する
-		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
-	}
 }

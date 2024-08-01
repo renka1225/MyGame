@@ -15,8 +15,20 @@ namespace
 	const char* const kFightTextPath = "data/UI/Fight!.png"; // "Fight"のテキスト画像のファイル位置
 }
 
+
 /// <summary>
 /// コンストラクタ
+/// </summary>
+SceneStageBase::SceneStageBase():
+	m_battleNum(0),
+	m_nextBattleTime(0),
+	m_fightTextHandle(-1)
+{
+}
+
+
+/// <summary>
+/// 引数つきコンストラクタ
 /// </summary>
 /// <param name="pPlayer">プレイヤー参照</param>
 /// <param name="pCamera">カメラ参照</param>

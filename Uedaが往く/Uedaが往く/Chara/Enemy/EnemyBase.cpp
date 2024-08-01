@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Stage.h"
 #include "EnemyBase.h"
+#include <fstream>
+#include <sstream>
 
 // 定数
 namespace
@@ -12,8 +14,8 @@ namespace
 	constexpr int kStopMaxTime = 150;		 // 最大の停止時間
 
 	constexpr int kMaxProb = 100;			 // 最大確率%
-	constexpr int kChangeAngleProb = 30;	 // 角度を更新する確率%
-	constexpr int kChangeAngleFrame = 30;	 // 角度を更新するフレーム数
+	constexpr int kChangeAngleProb = 60;	 // 角度を更新する確率%
+	constexpr int kChangeAngleFrame = 60;	 // 角度を更新するフレーム数
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -110,14 +112,14 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 			}
 		}
 		// プレイヤーが攻撃範囲に入った場合
-		else if(distance <= kAttackRange)
-		{
-			nextState = CharacterBase::State::kKick;	// 攻撃状態にする
-		}
+		//else if(distance <= kAttackRange)
+		//{
+		//	nextState = CharacterBase::State::kKick;	// 攻撃状態にする
+		//}
 		else
 		{
 			m_stopTime = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
-			nextState = CharacterBase::State::kFightIdle;	// 待機状態にする
+			nextState = CharacterBase::State::kFightIdle;		// 待機状態にする
 		}
 	}
 
@@ -130,9 +132,60 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 /// </summary>
 void EnemyBase::Punch()
 {
-	m_isAttack = true;
-	m_currentState = CharacterBase::State::kPunch1;
-	PlayAnim(AnimKind::kPunch1);
+	// 攻撃中はスキップ
+	if (m_isAttack) return;
+
+	// パンチできない場合
+	if (m_punchCoolTime > 0)
+	{
+		m_punchCoolTime--;
+		return;
+	}
+
+	// コンボ入力の受付時間の更新
+	m_punchComboTime--;
+
+	// コンボ入力受付時間内にボタンが押された場合
+	if (m_punchComboTime > 0)
+	{
+		m_punchCount++;
+	}
+	else
+	{
+		m_punchCount = 0;
+	}
+
+	// コンボ数によってパンチを変える
+	switch (m_punchCount)
+	{
+	case 0:
+		m_punchComboTime = m_status.punchReceptionTime; // コンボ入力の受付時間をリセット
+		m_isAttack = true;
+		m_isFighting = false;
+		m_currentState = CharacterBase::State::kPunch1;
+		PlayAnim(AnimKind::kPunch1);
+		break;
+	case 1:
+		m_punchComboTime = m_status.punchReceptionTime;
+		m_isAttack = true;
+		m_isFighting = false;
+		m_currentState = CharacterBase::State::kPunch2;
+		PlayAnim(AnimKind::kPunch2);
+		break;
+	case 2:
+		m_punchComboTime = m_status.punchReceptionTime;
+		m_isAttack = true;
+		m_isFighting = false;
+		m_currentState = CharacterBase::State::kPunch3;
+		PlayAnim(AnimKind::kPunch3);
+		break;
+	case 3:
+		m_punchCount = 0;
+		m_punchCoolTime = m_status.punchCoolTime;	// クールダウンタイムを設定
+		break;
+	default:
+		break;
+	}
 }
 
 
@@ -141,9 +194,82 @@ void EnemyBase::Punch()
 /// </summary>
 void EnemyBase::kick()
 {
+	//m_isAttack = true;
+	//m_currentState = CharacterBase::State::kKick;
+	//PlayAnim(AnimKind::kKick);
+
+	// 攻撃中はスキップ
+	if (m_isAttack) return;
+
+	// キック攻撃
 	m_isAttack = true;
+	m_isFighting = false;
 	m_currentState = CharacterBase::State::kKick;
 	PlayAnim(AnimKind::kKick);
+}
+
+
+/// <summary>
+/// 回避処理
+/// </summary>
+/// <param name="moveVec">移動ベクトル</param>
+void EnemyBase::Avoidance(VECTOR& moveVec)
+{
+	// 回避できない場合
+	if (m_avoidCoolTime > 0)
+	{
+		m_avoidCoolTime--;
+		return;
+	}
+
+	m_isFighting = false;
+	m_avoidCount++;
+	// 回避数が最大になった場合
+	if (m_avoidCount > m_status.maxAvoidCount)
+	{
+		m_avoidCount = 0;
+		m_avoidCoolTime = m_status.avoidCoolTime;	// クールダウンタイムを設定
+	}
+	else
+	{
+		m_currentState = CharacterBase::State::kAvoid;
+		// 移動ベクトルを設定する
+		//VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
+		//m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.avoidDist));
+	}
+}
+
+
+/// <summary>
+/// 構え処理
+/// </summary>
+void EnemyBase::Fighting()
+{
+	m_isFighting = true;
+	m_currentState = CharacterBase::State::kFightWalk;
+	PlayAnim(AnimKind::kFightWalk);
+}
+
+
+/// <summary>
+/// ガード処理
+/// </summary>
+void EnemyBase::Guard()
+{
+	m_isGuard = true;
+	m_currentState = CharacterBase::State::kGuard;
+	PlayAnim(AnimKind::kGuard);
+}
+
+
+/// <summary>
+/// ガード状態を解除
+/// </summary>
+void EnemyBase::OffGuard()
+{
+	m_isGuard = false;
+	m_currentState = CharacterBase::State::kFightIdle;
+	PlayAnim(AnimKind::kFightIdle);
 }
 
 
@@ -212,7 +338,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	else if (hitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// キックが当たった場合
-		if (player.GetIsGuard())
+		if (!player.GetIsGuard())
 		{
 			player.OnDamage(m_status.kickPower);
 		}
@@ -236,86 +362,5 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	if (!hit && m_currentState == CharacterBase::State::kGrab)
 	{
 		// 掴み失敗のアニメーションを再生する
-	}
-}
-
-
-/// <summary>
-/// アニメーション処理
-/// </summary>
-void EnemyBase::UpdateAnim()
-{
-	float animTotalTime; // 再生中のアニメーション時間
-
-	// ブレンド率が1以下の場合
-	if (m_animBlendRate < kAnimBlendMax)
-	{
-		m_animBlendRate += kAnimBlendSpeed;
-		if (m_animBlendRate >= kAnimBlendMax)
-		{
-			m_animBlendRate = kAnimBlendMax;
-		}
-	}
-
-	// 現在再生中のアニメーションの処理
-	if (m_currentPlayAnim != -1)
-	{
-		// アニメーションの総時間を取得する
-		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
-		if (m_isAttack)
-		{
-			m_currentAnimCount += m_animSpeed.punch1;
-		}
-		else
-		{
-			m_currentAnimCount += m_animSpeed.fightIdle;
-		}
-
-		// アニメーションの再生時間をループ
-		if (m_currentAnimCount > animTotalTime)
-		{
-			// 攻撃アニメーションが終了したら待機状態に移行
-			if (m_isAttack)
-			{
-				m_isAttack = false;
-				m_currentState = CharacterBase::State::kFightIdle;
-				PlayAnim(AnimKind::kFightIdle);
-			}
-
-			m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
-		}
-
-		// 再生時間を更新
-		MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
-		// アニメーションのブレンド率を設定する
-		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
-
-
-	}
-
-	// 1つ前に再生していたアニメーションの処理
-	if (m_prevPlayAnim != -1)
-	{
-		// アニメーションの総時間を取得する
-		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
-		if (m_isAttack)
-		{
-			m_prevAnimCount += m_animSpeed.punch1;
-		}
-		else
-		{
-			m_prevAnimCount += m_animSpeed.fightIdle;
-		}
-
-		// アニメーションの再生時間をループ
-		if (m_prevPlayAnim > animTotalTime)
-		{
-			m_prevAnimCount = static_cast<float>(fmod(m_prevAnimCount, animTotalTime));
-		}
-
-		// 再生時間を更新
-		MV1SetAttachAnimTime(m_modelHandle, m_prevPlayAnim, m_prevAnimCount);
-		// アニメーションのブレンド率を設定する
-		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
 	}
 }

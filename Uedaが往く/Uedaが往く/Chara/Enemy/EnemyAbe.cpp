@@ -157,7 +157,7 @@ void EnemyAbe::DecideNextAction()
 			kick();
 		}
 		// ƒpƒ“ƒ`UŒ‚
-		if (randNum <= kPunchProb)
+		else if (randNum <= kPunchProb)
 		{
 			Punch();
 		}

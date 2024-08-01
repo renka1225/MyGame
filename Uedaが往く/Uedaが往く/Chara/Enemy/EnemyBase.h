@@ -32,10 +32,16 @@ protected:
 	void Punch();
 	// キック処理
 	void kick();
+	// 回避処理
+	void Avoidance(VECTOR& moveVec);
+	// 構え処理
+	void Fighting();
+	// ガード処理
+	void Guard();
+	// ガード状態を解除する
+	void OffGuard();
 	// 敵の角度を更新
 	void UpdateAngle(Player& player);
-	// アニメーション処理
-	virtual void UpdateAnim() override;
 
 protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)

@@ -1,0 +1,5 @@
+Chara,ApproachRange,AttackRange,MinStopTime,MaxStopTime,MaxProb,PunchProb,KickProb,AvoidProb,GuardProb,GrabProb,ChangeAngleProb,ChangeAngleFrame
+Tuto,70,50,30,150,100,10,10,3,30,3,30,30
+Ninja,70,100,30,150,100,40,20,5,10,8,60,30
+Chef,70,100,30,150,100,10,60,5,10,3,60,40
+Abe,70,100,30,150,100,40,20,5,10,10,80,20

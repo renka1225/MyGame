@@ -259,3 +259,138 @@ void CharacterBase::PlayAnim(AnimKind playAnimIndex)
 		m_animBlendRate = 0.0f;
 	}
 }
+
+
+/// <summary>
+/// アニメーションの処理を行う
+/// </summary>
+void CharacterBase::UpdateAnim()
+{
+	float animTotalTime; // 再生中のアニメーション時間
+
+	// ブレンド率が1以下の場合
+	if (m_animBlendRate < kAnimBlendMax)
+	{
+		m_animBlendRate += kAnimBlendSpeed;
+		m_animBlendRate = std::min(m_animBlendRate, kAnimBlendMax);
+	}
+
+	// 現在再生中のアニメーションの処理
+	if (m_currentPlayAnim != -1)
+	{
+		// アニメーションの総時間を取得する
+		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
+
+		// アニメーションによって再生スピードを変える
+		if (m_currentState == CharacterBase::State::kPunch1)
+		{
+			m_currentAnimCount += m_animSpeed.punch1;
+		}
+		else if (m_currentState == CharacterBase::State::kPunch2)
+		{
+			m_currentAnimCount += m_animSpeed.punch2;
+		}
+		else if (m_currentState == CharacterBase::State::kPunch3)
+		{
+			m_currentAnimCount += m_animSpeed.punch3;
+		}
+		else if (m_currentState == CharacterBase::State::kKick)
+		{
+			m_currentAnimCount += m_animSpeed.kick;
+		}
+		else if (m_currentState == CharacterBase::State::kAvoid)
+		{
+			m_currentAnimCount += m_animSpeed.avoid;
+		}
+		else if (m_currentState == CharacterBase::State::kFightWalk)
+		{
+			// 移動時のみアニメーションを再生
+			if (m_isMove)
+			{
+				m_currentAnimCount += m_animSpeed.fightWalk;
+			}
+			else
+			{
+				m_currentAnimCount = 0.0f;
+			}
+		}
+		else if (m_currentState == CharacterBase::State::kGuard)
+		{
+			// 一度のみアニメーションを再生
+			m_currentAnimCount += m_animSpeed.guard;
+			m_currentAnimCount = std::min(m_currentAnimCount, m_status.guardAnimTime);
+		}
+		else
+		{
+			m_currentAnimCount += m_animSpeed.fightIdle;
+		}
+
+		// アニメーションが終わった場合
+		if (m_currentAnimCount > animTotalTime)
+		{
+			// 攻撃アニメーションが終了したら待機状態に移行
+			if (m_isAttack)
+			{
+				m_isAttack = false;
+				m_currentState = CharacterBase::State::kFightIdle;
+				PlayAnim(AnimKind::kFightIdle);
+			}
+			// 回避アニメーションが終わったら待機状態に移行
+			else if (m_currentState == CharacterBase::State::kAvoid)
+			{
+				m_currentState = CharacterBase::State::kFightIdle;
+				PlayAnim(AnimKind::kFightIdle);
+			}
+			else
+			{
+				// アニメーションの再生時間をループ
+				m_currentAnimCount = static_cast<float>(fmod(m_currentAnimCount, animTotalTime));
+			}
+		}
+
+		// 再生時間を更新
+		MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
+		// アニメーションのブレンド率を設定する
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
+	}
+
+	// 1つ前に再生していたアニメーションの処理
+	if (m_prevPlayAnim != -1)
+	{
+		// アニメーションの総時間を取得する
+		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
+
+		// アニメーションによって再生速度を変える
+		if (m_prevPlayAnim == static_cast<int>(CharacterBase::AnimKind::kPunch1))
+		{
+			m_prevAnimCount += m_animSpeed.punch1;
+		}
+		else if (m_prevPlayAnim == static_cast<int>(CharacterBase::AnimKind::kPunch2))
+		{
+			m_prevAnimCount += m_animSpeed.punch2;
+		}
+		else if (m_prevPlayAnim == static_cast<int>(CharacterBase::AnimKind::kPunch3))
+		{
+			m_prevAnimCount += m_animSpeed.punch3;
+		}
+		else if (m_prevPlayAnim == static_cast<int>(CharacterBase::AnimKind::kKick))
+		{
+			m_prevAnimCount += m_animSpeed.kick;
+		}
+		else if (m_prevPlayAnim == static_cast<int>(CharacterBase::AnimKind::kAvoid))
+		{
+			m_prevAnimCount += m_animSpeed.avoid;
+		}
+
+		// アニメーションの再生時間をループ
+		if (m_prevPlayAnim > animTotalTime)
+		{
+			m_prevAnimCount = static_cast<float>(fmod(m_prevAnimCount, animTotalTime));
+		}
+
+		// 再生時間を更新
+		MV1SetAttachAnimTime(m_modelHandle, m_prevPlayAnim, m_prevAnimCount);
+		// アニメーションのブレンド率を設定する
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
+	}
+}

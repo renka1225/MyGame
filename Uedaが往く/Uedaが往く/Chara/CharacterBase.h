@@ -111,6 +111,7 @@ public:
 		float avoidDist;			// 回避の距離
 		int maxAvoidCount;			// 連続で回避できる回数
 		int avoidCoolTime;			// 回避できるようになるまでの時間
+		float guardAnimTime;		// ガードのアニメーションを止める時間
 	};
 	Status m_status;
 
@@ -130,6 +131,24 @@ public:
 	};
 	CollisionInfo m_colInfo;
 
+	// 敵の情報
+	struct EnemyInfo
+	{
+		float approachRange;	// プレイヤーに近づく範囲
+		float attackRange;		// プレイヤーを攻撃する範囲
+		int minStopTime;		// 最小の停止時間
+		int maxstopTime;		// 最大の停止時間
+		int maxProb;			// 最大確率%
+		int punchProb;			// パンチ確率
+		int kickProb;			// キック確率
+		int avoidProb;			// 回避確率
+		int guardProb;			// ガード確率
+		int grabProb;			// 掴み確率
+		int changeAngleProb;	// 角度を更新する確率
+		int changeAngleFrame;	// 角度を更新するフレーム数
+	};
+	EnemyInfo m_enemyInfo;
+
 protected:
 	// 当たり判定位置の更新
 	void UpdateCol();
@@ -138,7 +157,7 @@ protected:
 	// アニメーションを再生する
 	void PlayAnim(AnimKind playAnimIndex);
 	// アニメーション処理
-	virtual void UpdateAnim() = 0;
+	void UpdateAnim();
 	
 protected:
 	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得
@@ -148,8 +167,15 @@ protected:
 	VECTOR m_pos;			// 位置
 	float m_moveSpeed;		// 移動速度
 	float m_angle;			// 向いている方向の角度
+	int m_punchCount;		// 現在のパンチのコンボ数
+	int m_punchComboTime;	// コンボ入力受付時間
+	int m_punchCoolTime;	// パンチできない時間
+	int m_avoidCoolTime;	// 回避できない時間
+	int m_avoidCount;		// 回避した回数
 	bool m_isAttack;		// 攻撃中かどうか(true:攻撃中)
 	bool m_isGuard;			// ガード中かどうか(ture:ガード中)
+	bool m_isMove;			// 移動したかどうか(true:移動した)
+	bool m_isFighting;		// 構え中かどうか(true:構え中)
 	State m_currentState;	// 現在の状態
 	int m_modelHandle;		// キャラクターの3Dモデル
 

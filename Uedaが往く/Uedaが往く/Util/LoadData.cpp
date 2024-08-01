@@ -10,15 +10,16 @@ namespace
 	const char* const kCharStatusFileName = "data/csv/charaStatus.csv";	// キャラクターデータのファイル名
 	const char* const kAnimSpeedFileName = "data/csv/animSpeed.csv";	// アニメーション速度データのファイル名
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
+	const char* const kEnemyInfoFileName = "data/csv/enemyInfo.csv";	// 敵データのファイル名
 
-	constexpr int kStatusNum = 14;	// 1キャラクターのステータス数
+	constexpr int kStatusNum = 15;	// 1キャラクターのステータス数
 	constexpr int kAnimNum = 16;	// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;		// 1キャラクターの当たり判定の情報数
 }
 
 
 /// <summary>
-/// コンストラクタ
+/// 引数つきコンストラクタ
 /// </summary>
 /// <param name="data">キャラクター参照</param>
 /// <param name="charType">キャラクターの種類</param>
@@ -27,6 +28,7 @@ LoadData::LoadData(CharacterBase& data, int charType)
 	LoadCharaData(data, charType);
 	LoadAnimSpeedData(data, charType);
 	LoadColData(data, charType);
+	LoadEnemyData(data, charType);
 }
 
 
@@ -48,7 +50,7 @@ void LoadData::Draw()
 	int y = 0;
 	for (const auto& data : m_charData)
 	{
-		DrawFormatString(0, 100+y, 0xffffff, "%f:", data);
+		DrawFormatString(0, 100 + y, 0xffffff, "%f:", data);
 		y += 20;
 	}
 #endif
@@ -104,6 +106,7 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 	data.m_status.avoidDist = m_charData[11 + charType * kStatusNum];
 	data.m_status.maxAvoidCount = m_charData[12 + charType * kStatusNum];
 	data.m_status.avoidCoolTime = m_charData[13 + charType * kStatusNum];
+	data.m_status.guardAnimTime = m_charData[14 + charType * kStatusNum];
 }
 
 
@@ -212,4 +215,13 @@ void LoadData::LoadColData(CharacterBase& data, int charType)
 	data.m_colInfo.legEndPos.x = m_colData[13 + charType * kColNum];
 	data.m_colInfo.legEndPos.y = m_colData[14 + charType * kColNum];
 	data.m_colInfo.legEndPos.z = m_colData[15 + charType * kColNum];
+}
+
+
+/// <summary>
+/// 敵情報を読み込む
+/// </summary>
+/// <param name="data">敵参照</param>
+void LoadData::LoadEnemyData(CharacterBase& data, int charType)
+{
 }

@@ -30,7 +30,7 @@ namespace
 	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
 
 	// HPバーが減少するまでの時間
-	constexpr int kIntervalTime = 15;
+	constexpr int kIntervalTime = 50;
 }
 
 /// <summary>
@@ -143,7 +143,7 @@ void UIGauge::DrawEnemyHp(float currentHp)
 /// </summary>
 void UIGauge::SetDamageTimer()
 {
-	if (m_intervalTime <= 0)
+	if (m_intervalTime < 0)
 	{
 		m_intervalTime = kIntervalTime;
 	}

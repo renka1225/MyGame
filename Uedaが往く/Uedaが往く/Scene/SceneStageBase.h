@@ -13,7 +13,7 @@ class CharacterBase;
 class SceneStageBase : public SceneBase
 {
 public:
-	SceneStageBase(){};
+	SceneStageBase();
 	SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage);
 	virtual ~SceneStageBase();
 	virtual void Init();

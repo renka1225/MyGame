@@ -124,6 +124,6 @@ void SceneGameover::UpdateSelect(Input& input)
 	}
 	if (input.IsTriggered("up"))
 	{
-		m_select = (m_select + 1) % kSelectNum;	// ‘I‘ğó‘Ô‚ğ1‚Âã‚°‚é
+		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// ‘I‘ğó‘Ô‚ğ1‚Âã‚°‚é
 	}
 }

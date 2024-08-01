@@ -94,15 +94,18 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 			case 0:	// 2í–Ú
 				m_pEnemy = nullptr;
 				m_pEnemy = std::make_shared<EnemyChef>();
+				m_pEnemy->Init();
+				m_pPlayer->Init();
 				UpdateNextBattle();
 				break;
 			case 1:	// 3í–Ú
 				m_pEnemy = nullptr;
 				m_pEnemy = std::make_shared<EnemyAbe>();
+				m_pEnemy->Init();
+				m_pPlayer->Init();
 				UpdateNextBattle();
 				break;
-			case 2: // “G‚ğ‚·‚×‚Ä“|‚µ‚½‚ç
-				// TODO:ƒNƒŠƒAˆ—‚ÉˆÚs‚·‚é
+			case 2: // Ÿ—˜
 				return std::make_shared<SceneClear>();
 				break;
 			default:
