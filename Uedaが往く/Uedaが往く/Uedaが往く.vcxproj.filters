@@ -49,6 +49,12 @@
     <Filter Include="ヘッダー ファイル\Stage">
       <UniqueIdentifier>{40dbb347-510a-4ee6-bfd3-d8866db0475e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Debug">
+      <UniqueIdentifier>{800fa02a-f74f-4eb3-aabf-c9cf86c67f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Debug">
+      <UniqueIdentifier>{a38ad96b-0d51-41ed-8107-cffa6bef6a82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chara\CharacterBase.cpp">
@@ -73,9 +79,6 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneClear.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\SceneDebug.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneGameover.cpp">
@@ -126,8 +129,14 @@
     <ClCompile Include="Chara\Enemy\EnemyChef.cpp">
       <Filter>ソース ファイル\Chara\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\DebugDraw.cpp">
+      <Filter>ソース ファイル\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\SceneDebug.cpp">
+      <Filter>ソース ファイル\Debug</Filter>
+    </ClCompile>
     <ClCompile Include="Chara\Enemy\EnemyAbe.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Chara\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,9 +159,6 @@
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneClear.h">
-      <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SceneDebug.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneGameover.h">
@@ -209,8 +215,14 @@
     <ClInclude Include="Chara\Enemy\EnemyChef.h">
       <Filter>ヘッダー ファイル\Chara\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Debug\DebugDraw.h">
+      <Filter>ヘッダー ファイル\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\SceneDebug.h">
+      <Filter>ヘッダー ファイル\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="Chara\Enemy\EnemyAbe.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Chara\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

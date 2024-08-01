@@ -3,6 +3,7 @@
 #include "Stage.h"
 #include "UIGauge.h"
 #include "LoadData.h"
+#include "DebugDraw.h"
 #include "EnemyTuto.h"
 
 // íËêî
@@ -112,15 +113,12 @@ void EnemyTuto::Draw()
 	m_pUIGauge->DrawEnemyHp(m_hp);
 
 #ifdef _DEBUG
-	// ìGç¿ïWÉfÉoÉbÉOï\é¶
-	DrawFormatString(0, 60, 0xffffff, "ìGç¿ïW(%0.2f,%0.2f,%0.2f)", m_pos.x, m_pos.y, m_pos.z);
-	DrawFormatString(0, 80, 0xffffff, "hp:%0.2f", m_hp);
-	DrawFormatString(0, 100, 0xffffff, "ìGèÛë‘:%d", m_currentState);
-
+	DebugDraw debug;
+	debug.DrawEnemyInfo(m_pos, m_hp, static_cast<int>(m_currentState));
 	// ìñÇΩÇËîªíËï`âÊ
-	DrawCapsule3D(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, 1, 0x0000ff, 0xffffff, false);	// ëSêg
-	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, 1, 0xff00ff, 0xffffff, false);		// òr
-	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, 1, 0xffff00, 0xffffff, false);		// ãr
+	debug.DrawBodyCol(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius); // ëSêg
+	debug.DrawAimCol(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius);		// òr
+	debug.DrawLegCol(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius);		// ãr
 #endif
 }
 

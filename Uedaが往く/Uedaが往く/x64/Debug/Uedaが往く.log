@@ -1,8 +1,6 @@
-﻿  SceneDebug.cpp
-  SceneGameover.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneGameover.cpp(110,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneGameover.cpp(110,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-  SceneSelectStage.cpp
-  SceneStage2.cpp
+﻿  EnemyAbe.cpp
+  Player.cpp
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Chara\Player.cpp(19,39): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+  DebugDraw.cpp
   コードを生成中...
   Uedaが往く.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe

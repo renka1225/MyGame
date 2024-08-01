@@ -5,6 +5,7 @@
 #include "UIGauge.h"
 #include "Input.h"
 #include "LoadData.h"
+#include "DebugDraw.h"
 #include "Player.h"
 
 // 定数
@@ -23,8 +24,6 @@ namespace
 	constexpr float kFightWalkSpeed = 2.3f;							// 構え中の移動速度
 	constexpr float kGuardAnimTime = 10.0f;							// ガード中のアニメーションを止める時間
 	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
-	constexpr float kVelocity = 6.0f;								// ジャンプの高さ
-	constexpr float kGravity = -0.25f;								// 重力
 	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -20.0f);				// 初期位置
@@ -44,8 +43,8 @@ Player::Player():
 	m_punchCount(0),
 	m_punchComboTime(0),
 	m_punchCoolTime(0),
-	m_avoidCount(0),
 	m_avoidCoolTime(0),
+	m_avoidCount(0),
 	m_isMove(false),
 	m_isFighting(false),
 	m_targetMoveDir(kInitDir),
@@ -150,13 +149,12 @@ void Player::Draw()
 	m_pUIGauge->DrawPlayerGauge(m_gauge, kMaxGauge);
 
 #ifdef _DEBUG	// デバッグ表示
-	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標(%0.2f,%0.2f,%0.2f)", m_pos.x, m_pos.y, m_pos.z);
-	DrawFormatString(0, 40, 0xffffff, "hp:%0.2f",m_hp);
-
+	DebugDraw debug;
+	debug.DrawPlayerInfo(m_pos, m_hp, static_cast<int>(m_currentState));
 	// 当たり判定描画
-	DrawCapsule3D(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, 1, 0x0000ff, 0xffffff, false);	// 全身
-	DrawCapsule3D(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, 1, 0xff00ff, 0xffffff, false);		// 腕
-	DrawCapsule3D(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, 1, 0xffff00, 0xffffff, false);		// 脚
+	debug.DrawBodyCol(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius); // 全身
+	debug.DrawAimCol(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius);		// 腕
+	debug.DrawLegCol(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius);		// 脚
 #endif
 }
 
@@ -208,14 +206,27 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	// キック
 	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 
-	// パンチが当たった場合
-	if (hitPunch && m_currentState == PlayerState::kPunch)
+	// 1コンボ目が当たった場合
+	if (hitPunch && m_currentState == PlayerState::kPunch1)
 	{
 		// パンチが当たった場合
 		enemy.OnDamage(m_status.punchPower);
-		// TODO:攻撃が当たったらゲージを増やす
 		m_gauge += kGaugeCharge;
 
+	}
+	// 2コンボ目が当たった場合
+	if (hitPunch && m_currentState == PlayerState::kPunch2)
+	{
+		// パンチが当たった場合
+		enemy.OnDamage(m_status.secondPunchPower);
+		m_gauge += kGaugeCharge;
+	}
+	// 3コンボ目が当たった場合
+	if (hitPunch && m_currentState == PlayerState::kPunch3)
+	{
+		// パンチが当たった場合
+		enemy.OnDamage(m_status.thirdPunchPower);
+		m_gauge += kGaugeCharge;
 	}
 	// キックが当たった場合
 	else if (hitKick && m_currentState == PlayerState::kKick)
@@ -307,18 +318,33 @@ Player::PlayerState Player::Punch(const Input& input)
 			m_punchCount = 0;
 		}
 
-		// コンボ数が最大になった場合
-		if (m_punchCount > kMaxPunchCount)
+		// コンボ数によってパンチを変える
+		switch (m_punchCount)
 		{
-			m_punchCount = 0;
-			m_punchCoolTime = kPunchCoolTime;	// クールダウンタイムを設定
-		}
-		else
-		{
+		case 0:
 			m_punchComboTime = kPunchComboTime; // コンボ入力の受付時間をリセット
 			m_isAttack = true;
-			nextState = PlayerState::kPunch;
+			nextState = PlayerState::kPunch1;
 			PlayAnim(AnimKind::kPunch1);
+			break;
+		case 1:
+			m_punchComboTime = kPunchComboTime;
+			m_isAttack = true;
+			nextState = PlayerState::kPunch2;
+			PlayAnim(AnimKind::kPunch2);
+			break;
+		case 2:
+			m_punchComboTime = kPunchComboTime;
+			m_isAttack = true;
+			nextState = PlayerState::kPunch3;
+			PlayAnim(AnimKind::kPunch3);
+			break;
+		case kMaxPunchCount:
+			m_punchCount = 0;
+			m_punchCoolTime = kPunchCoolTime;	// クールダウンタイムを設定
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -597,7 +623,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if(m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch)PlayAnim(AnimKind::kPunch1);
+		if (m_currentState == PlayerState::kPunch1)PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick)	PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -613,7 +639,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 待機アニメーションを再生
 		if(m_currentState == PlayerState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
+		if (m_currentState == PlayerState::kPunch1) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -623,13 +649,51 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// ガードアニメーションを再生
 		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
 	}
-	// パンチ状態から
-	else if (prevState == PlayerState::kPunch)
+	// パンチ状態(1コンボ目)から
+	else if (prevState == PlayerState::kPunch1)
 	{
 		// 待機アニメーションを再生
 		if (m_currentState == PlayerState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
+		// 2コンボ目アニメーションを再生
+		if (m_currentState == PlayerState::kPunch2) PlayAnim(AnimKind::kPunch2);
+		// キックアニメーションを再生
+		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// パンチ状態(2コンボ目)から
+	else if (prevState == PlayerState::kPunch2)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == PlayerState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
+		// 3コンボ目アニメーションを再生
+		if (m_currentState == PlayerState::kPunch3) PlayAnim(AnimKind::kPunch3);
+		// キックアニメーションを再生
+		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == PlayerState::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == PlayerState::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// パンチ状態(3コンボ目)から
+	else if (prevState == PlayerState::kPunch3)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == PlayerState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
+		// 1コンボ目アニメーションを再生
+		if (m_currentState == PlayerState::kPunch1) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -647,7 +711,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
+		if (m_currentState == PlayerState::kPunch1) PlayAnim(AnimKind::kPunch1);
 		// 回避アニメーションを再生
 		if (m_currentState == PlayerState::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
@@ -663,7 +727,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
+		if (m_currentState == PlayerState::kPunch1) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 構えアニメーションを再生
@@ -679,7 +743,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
+		if (m_currentState == PlayerState::kPunch1) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -695,7 +759,7 @@ void Player::UpdateAnimState(PlayerState prevState)
 		// 移動アニメーションを再生
 		if (m_currentState == PlayerState::kRun) PlayAnim(AnimKind::kRun);
 		// パンチアニメーションを再生
-		if (m_currentState == PlayerState::kPunch) PlayAnim(AnimKind::kPunch1);
+		if (m_currentState == PlayerState::kPunch1) PlayAnim(AnimKind::kPunch1);
 		// キックアニメーションを再生
 		if (m_currentState == PlayerState::kKick) PlayAnim(AnimKind::kKick);
 		// 回避アニメーションを再生
@@ -727,9 +791,17 @@ void Player::UpdateAnim()
 		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentPlayAnim);
 
 		// アニメーションによって再生スピードを変える
-		if (m_currentState == PlayerState::kPunch)
+		if (m_currentState == PlayerState::kPunch1)
 		{
 			m_currentAnimCount += m_animSpeed.punch1;
+		}
+		else if (m_currentState == PlayerState::kPunch2)
+		{
+			m_currentAnimCount += m_animSpeed.punch2;
+		}
+		else if (m_currentState == PlayerState::kPunch3)
+		{
+			m_currentAnimCount += m_animSpeed.punch3;
 		}
 		else if (m_currentState == PlayerState::kKick)
 		{
@@ -761,10 +833,9 @@ void Player::UpdateAnim()
 		{
 			m_currentAnimCount += m_animSpeed.fightIdle;
 		}
-
 		
-		// パンチコンボの場合
-		if (m_currentAnimCount >= kPunchComboTime && m_punchCount > 0 && m_currentState == PlayerState::kPunch)
+		// パンチコンボの場合はアニメーションループしない
+		if (m_currentAnimCount >= kPunchComboTime && m_punchCount > 0 && m_currentState == PlayerState::kPunch1)
 		{
 			// パンチコンボの場合
 			m_currentAnimCount = 0.0f;

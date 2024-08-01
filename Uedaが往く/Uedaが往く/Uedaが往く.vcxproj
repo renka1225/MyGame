@@ -26,13 +26,14 @@
     <ClCompile Include="Chara\Player.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyChef.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyAbe.cpp" />
+    <ClCompile Include="Debug\DebugDraw.cpp" />
     <ClCompile Include="Scene\SceneStageBase.cpp" />
     <ClCompile Include="Util\ConversionTime.cpp" />
     <ClCompile Include="Util\LoadData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneClear.cpp" />
-    <ClCompile Include="Scene\SceneDebug.cpp" />
+    <ClCompile Include="Debug\SceneDebug.cpp" />
     <ClCompile Include="Scene\SceneGameover.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\SceneOption.cpp" />
@@ -54,13 +55,14 @@
     <ClInclude Include="Chara\Player.h" />
     <ClInclude Include="Chara\Enemy\EnemyChef.h" />
     <ClInclude Include="Chara\Enemy\EnemyAbe.h" />
+    <ClInclude Include="Debug\DebugDraw.h" />
     <ClInclude Include="Scene\SceneStageBase.h" />
     <ClInclude Include="Stage\Light.h" />
     <ClInclude Include="Util\ConversionTime.h" />
     <ClInclude Include="Util\LoadData.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneClear.h" />
-    <ClInclude Include="Scene\SceneDebug.h" />
+    <ClInclude Include="Debug\SceneDebug.h" />
     <ClInclude Include="Scene\SceneGameover.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\SceneOption.h" />
@@ -167,7 +169,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Shader</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Debug</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -184,7 +186,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Shader</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Debug</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

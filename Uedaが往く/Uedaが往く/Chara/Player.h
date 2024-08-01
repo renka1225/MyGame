@@ -17,20 +17,21 @@ public:
 	// プレイヤーの状態
 	enum class PlayerState
 	{
-		kAvoid = 0,		// 回避
-		kDown = 1,		// 倒れる
-		kFightIdle = 2, // 構え(停止中)
-		kFightWalk = 3, // 構え(移動中)
-		kGettingUp = 4, // 起き上がる
-		kGrab = 5,		// 掴み
-		kGuard = 6,		// ガード
-		kKick = 7,		// キック
-		kPunch = 8,		// パンチ
-		kComboPunch = 9,// コンボパンチ
-		kReceive = 10,	// 攻撃を受ける
-		kRun = 11,		// 移動
-		kStand = 12,	// 待機
-		kStumble = 13,	// 掴み失敗
+		kAvoid = 0,		 // 回避
+		kDown = 1,		 // 倒れる
+		kFightIdle = 2,  // 構え(停止中)
+		kFightWalk = 3,  // 構え(移動中)
+		kGettingUp = 4,  // 起き上がる
+		kGrab = 5,		 // 掴み
+		kGuard = 6,		 // ガード
+		kKick = 7,		 // キック
+		kPunch1 = 8,	 // パンチ(1コンボ)
+		kPunch2 = 9,	 // パンチ(2コンボ)
+		kPunch3 = 10,	 // パンチ(3コンボ)
+		kReceive = 11,	 // 攻撃を受ける
+		kRun = 12,		 // 移動
+		kStand = 13,	 // 待機
+		kStumble = 14,	 // 掴み失敗
 	};
 
 	Player();
@@ -79,8 +80,8 @@ private:
 	int m_punchCount;			// 現在のパンチのコンボ数
 	int m_punchComboTime;		// コンボ入力受付時間
 	int m_punchCoolTime;		// パンチできない時間
-	int m_avoidCount;			// 回避した回数
 	int m_avoidCoolTime;		// 回避できない時間
+	int m_avoidCount;			// 回避した回数
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isFighting;			// 構え中かどうか(true:構え中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
