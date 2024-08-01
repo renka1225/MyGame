@@ -14,26 +14,6 @@ class UIGauge;
 class Player : public CharacterBase 
 {
 public:
-	// プレイヤーの状態
-	enum class PlayerState
-	{
-		kAvoid = 0,		 // 回避
-		kDown = 1,		 // 倒れる
-		kFightIdle = 2,  // 構え(停止中)
-		kFightWalk = 3,  // 構え(移動中)
-		kGettingUp = 4,  // 起き上がる
-		kGrab = 5,		 // 掴み
-		kGuard = 6,		 // ガード
-		kKick = 7,		 // キック
-		kPunch1 = 8,	 // パンチ(1コンボ)
-		kPunch2 = 9,	 // パンチ(2コンボ)
-		kPunch3 = 10,	 // パンチ(3コンボ)
-		kReceive = 11,	 // 攻撃を受ける
-		kRun = 12,		 // 移動
-		kStand = 13,	 // 待機
-		kStumble = 14,	 // 掴み失敗
-	};
-
 	Player();
 	~Player();
 	virtual void Init() override;
@@ -54,23 +34,21 @@ private:
 	// 移動処理
 	void Move(const VECTOR& moveVec, Stage& stage);
 	// パンチ攻撃処理
-	PlayerState Punch(const Input& input);
+	void Punch(const Input& input);
 	// キック攻撃処理
-	PlayerState Kick(const Input& input);
+	void Kick(const Input& input);
 	// 回避処理
-	PlayerState Avoidance(const Input& input, VECTOR& moveVec);
+	void Avoidance(const Input& input, VECTOR& moveVec);
 	// 構え処理
-	PlayerState Fighting(const Input& input);
+	void Fighting(const Input& input);
 	// ガード処理
-	PlayerState Guard(const Input& input);
+	void Guard(const Input& input);
 	// ガード状態を解除する
 	void OffGuard();
 	// 移動パラメータを設定する
-	PlayerState UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	CharacterBase::State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの回転を制御する
 	void UpdateAngle(EnemyBase& enemy);
-	// アニメーションステートの更新
-	void UpdateAnimState(PlayerState prevState);
 	// アニメーション処理
 	virtual void UpdateAnim() override;
 
@@ -85,5 +63,4 @@ private:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
 	bool m_isFighting;			// 構え中かどうか(true:構え中)
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
-	PlayerState m_currentState;	// 現在の状態
 };

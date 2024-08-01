@@ -68,7 +68,7 @@ void EnemyNinja::Update(Player& player, Stage& stage)
 	VECTOR	moveVec;		// このフレームの移動ベクトル
 
 	// エネミーの状態を更新
-	EnemyState prevState = m_currentState;
+	CharacterBase::State prevState = m_currentState;
 
 	// 次の行動を決める
 	DecideNextAction();
@@ -144,7 +144,7 @@ void EnemyNinja::DecideNextAction()
 	if (m_intervalTime > 0) return;
 
 	// 攻撃中かつ移動中でない場合
-	if (!m_isAttack && m_currentState != EnemyState::kRun)
+	if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
 	{
 		// 確率で攻撃を行う
 		int randNum = GetRand(kMaxProb);

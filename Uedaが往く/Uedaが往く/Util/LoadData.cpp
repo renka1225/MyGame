@@ -11,7 +11,7 @@ namespace
 	const char* const kAnimSpeedFileName = "data/csv/animSpeed.csv";	// アニメーション速度データのファイル名
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
 
-	constexpr int kStatusNum = 10;	// 1キャラクターのステータス数
+	constexpr int kStatusNum = 14;	// 1キャラクターのステータス数
 	constexpr int kAnimNum = 16;	// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;		// 1キャラクターの当たり判定の情報数
 }
@@ -91,15 +91,19 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 
 	// 外部ファイルの情報を入れる
 	data.m_status.maxHp = m_charData[0 + charType * kStatusNum];
-	data.m_status.punchPower = m_charData[1 + charType * kStatusNum];
-	data.m_status.secondPunchPower = m_charData[2 + charType * kStatusNum];
-	data.m_status.thirdPunchPower = m_charData[3 + charType * kStatusNum];
-	data.m_status.kickPower = m_charData[4 + charType * kStatusNum];
-	data.m_status.maxMoveSpeed = m_charData[5 + charType * kStatusNum];
-	data.m_status.fightWalkSpeed = m_charData[6 + charType * kStatusNum];
-	data.m_status.acceleration = m_charData[7 + charType * kStatusNum];
-	data.m_status.deceleration = m_charData[8 + charType * kStatusNum];
-	data.m_status.avoidDist = m_charData[9 + charType * kStatusNum];
+	data.m_status.punchReceptionTime = m_charData[1 + charType * kStatusNum];
+	data.m_status.punchCoolTime = m_charData[2 + charType * kStatusNum];
+	data.m_status.punchPower = m_charData[3 + charType * kStatusNum];
+	data.m_status.secondPunchPower = m_charData[4 + charType * kStatusNum];
+	data.m_status.thirdPunchPower = m_charData[5 + charType * kStatusNum];
+	data.m_status.kickPower = m_charData[6 + charType * kStatusNum];
+	data.m_status.maxMoveSpeed = m_charData[7 + charType * kStatusNum];
+	data.m_status.fightWalkSpeed = m_charData[8 + charType * kStatusNum];
+	data.m_status.acceleration = m_charData[9 + charType * kStatusNum];
+	data.m_status.deceleration = m_charData[10 + charType * kStatusNum];
+	data.m_status.avoidDist = m_charData[11 + charType * kStatusNum];
+	data.m_status.maxAvoidCount = m_charData[12 + charType * kStatusNum];
+	data.m_status.avoidCoolTime = m_charData[13 + charType * kStatusNum];
 }
 
 

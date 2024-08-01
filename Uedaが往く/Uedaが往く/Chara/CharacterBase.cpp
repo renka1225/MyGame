@@ -67,6 +67,168 @@ void CharacterBase::UpdateCol()
 
 
 /// <summary>
+/// アニメーションステートを更新
+/// </summary>
+/// <param name="prevState">1つ前のアニメーション</param>
+void CharacterBase::UpdateAnimState(CharacterBase::State prevState)
+{
+	// 攻撃中は状態を更新しない
+	if (m_isAttack) return;
+
+	// 待機状態から
+	if (prevState == CharacterBase::State::kFightIdle)
+	{
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// パンチアニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1)PlayAnim(AnimKind::kPunch1);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick)	PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// 移動状態から
+	else if (prevState == CharacterBase::State::kRun)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// パンチアニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1) PlayAnim(AnimKind::kPunch1);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// パンチ状態(1コンボ目)から
+	else if (prevState == CharacterBase::State::kPunch1)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// 2コンボ目アニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch2) PlayAnim(AnimKind::kPunch2);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// パンチ状態(2コンボ目)から
+	else if (prevState == CharacterBase::State::kPunch2)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// 3コンボ目アニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch3) PlayAnim(AnimKind::kPunch3);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// パンチ状態(3コンボ目)から
+	else if (prevState == CharacterBase::State::kPunch3)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// 1コンボ目アニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1) PlayAnim(AnimKind::kPunch1);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// キック状態から
+	else if (prevState == CharacterBase::State::kKick)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// パンチアニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1) PlayAnim(AnimKind::kPunch1);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// 回避状態から
+	else if (prevState == CharacterBase::State::kAvoid)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// パンチアニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1) PlayAnim(AnimKind::kPunch1);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// 構え状態から
+	else if (prevState == CharacterBase::State::kFightWalk)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// パンチアニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1) PlayAnim(AnimKind::kPunch1);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
+	}
+	// ガード状態から
+	else if (prevState == CharacterBase::State::kGuard)
+	{
+		// 待機アニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightIdle) PlayAnim(AnimKind::kFightIdle);
+		// 移動アニメーションを再生
+		if (m_currentState == CharacterBase::State::kRun) PlayAnim(AnimKind::kRun);
+		// パンチアニメーションを再生
+		if (m_currentState == CharacterBase::State::kPunch1) PlayAnim(AnimKind::kPunch1);
+		// キックアニメーションを再生
+		if (m_currentState == CharacterBase::State::kKick) PlayAnim(AnimKind::kKick);
+		// 回避アニメーションを再生
+		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
+		// 構えアニメーションを再生
+		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+	}
+}
+
+
+/// <summary>
 /// アニメーションを再生する
 /// </summary>
 /// <param name="PlayAnimIndex">再生するアニメーション状態</param>

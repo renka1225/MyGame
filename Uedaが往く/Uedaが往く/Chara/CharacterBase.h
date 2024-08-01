@@ -30,6 +30,26 @@ public:
 		kEnemyAbe,		// 爺さん
 	};
 
+	// キャラクターの状態
+	enum class State
+	{
+		kAvoid = 0,		 // 回避
+		kDown = 1,		 // 倒れる
+		kFightIdle = 2,  // 構え(停止中)
+		kFightWalk = 3,  // 構え(移動中)
+		kGettingUp = 4,  // 起き上がる
+		kGrab = 5,		 // 掴み
+		kGuard = 6,		 // ガード
+		kKick = 7,		 // キック
+		kPunch1 = 8,	 // パンチ(1コンボ)
+		kPunch2 = 9,	 // パンチ(2コンボ)
+		kPunch3 = 10,	 // パンチ(3コンボ)
+		kReceive = 11,	 // 攻撃を受ける
+		kRun = 12,		 // 移動
+		kStand = 13,	 // 待機
+		kStumble = 14,	 // 掴み失敗
+	};
+
 	// アニメーション種別
 	enum class AnimKind
 	{
@@ -77,16 +97,20 @@ public:
 	// キャラクターのステータス
 	struct Status
 	{
-		float maxHp;			// 最大HP
-		float punchPower;		// パンチの攻撃力
-		float secondPunchPower;	// パンチ2コンボ目の攻撃力
-		float thirdPunchPower;	// パンチ3コンボ目の攻撃力
-		float kickPower;		// キックの攻撃力
-		float maxMoveSpeed;		// 最大の移動速度
-		float fightWalkSpeed;	// 構え時の移動速度
-		float acceleration;		// 加速度
-		float deceleration;		// 減速度
-		float avoidDist;		// 回避の距離
+		float maxHp;				// 最大HP
+		int punchReceptionTime;		// パンチコンボの入力受付時間
+		int punchCoolTime;			// パンチできるようになるまでの時間
+		float punchPower;			// パンチの攻撃力
+		float secondPunchPower;		// パンチ2コンボ目の攻撃力
+		float thirdPunchPower;		// パンチ3コンボ目の攻撃力
+		float kickPower;			// キックの攻撃力
+		float maxMoveSpeed;			// 最大の移動速度
+		float fightWalkSpeed;		// 構え時の移動速度
+		float acceleration;			// 加速度
+		float deceleration;			// 減速度
+		float avoidDist;			// 回避の距離
+		int maxAvoidCount;			// 連続で回避できる回数
+		int avoidCoolTime;			// 回避できるようになるまでの時間
 	};
 	Status m_status;
 
@@ -109,6 +133,8 @@ public:
 protected:
 	// 当たり判定位置の更新
 	void UpdateCol();
+	// アニメーションステートの更新
+	void UpdateAnimState(CharacterBase::State prevState);
 	// アニメーションを再生する
 	void PlayAnim(AnimKind playAnimIndex);
 	// アニメーション処理
@@ -118,13 +144,14 @@ protected:
 	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得
 	std::shared_ptr<UIGauge> m_pUIGauge;	// バトル中に表示するHPのゲージ
 
-	float m_hp;			// HP
-	VECTOR m_pos;		// 位置
-	float m_moveSpeed;	// 移動速度
-	float m_angle;		// 向いている方向の角度
-	bool m_isAttack;	// 攻撃中かどうか(true:攻撃中)
-	bool m_isGuard;		// ガード中かどうか(ture:ガード中)
-	int m_modelHandle;	// キャラクターの3Dモデル
+	float m_hp;				// HP
+	VECTOR m_pos;			// 位置
+	float m_moveSpeed;		// 移動速度
+	float m_angle;			// 向いている方向の角度
+	bool m_isAttack;		// 攻撃中かどうか(true:攻撃中)
+	bool m_isGuard;			// ガード中かどうか(ture:ガード中)
+	State m_currentState;	// 現在の状態
+	int m_modelHandle;		// キャラクターの3Dモデル
 
 	// アニメーション情報
 	int m_currentPlayAnim;		// 再生中のアニメーションのアタッチ番号
@@ -133,6 +160,7 @@ protected:
 	float m_prevAnimCount;		// 前の再生アニメーションの再生時間
 	float m_animBlendRate;		// 現在と過去のアニメーションのブレンド率
 
+	// 当たり判定位置
 	struct Collision
 	{
 		VECTOR armStartPos;		// 腕の当たり判定始点

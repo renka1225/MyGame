@@ -30,7 +30,7 @@ namespace
 	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
 
 	// HPバーが減少するまでの時間
-	constexpr int kIntervalTime = 30;
+	constexpr int kIntervalTime = 15;
 }
 
 /// <summary>
@@ -118,8 +118,7 @@ void UIGauge::DrawPlayerGauge(float currentGauge, float MaxGauge)
 /// <summary>
 /// 敵のHPバーを表示
 /// </summary>
-/// <param name="currentHp"></param>
-/// <param name="MaxHp"></param>
+/// <param name="currentHp">現在のHP</param>
 void UIGauge::DrawEnemyHp(float currentHp)
 {
 	// 表示するゲージ量を計算する

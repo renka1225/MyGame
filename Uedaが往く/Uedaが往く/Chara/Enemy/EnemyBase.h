@@ -11,25 +11,6 @@ class Stage;
 class EnemyBase : public CharacterBase
 {
 public:
-	// エネミーの状態
-	enum class EnemyState
-	{
-		kAvoid = 0,		// 回避
-		kDown = 1,		// 倒れる
-		kFightIdle = 2, // 構え(停止中)
-		kFightWalk = 3, // 構え(移動中)
-		kGettingUp = 4, // 起き上がる
-		kGrab = 5,		// 掴み
-		kGuard = 6,		// ガード
-		kKick = 7,		// キック
-		kPunch = 8,		// パンチ
-		kComboPunch = 9,// コンボパンチ
-		kReceive = 10,	// 攻撃を受ける
-		kRun = 11,		// 移動
-		kStand = 12,	// 待機
-		kStumble = 13,	// 掴み失敗
-	};
-
 	EnemyBase();
 	virtual ~EnemyBase();
 	virtual void Init() = 0;
@@ -46,15 +27,13 @@ protected:
 	// 移動処理
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
 	// 移動パラメータを設定する
-	EnemyState UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	CharacterBase::State UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// パンチ処理
 	void Punch();
 	// キック処理
 	void kick();
 	// 敵の角度を更新
 	void UpdateAngle(Player& player);
-	// アニメーションステートの更新
-	void UpdateAnimState(EnemyState prevState);
 	// アニメーション処理
 	virtual void UpdateAnim() override;
 
@@ -64,6 +43,5 @@ protected:
 	int m_stopTime;				// 停止する時間
 	int m_angleIntervalTime;	// 角度を更新するまでの時間
 	int m_intervalTime;			// 次の状態を更新するまでの時間
-	EnemyState m_currentState;	// エネミーの現在の状態
 };
 

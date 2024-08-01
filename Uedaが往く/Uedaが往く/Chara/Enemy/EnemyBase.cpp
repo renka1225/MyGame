@@ -24,14 +24,14 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-EnemyBase::EnemyBase():
+EnemyBase::EnemyBase() :
 	m_isMove(false),
 	m_isAttack(false),
 	m_stopTime(0),
 	m_angleIntervalTime(0),
-	m_intervalTime(0),
-	m_currentState(EnemyState::kFightIdle)
+	m_intervalTime(0)
 {
+	m_currentState = CharacterBase::State::kFightIdle;
 }
 
 
@@ -75,9 +75,9 @@ void EnemyBase::Move(const VECTOR& moveVec, Player& player, Stage& stage)
 /// <param name="leftMoveVec">左方向への移動ベクトル</param>
 /// <param name="moveVec">移動ベクトル</param>
 /// <returns>現在の状態</returns>
-EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
+EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
 {
-	EnemyState nextState = m_currentState;
+	CharacterBase::State nextState = m_currentState;
 	
 	// このフレームでの移動ベクトルを初期化
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
@@ -99,9 +99,9 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 				moveVec = VScale(dir, m_moveSpeed);
 
 				// 待機状態の場合
-				if (m_currentState == EnemyState::kFightIdle)
+				if (m_currentState == CharacterBase::State::kFightIdle)
 				{
-					nextState = EnemyState::kRun; // 移動状態にする
+					nextState = CharacterBase::State::kRun; // 移動状態にする
 				}
 			}
 			else
@@ -112,12 +112,12 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 		// プレイヤーが攻撃範囲に入った場合
 		else if(distance <= kAttackRange)
 		{
-			nextState = EnemyState::kKick;	// 攻撃状態にする
+			nextState = CharacterBase::State::kKick;	// 攻撃状態にする
 		}
 		else
 		{
 			m_stopTime = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
-			nextState = EnemyState::kFightIdle;	// 待機状態にする
+			nextState = CharacterBase::State::kFightIdle;	// 待機状態にする
 		}
 	}
 
@@ -131,7 +131,7 @@ EnemyBase::EnemyState EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upM
 void EnemyBase::Punch()
 {
 	m_isAttack = true;
-	m_currentState = EnemyState::kPunch;
+	m_currentState = CharacterBase::State::kPunch1;
 	PlayAnim(AnimKind::kPunch1);
 }
 
@@ -142,7 +142,7 @@ void EnemyBase::Punch()
 void EnemyBase::kick()
 {
 	m_isAttack = true;
-	m_currentState = EnemyState::kKick;
+	m_currentState = CharacterBase::State::kKick;
 	PlayAnim(AnimKind::kKick);
 }
 
@@ -196,7 +196,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	bool isBackAttack = VDot(player.GetDir(), pToEVec) < 0.0f;
 
 	// パンチが当たった場合
-	if (hitPunch && m_currentState == EnemyState::kPunch)
+	if (hitPunch && m_currentState == CharacterBase::State::kPunch1)
 	{
 		// プレイヤーがガードしていないか、背後から攻撃した場合
 		if (isBackAttack || !player.GetIsGuard())
@@ -209,7 +209,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 		}
 	}
 	// キックが当たった場合
-	else if (hitKick && m_currentState == EnemyState::kKick)
+	else if (hitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// キックが当たった場合
 		if (player.GetIsGuard())
@@ -233,81 +233,9 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	}
 
 	// 掴みが決まらなかった場合
-	if (!hit && m_currentState == EnemyState::kGrab)
+	if (!hit && m_currentState == CharacterBase::State::kGrab)
 	{
 		// 掴み失敗のアニメーションを再生する
-	}
-}
-
-
-/// <summary>
-/// アニメーションステートの更新
-/// </summary>
-/// <param name="prevState"></param>
-void EnemyBase::UpdateAnimState(EnemyState prevState)
-{
-	// 攻撃中は状態を更新しない
-	if (m_isAttack) return;
-
-	// 待機状態から
-	if (prevState == EnemyState::kFightIdle)
-	{
-		// 移動アニメーションを再生
-		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
-		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
-		// キックアニメーションを再生
-		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
-		// 回避アニメーションを再生
-		if (m_currentState == EnemyState::kAvoid) PlayAnim(AnimKind::kAvoid);
-	}
-	// 移動状態から
-	else if (prevState == EnemyState::kRun)
-	{
-		// 待機アニメーションを再生
-		if (m_currentState == EnemyState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
-		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
-		// キックアニメーションを再生
-		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
-		// 回避アニメーションを再生
-		if (m_currentState == EnemyState::kAvoid) PlayAnim(AnimKind::kAvoid);
-	}
-	// パンチ状態から
-	else if (prevState == EnemyState::kPunch)
-	{
-		// 待機アニメーションを再生
-		if (m_currentState == EnemyState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
-		// 移動アニメーションを再生
-		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
-		// キックアニメーションを再生
-		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
-		// 回避アニメーションを再生
-		if (m_currentState == EnemyState::kAvoid) PlayAnim(AnimKind::kAvoid);
-	}
-	// キック状態から
-	else if (prevState == EnemyState::kKick)
-	{
-		// 待機アニメーションを再生
-		if (m_currentState == EnemyState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
-		// 移動アニメーションを再生
-		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
-		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
-		// 回避アニメーションを再生
-		if (m_currentState == EnemyState::kAvoid) PlayAnim(AnimKind::kAvoid);
-	}
-	// 回避状態から
-	else if (prevState == EnemyState::kAvoid)
-	{
-		// 待機アニメーションを再生
-		if (m_currentState == EnemyState::kFightIdle) PlayAnim(AnimKind::kFightIdle);
-		// 移動アニメーションを再生
-		if (m_currentState == EnemyState::kRun) PlayAnim(AnimKind::kRun);
-		// パンチアニメーションを再生
-		if (m_currentState == EnemyState::kPunch) PlayAnim(AnimKind::kPunch1);
-		// キックアニメーションを再生
-		if (m_currentState == EnemyState::kKick) PlayAnim(AnimKind::kKick);
 	}
 }
 
@@ -350,7 +278,7 @@ void EnemyBase::UpdateAnim()
 			if (m_isAttack)
 			{
 				m_isAttack = false;
-				m_currentState = EnemyState::kFightIdle;
+				m_currentState = CharacterBase::State::kFightIdle;
 				PlayAnim(AnimKind::kFightIdle);
 			}
 

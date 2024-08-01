@@ -15,9 +15,9 @@ namespace
 	constexpr int kIntervalTime = 120;							// 状態を更新するまでの時間
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);			// 初期位置
 
-	constexpr int kMaxProb = 100;			// 最大確率%
-	constexpr int kPunchProb = 70;			// パンチを行う確率
-	constexpr int kKickProb = 30;			// キックを行う確率
+	constexpr int kMaxProb = 100;		// 最大確率%
+	constexpr int kPunchProb = 70;		// パンチを行う確率
+	constexpr int kKickProb = 30;		// キックを行う確率
 }
 
 
@@ -69,7 +69,7 @@ void EnemyAbe::Update(Player& player, Stage& stage)
 	VECTOR	moveVec;		// このフレームの移動ベクトル
 
 	// エネミーの状態を更新
-	EnemyState prevState = m_currentState;
+	CharacterBase::State prevState = m_currentState;
 
 	// 次の行動を決める
 	DecideNextAction();
@@ -146,7 +146,7 @@ void EnemyAbe::DecideNextAction()
 	if (m_intervalTime > 0) return;
 
 	// 攻撃中かつ移動中でない場合
-	if (!m_isAttack && m_currentState != EnemyState::kRun)
+	if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
 	{
 		// 確率で攻撃を行う
 		int randNum = GetRand(kMaxProb);
