@@ -14,10 +14,6 @@ namespace
 	constexpr float kScale = 0.3f;								// 拡大率
 	constexpr int kIntervalTime = 120;							// 状態を更新するまでの時間
 	const VECTOR kInitPos = VGet(0.0f, 10.0f, 5.0f);			// 初期位置
-
-	constexpr int kMaxProb = 100;			// 最大確率%
-	constexpr int kPunchProb = 10;			// パンチを行う確率
-	constexpr int kKickProb = 60;			// キックを行う確率
 }
 
 
@@ -149,15 +145,15 @@ void EnemyChef::DecideNextAction()
 	if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
 	{
 		// 確率で攻撃を行う
-		int randNum = GetRand(kMaxProb);
+		int randNum = GetRand(m_enemyInfo.maxProb);
 
 		// キック攻撃
-		if (randNum <= kKickProb)
+		if (randNum <= m_enemyInfo.kickProb)
 		{
 			kick();
 		}
 		// パンチ攻撃
-		if (randNum <= kPunchProb)
+		if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
 		{
 			Punch();
 		}

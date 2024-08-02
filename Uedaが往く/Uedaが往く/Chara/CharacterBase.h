@@ -137,7 +137,7 @@ public:
 		float approachRange;	// プレイヤーに近づく範囲
 		float attackRange;		// プレイヤーを攻撃する範囲
 		int minStopTime;		// 最小の停止時間
-		int maxstopTime;		// 最大の停止時間
+		int maxStopTime;		// 最大の停止時間
 		int maxProb;			// 最大確率%
 		int punchProb;			// パンチ確率
 		int kickProb;			// キック確率

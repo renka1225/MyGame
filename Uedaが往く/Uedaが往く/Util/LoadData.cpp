@@ -3,6 +3,7 @@
 #include "LoadData.h"
 #include <fstream>
 #include <sstream>
+#include <cassert>
 
 // 定数
 namespace
@@ -12,9 +13,10 @@ namespace
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
 	const char* const kEnemyInfoFileName = "data/csv/enemyInfo.csv";	// 敵データのファイル名
 
-	constexpr int kStatusNum = 15;	// 1キャラクターのステータス数
-	constexpr int kAnimNum = 16;	// 1キャラクターのアニメーションの数
-	constexpr int kColNum = 16;		// 1キャラクターの当たり判定の情報数
+	constexpr int kStatusNum = 15;		// 1キャラクターのステータス数
+	constexpr int kAnimNum = 16;		// 1キャラクターのアニメーションの数
+	constexpr int kColNum = 16;			// 1キャラクターの当たり判定の情報数
+	constexpr int kEnemyInfoNum = 12;	// 1キャラクターの情報数
 }
 
 
@@ -28,7 +30,11 @@ LoadData::LoadData(CharacterBase& data, int charType)
 	LoadCharaData(data, charType);
 	LoadAnimSpeedData(data, charType);
 	LoadColData(data, charType);
-	LoadEnemyData(data, charType);
+	if (charType != 0)
+	{
+		LoadEnemyData(data, charType);
+	}
+
 }
 
 
@@ -224,4 +230,46 @@ void LoadData::LoadColData(CharacterBase& data, int charType)
 /// <param name="data">敵参照</param>
 void LoadData::LoadEnemyData(CharacterBase& data, int charType)
 {
+	std::ifstream file(kEnemyInfoFileName);
+	m_enemyData.clear();
+	std::string line;
+
+	// ファイルの入力取得
+	// std::getline(読み取るファイルの変数, 入力文字列を格納する変数);
+	while (std::getline(file, line))
+	{
+		std::istringstream stream(line);
+		std::string field;
+
+		// 文字列分割
+		// getline(istringstream型の変数, 分割した文字列を格納する変数, ',で分割')
+		while (getline(stream, field, ','))
+		{
+			try
+			{
+				// 文字列をfloatに変換してm_dataに追加する
+				m_enemyData.push_back(std::stof(field));
+			
+			}
+			catch (const std::invalid_argument& e)
+			{
+				// 無効な文字列をスキップ
+			}
+		}
+	}
+
+	// 外部ファイルの情報を入れる
+	// MEMO:敵番号が1番から始まるため、charType-1をする
+	data.m_enemyInfo.approachRange = m_enemyData[0 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.attackRange = m_enemyData[1 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.minStopTime = m_enemyData[2 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.maxStopTime = m_enemyData[3 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.maxProb = m_enemyData[4 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.punchProb = m_enemyData[5 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.kickProb = m_enemyData[6 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.avoidProb = m_enemyData[7 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.guardProb = m_enemyData[8 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.grabProb = m_enemyData[9 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.changeAngleProb = m_enemyData[10 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.changeAngleFrame = m_enemyData[11 + (charType - 1) * kEnemyInfoNum];
 }

@@ -13,10 +13,6 @@ namespace
 	constexpr int kStopMinTime = 30;		 // 最小の停止時間
 	constexpr int kStopMaxTime = 150;		 // 最大の停止時間
 
-	constexpr int kMaxProb = 100;			 // 最大確率%
-	constexpr int kChangeAngleProb = 60;	 // 角度を更新する確率%
-	constexpr int kChangeAngleFrame = 60;	 // 角度を更新するフレーム数
-
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
@@ -48,8 +44,8 @@ EnemyBase::~EnemyBase()
 /// <summary>
 /// 移動処理
 /// </summary>
-/// <param name="MoveVec"></param>
-/// <param name="stage"></param>
+/// <param name="MoveVec">移動量</param>
+/// <param name="stage">ステージ情報参照</param>
 void EnemyBase::Move(const VECTOR& moveVec, Player& player, Stage& stage)
 {
 	if (fabs(moveVec.x) > 0.0f || fabs(moveVec.z) > 0.0f)
@@ -284,11 +280,11 @@ void EnemyBase::UpdateAngle(Player& player)
 	VECTOR dir = VSub(player.GetPos(), m_pos);
 
 	// 一定時間たったらエネミーの角度を更新する
-	if (m_angleIntervalTime >= kChangeAngleFrame)
+	if (m_angleIntervalTime >= m_enemyInfo.changeAngleFrame)
 	{
 		// ランダムでプレイヤーの方向を向く
-		int randNum = GetRand(kMaxProb);
-		if (randNum <= kChangeAngleProb)
+		int randNum = GetRand(m_enemyInfo.maxProb);
+		if (randNum <= m_enemyInfo.changeAngleProb)
 		{
 			m_angle = atan2f(dir.x, dir.z);
 		}
