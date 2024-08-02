@@ -24,4 +24,3 @@ public:
 private:
 	void UpdateNextBattle();	// “G‚ğ“|‚µ‚ÄŸ‡‚ªn‚Ü‚é‘O‚Ìˆ—
 };
-

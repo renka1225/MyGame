@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include <memory>
 
 /// <summary>
 /// クリアシーン
@@ -13,7 +14,9 @@ public:
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
-private:
-	int m_textHandle;	// テキストの画像
-};
+	//void SetClearTime(std::vector<int> clearTime) { m_clearTime = clearTime; };
 
+private:
+	int m_textHandle;				// テキストの画像
+	std::vector<int> m_clearTime;	// クリアタイム
+};

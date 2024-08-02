@@ -27,7 +27,7 @@ public:
 		kEnemyTuto,		// チュートリアルの敵
 		kEnemyNinja,	// 忍者
 		kEnemyChef,		// シェフ
-		kEnemyAbe,		// 爺さん
+		kEnemyAbe,		// Abe
 	};
 
 	// キャラクターの状態

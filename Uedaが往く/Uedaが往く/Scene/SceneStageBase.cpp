@@ -22,6 +22,7 @@ namespace
 SceneStageBase::SceneStageBase():
 	m_battleNum(0),
 	m_nextBattleTime(0),
+	m_elapsedTime(0),
 	m_fightTextHandle(-1)
 {
 }

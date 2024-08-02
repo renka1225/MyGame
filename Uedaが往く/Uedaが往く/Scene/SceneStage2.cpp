@@ -85,9 +85,14 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		m_pEnemy->Update(*m_pPlayer, *m_pStage);
 		if (m_nextBattleTime > 0) return shared_from_this();
 
+		m_elapsedTime++; // 経過時間を進める
+
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
+			m_clearTime.push_back(m_elapsedTime);
+			m_elapsedTime = 0;
+
 			// 次の敵を登場させる
 			switch (m_battleNum)
 			{
@@ -123,6 +128,8 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	}
 
 #ifdef _DEBUG
+	// 敵のHPを0にする
+	m_pEnemy->DebugDamage(input);
 	// シーン遷移
 	if (input.IsTriggered("debug_clear"))
 	{
@@ -132,7 +139,6 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	{
 		return std::make_shared<SceneGameover>();
 	}
-
 #endif
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -156,6 +162,7 @@ void SceneStage2::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ2", 0xffffff);
+	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
 }
 

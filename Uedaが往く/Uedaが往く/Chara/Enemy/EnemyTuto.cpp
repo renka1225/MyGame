@@ -68,7 +68,7 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	CharacterBase::State prevState = m_currentState;
 
 	// 次の行動を決める
-	DecideNextAction();
+	DecideNextAction(player);
 	m_intervalTime--;
 
 	// 移動処理
@@ -137,10 +137,45 @@ void EnemyTuto::OnDamage(float damage)
 /// <summary>
 /// 次の行動を決める
 /// </summary>
-void EnemyTuto::DecideNextAction()
+void EnemyTuto::DecideNextAction(Player& player)
 {
+	// 一定時間経過するまでは変更しない
 	if (m_intervalTime > 0) return;
 
+	// 敵の位置からプレイヤー位置までのベクトルを求める
+	VECTOR dir = VSub(player.GetPos(), m_pos);
+	float distance = VSize(dir);
+
+	// プレイヤーから離れている場合
+	if (distance > m_enemyInfo.approachRange)
+	{
+		// 数秒たったらプレイヤーの方へ移動する
+		if (m_stopTime <= 0)
+		{
+			dir = VNorm(dir);
+			//moveVec = VScale(dir, m_moveSpeed);
+
+			m_currentState = CharacterBase::State::kRun; // 移動状態にする
+			PlayAnim(CharacterBase::AnimKind::kRun);
+		}
+		else
+		{
+			m_stopTime--;
+		}
+	}
+	// プレイヤーに近い場合
+	else
+	{
+		m_stopTime = m_enemyInfo.minStopTime + GetRand(m_enemyInfo.maxStopTime);	// 停止時間をランダムで計算する
+		m_currentState = CharacterBase::State::kFightIdle;							// 待機状態にする
+	}
+
+
+	// 待機中の場合
+	if (m_currentState == CharacterBase::State::kFightIdle)
+	{
+		
+	}
 	// 攻撃中かつ移動中でない場合
 	if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
 	{

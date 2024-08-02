@@ -23,6 +23,11 @@ public:
 	float GetHp() const { return m_hp; }	// “G‚ÌHP‚ğæ“¾
 	VECTOR GetPos() const { return m_pos; } // “G‚ÌÀ•W‚ğæ“¾
 
+#ifdef _DEBUG
+	void DebugDamage(Input& input); // 1ƒ{ƒ^ƒ“‚Å“G‚ÌHP‚ğ0‚É‚·‚é
+#endif
+
+
 protected:
 	// ˆÚ“®ˆ—
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);

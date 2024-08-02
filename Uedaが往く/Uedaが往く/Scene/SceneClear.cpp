@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Vec2.h"
 #include "Game.h"
+#include "ConversionTime.h"
 #include "SceneSelectStage.h"
 #include "SceneClear.h"
 
@@ -69,11 +70,22 @@ void SceneClear::Draw()
 	// 中心線
 	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 
+	// クリアタイムをフレーム数から秒数に変換
+	//for (const auto& time : m_clearTime)
+	//{
+	//	int min = Conversion::ChangeMin(time);
+	//	int sec = Conversion::ChangeSec(time);
+	//	int milliSec = Conversion::ChangeMilliSec(time);
+
+	//	DrawFormatString(500, 650 + 100 * time, 0xffffff, "%d回戦 %02d:%02d:%03d", time, min, sec, milliSec);
+	//	DrawFormatString(500, 650 + 100 * time, 0xffffff, "%d回戦 %02d:%02d:%03d", time, min, sec, milliSec);
+	//	DrawFormatString(500, 650 + 100 * time, 0xffffff, "%d回戦 %02d:%02d:%03d", time, min, sec, milliSec);
+	//}
+
 	// TODO:仮でクリアタイム部分表示
 	DrawString(480, 550, "TotalTime 00:00:00", 0x000000);
-	DrawString(500, 650, "1回戦 00:00:00", 0x000000);
-	DrawString(500, 750, "2回戦 00:00:00", 0x000000);
-	DrawString(500, 850, "3回戦 00:00:00", 0x000000);
+	//DrawString(500, 600, "1回戦 00:00:00", 0x000000);
+
 	DrawString(1300, 550, "ランキング", 0x000000);
 	DrawString(1300, 600, "1位 00:00:00", 0x000000);
 	DrawString(1300, 650, "2位 00:00:00", 0x000000);

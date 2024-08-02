@@ -25,8 +25,10 @@ protected:
 	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Stage> m_pStage;
 	std::shared_ptr<EnemyBase> m_pEnemy;
-	int m_battleNum;		// 現在のバトル数
-	int m_nextBattleTime;	// 次の試合が始まるまでの時間
-	int m_fightTextHandle;	// "Fight"のテキスト画像
+	int m_battleNum;				// 現在のバトル数
+	int m_nextBattleTime;			// 次の試合が始まるまでの時間
+	int m_elapsedTime;				// 経過時間
+	std::vector<int> m_clearTime;	// 各試合ごとのクリアタイム
+	int m_fightTextHandle;			// "Fight"のテキスト画像
 };
 

@@ -89,6 +89,8 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	}
 
 #ifdef _DEBUG
+	// “G‚ÌHP‚ğ0‚É‚·‚é
+	m_pEnemy->DebugDamage(input);
 	// ƒV[ƒ“‘JˆÚ
 	if (input.IsTriggered("debug_clear"))
 	{

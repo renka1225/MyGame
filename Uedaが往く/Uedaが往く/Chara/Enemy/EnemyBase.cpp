@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Player.h"
 #include "Stage.h"
+#include "Input.h"
 #include "EnemyBase.h"
 #include <fstream>
 #include <sstream>
@@ -8,10 +9,6 @@
 // 定数
 namespace
 {
-	constexpr float kApproachRange = 70.0f;	 // プレイヤーに近づく範囲
-	constexpr float kAttackRange = 100.0f;	 // プレイヤーを攻撃する範囲
-	constexpr int kStopMinTime = 30;		 // 最小の停止時間
-	constexpr int kStopMaxTime = 150;		 // 最大の停止時間
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -88,10 +85,10 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 		float distance = VSize(dir);
 
 		// プレイヤーが一定距離離れた場合
-		if (distance > kApproachRange)
+		if (distance > m_enemyInfo.approachRange)
 		{
-			// 数秒たったらエネミーを移動させる
-			if (m_stopTime <= 0)
+			// 数秒たったらプレイヤーに近づく
+			if (m_stopTime < 0)
 			{
 				dir = VNorm(dir);
 				moveVec = VScale(dir, m_moveSpeed);
@@ -100,6 +97,7 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 				if (m_currentState == CharacterBase::State::kFightIdle)
 				{
 					nextState = CharacterBase::State::kRun; // 移動状態にする
+
 				}
 			}
 			else
@@ -107,6 +105,7 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 				m_stopTime--;
 			}
 		}
+
 		// プレイヤーが攻撃範囲に入った場合
 		//else if(distance <= kAttackRange)
 		//{
@@ -114,8 +113,8 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 		//}
 		else
 		{
-			m_stopTime = kStopMinTime + GetRand(kStopMaxTime);	// 停止時間をランダムで計算する
-			nextState = CharacterBase::State::kFightIdle;		// 待機状態にする
+			m_stopTime = m_enemyInfo.minStopTime + GetRand(m_enemyInfo.maxStopTime);	// プレイヤーに近づくまでの時間をランダムで計算する
+			nextState = CharacterBase::State::kFightIdle;								// 待機状態にする
 		}
 	}
 
@@ -360,3 +359,17 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 		// 掴み失敗のアニメーションを再生する
 	}
 }
+
+
+#ifdef _DEBUG
+/// <summary>
+/// デバッグ用
+/// </summary>
+void EnemyBase::DebugDamage(Input& input)
+{
+	if (input.IsTriggered("debug_damage"))
+	{
+		m_hp = 0;
+	}
+}
+#endif // _DEBUG
