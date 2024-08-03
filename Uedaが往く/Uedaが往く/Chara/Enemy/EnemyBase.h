@@ -46,7 +46,7 @@ protected:
 	// ガード状態を解除する
 	void OffGuard();
 	// 敵の角度を更新
-	void UpdateAngle(Player& player);
+	void UpdateAngle();
 
 protected:
 	bool m_isMove;				// 移動したかどうか(true:移動した)
@@ -54,5 +54,6 @@ protected:
 	int m_stopTime;				// 停止する時間
 	int m_angleIntervalTime;	// 角度を更新するまでの時間
 	int m_intervalTime;			// 次の状態を更新するまでの時間
+	VECTOR m_eToPDirVec;		// 敵の位置からプレイヤー位置のベクトル
 };
 

@@ -1,9 +1,4 @@
-﻿  SceneDebug.cpp
-  SceneClear.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneClear.cpp(71,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneClear.cpp(71,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-  SceneStage1.cpp
-  SceneStage2.cpp
-  SceneStageBase.cpp
-  コードを生成中...
-  Uedaが往く.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe
+﻿  SceneStage2.cpp
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneStage2.cpp(164,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneStage2.cpp(164,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+  Uedaが往く.vcxproj -> C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe

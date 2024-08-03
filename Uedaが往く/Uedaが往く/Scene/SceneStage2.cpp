@@ -4,9 +4,10 @@
 #include "EnemyChef.h"
 #include "EnemyAbe.h"
 #include "Camera.h"
+#include "Stage.h"
 #include "Input.h"
 #include "Vec2.h"
-#include "Stage.h"
+#include "Game.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage2.h"
@@ -14,7 +15,7 @@
 namespace
 {
 	const char* const kFightTextPath = "data/UI/Fight!.png";	// "Fight"のテキスト画像のファイル位置
-	const Vec2 kFightTextPos = { 900, 500 };					// "Fight"のテキスト位置
+	const Vec2 kFightTextPos = { 960, 500 };					// "Fight"のテキスト位置
 	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
 	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
 
@@ -99,19 +100,15 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 			case 0:	// 2戦目
 				m_pEnemy = nullptr;
 				m_pEnemy = std::make_shared<EnemyChef>();
-				m_pEnemy->Init();
-				m_pPlayer->Init();
 				UpdateNextBattle();
 				break;
 			case 1:	// 3戦目
 				m_pEnemy = nullptr;
 				m_pEnemy = std::make_shared<EnemyAbe>();
-				m_pEnemy->Init();
-				m_pPlayer->Init();
 				UpdateNextBattle();
 				break;
 			case 2: // 勝利時
-				return std::make_shared<SceneClear>();
+				return std::make_shared<SceneClear>(m_clearTime);
 				break;
 			default:
 				break;
@@ -172,6 +169,10 @@ void SceneStage2::Draw()
 /// </summary>
 void SceneStage2::UpdateNextBattle()
 {
+	// TODO:プレイヤーの位置、カメラ位置を最初の状態に戻す
 	m_pPlayer->Recovery();
+	m_pPlayer->Init();
+	m_pCamera->Init();
+	m_pEnemy->Init();
 	m_nextBattleTime = kNextBattleTime;
 }

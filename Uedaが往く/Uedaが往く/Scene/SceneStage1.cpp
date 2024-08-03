@@ -12,7 +12,7 @@
 namespace
 {
 	const char* const kFightTextPath = "data/UI/Fight!.png";	// "Fight"のテキスト画像のファイル位置
-	const Vec2 kFightTextPos = { 900, 500 };					// "Fight"のテキスト位置
+	const Vec2 kFightTextPos = { 960, 500 };					// "Fight"のテキスト位置
 	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
 	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
 
@@ -72,14 +72,20 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
+		m_nextBattleTime--;
+
 		m_pCamera->Update(input, *m_pPlayer);
+		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 		m_pEnemy->Update(*m_pPlayer, *m_pStage);
+		if (m_nextBattleTime > 0) return shared_from_this();
+
+		m_elapsedTime++; // 経過時間を進める
 
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
-			return std::make_shared<SceneClear>();
+			m_clearTime.push_back(m_elapsedTime);
+			return std::make_shared<SceneClear>(m_clearTime);
 		}
 		// プレイヤーのHPが0になった場合
 		if (m_pPlayer->GetHp() <= 0)
@@ -123,5 +129,6 @@ void SceneStage1::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ1", 0xffffff);
+	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
 }

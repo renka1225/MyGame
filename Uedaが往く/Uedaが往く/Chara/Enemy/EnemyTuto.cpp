@@ -67,6 +67,9 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	// エネミーの状態を更新
 	CharacterBase::State prevState = m_currentState;
 
+	// 敵の位置からプレイヤー位置までのベクトルを求める
+	m_eToPDirVec = VSub(player.GetPos(), m_pos);
+
 	// 次の行動を決める
 	DecideNextAction(player);
 	m_intervalTime--;
@@ -81,7 +84,7 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	UpdateAnimState(prevState);
 
 	// 角度を更新
-	UpdateAngle(player);
+	UpdateAngle();
 
 	// 移動ベクトルを元にエネミーを移動させる
 	Move(moveVec, player, stage);
@@ -149,19 +152,20 @@ void EnemyTuto::DecideNextAction(Player& player)
 	// プレイヤーから離れている場合
 	if (distance > m_enemyInfo.approachRange)
 	{
-		// 数秒たったらプレイヤーの方へ移動する
-		if (m_stopTime <= 0)
-		{
-			dir = VNorm(dir);
-			//moveVec = VScale(dir, m_moveSpeed);
+		//// 数秒たったらプレイヤーの方へ移動する
+		//if (m_stopTime <= 0)
+		//{
 
-			m_currentState = CharacterBase::State::kRun; // 移動状態にする
-			PlayAnim(CharacterBase::AnimKind::kRun);
-		}
-		else
-		{
-			m_stopTime--;
-		}
+		//	dir = VNorm(dir);
+		//	//moveVec = VScale(dir, m_moveSpeed);
+
+		//	m_currentState = CharacterBase::State::kRun; // 移動状態にする
+		//	PlayAnim(CharacterBase::AnimKind::kRun);
+		//}
+		//else
+		//{
+		//	m_stopTime--;
+		//}
 	}
 	// プレイヤーに近い場合
 	else
@@ -177,22 +181,22 @@ void EnemyTuto::DecideNextAction(Player& player)
 		
 	}
 	// 攻撃中かつ移動中でない場合
-	if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
-	{
-		// 確率で攻撃を行う
-		int randNum = GetRand(m_enemyInfo.maxProb);
+	//if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
+	//{
+	//	// 確率で攻撃を行う
+	//	int randNum = GetRand(m_enemyInfo.maxProb);
 
-		// キック攻撃
-		if (randNum <= m_enemyInfo.kickProb)
-		{
-			kick();
-		}
-		// パンチ攻撃
-		if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
-		{
-			Punch();
-		}
+	//	// キック攻撃
+	//	if (randNum <= m_enemyInfo.kickProb)
+	//	{
+	//		kick();
+	//	}
+	//	// パンチ攻撃
+	//	if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+	//	{
+	//		Punch();
+	//	}
 
-		m_intervalTime = kIntervalTime;
-	}
+	//	m_intervalTime = kIntervalTime;
+	//}
 }

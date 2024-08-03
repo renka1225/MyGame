@@ -24,7 +24,8 @@ EnemyBase::EnemyBase() :
 	m_isAttack(false),
 	m_stopTime(0),
 	m_angleIntervalTime(0),
-	m_intervalTime(0)
+	m_intervalTime(0),
+	m_eToPDirVec(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_currentState = CharacterBase::State::kFightIdle;
 }
@@ -81,8 +82,7 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 	if (!m_isAttack)
 	{
 		// エネミーとプレイヤーの距離を計算
-		VECTOR dir = VSub(player.GetPos(), m_pos);
-		float distance = VSize(dir);
+		float distance = VSize(m_eToPDirVec);
 
 		// プレイヤーが一定距離離れた場合
 		if (distance > m_enemyInfo.approachRange)
@@ -90,8 +90,8 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, V
 			// 数秒たったらプレイヤーに近づく
 			if (m_stopTime < 0)
 			{
-				dir = VNorm(dir);
-				moveVec = VScale(dir, m_moveSpeed);
+				m_eToPDirVec = VNorm(m_eToPDirVec);
+				moveVec = VScale(m_eToPDirVec, m_moveSpeed);
 
 				// 待機状態の場合
 				if (m_currentState == CharacterBase::State::kFightIdle)
@@ -175,6 +175,7 @@ void EnemyBase::Punch()
 		PlayAnim(AnimKind::kPunch3);
 		break;
 	case 3:
+		m_isAttack = false;
 		m_punchCount = 0;
 		m_punchCoolTime = m_status.punchCoolTime;	// クールダウンタイムを設定
 		break;
@@ -189,10 +190,6 @@ void EnemyBase::Punch()
 /// </summary>
 void EnemyBase::kick()
 {
-	//m_isAttack = true;
-	//m_currentState = CharacterBase::State::kKick;
-	//PlayAnim(AnimKind::kKick);
-
 	// 攻撃中はスキップ
 	if (m_isAttack) return;
 
@@ -271,21 +268,23 @@ void EnemyBase::OffGuard()
 /// <summary>
 /// 敵の角度を更新
 /// </summary>
-void EnemyBase::UpdateAngle(Player& player)
+void EnemyBase::UpdateAngle()
 {
 	m_angleIntervalTime++;
 
-	// 敵の位置からプレイヤー位置までのベクトルを求める
-	VECTOR dir = VSub(player.GetPos(), m_pos);
-
-	// 一定時間たったらエネミーの角度を更新する
-	if (m_angleIntervalTime >= m_enemyInfo.changeAngleFrame)
+	// 移動中は常にプレイヤーの方向を向くようにする
+	if(m_currentState == CharacterBase::State::kRun)
+	{
+		m_angle = atan2f(m_eToPDirVec.x, m_eToPDirVec.z);
+	}
+	// 一定時間経過したら
+	else if (m_angleIntervalTime >= m_enemyInfo.changeAngleFrame)
 	{
 		// ランダムでプレイヤーの方向を向く
 		int randNum = GetRand(m_enemyInfo.maxProb);
 		if (randNum <= m_enemyInfo.changeAngleProb)
 		{
-			m_angle = atan2f(dir.x, dir.z);
+			m_angle = atan2f(m_eToPDirVec.x, m_eToPDirVec.z);
 		}
 		m_angleIntervalTime = 0;
 	}
@@ -310,19 +309,31 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	// キック
 	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 
-	// プレイヤーとエネミーの位置ベクトルを求める
-	VECTOR pToEVec = VSub(m_pos, player.GetPos());
-	pToEVec = VNorm(pToEVec);
-	// 背後から攻撃したか
-	bool isBackAttack = VDot(player.GetDir(), pToEVec) < 0.0f;
+	// 背後から攻撃したかどうか
+	m_eToPDirVec = VNorm(m_eToPDirVec);
+	bool isBackAttack = VDot(player.GetDir(), m_eToPDirVec) < 0.0f;
 
 	// パンチが当たった場合
-	if (hitPunch && m_currentState == CharacterBase::State::kPunch1)
+	if (hitPunch && m_isAttack)
 	{
 		// プレイヤーがガードしていないか、背後から攻撃した場合
 		if (isBackAttack || !player.GetIsGuard())
 		{
-			player.OnDamage(m_status.punchPower);
+			// 1コンボ目
+			if (m_currentState == CharacterBase::State::kPunch1)
+			{
+				player.OnDamage(m_status.punchPower);
+			}
+			// 2コンボ目
+			if (m_currentState == CharacterBase::State::kPunch2)
+			{
+				player.OnDamage(m_status.secondPunchPower);
+			}
+			// 3コンボ目
+			if (m_currentState == CharacterBase::State::kPunch3)
+			{
+				player.OnDamage(m_status.thirdPunchPower);
+			}
 		}
 		else
 		{
@@ -341,16 +352,6 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 		{
 			player.OnDamage(0.0f);
 		}
-	}
-	// 攻撃中でなく、プレイヤーに当たった場合
-	else if (hit)
-	{
-		// エネミーの位置を補正する
-		VECTOR collisionNormal = VSub(m_pos, player.GetPos());
-		collisionNormal = VNorm(collisionNormal);
-
-		const float kAdj = 1.0f;
-		m_pos = VAdd(m_pos, VScale(collisionNormal, kAdj));
 	}
 
 	// 掴みが決まらなかった場合
@@ -372,4 +373,4 @@ void EnemyBase::DebugDamage(Input& input)
 		m_hp = 0;
 	}
 }
-#endif // _DEBUG
+#endif

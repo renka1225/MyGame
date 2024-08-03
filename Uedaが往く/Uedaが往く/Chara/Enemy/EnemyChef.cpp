@@ -67,6 +67,9 @@ void EnemyChef::Update(Player& player, Stage& stage)
 	// エネミーの状態を更新
 	CharacterBase::State prevState = m_currentState;
 
+	// 敵の位置からプレイヤー位置までのベクトルを求める
+	m_eToPDirVec = VSub(player.GetPos(), m_pos);
+
 	// 次の行動を決める
 	DecideNextAction();
 	m_intervalTime--;
@@ -81,7 +84,7 @@ void EnemyChef::Update(Player& player, Stage& stage)
 	UpdateAnimState(prevState);
 
 	// 角度を更新
-	UpdateAngle(player);
+	UpdateAngle();
 
 	// 移動ベクトルを元にエネミーを移動させる
 	Move(moveVec, player, stage);
@@ -144,19 +147,19 @@ void EnemyChef::DecideNextAction()
 	// 攻撃中かつ移動中でない場合
 	if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
 	{
-		// 確率で攻撃を行う
-		int randNum = GetRand(m_enemyInfo.maxProb);
+		//// 確率で攻撃を行う
+		//int randNum = GetRand(m_enemyInfo.maxProb);
 
-		// キック攻撃
-		if (randNum <= m_enemyInfo.kickProb)
-		{
-			kick();
-		}
-		// パンチ攻撃
-		if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
-		{
-			Punch();
-		}
+		//// キック攻撃
+		//if (randNum <= m_enemyInfo.kickProb)
+		//{
+		//	kick();
+		//}
+		//// パンチ攻撃
+		//if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+		//{
+		//	Punch();
+		//}
 
 		m_intervalTime = kIntervalTime;
 	}

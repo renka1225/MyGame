@@ -18,6 +18,7 @@ namespace
 	constexpr float kHPRecoveryRate = 0.3f;							// プレイヤーのHPが回復する割合
 	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
 	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
+	constexpr float kAdj = 3.0f;									// 敵に当たった時の位置調整量
 
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, -40.0f);				// 初期位置
@@ -71,7 +72,7 @@ Player::~Player()
 void Player::Init()
 {
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
-	MV1SetPosition(m_modelHandle, m_pos);
+	MV1SetPosition(m_modelHandle, kInitPos);
 	m_currentState = CharacterBase::State::kFightIdle;
 	m_animBlendRate = kAnimBlendMax;
 	PlayAnim(AnimKind::kFightIdle);
@@ -234,7 +235,6 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 		VECTOR collisionNormal = VSub(m_pos, enemy.GetPos());
 		collisionNormal = VNorm(collisionNormal);
 
-		const float kAdj = 1.0f;
 		m_pos = VAdd(m_pos, VScale(collisionNormal, kAdj));
 	}
 

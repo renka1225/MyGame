@@ -13,12 +13,16 @@ namespace
 	const Vec2 kSyoriTextPos = { 650, 100 };				// 勝利のテキスト画像表示位置
 }
 
+
 /// <summary>
-/// コンストラクタ
+/// 引数付きコンストラクタ
 /// </summary>
-SceneClear::SceneClear()
+/// <param name="clearTime">クリアタイム</param>
+SceneClear::SceneClear(std::vector<int> clearTime):
+	m_totalClearTime(0)
 {
 	m_textHandle = LoadGraph(kSyoriTextPath);
+	m_clearTime = clearTime;
 }
 
 
@@ -36,6 +40,11 @@ SceneClear::~SceneClear()
 /// </summary>
 void SceneClear::Init()
 {
+	// トータルのクリア時間を計算する
+	for (int i = 0; i < m_clearTime.size(); i++)
+	{
+		m_totalClearTime += m_clearTime[i];
+	}
 }
 
 
@@ -71,20 +80,21 @@ void SceneClear::Draw()
 	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 
 	// クリアタイムをフレーム数から秒数に変換
-	//for (const auto& time : m_clearTime)
-	//{
-	//	int min = Conversion::ChangeMin(time);
-	//	int sec = Conversion::ChangeSec(time);
-	//	int milliSec = Conversion::ChangeMilliSec(time);
+	for (int i = 0; i < m_clearTime.size(); i++)
+	{
+		int min = Conversion::ChangeMin(m_clearTime[i]);
+		int sec = Conversion::ChangeSec(m_clearTime[i]);
+		int milliSec = Conversion::ChangeMilliSec(m_clearTime[i]);
 
-	//	DrawFormatString(500, 650 + 100 * time, 0xffffff, "%d回戦 %02d:%02d:%03d", time, min, sec, milliSec);
-	//	DrawFormatString(500, 650 + 100 * time, 0xffffff, "%d回戦 %02d:%02d:%03d", time, min, sec, milliSec);
-	//	DrawFormatString(500, 650 + 100 * time, 0xffffff, "%d回戦 %02d:%02d:%03d", time, min, sec, milliSec);
-	//}
+		// クリアタイム表示
+		DrawFormatString(500, 650 + 100 * i, 0x000000, "%d回戦 %02d:%02d:%03d", i + 1, min, sec, milliSec);
+	}
 
-	// TODO:仮でクリアタイム部分表示
-	DrawString(480, 550, "TotalTime 00:00:00", 0x000000);
-	//DrawString(500, 600, "1回戦 00:00:00", 0x000000);
+	// トータルタイム表示
+	int totalMin = Conversion::ChangeMin(m_totalClearTime);
+	int totalSec = Conversion::ChangeSec(m_totalClearTime);
+	int totalMilliSec = Conversion::ChangeMilliSec(m_totalClearTime);
+	DrawFormatString(500, 550, 0x000000, "TOTAL TIME %02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
 
 	DrawString(1300, 550, "ランキング", 0x000000);
 	DrawString(1300, 600, "1位 00:00:00", 0x000000);
