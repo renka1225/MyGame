@@ -18,5 +18,5 @@ public:
 
 private:
 	// Ÿ‚Ìs“®‚ğŒˆ‚ß‚é
-	void DecideNextAction(Player& player);
+	//void DecideNextAction(Player& player);
 };

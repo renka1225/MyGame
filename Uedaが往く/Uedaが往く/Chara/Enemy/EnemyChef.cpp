@@ -70,33 +70,19 @@ void EnemyChef::Update(Player& player, Stage& stage)
 	// 敵の位置からプレイヤー位置までのベクトルを求める
 	m_eToPDirVec = VSub(player.GetPos(), m_pos);
 
-	// 次の行動を決める
-	DecideNextAction();
+	// 状態を更新する
 	m_intervalTime--;
-
-	// 移動処理
-	m_currentState = UpdateMoveParameter(player, upMoveVec, leftMoveVec, moveVec);
+	m_currentState = UpdateState(player, upMoveVec, leftMoveVec, moveVec);
 
 	// プレイヤーとの当たり判定をチェックする
 	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + m_colInfo.bodyHeight, m_pos.z), m_pos, m_colInfo.bodyRadius);
 
-	// アニメーション状態を更新
-	UpdateAnimState(prevState);
-
-	// 角度を更新
-	UpdateAngle();
-
-	// 移動ベクトルを元にエネミーを移動させる
-	Move(moveVec, player, stage);
-
-	// アニメーション処理の更新
-	UpdateAnim();
-
-	// 当たり判定の位置更新
-	UpdateCol();
-
-	// HPバーの更新
-	m_pUIGauge->UpdateHpBar();
+	UpdateAnimState(prevState);		// アニメーション状態を更新
+	UpdateAngle();					// 角度を更新
+	Move(moveVec, player, stage);	// 移動ベクトルを元にエネミーを移動させる
+	UpdateAnim();					// アニメーション処理の更新
+	UpdateCol();					// 当たり判定の位置更新
+	m_pUIGauge->UpdateHpBar();		// HPバーの更新
 }
 
 

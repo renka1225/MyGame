@@ -20,8 +20,6 @@ namespace
 /// コンストラクタ
 /// </summary>
 EnemyBase::EnemyBase() :
-	m_isMove(false),
-	m_isAttack(false),
 	m_stopTime(0),
 	m_angleIntervalTime(0),
 	m_intervalTime(0),
@@ -36,6 +34,76 @@ EnemyBase::EnemyBase() :
 /// </summary>
 EnemyBase::~EnemyBase()
 {
+}
+
+
+/// <summary>
+/// 敵の状態を更新する
+/// </summary>
+/// <param name="player">プレイヤー参照</param>
+/// <param name="upMoveVec">上方向への移動ベクトル</param>
+/// <param name="leftMoveVec">左方向への移動ベクトル</param>
+/// <param name="moveVec">移動ベクトル</param>
+/// <returns>現在の状態</returns>
+EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
+{
+	CharacterBase::State nextState = m_currentState;
+
+	// このフレームでの移動ベクトルを初期化
+	moveVec = VGet(0.0f, 0.0f, 0.0f);
+
+	// 攻撃中または移動中は状態を更新しない
+	if (m_intervalTime > 0 || m_isAttack || m_isMove) return nextState;
+
+	// エネミーとプレイヤーの距離を計算
+	float distance = VSize(m_eToPDirVec);
+
+	// プレイヤーが一定距離離れた場合
+	if (distance > m_enemyInfo.approachRange)
+	{
+		// 数秒たったらプレイヤーに近づく
+		if (m_stopTime < 0)
+		{
+			m_eToPDirVec = VNorm(m_eToPDirVec);
+			moveVec = VScale(m_eToPDirVec, m_moveSpeed);
+
+			// 待機状態の場合
+			nextState = CharacterBase::State::kRun; // 移動状態にする
+		}
+		else
+		{
+			m_stopTime--;
+		}
+	}
+
+	// プレイヤーが攻撃範囲に入った場合
+	else if (distance <= m_enemyInfo.attackRange)
+	{
+		// 確率で攻撃を行う
+		int randNum = GetRand(m_enemyInfo.maxProb);
+		// キック攻撃
+		if (randNum <= m_enemyInfo.kickProb)
+		{
+			nextState = kick();
+		}
+		// パンチ攻撃
+		if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+		{
+			nextState = Punch();
+			nextState = CharacterBase::State::kPunch1;
+		}
+		else
+		{
+			Fighting();
+		}
+	}
+	else
+	{
+		m_stopTime = m_enemyInfo.minStopTime + GetRand(m_enemyInfo.maxStopTime);	// プレイヤーに近づくまでの時間をランダムで計算する
+		nextState = CharacterBase::State::kFightIdle;								// 待機状態にする
+	}
+
+	return nextState;
 }
 
 
@@ -64,77 +132,18 @@ void EnemyBase::Move(const VECTOR& moveVec, Player& player, Stage& stage)
 
 
 /// <summary>
-/// 移動パラメータを設定する
-/// </summary>
-/// <param name="player">プレイヤー参照</param>
-/// <param name="upMoveVec">上方向への移動ベクトル</param>
-/// <param name="leftMoveVec">左方向への移動ベクトル</param>
-/// <param name="moveVec">移動ベクトル</param>
-/// <returns>現在の状態</returns>
-EnemyBase::CharacterBase::State EnemyBase::UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
-{
-	CharacterBase::State nextState = m_currentState;
-	
-	// このフレームでの移動ベクトルを初期化
-	moveVec = VGet(0.0f, 0.0f, 0.0f);
-
-	// 攻撃中でない場合
-	if (!m_isAttack)
-	{
-		// エネミーとプレイヤーの距離を計算
-		float distance = VSize(m_eToPDirVec);
-
-		// プレイヤーが一定距離離れた場合
-		if (distance > m_enemyInfo.approachRange)
-		{
-			// 数秒たったらプレイヤーに近づく
-			if (m_stopTime < 0)
-			{
-				m_eToPDirVec = VNorm(m_eToPDirVec);
-				moveVec = VScale(m_eToPDirVec, m_moveSpeed);
-
-				// 待機状態の場合
-				if (m_currentState == CharacterBase::State::kFightIdle)
-				{
-					nextState = CharacterBase::State::kRun; // 移動状態にする
-
-				}
-			}
-			else
-			{
-				m_stopTime--;
-			}
-		}
-
-		// プレイヤーが攻撃範囲に入った場合
-		//else if(distance <= kAttackRange)
-		//{
-		//	nextState = CharacterBase::State::kKick;	// 攻撃状態にする
-		//}
-		else
-		{
-			m_stopTime = m_enemyInfo.minStopTime + GetRand(m_enemyInfo.maxStopTime);	// プレイヤーに近づくまでの時間をランダムで計算する
-			nextState = CharacterBase::State::kFightIdle;								// 待機状態にする
-		}
-	}
-
-	return nextState;
-}
-
-
-/// <summary>
 /// パンチ攻撃
 /// </summary>
-void EnemyBase::Punch()
+/// <returns>現在の状態</returns>
+CharacterBase::State EnemyBase::Punch()
 {
-	// 攻撃中はスキップ
-	if (m_isAttack) return;
+	CharacterBase::State nextState = m_currentState;
 
 	// パンチできない場合
 	if (m_punchCoolTime > 0)
 	{
 		m_punchCoolTime--;
-		return;
+		return m_currentState;
 	}
 
 	// コンボ入力の受付時間の更新
@@ -157,47 +166,48 @@ void EnemyBase::Punch()
 		m_punchComboTime = m_status.punchReceptionTime; // コンボ入力の受付時間をリセット
 		m_isAttack = true;
 		m_isFighting = false;
-		m_currentState = CharacterBase::State::kPunch1;
 		PlayAnim(AnimKind::kPunch1);
+		nextState = CharacterBase::State::kPunch1;
 		break;
 	case 1:
 		m_punchComboTime = m_status.punchReceptionTime;
 		m_isAttack = true;
 		m_isFighting = false;
-		m_currentState = CharacterBase::State::kPunch2;
 		PlayAnim(AnimKind::kPunch2);
+		nextState = CharacterBase::State::kPunch2;
 		break;
 	case 2:
 		m_punchComboTime = m_status.punchReceptionTime;
 		m_isAttack = true;
 		m_isFighting = false;
-		m_currentState = CharacterBase::State::kPunch3;
 		PlayAnim(AnimKind::kPunch3);
+		nextState = CharacterBase::State::kPunch3;
 		break;
 	case 3:
 		m_isAttack = false;
 		m_punchCount = 0;
 		m_punchCoolTime = m_status.punchCoolTime;	// クールダウンタイムを設定
+		nextState = CharacterBase::State::kFightIdle;
 		break;
 	default:
 		break;
 	}
+
+	return nextState;
 }
 
 
 /// <summary>
 /// キック攻撃
 /// </summary>
-void EnemyBase::kick()
+/// <returns>現在の状態</returns>
+CharacterBase::State EnemyBase::kick()
 {
-	// 攻撃中はスキップ
-	if (m_isAttack) return;
-
 	// キック攻撃
 	m_isAttack = true;
 	m_isFighting = false;
-	m_currentState = CharacterBase::State::kKick;
 	PlayAnim(AnimKind::kKick);
+	return CharacterBase::State::kKick;
 }
 
 
@@ -313,8 +323,10 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	m_eToPDirVec = VNorm(m_eToPDirVec);
 	bool isBackAttack = VDot(player.GetDir(), m_eToPDirVec) < 0.0f;
 
+	// パンチ状態かどうか
+	bool isStatePunch = m_currentState == CharacterBase::State::kPunch1 || m_currentState == CharacterBase::State::kPunch2 || m_currentState == CharacterBase::State::kPunch3;
 	// パンチが当たった場合
-	if (hitPunch && m_isAttack)
+	if (hitPunch && isStatePunch)
 	{
 		// プレイヤーがガードしていないか、背後から攻撃した場合
 		if (isBackAttack || !player.GetIsGuard())
@@ -358,6 +370,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	if (!hit && m_currentState == CharacterBase::State::kGrab)
 	{
 		// 掴み失敗のアニメーションを再生する
+		PlayAnim(CharacterBase::AnimKind::kStumble);
 	}
 }
 

@@ -29,6 +29,8 @@ EnemyTuto::EnemyTuto()
 	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
 	m_moveSpeed = m_status.maxMoveSpeed;
+	m_isAttack = false;
+	m_isMove = false;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 }
@@ -70,33 +72,19 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 	// 敵の位置からプレイヤー位置までのベクトルを求める
 	m_eToPDirVec = VSub(player.GetPos(), m_pos);
 
-	// 次の行動を決める
-	DecideNextAction(player);
+	// 状態を更新する
 	m_intervalTime--;
-
-	// 移動処理
-	m_currentState = UpdateMoveParameter(player, upMoveVec, leftMoveVec, moveVec);
+	m_currentState = UpdateState(player, upMoveVec, leftMoveVec, moveVec);
 
 	// プレイヤーとの当たり判定をチェックする
 	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + m_colInfo.bodyHeight, m_pos.z), m_pos, m_colInfo.bodyRadius);
 
-	// アニメーション状態を更新
-	UpdateAnimState(prevState);
-
-	// 角度を更新
-	UpdateAngle();
-
-	// 移動ベクトルを元にエネミーを移動させる
-	Move(moveVec, player, stage);
-
-	// アニメーション処理の更新
-	UpdateAnim();
-
-	// 当たり判定の位置更新
-	UpdateCol();
-
-	// HPバーの更新
-	m_pUIGauge->UpdateHpBar();
+	UpdateAnimState(prevState);		// アニメーション状態を更新
+	UpdateAngle();					// 角度を更新
+	Move(moveVec, player, stage);	// 移動ベクトルを元にエネミーを移動させる
+	UpdateAnim();					// アニメーション処理の更新
+	UpdateCol();					// 当たり判定の位置更新
+	m_pUIGauge->UpdateHpBar();		// HPバーの更新
 }
 
 
@@ -105,11 +93,8 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 /// </summary>
 void EnemyTuto::Draw()
 {
-	// 敵モデル描画
-	MV1DrawModel(m_modelHandle);
-
-	// HPゲージを表示
-	m_pUIGauge->DrawEnemyHp(m_hp);
+	MV1DrawModel(m_modelHandle);	// 敵モデル描画
+	m_pUIGauge->DrawEnemyHp(m_hp);	// HPゲージを表示
 
 #ifdef _DEBUG
 	DebugDraw debug;
@@ -140,63 +125,63 @@ void EnemyTuto::OnDamage(float damage)
 /// <summary>
 /// 次の行動を決める
 /// </summary>
-void EnemyTuto::DecideNextAction(Player& player)
-{
-	// 一定時間経過するまでは変更しない
-	if (m_intervalTime > 0) return;
-
-	// 敵の位置からプレイヤー位置までのベクトルを求める
-	VECTOR dir = VSub(player.GetPos(), m_pos);
-	float distance = VSize(dir);
-
-	// プレイヤーから離れている場合
-	if (distance > m_enemyInfo.approachRange)
-	{
-		//// 数秒たったらプレイヤーの方へ移動する
-		//if (m_stopTime <= 0)
-		//{
-
-		//	dir = VNorm(dir);
-		//	//moveVec = VScale(dir, m_moveSpeed);
-
-		//	m_currentState = CharacterBase::State::kRun; // 移動状態にする
-		//	PlayAnim(CharacterBase::AnimKind::kRun);
-		//}
-		//else
-		//{
-		//	m_stopTime--;
-		//}
-	}
-	// プレイヤーに近い場合
-	else
-	{
-		m_stopTime = m_enemyInfo.minStopTime + GetRand(m_enemyInfo.maxStopTime);	// 停止時間をランダムで計算する
-		m_currentState = CharacterBase::State::kFightIdle;							// 待機状態にする
-	}
-
-
-	// 待機中の場合
-	if (m_currentState == CharacterBase::State::kFightIdle)
-	{
-		
-	}
-	// 攻撃中かつ移動中でない場合
-	//if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
-	//{
-	//	// 確率で攻撃を行う
-	//	int randNum = GetRand(m_enemyInfo.maxProb);
-
-	//	// キック攻撃
-	//	if (randNum <= m_enemyInfo.kickProb)
-	//	{
-	//		kick();
-	//	}
-	//	// パンチ攻撃
-	//	if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
-	//	{
-	//		Punch();
-	//	}
-
-	//	m_intervalTime = kIntervalTime;
-	//}
-}
+//void EnemyTuto::DecideNextAction(Player& player)
+//{
+//	// 一定時間経過するまでは変更しない
+//	if (m_intervalTime > 0) return;
+//
+//	// 敵の位置からプレイヤー位置までのベクトルを求める
+//	VECTOR dir = VSub(player.GetPos(), m_pos);
+//	float distance = VSize(dir);
+//
+//	// プレイヤーから離れている場合
+//	if (distance > m_enemyInfo.approachRange)
+//	{
+//		//// 数秒たったらプレイヤーの方へ移動する
+//		//if (m_stopTime <= 0)
+//		//{
+//
+//		//	dir = VNorm(dir);
+//		//	//moveVec = VScale(dir, m_moveSpeed);
+//
+//		//	m_currentState = CharacterBase::State::kRun; // 移動状態にする
+//		//	PlayAnim(CharacterBase::AnimKind::kRun);
+//		//}
+//		//else
+//		//{
+//		//	m_stopTime--;
+//		//}
+//	}
+//	// プレイヤーに近い場合
+//	else
+//	{
+//		m_stopTime = m_enemyInfo.minStopTime + GetRand(m_enemyInfo.maxStopTime);	// 停止時間をランダムで計算する
+//		m_currentState = CharacterBase::State::kFightIdle;							// 待機状態にする
+//	}
+//
+//
+//	// 待機中の場合
+//	if (m_currentState == CharacterBase::State::kFightIdle)
+//	{
+//		
+//	}
+//	// 攻撃中かつ移動中でない場合
+//	//if (!m_isAttack && m_currentState != CharacterBase::State::kRun)
+//	//{
+//	//	// 確率で攻撃を行う
+//	//	int randNum = GetRand(m_enemyInfo.maxProb);
+//
+//	//	// キック攻撃
+//	//	if (randNum <= m_enemyInfo.kickProb)
+//	//	{
+//	//		kick();
+//	//	}
+//	//	// パンチ攻撃
+//	//	if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+//	//	{
+//	//		Punch();
+//	//	}
+//
+//	//	m_intervalTime = kIntervalTime;
+//	//}
+//}

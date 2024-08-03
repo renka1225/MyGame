@@ -29,14 +29,14 @@ public:
 
 
 protected:
+	// 状態を更新する
+	CharacterBase::State UpdateState(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// 移動処理
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
-	// 移動パラメータを設定する
-	CharacterBase::State UpdateMoveParameter(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// パンチ処理
-	void Punch();
+	CharacterBase::State Punch();
 	// キック処理
-	void kick();
+	CharacterBase::State kick();
 	// 回避処理
 	void Avoidance(VECTOR& moveVec);
 	// 構え処理
@@ -49,8 +49,6 @@ protected:
 	void UpdateAngle();
 
 protected:
-	bool m_isMove;				// 移動したかどうか(true:移動した)
-	bool m_isAttack;			// 攻撃中かどうか(ture:攻撃中)
 	int m_stopTime;				// 停止する時間
 	int m_angleIntervalTime;	// 角度を更新するまでの時間
 	int m_intervalTime;			// 次の状態を更新するまでの時間
