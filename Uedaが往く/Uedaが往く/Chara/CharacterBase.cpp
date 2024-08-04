@@ -41,6 +41,11 @@ CharacterBase::CharacterBase():
 void CharacterBase::OnDamage(float damage)
 {
 	m_hp -= damage;
+	// HPバーを更新
+	if (damage > 0.0f)
+	{
+		m_pUIGauge->OnDamage(damage);
+	}
 }
 
 

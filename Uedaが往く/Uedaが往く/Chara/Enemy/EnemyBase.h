@@ -38,13 +38,13 @@ protected:
 	// キック処理
 	CharacterBase::State kick();
 	// 回避処理
-	void Avoidance(VECTOR& moveVec);
+	CharacterBase::State Avoid();
 	// 構え処理
-	void Fighting();
+	CharacterBase::State Fighting();
 	// ガード処理
-	void Guard();
+	CharacterBase::State Guard();
 	// ガード状態を解除する
-	void OffGuard();
+	CharacterBase::State OffGuard();
 	// 敵の角度を更新
 	void UpdateAngle();
 

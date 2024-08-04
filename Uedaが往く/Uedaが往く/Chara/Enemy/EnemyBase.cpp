@@ -9,7 +9,6 @@
 // 定数
 namespace
 {
-
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
@@ -53,7 +52,8 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, VECTOR& u
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
 	// 攻撃中または移動中は状態を更新しない
-	if (m_intervalTime > 0 || m_isAttack || m_isMove) return nextState;
+	bool isKeepState = m_intervalTime > 0 || m_isAttack || m_isMove || m_isGuard;
+	if (isKeepState) return nextState;
 
 	// エネミーとプレイヤーの距離を計算
 	float distance = VSize(m_eToPDirVec);
@@ -87,14 +87,24 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, VECTOR& u
 			nextState = kick();
 		}
 		// パンチ攻撃
-		if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
 		{
 			nextState = Punch();
-			nextState = CharacterBase::State::kPunch1;
 		}
+		// 回避
+		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb + m_enemyInfo.avoidProb)
+		{
+			nextState = Avoid();
+		}
+		// ガード
+		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb + m_enemyInfo.avoidProb + m_enemyInfo.guardProb)
+		{
+			nextState = Guard();
+		}
+		// 待機状態
 		else
 		{
-			Fighting();
+			nextState = Fighting();
 		}
 	}
 	else
@@ -215,17 +225,18 @@ CharacterBase::State EnemyBase::kick()
 /// 回避処理
 /// </summary>
 /// <param name="moveVec">移動ベクトル</param>
-void EnemyBase::Avoidance(VECTOR& moveVec)
+CharacterBase::State EnemyBase::Avoid()
 {
 	// 回避できない場合
 	if (m_avoidCoolTime > 0)
 	{
 		m_avoidCoolTime--;
-		return;
+		return m_currentState;
 	}
 
 	m_isFighting = false;
 	m_avoidCount++;
+
 	// 回避数が最大になった場合
 	if (m_avoidCount > m_status.maxAvoidCount)
 	{
@@ -234,10 +245,10 @@ void EnemyBase::Avoidance(VECTOR& moveVec)
 	}
 	else
 	{
-		m_currentState = CharacterBase::State::kAvoid;
-		// 移動ベクトルを設定する
-		//VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
-		//m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.avoidDist));
+		// 向いている方向と逆方向に移動する
+		VECTOR backMoveVec = VScale(VNorm(m_eToPDirVec), -1.0f * m_status.avoidDist);
+		m_pos = VAdd(m_pos,backMoveVec);
+		return CharacterBase::State::kAvoid;
 	}
 }
 
@@ -245,33 +256,34 @@ void EnemyBase::Avoidance(VECTOR& moveVec)
 /// <summary>
 /// 構え処理
 /// </summary>
-void EnemyBase::Fighting()
+CharacterBase::State  EnemyBase::Fighting()
 {
 	m_isFighting = true;
-	m_currentState = CharacterBase::State::kFightWalk;
 	PlayAnim(AnimKind::kFightWalk);
+	return CharacterBase::State::kFightWalk;
+
 }
 
 
 /// <summary>
 /// ガード処理
 /// </summary>
-void EnemyBase::Guard()
+CharacterBase::State EnemyBase::Guard()
 {
 	m_isGuard = true;
-	m_currentState = CharacterBase::State::kGuard;
 	PlayAnim(AnimKind::kGuard);
+	return CharacterBase::State::kGuard;
 }
 
 
 /// <summary>
 /// ガード状態を解除
 /// </summary>
-void EnemyBase::OffGuard()
+CharacterBase::State EnemyBase::OffGuard()
 {
 	m_isGuard = false;
-	m_currentState = CharacterBase::State::kFightIdle;
 	PlayAnim(AnimKind::kFightIdle);
+	return CharacterBase::State::kFightIdle;
 }
 
 
@@ -283,7 +295,7 @@ void EnemyBase::UpdateAngle()
 	m_angleIntervalTime++;
 
 	// 移動中は常にプレイヤーの方向を向くようにする
-	if(m_currentState == CharacterBase::State::kRun)
+	if(m_currentState == CharacterBase::State::kRun || m_currentState == CharacterBase::State::kAvoid)
 	{
 		m_angle = atan2f(m_eToPDirVec.x, m_eToPDirVec.z);
 	}
@@ -307,17 +319,17 @@ void EnemyBase::UpdateAngle()
 /// プレイヤーとの当たり判定をチェックする
 /// </summary>
 /// <param name="player">プレイヤー参照</param>
-/// <param name="eCapPosTop">当たり判定カプセルの頂点位置</param>
-/// <param name="eCapPosBottom">当たり判定カプセルの頂点位置</param>
-/// <param name="eCapRadius">当たり判定カプセルの半径</param>
+/// <param name="eCapPosTop">敵の当たり判定カプセルの頂点位置</param>
+/// <param name="eCapPosBottom">敵の当たり判定カプセルの頂点位置</param>
+/// <param name="eCapRadius">敵の当たり判定カプセルの半径</param>
 void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
 {
 	// プレイヤーと敵の当たり判定を行う
-	bool hit = HitCheck_Capsule_Capsule(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+	bool isHit = HitCheck_Capsule_Capsule(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 	// パンチ
-	bool hitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+	bool isHitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 	// キック
-	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+	bool isHitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 
 	// 背後から攻撃したかどうか
 	m_eToPDirVec = VNorm(m_eToPDirVec);
@@ -326,7 +338,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	// パンチ状態かどうか
 	bool isStatePunch = m_currentState == CharacterBase::State::kPunch1 || m_currentState == CharacterBase::State::kPunch2 || m_currentState == CharacterBase::State::kPunch3;
 	// パンチが当たった場合
-	if (hitPunch && isStatePunch)
+	if (isHitPunch && isStatePunch)
 	{
 		// プレイヤーがガードしていないか、背後から攻撃した場合
 		if (isBackAttack || !player.GetIsGuard())
@@ -353,7 +365,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 		}
 	}
 	// キックが当たった場合
-	else if (hitKick && m_currentState == CharacterBase::State::kKick)
+	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// キックが当たった場合
 		if (!player.GetIsGuard())
@@ -367,7 +379,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	}
 
 	// 掴みが決まらなかった場合
-	if (!hit && m_currentState == CharacterBase::State::kGrab)
+	if (!isHit && m_currentState == CharacterBase::State::kGrab)
 	{
 		// 掴み失敗のアニメーションを再生する
 		PlayAnim(CharacterBase::AnimKind::kStumble);

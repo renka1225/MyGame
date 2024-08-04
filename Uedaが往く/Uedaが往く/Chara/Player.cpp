@@ -97,11 +97,11 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	// プレイヤーの状態を更新
 	CharacterBase::State prevState = m_currentState;
 
-	Punch(input);				// パンチ処理
-	Kick(input);				// キック処理
-	Avoidance(input, moveVec);	// 回避処理
-	Fighting(input);			// 構え処理
-	Guard(input);				// ガード処理
+	Punch(input);		// パンチ処理
+	Kick(input);		// キック処理
+	Avoid(input);		// 回避処理
+	Fighting(input);	// 構え処理
+	Guard(input);		// ガード処理
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec); // 移動処理
 
 	// エネミーとの当たり判定をチェックする
@@ -155,12 +155,7 @@ void Player::Draw()
 /// <param name="damage">ダメージ量</param>
 void Player::OnDamage(float damage)
 {
-	m_hp -= damage;
-	// HPバーを更新
-	if (damage > 0.0f)
-	{
-		m_pUIGauge->OnDamage(damage);
-	}
+	CharacterBase::OnDamage(damage);
 
 	// ガード状態の場合
 	if (m_currentState == CharacterBase::State::kGuard)
@@ -366,7 +361,7 @@ void Player::Kick(const Input& input)
 /// </summary>
 /// <param name="input">入力処理</param>
 /// <returns>現在の状態</returns>
-void Player::Avoidance(const Input& input, VECTOR& moveVec)
+void Player::Avoid(const Input& input)
 {
 	// 回避できない場合
 	if (m_avoidCoolTime > 0)
