@@ -1,0 +1,6 @@
+﻿  LoadData.cpp
+C:\Users\lotus\デスクトップ\unityDataLoad\LoadData.cpp(24,47): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\lotus\デスクトップ\unityDataLoad\LoadData.cpp(30,46): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  main.cpp
+  コードを生成中...
+  unityDataLoad.vcxproj -> C:\Users\lotus\デスクトップ\unityDataLoad\x64\Debug\unityDataLoad.exe
