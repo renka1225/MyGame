@@ -1,5 +1,96 @@
-﻿  EnemyTuto.cpp
+﻿  CharacterBase.cpp
+  EnemyAbe.cpp
+  EnemyBase.cpp
+  EnemyChef.cpp
+  EnemyNinja.cpp
+  EnemyTuto.cpp
   Player.cpp
+  SceneDebug.cpp
+  SceneGameover.cpp
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneGameover.cpp(110,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneGameover.cpp(110,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+  SceneSelectStage.cpp
   SceneStage1.cpp
+  SceneStage2.cpp
+  SceneStageBase.cpp
+  Stage.cpp
+  UIGauge.cpp
+  Camera.cpp
+  LoadData.cpp
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(102,73): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(103,68): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(113,69): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(114,69): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(93,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(146,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(200,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(265,79): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(266,79): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(267,75): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(268,77): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(269,76): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(270,77): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(271,77): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(272,76): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(273,84): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(274,85): warning C4244: '=': '_Ty' から 'int' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=float
+          ]
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\LoadData.cpp(254,40): warning C4101: 'e': ローカル変数は 1 度も使われていません。
   コードを生成中...
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Chara\Enemy\EnemyBase.cpp(253): warning C4715: 'EnemyBase::Avoid': 値を返さないコントロール パスがあります。
   Uedaが往く.vcxproj -> C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe

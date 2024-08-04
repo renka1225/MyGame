@@ -28,6 +28,7 @@ public:
 		kEnemyNinja,	// 忍者
 		kEnemyChef,		// シェフ
 		kEnemyAbe,		// Abe
+		kCharaNum,		// キャラ数
 	};
 
 	// キャラクターの状態

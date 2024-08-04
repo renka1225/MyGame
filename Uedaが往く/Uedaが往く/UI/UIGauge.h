@@ -17,10 +17,10 @@ public:
 	void OnDamage(float damage);	// 受けたダメージ量を計算する
 
 private:
-	float m_decreaseHp;			// ダメージを受けた後のHP
-	float m_currentHp;			// 現在のHP
-	float m_damage;				// 受けたダメージ量
-	float m_maxHp;				// 最大HP
-	int m_intervalTime;			// HPバーが減少するまでの時間
-	int m_gaugeBarHandle;		// ゲージバーの画像
+	float m_decreaseHp;				// ダメージを受けた後のHP
+	float m_currentHp;				// 現在のHP
+	float m_damage;					// 受けたダメージ量
+	float m_maxHp;					// 最大HP
+	int m_intervalTime;				// HPバーが減少するまでの時間
+	int m_gaugeBarHandle;			// ゲージバーの画像
 };
