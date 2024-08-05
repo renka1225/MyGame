@@ -271,7 +271,6 @@ CharacterBase::State  EnemyBase::Fighting()
 CharacterBase::State EnemyBase::Guard()
 {
 	m_isGuard = true;
-	PlayAnim(AnimKind::kGuard);
 	return CharacterBase::State::kGuard;
 }
 
@@ -282,7 +281,6 @@ CharacterBase::State EnemyBase::Guard()
 CharacterBase::State EnemyBase::OffGuard()
 {
 	m_isGuard = false;
-	PlayAnim(AnimKind::kFightIdle);
 	return CharacterBase::State::kFightIdle;
 }
 
@@ -368,7 +366,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// ÉLÉbÉNÇ™ìñÇΩÇ¡ÇΩèÍçá
-		if (!player.GetIsGuard())
+		if (isBackAttack || !player.GetIsGuard())
 		{
 			player.OnDamage(m_status.kickPower);
 		}

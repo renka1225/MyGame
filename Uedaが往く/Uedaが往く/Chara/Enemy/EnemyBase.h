@@ -20,8 +20,9 @@ public:
 	// プレイヤーとの当たり判定をチェックする
 	void CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
-	float GetHp() const { return m_hp; }	// 敵のHPを取得
-	VECTOR GetPos() const { return m_pos; } // 敵の座標を取得
+	float GetHp() const { return m_hp; }				// 敵のHPを取得
+	VECTOR GetPos() const { return m_pos; }				// 敵の座標を取得
+	VECTOR GetDir() const { return m_eToPDirVec; }		// 敵の向きベクトルを取得
 
 #ifdef _DEBUG
 	void DebugDamage(Input& input); // 1ボタンで敵のHPを0にする

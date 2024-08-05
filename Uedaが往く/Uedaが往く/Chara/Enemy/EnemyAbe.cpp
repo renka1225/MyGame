@@ -91,11 +91,9 @@ void EnemyAbe::Update(Player& player, Stage& stage)
 /// </summary>
 void EnemyAbe::Draw()
 {
-	// 敵モデル描画
-	MV1DrawModel(m_modelHandle);
-
-	// HPゲージを表示
-	m_pUIGauge->DrawEnemyHp(m_hp);
+	MV1DrawModel(m_modelHandle);	// 敵モデル描画
+	m_pUIGauge->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyAbe));	// シルエット描画
+	m_pUIGauge->DrawEnemyHp(m_hp);	// HPゲージを表示
 
 #ifdef _DEBUG
 	DebugDraw debug;

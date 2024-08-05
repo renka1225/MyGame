@@ -323,7 +323,10 @@ void CharacterBase::UpdateAnim()
 		{
 			// 一度のみアニメーションを再生
 			m_currentAnimCount += m_animSpeed.guard;
-			m_currentAnimCount = std::min(m_currentAnimCount, m_status.guardAnimTime);
+			if (m_isGuard)
+			{
+				m_currentAnimCount = std::min(m_currentAnimCount, m_status.guardAnimTime);
+			}
 		}
 		else
 		{
@@ -340,8 +343,8 @@ void CharacterBase::UpdateAnim()
 				m_currentState = CharacterBase::State::kFightIdle;
 				PlayAnim(AnimKind::kFightIdle);
 			}
-			// 回避アニメーションが終わったら待機状態に移行
-			else if (m_currentState == CharacterBase::State::kAvoid)
+			// 回避アニメーション、ガードアニメーションが終わったら待機状態に移行
+			else if (m_currentState == CharacterBase::State::kAvoid || m_currentState == CharacterBase::State::kGuard)
 			{
 				m_currentState = CharacterBase::State::kFightIdle;
 				PlayAnim(AnimKind::kFightIdle);

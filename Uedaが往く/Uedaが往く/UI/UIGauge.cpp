@@ -1,10 +1,20 @@
 #include "DxLib.h"
 #include "Vec2.h"
+#include "CharacterBase.h"
 #include "UIGauge.h"
 
 // 定数
 namespace
 {
+	const Vec2 kESilhouettePos = { 1700.0f, 870.0f };		// 敵キャラクターのシルエット位置
+	constexpr int kSilhouetteWidth = 268;					// キャラクターのシルエット画像幅
+	constexpr int kSilhouetteHeight = 213;					// キャラクターのシルエット画像高さ
+	
+	constexpr int kHpColor = 0xff0000;						// HPバーの色
+	constexpr int kDamageHpColor = 0xffd700;				// ダメージ時のHPバーの色
+	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
+	constexpr int kIntervalTime = 50;						// HPバーが減少するまでの時間
+
 	// プレイヤーUI
 	const Vec2 kPlayerHpBarLT = { 25.0f, 50.0f };			// HPバー左上位置
 	const Vec2 kPlayerHpBarRB = { 1000.0f, 80.0f };			// HPバー右下位置
@@ -24,13 +34,6 @@ namespace
 	const Vec2 kEnemyCurrentHpLT = { 885.0f, 976.0f };		// 現在のHP左上位置
 	constexpr float kEnemyHpWidth = 920.0f;					// HPバーの横幅
 	constexpr float kEnemyHpHeight = 17.0f;					// HPバーの縦幅
-
-	constexpr int kHpColor = 0xff0000;						// HPバーの色
-	constexpr int kDamageHpColor = 0xffd700;				// ダメージ時のHPバーの色
-	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
-
-	// HPバーが減少するまでの時間
-	constexpr int kIntervalTime = 50;
 }
 
 /// <summary>
@@ -44,6 +47,7 @@ UIGauge::UIGauge(float maxHp):
 	m_intervalTime(0)
 {
 	m_gaugeBarHandle = LoadGraph("data/UI/Gauge.png");
+	m_silhouetteHandle = LoadGraph("data/UI/silhouette.png");
 }
 
 
@@ -53,6 +57,7 @@ UIGauge::UIGauge(float maxHp):
 UIGauge::~UIGauge()
 {
 	DeleteGraph(m_gaugeBarHandle);
+	DeleteGraph(m_silhouetteHandle);
 }
 
 
@@ -135,6 +140,15 @@ void UIGauge::DrawEnemyHp(float currentHp)
 		DrawBoxAA(kEnemyCurrentHpLT.x, kEnemyCurrentHpLT.y, kEnemyCurrentHpLT.x + decreaseHpLength, kEnemyCurrentHpLT.y + kEnemyHpHeight, kDamageHpColor, true);
 	}
 	DrawBoxAA(kEnemyCurrentHpLT.x, kEnemyCurrentHpLT.y, kEnemyCurrentHpLT.x + hpLength, kEnemyCurrentHpLT.y + kEnemyHpHeight, kHpColor, true);
+}
+
+
+/// <summary>
+/// シルエット描画
+/// </summary>
+void UIGauge::DrawSilhouette(int charType)
+{
+	DrawRectRotaGraphF(kESilhouettePos.x, kESilhouettePos.y, kSilhouetteWidth * charType, 0, kSilhouetteWidth, kSilhouetteHeight, 1.0f, 0.0f, m_silhouetteHandle, true);
 }
 
 

@@ -184,46 +184,65 @@ void Player::Recovery()
 void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius)
 {
 	// プレイヤーと敵の当たり判定を行う
-	bool hit = HitCheck_Capsule_Capsule(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+	bool isHit = HitCheck_Capsule_Capsule(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 	// パンチ
-	bool hitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+	bool isHitPunch = HitCheck_Capsule_Capsule(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius, eCapPosTop, eCapPosBottom, eCapRadius);
 	// キック
-	bool hitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+	bool isHitKick = HitCheck_Capsule_Capsule(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius, eCapPosTop, eCapPosBottom, eCapRadius);
+
+	// 背後から攻撃したかどうか
+	VECTOR pToEDir = VNorm(VSub(enemy.GetPos(), m_pos));
+	bool isBackAttack = VDot(enemy.GetDir(), pToEDir) < 0.0f;
+
+	// パンチ状態かどうか
+	bool isStatePunch = m_currentState == CharacterBase::State::kPunch1 || m_currentState == CharacterBase::State::kPunch2 || m_currentState == CharacterBase::State::kPunch3;
 
 	// 1コンボ目が当たった場合
-	if (hitPunch && m_currentState == CharacterBase::State::kPunch1)
+	if (isHitPunch && isStatePunch)
 	{
-		// パンチが当たった場合
-		enemy.OnDamage(m_status.punchPower);
-		m_gauge += kGaugeCharge;
-
-	}
-	// 2コンボ目が当たった場合
-	if (hitPunch && m_currentState == CharacterBase::State::kPunch2)
-	{
-		// パンチが当たった場合
-		enemy.OnDamage(m_status.secondPunchPower);
-		m_gauge += kGaugeCharge;
-	}
-	// 3コンボ目が当たった場合
-	if (hitPunch && m_currentState == CharacterBase::State::kPunch3)
-	{
-		// パンチが当たった場合
-		enemy.OnDamage(m_status.thirdPunchPower);
-		m_gauge += kGaugeCharge;
+		// 敵がガードしていないか、背後から攻撃した場合
+		if (isBackAttack || !enemy.GetIsGuard())
+		{
+			// 1コンボ目
+			if (m_currentState == CharacterBase::State::kPunch1)
+			{
+				enemy.OnDamage(m_status.punchPower);
+				m_gauge += kGaugeCharge;
+			}
+			// 2コンボ目
+			if (m_currentState == CharacterBase::State::kPunch2)
+			{
+				enemy.OnDamage(m_status.secondPunchPower);
+				m_gauge += kGaugeCharge;
+			}
+			// 3コンボ目
+			if (m_currentState == CharacterBase::State::kPunch3)
+			{
+				enemy.OnDamage(m_status.thirdPunchPower);
+				m_gauge += kGaugeCharge;
+			}
+		}
+		else
+		{
+			enemy.OnDamage(0.0f);
+		}
 	}
 	// キックが当たった場合
-	else if (hitKick && m_currentState == CharacterBase::State::kKick)
+	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// キックが当たった場合
-		if (m_currentState == CharacterBase::State::kKick)
+		if (!enemy.GetIsGuard())
 		{
 			enemy.OnDamage(m_status.kickPower);
 			m_gauge += kGaugeCharge;
 		}
+		else
+		{
+			enemy.OnDamage(0.0f);
+		}
 	}
 	// 攻撃中でなく、敵に当たった場合
-	else if(hit)
+	else if(isHit)
 	{
 		// プレイヤーの位置を補正する
 		VECTOR collisionNormal = VSub(m_pos, enemy.GetPos());
@@ -233,9 +252,10 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	}
 
 	// 掴みが決まらなかった場合
-	if(!hit && m_currentState == CharacterBase::State::kGrab)
+	if(!isHit && m_currentState == CharacterBase::State::kGrab)
 	{
 		// 掴み失敗のアニメーションを再生する
+		PlayAnim(CharacterBase::AnimKind::kStumble);
 	}
 
 	// ゲージ量の調整

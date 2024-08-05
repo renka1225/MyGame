@@ -94,7 +94,10 @@ void EnemyTuto::Update(Player& player, Stage& stage)
 void EnemyTuto::Draw()
 {
 	MV1DrawModel(m_modelHandle);	// 敵モデル描画
+	m_pUIGauge->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyTuto));	// シルエット描画
 	m_pUIGauge->DrawEnemyHp(m_hp);	// HPゲージを表示
+
+
 
 #ifdef _DEBUG
 	DebugDraw debug;
