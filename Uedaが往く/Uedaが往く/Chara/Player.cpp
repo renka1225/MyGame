@@ -21,8 +21,7 @@ namespace
 	constexpr float kAdj = 3.0f;									// 敵に当たった時の位置調整量
 
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
-	const VECTOR kInitPos = VGet(0.0f, 0.0f, -40.0f);				// 初期位置
-	//const VECTOR kInitPos = VGet(5000.0f, 100.0f, -1000.0f);		// 初期位置
+	const VECTOR kInitPos = VGet(2550.0f, 69.0f, 4218.0f);			// 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値

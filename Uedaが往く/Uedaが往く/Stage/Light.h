@@ -5,18 +5,18 @@
 namespace
 {
 	/*ディレクショナルライト*/
-	const VECTOR kDirLightPos = VGet(0.0f, 1000.0f, 0.0f);	 // 位置
+	const VECTOR kDirLightPos = VGet(-8000.0f, 1000.0f, 0.0f);	 // 位置
 	const VECTOR kDirLightDir = VGet(0.0f, -1.0f, 0.0f);	 // 方向
 
 	/*ポイントライト*/
-	const VECTOR kPointLightPos = VGet(0.0f, 200.0f, 0.0f);  // 位置
+	const VECTOR kPointLightPos = VGet(-8000.0f, 200.0f, 0.0f);  // 位置
 	constexpr float kPointLightRange = 1000.0f;				 // 有効距離
 	constexpr float kPointLightAtten0 = 0.0f;				 // 距離減衰パラメータ0
 	constexpr float kPointLightAtten1 = 0.002f;				 // 距離減衰パラメータ1
 	constexpr float kPointLightAtten2 = 0.0f;				 // 距離減衰パラメータ2
 
 	/*スポットライト*/
-	const VECTOR kSpotLightPos = VGet(0.0f, 1000.0f, 0.0f);	 // 位置
+	const VECTOR kSpotLightPos = VGet(-8000.0f, 1000.0f, 0.0f);	 // 位置
 	const VECTOR kSpotLightDir = VGet(0.0f, -1.0f, 0.0f);	 // 向き
 	constexpr float kSpotLightOutAngle = 0.0f;				 // スポットライトコーンの外側の角度
 	constexpr float kSpotLightInAngle = 180.0f;				 // スポットライトコーンの内側の角度
