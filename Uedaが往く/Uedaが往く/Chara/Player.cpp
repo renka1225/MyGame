@@ -403,8 +403,17 @@ void Player::Avoid(const Input& input)
 		{
 			m_currentState = CharacterBase::State::kAvoid;
 			// 移動ベクトルを設定する
-			VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
-			m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.avoidDist));
+			// 方向キーを入力中は入力方向へ移動する
+			if (input.IsPressing("up") || input.IsPressing("down") || input.IsPressing("left") || input.IsPressing("right"))
+			{
+				m_pos = VAdd(m_pos, VScale(m_targetMoveDir, m_status.avoidDist));
+			}
+			// 方向キーが入力されていない場合は後ろへ移動する
+			else
+			{
+				VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
+				m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.avoidDist));
+			}
 		}
 	}
 }

@@ -27,9 +27,9 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneGameover::SceneGameover():
-	m_select(Select::kRetry)
+SceneGameover::SceneGameover()
 {
+	m_select = Select::kRetry;
 	m_textHandle = LoadGraph(kHaibokuTextPath);
 	m_cursorHandle = LoadGraph(kCursorPath);
 }

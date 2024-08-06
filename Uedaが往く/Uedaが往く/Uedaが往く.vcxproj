@@ -27,6 +27,7 @@
     <ClCompile Include="Chara\Enemy\EnemyChef.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyAbe.cpp" />
     <ClCompile Include="Debug\DebugDraw.cpp" />
+    <ClCompile Include="Scene\ScenePause.cpp" />
     <ClCompile Include="Scene\SceneStageBase.cpp" />
     <ClCompile Include="Util\ConversionTime.cpp" />
     <ClCompile Include="Util\LoadData.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="Chara\Enemy\EnemyChef.h" />
     <ClInclude Include="Chara\Enemy\EnemyAbe.h" />
     <ClInclude Include="Debug\DebugDraw.h" />
+    <ClInclude Include="Scene\ScenePause.h" />
     <ClInclude Include="Scene\SceneStageBase.h" />
     <ClInclude Include="Stage\Light.h" />
     <ClInclude Include="Util\ConversionTime.h" />

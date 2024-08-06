@@ -12,5 +12,14 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
+
+private:
+	enum Select
+	{
+		kBGM,			// BGM音量調整
+		kSE,			// SE音量調整
+		kKyeConfig,		// キーコンフィグ
+		kSelectNum		// 選択数
+	};
 };
 

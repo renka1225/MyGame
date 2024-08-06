@@ -138,6 +138,9 @@
     <ClCompile Include="Chara\Enemy\EnemyAbe.cpp">
       <Filter>ソース ファイル\Chara\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\ScenePause.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chara\CharacterBase.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="Chara\Enemy\EnemyAbe.h">
       <Filter>ヘッダー ファイル\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ScenePause.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,7 +31,7 @@ void SceneOption::Init()
 /// 更新
 /// </summary>
 /// <param name="input"></param>
-/// <returns></returns>
+/// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 {
 	return shared_from_this();	// 自身のshared_ptrを返す

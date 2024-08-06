@@ -25,7 +25,6 @@ private:
 		kTitle,			// タイトル
 		kSelectNum,		// 選択数
 	};
-	int m_select;	// 現在の選択状態
 
 	int m_textHandle;	// テキストの画像
 	int m_cursorHandle;	// カーソルの画像

@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "Vec2.h"
 #include "Game.h"
+#include "ScenePause.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage2.h"

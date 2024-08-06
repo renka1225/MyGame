@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Vec2.h"
 #include "Stage.h"
+#include "ScenePause.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStage1.h"
@@ -72,6 +73,12 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
+		// ポーズ画面を開く
+		if (input.IsTriggered("pause"))
+		{
+			return std::make_shared<ScenePause>(shared_from_this());
+		}
+
 		m_nextBattleTime--;
 
 		m_pCamera->Update(input, *m_pPlayer);

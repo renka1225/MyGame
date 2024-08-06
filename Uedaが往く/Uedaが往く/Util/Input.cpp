@@ -182,11 +182,11 @@ Input::Input()
 
 	/*デバッグ機能*/
 	m_commandTable["debug_damage"] = { {InputType::keybd, KEY_INPUT_LSHIFT},
-								  {InputType::pad, PAD_INPUT_R} };
+								  {InputType::pad, PAD_INPUT_11} };
 	m_commandTable["debug_pause"] = { {InputType::keybd, KEY_INPUT_P},
-									  {InputType::pad, PAD_INPUT_R} };
+									  {InputType::pad, PAD_INPUT_11} };
 	m_commandTable["debug_enter"] = { {InputType::keybd, KEY_INPUT_RETURN},
-									  {InputType::pad, PAD_INPUT_R} };
+									  {InputType::pad, PAD_INPUT_11} };
 	m_commandTable["debug_clear"] = { {InputType::keybd, KEY_INPUT_B},
 									  {InputType::pad, PAD_INPUT_10} };
 	m_commandTable["debug_gameover"] = { {InputType::keybd, KEY_INPUT_N},
