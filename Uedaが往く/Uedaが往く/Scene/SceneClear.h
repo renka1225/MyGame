@@ -8,7 +8,7 @@
 class SceneClear : public SceneBase
 {
 public:
-	SceneClear() {};
+	SceneClear():m_textHandle(-1),m_totalClearTime(0) {};
 	SceneClear(std::vector<int> clearTime);
 	virtual ~SceneClear();
 	virtual void Init();

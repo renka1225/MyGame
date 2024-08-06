@@ -7,17 +7,20 @@
 class SceneOption : public SceneBase
 {
 public:
-	SceneOption();
+	SceneOption() {};
+	SceneOption(std::shared_ptr<SceneBase> pScene);
 	virtual ~SceneOption();
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 
 private:
+	std::shared_ptr<SceneBase> m_pPrevScene;	// 前に実行していたシーン
+
 	enum Select
 	{
-		kBGM,			// BGM音量調整
-		kSE,			// SE音量調整
+		kSound,			// サウンド
+		kBrightness,	// 明るさ
 		kKyeConfig,		// キーコンフィグ
 		kSelectNum		// 選択数
 	};

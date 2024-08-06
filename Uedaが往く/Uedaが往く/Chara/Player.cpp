@@ -53,6 +53,12 @@ Player::Player():
 	m_isFighting = false;
 	m_modelHandle = MV1LoadModel(kfileName);
 	m_currentState = CharacterBase::State::kFightIdle;
+
+	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
+	MV1SetPosition(m_modelHandle, kInitPos);
+	m_currentState = CharacterBase::State::kFightIdle;
+	m_animBlendRate = kAnimBlendMax;
+	PlayAnim(AnimKind::kFightIdle);
 }
 
 
@@ -70,12 +76,6 @@ Player::~Player()
 /// </summary>
 void Player::Init()
 {
-	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
-	MV1SetPosition(m_modelHandle, kInitPos);
-	m_currentState = CharacterBase::State::kFightIdle;
-	m_animBlendRate = kAnimBlendMax;
-	PlayAnim(AnimKind::kFightIdle);
-
 	// モデル全体のコリジョン情報のセットアップ
 	MV1SetupCollInfo(m_modelHandle, -1);
 }

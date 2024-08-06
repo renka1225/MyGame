@@ -22,6 +22,7 @@ EnemyBase::EnemyBase() :
 	m_stopTime(0),
 	m_angleIntervalTime(0),
 	m_intervalTime(0),
+	m_guardTime(0),
 	m_eToPDirVec(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_currentState = CharacterBase::State::kFightIdle;
@@ -75,7 +76,6 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, VECTOR& u
 			m_stopTime--;
 		}
 	}
-
 	// プレイヤーが攻撃範囲に入った場合
 	else if (distance <= m_enemyInfo.attackRange)
 	{
@@ -270,8 +270,33 @@ CharacterBase::State  EnemyBase::Fighting()
 /// </summary>
 CharacterBase::State EnemyBase::Guard()
 {
+	if (m_isGuard)
+	{
+		return CharacterBase::State::kGuard;
+	}
+
 	m_isGuard = true;
+	// ガードの時間を設定
+	m_guardTime = m_enemyInfo.guardTime;
 	return CharacterBase::State::kGuard;
+}
+
+
+/// <summary>
+/// ガード状態を更新
+/// </summary>
+void EnemyBase::UpdateGuard()
+{
+	if (!m_isGuard) return;
+
+	if (m_guardTime > 0)
+	{
+		m_guardTime--;
+	}
+	else
+	{
+		OffGuard(); // ガード状態を解除する
+	}
 }
 
 

@@ -31,6 +31,7 @@ EnemyAbe::EnemyAbe()
 	m_moveSpeed = m_status.maxMoveSpeed;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
+	MV1SetPosition(m_modelHandle, kInitPos);
 }
 
 
@@ -48,7 +49,6 @@ EnemyAbe::~EnemyAbe()
 /// </summary>
 void EnemyAbe::Init()
 {
-	MV1SetPosition(m_modelHandle, kInitPos);
 }
 
 
@@ -79,6 +79,7 @@ void EnemyAbe::Update(Player& player, Stage& stage)
 
 	UpdateAnimState(prevState);		// アニメーション状態を更新
 	UpdateAngle();					// 角度を更新
+	UpdateGuard();					// ガード状態を更新
 	Move(moveVec, player, stage);	// 移動ベクトルを元にエネミーを移動させる
 	UpdateAnim();					// アニメーション処理の更新
 	UpdateCol();					// 当たり判定の位置更新

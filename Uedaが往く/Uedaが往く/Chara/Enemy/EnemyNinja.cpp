@@ -30,6 +30,7 @@ EnemyNinja::EnemyNinja()
 	m_moveSpeed = m_status.maxMoveSpeed;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
+	MV1SetPosition(m_modelHandle, kInitPos);
 }
 
 
@@ -47,15 +48,14 @@ EnemyNinja::~EnemyNinja()
 /// </summary>
 void EnemyNinja::Init()
 {
-	MV1SetPosition(m_modelHandle, kInitPos);
 }
 
 
 /// <summary>
 /// 更新
 /// </summary>
-/// <param name="player"></param>
-/// <param name="stage"></param>
+/// <param name="player">プレイヤー参照</param>
+/// <param name="stage">ステージ参照</param>
 void EnemyNinja::Update(Player& player, Stage& stage)
 {
 	// 移動パラメータを設定する
@@ -78,6 +78,7 @@ void EnemyNinja::Update(Player& player, Stage& stage)
 
 	UpdateAnimState(prevState);		// アニメーション状態を更新
 	UpdateAngle();					// 角度を更新
+	UpdateGuard();					// ガード状態を更新
 	Move(moveVec, player, stage);	// 移動ベクトルを元にエネミーを移動させる
 	UpdateAnim();					// アニメーション処理の更新
 	UpdateCol();					// 当たり判定の位置更新

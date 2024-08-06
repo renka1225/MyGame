@@ -147,6 +147,7 @@ public:
 		int grabProb;			// 掴み確率
 		int changeAngleProb;	// 角度を更新する確率
 		int changeAngleFrame;	// 角度を更新するフレーム数
+		int guardTime;			// ガード時間
 	};
 	EnemyInfo m_enemyInfo;
 

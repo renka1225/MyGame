@@ -80,6 +80,12 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
+		// ポーズ画面を開く
+		if (input.IsTriggered("pause"))
+		{
+			return std::make_shared<ScenePause>(shared_from_this());
+		}
+
 		m_nextBattleTime--;
 
 		m_pCamera->Update(input, *m_pPlayer);

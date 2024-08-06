@@ -44,6 +44,8 @@ protected:
 	CharacterBase::State Fighting();
 	// ガード処理
 	CharacterBase::State Guard();
+	// ガード状態を更新
+	void UpdateGuard();
 	// ガード状態を解除する
 	CharacterBase::State OffGuard();
 	// 敵の角度を更新
@@ -53,6 +55,7 @@ protected:
 	int m_stopTime;				// 停止する時間
 	int m_angleIntervalTime;	// 角度を更新するまでの時間
 	int m_intervalTime;			// 次の状態を更新するまでの時間
+	int m_guardTime;			// ガードの時間
 	VECTOR m_eToPDirVec;		// 敵の位置からプレイヤー位置のベクトル
 };
 

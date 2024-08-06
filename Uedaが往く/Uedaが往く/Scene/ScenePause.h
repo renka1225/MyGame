@@ -20,7 +20,7 @@ private:
 	enum Select
 	{
 		kBack,			// ゲームに戻る
-		kRetry,			// 最初からやり直す
+		kOption,		// オプション
 		kStageSelect,	// ステージ選択に戻る
 		kSelectNum		// 選択数
 	};

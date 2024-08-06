@@ -40,9 +40,11 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_pStage(pStage),
 	m_pEnemy(nullptr),
 	m_battleNum(0),
-	m_nextBattleTime(0)
+	m_nextBattleTime(0),
+	m_elapsedTime(0)
 {
 	m_fightTextHandle = LoadGraph(kFightTextPath);
+	Light::SetLight();
 }
 
 
@@ -64,7 +66,6 @@ void SceneStageBase::Init()
 	m_pPlayer->Init();
 	m_pCamera->Init();
 	m_pEnemy->Init();
-	Light::SetLight();
 }
 
 

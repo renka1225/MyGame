@@ -126,6 +126,9 @@ void SceneStage1::Draw()
 {
 	SceneStageBase::Draw();
 
+	//MEMO:‹P“x‚ğ’²®‚·‚é
+	//SetDrawBright(128, 128, 128);
+
 	if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
 	{
 		int sizeW, sizeH;

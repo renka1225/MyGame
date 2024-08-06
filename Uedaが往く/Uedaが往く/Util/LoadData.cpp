@@ -16,7 +16,7 @@ namespace
 	constexpr int kStatusNum = 15;		// 1キャラクターのステータス数
 	constexpr int kAnimNum = 16;		// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;			// 1キャラクターの当たり判定の情報数
-	constexpr int kEnemyInfoNum = 12;	// 1キャラクターの情報数
+	constexpr int kEnemyInfoNum = 13;	// 1キャラクターの情報数
 }
 
 
@@ -272,4 +272,5 @@ void LoadData::LoadEnemyData(CharacterBase& data, int charType)
 	data.m_enemyInfo.grabProb = m_enemyData[9 + (charType - 1) * kEnemyInfoNum];
 	data.m_enemyInfo.changeAngleProb = m_enemyData[10 + (charType - 1) * kEnemyInfoNum];
 	data.m_enemyInfo.changeAngleFrame = m_enemyData[11 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.guardTime = m_enemyData[12 + (charType - 1) * kEnemyInfoNum];
 }
