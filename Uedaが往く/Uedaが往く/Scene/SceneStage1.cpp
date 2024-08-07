@@ -1,9 +1,10 @@
 #include "DxLib.h"
+#include "Vec2.h"
+#include "Input.h"
+#include "UIProduction.h"
 #include "Player.h"
 #include "EnemyTuto.h"
 #include "Camera.h"
-#include "Input.h"
-#include "Vec2.h"
 #include "Stage.h"
 #include "ScenePause.h"
 #include "SceneClear.h"
@@ -12,11 +13,6 @@
 
 namespace
 {
-	const char* const kFightTextPath = "data/UI/Fight!.png";	// "Fight"のテキスト画像のファイル位置
-	const Vec2 kFightTextPos = { 960, 500 };					// "Fight"のテキスト位置
-	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
-	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
-
 	constexpr int kMaxBattleNum = 1;							// 最大バトル数
 	constexpr int kNextBattleTime = 150;						// 次の試合が始まるまでの時間
 }
@@ -30,9 +26,8 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pCamera = pCamera;
 	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyTuto>();
-	m_battleNum = kMaxBattleNum;
+	m_battleNum = 0;
 	m_nextBattleTime = kNextBattleTime;
-	m_fightTextHandle = LoadGraph(kFightTextPath);
 }
 
 
@@ -129,12 +124,8 @@ void SceneStage1::Draw()
 	//MEMO:輝度を調整する
 	//SetDrawBright(128, 128, 128);
 
-	if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
-	{
-		int sizeW, sizeH;
-		GetGraphSize(m_fightTextHandle, &sizeW, &sizeH);
-		DrawRectRotaGraphF(kFightTextPos.x, kFightTextPos.y, 0, 0, sizeW, sizeH, kFightTextScele, 0.0f, m_fightTextHandle, true);
-	}
+	// 演出UIを表示
+	m_pUIProduction->Draw(m_nextBattleTime, m_battleNum, kMaxBattleNum);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

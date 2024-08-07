@@ -163,7 +163,7 @@ protected:
 	
 protected:
 	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得
-	std::shared_ptr<UIGauge> m_pUIGauge;	// バトル中に表示するHPのゲージ
+	std::shared_ptr<UIGauge> m_pUIGauge;	// バトル中に表示するHPゲージ
 
 	float m_hp;				// HP
 	VECTOR m_pos;			// 位置

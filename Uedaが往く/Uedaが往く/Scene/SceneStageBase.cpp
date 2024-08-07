@@ -1,19 +1,14 @@
 #include "DxLib.h"
+#include "Input.h"
+#include "UIProduction.h"
+#include "Light.h"
 #include "Player.h"
 #include "EnemyBase.h"
 #include "Camera.h"
-#include "Input.h"
-#include "Light.h"
 #include "Stage.h"
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStageBase.h"
-
-// 定数
-namespace
-{
-	const char* const kFightTextPath = "data/UI/Fight!.png"; // "Fight"のテキスト画像のファイル位置
-}
 
 
 /// <summary>
@@ -22,9 +17,10 @@ namespace
 SceneStageBase::SceneStageBase():
 	m_battleNum(0),
 	m_nextBattleTime(0),
-	m_elapsedTime(0),
-	m_fightTextHandle(-1)
+	m_elapsedTime(0)
 {
+	m_pUIProduction = std::make_shared<UIProduction>();
+	Light::SetLight();
 }
 
 
@@ -43,8 +39,6 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_nextBattleTime(0),
 	m_elapsedTime(0)
 {
-	m_fightTextHandle = LoadGraph(kFightTextPath);
-	Light::SetLight();
 }
 
 
@@ -53,7 +47,6 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 /// </summary>
 SceneStageBase::~SceneStageBase()
 {
-	DeleteGraph(m_fightTextHandle);
 	Light::DeleteLight();
 }
 
