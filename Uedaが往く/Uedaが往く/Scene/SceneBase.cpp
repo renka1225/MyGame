@@ -10,6 +10,7 @@
 SceneBase::SceneBase():
 	m_select(0)
 {
+	m_cursorHandle = LoadGraph("data/UI/cursor.png");
 }
 
 
@@ -18,6 +19,7 @@ SceneBase::SceneBase():
 /// </summary>
 SceneBase::~SceneBase()
 {
+	DeleteGraph(m_cursorHandle);
 }
 
 

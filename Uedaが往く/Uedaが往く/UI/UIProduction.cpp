@@ -56,9 +56,6 @@ void UIProduction::Update()
 /// <param name="maxMatch">Å‘å‚Ì‡”</param>
 void UIProduction::Draw(int time, int matchNum, int maxMatch)
 {
-	// ’†Sü
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
-
 	if (time > kFightTextDispStart)
 	{
 		int sizeW, sizeH;

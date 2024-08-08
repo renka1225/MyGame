@@ -1,4 +1,10 @@
-﻿  UIProduction.cpp
-C:\GitHub\MyGame\Uedaが往く\Uedaが往く\UI\UIProduction.cpp(60,59): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\GitHub\MyGame\Uedaが往く\Uedaが往く\UI\UIProduction.cpp(60,30): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+﻿  SceneOption.cpp
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(75,39): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(75,22): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(78,48): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(78,27): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(79,48): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(79,27): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(80,48): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneOption.cpp(80,27): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
   Uedaが往く.vcxproj -> C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Uedaが往く.exe

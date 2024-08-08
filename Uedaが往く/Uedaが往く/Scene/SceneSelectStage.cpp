@@ -1,12 +1,28 @@
+#include "EffekseerForDXLib.h"
 #include "DxLib.h"
+#include "Vec2.h"
 #include "Input.h"
+#include "Game.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
 #include "SceneStage1.h"
 #include "SceneStage2.h"
+#include "SceneOption.h"
 #include "SceneTitle.h"
 #include "SceneSelectStage.h"
+
+// 定数
+namespace
+{
+	constexpr int kBackColor = 0xdddddd;			// 背景の色
+	constexpr int kBackBoxColor = 0x494949;			// 四角の色
+	constexpr int kBackBoxLTPos = 140;				// 四角の左上位置
+	constexpr int kBackBoxWidth = 490;				// 四角の幅
+	const Vec2 kSelectTextPos = { 200, 300 };		// 選択テキスト表示位置
+	constexpr float kSelectTextInterval = 100.0f;	// 選択テキスト表示間隔
+	const Vec2 kCursorPos = { 140, 290 };			// カーソル表示位置
+}
 
 
 /// <summary>
@@ -59,10 +75,19 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 		{
 			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);
 		}
-		else if (m_select == kTitle)
+		else if (m_select == kOption)
 		{
-			return std::make_shared<SceneTitle>();
+			return std::make_shared<SceneOption>();
 		}
+		else if (m_select == kEnd)
+		{
+			Effkseer_End();	// Effekseerの終了処理
+			DxLib_End();
+		}
+	}
+	if (input.IsTriggered("back"))
+	{
+		return std::make_shared<SceneTitle>();
 	}
 
 	return shared_from_this();
@@ -74,19 +99,23 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 /// </summary>
 void SceneSelectStage::Draw()
 {
+	// 背景描画
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
+	// 背景の四角部分表示
+	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
+
+	// カーソル表示
+	DrawGraph(kCursorPos.x, kCursorPos.y + kSelectTextInterval * m_select, m_cursorHandle, true);
+
+	// テキスト表示
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage1, "練習へ往く", 0xffffff);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage2, "闘いへ往く", 0xffffff);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kOption, "オプション", 0xffffff);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd, "ゲームを終わる", 0xffffff);
+
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ選択画面", 0xffffff);
-
-	int stage1Color = 0xffffff;
-	int stage2Color = 0xffffff;
-	int titleColor = 0xffffff;
-	if(m_select == SelectScene::kStage1) stage1Color = 0xff0000;
-	if (m_select == SelectScene::kStage2) stage2Color = 0xff0000;
-	if (m_select == SelectScene::kTitle) titleColor = 0xff0000;
-	DrawString(0, 20, "ステージ1", stage1Color);
-	DrawString(0, 40, "ステージ2", stage2Color);
-	DrawString(0, 60, "タイトル", titleColor);
 #endif
 }
 

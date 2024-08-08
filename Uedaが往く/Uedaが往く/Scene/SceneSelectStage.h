@@ -19,7 +19,8 @@ private:
 	{
 		kStage1,	// ステージ1
 		kStage2,	// ステージ2
-		kTitle,		// タイトルにもどる
+		kOption,	// オプション
+		kEnd,		// ゲームを終わる
 		kSelectNum	// シーンの数
 	};
 };
