@@ -155,9 +155,8 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 void SceneStage2::Draw()
 {
 	SceneStageBase::Draw();
-
 	// 演出UIを表示
-	m_pUIProduction->Draw(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+	m_pUIProduction->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

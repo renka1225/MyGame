@@ -45,6 +45,8 @@ private:
 	void Guard(const Input& input);
 	// ガード状態を解除する
 	void OffGuard();
+	// 攻撃を受けている最中の処理
+	void Receive();
 	// 移動パラメータを設定する
 	CharacterBase::State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの角度を更新

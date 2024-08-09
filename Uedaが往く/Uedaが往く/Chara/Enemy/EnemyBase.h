@@ -50,6 +50,8 @@ protected:
 	void UpdateGuard();
 	// ガード状態を解除する
 	CharacterBase::State OffGuard();
+	// 攻撃を受けている最中の処理
+	void Receive();
 	// 敵の角度を更新
 	void UpdateAngle();
 

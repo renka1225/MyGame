@@ -73,4 +73,7 @@ void SceneStageBase::Draw()
 	m_pPlayer->Draw();
 	// “G•`‰æ
 	m_pEnemy->Draw();
+
+	// ‘€ìà–¾‚ð•\Ž¦
+	//m_pUIProduction->DrawOperation();
 }

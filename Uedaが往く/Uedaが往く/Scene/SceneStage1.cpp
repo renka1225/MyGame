@@ -125,7 +125,7 @@ void SceneStage1::Draw()
 	//SetDrawBright(128, 128, 128);
 
 	// 演出UIを表示
-	m_pUIProduction->Draw(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+	m_pUIProduction->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

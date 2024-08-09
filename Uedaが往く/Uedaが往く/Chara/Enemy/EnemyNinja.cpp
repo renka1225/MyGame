@@ -13,7 +13,7 @@ namespace
 	const char* const kfileName = "data/Model/Chara/Ninja.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.3f;								// 拡大率
 	constexpr int kIntervalTime = 180;							// 状態を更新するまでの時間
-	const VECTOR kInitPos = VGet(2800.0f, 69.0f, 4370.0f);		// 初期位置
+	const VECTOR kInitPos = VGet(2660, 69.0f, 4280.0f);			// 初期位置
 }
 
 /// <summary>
@@ -70,7 +70,6 @@ void EnemyNinja::Update(Player& player, Stage& stage, SceneStageBase& sceneStage
 	m_eToPDirVec = VSub(player.GetPos(), m_pos);
 
 	// 状態を更新する
-	m_intervalTime--;
 	m_currentState = UpdateState(player, sceneStage, upMoveVec, leftMoveVec, moveVec);
 
 	// プレイヤーとの当たり判定をチェックする

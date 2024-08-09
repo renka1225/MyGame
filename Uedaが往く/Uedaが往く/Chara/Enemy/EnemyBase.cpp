@@ -10,9 +10,7 @@
 // 定数
 namespace
 {
-	// アニメーション情報
-	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
-	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
+	constexpr float kInitAngle = 180.0f;	// 開始時の敵の向く方向
 }
 
 
@@ -27,6 +25,7 @@ EnemyBase::EnemyBase() :
 	m_eToPDirVec(VGet(0.0f, 0.0f, 0.0f))
 {
 	m_currentState = CharacterBase::State::kFightIdle;
+	m_angle = kInitAngle; // 真正面を向くようにする
 }
 
 
@@ -54,7 +53,6 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 	// このフレームでの移動ベクトルを初期化
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
-
 	// スタート演出時は待機状態にする
 	if (sceneStage.GetBattleStartTime() > 0)
 	{
@@ -63,11 +61,18 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 	}
 
 	// 攻撃中または移動中は状態を更新しない
-	bool isKeepState = m_intervalTime > 0 || m_isAttack || m_isMove || m_isGuard;
+	bool isKeepState = m_isAttack || m_isMove || m_isGuard || m_currentState == CharacterBase::State::kReceive;
 	if (isKeepState) return nextState;
 
 	// エネミーとプレイヤーの距離を計算
 	float distance = VSize(m_eToPDirVec);
+
+	if (m_intervalTime > 0)
+	{
+		m_intervalTime--;								// クールダウンタイマーを減少させる
+		nextState = CharacterBase::State::kFightIdle;	// クールダウン中は待機状態にする
+		return nextState;
+	}
 
 	// プレイヤーが一定距離離れた場合
 	if (distance > m_enemyInfo.approachRange)
@@ -116,6 +121,9 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		{
 			nextState = Fighting();
 		}
+
+		m_intervalTime = 60;
+
 	}
 	else
 	{
@@ -323,6 +331,22 @@ CharacterBase::State EnemyBase::OffGuard()
 
 
 /// <summary>
+/// 攻撃を受けている最中の処理
+/// </summary>
+/// <returns></returns>
+void EnemyBase::Receive()
+{
+	m_currentState = CharacterBase::State::kReceive;
+
+	if (!m_isReceive)
+	{
+		m_isReceive = true;
+		PlayAnim(CharacterBase::AnimKind::kReceive);
+	}
+}
+
+
+/// <summary>
 /// 敵の角度を更新
 /// </summary>
 void EnemyBase::UpdateAngle()
@@ -364,6 +388,11 @@ void EnemyBase::OnDamage(float damage)
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_eToPDirVec, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
+	}
+	else
+	{
+		m_isAttack = false;
+		Receive();
 	}
 }
 

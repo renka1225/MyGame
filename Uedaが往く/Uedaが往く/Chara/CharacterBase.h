@@ -179,6 +179,7 @@ protected:
 	bool m_isGuard;			// ガード中かどうか(ture:ガード中)
 	bool m_isMove;			// 移動したかどうか(true:移動した)
 	bool m_isFighting;		// 構え中かどうか(true:構え中)
+	bool m_isReceive;		// 攻撃を受けている最中かどうか(true:攻撃を受けている)
 	State m_currentState;	// 現在の状態
 	int m_modelHandle;		// キャラクターの3Dモデル
 

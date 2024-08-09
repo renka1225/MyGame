@@ -21,11 +21,10 @@ namespace
 	constexpr float kAdj = 3.0f;									// 敵に当たった時の位置調整量
 
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
-	const VECTOR kInitPos = VGet(2550.0f, 69.0f, 4218.0f);			// 初期位置
+	const VECTOR kInitPos = VGet(2600.0f, 69.0f, 4240.0f);			// 初期位置
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
-	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
 }
 
 
@@ -163,6 +162,11 @@ void Player::OnDamage(float damage)
 		VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
 	}
+	else
+	{
+		m_isAttack = false;
+		Receive();
+	}
 }
 
 
@@ -296,8 +300,8 @@ void Player::Move(const VECTOR& moveVec, Stage& stage)
 /// <returns>現在の状態</returns>
 void Player::Punch(const Input& input)
 {
-	// 攻撃中はスキップ
-	if (m_isAttack) return;
+	// 攻撃中はまたは攻撃を受けている最中はスキップ
+	if (m_isAttack || m_isReceive) return;
 
 	// パンチできない場合
 	if (m_punchCoolTime > 0)
@@ -363,8 +367,8 @@ void Player::Punch(const Input& input)
 /// <returns>現在の状態</returns>
 void Player::Kick(const Input& input)
 {
-	// 攻撃中はスキップ
-	if (m_isAttack) return;
+	// 攻撃中はまたは攻撃を受けている最中はスキップ
+	if (m_isAttack || m_isReceive) return;
 
 	// キック攻撃
 	else if (input.IsTriggered("kick"))
@@ -474,6 +478,21 @@ void Player::OffGuard()
 	m_isGuard = false;
 	m_currentState = CharacterBase::State::kFightIdle;
 	PlayAnim(AnimKind::kFightIdle);
+}
+
+
+/// <summary>
+/// 攻撃を受けている最中の処理
+/// </summary>
+void Player::Receive()
+{
+	m_currentState = CharacterBase::State::kReceive;
+
+	if (!m_isReceive)
+	{
+		m_isReceive = true;
+		PlayAnim(CharacterBase::AnimKind::kReceive);
+	}
 }
 
 
