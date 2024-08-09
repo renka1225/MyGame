@@ -2,6 +2,7 @@
 #include "CharacterBase.h"
 #include <memory>
 
+class SceneStageBase;
 class Player;
 class Stage;
 
@@ -14,9 +15,10 @@ public:
 	EnemyBase();
 	virtual ~EnemyBase();
 	virtual void Init() = 0;
-	virtual void Update(Player& player, Stage& stage) = 0;
+	virtual void Update(Player& player, Stage& stage, SceneStageBase& sceneStage) = 0;
 	virtual void Draw() = 0;
-
+	// 攻撃を受けた際の処理
+	virtual void OnDamage(float damage) override;
 	// プレイヤーとの当たり判定をチェックする
 	void CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
@@ -31,7 +33,7 @@ public:
 
 protected:
 	// 状態を更新する
-	CharacterBase::State UpdateState(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+	CharacterBase::State UpdateState(Player& player, SceneStageBase& sceneStage, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// 移動処理
 	void Move(const VECTOR& moveVec, Player& player, Stage& stage);
 	// パンチ処理

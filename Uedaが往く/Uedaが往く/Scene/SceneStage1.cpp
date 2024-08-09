@@ -78,7 +78,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 
 		m_pCamera->Update(input, *m_pPlayer);
 		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
-		m_pEnemy->Update(*m_pPlayer, *m_pStage);
+		m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
 		if (m_nextBattleTime > 0) return shared_from_this();
 
 		m_elapsedTime++; // Œo‰ßŠÔ‚ği‚ß‚é

@@ -159,7 +159,9 @@ void Player::OnDamage(float damage)
 	// ガード状態の場合
 	if (m_currentState == CharacterBase::State::kGuard)
 	{
-		OffGuard();
+		// 少し後ろに移動する
+		VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
+		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
 	}
 }
 
@@ -201,7 +203,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	if (isHitPunch && isStatePunch)
 	{
 		// 敵がガードしていないか、背後から攻撃した場合
-		if (isBackAttack || !enemy.GetIsGuard())
+		if (!enemy.GetIsGuard())
 		{
 			// 1コンボ目
 			if (m_currentState == CharacterBase::State::kPunch1)

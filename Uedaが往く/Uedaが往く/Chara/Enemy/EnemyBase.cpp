@@ -1,7 +1,8 @@
 #include "DxLib.h"
+#include "Input.h"
 #include "Player.h"
 #include "Stage.h"
-#include "Input.h"
+#include "SceneStageBase.h"
 #include "EnemyBase.h"
 #include <fstream>
 #include <sstream>
@@ -41,16 +42,25 @@ EnemyBase::~EnemyBase()
 /// 敵の状態を更新する
 /// </summary>
 /// <param name="player">プレイヤー参照</param>
+/// <param name="sceneStage">シーン情報参照</param>
 /// <param name="upMoveVec">上方向への移動ベクトル</param>
 /// <param name="leftMoveVec">左方向への移動ベクトル</param>
 /// <param name="moveVec">移動ベクトル</param>
 /// <returns>現在の状態</returns>
-EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
+EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStageBase& sceneStage, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec)
 {
 	CharacterBase::State nextState = m_currentState;
 
 	// このフレームでの移動ベクトルを初期化
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
+
+
+	// スタート演出時は待機状態にする
+	if (sceneStage.GetBattleStartTime() > 0)
+	{
+		nextState = CharacterBase::State::kFightIdle;
+		return nextState;
+	}
 
 	// 攻撃中または移動中は状態を更新しない
 	bool isKeepState = m_intervalTime > 0 || m_isAttack || m_isMove || m_isGuard;
@@ -250,6 +260,8 @@ CharacterBase::State EnemyBase::Avoid()
 		m_pos = VAdd(m_pos,backMoveVec);
 		return CharacterBase::State::kAvoid;
 	}
+
+	return m_currentState;
 }
 
 
@@ -339,6 +351,24 @@ void EnemyBase::UpdateAngle()
 
 
 /// <summary>
+/// 攻撃を受けた際の処理
+/// </summary>
+/// <param name="damage"></param>
+void EnemyBase::OnDamage(float damage)
+{
+	CharacterBase::OnDamage(damage);
+
+	// ガード状態の場合
+	if (m_currentState == CharacterBase::State::kGuard)
+	{
+		// 少し後ろに移動する
+		VECTOR backMoveVec = VScale(m_eToPDirVec, -1.0f);
+		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
+	}
+}
+
+
+/// <summary>
 /// プレイヤーとの当たり判定をチェックする
 /// </summary>
 /// <param name="player">プレイヤー参照</param>
@@ -364,7 +394,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	if (isHitPunch && isStatePunch)
 	{
 		// プレイヤーがガードしていないか、背後から攻撃した場合
-		if (isBackAttack || !player.GetIsGuard())
+		if (!player.GetIsGuard())
 		{
 			// 1コンボ目
 			if (m_currentState == CharacterBase::State::kPunch1)

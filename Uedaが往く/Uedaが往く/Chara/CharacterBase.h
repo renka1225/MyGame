@@ -113,6 +113,7 @@ public:
 		int maxAvoidCount;			// 連続で回避できる回数
 		int avoidCoolTime;			// 回避できるようになるまでの時間
 		float guardAnimTime;		// ガードのアニメーションを止める時間
+		float backMove;				// ガード中に攻撃を受けた際に移動する距離
 	};
 	Status m_status;
 
@@ -162,8 +163,8 @@ protected:
 	void UpdateAnim();
 	
 protected:
-	std::shared_ptr<LoadData> m_pLoadData;	// キャラクター情報を取得
-	std::shared_ptr<UIGauge> m_pUIGauge;	// バトル中に表示するHPゲージ
+	std::shared_ptr<LoadData> m_pLoadData;			// キャラクター情報
+	std::shared_ptr<UIGauge> m_pUIGauge;			// バトル中に表示するゲージ
 
 	float m_hp;				// HP
 	VECTOR m_pos;			// 位置

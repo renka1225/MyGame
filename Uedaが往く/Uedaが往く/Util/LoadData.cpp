@@ -13,7 +13,7 @@ namespace
 	const char* const kColFileName = "data/csv/collision.csv";			// 当たり判定データのファイル名
 	const char* const kEnemyInfoFileName = "data/csv/enemyInfo.csv";	// 敵データのファイル名
 
-	constexpr int kStatusNum = 15;		// 1キャラクターのステータス数
+	constexpr int kStatusNum = 16;		// 1キャラクターのステータス数
 	constexpr int kAnimNum = 16;		// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;			// 1キャラクターの当たり判定の情報数
 	constexpr int kEnemyInfoNum = 13;	// 1キャラクターの情報数
@@ -113,6 +113,7 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 	data.m_status.maxAvoidCount = m_charData[12 + charType * kStatusNum];
 	data.m_status.avoidCoolTime = m_charData[13 + charType * kStatusNum];
 	data.m_status.guardAnimTime = m_charData[14 + charType * kStatusNum];
+	data.m_status.backMove = m_charData[15 + charType * kStatusNum];
 }
 
 

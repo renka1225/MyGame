@@ -56,7 +56,7 @@ void EnemyNinja::Init()
 /// </summary>
 /// <param name="player">プレイヤー参照</param>
 /// <param name="stage">ステージ参照</param>
-void EnemyNinja::Update(Player& player, Stage& stage)
+void EnemyNinja::Update(Player& player, Stage& stage, SceneStageBase& sceneStage)
 {
 	// 移動パラメータを設定する
 	VECTOR	upMoveVec;		// 上ボタンを入力をしたときのプレイヤーの移動方向ベクトル
@@ -71,7 +71,7 @@ void EnemyNinja::Update(Player& player, Stage& stage)
 
 	// 状態を更新する
 	m_intervalTime--;
-	m_currentState = UpdateState(player, upMoveVec, leftMoveVec, moveVec);
+	m_currentState = UpdateState(player, sceneStage, upMoveVec, leftMoveVec, moveVec);
 
 	// プレイヤーとの当たり判定をチェックする
 	player.CheckHitEnemyCol(*this, VGet(m_pos.x, m_pos.y + m_colInfo.bodyHeight, m_pos.z), m_pos, m_colInfo.bodyRadius);

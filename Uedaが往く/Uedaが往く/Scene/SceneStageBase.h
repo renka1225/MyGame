@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include <vector>
 
 class Player;
 class Camera;
@@ -19,6 +20,8 @@ public:
 	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input) = 0;
 	virtual void Draw();
+	// 試合が始まるまでの時間を取得
+	int GetBattleStartTime() const { return m_nextBattleTime; }
 
 protected:
 	std::shared_ptr<Player> m_pPlayer;				// プレイヤー
@@ -26,9 +29,9 @@ protected:
 	std::shared_ptr<Stage> m_pStage;				// ステージ
 	std::shared_ptr<EnemyBase> m_pEnemy;			// 敵
 	std::shared_ptr<UIProduction> m_pUIProduction;	// 演出UI
-	int m_battleNum;				// 現在のバトル数
-	int m_nextBattleTime;			// 次の試合が始まるまでの時間
-	int m_elapsedTime;				// 経過時間
-	std::vector<int> m_clearTime;	// 各試合ごとのクリアタイム
+	int m_battleNum;								// 現在のバトル数
+	int m_nextBattleTime;							// 次の試合が始まるまでの時間
+	int m_elapsedTime;								// 経過時間
+	std::vector<int> m_clearTime;					// 各試合ごとのクリアタイム
 };
 
