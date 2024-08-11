@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Vec2.h"
 #include "Input.h"
 #include "Game.h"
 #include "ScenePause.h"
@@ -9,6 +10,14 @@
 namespace
 {
 	constexpr int kAlpha = 200;
+	constexpr int kBackColor = 0xdcdcdc;				// 背景の色
+	constexpr int kBackBoxColor = 0x494949;				// 四角の色
+	const Vec2 kBackBoxLTPos = { 500.0f, 120.0f };		// 四角の左上位置
+	const Vec2 kBackBoxRBPos = { 1420.0f, 880.0f };		// 四角の右下位置
+	constexpr int kBackBoxWidth = 490;					// 四角の幅
+	const Vec2 kSelectTextPos = { 750, 300 };			// 選択テキスト表示位置
+	constexpr float kSelectTextInterval = 200.0f;		// 選択テキスト表示間隔
+	const Vec2 kCursorPos = { 700, 290 };				// カーソル表示位置
 }
 
 /// <summary>
@@ -75,24 +84,24 @@ void ScenePause::Draw()
 	// プレイ画面を薄く表示する
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kAlpha);
 	m_pPrevScene->Draw();
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// 背景に黒枠を表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kAlpha);
-	DrawBox(500, 200, 1420, 880, 0x000000, true);
+	DrawBoxAA(kBackBoxLTPos.x, kBackBoxLTPos.y, kBackBoxRBPos.x, kBackBoxRBPos.y, kBackBoxColor, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// カーソル表示
 	for (int i = 0; i < Select::kSelectNum; i++)
 	{
-		DrawBox(700, 300 + 200 * i, 1220, 400 + 200 * i, 0xffffff, true);
+		DrawGraphF(kCursorPos.x, kCursorPos.y + kSelectTextInterval * m_select, m_cursorHandle, true);
 	}
 
-	// 文字表示
-	DrawString(750, 320, "ゲームにもどる", 0x000000);
-	DrawString(750, 520, "オプション", 0x000000);
-	DrawString(750, 720, "ステージ選択に戻る", 0x000000);
+	// テキスト表示
+	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kBack, "ゲームにもどる", 0x000000);
+	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kOption ,"オプション", 0x000000);
+	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kStageSelect,"ステージ選択に戻る", 0x000000);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

@@ -27,9 +27,11 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneGameover::SceneGameover()
+/// <param name="pScene">前に実行していたシーン</param>
+SceneGameover::SceneGameover(std::shared_ptr<SceneBase> pScene)
 {
 	m_select = Select::kRetry;
+	m_pPrevScene = pScene;
 	m_textHandle = LoadGraph(kHaibokuTextPath);
 	m_cursorHandle = LoadGraph(kCursorPath);
 }
@@ -70,6 +72,7 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 			std::shared_ptr<Camera> pCamera = std::make_shared<Camera>();
 			std::shared_ptr<Stage> pStage = std::make_shared<Stage>();
 			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);	// プレイ画面に移動
+			//return m_pPrevScene;
 		}
 		else if (m_select == kStageSelect)
 		{

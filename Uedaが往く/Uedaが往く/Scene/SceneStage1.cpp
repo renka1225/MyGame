@@ -92,7 +92,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 		// ƒvƒŒƒCƒ„[‚ÌHP‚ª0‚É‚È‚Á‚½ê‡
 		if (m_pPlayer->GetHp() <= 0)
 		{
-			return std::make_shared<SceneGameover>();
+			return std::make_shared<SceneGameover>(shared_from_this());
 		}
 	}
 
@@ -106,7 +106,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	}
 	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 	{
-		return std::make_shared<SceneGameover>();
+		return std::make_shared<SceneGameover>(shared_from_this());
 	}
 #endif
 
