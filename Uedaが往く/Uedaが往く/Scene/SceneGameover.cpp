@@ -7,6 +7,7 @@
 #include "Stage.h"
 #include "SceneTitle.h"
 #include "SceneSelectStage.h"
+#include "SceneStage1.h"
 #include "SceneStage2.h"
 #include "SceneGameover.h"
 
@@ -71,8 +72,16 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 			std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
 			std::shared_ptr<Camera> pCamera = std::make_shared<Camera>();
 			std::shared_ptr<Stage> pStage = std::make_shared<Stage>();
-			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);	// プレイ画面に移動
-			//return m_pPrevScene;
+
+			// MEMO:typeidでクラスを取得する
+			if (typeid(*m_pPrevScene) == typeid(SceneStage1))
+			{
+				return std::make_shared<SceneStage1>(pPlayer, pCamera, pStage); // ステージ1に移動
+			}
+			if (typeid(*m_pPrevScene) == typeid(SceneStage2))
+			{
+				return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage); // ステージ2に移動
+			}
 		}
 		else if (m_select == kStageSelect)
 		{

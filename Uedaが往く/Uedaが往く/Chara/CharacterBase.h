@@ -149,6 +149,7 @@ public:
 		int changeAngleProb;	// 角度を更新する確率
 		int changeAngleFrame;	// 角度を更新するフレーム数
 		int guardTime;			// ガード時間
+		int stateIntervalTime;	// 状態を更新するまでの時間
 	};
 	EnemyInfo m_enemyInfo;
 

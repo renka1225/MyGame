@@ -262,6 +262,8 @@ void CharacterBase::UpdateAnimState(CharacterBase::State prevState)
 		if (m_currentState == CharacterBase::State::kAvoid) PlayAnim(AnimKind::kAvoid);
 		// 構えアニメーションを再生
 		if (m_currentState == CharacterBase::State::kFightWalk) PlayAnim(AnimKind::kFightWalk);
+		// ガードアニメーションを再生
+		if (m_currentState == CharacterBase::State::kGuard) PlayAnim(AnimKind::kGuard);
 	}
 }
 

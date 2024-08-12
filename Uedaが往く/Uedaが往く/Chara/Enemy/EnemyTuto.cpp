@@ -115,7 +115,7 @@ void EnemyTuto::Draw()
 /// <param name="damage">ダメージ量</param>
 void EnemyTuto::OnDamage(float damage)
 {
-	CharacterBase::OnDamage(damage);
+	EnemyBase::OnDamage(damage);
 
 	// ガード状態の場合
 	if (m_currentState == CharacterBase::State::kGuard)

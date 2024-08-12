@@ -65,6 +65,7 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 	if (isKeepState) return nextState;
 
 	// エネミーとプレイヤーの距離を計算
+	m_eToPDirVec = VSub(player.GetPos(), m_pos);
 	float distance = VSize(m_eToPDirVec);
 
 	if (m_intervalTime > 0)
@@ -122,7 +123,7 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 			nextState = Fighting();
 		}
 
-		m_intervalTime = 60;
+		m_intervalTime = m_enemyInfo.stateIntervalTime;
 
 	}
 	else
@@ -335,7 +336,8 @@ CharacterBase::State EnemyBase::OffGuard()
 /// </summary>
 /// <returns></returns>
 void EnemyBase::Receive()
-{
+{ 
+	m_isAttack = false; // 攻撃状態を解除
 	m_currentState = CharacterBase::State::kReceive;
 
 	if (!m_isReceive)
@@ -377,7 +379,7 @@ void EnemyBase::UpdateAngle()
 /// <summary>
 /// 攻撃を受けた際の処理
 /// </summary>
-/// <param name="damage"></param>
+/// <param name="damage">ダメージ量</param>
 void EnemyBase::OnDamage(float damage)
 {
 	CharacterBase::OnDamage(damage);
@@ -391,8 +393,7 @@ void EnemyBase::OnDamage(float damage)
 	}
 	else
 	{
-		m_isAttack = false;
-		Receive();
+		Receive(); // 攻撃を受けた状態にする
 	}
 }
 
@@ -450,7 +451,7 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// キックが当たった場合
-		if (isBackAttack || !player.GetIsGuard())
+		if (!player.GetIsGuard())
 		{
 			player.OnDamage(m_status.kickPower);
 		}

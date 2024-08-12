@@ -1,6 +1,8 @@
 #pragma once
 #include "SceneBase.h"
 
+class SceneStageBase;
+
 /// <summary>
 /// ゲームオーバーシーン
 /// </summary>

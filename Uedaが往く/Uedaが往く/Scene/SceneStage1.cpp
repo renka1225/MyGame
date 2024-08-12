@@ -74,7 +74,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
 
-		m_nextBattleTime--;
+		m_nextBattleTime--; // Ÿ‚Ì‡‚ªn‚Ü‚é‚Ü‚Å‚ÌŠÔ
 
 		m_pCamera->Update(input, *m_pPlayer);
 		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);

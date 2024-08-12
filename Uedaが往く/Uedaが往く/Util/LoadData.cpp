@@ -16,7 +16,7 @@ namespace
 	constexpr int kStatusNum = 16;		// 1キャラクターのステータス数
 	constexpr int kAnimNum = 16;		// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;			// 1キャラクターの当たり判定の情報数
-	constexpr int kEnemyInfoNum = 13;	// 1キャラクターの情報数
+	constexpr int kEnemyInfoNum = 14;	// 1キャラクターの情報数
 }
 
 
@@ -174,8 +174,8 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 /// <summary>
 /// 当たり判定情報を読み込む
 /// </summary>
-/// <param name="data"></param>
-/// <param name="charType"></param>
+/// <param name="data">キャラクター参照</param>
+/// <param name="charType">キャラクターの種類</param>
 void LoadData::LoadColData(CharacterBase& data, int charType)
 {
 	std::ifstream file(kColFileName);
@@ -274,4 +274,5 @@ void LoadData::LoadEnemyData(CharacterBase& data, int charType)
 	data.m_enemyInfo.changeAngleProb = m_enemyData[10 + (charType - 1) * kEnemyInfoNum];
 	data.m_enemyInfo.changeAngleFrame = m_enemyData[11 + (charType - 1) * kEnemyInfoNum];
 	data.m_enemyInfo.guardTime = m_enemyData[12 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.stateIntervalTime = m_enemyData[13 + (charType - 1) * kEnemyInfoNum];
 }

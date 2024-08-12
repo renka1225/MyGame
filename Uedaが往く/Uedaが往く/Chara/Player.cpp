@@ -198,7 +198,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 
 	// îwå„Ç©ÇÁçUåÇÇµÇΩÇ©Ç«Ç§Ç©
 	VECTOR pToEDir = VNorm(VSub(enemy.GetPos(), m_pos));
-	bool isBackAttack = VDot(enemy.GetDir(), pToEDir) < 0.0f;
+	bool isBackAttack = pToEDir.x < 0.0f;
 
 	// ÉpÉìÉ`èÛë‘Ç©Ç«Ç§Ç©
 	bool isStatePunch = m_currentState == CharacterBase::State::kPunch1 || m_currentState == CharacterBase::State::kPunch2 || m_currentState == CharacterBase::State::kPunch3;
@@ -207,7 +207,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	if (isHitPunch && isStatePunch)
 	{
 		// ìGÇ™ÉKÅ[ÉhÇµÇƒÇ¢Ç»Ç¢Ç©ÅAîwå„Ç©ÇÁçUåÇÇµÇΩèÍçá
-		if (!enemy.GetIsGuard())
+		if (!enemy.GetIsGuard() || isBackAttack)
 		{
 			// 1ÉRÉìÉ{ñ⁄
 			if (m_currentState == CharacterBase::State::kPunch1)
@@ -237,7 +237,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
 		// ÉLÉbÉNÇ™ìñÇΩÇ¡ÇΩèÍçá
-		if (!enemy.GetIsGuard())
+		if (!enemy.GetIsGuard() || isBackAttack)
 		{
 			enemy.OnDamage(m_status.kickPower);
 			m_gauge += kGaugeCharge;
