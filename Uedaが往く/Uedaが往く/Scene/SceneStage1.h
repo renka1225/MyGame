@@ -21,4 +21,3 @@ public:
 	virtual std::shared_ptr<SceneBase> Update(Input& input) override;
 	virtual void Draw() override;
 };
-

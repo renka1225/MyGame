@@ -44,10 +44,13 @@ EnemyNinja::~EnemyNinja()
 
 
 /// <summary>
-/// ‰Šú‰»
+///  ‰Šú‰»
 /// </summary>
-void EnemyNinja::Init()
+/// <param name="pos">‰ŠúˆÊ’u</param>
+void EnemyNinja::Init(VECTOR pos)
 {
+	m_pos = pos;
+	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 

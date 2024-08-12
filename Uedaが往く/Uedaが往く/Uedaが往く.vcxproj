@@ -27,6 +27,7 @@
     <ClCompile Include="Chara\Enemy\EnemyChef.cpp" />
     <ClCompile Include="Chara\Enemy\EnemyAbe.cpp" />
     <ClCompile Include="Debug\DebugDraw.cpp" />
+    <ClCompile Include="Effect\EffectManager.cpp" />
     <ClCompile Include="UI\UIProduction.cpp" />
     <ClCompile Include="Util\Ranking.cpp" />
     <ClCompile Include="Scene\ScenePause.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Chara\Enemy\EnemyChef.h" />
     <ClInclude Include="Chara\Enemy\EnemyAbe.h" />
     <ClInclude Include="Debug\DebugDraw.h" />
+    <ClInclude Include="Effect\EffectManager.h" />
     <ClInclude Include="UI\UIProduction.h" />
     <ClInclude Include="Util\Ranking.h" />
     <ClInclude Include="Scene\ScenePause.h" />
@@ -141,7 +143,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Shader</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Effect;$(ProjectDir)Debug</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -158,7 +160,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Shader</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Effect;$(ProjectDir)Debug</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -175,7 +177,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Debug</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Effect;$(ProjectDir)Debug</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -192,7 +194,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Debug</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(EFKLIB_DIR);$(ProjectDir);$(ProjectDir)Scene;$(ProjectDir)Chara;$(ProjectDir)Chara\Enemy;$(ProjectDir)Util;$(ProjectDir)UI;$(ProjectDir)Stage;$(ProjectDir)Effect;$(ProjectDir)Debug</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

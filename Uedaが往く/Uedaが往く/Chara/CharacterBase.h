@@ -9,16 +9,30 @@ class UIGauge;
 /// </summary>
 class CharacterBase
 {
+protected:
+	// 当たり判定位置
+	struct Collision
+	{
+		VECTOR armStartPos;		// 腕の当たり判定始点
+		VECTOR armEndPos;		// 腕の当たり判定終点
+		VECTOR legStartPos;		// 脚の当たり判定始点
+		VECTOR legEndPos;		// 脚の当たり判定終点
+		VECTOR bodyTopPos;		// 全身の当たり判定始点
+		VECTOR bodyBottomPos;	// 全身の当たり判定終点
+	};
+	Collision m_col;
+
 public:
 	CharacterBase();
 	~CharacterBase() {};
-	virtual void Init() = 0;
+	virtual void Init(VECTOR pos) = 0;
 	virtual void Draw() = 0;
 	virtual void OnDamage(float damage);		// ダメージを受けた際の処理
 
 	VECTOR GetPos() const { return m_pos; }			// 現在地取得
 	float GetHp() const { return m_hp; }			// 現在のHPを取得
 	bool GetIsGuard() const { return m_isGuard; }	// ガード中かどうか取得
+	Collision GetCol() const { return m_col; }		// 当たり判定位置を取得
 
 	// キャラクターの種類
 	enum class CharaType
@@ -117,7 +131,7 @@ public:
 	};
 	Status m_status;
 
-	// 当たり判定情報
+	// 初期の当たり判定情報
 	struct CollisionInfo
 	{
 		float bodyHeight;		// 全身の当たり判定の高さ
@@ -190,16 +204,4 @@ protected:
 	int m_prevPlayAnim;			// 前の再生アニメーションのアタッチ番号
 	float m_prevAnimCount;		// 前の再生アニメーションの再生時間
 	float m_animBlendRate;		// 現在と過去のアニメーションのブレンド率
-
-	// 当たり判定位置
-	struct Collision
-	{
-		VECTOR armStartPos;		// 腕の当たり判定始点
-		VECTOR armEndPos;		// 腕の当たり判定終点
-		VECTOR legStartPos;		// 脚の当たり判定始点
-		VECTOR legEndPos;		// 脚の当たり判定終点
-		VECTOR bodyTopPos;		// 全身の当たり判定始点
-		VECTOR bodyBottomPos;	// 全身の当たり判定終点
-	};
-	Collision m_col;
 };

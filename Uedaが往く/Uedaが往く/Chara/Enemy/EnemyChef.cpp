@@ -13,7 +13,6 @@ namespace
 	const char* const kfileName = "data/Model/Chara/Chef.mv1";	// 敵のファイル名
 	constexpr float kScale = 0.3f;								// 拡大率
 	constexpr int kIntervalTime = 120;							// 状態を更新するまでの時間
-	const VECTOR kInitPos = VGet(2660, 69.0f, 4280.0f);			// 初期位置
 }
 
 
@@ -27,11 +26,9 @@ EnemyChef::EnemyChef()
 	m_pUIGauge = std::make_shared<UIGauge>(m_status.maxHp);
 
 	m_hp = m_status.maxHp;
-	m_pos = kInitPos;
 	m_moveSpeed = m_status.maxMoveSpeed;
 	m_modelHandle = MV1LoadModel(kfileName);
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
-	MV1SetPosition(m_modelHandle, kInitPos);
 }
 
 
@@ -47,8 +44,11 @@ EnemyChef::~EnemyChef()
 /// <summary>
 /// 初期化
 /// </summary>
-void EnemyChef::Init()
+/// <param name="pos">初期位置</param>
+void EnemyChef::Init(VECTOR pos)
 {
+	m_pos = pos;
+	MV1SetPosition(m_modelHandle, m_pos);
 }
 
 

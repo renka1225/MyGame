@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Input.h"
 #include "UIProduction.h"
+#include "EffectManager.h"
 #include "Player.h"
 #include "EnemyTuto.h"
 #include "Camera.h"
@@ -83,6 +84,8 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 
 		m_elapsedTime++; // 経過時間を進める
 
+		m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
@@ -121,11 +124,12 @@ void SceneStage1::Draw()
 {
 	SceneStageBase::Draw();
 
+	// 演出UIを表示
+	m_pUIProduction->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+
 	//MEMO:輝度を調整する
 	//SetDrawBright(128, 128, 128);
 
-	// 演出UIを表示
-	m_pUIProduction->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "UIProduction.h"
 #include "Light.h"
+#include "EffectManager.h"
 #include "Player.h"
 #include "EnemyBase.h"
 #include "Camera.h"
@@ -9,6 +10,12 @@
 #include "SceneClear.h"
 #include "SceneGameover.h"
 #include "SceneStageBase.h"
+
+namespace
+{
+	const VECTOR kPlayerInitPos = VGet(2600.0f, 69.0f, 4240.0f);  // プレイヤーの初期位置
+	const VECTOR kEnemyInitPos = VGet(2660, 69.0f, 4280.0f);	  // 敵の初期位置
+}
 
 
 /// <summary>
@@ -20,6 +27,7 @@ SceneStageBase::SceneStageBase():
 	m_elapsedTime(0)
 {
 	m_pUIProduction = std::make_shared<UIProduction>();
+	m_pEffect = std::make_shared<EffectManager>();
 	Light::SetLight();
 }
 
@@ -56,9 +64,12 @@ SceneStageBase::~SceneStageBase()
 /// </summary>
 void SceneStageBase::Init()
 {
-	m_pPlayer->Init();
+	m_pPlayer->Init(kPlayerInitPos);
 	m_pCamera->Init();
-	m_pEnemy->Init();
+	m_pEnemy->Init(kEnemyInitPos);
+	m_pEffect->Init();
+
+	//printfDx("座標:%f,%f,%f\n", m_pPlayer->GetPos().x, m_pPlayer->GetPos().y, m_pPlayer->GetPos().z);
 }
 
 
@@ -73,6 +84,8 @@ void SceneStageBase::Draw()
 	m_pPlayer->Draw();
 	// 敵描画
 	m_pEnemy->Draw();
+	// エフェクト描画
+	m_pEffect->Draw();
 
 	// 操作説明を表示
 	//m_pUIProduction->DrawOperation();

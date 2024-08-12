@@ -55,6 +55,12 @@
     <Filter Include="ソース ファイル\Debug">
       <UniqueIdentifier>{a38ad96b-0d51-41ed-8107-cffa6bef6a82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Effect">
+      <UniqueIdentifier>{ca79605a-b567-46e9-935a-9979a2cf2188}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Effect">
+      <UniqueIdentifier>{5f3726b3-b11f-48cd-8976-572fb1362ac5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chara\CharacterBase.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="UI\UIProduction.cpp">
       <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\EffectManager.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="UI\UIProduction.h">
       <Filter>ヘッダー ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\EffectManager.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

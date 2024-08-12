@@ -16,7 +16,7 @@ class Player : public CharacterBase
 public:
 	Player();
 	~Player();
-	virtual void Init() override;
+	virtual void Init(VECTOR pos) override;
 	void Update(const Input& input, const Camera& camera, EnemyBase& enemy, Stage& stage);
 	virtual void Draw() override;
 

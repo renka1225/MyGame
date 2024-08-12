@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Input.h"
 #include "UIProduction.h"
+#include "EffectManager.h"
 #include "Player.h"
 #include "EnemyNinja.h"
 #include "EnemyChef.h"
@@ -95,11 +96,13 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 
 		m_elapsedTime++; // 経過時間を進める
 
+		m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
 			m_clearTime.push_back(m_elapsedTime);
-			m_elapsedTime = 0;
+			m_elapsedTime = 0; // 経過時間をリセット
 
 			// 次の敵を登場させる
 			switch (m_battleNum)
@@ -171,10 +174,8 @@ void SceneStage2::Draw()
 /// </summary>
 void SceneStage2::UpdateNextBattle()
 {
-	// TODO:プレイヤーの位置、カメラ位置を最初の状態に戻す
+	// プレイヤーの位置、カメラ位置を最初の状態に戻す
 	m_pPlayer->Recovery();
-	m_pPlayer->Init();
-	m_pCamera->Init();
-	m_pEnemy->Init();
+	Init();
 	m_nextBattleTime = kNextBattleTime;
 }

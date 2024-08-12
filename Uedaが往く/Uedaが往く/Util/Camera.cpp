@@ -46,6 +46,11 @@ Camera::~Camera()
 /// </summary>
 void Camera::Init()
 {
+	m_pos = VGet(0.0f, kHeight, 0.0f);
+	m_target = VGet(0.0f, 0.0f, 0.0f);
+	m_angleH = kInitAngleH;
+	m_angleV = kInitAngleV;
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_target);
 	SetCameraNearFar(kNear, kFar);
 }
 

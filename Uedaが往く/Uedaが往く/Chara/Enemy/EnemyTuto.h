@@ -10,7 +10,7 @@ class EnemyTuto : public EnemyBase
 public:
 	EnemyTuto();
 	virtual ~EnemyTuto();
-	virtual void Init() override;
+	virtual void Init(VECTOR pos) override;
 	virtual void Update(Player& player, Stage& stage, SceneStageBase& sceneStage) override;
 	virtual void Draw() override;
 	// ƒ_ƒ[ƒW‚ğó‚¯‚½Û‚Ìˆ—
