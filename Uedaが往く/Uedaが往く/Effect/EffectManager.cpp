@@ -71,3 +71,16 @@ void EffectManager::Draw()
 {
 	DrawEffekseer3D();
 }
+
+
+/// <summary>
+/// 画面上のエフェクトを削除する
+/// </summary>
+void EffectManager::ClearEffect()
+{
+	for (auto& e : emitter.effects)
+	{
+		StopEffekseer3DEffect(e.handle);
+	}
+	emitter.effects.clear();
+}

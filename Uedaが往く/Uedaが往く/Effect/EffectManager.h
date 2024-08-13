@@ -15,6 +15,7 @@ public:
 	void Init();
 	void Update(Input& input, Player& player, EnemyBase& enemy);
 	void Draw();
+	void ClearEffect(); // 画面上のエフェクトを停止する
 
 private:
 	struct Effect

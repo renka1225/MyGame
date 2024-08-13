@@ -93,11 +93,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 		m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
 		if (m_nextBattleTime > 0) return shared_from_this();
-
-		m_elapsedTime++; // 経過時間を進める
-
-		m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
-
+		
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
@@ -126,11 +122,15 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 
 			m_battleNum++;
 		}
-
 		// プレイヤーのHPが0になった場合
-		if (m_pPlayer->GetHp() <= 0)
+		else if (m_pPlayer->GetHp() <= 0)
 		{
 			return std::make_shared<SceneGameover>(shared_from_this());
+		}
+		else
+		{
+			m_elapsedTime++; // 経過時間を進める
+			m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
 		}
 	}
 
@@ -174,8 +174,10 @@ void SceneStage2::Draw()
 /// </summary>
 void SceneStage2::UpdateNextBattle()
 {
+	m_nextBattleTime = kNextBattleTime;
+	// 画面上に残ったエフェクトを削除する
+	m_pEffect->ClearEffect();
 	// プレイヤーの位置、カメラ位置を最初の状態に戻す
 	m_pPlayer->Recovery();
 	Init();
-	m_nextBattleTime = kNextBattleTime;
 }

@@ -78,8 +78,8 @@ void CharacterBase::UpdateCol()
 /// <param name="prevState">1つ前のアニメーション</param>
 void CharacterBase::UpdateAnimState(CharacterBase::State prevState)
 {
-	// 攻撃中は状態を更新しない
-	if (m_isAttack) return;
+	// 攻撃中または攻撃を受けているときは状態を更新しない
+	if (m_isAttack || m_isReceive) return;
 
 	// 待機状態から
 	if (prevState == CharacterBase::State::kFightIdle)
