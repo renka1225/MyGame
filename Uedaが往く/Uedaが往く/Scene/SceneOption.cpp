@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Input.h"
 #include "Game.h"
+#include "UI.h"
 #include "SceneOption.h"
 
 // 定数
@@ -51,6 +52,7 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 {
 	//選択状態更新
 	UpdateSelect(input, kSelectNum);
+	m_pUI->Update();
 
 	if (input.IsTriggered("back"))
 	{
@@ -72,12 +74,12 @@ void SceneOption::Draw()
 	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
 
 	// カーソル表示
-	DrawGraph(kCursorPos.x, kCursorPos.y + kSelectTextInterval * m_select, m_cursorHandle, true);
+	m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);
 
 	// 選択項目表示
-	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kSound , "サウンド", 0xffffff);
-	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kBrightness, "明るさ", 0xffffff);
-	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKyeConfig, "ボタン配置", 0xffffff);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kSound , "サウンド", 0xffffff);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kBrightness, "明るさ", 0xffffff);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKyeConfig, "ボタン配置", 0xffffff);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

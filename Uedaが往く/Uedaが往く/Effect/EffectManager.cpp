@@ -35,6 +35,7 @@ EffectManager::~EffectManager()
 void EffectManager::Init()
 {
 	Effekseer_InitDistortion();	// エフェクトの歪みを適用する
+	ClearEffect();
 }
 
 

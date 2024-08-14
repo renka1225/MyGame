@@ -103,12 +103,12 @@ void UIProduction::DrawOperation()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	// TODO:テキスト表示
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kLSButton, "移動 : LS" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval* kRSButton, "カメラ移動 : RS" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kXButton, "パンチ : X" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kYButton, "キック : Y" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kAButton, "回避 : A" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kLBButton, "ガード : LB" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kRBButton, "ロックオン : RB" , 0xfffffff);
-	DrawString(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kLineButton, "ポーズ : start" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kLSButton, "移動 : LS" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval* kRSButton, "カメラ移動 : RS" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kXButton, "パンチ : X" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kYButton, "キック : Y" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kAButton, "回避 : A" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kLBButton, "ガード : LB" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kRBButton, "ロックオン : RB" , 0xfffffff);
+	DrawStringF(kOperationTextPos.x, kOperationTextPos.y + kOperationTextInterval * kLineButton, "ポーズ : start" , 0xfffffff);
 }

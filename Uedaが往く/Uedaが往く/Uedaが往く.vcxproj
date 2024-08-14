@@ -28,6 +28,7 @@
     <ClCompile Include="Chara\Enemy\EnemyAbe.cpp" />
     <ClCompile Include="Debug\DebugDraw.cpp" />
     <ClCompile Include="Effect\EffectManager.cpp" />
+    <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIProduction.cpp" />
     <ClCompile Include="Util\Ranking.cpp" />
     <ClCompile Include="Scene\ScenePause.cpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Chara\Enemy\EnemyAbe.h" />
     <ClInclude Include="Debug\DebugDraw.h" />
     <ClInclude Include="Effect\EffectManager.h" />
+    <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIProduction.h" />
     <ClInclude Include="Util\Ranking.h" />
     <ClInclude Include="Scene\ScenePause.h" />

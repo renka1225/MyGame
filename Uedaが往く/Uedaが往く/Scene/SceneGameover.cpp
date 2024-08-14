@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Vec2.h"
 #include "Game.h"
+#include "UI.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -17,10 +18,10 @@ namespace
 	const char* const kHaibokuTextPath = "data/UI/haiboku.png";	// 敗北のテキスト画像のファイル位置
 	const char* const kCursorPath = "data/UI/cursor.png";		// カーソル画像のファイル位置
 	const Vec2 kHaibokuTextPos = { 670, 100 };					// 敗北のテキスト画像表示位置
-	const Vec2 kRetryTextPos = { 650, 600 };					// "リトライ"表示位置
-	const Vec2 kStageTextPos = { 650, 700 };					// "ステージ選択にもどる"表示位置
-	const Vec2 kTitleTextPos = { 650, 800 };					// "タイトルにもどる"表示位置
-	const Vec2 kCursorPos = { 600, 590 };						// カーソル表示位置
+	const Vec2 kRetryTextPos = { 850, 600 };					// "リトライ"表示位置
+	const Vec2 kStageTextPos = { 850, 700 };					// "ステージ選択にもどる"表示位置
+	const Vec2 kTitleTextPos = { 850, 800 };					// "タイトルにもどる"表示位置
+	const Vec2 kCursorPos = { 750, 590 };						// カーソル表示位置
 	constexpr float kCursorMove = 100.0f;						// カーソルの移動量
 }
 
@@ -63,7 +64,9 @@ void SceneGameover::Init()
 /// <returns></returns>
 std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 {
-	UpdateSelect(input);	// 選択状態更新
+	// 選択状態更新
+	UpdateSelect(input, Select::kSelectNum);
+	m_pUI->Update();
 
 	if (input.IsTriggered("OK"))
 	{
@@ -82,6 +85,7 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 			{
 				return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage); // ステージ2に移動
 			}
+
 		}
 		else if (m_select == kStageSelect)
 		{
@@ -108,7 +112,7 @@ void SceneGameover::Draw()
 	DrawGraphF(kHaibokuTextPos.x, kHaibokuTextPos.y, m_textHandle, true);
 
 	// カーソル表示
-	DrawGraphF(kCursorPos.x, kCursorPos.y + kCursorMove * m_select, m_cursorHandle, true);
+	m_pUI->DrawCursor(kCursorPos, m_select, kCursorMove);
 
 	// 選択項目を表示
 	DrawStringF(kRetryTextPos.x, kRetryTextPos.y, "リトライ", 0xffffff);
@@ -119,23 +123,6 @@ void SceneGameover::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "ゲームオーバー画面", 0xffffff);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
-}
-
-
-/// <summary>
-/// 選択状態を更新する
-/// </summary>
-/// <param name="input">入力状態</param>
-void SceneGameover::UpdateSelect(Input& input)
-{
-	if (input.IsTriggered("down"))
-	{
-		m_select = (m_select + 1) % kSelectNum;	// 選択状態を1つ下げる
-	}
-	if (input.IsTriggered("up"))
-	{
-		m_select = (m_select + (kSelectNum - 1)) % kSelectNum;	// 選択状態を1つ上げる
-	}
 }

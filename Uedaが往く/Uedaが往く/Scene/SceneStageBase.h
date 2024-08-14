@@ -25,6 +25,9 @@ public:
 	int GetBattleStartTime() const { return m_nextBattleTime; }
 
 protected:
+	void UpdateNextBattle();	// 敵を倒して次試合が始まる前の処理
+
+protected:
 	std::shared_ptr<Player> m_pPlayer;				// プレイヤー
 	std::shared_ptr<Camera> m_pCamera;				// カメラ
 	std::shared_ptr<Stage> m_pStage;				// ステージ

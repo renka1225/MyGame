@@ -1,8 +1,9 @@
 #include "EffekseerForDXLib.h"
 #include "DxLib.h"
 #include "Vec2.h"
-#include "Input.h"
 #include "Game.h"
+#include "Input.h"
+#include "UI.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -21,7 +22,7 @@ namespace
 	constexpr int kBackBoxWidth = 490;				// 四角の幅
 	const Vec2 kSelectTextPos = { 200, 300 };		// 選択テキスト表示位置
 	constexpr float kSelectTextInterval = 100.0f;	// 選択テキスト表示間隔
-	const Vec2 kCursorPos = { 140, 290 };			// カーソル表示位置
+	const Vec2 kCursorLTPos = { 140, 290 };			// カーソル左上位置
 }
 
 
@@ -59,6 +60,7 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 {
 	//選択状態更新
 	UpdateSelect(input, kSelectNum);
+	m_pUI->Update();
 
 	// シーン遷移
 	if (input.IsTriggered("OK"))
@@ -103,9 +105,9 @@ void SceneSelectStage::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
 	// 背景の四角部分表示
 	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
-
+	
 	// カーソル表示
-	DrawGraph(kCursorPos.x, kCursorPos.y + kSelectTextInterval * m_select, m_cursorHandle, true);
+	m_pUI->DrawCursor(kCursorLTPos, m_select, kSelectTextInterval);
 
 	// テキスト表示
 	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage1, "練習へ往く", 0xffffff);

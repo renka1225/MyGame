@@ -2,6 +2,7 @@
 #include <memory>
 
 class Input;
+class UI;
 
 /// <summary>
 /// シーン基底クラス
@@ -19,8 +20,8 @@ protected:
 	void UpdateSelect(Input& input, int selectNum);	// 選択状態を更新
 
 protected:
-	int m_select;		// 現在の選択状態
-	int m_cursorHandle;	// カーソルの画像	
+	std::shared_ptr<UI> m_pUI;	// UIのポインタ
+	int m_select;				// 現在の選択状態
 
 #ifdef _DEBUG
 	// デバッグ状況

@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Input.h"
+#include "UI.h"
 #include "Game.h"
 #include "SceneBase.h"
 
@@ -10,7 +11,7 @@
 SceneBase::SceneBase():
 	m_select(0)
 {
-	m_cursorHandle = LoadGraph("data/UI/cursor.png");
+	m_pUI = std::make_shared<UI>();
 }
 
 
@@ -19,7 +20,6 @@ SceneBase::SceneBase():
 /// </summary>
 SceneBase::~SceneBase()
 {
-	DeleteGraph(m_cursorHandle);
 }
 
 
@@ -33,9 +33,11 @@ void SceneBase::UpdateSelect(Input& input, int selectNum)
 	if (input.IsTriggered("down"))
 	{
 		m_select = (m_select + 1) % selectNum;	// ‘I‘ðó‘Ô‚ð1‚Â‰º‚°‚é
+		m_pUI->Init();
 	}
 	if (input.IsTriggered("up"))
 	{
 		m_select = (m_select + (selectNum - 1)) % selectNum;	// ‘I‘ðó‘Ô‚ð1‚Âã‚°‚é
+		m_pUI->Init();
 	}
 }

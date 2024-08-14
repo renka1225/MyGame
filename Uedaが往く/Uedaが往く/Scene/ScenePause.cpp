@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Input.h"
 #include "Game.h"
+#include "UI.h"
 #include "ScenePause.h"
 #include "SceneOption.h"
 #include "SceneSelectStage.h"
@@ -54,7 +55,9 @@ void ScenePause::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> ScenePause::Update(Input& input)
 {
+	// 選択状態を更新
 	UpdateSelect(input, Select::kSelectNum);
+	m_pUI->Update();
 
 	if (input.IsTriggered("OK"))
 	{
@@ -93,15 +96,12 @@ void ScenePause::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// カーソル表示
-	for (int i = 0; i < Select::kSelectNum; i++)
-	{
-		DrawGraphF(kCursorPos.x, kCursorPos.y + kSelectTextInterval * m_select, m_cursorHandle, true);
-	}
+	m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);
 
 	// テキスト表示
-	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kBack, "ゲームにもどる", 0x000000);
-	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kOption ,"オプション", 0x000000);
-	DrawString(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kStageSelect,"ステージ選択に戻る", 0x000000);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kBack, "ゲームにもどる", 0x000000);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kOption ,"オプション", 0x000000);
+	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kStageSelect,"ステージ選択に戻る", 0x000000);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

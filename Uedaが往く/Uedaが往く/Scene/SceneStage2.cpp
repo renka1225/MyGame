@@ -23,7 +23,6 @@ namespace
 	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
 
 	constexpr int kMaxBattleNum = 3;							// 最大バトル数
-	constexpr int kNextBattleTime = 150;						// 次の試合が始まるまでの時間
 }
 
 
@@ -40,7 +39,6 @@ SceneStage2::SceneStage2(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyNinja>();
 	m_battleNum = 0;
-	m_nextBattleTime = kNextBattleTime;
 }
 
 
@@ -92,6 +90,8 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		m_pCamera->Update(input, *m_pPlayer);
 		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 		m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
+		m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+
 		if (m_nextBattleTime > 0) return shared_from_this();
 		
 		// 敵のHPが0になった場合
@@ -114,9 +114,8 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 				UpdateNextBattle();
 				break;
 			case 2: // 勝利時
+				UpdateNextBattle();
 				return std::make_shared<SceneClear>(m_clearTime);
-				break;
-			default:
 				break;
 			}
 
@@ -166,18 +165,4 @@ void SceneStage2::Draw()
 	DrawString(0, 0, "ステージ2", 0xffffff);
 	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
-}
-
-
-/// <summary>
-/// 敵を倒して次試合が始まる前の処理
-/// </summary>
-void SceneStage2::UpdateNextBattle()
-{
-	m_nextBattleTime = kNextBattleTime;
-	// 画面上に残ったエフェクトを削除する
-	m_pEffect->ClearEffect();
-	// プレイヤーの位置、カメラ位置を最初の状態に戻す
-	m_pPlayer->Recovery();
-	Init();
 }

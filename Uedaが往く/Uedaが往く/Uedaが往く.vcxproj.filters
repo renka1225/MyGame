@@ -156,6 +156,9 @@
     <ClCompile Include="Effect\EffectManager.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="UI\UI.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chara\CharacterBase.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Effect\EffectManager.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI.h">
+      <Filter>ヘッダー ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

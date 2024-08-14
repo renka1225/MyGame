@@ -17,9 +17,6 @@ public:
 	virtual void Draw();
 
 private:
-	void UpdateSelect(Input& input);	// 選択状態の更新
-
-private:
 	std::shared_ptr<SceneBase> m_pPrevScene;	// 前に実行していたシーン
 	int m_textHandle;	// テキストの画像
 	int m_cursorHandle;	// カーソルの画像
