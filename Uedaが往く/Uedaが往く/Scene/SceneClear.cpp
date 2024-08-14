@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Vec2.h"
 #include "Game.h"
+#include "Sound.h"
 #include "ConversionTime.h"
 #include "SceneSelectStage.h"
 #include "SceneClear.h"
@@ -31,6 +32,7 @@ SceneClear::SceneClear(std::vector<int> clearTime):
 /// </summary>
 SceneClear::~SceneClear()
 {
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]);
 	DeleteGraph(m_textHandle);
 }
 
@@ -55,6 +57,12 @@ void SceneClear::Init()
 /// <returns></returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	// BGM‚ğ–Â‚ç‚·
+	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)], DX_PLAYTYPE_LOOP);
+	}
+
 	if (input.IsTriggered("OK"))
 	{
 		return std::make_shared<SceneSelectStage>();
@@ -68,6 +76,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
+	// ”wŒi•\¦
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xb3b3b3, true);
 
 	// Ÿ—˜‚Ì•¶š‚ğ•\¦

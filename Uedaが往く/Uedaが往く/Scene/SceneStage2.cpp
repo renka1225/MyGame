@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Game.h"
 #include "Input.h"
+#include "Sound.h"
 #include "UIProduction.h"
 #include "EffectManager.h"
 #include "Player.h"
@@ -47,6 +48,7 @@ SceneStage2::SceneStage2(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 /// </summary>
 SceneStage2::~SceneStage2()
 {
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStage2BGM)]);
 }
 
 
@@ -79,6 +81,12 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
+		// BGMを鳴らす
+		if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStage2BGM)]))
+		{
+			PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStage2BGM)], DX_PLAYTYPE_LOOP);
+		}
+
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
 		{

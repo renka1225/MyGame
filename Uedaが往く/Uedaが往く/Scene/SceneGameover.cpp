@@ -3,6 +3,7 @@
 #include "Vec2.h"
 #include "Game.h"
 #include "UI.h"
+#include "Sound.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -44,6 +45,7 @@ SceneGameover::SceneGameover(std::shared_ptr<SceneBase> pScene)
 /// </summary>
 SceneGameover::~SceneGameover()
 {
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kGameoverBGM)]);
 	DeleteGraph(m_textHandle);
 	DeleteGraph(m_cursorHandle);
 }
@@ -67,6 +69,12 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 	// ‘I‘ðó‘ÔXV
 	UpdateSelect(input, Select::kSelectNum);
 	m_pUI->Update();
+
+	// BGM‚ð–Â‚ç‚·
+	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kGameoverBGM)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kGameoverBGM)], DX_PLAYTYPE_LOOP);
+	}
 
 	if (input.IsTriggered("OK"))
 	{
