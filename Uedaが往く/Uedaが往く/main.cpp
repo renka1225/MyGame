@@ -2,6 +2,8 @@
 #include "EffekseerForDXLib.h"
 #include "Input.h"
 #include "Game.h"
+#include "Font.h"
+#include "Sound.h"
 #include "SceneManager.h"
 
 
@@ -36,6 +38,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 入力状態を取得
 	Input input;
+	//Font::Load();		// フォントの読み込み
+	Sound::Load();		// サウンドの読み込み
 
 	// SceneManagerを生成
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
@@ -67,13 +71,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// デバッグ時はESCキーで終了できるようにする
 		if (input.IsTriggered("end"))
 		{
+			//Font::UnLoad();
+			Sound::UnLode();
 			Effkseer_End();
 			DxLib_End();
 		}
 #endif
 	}
 
-	Effkseer_End();	// Effekseerの終了処理
+	//Font::UnLoad();	 // フォントの解放
+	Sound::UnLode(); // サウンドの解放
+	Effkseer_End();	 // Effekseerの終了処理
 
 	DxLib_End();	// Dxライブラリ使用の終了処理
 

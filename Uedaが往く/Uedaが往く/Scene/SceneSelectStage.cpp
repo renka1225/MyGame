@@ -3,6 +3,7 @@
 #include "Vec2.h"
 #include "Game.h"
 #include "Input.h"
+#include "Sound.h"
 #include "UI.h"
 #include "Player.h"
 #include "Camera.h"
@@ -40,6 +41,7 @@ SceneSelectStage::SceneSelectStage()
 /// </summary>
 SceneSelectStage::~SceneSelectStage()
 {
+	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStageSelectBGM)]);
 }
 
 
@@ -62,9 +64,17 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 	UpdateSelect(input, kSelectNum);
 	m_pUI->Update();
 
+	// BGM‚ğ–Â‚ç‚·
+	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStageSelectBGM)]))
+	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStageSelectBGM)], DX_PLAYTYPE_LOOP);
+	}
+
 	// ƒV[ƒ“‘JˆÚ
 	if (input.IsTriggered("OK"))
 	{
+		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK); // SE‚ğ–Â‚ç‚·
+
 		std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
 		std::shared_ptr<Camera> pCamera = std::make_shared<Camera>();
 		std::shared_ptr<Stage> pStage = std::make_shared<Stage>();

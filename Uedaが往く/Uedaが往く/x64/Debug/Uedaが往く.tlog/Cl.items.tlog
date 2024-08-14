@@ -9,6 +9,7 @@ C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Debug\DebugDraw.cpp;C:\GitHub\MyGam
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Effect\EffectManager.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\EffectManager.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\UI\UI.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\UI.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\UI\UIProduction.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\UIProduction.obj
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\Font.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Font.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\Ranking.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Ranking.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\ScenePause.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\ScenePause.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Scene\SceneStageBase.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\SceneStageBase.obj
@@ -29,4 +30,5 @@ C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Stage\Stage.cpp;C:\GitHub\MyGame\Ue
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\UI\UIGauge.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\UIGauge.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\Camera.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Camera.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\Input.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Input.obj
+C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\Sound.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Sound.obj
 C:\GitHub\MyGame\Uedaが往く\Uedaが往く\Util\Vec2.cpp;C:\GitHub\MyGame\Uedaが往く\Uedaが往く\x64\Debug\Vec2.obj
