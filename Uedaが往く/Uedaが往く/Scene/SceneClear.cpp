@@ -32,7 +32,7 @@ SceneClear::SceneClear(std::vector<int> clearTime):
 /// </summary>
 SceneClear::~SceneClear()
 {
-	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]);
+	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kClear)]);
 	DeleteGraph(m_textHandle);
 }
 
@@ -58,9 +58,9 @@ void SceneClear::Init()
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
 	// BGM‚ð–Â‚ç‚·
-	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)]))
+	if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kClear)]))
 	{
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kClearBGM)], DX_PLAYTYPE_LOOP);
+		PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kClear)], DX_PLAYTYPE_LOOP);
 	}
 
 	if (input.IsTriggered("OK"))

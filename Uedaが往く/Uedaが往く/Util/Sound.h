@@ -6,26 +6,34 @@
 /// </summary>
 namespace Sound
 {
-	// サウンドの種類
-	enum class SoundKind
+	//BGMの種類
+	enum class BgmKind
 	{
-		kCursorSE,		// カーソル移動
-		kSelectSE,		// 決定
-		kAttackSE,		// 攻撃
-		kClearCheersSE, // クリア時の歓声SE
-		kTitleBGM,		// タイトルBGM
-		kStageSelectBGM,// ステージ選択BGM
-		kStage1BGM,		// ステージ1BGM
-		kStage2BGM,		// ステージ2BGM
-		kClearBGM,		// クリアBGM
-		kGameoverBGM,	// ゲームオーバーBGM
-		kNum			// サウンドの数
+		kTitle,			// タイトルBGM
+		kStageSelect,	// ステージ選択BGM
+		kStage1,		// ステージ1BGM
+		kStage2,		// ステージ2BGM
+		kClear,			// クリアBGM
+		kGameover,		// ゲームオーバーBGM
+		kBgmNum			// BGMの数
+	};
+
+	// SEの種類
+	enum class SeKind
+	{
+		kCursor,		// カーソル移動
+		kSelect,		// 決定
+		kAttack,		// 攻撃
+		kClearCheers,	// クリア時の歓声SE
+		kSeNum			// SEの数
 	};
 
 	void Load();
 	void UnLode();
-	void ChangeVol(); // 音量を変更する
+	void ChangeBgmVol(Input& input); // BGMの音量を変更する
+	void ChangeSeVol(Input& input);  // SEの音量を変更する
 
-	extern std::vector<int> m_soundHandle;
+	extern std::vector<int> m_bgmHandle;
+	extern std::vector<int> m_seHandle;
 };
 

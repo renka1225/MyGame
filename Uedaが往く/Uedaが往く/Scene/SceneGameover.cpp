@@ -45,7 +45,7 @@ SceneGameover::SceneGameover(std::shared_ptr<SceneBase> pScene)
 /// </summary>
 SceneGameover::~SceneGameover()
 {
-	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kGameoverBGM)]);
+	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kGameover)]);
 	DeleteGraph(m_textHandle);
 	DeleteGraph(m_cursorHandle);
 }
@@ -71,9 +71,9 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 	m_pUI->Update();
 
 	// BGM‚ð–Â‚ç‚·
-	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kGameoverBGM)]))
+	if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kGameover)]))
 	{
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kGameoverBGM)], DX_PLAYTYPE_LOOP);
+		PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kGameover)], DX_PLAYTYPE_LOOP);
 	}
 
 	if (input.IsTriggered("OK"))

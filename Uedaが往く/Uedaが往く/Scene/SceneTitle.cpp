@@ -43,7 +43,7 @@ SceneTitle::SceneTitle():
 /// </summary>
 SceneTitle::~SceneTitle()
 {
-	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)]);
+	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kTitle)]);
 	DeleteGraph(m_titleLogo);
 	DeleteGraph(m_titleLogoBack);
 	DeleteGraph(m_textHandle);
@@ -73,9 +73,9 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// タイトルロゴ表示後BGMを鳴らす
 	if (m_time > kBGMTime)
 	{
-		if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)]))
+		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kTitle)]))
 		{
-			PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kTitleBGM)], DX_PLAYTYPE_LOOP);
+			PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kTitle)], DX_PLAYTYPE_LOOP);
 		}
 	}
 

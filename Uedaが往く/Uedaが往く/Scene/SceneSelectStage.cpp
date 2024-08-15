@@ -41,7 +41,7 @@ SceneSelectStage::SceneSelectStage()
 /// </summary>
 SceneSelectStage::~SceneSelectStage()
 {
-	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStageSelectBGM)]);
+	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStageSelect)]);
 }
 
 
@@ -65,15 +65,15 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 	m_pUI->Update();
 
 	// BGM‚ğ–Â‚ç‚·
-	if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStageSelectBGM)]))
+	if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStageSelect)]))
 	{
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStageSelectBGM)], DX_PLAYTYPE_LOOP);
+		PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStageSelect)], DX_PLAYTYPE_LOOP);
 	}
 
 	// ƒV[ƒ“‘JˆÚ
 	if (input.IsTriggered("OK"))
 	{
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kSelectSE)], DX_PLAYTYPE_BACK); // SE‚ğ–Â‚ç‚·
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kSelect)], DX_PLAYTYPE_BACK); // SE‚ğ–Â‚ç‚·
 
 		std::shared_ptr<Player> pPlayer = std::make_shared<Player>();
 		std::shared_ptr<Camera> pCamera = std::make_shared<Camera>();

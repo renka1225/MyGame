@@ -38,7 +38,7 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 /// </summary>
 SceneStage1::~SceneStage1()
 {
-	StopSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStage1BGM)]);
+	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]);
 }
 
 
@@ -72,9 +72,9 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 #endif
 	{
 		// BGMを鳴らす
-		if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStage1BGM)]))
+		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]))
 		{
-			PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kStage1BGM)], DX_PLAYTYPE_LOOP);
+			PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)], DX_PLAYTYPE_LOOP);
 		}
 
 		// ポーズ画面を開く

@@ -36,13 +36,13 @@ void SceneBase::UpdateSelect(Input& input, int selectNum)
 	{
 		m_select = (m_select + 1) % selectNum;
 		m_pUI->Init();
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK);
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
 	}
 	// ‘I‘ðó‘Ô‚ð1‚Âã‚°‚é
 	if (input.IsTriggered("up"))
 	{
 		m_select = (m_select + (selectNum - 1)) % selectNum;
 		m_pUI->Init();
-		PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kCursorSE)], DX_PLAYTYPE_BACK);
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
 	}
 }
