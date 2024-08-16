@@ -89,7 +89,7 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 		}
 		else if (m_select == kOption)
 		{
-			return std::make_shared<SceneOption>();
+			return std::make_shared<SceneOption>(shared_from_this());
 		}
 		else if (m_select == kEnd)
 		{
@@ -112,10 +112,7 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 void SceneSelectStage::Draw()
 {
 	// ”wŒi•`‰æ
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
-	// ”wŒi‚ÌŽlŠp•”•ª•\Ž¦
-	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
-	
+	m_pUI->DrawMenuBg();
 	// ƒJ[ƒ\ƒ‹•\Ž¦
 	m_pUI->DrawCursor(kCursorLTPos, m_select, kSelectTextInterval);
 

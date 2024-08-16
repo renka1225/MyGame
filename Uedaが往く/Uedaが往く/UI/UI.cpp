@@ -1,11 +1,19 @@
 #include "DxLib.h"
+#include "Game.h"
 #include "UI.h"
 #include <algorithm>
 
 // 定数
 namespace
 {
+	// 背景関連
+	constexpr int kBackColor = 0xdddddd;			// 背景の色
+	constexpr int kBackBoxColor = 0x494949;			// 四角の色
+	constexpr int kBackBoxLTPos = 140;				// 四角の左上位置
+	constexpr int kBackBoxWidth = 490;				// 四角の幅
+	// カーソル関連
 	constexpr float kCursorWidth = 489.0f;			// カーソルの横幅
+	constexpr float kOptionCursorWidth = 1000.0f;	// オプション画面のカーソルの横幅
 	constexpr float kCursorHeight = 90.0f;			// カーソルの縦幅
 	constexpr float kCursorSpeed = 60.0f;			// カーソルの横幅の伸びる量
 }
@@ -15,7 +23,8 @@ namespace
 /// コンストラクタ
 /// </summary>
 UI::UI():
-	m_cursorWidth(0.0f)
+	m_cursorWidth(0.0f),
+	m_isOption(false)
 {
 	m_cursorHandle = LoadGraph("data/UI/cursor.png");
 }
@@ -45,8 +54,16 @@ void UI::Init()
 void UI::Update()
 {
 	// カーソルの横幅を更新
+	// オプション画面の場合のみカーソルの長さを変える
 	m_cursorWidth += kCursorSpeed;
-	m_cursorWidth = std::min(m_cursorWidth, kCursorWidth);
+	if (m_isOption)
+	{
+		m_cursorWidth = std::min(m_cursorWidth, kOptionCursorWidth);
+	}
+	else
+	{
+		m_cursorWidth = std::min(m_cursorWidth, kCursorWidth);
+	}
 }
 
 
@@ -56,9 +73,22 @@ void UI::Update()
 /// <param name="pos">表示位置</param>
 /// <param name="select">選択状態</param>
 /// <param name="interval">表示間隔</param>
-void UI::DrawCursor(Vec2 pos, int select, float interval)
+void UI::DrawCursor(Vec2 pos, int select, float interval, bool isOption)
 {
+	m_isOption = isOption;
 	DrawExtendGraphF(pos.x, pos.y + interval * select,
 		pos.x + m_cursorWidth, pos.y + interval * select + kCursorHeight,
 		m_cursorHandle, true);
+}
+
+
+/// <summary>
+/// メニューの背景表示
+/// </summary>
+void UI::DrawMenuBg()
+{
+	// 背景描画
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
+	// 背景の四角部分表示
+	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
 }

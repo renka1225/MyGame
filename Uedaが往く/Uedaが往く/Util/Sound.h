@@ -32,6 +32,8 @@ namespace Sound
 	void UnLode();
 	void ChangeBgmVol(Input& input); // BGM‚Ì‰¹—Ê‚ğ•ÏX‚·‚é
 	void ChangeSeVol(Input& input);  // SE‚Ì‰¹—Ê‚ğ•ÏX‚·‚é
+	int GetBgmVol();				 // BGM‚Ì‰¹—Ê‚ğæ“¾
+	int GetSeVol();					 // SE‚Ì‰¹—Ê‚ğæ“¾
 
 	extern std::vector<int> m_bgmHandle;
 	extern std::vector<int> m_seHandle;

@@ -100,10 +100,8 @@ namespace Sound
 
 		for (int i = 0; i < m_bgmHandle.size(); i++)
 		{
-			ChangeVolumeSoundMem(bgmData[i].volumePal, i);
+			ChangeVolumeSoundMem(bgmData[i].volumePal, m_bgmHandle[i]);
 		}
-
-		printfDx("BGM:%d\n", bgmData[0].volumePal);
 	}
 
 
@@ -133,8 +131,31 @@ namespace Sound
 
 		for (int i = 0; i < m_seHandle.size(); i++)
 		{
-			ChangeVolumeSoundMem(seData[i].volumePal, i);
+			ChangeVolumeSoundMem(seData[i].volumePal, m_seHandle[i]);
 		}
-		printfDx("SE:%d\n", seData[0].volumePal);
+	}
+
+
+	/// <summary>
+	/// BGM‚Ì‰¹—Ê‚ğæ“¾‚·‚é
+	/// </summary>
+	/// <returns>Œ»İ‚Ì‰¹—Ê</returns>
+	int GetBgmVol()
+	{
+		// 0`255‚ğ0`100‚É•ÏŠ·‚·‚é
+		int vol = static_cast<int>((bgmData[0].volumePal / static_cast<float>(kMaxVolumePal)) * 100);
+		return vol;
+	}
+
+
+	/// <summary>
+	/// SE‚Ì‰¹—Ê‚ğæ“¾‚·‚é
+	/// </summary>
+	/// <returns>Œ»İ‚Ì‰¹—Ê</returns>
+	int GetSeVol()
+	{
+		// 0`255‚ğ0`100‚É•ÏŠ·‚·‚é
+		int vol = static_cast<int>((seData[0].volumePal / static_cast<float>(kMaxVolumePal)) * 100);
+		return vol;
 	}
 }

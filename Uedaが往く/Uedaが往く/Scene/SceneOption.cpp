@@ -9,16 +9,32 @@
 // 定数
 namespace
 {
-	constexpr int kBackColor = 0xdddddd;				 // 背景の色
 	constexpr int kBackBoxColor = 0x494949;				 // 四角の色
-	constexpr int kBackBoxLTPos = 140;					 // 四角の左上位置
-	constexpr int kBackBoxWidth = 490;					 // 四角の幅
 	const Vec2 kSelectTextPos = { 200, 300 };			 // 選択テキスト表示位置
 	constexpr float kSelectTextInterval = 100.0f;		 // 選択テキスト表示間隔
 	const Vec2 kCursorPos = { 140, 290 };				 // カーソル表示位置
+
 	const Vec2 kAfterSelectTextPos = { 800, 310 };		 // 選択後テキスト表示位置
 	constexpr float kAfterSelectTextInterval = 100.0f;	 // 選択後テキスト表示間隔
-	const Vec2 kAfterSelectCursorPos = { 800, 300 };	 // 選択後カーソル表示位置
+	const Vec2 kAfterSelectCursorPos = { 780, 300 };	 // 選択後カーソル表示位置
+
+	// サウンド関係
+	const Vec2 kSoundNumText = { 1650, 340 };			 // 音量テキスト表示位置
+	const Vec2 kSoundBarPos = { 950, 330 };				 // 音量バー背景表示位置
+	const Vec2 kCurrentSoundBarPos = { 954, 333 };		 // 現在の音量バー左上位置
+	constexpr float kCurrentSoundBarWidth = 650;		 // 現在の音量バーの最大横幅
+	constexpr float kCurrentSoundBarHeight = 23;		 // 現在の音量バーの高さ
+	constexpr int kCurrentSoundBarColor = 0xcf2223;		 // 現在の音量バーの色
+	const Vec2 kSoundKnobPos = { 1600, 315 };			 // つまみ初期表示位置
+	constexpr float kSoundKnobMinPosX = 950.0f;			 // つまみ最小表示位置X
+
+	// 画像の種類
+	enum class Handle
+	{
+		kSoundBar,
+		kSoundKnob,
+		kHandleNum,
+	};
 }
 
 
@@ -31,6 +47,9 @@ SceneOption::SceneOption(std::shared_ptr<SceneBase> pScene) :
 	m_isSound(false),
 	m_isKeyConfig(false)
 {
+	m_handle.resize(static_cast<int>(Handle::kHandleNum));
+	m_handle[static_cast<int>(Handle::kSoundBar)] = LoadGraph("data/UI/soundBar.png");
+	m_handle[static_cast<int>(Handle::kSoundKnob)] = LoadGraph("data/UI/soundKnob.png");
 }
 
 
@@ -39,6 +58,10 @@ SceneOption::SceneOption(std::shared_ptr<SceneBase> pScene) :
 /// </summary>
 SceneOption::~SceneOption()
 {
+	for (auto& handle : m_handle)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 
@@ -112,9 +135,8 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 void SceneOption::Draw()
 {
 	// 背景描画
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
-	// 背景の四角部分表示
-	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
+	m_pUI->DrawMenuBg();
+	DrawBox(712, 115, 712 + 1070, 115 + 800, kBackBoxColor, true);
 
 	// カーソル表示
 	if (!m_isSound && !m_isKeyConfig)
@@ -123,7 +145,18 @@ void SceneOption::Draw()
 	}
 	else
 	{
-		m_pUI->DrawCursor(kAfterSelectCursorPos, m_afterSelect, kAfterSelectTextInterval);
+		m_pUI->DrawCursor(kAfterSelectCursorPos, m_afterSelect, kAfterSelectTextInterval, true);
+	}
+
+	// サウンド関連表示
+	if (m_select == Select::kSound)
+	{
+		DrawSound();
+	}
+	// キーコンフィグ関連表示
+	else if (m_select == Select::kKeyConfig)
+	{
+		DrawKeyConfig();
 	}
 
 	// テキスト表示
@@ -132,8 +165,6 @@ void SceneOption::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "オプション画面", 0xffffff);
-	DrawFormatString(0, 100, 0xffffff, "状態:%d", m_afterSelect);
-	DrawFormatString(0, 120, 0xffffff, "状態:%d", m_select);
 #endif
 }
 
@@ -162,33 +193,11 @@ void SceneOption::UpdateSound(Input& input)
 	// BGM選択中の場合
 	if (m_afterSelect == SelectSound::kBGM)
 	{
-		//// 音量を下げる
-		//if (input.IsPressing("left"))
-		//{
-		//	printfDx("BGM:-1\n");
-		//}
-		//// 音量を上げる
-		//else if (input.IsPressing("right"))
-		//{
-		//	printfDx("BGM:+1\n");
-		//}
-
 		Sound::ChangeBgmVol(input);
 	}
 	// SE選択中の場合
 	if (m_afterSelect == SelectSound::kSE)
 	{
-		//// 音量を下げる
-		//if (input.IsPressing("left"))
-		//{
-		//	printfDx("SE:-1\n");
-		//}
-		//// 音量を上げる
-		//else if (input.IsPressing("right"))
-		//{
-		//	printfDx("SE:+1\n");
-		//}
-
 		Sound::ChangeSeVol(input);
 	}
 }
@@ -210,15 +219,46 @@ void SceneOption::DrawDispText()
 {
 	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kSound, "サウンド", 0xffffff);
 	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKeyConfig, "ボタン配置", 0xffffff);
+}
 
-	if (m_isSound)
-	{
-		DrawStringF(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kAfterSelectTextInterval * SelectSound::kBGM, "BGM", 0xffffff);
-		DrawStringF(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kAfterSelectTextInterval * SelectSound::kSE, "SE", 0xffffff);
-	}
-	else if (m_isKeyConfig)
-	{
-		DrawStringF(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kAfterSelectTextInterval * SelectKeyConfig::kXButton, "X", 0xffffff);
-		DrawStringF(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kAfterSelectTextInterval * SelectKeyConfig::kYButton, "Y", 0xffffff);
-	}
+
+/// <summary>
+/// サウンド部分表示
+/// </summary>
+void SceneOption::DrawSound()
+{
+	// サウンドバー表示
+	DrawGraphF(kSoundBarPos.x, kSoundBarPos.y + kAfterSelectTextInterval * SelectSound::kBGM, m_handle[static_cast<int>(Handle::kSoundBar)], true);
+	DrawGraphF(kSoundBarPos.x, kSoundBarPos.y + kAfterSelectTextInterval * SelectSound::kSE, m_handle[static_cast<int>(Handle::kSoundBar)], true);
+
+	// 音量に合わせて四角の長さを更新する
+	float bgmBarWidth = kCurrentSoundBarWidth * (Sound::GetBgmVol() / 100.0f);
+	float seBarWidth = kCurrentSoundBarWidth * (Sound::GetSeVol() / 100.0f);
+	DrawBox(kCurrentSoundBarPos.x, kCurrentSoundBarPos.y + kAfterSelectTextInterval * SelectSound::kBGM,
+		kCurrentSoundBarPos.x + bgmBarWidth, kCurrentSoundBarPos.y + kCurrentSoundBarHeight + kAfterSelectTextInterval * SelectSound::kBGM,
+		kCurrentSoundBarColor, true);
+	DrawBox(kCurrentSoundBarPos.x, kCurrentSoundBarPos.y + kAfterSelectTextInterval * SelectSound::kSE,
+		kCurrentSoundBarPos.x + seBarWidth, kCurrentSoundBarPos.y + kCurrentSoundBarHeight + kAfterSelectTextInterval * SelectSound::kSE,
+		kCurrentSoundBarColor, true);
+
+	// 音量によってつまみの位置を更新する
+	float bgmKnobPosX = kSoundKnobMinPosX + (kSoundKnobPos.x - kSoundKnobMinPosX) * (Sound::GetBgmVol() / 100.0f);
+	float seKnobPosX = kSoundKnobMinPosX + (kSoundKnobPos.x - kSoundKnobMinPosX) * (Sound::GetSeVol() / 100.0f);
+	DrawGraphF(bgmKnobPosX, kSoundKnobPos.y + kAfterSelectTextInterval * SelectSound::kBGM, m_handle[static_cast<int>(Handle::kSoundKnob)], true);
+	DrawGraphF(seKnobPosX, kSoundKnobPos.y + kAfterSelectTextInterval * SelectSound::kSE, m_handle[static_cast<int>(Handle::kSoundKnob)], true);
+
+	// テキスト表示
+	DrawStringF(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kAfterSelectTextInterval * SelectSound::kBGM, "BGM", 0xffffff);
+	DrawStringF(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kAfterSelectTextInterval * SelectSound::kSE, "SE", 0xffffff);
+	DrawFormatString(kSoundNumText.x, kSoundNumText.y + kAfterSelectTextInterval * SelectSound::kBGM, 0xffffff, "%d", Sound::GetBgmVol());
+	DrawFormatString(kSoundNumText.x, kSoundNumText.y + kAfterSelectTextInterval * SelectSound::kSE, 0xffffff, "%d", Sound::GetSeVol());
+
+}
+
+
+/// <summary>
+/// キーコンフィグ部分表示
+/// </summary>
+void SceneOption::DrawKeyConfig()
+{
 }
