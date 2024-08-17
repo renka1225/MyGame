@@ -70,7 +70,7 @@ std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 		}
 		else if (m_select == SelectScene::kGameover)
 		{
-			return std::make_shared<SceneGameover>();
+			return std::make_shared<SceneGameover>(shared_from_this());
 		}
 	}
 

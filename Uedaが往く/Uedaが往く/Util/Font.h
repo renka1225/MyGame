@@ -17,30 +17,22 @@ namespace Font
 		kSize24_4,
 		kSize16_4,
 		kNormal,
-		kNum,		// フォントの種類の数
+		kNum,		// フォントの種類数
 
 		// 使うフォントを指定する
 		// SceneSelectStage
 		kSelectStage = kSize48_4,		// ステージ選択で使う文字サイズ
-
 		// SceneOption
-		kOption = kSize48_4,
-
+		kOption = kSize48_4,			// オプションで使用する文字サイズ
 		// ScenePause
-		kPause = kSize42_4,
-
-		// ScenePlaying
-		kTask = kSize40_4,				 // 左上に表示する文字サイズ
-		kOperation = kSize28_4,			 // "操作説明"の文字サイズ
-		kOperationMenu = kSize24_4,		 // 操作説明部分の文字サイズ
-		kPauseMenu = kSize42_4,			 // ポーズ画面の文字サイズ
-		kMenuTitle = kSize42_4,
-
+		kPause = kSize42_4,				// ポーズ画面で使用する文字サイズ
 		// SceneClear
-		kClearMenu = kSize42_4,		// クリアで使う文字サイズ
-
+		kClearMenu = kSize42_4,			// クリアで使う文字サイズ
 		// SceneGameover
-		kGameover = kSize48_4,		// ゲームオーバーで使う文字サイズ
+		kGameover = kSize48_4,			// ゲームオーバーで使う文字サイズ
+		
+		//右下に表示するボタン表示の文字サイズ
+		kButtonText = kSize24_4,
 	};
 
 	// フォントのロード、アンロード

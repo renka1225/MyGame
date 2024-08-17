@@ -16,7 +16,8 @@ namespace
 	constexpr float kBackBoxHeight = 800;				 // 背景の四角の高さ
 
 	constexpr int kTextColor = 0xffffff;				 // テキストの色
-	const Vec2 kSelectTextPos = { 200, 300 };			 // 選択テキスト表示位置
+	const Vec2 kSelectTextPos = { 250, 300 };			 // 選択テキスト表示位置
+	constexpr float kSelectTextAdj = 30.0f;				 // 選択テキスト表示位置調整
 	constexpr float kSelectTextInterval = 120.0f;		 // 選択テキスト表示間隔
 	const Vec2 kAfterSelectTextPos = { 800, 310 };		 // 選択後テキスト表示位置
 	const Vec2 kCursorPos = { 140, 290 };				 // カーソル表示位置
@@ -164,7 +165,7 @@ void SceneOption::Draw()
 	}
 
 	// テキスト表示
-	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kSound,
+	DrawStringFToHandle(kSelectTextPos.x + kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kSound,
 		"サウンド", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKeyConfig,
 		"ボタン配置", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);

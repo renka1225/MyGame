@@ -20,12 +20,12 @@ namespace
 	const char* const kHaibokuTextPath = "data/UI/haiboku.png";	// 敗北のテキスト画像のファイル位置
 	const char* const kCursorPath = "data/UI/cursor.png";		// カーソル画像のファイル位置
 	constexpr int kTextColor = 0xffffff;						// テキストの色
-	const Vec2 kHaibokuTextPos = { 670, 100 };					// 敗北のテキスト画像表示位置
-	const Vec2 kRetryTextPos = { 860, 600 };					// "リトライ"表示位置
-	const Vec2 kStageTextPos = { 720, 720 };					// "ステージ選択にもどる"表示位置
-	const Vec2 kTitleTextPos = { 760, 840 };					// "タイトルにもどる"表示位置
-	const Vec2 kCursorPos = { 750, 590 };						// カーソル表示位置
-	constexpr float kCursorMove = 120.0f;						// カーソルの移動量
+	const Vec2 kHaibokuTextPos = { 670, 120 };					// 敗北のテキスト画像表示位置
+	const Vec2 kRetryTextPos = { 870, 650 };					// "リトライ"表示位置
+	const Vec2 kStageTextPos = { 720, 780 };					// "ステージ選択にもどる"表示位置
+	const Vec2 kTitleTextPos = { 770, 910 };					// "タイトルにもどる"表示位置
+	const Vec2 kCursorPos = { 720, 640 };						// カーソル表示位置
+	constexpr float kCursorMove = 130.0f;						// カーソルの移動量
 }
 
 
@@ -38,7 +38,6 @@ SceneGameover::SceneGameover(std::shared_ptr<SceneBase> pScene)
 	m_select = Select::kRetry;
 	m_pPrevScene = pScene;
 	m_textHandle = LoadGraph(kHaibokuTextPath);
-	m_cursorHandle = LoadGraph(kCursorPath);
 }
 
 
@@ -49,7 +48,6 @@ SceneGameover::~SceneGameover()
 {
 	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kGameover)]);
 	DeleteGraph(m_textHandle);
-	DeleteGraph(m_cursorHandle);
 }
 
 
