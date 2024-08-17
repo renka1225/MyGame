@@ -17,7 +17,6 @@ public:
 private:
 	void UpdateSound(Input& input);		// サウンド更新
 	void UpdateKeyConfig(Input& input); // キー更新
-	void DrawDispText();				// テキスト表示
 	void DrawSound();					// サウンド部分表示
 	void DrawKeyConfig();				// キーコンフィグ部分表示
 

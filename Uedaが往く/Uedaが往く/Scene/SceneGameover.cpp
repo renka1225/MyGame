@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "UI.h"
 #include "Sound.h"
+#include "Font.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -18,12 +19,13 @@ namespace
 {
 	const char* const kHaibokuTextPath = "data/UI/haiboku.png";	// 敗北のテキスト画像のファイル位置
 	const char* const kCursorPath = "data/UI/cursor.png";		// カーソル画像のファイル位置
+	constexpr int kTextColor = 0xffffff;						// テキストの色
 	const Vec2 kHaibokuTextPos = { 670, 100 };					// 敗北のテキスト画像表示位置
-	const Vec2 kRetryTextPos = { 850, 600 };					// "リトライ"表示位置
-	const Vec2 kStageTextPos = { 850, 700 };					// "ステージ選択にもどる"表示位置
-	const Vec2 kTitleTextPos = { 850, 800 };					// "タイトルにもどる"表示位置
+	const Vec2 kRetryTextPos = { 860, 600 };					// "リトライ"表示位置
+	const Vec2 kStageTextPos = { 720, 720 };					// "ステージ選択にもどる"表示位置
+	const Vec2 kTitleTextPos = { 760, 840 };					// "タイトルにもどる"表示位置
 	const Vec2 kCursorPos = { 750, 590 };						// カーソル表示位置
-	constexpr float kCursorMove = 100.0f;						// カーソルの移動量
+	constexpr float kCursorMove = 120.0f;						// カーソルの移動量
 }
 
 
@@ -123,14 +125,17 @@ void SceneGameover::Draw()
 	m_pUI->DrawCursor(kCursorPos, m_select, kCursorMove);
 
 	// 選択項目を表示
-	DrawStringF(kRetryTextPos.x, kRetryTextPos.y, "リトライ", 0xffffff);
-	DrawStringF(kStageTextPos.x, kStageTextPos.y, "ステージ選択にもどる", 0xffffff);
-	DrawStringF(kTitleTextPos.x, kTitleTextPos.y, "タイトルにもどる", 0xffffff);
+	DrawStringFToHandle(kRetryTextPos.x, kRetryTextPos.y,
+		"リトライ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kGameover)]);
+	DrawStringFToHandle(kStageTextPos.x, kStageTextPos.y,
+		"ステージ選択にもどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kGameover)]);
+	DrawStringFToHandle(kTitleTextPos.x, kTitleTextPos.y,
+		"タイトルにもどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kGameover)]);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ゲームオーバー画面", 0xffffff);
 	// 中心線
-	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
 }

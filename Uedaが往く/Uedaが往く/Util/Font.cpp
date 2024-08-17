@@ -3,10 +3,13 @@
 
 namespace
 {
+	// フォント名
+	const char* kFontName = "Yuji Syuku";
+
 	// 読み込むフォントファイル名
 	const LPCSTR kFontDataPath[] =
 	{
-		"data/font/TsunagiGothic.ttf",
+		"data/font/YujiSyuku-Regular.ttf",
 	};
 
 	// フォントのデータ
@@ -26,21 +29,21 @@ namespace Font
 	FontData data[] =
 	{
 		// Size96_4
-		{"Tsunagi Gothic Black", 96, 4, -1},
+		{kFontName, 96, 4, -1},
 		// Size64_4
-		{"Tsunagi Gothic Black", 64, 4, -1},
+		{kFontName, 64, 4, -1},
 		// Size48_4
-		{"Tsunagi Gothic Black", 48, 4, -1},
+		{kFontName, 48, 4, -1},
 		// Size42_4
-		{"Tsunagi Gothic Black", 42, 4, -1},
+		{kFontName, 42, 4, -1},
 		// Size40_4
-		{"Tsunagi Gothic Black", 40, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
+		{kFontName, 40, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size28_4
-		{"Tsunagi Gothic Black", 28, 4, -1},
+		{kFontName, 28, 4, -1},
 		// Size24_4
-		{"Tsunagi Gothic Black", 24, 4, -1},
+		{kFontName, 24, 4, -1},
 		// Size16_4
-		{"Tsunagi Gothic Black", 16, 4, -1},
+		{kFontName, 16, 4, -1},
 		// Normal
 		{"ＭＳ　ゴシック", 16, -1, -1},
 	};

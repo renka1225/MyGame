@@ -20,8 +20,14 @@ namespace Font
 		kNum,		// フォントの種類の数
 
 		// 使うフォントを指定する
-		// SceneTitle
-		kTitleMenu = kSize64_4,		// タイトルで使う文字サイズ
+		// SceneSelectStage
+		kSelectStage = kSize48_4,		// ステージ選択で使う文字サイズ
+
+		// SceneOption
+		kOption = kSize48_4,
+
+		// ScenePause
+		kPause = kSize42_4,
 
 		// ScenePlaying
 		kTask = kSize40_4,				 // 左上に表示する文字サイズ
@@ -32,6 +38,9 @@ namespace Font
 
 		// SceneClear
 		kClearMenu = kSize42_4,		// クリアで使う文字サイズ
+
+		// SceneGameover
+		kGameover = kSize48_4,		// ゲームオーバーで使う文字サイズ
 	};
 
 	// フォントのロード、アンロード

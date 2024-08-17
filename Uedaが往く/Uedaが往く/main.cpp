@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 入力状態を取得
 	Input input;
-	//Font::Load();		// フォントの読み込み
+	Font::Load();		// フォントの読み込み
 	Sound::Load();		// サウンドの読み込み
 
 	// SceneManagerを生成
@@ -71,7 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// デバッグ時はESCキーで終了できるようにする
 		if (input.IsTriggered("end"))
 		{
-			//Font::UnLoad();
+			Font::UnLoad();
 			Sound::UnLode();
 			Effkseer_End();
 			DxLib_End();
@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 	}
 
-	//Font::UnLoad();	 // フォントの解放
+	Font::UnLoad();	 // フォントの解放
 	Sound::UnLode(); // サウンドの解放
 	Effkseer_End();	 // Effekseerの終了処理
 

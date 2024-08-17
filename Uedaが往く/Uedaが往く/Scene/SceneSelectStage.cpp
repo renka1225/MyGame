@@ -3,8 +3,9 @@
 #include "Vec2.h"
 #include "Game.h"
 #include "Input.h"
-#include "Sound.h"
 #include "UI.h"
+#include "Sound.h"
+#include "Font.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -21,9 +22,11 @@ namespace
 	constexpr int kBackBoxColor = 0x494949;			// 四角の色
 	constexpr int kBackBoxLTPos = 140;				// 四角の左上位置
 	constexpr int kBackBoxWidth = 490;				// 四角の幅
-	const Vec2 kSelectTextPos = { 200, 300 };		// 選択テキスト表示位置
-	constexpr float kSelectTextInterval = 100.0f;	// 選択テキスト表示間隔
+	const Vec2 kSelectTextPos = { 260, 300 };		// 選択テキスト表示位置
+	constexpr float kSelectTextInterval = 120.0f;	// 選択テキスト表示間隔
+	constexpr float kSelectTextAdj = 40.0f;			// テキスト表示位置調整
 	const Vec2 kCursorLTPos = { 140, 290 };			// カーソル左上位置
+	constexpr int kTextColor = 0xffffff;			// テキストの色
 }
 
 
@@ -117,10 +120,14 @@ void SceneSelectStage::Draw()
 	m_pUI->DrawCursor(kCursorLTPos, m_select, kSelectTextInterval);
 
 	// テキスト表示
-	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage1, "練習へ往く", 0xffffff);
-	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage2, "闘いへ往く", 0xffffff);
-	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kOption, "オプション", 0xffffff);
-	DrawStringF(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd, "ゲームを終わる", 0xffffff);
+	DrawFormatStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage1, 
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)],"練習へ往く");
+	DrawFormatStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage2,
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)], "闘いへ往く");
+	DrawFormatStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kOption,
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)], "オプション");
+	DrawFormatStringFToHandle(kSelectTextPos.x - kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd,
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)], "ゲームを終わる");
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

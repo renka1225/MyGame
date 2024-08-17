@@ -3,6 +3,7 @@
 #include "Vec2.h"
 #include "Game.h"
 #include "Sound.h"
+#include "Font.h"
 #include "ConversionTime.h"
 #include "SceneSelectStage.h"
 #include "SceneClear.h"
@@ -86,7 +87,7 @@ void SceneClear::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "クリア画面", 0xffffff);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 
 	// クリアタイムをフレーム数から秒数に変換
 	for (int i = 0; i < m_clearTime.size(); i++)
