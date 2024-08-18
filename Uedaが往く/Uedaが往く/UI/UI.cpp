@@ -1,5 +1,7 @@
 #include "DxLib.h"
+#include "Vec2.h"
 #include "Game.h"
+#include "Font.h"
 #include "UI.h"
 #include <algorithm>
 
@@ -16,6 +18,10 @@ namespace
 	constexpr float kOptionCursorWidth = 1000.0f;	// オプション画面のカーソルの横幅
 	constexpr float kCursorHeight = 90.0f;			// カーソルの縦幅
 	constexpr float kCursorSpeed = 60.0f;			// カーソルの横幅の伸びる量
+	// ボタンの画像とテキストの位置
+	const Vec2 kButtonTextPos = { 1500, 970 };		// テキストの位置
+	constexpr float kButtonTextWidth = 150.0f;		// テキストの幅
+	constexpr int kTextColor = 0xffffff;			// テキストの色
 }
 
 
@@ -91,4 +97,19 @@ void UI::DrawMenuBg()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
 	// 背景の四角部分表示
 	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
+}
+
+
+/// <summary>
+/// ボタンの画像とテキストを表示する
+/// </summary>
+void UI::DrawButtonText()
+{
+	//TODO:シーンによってテキストを変更する
+
+	// テキスト表示
+	DrawStringFToHandle(kButtonTextPos.x, kButtonTextPos.y,
+		"決定", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kButtonText)]);
+	DrawStringFToHandle(kButtonTextPos.x + kButtonTextWidth, kButtonTextPos.y,
+		"もどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kButtonText)]);
 }

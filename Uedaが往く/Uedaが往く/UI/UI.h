@@ -12,7 +12,8 @@ public:
 	void Init();
 	void Update();
 	void DrawCursor(Vec2 pos, int select, float interval, bool isOption = false); // カーソル表示
-	void DrawMenuBg();	// メニューの背景表示
+	void DrawMenuBg();		// メニューの背景表示
+	void DrawButtonText();	// ボタンテキスト表示
 
 private:
 	float m_cursorWidth;	// カーソルの横幅

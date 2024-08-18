@@ -32,7 +32,7 @@ namespace Font
 		kGameover = kSize48_4,			// ゲームオーバーで使う文字サイズ
 		
 		//右下に表示するボタン表示の文字サイズ
-		kButtonText = kSize24_4,
+		kButtonText = kSize42_4,
 	};
 
 	// フォントのロード、アンロード

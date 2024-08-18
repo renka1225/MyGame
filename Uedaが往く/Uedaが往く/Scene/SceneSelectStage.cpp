@@ -118,16 +118,17 @@ void SceneSelectStage::Draw()
 	m_pUI->DrawMenuBg();
 	// カーソル表示
 	m_pUI->DrawCursor(kCursorLTPos, m_select, kSelectTextInterval);
+	m_pUI->DrawButtonText();
 
 	// テキスト表示
-	DrawFormatStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage1, 
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)],"練習へ往く");
-	DrawFormatStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage2,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)], "闘いへ往く");
-	DrawFormatStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kOption,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)], "オプション");
-	DrawFormatStringFToHandle(kSelectTextPos.x - kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)], "ゲームを終わる");
+	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage1,
+		"練習へ往く", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
+	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kStage2,
+		"闘いへ往く", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
+	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kOption,
+		"オプション", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
+	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd,
+		"ゲームを終わる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
