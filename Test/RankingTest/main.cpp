@@ -1,6 +1,9 @@
 #include "DxLib.h"
 #include <iostream>
 #include<string>
+#include <fstream>
+#include <sstream>
+#include <cassert>
 
 
 /// <summary>
@@ -71,7 +74,7 @@ std::string HttpGet(const char* domain, const char* uri)
 		NetWorkRecv(NetHandle, StrBuf, DATA_SIZE);    // データをバッファに取得
 
 		// 受信したデータを描画
-		DrawString(0, 120, StrBuf, 0xffffff);
+		//DrawString(0, 120, StrBuf, 0xffffff);
 
 		// キー入力待ち
 		WaitKey();
@@ -80,7 +83,7 @@ std::string HttpGet(const char* domain, const char* uri)
 		CloseNetWork(NetHandle);
 	}
 
-	return ans;
+	return StrBuf;
 }
 
 int m_time = 0;
@@ -119,17 +122,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ランキングのデータベースを作成
 	// MEMO:ゲーム開始時最初に1回だけ呼ぶ
 	//std::string createRank = HttpGet("rueda.zombie.jp", "/Ranking/createRanking.php");
+
 	// 画面クリア
 	ClearDrawScreen();
+
 	// ランキングの更新
 	// 経過した時間を新たに追加する
 	std::string uri = "/Ranking/updateRanking.php?clearTime=" + std::to_string(m_time);
 	std::string updateRank = HttpGet("rueda.zombie.jp", uri.c_str());
+
 	// 画面クリア
 	ClearDrawScreen();
+
 	//ランキングの取得
 	std::string getRank = HttpGet("rueda.zombie.jp", "/Ranking/getRanking.php");
+	ClearDrawScreen();
+	//DrawString(0, 0, getRank.c_str(), 0xffffff);
 
+	int y = 0;
+	int lineCount = 0; // 表示する行数をカウントする変数
+
+	size_t pos = getRank.find("\r\n");
+	if (pos != std::string::npos)
+	{
+		// 10位まで取得する
+		std::string line = getRank.substr(0, pos + 256);
+		if (!line.empty())
+		{
+			DrawString(0, 0, line.c_str(), 0xffffff);
+		}
+	}
+	else
+	{
+		// 改行が見つからない場合、getRank全体を描画
+		DrawString(0, 0, getRank.c_str(), 0xffffff);
+	}
 
 	WaitKey();// キー入力待ち
 	DxLib_End();// ＤＸライブラリ使用の終了処理

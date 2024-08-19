@@ -5,6 +5,7 @@
 #include "Font.h"
 #include "Sound.h"
 #include "SceneManager.h"
+#include "Ranking.h"
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -45,6 +46,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
 	pScene->Init();
 
+	std::shared_ptr<Ranking> pRank = std::make_shared<Ranking>();
+	// ランキング作成
+	//ank->CreateRanking();
+	// ランキング更新
+	pRank->UpdateRanking(80);
+	// ランキング取得
+	pRank->GetRanking();
+
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
@@ -57,6 +66,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// 描画
 		pScene->Draw();
+
+		// ランキング描画
+		pRank->DrawRanking();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
