@@ -1,3 +1,3 @@
 ﻿  main.cpp
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\RankingTest\main.cpp(56,50): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\RankingTest\main.cpp(55,50): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   RankingTest.vcxproj -> C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\RankingTest\x64\Debug\RankingTest.exe

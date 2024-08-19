@@ -1,37 +1,29 @@
 <?php
-
-/*データベースの作成と接続*/
-//(既にある場合は接続のみ)
+// データベースの作成と接続(既にある場合は接続のみ)
 $db = new PDO('sqlite:ranking.db');
 
-/*データの受け取り*/
-$getName = $_GET['name'];
-$getScore = $_GET['score'];
+// データの受け取り
+$getClearTime = $_GET['clearTime'];
 
-/*テーブルのデータを取得*/
-$que ="SELECT * From Ranking";
+// 新しいクリア時間をデータベースに挿入
+$que = "INSERT INTO Ranking (clearTime) VALUES ('{$getClearTime}')";
+$db->query($que);
+
+// データを昇順にソートする
+$que ="SELECT * FROM Ranking ORDER BY clearTime";
 //連想配列にする
 $value = $db->query($que)->fetchAll();
 
-/*２要素の配列にする*/
+// 受け取ったデータを配列に挿入
 $arr = [];
-foreach($value as $temp)
-{
-    $arr[$temp['name']] = $temp['score'];
-}
+$arr[$getClearTime] = $getClearTime;
 
-/*受け取ったデータを配列に挿入*/
-$arr[$getName] = $getScore;
-
-/*ソート*/
-arsort($arr);
-
-/*テーブルデータの書き直し*/
-$cout =1;
+// テーブルデータの書き直し
+$rank=1;
 foreach($arr as $key => $temp)
 {
-    $que ="INSERT OR REPLACE INTO Ranking VALUES ({$cout},'{$key}',{$temp})";
+    $que ="INSERT OR REPLACE INTO Ranking VALUES ({$rank},'{$key}')";
     echo $que."\n";
-    $db->query($que);
-    $cout++;
+    $rank++;
 }
+?>

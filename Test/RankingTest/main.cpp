@@ -51,7 +51,6 @@ std::string HttpGet(const char* domain, const char* uri)
 		sprintf_s(HttpCmd, "GET %s HTTP/1.1\nHost: %s\n\n", uri, domain);
 		DrawFormatString(0, 60, 0xffffff, "HttpCmd:\n%s", HttpCmd);
 
-
 		// データ送信(http命令を送る)
 		NetWorkSend(NetHandle, HttpCmd, strlen(HttpCmd));
 
@@ -84,6 +83,7 @@ std::string HttpGet(const char* domain, const char* uri)
 	return ans;
 }
 
+int m_time = 0;
 
 /*Main*/
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -95,13 +95,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return -1;
 	}
 
+	char KeyBuf[256];
+
+	while (ProcessMessage() == 0)
+	{
+		// 画面のクリア
+		ClearDrawScreen();
+
+		// すべてのキーの状態を得る
+		GetHitKeyStateAll(KeyBuf);
+
+		if (KeyBuf[KEY_INPUT_Z] == 1)
+		{
+			break;
+		}
+
+		m_time++;
+		m_time %= 1000;
+		DrawFormatString(0, 150, 0x0000ff, "%d", m_time);
+	}
+	
 	/*Http通信でGet命令を指定のアドレスに行っている*/
-	//ランキングの更新
-	std::string updateRank = HttpGet("rueda.zombie.jp", "/Ranking/updateRanking.php");
+	// ランキングのデータベースを作成
+	// MEMO:ゲーム開始時最初に1回だけ呼ぶ
+	//std::string createRank = HttpGet("rueda.zombie.jp", "/Ranking/createRanking.php");
+	// 画面クリア
+	ClearDrawScreen();
+	// ランキングの更新
+	// 経過した時間を新たに追加する
+	std::string uri = "/Ranking/updateRanking.php?clearTime=" + std::to_string(m_time);
+	std::string updateRank = HttpGet("rueda.zombie.jp", uri.c_str());
 	// 画面クリア
 	ClearDrawScreen();
 	//ランキングの取得
 	std::string getRank = HttpGet("rueda.zombie.jp", "/Ranking/getRanking.php");
+
 
 	WaitKey();// キー入力待ち
 	DxLib_End();// ＤＸライブラリ使用の終了処理
