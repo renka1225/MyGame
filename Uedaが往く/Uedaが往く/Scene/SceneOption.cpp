@@ -159,16 +159,20 @@ void SceneOption::Draw()
 		DrawSound();
 	}
 	// キーコンフィグ関連表示
-	else if (m_select == Select::kKeyConfig)
-	{
-		DrawKeyConfig();
-	}
+	//else if (m_select == Select::kKeyConfig)
+	//{
+	//	DrawKeyConfig();
+	//}
 
 	// テキスト表示
 	DrawStringFToHandle(kSelectTextPos.x + kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kSound,
 		"サウンド", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
-	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKeyConfig,
-		"ボタン配置", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+
+	//m_pUI->DrawButtonText();
+
+	// TODO:キーコンフィグは後ほど行う
+	//DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKeyConfig,
+		//"ボタン配置", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
@@ -184,19 +188,19 @@ void SceneOption::Draw()
 void SceneOption::UpdateSound(Input& input)
 {
 	// 選択状態を1つ下げる
-	if (input.IsTriggered("down"))
-	{
-		m_afterSelect = (m_afterSelect + 1) % SelectSound::kSelectSoundNum;
-		m_pUI->Init();
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
-	}
-	// 選択状態を1つ上げる
-	if (input.IsTriggered("up"))
-	{
-		m_afterSelect = (m_afterSelect + (SelectSound::kSelectSoundNum - 1)) % SelectSound::kSelectSoundNum;
-		m_pUI->Init();
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
-	}
+	//if (input.IsTriggered("down"))
+	//{
+	//	m_afterSelect = (m_afterSelect + 1) % SelectSound::kSelectSoundNum;
+	//	m_pUI->Init();
+	//	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
+	//}
+	//// 選択状態を1つ上げる
+	//if (input.IsTriggered("up"))
+	//{
+	//	m_afterSelect = (m_afterSelect + (SelectSound::kSelectSoundNum - 1)) % SelectSound::kSelectSoundNum;
+	//	m_pUI->Init();
+	//	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
+	//}
 
 	// BGM選択中の場合
 	if (m_afterSelect == SelectSound::kBGM)

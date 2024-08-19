@@ -1,2 +1,3 @@
 C:\Users\lotus\デスクトップ\RankingTest\x64\Debug\RankingTest.exe
 C:\GitHub\MyGame\Test\RankingTest\x64\Debug\RankingTest.exe
+C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\Test\RankingTest\x64\Debug\RankingTest.exe

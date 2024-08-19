@@ -98,7 +98,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	/*Http通信でGet命令を指定のアドレスに行っている*/
 	//ランキングの更新
 	std::string updateRank = HttpGet("rueda.zombie.jp", "/Ranking/updateRanking.php");
-	//std::string updateRank = HttpGet("rueda.zombie.jp", "/Ranking/updateRanking.php?clearTime=30");
 	// 画面クリア
 	ClearDrawScreen();
 	//ランキングの取得
