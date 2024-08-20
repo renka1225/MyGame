@@ -18,9 +18,11 @@ namespace
 	const Vec2 kBackBoxRBPos = { 1420.0f, 880.0f };		// 四角の右下位置
 	constexpr int kBackBoxWidth = 490;					// 四角の幅
 	constexpr int kTextColor = 0xffffff;				// テキストの色
-	const Vec2 kSelectTextPos = { 770, 300 };			// 選択テキスト表示位置
-	constexpr float kSelectTextInterval = 200.0f;		// 選択テキスト表示間隔
-	const Vec2 kCursorPos = { 700, 290 };				// カーソル表示位置
+	const Vec2 kBackTextPos = { 800, 350 };				// "ゲームにもどる"表示位置
+	const Vec2 kOptionTextPos = { 860, 500 };			// "オプション"表示位置
+	const Vec2 kStageTextPos = { 760, 650 };			// "ステージ選択にもどる"表示位置
+	constexpr float kSelectTextInterval = 150.0f;		// 選択テキスト表示間隔
+	const Vec2 kCursorPos = { 720, 340 };				// カーソル表示位置
 }
 
 /// <summary>
@@ -101,15 +103,17 @@ void ScenePause::Draw()
 	m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);
 
 	// テキスト表示
-	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kBack, 
+	DrawStringFToHandle(kBackTextPos.x, kBackTextPos.y,
 		"ゲームにもどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kPause)]);
-	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kOption,
+	DrawStringFToHandle(kOptionTextPos.x, kOptionTextPos.y,
 		"オプション", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kPause)]);
-	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kStageSelect,
+	DrawStringFToHandle(kStageTextPos.x, kStageTextPos.y,
 		"ステージ選択にもどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kPause)]);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ポーズ画面", 0xffffff);
+	// 中心線
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
 }

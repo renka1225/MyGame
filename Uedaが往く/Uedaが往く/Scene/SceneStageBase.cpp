@@ -15,6 +15,8 @@ namespace
 {
 	const VECTOR kPlayerInitPos = VGet(2600.0f, 69.0f, 4240.0f);  // プレイヤーの初期位置
 	const VECTOR kEnemyInitPos = VGet(2660, 69.0f, 4280.0f);	  // 敵の初期位置
+	constexpr int kChangeColorTime = 150;						  // 画面の表示を変更する時間
+	constexpr int kClearStagingTime = 180;						  // 画面の表示を変更する時間
 	constexpr int kNextBattleTime = 150;						  // 次の試合が始まるまでの時間
 }
 
@@ -22,9 +24,10 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneStageBase::SceneStageBase():
+SceneStageBase::SceneStageBase() :
 	m_battleNum(0),
 	m_nextBattleTime(kNextBattleTime),
+	m_clearStagingTime(kClearStagingTime),
 	m_elapsedTime(0)
 {
 	m_pUIProduction = std::make_shared<UIProduction>();
@@ -45,6 +48,7 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_pStage(pStage),
 	m_pEnemy(nullptr),
 	m_battleNum(0),
+	m_clearStagingTime(0),
 	m_nextBattleTime(0),
 	m_elapsedTime(0)
 {
@@ -92,11 +96,31 @@ void SceneStageBase::Draw()
 
 
 /// <summary>
+/// クリア演出を行う
+/// </summary>
+void SceneStageBase::ClearStaging()
+{
+	if (m_clearStagingTime >= kClearStagingTime - kChangeColorTime)
+	{
+		// 画面の色を変える
+		SetLightDifColor(GetColorF(0.0f, 0.7f, 1.0f, 0.0f));
+		m_clearStagingTime--;
+		return;
+	}
+
+	// クリア演出をリセット
+	m_clearStagingTime = 0;
+	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+}
+
+
+/// <summary>
 /// 敵を倒して次試合が始まる前の処理
 /// </summary>
 void SceneStageBase::UpdateNextBattle()
 {
 	m_nextBattleTime = kNextBattleTime;
+	m_clearStagingTime = kClearStagingTime;
 	// 画面上に残ったエフェクトを削除する
 	m_pEffect->ClearEffect();
 	// プレイヤーの位置、カメラ位置を最初の状態に戻す

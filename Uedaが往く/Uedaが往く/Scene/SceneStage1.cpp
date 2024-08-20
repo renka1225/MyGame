@@ -83,13 +83,16 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
 
+		// クリア演出中は動けないようにする
+		if (!(m_pEnemy->GetHp() <= 0 && m_clearStagingTime > 0))
+		{
+			m_pCamera->Update(input, *m_pPlayer);
+			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
+			m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
+			m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+		}
+
 		m_nextBattleTime--; // 次の試合が始まるまでの時間
-
-		m_pCamera->Update(input, *m_pPlayer);
-		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
-		m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
-		m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
-
 		if (m_nextBattleTime > 0) return shared_from_this();
 
 		m_elapsedTime++; // 経過時間を進める
@@ -97,9 +100,16 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
-			UpdateNextBattle();
-			m_clearTime.push_back(m_elapsedTime);
-			return std::make_shared<SceneClear>(m_clearTime);
+			// クリア演出を行う
+			ClearStaging();
+
+			// クリア演出が終わったら次のバトルに移行する
+			if (m_clearStagingTime <= 0)
+			{
+				UpdateNextBattle();
+				m_clearTime.push_back(m_elapsedTime);
+				return std::make_shared<SceneClear>(m_clearTime);
+			}
 		}
 		// プレイヤーのHPが0になった場合
 		if (m_pPlayer->GetHp() <= 0)

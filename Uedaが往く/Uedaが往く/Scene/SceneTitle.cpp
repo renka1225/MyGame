@@ -13,7 +13,9 @@ namespace
 	constexpr float kTitleLogoMinScale = 0.5f;		// タイトルロゴの最小サイズ
 	constexpr float kTitleLogoMaxScale = 10.0f;		// タイトルロゴの最大サイズ
 	constexpr float kTitleLogoChangeScale = 0.3f;	// タイトルロゴのサイズ変化量
-	const Vec2 kTextPos = { 500.0f, 880.0f };		// "PRESS ANY BUTTON"のテキスト位置
+	constexpr float kTitleLogoInitRot = 360.0f;		// 開始時のタイトルロゴの回転率
+	constexpr float kTitleLogoChangeRot = 20.0f;	// タイトルロゴの回転率変化量
+	const Vec2 kTextPos = { 500.0f, 750.0f };		// "PRESS ANY BUTTON"のテキスト位置
 	constexpr int kTextDisplayTime = 2;				// テキストを表示する間隔
 	constexpr int kTextDisplayAnimTime = 240;		// テキストアニメーションの時間
 	constexpr int kMaxAlpha = 255;					// 最大アルファ値
@@ -30,7 +32,8 @@ SceneTitle::SceneTitle():
 	m_time(0),
 	m_textDisplayTime(0),
 	m_titleLogoScale(kTitleLogoMaxScale),
-	m_textAlpha(0)
+	m_titleLogoRot(kTitleLogoInitRot),
+	m_textAlpha(kMinAlpha)
 {
 	m_titleLogo = LoadGraph("data/UI/title.png");
 	m_titleLogoBack = LoadGraph("data/UI/titleBack.png");
@@ -98,7 +101,7 @@ void SceneTitle::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xffffff, true);
 
 	// タイトルロゴ表示
-	DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, 0.0f, m_titleLogoBack, true);
+	DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, m_titleLogoRot, m_titleLogoBack, true);
 	if (m_time > kTitleTime)
 	{
 		DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, 0.0f, m_titleLogo, true);
@@ -135,4 +138,8 @@ void SceneTitle::UpdateDisplay()
 	// タイトルロゴのサイズをだんだん小さくする
 	m_titleLogoScale -= kTitleLogoChangeScale;
 	m_titleLogoScale = std::max(kTitleLogoMinScale, m_titleLogoScale);
+
+	// タイトルロゴを回転させる
+	m_titleLogoRot -= kTitleLogoChangeRot;
+	m_titleLogoRot = std::max(0.0f, m_titleLogoRot);
 }

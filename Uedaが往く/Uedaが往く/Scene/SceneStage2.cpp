@@ -22,7 +22,7 @@ namespace
 	const Vec2 kFightTextPos = { 960, 500 };					// "Fight"のテキスト位置
 	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
 	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
-
+	constexpr int kClearStagingTime = 60;						// クリア演出の時間
 	constexpr int kMaxBattleNum = 3;							// 最大バトル数
 }
 
@@ -93,41 +93,52 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
 
+		// クリア演出中は動けないようにする
+		if (!(m_pEnemy->GetHp() <= 0 && m_clearStagingTime > 0))
+		{
+			m_pCamera->Update(input, *m_pPlayer);
+			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
+			m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
+			m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+		}
+
 		m_nextBattleTime--;
-
-		m_pCamera->Update(input, *m_pPlayer);
-		m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
-		m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
-		m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
-
 		if (m_nextBattleTime > 0) return shared_from_this();
 		
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
-			m_clearTime.push_back(m_elapsedTime);
-			m_elapsedTime = 0; // 経過時間をリセット
+			// クリア演出を行う
+			ClearStaging();
 
-			// 次の敵を登場させる
-			switch (m_battleNum)
+			// クリア演出が終わったら次のバトルに移行する
+			if (m_clearStagingTime <= 0)
 			{
-			case 0:	// 2戦目
-				m_pEnemy = nullptr;
-				m_pEnemy = std::make_shared<EnemyChef>();
-				UpdateNextBattle();
-				break;
-			case 1:	// 3戦目
-				m_pEnemy = nullptr;
-				m_pEnemy = std::make_shared<EnemyAbe>();
-				UpdateNextBattle();
-				break;
-			case 2: // 勝利時
-				UpdateNextBattle();
-				return std::make_shared<SceneClear>(m_clearTime);
-				break;
+				m_clearTime.push_back(m_elapsedTime);
+				m_elapsedTime = 0; // 経過時間をリセット
+
+				// 次の敵を登場させる
+				switch (m_battleNum)
+				{
+				case 0:	// 2戦目
+					m_pEnemy = nullptr;
+					m_pEnemy = std::make_shared<EnemyChef>();
+					UpdateNextBattle();
+					break;
+				case 1:	// 3戦目
+					m_pEnemy = nullptr;
+					m_pEnemy = std::make_shared<EnemyAbe>();
+					UpdateNextBattle();
+					break;
+				case 2: // 勝利時
+					UpdateNextBattle();
+					return std::make_shared<SceneClear>(m_clearTime);
+					break;
+				}
+
+				m_battleNum++; // 現在のバトル数を増やす
 			}
 
-			m_battleNum++;
 		}
 		// プレイヤーのHPが0になった場合
 		else if (m_pPlayer->GetHp() <= 0)
@@ -172,5 +183,6 @@ void SceneStage2::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "ステージ2", 0xffffff);
 	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
+	//DrawFormatString(0, 240, 0xfffff, "%d", m_clearStagingTime);
 #endif
 }

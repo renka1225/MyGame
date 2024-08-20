@@ -17,10 +17,15 @@ namespace
 	constexpr int kMaxRankNum = 10;		// 表示するランキング数
 
 	// ランキング表示
-	const Vec2 kRankingPos = { 1000.0f, 400.0f };	// 表示位置
-	constexpr float kRankingIntervalWidth= 300.0f;	// 横の表示間隔
-	constexpr float kRankingIntervalHeight = 40.0f;	// 縦の表示間隔
-	constexpr int kTextColor = 0xffffff;
+	constexpr float kRankingIntervalAdj = 28.0f;		// 表示位置調整
+	constexpr int kTextColor = 0xffffff;				// テキストの色
+	constexpr float kRankingIntervalWidth = 400.0f;		// 横の表示間隔
+	// ステージ選択時
+	const Vec2 kStageSlectRankPos = { 900, 350 };		// 表示位置
+	constexpr float kStageSlectRankInterval = 60.0f;	// 縦の表示間隔
+	// クリア時
+	const Vec2 kRankingPos = { 1000.0f, 550.0f };		// 表示位置
+	constexpr float kClearRankInterval = 80.0f;			// 縦の表示間隔
 
 }
 
@@ -102,9 +107,9 @@ void Ranking::GetRanking()
 
 
 /// <summary>
-/// ランキング描画
+/// ステージ選択時ランキング表示
 /// </summary>
-void Ranking::DrawRanking()
+void Ranking::DrawStageSelectRanking()
 {
 	m_pos = getRank.find_first_of("\r\n");
 
@@ -115,18 +120,55 @@ void Ranking::DrawRanking()
 		int sec = Conversion::ChangeSec(m_rankingList[i]);			 // 秒
 		int milliSec = Conversion::ChangeMilliSec(m_rankingList[i]); // ミリ秒
 
-		std::string line = std::to_string(i + 1) + "位: " + std::to_string(min) + ":" + std::to_string(sec) + ":" + std::to_string(milliSec);
+		// 1位～5位、6位～10位の表示位置をずらす
+		if (i < 5)
+		{
+			DrawFormatStringFToHandle(kStageSlectRankPos.x, kStageSlectRankPos.y + i * kStageSlectRankInterval,
+				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+		}
+		else if (i < 9)
+		{
+			DrawFormatStringFToHandle(kStageSlectRankPos.x + kRankingIntervalWidth, kStageSlectRankPos.y + (i - 5) * kStageSlectRankInterval,
+				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+		}
+		else
+		{
+			DrawFormatStringFToHandle(kStageSlectRankPos.x + kRankingIntervalWidth - kRankingIntervalAdj, kStageSlectRankPos.y + (i - 5) * kStageSlectRankInterval,
+				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+		}
+	}
+}
+
+
+/// <summary>
+/// クリア時のランキング描画
+/// </summary>
+void Ranking::DrawClearRanking()
+{
+	m_pos = getRank.find_first_of("\r\n");
+
+	for (int i = 0; i < m_lineCount; i++)
+	{
+		// フレーム数から秒数に変換する
+		int min = Conversion::ChangeMin(m_rankingList[i]);			 // 分
+		int sec = Conversion::ChangeSec(m_rankingList[i]);			 // 秒
+		int milliSec = Conversion::ChangeMilliSec(m_rankingList[i]); // ミリ秒
 
 		// 1位～5位、6位～10位の表示位置をずらす
 		if (i < 5)
 		{
-			DrawStringFToHandle(kRankingPos.x, kRankingPos.y + i * kRankingIntervalHeight, 
-				line.c_str(), kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)]);
+			DrawFormatStringFToHandle(kRankingPos.x, kRankingPos.y + i * kClearRankInterval,
+				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+		}
+		else if(i < 9)
+		{
+			DrawFormatStringFToHandle(kRankingPos.x + kRankingIntervalWidth, kRankingPos.y + (i - 5) * kClearRankInterval,
+				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
 		}
 		else
-		{
-			DrawStringFToHandle(kRankingPos.x + kRankingIntervalWidth, kRankingPos.y + (i - 5) * kRankingIntervalHeight,
-				line.c_str(), kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)]);
+		{ 
+			DrawFormatStringFToHandle(kRankingPos.x + kRankingIntervalWidth - kRankingIntervalAdj, kRankingPos.y + (i - 5) * kClearRankInterval,
+				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
 		}
 	}
 }

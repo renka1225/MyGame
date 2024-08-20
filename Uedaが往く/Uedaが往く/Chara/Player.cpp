@@ -94,11 +94,11 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	// プレイヤーの状態を更新
 	CharacterBase::State prevState = m_currentState;
 
-	Punch(input);		// パンチ処理
-	Kick(input);		// キック処理
-	Avoid(input);		// 回避処理
-	Fighting(input);	// 構え処理
-	Guard(input);		// ガード処理
+	Punch(input);						// パンチ処理
+	Kick(input);						// キック処理
+	Avoid(input, stage, moveVec);		// 回避処理
+	Fighting(input);					// 構え処理
+	Guard(input);						// ガード処理
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec); // 移動処理
 
 	// エネミーとの当たり判定をチェックする
@@ -385,7 +385,7 @@ void Player::Kick(const Input& input)
 /// </summary>
 /// <param name="input">入力処理</param>
 /// <returns>現在の状態</returns>
-void Player::Avoid(const Input& input)
+void Player::Avoid(const Input& input, Stage& stage, VECTOR& moveVec)
 {
 	// 回避できない場合
 	if (m_avoidCoolTime > 0)
@@ -407,6 +407,9 @@ void Player::Avoid(const Input& input)
 		else
 		{
 			m_currentState = CharacterBase::State::kAvoid;
+
+			// TODO:壁に当たった場合は壁の外に移動しないようにする
+
 			// 移動ベクトルを設定する
 			// 方向キーを入力中は入力方向へ移動する
 			if (input.IsPressing("up") || input.IsPressing("down") || input.IsPressing("left") || input.IsPressing("right"))

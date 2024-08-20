@@ -27,11 +27,12 @@ namespace Font
 		// ScenePause
 		kPause = kSize42_4,		  // ポーズ画面で使用する文字サイズ
 		// SceneClear
-		kClearMenu = kSize42_4,	  // クリアで使う文字サイズ
+		kClearTime = kSize42_4,	  // 時間表示で使う文字サイズ
 		// SceneGameover
 		kGameover = kSize48_4,	  // ゲームオーバーで使う文字サイズ
 		// ランキング
 		kRanking = kSize42_4,
+		kRankingText = kSize48_4,
 		//右下に表示するボタン表示の文字サイズ
 		kButtonText = kSize42_4,
 	};

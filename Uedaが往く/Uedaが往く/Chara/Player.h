@@ -38,7 +38,7 @@ private:
 	// キック攻撃処理
 	void Kick(const Input& input);
 	// 回避処理
-	void Avoid(const Input& input);
+	void Avoid(const Input& input, Stage& stage, VECTOR& moveVec);
 	// 構え処理
 	void Fighting(const Input& input);
 	// ガード処理

@@ -26,6 +26,7 @@ namespace
 	const Vec2 kSelectTextPos = { 260, 300 };		// 選択テキスト表示位置
 	constexpr float kSelectTextInterval = 120.0f;	// 選択テキスト表示間隔
 	constexpr float kSelectTextAdj = 40.0f;			// テキスト表示位置調整
+	const Vec2 kRankingTextPos = { 1150, 270 };		// "ランキング"表示位置
 	const Vec2 kCursorLTPos = { 140, 290 };			// カーソル左上位置
 	constexpr int kTextColor = 0xffffff;			// テキストの色
 }
@@ -130,13 +131,15 @@ void SceneSelectStage::Draw()
 		"闘いへ往く", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
 	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kOption,
 		"オプション", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
-	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd,
+	DrawStringFToHandle(kSelectTextPos.x - kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd,
 		"ゲームを終わる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
 
 	// ランキング表示
 	if (m_select == SelectScene::kStage2)
 	{
-		m_pRank->DrawRanking();
+		DrawStringFToHandle(kRankingTextPos.x, kRankingTextPos.y,
+			"ランキング", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
+		m_pRank->DrawStageSelectRanking();
 	}
 
 #ifdef _DEBUG	// デバッグ表示
