@@ -1,4 +1,7 @@
 #include "DxLib.h"
+#include "Vec2.h"
+#include "Font.h"
+#include "ConversionTime.h"
 #include "Ranking.h"
 
 // 定数
@@ -11,14 +14,24 @@ namespace
 	const char* kUpdateUri = "/Ranking/updateRanking.php?clearTime=";  // 更新
 	const char* kGetUri = "/Ranking/getRanking.php";				   // 取得
 	constexpr int kPortNum = 80;		// ポート番号
+	constexpr int kMaxRankNum = 10;		// 表示するランキング数
+
+	// ランキング表示
+	const Vec2 kRankingPos = { 1000.0f, 400.0f };	// 表示位置
+	constexpr float kRankingIntervalWidth= 300.0f;	// 横の表示間隔
+	constexpr float kRankingIntervalHeight = 40.0f;	// 縦の表示間隔
+	constexpr int kTextColor = 0xffffff;
+
 }
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Ranking::Ranking()
+Ranking::Ranking():
+	m_pos(0),
+	m_lineCount(0)
 {
-	pos = 0;
+	m_rankingList.resize(kMaxRankNum);
 }
 
 
@@ -45,7 +58,7 @@ void Ranking::CreateRanking()
 /// <param name="clearTime">クリアタイム</param>
 void Ranking::UpdateRanking(int clearTime)
 {
-	uri = "/Ranking/updateRanking.php?clearTime=" + std::to_string(clearTime);
+	uri = kUpdateUri + std::to_string(clearTime);
 	std::string getRank = HttpGet(kDomainName, uri.c_str());
 }
 
@@ -56,6 +69,35 @@ void Ranking::UpdateRanking(int clearTime)
 void Ranking::GetRanking()
 {
 	getRank = HttpGet(kDomainName, kGetUri);
+
+	m_lineCount = 0;  // ランキングカウントをリセット
+	size_t m_pos = 0;
+
+	// 1位～10位まで取得する
+	// MEMO:clearTimeだけを抽出する。clearTimeが見つからない場合はnposを返す
+	while (m_lineCount < kMaxRankNum && (m_pos = getRank.find("\"clearTime\":")) != std::string::npos)
+	{
+		m_pos += strlen("\"clearTime\":");
+		int clearTime = 0;
+		int numChars = 0;
+
+		if (sscanf_s(getRank.c_str() + m_pos, "%d%n", &clearTime, &numChars) == 1)
+		{
+			if (m_lineCount < kMaxRankNum)
+			{
+				m_rankingList[m_lineCount] = clearTime;  // ランキングリストに保存
+				m_lineCount++;
+			}
+
+			// 次の要素に進む
+			m_pos += numChars;				  // 読み取った文字数分だけ進める
+			getRank = getRank.substr(m_pos);  // 残りの部分文字列を取得
+		}
+		else
+		{
+			break;  // sscanf_sが失敗した場合はループを終了
+		}
+	}
 }
 
 
@@ -64,16 +106,27 @@ void Ranking::GetRanking()
 /// </summary>
 void Ranking::DrawRanking()
 {
-	// 1位～10位まで取得する
-	// MEMO: std::string::nposは値が見つからなかった場合に値を返す
-	pos = getRank.find("\r\n");
-	if (pos != std::string::npos)
-	{
-		std::string line = getRank.substr(0, pos + 256);
+	m_pos = getRank.find_first_of("\r\n");
 
-		if (!line.empty())
+	for (int i = 0; i < m_lineCount; i++)
+	{
+		// フレーム数から秒数に変換する
+		int min = Conversion::ChangeMin(m_rankingList[i]);			 // 分
+		int sec = Conversion::ChangeSec(m_rankingList[i]);			 // 秒
+		int milliSec = Conversion::ChangeMilliSec(m_rankingList[i]); // ミリ秒
+
+		std::string line = std::to_string(i + 1) + "位: " + std::to_string(min) + ":" + std::to_string(sec) + ":" + std::to_string(milliSec);
+
+		// 1位～5位、6位～10位の表示位置をずらす
+		if (i < 5)
 		{
-			DrawString(0, 0, line.c_str(), 0xffffff);
+			DrawStringFToHandle(kRankingPos.x, kRankingPos.y + i * kRankingIntervalHeight, 
+				line.c_str(), kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)]);
+		}
+		else
+		{
+			DrawStringFToHandle(kRankingPos.x + kRankingIntervalWidth, kRankingPos.y + (i - 5) * kRankingIntervalHeight,
+				line.c_str(), kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)]);
 		}
 	}
 }
@@ -101,9 +154,9 @@ std::string Ranking::HttpGet(const char* domain, const char* uri)
 	// 確立が成功した場合のみ中の処理をする
 	if (NetHandle != -1)
 	{
-#ifdef _DEBUG
 		//Http命令の作成
 		sprintf_s(HttpCmd, "GET %s HTTP/1.1\nHost: %s\n\n", uri, domain);
+#ifdef _DEBUG
 		//DrawFormatString(0, 60, 0xffffff, "HttpCmd:\n%s", HttpCmd);
 #endif // _DEBUG
 

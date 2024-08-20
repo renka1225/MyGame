@@ -6,6 +6,7 @@
 #include "UI.h"
 #include "Sound.h"
 #include "Font.h"
+#include "Ranking.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Stage.h"
@@ -53,6 +54,8 @@ SceneSelectStage::~SceneSelectStage()
 /// </summary>
 void SceneSelectStage::Init()
 {
+	// ランキング取得
+	m_pRank->GetRanking();
 }
 
 
@@ -129,6 +132,12 @@ void SceneSelectStage::Draw()
 		"オプション", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
 	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * SelectScene::kEnd,
 		"ゲームを終わる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
+
+	// ランキング表示
+	if (m_select == SelectScene::kStage2)
+	{
+		m_pRank->DrawRanking();
+	}
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

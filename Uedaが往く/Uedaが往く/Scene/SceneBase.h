@@ -3,6 +3,7 @@
 
 class Input;
 class UI;
+class Ranking;
 
 /// <summary>
 /// シーン基底クラス
@@ -20,6 +21,7 @@ protected:
 	void UpdateSelect(Input& input, int selectNum);	// 選択状態を更新
 
 protected:
+	std::shared_ptr<Ranking> m_pRank;
 	std::shared_ptr<UI> m_pUI;	// UIのポインタ
 	int m_select;				// 現在の選択状態
 

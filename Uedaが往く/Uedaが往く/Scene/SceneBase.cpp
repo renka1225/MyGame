@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Game.h"
 #include "UI.h"
+#include "Ranking.h"
 #include "Sound.h"
 #include "SceneBase.h"
 
@@ -13,6 +14,7 @@ SceneBase::SceneBase():
 	m_select(0)
 {
 	m_pUI = std::make_shared<UI>();
+	m_pRank = std::make_shared<Ranking>();
 }
 
 

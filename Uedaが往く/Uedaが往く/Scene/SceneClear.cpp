@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Sound.h"
 #include "Font.h"
+#include "Ranking.h"
 #include "ConversionTime.h"
 #include "SceneSelectStage.h"
 #include "SceneClear.h"
@@ -48,6 +49,10 @@ void SceneClear::Init()
 	{
 		m_totalClearTime += m_clearTime[i];
 	}
+
+	// ランキングの更新、取得
+	m_pRank->UpdateRanking(m_totalClearTime);
+	m_pRank->GetRanking();
 }
 
 
@@ -55,7 +60,7 @@ void SceneClear::Init()
 /// 更新
 /// </summary>
 /// <param name="input">入力状態</param>
-/// <returns></returns>
+/// <returns>遷移先</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
 	// BGMを鳴らす
@@ -106,12 +111,6 @@ void SceneClear::Draw()
 	int totalMilliSec = Conversion::ChangeMilliSec(m_totalClearTime);
 	DrawFormatString(500, 550, 0x000000, "TOTAL TIME %02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
 
-	DrawString(1300, 550, "ランキング", 0x000000);
-	DrawString(1300, 600, "1位 00:00:00", 0x000000);
-	DrawString(1300, 650, "2位 00:00:00", 0x000000);
-	DrawString(1300, 700, "3位 00:00:00", 0x000000);
-	DrawString(1300, 750, "4位 00:00:00", 0x000000);
-	DrawString(1300, 800, "5位 00:00:00", 0x000000);
-	DrawString(1600, 1000, "ステージ選択にもどる", 0x000000);
+	m_pRank->DrawRanking();
 #endif
 }

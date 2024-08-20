@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 /// <summary>
 /// ランキング情報を更新する
@@ -28,7 +29,8 @@ private:
 	IPDATA Ip;							// 接続用ＩＰアドレスデータ
 	int NetHandle;						// ネットワークハンドル
 	int DataLength;						// 受信データ量保存用変数
-	size_t pos;
+	size_t m_pos;						// 文字の長さを取得する
 	int m_lineCount;					// 表示する行数をカウントする
+	std::vector<int> m_rankingList;		// クリアタイムを保存する
 };
 

@@ -47,12 +47,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pScene->Init();
 
 	std::shared_ptr<Ranking> pRank = std::make_shared<Ranking>();
-	// ランキング作成
-	//ank->CreateRanking();
-	// ランキング更新
-	pRank->UpdateRanking(80);
-	// ランキング取得
-	pRank->GetRanking();
+	//// ランキング作成
+	//pRank->CreateRanking();
+	//// ランキング更新
+	//pRank->UpdateRanking(190);
+	//// ランキング取得
+	//pRank->GetRanking();
 
 	while (ProcessMessage() == 0)
 	{
@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		pScene->Draw();
 
 		// ランキング描画
-		pRank->DrawRanking();
+		//pRank->DrawRanking();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
