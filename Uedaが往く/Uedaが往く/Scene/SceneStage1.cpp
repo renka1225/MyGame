@@ -3,7 +3,6 @@
 #include "Input.h"
 #include "Sound.h"
 #include "UIProduction.h"
-#include "EffectManager.h"
 #include "Player.h"
 #include "EnemyTuto.h"
 #include "Camera.h"
@@ -89,13 +88,10 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			m_pCamera->Update(input, *m_pPlayer);
 			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 			m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
-			//m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
 		}
 
 		m_nextBattleTime--; // 次の試合が始まるまでの時間
 		if (m_nextBattleTime > 0) return shared_from_this();
-
-		m_elapsedTime++; // 経過時間を進める
 
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
@@ -112,9 +108,13 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			}
 		}
 		// プレイヤーのHPが0になった場合
-		if (m_pPlayer->GetHp() <= 0)
+		else if (m_pPlayer->GetHp() <= 0)
 		{
 			return std::make_shared<SceneGameover>(shared_from_this());
+		}
+		else
+		{
+			m_elapsedTime++; // 経過時間を進める
 		}
 	}
 

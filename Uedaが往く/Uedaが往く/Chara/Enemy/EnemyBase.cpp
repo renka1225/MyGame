@@ -1,12 +1,11 @@
 #include "DxLib.h"
 #include "Input.h"
+#include "EffectManager.h"
+#include "Sound.h"
 #include "Player.h"
 #include "Stage.h"
 #include "SceneStageBase.h"
-#include "EffectManager.h"
 #include "EnemyBase.h"
-#include <fstream>
-#include <sstream>
 
 // 定数
 namespace
@@ -347,6 +346,8 @@ void EnemyBase::Receive()
 		m_isReceive = true;
 		PlayAnim(CharacterBase::AnimKind::kReceive);
 		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));	// エフェクトを再生する
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK);
+		
 	}
 }
 
@@ -390,6 +391,8 @@ void EnemyBase::OnDamage(float damage)
 	// ガード状態の場合
 	if (m_currentState == CharacterBase::State::kGuard)
 	{
+		m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z)); // エフェクト表示
+
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_eToPDirVec, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));

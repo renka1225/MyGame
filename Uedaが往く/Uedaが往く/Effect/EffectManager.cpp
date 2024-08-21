@@ -7,8 +7,11 @@
 // 定数
 namespace
 {
-	constexpr float kEffectScale = 5.0f; // 拡大率
-	constexpr int kEffectNum = 2;		 // エフェクトの種類数
+	constexpr int kEffectNum = 2;				// エフェクトの種類
+	constexpr float kAttackEffectScale = 4.0f;	// 攻撃エフェクト拡大率
+	constexpr float kGaurdEffectScale = 8.0f;	// ガードエフェクトの拡大率
+	constexpr int kGaurdEffectTime = 30;		// ガードエフェクトの再生時間
+	constexpr float kGaurdEffectSpeed= 3.0f;	// ガードエフェクトの再生速度
 }
 
 
@@ -16,7 +19,7 @@ namespace
 /// コンストラクタ
 /// </summary>
 EffectManager::EffectManager():
-	m_isGuardEffect(false)
+	m_guardEffectTime(0)
 {
 	emitter.emitterHandle.resize(kEffectNum);
 	emitter.emitterHandle[EffectKind::kAttack] = LoadEffekseerEffect("data/Effect/attack.efk");
@@ -54,11 +57,7 @@ void EffectManager::Update()
 	Effekseer_Sync3DSetting();	// 3Dの情報をDxLibとEffekseerで合わせる
 	UpdateEffekseer3D();
 
-	// ガードエフェクトが再生されていない場合
-	if (m_isGuardEffect && !IsEffekseer3DEffectPlaying(emitter.emitterHandle[EffectKind::kGuard]))
-	{
-		m_isGuardEffect = false;
-	}
+	m_guardEffectTime--;
 }
 
 
@@ -95,7 +94,7 @@ void EffectManager::PlayDamageEffect(const VECTOR& pos)
 
 	// エフェクトの表示位置を設定
 	SetPosPlayingEffekseer3DEffect(effect.handle, pos.x, pos.y, pos.z);
-	SetScalePlayingEffekseer3DEffect(effect.handle, kEffectScale, kEffectScale, kEffectScale);
+	SetScalePlayingEffekseer3DEffect(effect.handle, kAttackEffectScale, kAttackEffectScale, kAttackEffectScale);
 }
 
 
@@ -105,15 +104,15 @@ void EffectManager::PlayDamageEffect(const VECTOR& pos)
 /// <param name="pos">エフェクト位置</param>
 void EffectManager::PlayGuardEffect(const VECTOR& pos)
 {
-	// TODO:ガード中1回のみ表示されるようにする
+	// ガード中はエフェクトが1回のみ表示されるようにする
+	if (m_guardEffectTime > 0) return;
 
-	if (m_isGuardEffect) return;
-
-	m_isGuardEffect = true;
+	m_guardEffectTime = kGaurdEffectTime;
 	emitter.effects.push_back({ PlayEffekseer3DEffect(emitter.emitterHandle[EffectKind::kGuard]), {} });
 	auto& effect = emitter.effects.back();
 
 	// エフェクトの表示位置を設定
 	SetPosPlayingEffekseer3DEffect(effect.handle, pos.x, pos.y, pos.z);
-	SetScalePlayingEffekseer3DEffect(effect.handle, kEffectScale, kEffectScale, kEffectScale);
+	SetScalePlayingEffekseer3DEffect(effect.handle, kGaurdEffectScale, kGaurdEffectScale, kGaurdEffectScale);
+	SetSpeedPlayingEffekseer3DEffect(effect.handle, kGaurdEffectSpeed);
 }

@@ -15,13 +15,12 @@ public:
 	void Init();
 	void Update();
 	void Draw();
-	void ClearEffect();											// 画面上のエフェクトを停止する
-	void PlayDamageEffect(const VECTOR& pos);					// 攻撃エフェクトを再生する
-	void PlayGuardEffect(const VECTOR& pos);					// ガードエフェクトを再生する
-	bool IsPlayGuardEffect() const { return m_isGuardEffect; }	// ガードエフェクトが再生中か
+	void ClearEffect();							// 画面上のエフェクトを停止する
+	void PlayDamageEffect(const VECTOR& pos);	// 攻撃エフェクトを再生する
+	void PlayGuardEffect(const VECTOR& pos);	// ガードエフェクトを再生する
 
 private:
-	bool m_isGuardEffect;	// ガードエフェクトが再生されているかどうか
+	int m_guardEffectTime;	// ガードエフェクトを再生する時間
 
 	struct Effect
 	{

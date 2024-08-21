@@ -1,11 +1,12 @@
 #include "DxLib.h"
+#include "Input.h"
+#include "Sound.h"
+#include "UIGauge.h"
+#include "EffectManager.h"
+#include "LoadData.h"
 #include "Camera.h"
 #include "Stage.h"
 #include "EnemyBase.h"
-#include "UIGauge.h"
-#include "EffectManager.h"
-#include "Input.h"
-#include "LoadData.h"
 #include "DebugDraw.h"
 #include "Player.h"
 
@@ -154,13 +155,10 @@ void Player::OnDamage(float damage)
 	// ガード状態の場合
 	if (m_currentState == CharacterBase::State::kGuard)
 	{
+		m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z)); // エフェクト表示
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
-		if (!m_pEffect->IsPlayGuardEffect())
-		{
-			m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));
-		}
 	}
 	else
 	{
@@ -494,11 +492,14 @@ void Player::Receive()
 {
 	m_currentState = CharacterBase::State::kReceive;
 
+	// 攻撃を受けている間は更新しない
 	if (!m_isReceive)
 	{
 		m_isReceive = true;
 		PlayAnim(CharacterBase::AnimKind::kReceive);
-		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));	// エフェクトを再生する
+
+		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK);
 	}
 }
 

@@ -2,8 +2,8 @@
 #include "Input.h"
 #include "UI.h"
 #include "UIProduction.h"
+#include "Sound.h"
 #include "Light.h"
-#include "EffectManager.h"
 #include "Player.h"
 #include "EnemyBase.h"
 #include "Camera.h"
@@ -32,7 +32,6 @@ SceneStageBase::SceneStageBase() :
 	m_elapsedTime(0)
 {
 	m_pUIProduction = std::make_shared<UIProduction>();
-	//m_pEffect = std::make_shared<EffectManager>();
 	Light::SetLight();
 }
 
@@ -73,7 +72,6 @@ void SceneStageBase::Init()
 	m_pPlayer->Init(kPlayerInitPos);
 	m_pCamera->Init();
 	m_pEnemy->Init(kEnemyInitPos);
-	//m_pEffect->Init();
 }
 
 
@@ -88,8 +86,6 @@ void SceneStageBase::Draw()
 	m_pPlayer->Draw();
 	// 敵描画
 	m_pEnemy->Draw();
-	// エフェクト描画
-	//m_pEffect->Draw();
 
 	// 操作説明を表示
 	m_pUI->DrawOperation();
@@ -101,6 +97,12 @@ void SceneStageBase::Draw()
 /// </summary>
 void SceneStageBase::ClearStaging()
 {
+	// SEを鳴らす
+	if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)]))
+	{
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)], DX_PLAYTYPE_BACK);
+	}
+
 	if (m_clearStagingTime >= kClearStagingTime - kChangeColorTime)
 	{
 		// 画面の色を変える
@@ -112,6 +114,7 @@ void SceneStageBase::ClearStaging()
 	// クリア演出をリセット
 	m_clearStagingTime = 0;
 	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+	StopSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)]);
 }
 
 
@@ -122,8 +125,6 @@ void SceneStageBase::UpdateNextBattle()
 {
 	m_nextBattleTime = kNextBattleTime;
 	m_clearStagingTime = kClearStagingTime;
-	// 画面上に残ったエフェクトを削除する
-	//m_pEffect->ClearEffect();
 	// プレイヤーの位置、カメラ位置を最初の状態に戻す
 	m_pPlayer->Recovery();
 	Init();
