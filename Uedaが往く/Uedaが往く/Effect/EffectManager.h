@@ -13,11 +13,16 @@ public:
 	EffectManager();
 	~EffectManager();
 	void Init();
-	void Update(Input& input, Player& player, EnemyBase& enemy);
+	void Update();
 	void Draw();
-	void ClearEffect(); // 画面上のエフェクトを停止する
+	void ClearEffect();											// 画面上のエフェクトを停止する
+	void PlayDamageEffect(const VECTOR& pos);					// 攻撃エフェクトを再生する
+	void PlayGuardEffect(const VECTOR& pos);					// ガードエフェクトを再生する
+	bool IsPlayGuardEffect() const { return m_isGuardEffect; }	// ガードエフェクトが再生中か
 
 private:
+	bool m_isGuardEffect;	// ガードエフェクトが再生されているかどうか
+
 	struct Effect
 	{
 		int handle;
@@ -27,8 +32,15 @@ private:
 	// パーティクルを生み出すもの
 	struct EffectEmitter
 	{
-		int emitterHandle;
+		std::vector<int> emitterHandle;
 		std::vector<Effect> effects;
 	};
 	EffectEmitter emitter;
+
+	// エフェクトの種類
+	enum EffectKind
+	{
+		kAttack,	// 攻撃
+		kGuard,		// ガード
+	};
 };

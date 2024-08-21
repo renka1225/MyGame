@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "LoadData.h"
 #include "UIGauge.h"
+#include "EffectManager.h"
 #include "CharacterBase.h"
 
 // ’è”
@@ -32,6 +33,7 @@ CharacterBase::CharacterBase():
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(0.0f)
 {
+	m_pEffect = std::make_shared<EffectManager>();
 }
 
 

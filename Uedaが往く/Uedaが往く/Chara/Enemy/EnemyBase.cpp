@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Stage.h"
 #include "SceneStageBase.h"
+#include "EffectManager.h"
 #include "EnemyBase.h"
 #include <fstream>
 #include <sstream>
@@ -11,6 +12,7 @@
 namespace
 {
 	constexpr float kInitAngle = 180.0f;	// 開始時の敵の向く方向
+	constexpr float kEffectHeight = 30.0f;	// エフェクトを表示する高さ
 }
 
 
@@ -344,6 +346,7 @@ void EnemyBase::Receive()
 	{
 		m_isReceive = true;
 		PlayAnim(CharacterBase::AnimKind::kReceive);
+		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));	// エフェクトを再生する
 	}
 }
 
@@ -390,6 +393,7 @@ void EnemyBase::OnDamage(float damage)
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_eToPDirVec, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
+		m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));
 	}
 	else
 	{

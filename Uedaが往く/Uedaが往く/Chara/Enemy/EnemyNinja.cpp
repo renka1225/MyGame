@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Stage.h"
 #include "UIGauge.h"
+#include "EffectManager.h"
 #include "LoadData.h"
 #include "DebugDraw.h"
 #include "EnemyNinja.h"
@@ -51,6 +52,7 @@ void EnemyNinja::Init(VECTOR pos)
 {
 	m_pos = pos;
 	MV1SetPosition(m_modelHandle, m_pos);
+	m_pEffect->Init();	// エフェクトの初期化
 }
 
 
@@ -85,6 +87,7 @@ void EnemyNinja::Update(Player& player, Stage& stage, SceneStageBase& sceneStage
 	UpdateAnim();					// アニメーション処理の更新
 	UpdateCol();					// 当たり判定の位置更新
 	m_pUIGauge->UpdateHpBar();		// HPバーの更新
+	m_pEffect->Update();			// エフェクト更新
 }
 
 
@@ -96,6 +99,7 @@ void EnemyNinja::Draw()
 	MV1DrawModel(m_modelHandle);	// 敵モデル描画
 	m_pUIGauge->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyNinja));	// シルエット描画
 	m_pUIGauge->DrawEnemyHp(m_hp);	// HPゲージを表示
+	m_pEffect->Draw();				// エフェクト描画
 
 #ifdef _DEBUG
 	DebugDraw debug;

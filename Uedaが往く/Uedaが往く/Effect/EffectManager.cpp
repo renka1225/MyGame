@@ -8,15 +8,19 @@
 namespace
 {
 	constexpr float kEffectScale = 5.0f; // 拡大率
+	constexpr int kEffectNum = 2;		 // エフェクトの種類数
 }
 
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-EffectManager::EffectManager()
+EffectManager::EffectManager():
+	m_isGuardEffect(false)
 {
-	emitter.emitterHandle = LoadEffekseerEffect("data/Effect/test.efk");
+	emitter.emitterHandle.resize(kEffectNum);
+	emitter.emitterHandle[EffectKind::kAttack] = LoadEffekseerEffect("data/Effect/attack.efk");
+	emitter.emitterHandle[EffectKind::kGuard] = LoadEffekseerEffect("data/Effect/guard.efk");
 }
 
 
@@ -25,7 +29,10 @@ EffectManager::EffectManager()
 /// </summary>
 EffectManager::~EffectManager()
 {
-	DeleteEffekseerEffect(emitter.emitterHandle);
+	for (auto& handle : emitter.emitterHandle)
+	{
+		DeleteEffekseerEffect(handle);
+	}
 }
 
 
@@ -39,29 +46,19 @@ void EffectManager::Init()
 }
 
 
-/// <summary>
-/// 更新
-/// </summary>
-void EffectManager::Update(Input& input, Player& player, EnemyBase& enemy)
+///// <summary>
+///// 更新
+///// </summary>
+void EffectManager::Update()
 {
 	Effekseer_Sync3DSetting();	// 3Dの情報をDxLibとEffekseerで合わせる
-
-	// TODO:攻撃が当たったらエフェクトを出す
-	if (input.IsTriggered("punch"))
-	{
-		emitter.effects.push_back({PlayEffekseer3DEffect(emitter.emitterHandle), {}});
-		auto& effect = emitter.effects.back();
-
-		// エフェクトの表示位置を更新
-		// MEMO:プレイヤーの腕の先端部分にエフェクトを表示
-		VECTOR armPos = player.GetCol().armEndPos;
-
-		// エフェクト位置と角度を調整
-		SetPosPlayingEffekseer3DEffect(effect.handle, armPos.x, armPos.y, armPos.z);
-		SetScalePlayingEffekseer3DEffect(effect.handle, kEffectScale, kEffectScale, kEffectScale);
-	}
-
 	UpdateEffekseer3D();
+
+	// ガードエフェクトが再生されていない場合
+	if (m_isGuardEffect && !IsEffekseer3DEffectPlaying(emitter.emitterHandle[EffectKind::kGuard]))
+	{
+		m_isGuardEffect = false;
+	}
 }
 
 
@@ -84,4 +81,39 @@ void EffectManager::ClearEffect()
 		StopEffekseer3DEffect(e.handle);
 	}
 	emitter.effects.clear();
+}
+
+
+/// <summary>
+/// 攻撃エフェクトを再生する
+/// </summary>
+/// <param name="pos">エフェクト位置</param>
+void EffectManager::PlayDamageEffect(const VECTOR& pos)
+{
+	emitter.effects.push_back({ PlayEffekseer3DEffect(emitter.emitterHandle[EffectKind::kAttack]), {}});
+	auto& effect = emitter.effects.back();
+
+	// エフェクトの表示位置を設定
+	SetPosPlayingEffekseer3DEffect(effect.handle, pos.x, pos.y, pos.z);
+	SetScalePlayingEffekseer3DEffect(effect.handle, kEffectScale, kEffectScale, kEffectScale);
+}
+
+
+/// <summary>
+/// ガードエフェクトを再生する
+/// </summary>
+/// <param name="pos">エフェクト位置</param>
+void EffectManager::PlayGuardEffect(const VECTOR& pos)
+{
+	// TODO:ガード中1回のみ表示されるようにする
+
+	if (m_isGuardEffect) return;
+
+	m_isGuardEffect = true;
+	emitter.effects.push_back({ PlayEffekseer3DEffect(emitter.emitterHandle[EffectKind::kGuard]), {} });
+	auto& effect = emitter.effects.back();
+
+	// エフェクトの表示位置を設定
+	SetPosPlayingEffekseer3DEffect(effect.handle, pos.x, pos.y, pos.z);
+	SetScalePlayingEffekseer3DEffect(effect.handle, kEffectScale, kEffectScale, kEffectScale);
 }

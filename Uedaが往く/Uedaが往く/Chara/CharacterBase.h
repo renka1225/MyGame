@@ -3,6 +3,7 @@
 
 class LoadData;
 class UIGauge;
+class EffectManager;
 
 /// <summary>
 /// キャラクターの基底クラス
@@ -180,6 +181,7 @@ protected:
 protected:
 	std::shared_ptr<LoadData> m_pLoadData;			// キャラクター情報
 	std::shared_ptr<UIGauge> m_pUIGauge;			// バトル中に表示するゲージ
+	std::shared_ptr<EffectManager> m_pEffect;		// エフェクト
 
 	float m_hp;				// HP
 	VECTOR m_pos;			// 位置

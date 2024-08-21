@@ -99,7 +99,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 			m_pCamera->Update(input, *m_pPlayer);
 			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 			m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
-			m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+			//m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
 		}
 
 		m_nextBattleTime--;
@@ -148,7 +148,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		else
 		{
 			m_elapsedTime++; // 経過時間を進める
-			m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
+			//m_pEffect->Update(input, *m_pPlayer, *m_pEnemy); // エフェクト更新
 		}
 	}
 

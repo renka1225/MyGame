@@ -32,7 +32,7 @@ SceneStageBase::SceneStageBase() :
 	m_elapsedTime(0)
 {
 	m_pUIProduction = std::make_shared<UIProduction>();
-	m_pEffect = std::make_shared<EffectManager>();
+	//m_pEffect = std::make_shared<EffectManager>();
 	Light::SetLight();
 }
 
@@ -73,7 +73,7 @@ void SceneStageBase::Init()
 	m_pPlayer->Init(kPlayerInitPos);
 	m_pCamera->Init();
 	m_pEnemy->Init(kEnemyInitPos);
-	m_pEffect->Init();
+	//m_pEffect->Init();
 }
 
 
@@ -89,7 +89,7 @@ void SceneStageBase::Draw()
 	// 敵描画
 	m_pEnemy->Draw();
 	// エフェクト描画
-	m_pEffect->Draw();
+	//m_pEffect->Draw();
 
 	// 操作説明を表示
 	m_pUI->DrawOperation();
@@ -104,7 +104,7 @@ void SceneStageBase::ClearStaging()
 	if (m_clearStagingTime >= kClearStagingTime - kChangeColorTime)
 	{
 		// 画面の色を変える
-		SetLightDifColor(GetColorF(0.0f, 0.7f, 1.0f, 0.0f));
+		SetLightDifColor(GetColorF(0.3f, 0.7f, 1.0f, 0.0f));
 		m_clearStagingTime--;
 		return;
 	}
@@ -123,7 +123,7 @@ void SceneStageBase::UpdateNextBattle()
 	m_nextBattleTime = kNextBattleTime;
 	m_clearStagingTime = kClearStagingTime;
 	// 画面上に残ったエフェクトを削除する
-	m_pEffect->ClearEffect();
+	//m_pEffect->ClearEffect();
 	// プレイヤーの位置、カメラ位置を最初の状態に戻す
 	m_pPlayer->Recovery();
 	Init();

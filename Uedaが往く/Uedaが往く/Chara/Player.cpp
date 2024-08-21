@@ -3,6 +3,7 @@
 #include "Stage.h"
 #include "EnemyBase.h"
 #include "UIGauge.h"
+#include "EffectManager.h"
 #include "Input.h"
 #include "LoadData.h"
 #include "DebugDraw.h"
@@ -14,12 +15,15 @@ namespace
 	// プレイヤー情報
 	const char* const kfileName = "data/Model/Chara/Player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxGauge = 100.0f;								// 最大ゲージ量
-	constexpr float kGaugeCharge = 0.3f;							// 1回の攻撃で増えるゲージ量
+	constexpr float kPunchGaugeCharge = 0.2f;						// パンチ時に増えるゲージ量
+	constexpr float kKickGaugeCharge = 0.3f;						// キック時に増えるゲージ量
+	constexpr float kDecreaseGauge = 0.15f;							// 攻撃を受けた際に減るゲージ量
 	constexpr float kHPRecoveryRate = 0.3f;							// プレイヤーのHPが回復する割合
 	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
 	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
 	constexpr float kAdj = 3.0f;									// 敵に当たった時の位置調整量
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
+	constexpr float kEffectHeight = 30.0f;							// エフェクトを表示する高さ
 
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
@@ -73,6 +77,7 @@ void Player::Init(VECTOR pos)
 	MV1SetPosition(m_modelHandle, m_pos);
 	m_targetMoveDir = kInitDir;
 	m_currentState = CharacterBase::State::kFightIdle;
+	m_pEffect->Init();	// エフェクトの初期化
 
 	// モデル全体のコリジョン情報のセットアップ
 	MV1SetupCollInfo(m_modelHandle, -1);
@@ -104,23 +109,13 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	// エネミーとの当たり判定をチェックする
 	enemy.CheckHitPlayerCol(*this, VGet(m_pos.x, m_pos.y + m_colInfo.bodyHeight, m_pos.z), m_pos, m_colInfo.bodyRadius);
 
-	// アニメーション状態を更新
-	UpdateAnimState(prevState);
-
-	// プレイヤーの移動方向を設定
-	UpdateAngle(enemy);
-
-	// 移動ベクトルを元にプレイヤーを移動させる
-	Move(moveVec, stage);
-
-	// アニメーション処理の更新
-	UpdateAnim();
-
-	// 当たり判定の位置更新
-	UpdateCol();
-
-	// HPバーの更新
-	m_pUIGauge->UpdateHpBar();
+	UpdateAnimState(prevState);	// アニメーション状態を更新
+	UpdateAngle(enemy);			// プレイヤーの移動方向を設定
+	Move(moveVec, stage);		// 移動ベクトルを元にプレイヤーを移動させる
+	UpdateAnim();				// アニメーション処理の更新
+	UpdateCol();				// 当たり判定の位置更新
+	m_pUIGauge->UpdateHpBar();	// HPバーの更新
+	m_pEffect->Update();		// エフェクト更新
 }
 
 
@@ -134,6 +129,8 @@ void Player::Draw()
 	// HPゲージを表示
 	m_pUIGauge->DrawPlayerHP(m_hp);
 	m_pUIGauge->DrawPlayerGauge(m_gauge, kMaxGauge);
+	// エフェクト描画
+	m_pEffect->Draw();
 
 #ifdef _DEBUG	// デバッグ表示
 	DebugDraw debug;
@@ -160,10 +157,15 @@ void Player::OnDamage(float damage)
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
+		if (!m_pEffect->IsPlayGuardEffect())
+		{
+			m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));
+		}
 	}
 	else
 	{
 		m_isAttack = false;
+		m_gauge -= kDecreaseGauge;
 		Receive();
 	}
 }
@@ -212,19 +214,19 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 			if (m_currentState == CharacterBase::State::kPunch1)
 			{
 				enemy.OnDamage(m_status.punchPower);
-				m_gauge += kGaugeCharge;
+				m_gauge += kPunchGaugeCharge;					// ゲージを増やす
 			}
 			// 2コンボ目
 			if (m_currentState == CharacterBase::State::kPunch2)
 			{
 				enemy.OnDamage(m_status.secondPunchPower);
-				m_gauge += kGaugeCharge;
+				m_gauge += kPunchGaugeCharge;
 			}
 			// 3コンボ目
 			if (m_currentState == CharacterBase::State::kPunch3)
 			{
 				enemy.OnDamage(m_status.thirdPunchPower);
-				m_gauge += kGaugeCharge;
+				m_gauge += kPunchGaugeCharge;
 			}
 		}
 		else
@@ -239,7 +241,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 		if (!enemy.GetIsGuard() || isBackAttack)
 		{
 			enemy.OnDamage(m_status.kickPower);
-			m_gauge += kGaugeCharge;
+			m_gauge += kKickGaugeCharge;
 		}
 		else
 		{
@@ -265,6 +267,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 
 	// ゲージ量の調整
 	m_gauge = std::min(m_gauge, kMaxGauge);
+	m_gauge = std::max(0.0f, m_gauge);
 }
 
 
@@ -394,6 +397,7 @@ void Player::Avoid(const Input& input, Stage& stage, VECTOR& moveVec)
 		return;
 	}
 
+	// ボタンを押した場合
 	if (input.IsTriggered("avoidance"))
 	{
 		m_isFighting = false;
@@ -494,6 +498,7 @@ void Player::Receive()
 	{
 		m_isReceive = true;
 		PlayAnim(CharacterBase::AnimKind::kReceive);
+		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));	// エフェクトを再生する
 	}
 }
 
