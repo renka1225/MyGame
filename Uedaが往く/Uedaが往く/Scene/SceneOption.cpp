@@ -141,7 +141,7 @@ void SceneOption::Draw()
 {
 	// 背景描画
 	m_pUI->DrawMenuBg();
-	DrawBox(kBackBoxPos.x, kBackBoxPos.y, kBackBoxPos.x + kBackBoxWidth, kBackBoxPos.y + kBackBoxHeight, kBackBoxColor, true);
+	DrawBoxAA(kBackBoxPos.x, kBackBoxPos.y, kBackBoxPos.x + kBackBoxWidth, kBackBoxPos.y + kBackBoxHeight, kBackBoxColor, true);
 
 	// カーソル表示
 	if (!m_isSound && !m_isKeyConfig)
@@ -168,9 +168,10 @@ void SceneOption::Draw()
 	DrawStringFToHandle(kSelectTextPos.x + kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kSound,
 		"サウンド", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 
-	//m_pUI->DrawButtonText();
+	// ボタン画像表示
+	m_pUI->DrawButtonText();
 
-	// TODO:キーコンフィグは後ほど行う
+	// TODO:キーコンフィグは後ほど行う予定
 	//DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKeyConfig,
 		//"ボタン配置", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 
@@ -236,10 +237,10 @@ void SceneOption::DrawSound()
 	// 音量に合わせて四角の長さを更新する
 	float bgmBarWidth = kCurrentSoundBarWidth * (Sound::GetBgmVol() / 100.0f);
 	float seBarWidth = kCurrentSoundBarWidth * (Sound::GetSeVol() / 100.0f);
-	DrawBox(kCurrentSoundBarPos.x, kCurrentSoundBarPos.y + kSelectTextInterval * SelectSound::kBGM,
+	DrawBoxAA(kCurrentSoundBarPos.x, kCurrentSoundBarPos.y + kSelectTextInterval * SelectSound::kBGM,
 		kCurrentSoundBarPos.x + bgmBarWidth, kCurrentSoundBarPos.y + kCurrentSoundBarHeight + kSelectTextInterval * SelectSound::kBGM,
 		kCurrentSoundBarColor, true);
-	DrawBox(kCurrentSoundBarPos.x, kCurrentSoundBarPos.y + kSelectTextInterval * SelectSound::kSE,
+	DrawBoxAA(kCurrentSoundBarPos.x, kCurrentSoundBarPos.y + kSelectTextInterval * SelectSound::kSE,
 		kCurrentSoundBarPos.x + seBarWidth, kCurrentSoundBarPos.y + kCurrentSoundBarHeight + kSelectTextInterval * SelectSound::kSE,
 		kCurrentSoundBarColor, true);
 

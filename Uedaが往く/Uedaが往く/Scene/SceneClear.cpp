@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Sound.h"
 #include "Font.h"
+#include "UI.h"
 #include "Ranking.h"
 #include "ConversionTime.h"
 #include "SceneSelectStage.h"
@@ -93,7 +94,6 @@ void SceneClear::Draw()
 	// 勝利の文字を表示
 	DrawGraphF(kSyoriTextPos.x, kSyoriTextPos.y, m_textHandle, true);
 
-
 	// トータルタイム表示
 	int totalMin = Conversion::ChangeMin(m_totalClearTime);
 	int totalSec = Conversion::ChangeSec(m_totalClearTime);
@@ -116,6 +116,9 @@ void SceneClear::Draw()
 	DrawStringFToHandle(kRankingTextPos.x, kRankingTextPos.y,
 		"ランキング", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
 	m_pRank->DrawClearRanking();
+
+	// テキスト表示
+	m_pUI->DrawClearButtonText();
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

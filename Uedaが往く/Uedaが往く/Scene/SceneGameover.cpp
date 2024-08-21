@@ -134,6 +134,6 @@ void SceneGameover::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "ゲームオーバー画面", 0xffffff);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
 }

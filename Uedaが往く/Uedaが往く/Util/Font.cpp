@@ -29,21 +29,29 @@ namespace Font
 	FontData data[] =
 	{
 		// Size96_4
-		{kFontName, 96, 4, -1},
+		{kFontName, 96, 4, DX_FONTTYPE_ANTIALIASING_8X8},
 		// Size64_4
-		{kFontName, 64, 4, -1},
+		{kFontName, 64, 4, DX_FONTTYPE_ANTIALIASING_8X8},
 		// Size48_4
-		{kFontName, 48, 4, -1},
+		{kFontName, 48, 4, DX_FONTTYPE_ANTIALIASING_8X8},
+		// Size48_4_EDGE
+		{kFontName, 48, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size42_4
-		{kFontName, 42, 4, -1},
+		{kFontName, 42, 4, DX_FONTTYPE_ANTIALIASING_8X8},
+		// Size42_4_EDGE
+		{kFontName, 42, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size40_4
 		{kFontName, 40, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
+		// Size36_4_EDGE
+		{kFontName, 36, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size28_4
-		{kFontName, 28, 4, -1},
+		{kFontName, 28, 4, DX_FONTTYPE_ANTIALIASING_8X8},
 		// Size24_4
-		{kFontName, 24, 4, -1},
+		{kFontName, 24, 4, DX_FONTTYPE_ANTIALIASING_8X8},
+		// Size24_4_EDGE
+		{kFontName, 24, 4,  DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size16_4
-		{kFontName, 16, 4, -1},
+		{kFontName, 16, 4, DX_FONTTYPE_ANTIALIASING_8X8},
 		// Normal
 		{"ÇlÇrÅ@ÉSÉVÉbÉN", 16, -1, -1},
 	};

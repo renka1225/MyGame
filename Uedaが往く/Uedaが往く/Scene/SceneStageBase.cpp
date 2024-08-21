@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Input.h"
+#include "UI.h"
 #include "UIProduction.h"
 #include "Light.h"
 #include "EffectManager.h"
@@ -91,7 +92,7 @@ void SceneStageBase::Draw()
 	m_pEffect->Draw();
 
 	// ‘€ìà–¾‚ð•\Ž¦
-	//m_pUIProduction->DrawOperation();
+	m_pUI->DrawOperation();
 }
 
 

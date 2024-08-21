@@ -14,9 +14,6 @@ namespace
 	constexpr int kAlpha = 200;
 	constexpr int kBackColor = 0xdcdcdc;				// 背景の色
 	constexpr int kBackBoxColor = 0x494949;				// 四角の色
-	const Vec2 kBackBoxLTPos = { 500.0f, 120.0f };		// 四角の左上位置
-	const Vec2 kBackBoxRBPos = { 1420.0f, 880.0f };		// 四角の右下位置
-	constexpr int kBackBoxWidth = 490;					// 四角の幅
 	constexpr int kTextColor = 0xffffff;				// テキストの色
 	const Vec2 kBackTextPos = { 800, 350 };				// "ゲームにもどる"表示位置
 	const Vec2 kOptionTextPos = { 860, 500 };			// "オプション"表示位置
@@ -91,12 +88,12 @@ void ScenePause::Draw()
 	// プレイ画面を薄く表示する
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kAlpha);
 	m_pPrevScene->Draw();
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// 背景に黒枠を表示
+	// 背景表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kAlpha);
-	DrawBoxAA(kBackBoxLTPos.x, kBackBoxLTPos.y, kBackBoxRBPos.x, kBackBoxRBPos.y, kBackBoxColor, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
+	m_pUI->DrawPauseBack();
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// カーソル表示
@@ -114,6 +111,6 @@ void ScenePause::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "ポーズ画面", 0xffffff);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
 }
