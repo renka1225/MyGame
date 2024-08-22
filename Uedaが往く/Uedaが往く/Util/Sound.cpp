@@ -37,6 +37,7 @@ namespace Sound
 		{"data/sound/SE/walk.wav", kMaxVolumePal},
 		{"data/sound/SE/run.wav", kMaxVolumePal},
 		{"data/sound/SE/attack.mp3", kMaxVolumePal},
+		{"data/sound/SE/guardAttack.mp3", kMaxVolumePal},
 		{"data/sound/SE/specialAttack.wav", kMaxVolumePal},
 		{"data/sound/SE/avoid.mp3", kMaxVolumePal},
 		{"data/sound/SE/battleStart.mp3", kMaxVolumePal},

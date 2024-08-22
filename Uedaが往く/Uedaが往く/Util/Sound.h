@@ -27,6 +27,7 @@ namespace Sound
 		kWalk,			// 歩き
 		kRun,			// 走り
 		kAttack,		// 攻撃
+		kGuardAttack,	// ガード時攻撃
 		kSpecialAttack,	// 必殺技
 		kAvoid,			// 回避
 		kBattleStart,	// バトル開始時

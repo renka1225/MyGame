@@ -143,6 +143,7 @@ void Player::Draw()
 	// ゲージがたまったら必殺技の文字を表示する
 	if (m_gauge >= kMaxGauge)
 	{
+		DrawString(300, 300, "必殺技 B", 0xffffff);
 	}
 
 #ifdef _DEBUG	// デバッグ表示
@@ -168,6 +169,11 @@ void Player::OnDamage(float damage)
 	if (m_currentState == CharacterBase::State::kGuard)
 	{
 		m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z)); // エフェクト表示
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kGuardAttack)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kGuardAttack)], DX_PLAYTYPE_BACK);	// ガード時攻撃SE再生
+		}
+
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_targetMoveDir, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));
@@ -510,9 +516,8 @@ void Player::Receive()
 	{
 		m_isReceive = true;
 		PlayAnim(CharacterBase::AnimKind::kReceive);
-
-		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK);
+		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));				 // 攻撃エフェクト表示
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK); // 攻撃SE再生
 	}
 }
 

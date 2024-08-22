@@ -10,28 +10,35 @@
 // 定数
 namespace
 {
-	constexpr int kBackBoxColor = 0x494949;				 // 四角の色
-	const Vec2 kBackBoxPos = { 712, 115 };				 // 背景の四角の表示位置
-	constexpr float kBackBoxWidth = 1070;				 // 背景の四角の幅
-	constexpr float kBackBoxHeight = 800;				 // 背景の四角の高さ
+	constexpr int kBackBoxColor = 0x494949;					 // 四角の色
+	const Vec2 kBackBoxPos = { 712.0f, 115.0f };			 // 背景の四角の表示位置
+	constexpr float kBackBoxWidth = 1070;					 // 背景の四角の幅
+	constexpr float kBackBoxHeight = 800;					 // 背景の四角の高さ
 
-	constexpr int kTextColor = 0xffffff;				 // テキストの色
-	const Vec2 kSelectTextPos = { 250, 300 };			 // 選択テキスト表示位置
-	constexpr float kSelectTextAdj = 30.0f;				 // 選択テキスト表示位置調整
-	constexpr float kSelectTextInterval = 120.0f;		 // 選択テキスト表示間隔
-	const Vec2 kAfterSelectTextPos = { 800, 310 };		 // 選択後テキスト表示位置
-	const Vec2 kCursorPos = { 140, 290 };				 // カーソル表示位置
-	const Vec2 kAfterSelectCursorPos = { 780, 300 };	 // 選択後カーソル表示位置
+	constexpr int kTextColor = 0xffffff;					 // テキストの色
+	const Vec2 kSelectTextPos = { 250.0f, 300.0f };			 // 選択テキスト表示位置
+	constexpr float kSelectTextAdj = 30.0f;					 // 選択テキスト表示位置調整
+	constexpr float kSelectTextInterval = 120.0f;			 // 選択テキスト表示間隔
+	const Vec2 kAfterSelectTextPos = { 800.0f, 310.0f };	 // 選択後テキスト表示位置
+	const Vec2 kCursorPos = { 140.0f, 290.0f };				// カーソル表示位置
+	const Vec2 kAfterSelectCursorPos = { 780.0f, 300.0f };	// 選択後カーソル表示位置
 
-	// サウンド関係
-	const Vec2 kSoundNumText = { 1650, 320 };			 // 音量テキスト表示位置
-	const Vec2 kSoundBarPos = { 950, 330 };				 // 音量バー背景表示位置
-	const Vec2 kCurrentSoundBarPos = { 954, 333 };		 // 現在の音量バー左上位置
-	constexpr float kCurrentSoundBarWidth = 650;		 // 現在の音量バーの最大横幅
-	constexpr float kCurrentSoundBarHeight = 23;		 // 現在の音量バーの高さ
-	constexpr int kCurrentSoundBarColor = 0xcf2223;		 // 現在の音量バーの色
-	const Vec2 kSoundKnobPos = { 1600, 315 };			 // つまみ初期表示位置
-	constexpr float kSoundKnobMinPosX = 950.0f;			 // つまみ最小表示位置X
+	// サウンド関連
+	const Vec2 kSoundNumTextPos = { 1650.0f, 320.0f };		 // 音量テキスト表示位置
+	const Vec2 kSoundBarPos = { 950.0f, 330.0f };			 // 音量バー背景表示位置
+	const Vec2 kCurrentSoundBarPos = { 954.0f, 333.0f };	 // 現在の音量バー左上位置
+	constexpr float kCurrentSoundBarWidth = 650;			 // 現在の音量バーの最大横幅
+	constexpr float kCurrentSoundBarHeight = 23;			 // 現在の音量バーの高さ
+	constexpr int kCurrentSoundBarColor = 0xcf2223;			 // 現在の音量バーの色
+	const Vec2 kSoundKnobPos = { 1600.0f, 315.0f };			 // つまみ初期表示位置
+	constexpr float kSoundKnobMinPosX = 950.0f;				 // つまみ最小表示位置X
+
+	// クレジット表記関連
+	const Vec2 kSoundCreditTextPos = { 800.0f, 250.0f }; 	 // サウンドクレジット表記位置
+	const Vec2 kModelCreditTextPos = { 800.0f, 540.0f };	 // 3Dモデルクレジット表記位置
+	constexpr float kCreditTextAdj = 30.0f;					 // クレジット表記位置調整
+	constexpr float kCreditTextIntervel = 60.0f;			 // クレジット表記間隔
+
 
 	// 画像の種類
 	enum class Handle
@@ -49,8 +56,7 @@ namespace
 SceneOption::SceneOption(std::shared_ptr<SceneBase> pScene) :
 	m_pPrevScene(pScene),
 	m_afterSelect(SelectSound::kBGM),
-	m_isSound(false),
-	m_isKeyConfig(false)
+	m_isSound(false)
 {
 	m_handle.resize(static_cast<int>(Handle::kHandleNum));
 	m_handle[static_cast<int>(Handle::kSoundBar)] = LoadGraph("data/UI/soundBar.png");
@@ -91,10 +97,6 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 		// サウンド更新
 		UpdateSound(input);
 	}
-	else if (m_isKeyConfig)
-	{
-		UpdateSelect(input, SelectKeyConfig::kSelectKeyNum);
-	}
 	else
 	{
 		UpdateSelect(input, Select::kSelectNum);
@@ -104,10 +106,9 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 
 	if (input.IsTriggered("back"))
 	{
-		if (m_isSound || m_isKeyConfig)
+		if (m_isSound)
 		{
 			m_isSound = false;
-			m_isKeyConfig = false;
 		}
 		else
 		{
@@ -119,14 +120,7 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 		if (m_select == Select::kSound)
 		{
 			m_isSound = true;
-			m_isKeyConfig = false;
 			m_afterSelect = SelectSound::kBGM;
-		}
-		else if (m_select == Select::kKeyConfig)
-		{
-			m_isSound = false;
-			m_isKeyConfig = true;
-			m_afterSelect = SelectKeyConfig::kXButton;
 		}
 	}
 
@@ -144,7 +138,7 @@ void SceneOption::Draw()
 	DrawBoxAA(kBackBoxPos.x, kBackBoxPos.y, kBackBoxPos.x + kBackBoxWidth, kBackBoxPos.y + kBackBoxHeight, kBackBoxColor, true);
 
 	// カーソル表示
-	if (!m_isSound && !m_isKeyConfig)
+	if (!m_isSound)
 	{
 		m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);
 	}
@@ -158,6 +152,11 @@ void SceneOption::Draw()
 	{
 		DrawSound();
 	}
+	// クレジット表記
+	if (m_select == Select::kCredit)
+	{
+		DrawCredit();
+	}
 	// キーコンフィグ関連表示
 	//else if (m_select == Select::kKeyConfig)
 	//{
@@ -167,6 +166,8 @@ void SceneOption::Draw()
 	// テキスト表示
 	DrawStringFToHandle(kSelectTextPos.x + kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kSound,
 		"サウンド", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	DrawStringFToHandle(kSelectTextPos.x - kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kCredit,
+		"クレジット表記", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 
 	// ボタン画像表示
 	m_pUI->DrawButtonText();
@@ -189,19 +190,19 @@ void SceneOption::Draw()
 void SceneOption::UpdateSound(Input& input)
 {
 	// 選択状態を1つ下げる
-	//if (input.IsTriggered("down"))
-	//{
-	//	m_afterSelect = (m_afterSelect + 1) % SelectSound::kSelectSoundNum;
-	//	m_pUI->Init();
-	//	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
-	//}
-	//// 選択状態を1つ上げる
-	//if (input.IsTriggered("up"))
-	//{
-	//	m_afterSelect = (m_afterSelect + (SelectSound::kSelectSoundNum - 1)) % SelectSound::kSelectSoundNum;
-	//	m_pUI->Init();
-	//	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
-	//}
+	if (input.IsTriggered("down"))
+	{
+		m_afterSelect = (m_afterSelect + 1) % SelectSound::kSelectSoundNum;
+		m_pUI->Init();
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
+	}
+	// 選択状態を1つ上げる
+	if (input.IsTriggered("up"))
+	{
+		m_afterSelect = (m_afterSelect + (SelectSound::kSelectSoundNum - 1)) % SelectSound::kSelectSoundNum;
+		m_pUI->Init();
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
+	}
 
 	// BGM選択中の場合
 	if (m_afterSelect == SelectSound::kBGM)
@@ -216,13 +217,13 @@ void SceneOption::UpdateSound(Input& input)
 }
 
 
-/// <summary>
-/// キー更新
-/// </summary>
-/// <param name="input">入力状態</param>
-void SceneOption::UpdateKeyConfig(Input& input)
-{
-}
+///// <summary>
+///// キー更新
+///// </summary>
+///// <param name="input">入力状態</param>
+//void SceneOption::UpdateKeyConfig(Input& input)
+//{
+//}
 
 
 /// <summary>
@@ -255,11 +256,28 @@ void SceneOption::DrawSound()
 		"BGM", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 	DrawStringFToHandle(kAfterSelectTextPos.x, kAfterSelectTextPos.y + kSelectTextInterval * SelectSound::kSE,
 		"SE", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
-	DrawFormatStringFToHandle(kSoundNumText.x, kSoundNumText.y + kSelectTextInterval * SelectSound::kBGM,
+	DrawFormatStringFToHandle(kSoundNumTextPos.x, kSoundNumTextPos.y + kSelectTextInterval * SelectSound::kBGM,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)], "%d", Sound::GetBgmVol());
-	DrawFormatStringFToHandle(kSoundNumText.x, kSoundNumText.y + kSelectTextInterval * SelectSound::kSE,
+	DrawFormatStringFToHandle(kSoundNumTextPos.x, kSoundNumTextPos.y + kSelectTextInterval * SelectSound::kSE,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)], "%d", Sound::GetSeVol());
 
+}
+
+
+/// <summary>
+/// クレジット表記
+/// </summary>
+void SceneOption::DrawCredit()
+{
+	// テキスト表示
+	DrawStringFToHandle(kSoundCreditTextPos.x, kSoundCreditTextPos.y,
+		"・サウンド", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	DrawStringFToHandle(kSoundCreditTextPos.x + kCreditTextAdj, kSoundCreditTextPos.y + kCreditTextIntervel,
+		"効果音ラボ\nOtoLogic\n魔王魂", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	DrawStringFToHandle(kModelCreditTextPos.x, kModelCreditTextPos.y,
+		"・3Dモデル", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	DrawStringFToHandle(kModelCreditTextPos.x + kCreditTextAdj, kModelCreditTextPos.y + kCreditTextIntervel,
+		"Mixamo\nZENRIN City Asset SeriesTM", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 }
 
 

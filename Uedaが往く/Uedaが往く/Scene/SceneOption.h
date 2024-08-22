@@ -16,22 +16,23 @@ public:
 
 private:
 	void UpdateSound(Input& input);		// サウンド更新
-	void UpdateKeyConfig(Input& input); // キー更新
+	//void UpdateKeyConfig(Input& input); // キー更新
 	void DrawSound();					// サウンド部分表示
+	void DrawCredit();					// クレジット表記
 	void DrawKeyConfig();				// キーコンフィグ部分表示
 
 private:
 	std::shared_ptr<SceneBase> m_pPrevScene;	// 前に実行していたシーン
 	int m_afterSelect;							// 選択後の状態
 	bool m_isSound;								// サウンドが選択中か(true:選択中)
-	bool m_isKeyConfig;							// キーコンフィグが選択中か(true:選択中)
+	bool m_isCredit;							// キーコンフィグが選択中か(true:選択中)
 	std::vector<int> m_handle;					// サウンドバーに使用する画像
 
 	// 選択肢
 	enum Select
 	{
 		kSound,			// サウンド
-		kKeyConfig,		// キーコンフィグ
+		kCredit,		// クレジット表記
 		kSelectNum		// 選択数
 	};
 
