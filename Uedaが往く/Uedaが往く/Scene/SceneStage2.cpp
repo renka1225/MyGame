@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "Input.h"
 #include "Sound.h"
-#include "UIProduction.h"
+#include "UIBattle.h"
 #include "Player.h"
 #include "EnemyNinja.h"
 #include "EnemyChef.h"
@@ -89,6 +89,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
 		{
+			m_isPause = true;
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
 
@@ -174,7 +175,7 @@ void SceneStage2::Draw()
 {
 	SceneStageBase::Draw();
 	// 演出UIを表示
-	m_pUIProduction->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+	m_pUIBattle->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

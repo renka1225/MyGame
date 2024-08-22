@@ -34,16 +34,6 @@ namespace
 	const Vec2 kClearButtonTextPos = { 1480, 975 };		// クリア時のテキスト位置
 	constexpr float kButtonTextWidth = 170.0f;			// テキストの幅
 	constexpr int kTextColor = 0xffffff;				// テキストの色
-
-	/*操作説明画面*/
-	const Vec2 kOperationFramePos = { 1720.0f, 280.0f };	// 枠表示位置
-	constexpr float kOperationWidth = 300.0f;				// 枠の横幅
-	constexpr float kOperationHeight = 350.0f;				// 枠の縦幅
-	constexpr int kOperationBackColor = 0x000000;			// 枠の背景色
-	const Vec2 kOperationTextPos = { 1730.0f, 300.0f };		// テキストの表示位置
-	const Vec2 kOperationButtonPos = { 1880.0f, 320.0f };	// ボタン位置
-	constexpr float kOperationButtonScale = 1.0f;			// ボタンサイズ
-	constexpr float kOperationInterval = 40.0f;				// 表示間隔
 }
 
 
@@ -166,52 +156,4 @@ void UI::DrawClearButtonText()
 
 	// ボタン画像表示
 	DrawRectRotaGraphF(kClearButtonPos.x, kClearButtonPos.y, kButtonSize * ButtonKind::kAButton, 0, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_buttonHandle, true);
-}
-
-
-/// <summary>
-/// 操作説明を表示する
-/// </summary>
-void UI::DrawOperation()
-{
-	// 背景を薄く表示する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawBoxAA(kOperationFramePos.x, kOperationFramePos.y, kOperationFramePos.x + kOperationWidth, kOperationFramePos.y + kOperationHeight, kOperationBackColor, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-
-	// テキスト表示
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kMove,
-		"移動", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kCameraMove,
-		"カメラ移動", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kPunch,
-		"パンチ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kKick,
-		"キック", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kAvoid,
-		"回避", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kGuard,
-		"ガード", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kRockon,
-		"ロックオン", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kPause,
-		"ポーズ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
-
-	// ボタン画像表示
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kMove,
-		kButtonSize * ButtonKind::kRStick, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);		// Rスティック
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kCameraMove,
-		kButtonSize * ButtonKind::kLStick, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);		// Lスティック
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kPunch,
-		kButtonSize * ButtonKind::kXButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// X
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kKick,
-		kButtonSize * ButtonKind::kYButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// Y
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kAvoid,
-		kButtonSize * ButtonKind::kAButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// A
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kGuard,
-		kButtonSize * ButtonKind::kLBButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// LB
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kRockon,
-		kButtonSize * ButtonKind::kRBButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// RB
-	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kPause,
-		kButtonSize * ButtonKind::kMenuButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// Menu
 }

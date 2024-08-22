@@ -29,7 +29,6 @@
     <ClCompile Include="Debug\DebugDraw.cpp" />
     <ClCompile Include="Effect\EffectManager.cpp" />
     <ClCompile Include="UI\UI.cpp" />
-    <ClCompile Include="UI\UIProduction.cpp" />
     <ClCompile Include="Util\Font.cpp" />
     <ClCompile Include="Util\Ranking.cpp" />
     <ClCompile Include="Scene\ScenePause.cpp" />
@@ -48,7 +47,7 @@
     <ClCompile Include="Scene\SceneStage2.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
-    <ClCompile Include="UI\UIGauge.cpp" />
+    <ClCompile Include="UI\UIBattle.cpp" />
     <ClCompile Include="Util\Camera.cpp" />
     <ClCompile Include="Util\Input.cpp" />
     <ClCompile Include="Util\Sound.cpp" />
@@ -65,7 +64,6 @@
     <ClInclude Include="Debug\DebugDraw.h" />
     <ClInclude Include="Effect\EffectManager.h" />
     <ClInclude Include="UI\UI.h" />
-    <ClInclude Include="UI\UIProduction.h" />
     <ClInclude Include="Util\Font.h" />
     <ClInclude Include="Util\Ranking.h" />
     <ClInclude Include="Scene\ScenePause.h" />
@@ -84,7 +82,7 @@
     <ClInclude Include="Scene\SceneStage2.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="Stage\Stage.h" />
-    <ClInclude Include="UI\UIGauge.h" />
+    <ClInclude Include="UI\UIBattle.h" />
     <ClInclude Include="Util\Camera.h" />
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />

@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "Input.h"
 #include "UI.h"
-#include "UIProduction.h"
+#include "UIBattle.h"
 #include "Sound.h"
 #include "Light.h"
 #include "Player.h"
@@ -29,9 +29,10 @@ SceneStageBase::SceneStageBase() :
 	m_battleNum(0),
 	m_nextBattleTime(kNextBattleTime),
 	m_clearStagingTime(kClearStagingTime),
-	m_elapsedTime(0)
+	m_elapsedTime(0),
+	m_isPause(false)
 {
-	m_pUIProduction = std::make_shared<UIProduction>();
+	m_pUIBattle = std::make_shared<UIBattle>();
 	Light::SetLight();
 }
 
@@ -50,7 +51,8 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_battleNum(0),
 	m_clearStagingTime(0),
 	m_nextBattleTime(0),
-	m_elapsedTime(0)
+	m_elapsedTime(0),
+	m_isPause(false)
 {
 }
 
@@ -69,9 +71,14 @@ SceneStageBase::~SceneStageBase()
 /// </summary>
 void SceneStageBase::Init()
 {
-	m_pPlayer->Init(kPlayerInitPos);
-	m_pCamera->Init();
-	m_pEnemy->Init(kEnemyInitPos);
+	if (!m_isPause)
+	{
+		m_pPlayer->Init(kPlayerInitPos);
+		m_pCamera->Init();
+		m_pEnemy->Init(kEnemyInitPos);
+	}
+
+	m_isPause = false;
 }
 
 
@@ -80,15 +87,10 @@ void SceneStageBase::Init()
 /// </summary>
 void SceneStageBase::Draw()
 {
-	// ステージ描画
-	m_pStage->Draw();
-	// プレイヤー描画
-	m_pPlayer->Draw();
-	// 敵描画
-	m_pEnemy->Draw();
-
-	// 操作説明を表示
-	m_pUI->DrawOperation();
+	m_pStage->Draw();			  // ステージ描画
+	m_pPlayer->Draw();			  // プレイヤー描画
+	m_pEnemy->Draw();			  // 敵描画
+	m_pUIBattle->DrawOperation(); // 操作説明を表示
 }
 
 

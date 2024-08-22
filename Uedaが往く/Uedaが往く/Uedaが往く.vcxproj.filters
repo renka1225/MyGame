@@ -102,7 +102,7 @@
     <ClCompile Include="Scene\SceneStage1.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UIGauge.cpp">
+    <ClCompile Include="UI\UIBattle.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
     <ClCompile Include="Util\Camera.cpp">
@@ -146,9 +146,6 @@
     </ClCompile>
     <ClCompile Include="Scene\ScenePause.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIProduction.cpp">
-      <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
     <ClCompile Include="Effect\EffectManager.cpp">
       <Filter>ソース ファイル\Effect</Filter>
@@ -206,7 +203,7 @@
     <ClInclude Include="Scene\SceneStage2.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="UI\UIGauge.h">
+    <ClInclude Include="UI\UIBattle.h">
       <Filter>ヘッダー ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Util\Game.h">
@@ -253,9 +250,6 @@
     </ClInclude>
     <ClInclude Include="Scene\ScenePause.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIProduction.h">
-      <Filter>ヘッダー ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Effect\EffectManager.h">
       <Filter>ヘッダー ファイル\Effect</Filter>

@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "Player.h"
 #include "Stage.h"
-#include "UIGauge.h"
+#include "UIBattle.h"
 #include "EffectManager.h"
 #include "LoadData.h"
 #include "DebugDraw.h"
@@ -24,7 +24,7 @@ EnemyChef::EnemyChef()
 {
 	// キャラクター情報を読み込む
 	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kEnemyChef));
-	m_pUIGauge = std::make_shared<UIGauge>(m_status.maxHp);
+	m_pUIBattle = std::make_shared<UIBattle>(m_status.maxHp);
 
 	m_hp = m_status.maxHp;
 	m_moveSpeed = m_status.maxMoveSpeed;
@@ -83,8 +83,9 @@ void EnemyChef::Update(Player& player, Stage& stage, SceneStageBase& sceneStage)
 	UpdateGuard();					// ガード状態を更新
 	Move(moveVec, player, stage);	// 移動ベクトルを元にエネミーを移動させる
 	UpdateAnim();					// アニメーション処理の更新
-	UpdateCol();					// 当たり判定の位置更新
-	m_pUIGauge->UpdateHpBar();		// HPバーの更新
+	UpdateCol();					// 当たり判定位置更新
+	UpdatePosLog();					// 位置ログを更新
+	m_pUIBattle->UpdateHpBar();		// HPバーの更新
 	m_pEffect->Update();			// エフェクト更新
 }
 
@@ -95,9 +96,15 @@ void EnemyChef::Update(Player& player, Stage& stage, SceneStageBase& sceneStage)
 void EnemyChef::Draw()
 {
 	MV1DrawModel(m_modelHandle);		// 敵モデル描画
-	m_pUIGauge->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyChef)); // シルエット描画
-	m_pUIGauge->DrawEnemyHp(m_hp);		// HPゲージを表示
 	m_pEffect->Draw();					// エフェクト描画
+	m_pUIBattle->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyChef)); // シルエット描画
+	m_pUIBattle->DrawEnemyHp(m_hp);		// HPゲージを表示
+
+	// 回避中は残像を表示する
+	if (m_currentState == State::kAvoid)
+	{
+		DrawAfterImage();
+	}
 
 #ifdef _DEBUG
 	DebugDraw debug;

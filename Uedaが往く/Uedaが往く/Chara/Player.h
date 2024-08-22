@@ -47,6 +47,8 @@ private:
 	void OffGuard();
 	// 攻撃を受けている最中の処理
 	void Receive();
+	// 必殺技
+	void SpecialAttack(const Input& input);
 	// 移動パラメータを設定する
 	CharacterBase::State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの角度を更新

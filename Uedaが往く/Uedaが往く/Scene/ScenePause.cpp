@@ -19,7 +19,7 @@ namespace
 	const Vec2 kOptionTextPos = { 860, 500 };			// "オプション"表示位置
 	const Vec2 kStageTextPos = { 760, 650 };			// "ステージ選択にもどる"表示位置
 	constexpr float kSelectTextInterval = 150.0f;		// 選択テキスト表示間隔
-	const Vec2 kCursorPos = { 720, 340 };				// カーソル表示位置
+	const Vec2 kCursorPos = { 740, 340 };				// カーソル表示位置
 }
 
 /// <summary>

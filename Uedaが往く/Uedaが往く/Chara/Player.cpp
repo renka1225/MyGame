@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "Input.h"
 #include "Sound.h"
-#include "UIGauge.h"
+#include "UIBattle.h"
 #include "EffectManager.h"
 #include "LoadData.h"
 #include "Camera.h"
@@ -16,8 +16,8 @@ namespace
 	// プレイヤー情報
 	const char* const kfileName = "data/Model/Chara/Player.mv1";	// プレイヤーのファイル名
 	constexpr float kMaxGauge = 100.0f;								// 最大ゲージ量
-	constexpr float kPunchGaugeCharge = 0.2f;						// パンチ時に増えるゲージ量
-	constexpr float kKickGaugeCharge = 0.3f;						// キック時に増えるゲージ量
+	constexpr float kPunchGaugeCharge = 0.1f;						// パンチ時に増えるゲージ量
+	constexpr float kKickGaugeCharge = 0.13f;						// キック時に増えるゲージ量
 	constexpr float kDecreaseGauge = 0.15f;							// 攻撃を受けた際に減るゲージ量
 	constexpr float kHPRecoveryRate = 0.3f;							// プレイヤーのHPが回復する割合
 	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
@@ -40,7 +40,7 @@ Player::Player():
 {
 	// キャラクター情報を読み込む
 	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kPlayer));
-	m_pUIGauge = std::make_shared<UIGauge>(m_status.maxHp);
+	m_pUIBattle = std::make_shared<UIBattle>(m_status.maxHp);
 
 	m_hp = m_status.maxHp;
 	m_moveSpeed = 0.0f;
@@ -105,6 +105,7 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	Avoid(input, stage, moveVec);		// 回避処理
 	Fighting(input);					// 構え処理
 	Guard(input);						// ガード処理
+	SpecialAttack(input);				// 必殺技
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec); // 移動処理
 
 	// エネミーとの当たり判定をチェックする
@@ -115,7 +116,8 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	Move(moveVec, stage);		// 移動ベクトルを元にプレイヤーを移動させる
 	UpdateAnim();				// アニメーション処理の更新
 	UpdateCol();				// 当たり判定の位置更新
-	m_pUIGauge->UpdateHpBar();	// HPバーの更新
+	UpdatePosLog();				// 位置ログを更新
+	m_pUIBattle->UpdateHpBar();	// HPバーの更新
 	m_pEffect->Update();		// エフェクト更新
 }
 
@@ -125,13 +127,22 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 /// </summary>
 void Player::Draw()
 {
-	MV1DrawModel(m_modelHandle);
+	MV1DrawModel(m_modelHandle); // プレイヤー描画
+	m_pEffect->Draw();			 // エフェクト描画
+	// ゲージを表示
+	m_pUIBattle->DrawPlayerHP(m_hp);
+	m_pUIBattle->DrawPlayerGauge(m_gauge, kMaxGauge);
 
-	// HPゲージを表示
-	m_pUIGauge->DrawPlayerHP(m_hp);
-	m_pUIGauge->DrawPlayerGauge(m_gauge, kMaxGauge);
-	// エフェクト描画
-	m_pEffect->Draw();
+	// 回避中は残像を表示する
+	if (m_currentState == State::kAvoid)
+	{
+		DrawAfterImage();
+	}
+
+	// ゲージがたまったら必殺技の文字を表示する
+	if (m_gauge >= kMaxGauge)
+	{
+	}
 
 #ifdef _DEBUG	// デバッグ表示
 	DebugDraw debug;
@@ -500,6 +511,23 @@ void Player::Receive()
 
 		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));
 		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK);
+	}
+}
+
+
+/// <summary>
+/// 必殺技の処理
+/// </summary>
+/// <param name="input">入力処理</param>
+void Player::SpecialAttack(const Input& input)
+{
+	if (m_gauge < kMaxGauge) return;
+
+	// ボタンを押したら必殺技を発動する
+	if (input.IsTriggered("special"))
+	{
+		printfDx("必殺技発動！");
+		m_gauge = 0.0f;
 	}
 }
 

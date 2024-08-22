@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 class LoadData;
-class UIGauge;
+class UIBattle;
 class EffectManager;
 
 /// <summary>
@@ -62,6 +63,7 @@ public:
 		kPunch3 = 10,	 // パンチ(3コンボ)
 		kReceive = 11,	 // 攻撃を受ける
 		kRun = 12,		 // 移動
+	//	kSpecialAttack = 13, // 必殺技 
 		kStand = 13,	 // 待機
 		kStumble = 14,	 // 掴み失敗
 	};
@@ -177,33 +179,38 @@ protected:
 	void PlayAnim(AnimKind playAnimIndex);
 	// アニメーション処理
 	void UpdateAnim();
+	// 位置ログを更新する
+	void UpdatePosLog();
+	// 回避の場合残像を表示する
+	void DrawAfterImage();
 	
 protected:
 	std::shared_ptr<LoadData> m_pLoadData;			// キャラクター情報
-	std::shared_ptr<UIGauge> m_pUIGauge;			// バトル中に表示するゲージ
+	std::shared_ptr<UIBattle> m_pUIBattle;			// バトル中に表示するUI
 	std::shared_ptr<EffectManager> m_pEffect;		// エフェクト
 
-	float m_hp;				// HP
-	VECTOR m_pos;			// 位置
-	float m_moveSpeed;		// 移動速度
-	float m_angle;			// 向いている方向の角度
-	int m_punchCount;		// 現在のパンチのコンボ数
-	int m_punchComboTime;	// コンボ入力受付時間
-	int m_punchCoolTime;	// パンチできない時間
-	int m_avoidCoolTime;	// 回避できない時間
-	int m_avoidCount;		// 回避した回数
-	bool m_isAttack;		// 攻撃中かどうか(true:攻撃中)
-	bool m_isGuard;			// ガード中かどうか(ture:ガード中)
-	bool m_isMove;			// 移動したかどうか(true:移動した)
-	bool m_isFighting;		// 構え中かどうか(true:構え中)
-	bool m_isReceive;		// 攻撃を受けている最中かどうか(true:攻撃を受けている)
-	State m_currentState;	// 現在の状態
-	int m_modelHandle;		// キャラクターの3Dモデル
+	float m_hp;					  // HP
+	VECTOR m_pos;				  // 位置
+	std::vector<VECTOR> m_posLog; // 過去の位置を保存する
+	float m_moveSpeed;			  // 移動速度
+	float m_angle;				  // 向いている方向の角度
+	int m_punchCount;			  // 現在のパンチのコンボ数
+	int m_punchComboTime;		  // コンボ入力受付時間
+	int m_punchCoolTime;		  // パンチできない時間
+	int m_avoidCoolTime;		  // 回避できない時間
+	int m_avoidCount;			  // 回避した回数
+	bool m_isAttack;			  // 攻撃中かどうか(true:攻撃中)
+	bool m_isGuard;				  // ガード中かどうか(ture:ガード中)
+	bool m_isMove;				  // 移動したかどうか(true:移動した)
+	bool m_isFighting;			  // 構え中かどうか(true:構え中)
+	bool m_isReceive;			  // 攻撃を受けている最中かどうか(true:攻撃を受けている)
+	State m_currentState;		  // 現在の状態
+	int m_modelHandle;			  // キャラクターの3Dモデル
 
 	// アニメーション情報
-	int m_currentPlayAnim;		// 再生中のアニメーションのアタッチ番号
-	float m_currentAnimCount;	// 再生中のアニメーションの再生時間
-	int m_prevPlayAnim;			// 前の再生アニメーションのアタッチ番号
-	float m_prevAnimCount;		// 前の再生アニメーションの再生時間
-	float m_animBlendRate;		// 現在と過去のアニメーションのブレンド率
+	int m_currentPlayAnim;		  // 再生中のアニメーションのアタッチ番号
+	float m_currentAnimCount;	  // 再生中のアニメーションの再生時間
+	int m_prevPlayAnim;			  // 前の再生アニメーションのアタッチ番号
+	float m_prevAnimCount;		  // 前の再生アニメーションの再生時間
+	float m_animBlendRate;		  // 現在と過去のアニメーションのブレンド率
 };

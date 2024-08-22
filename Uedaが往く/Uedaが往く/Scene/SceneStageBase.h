@@ -6,7 +6,7 @@ class Player;
 class Camera;
 class Stage;
 class EnemyBase;
-class UIProduction;
+class UIBattle;
 
 /// <summary>
 /// プレイシーンの基底クラス
@@ -23,6 +23,8 @@ public:
 	virtual void ClearStaging();	// クリア演出を行う
 	// 試合が始まるまでの時間を取得
 	int GetBattleStartTime() const { return m_nextBattleTime; }
+	// ポーズ状態かどうか取得
+	bool IsGetPause() const {return m_isPause; }
 
 protected:
 	void UpdateNextBattle();	// 敵を倒して次試合が始まる前の処理
@@ -32,11 +34,12 @@ protected:
 	std::shared_ptr<Camera> m_pCamera;				// カメラ
 	std::shared_ptr<Stage> m_pStage;				// ステージ
 	std::shared_ptr<EnemyBase> m_pEnemy;			// 敵
-	std::shared_ptr<UIProduction> m_pUIProduction;	// 演出UI
+	std::shared_ptr<UIBattle> m_pUIBattle;			// バトルUI
 	int m_battleNum;								// 現在のバトル数
 	int m_clearStagingTime;							// クリア演出の時間
 	int m_nextBattleTime;							// 次の試合が始まるまでの時間
 	int m_elapsedTime;								// 経過時間
 	std::vector<int> m_clearTime;					// 各試合ごとのクリアタイム
+	bool m_isPause;									// ポーズ状態かどうか(true:ポーズ状態)
 };
 

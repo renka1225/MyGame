@@ -1,6 +1,6 @@
 #include "DxLib.h"
 #include "LoadData.h"
-#include "UIGauge.h"
+#include "UIBattle.h"
 #include "EffectManager.h"
 #include "CharacterBase.h"
 
@@ -10,6 +10,8 @@ namespace
 	// アニメーション情報
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
+	constexpr int kPosLogNum = 8;			 // 覚えておく過去の位置情報の数
+	constexpr float kAlphaAdj = 0.3;		 // 残像の透明度を調整
 }
 
 /// <summary>
@@ -34,6 +36,7 @@ CharacterBase::CharacterBase():
 	m_animBlendRate(0.0f)
 {
 	m_pEffect = std::make_shared<EffectManager>();
+	m_posLog.resize(kPosLogNum);
 }
 
 
@@ -47,7 +50,7 @@ void CharacterBase::OnDamage(float damage)
 	// HPバーを更新
 	if (damage > 0.0f)
 	{
-		m_pUIGauge->OnDamage(damage);
+		m_pUIBattle->OnDamage(damage);
 	}
 }
 
@@ -444,4 +447,36 @@ void CharacterBase::UpdateAnim()
 		// アニメーションのブレンド率を設定する
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
 	}
+}
+
+
+/// <summary>
+/// 位置ログを更新する
+/// </summary>
+void CharacterBase::UpdatePosLog()
+{
+	// 位置ログをずらす
+	for (int i = m_posLog.size() - 1; i >= 1; i--)
+	{
+		m_posLog[i] = m_posLog[i - 1];
+	}
+	// 1フレーム前の位置情報を入れる
+	m_posLog[0] = m_pos;
+}
+
+
+/// <summary>
+/// 回避の際に残像を表示する
+/// </summary>
+void CharacterBase::DrawAfterImage()
+{
+	for (int i = 1; i < m_posLog.size(); i++)
+	{
+		// ログが古くなるほど透明になるようにする
+		float alpha = (1.0f - (static_cast<float>(i) / m_posLog.size())) * kAlphaAdj;
+		MV1SetOpacityRate(m_modelHandle, alpha);
+		MV1SetPosition(m_modelHandle, m_posLog[i]);
+		MV1DrawModel(m_modelHandle);
+	}
+	MV1SetOpacityRate(m_modelHandle, 1.0f); // 透明度を戻す
 }
