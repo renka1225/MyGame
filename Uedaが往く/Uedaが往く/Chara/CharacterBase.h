@@ -50,43 +50,44 @@ public:
 	// キャラクターの状態
 	enum class State
 	{
-		kAvoid = 0,		 // 回避
-		kDown = 1,		 // 倒れる
-		kFightIdle = 2,  // 構え(停止中)
-		kFightWalk = 3,  // 構え(移動中)
-		kGettingUp = 4,  // 起き上がる
-		kGrab = 5,		 // 掴み
-		kGuard = 6,		 // ガード
-		kKick = 7,		 // キック
-		kPunch1 = 8,	 // パンチ(1コンボ)
-		kPunch2 = 9,	 // パンチ(2コンボ)
-		kPunch3 = 10,	 // パンチ(3コンボ)
-		kReceive = 11,	 // 攻撃を受ける
-		kRun = 12,		 // 移動
-	//	kSpecialAttack = 13, // 必殺技 
-		kStand = 13,	 // 待機
-		kStumble = 14,	 // 掴み失敗
+		kAvoid = 0,			// 回避
+		kDown = 1,			// 倒れる
+		kFightIdle = 2,		// 構え(停止中)
+		kFightWalk = 3,		// 構え(移動中)
+		kGettingUp = 4,		// 起き上がる
+		kGrab = 5,			// 掴み
+		kGuard = 6,			// ガード
+		kKick = 7,			 // キック
+		kPunch1 = 8,		 // パンチ(1コンボ)
+		kPunch2 = 9,		// パンチ(2コンボ)
+		kPunch3 = 10,		// パンチ(3コンボ)
+		kReceive = 11,		// 攻撃を受ける
+		kRun = 12,			// 移動
+		kSpecialAttack = 13, // 必殺技 
+		kStand = 14,		 // 待機
+		kStumble = 15,		// 掴み失敗
 	};
 
 	// アニメーション種別
 	enum class AnimKind
 	{
-		kNone = -1,		// なし
-		kAvoid = 0,		// 回避
-		kDown = 1,		// 倒れる
-		kFightIdle = 2, // 構え(停止中)
-		kFightWalk = 3, // 構え(移動中)
-		kGettingUp = 4, // 起き上がる
-		kGrab = 5,		// 掴み
-		kGuard = 6,		// ガード
-		kKick = 7,		// キック
-		kPunch1 = 8,	// パンチ(1コンボ)
-		kPunch2 = 9,	// パンチ(2コンボ)
-		kPunch3 = 10,	// パンチ(3コンボ)
-		kReceive = 11,	// 攻撃を受ける
-		kRun = 12,		// 移動
-		kStand = 13,	// 待機
-		kStumble = 14,	// 掴み失敗
+		kNone = -1,			 // なし
+		kAvoid = 0,			 // 回避
+		kDown = 1,			 // 倒れる
+		kFightIdle = 2,		 // 構え(停止中)
+		kFightWalk = 3,		 // 構え(移動中)
+		kGettingUp = 4,		 // 起き上がる
+		kGrab = 5,			 // 掴み
+		kGuard = 6,			 // ガード
+		kKick = 7,			 // キック
+		kPunch1 = 8,		 // パンチ(1コンボ)
+		kPunch2 = 9,		 // パンチ(2コンボ)
+		kPunch3 = 10,		 // パンチ(3コンボ)
+		kReceive = 11,	  	 // 攻撃を受ける
+		kRun = 12,			 // 移動
+		kSpecialAttack = 13, // 必殺技 
+		kStand = 14,		 // 待機
+		kStumble = 15,		 // 掴み失敗
 	};
 
 	// アニメーション速度
@@ -104,7 +105,7 @@ public:
 		float punch1;		// パンチ(1コンボ)
 		float punch2;		// パンチ(2コンボ)
 		float punch3;		// パンチ(3コンボ)
-		float comboPunch;	// コンボパンチ
+		float specialAttack;// 必殺技
 		float receive;		// 攻撃を受ける
 		float run;			// 移動
 		float stand;		// 待機
@@ -204,6 +205,7 @@ protected:
 	bool m_isMove;				  // 移動したかどうか(true:移動した)
 	bool m_isFighting;			  // 構え中かどうか(true:構え中)
 	bool m_isReceive;			  // 攻撃を受けている最中かどうか(true:攻撃を受けている)
+	bool m_isSpecialAttack;		  // 必殺技を発動中か(true:発動中)
 	State m_currentState;		  // 現在の状態
 	int m_modelHandle;			  // キャラクターの3Dモデル
 

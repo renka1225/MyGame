@@ -28,6 +28,7 @@ CharacterBase::CharacterBase():
 	m_isAttack(false),
 	m_isGuard(false),
 	m_isReceive(false),
+	m_isSpecialAttack(false),
 	m_modelHandle(-1),
 	m_currentPlayAnim(-1),
 	m_currentAnimCount(0.0f),
@@ -84,7 +85,7 @@ void CharacterBase::UpdateCol()
 void CharacterBase::UpdateAnimState(CharacterBase::State prevState)
 {
 	// 攻撃中または攻撃を受けているときは状態を更新しない
-	if (m_isAttack || m_isReceive) return;
+	if (m_isAttack || m_isSpecialAttack || m_isReceive) return;
 
 	// 待機状態から
 	if (prevState == CharacterBase::State::kFightIdle)
@@ -343,9 +344,13 @@ void CharacterBase::UpdateAnim()
 		{
 			m_currentAnimCount += m_animSpeed.kick;
 		}
+		else if (m_currentState == CharacterBase::State::kSpecialAttack)
+		{
+			m_currentAnimCount += m_animSpeed.kick;
+		}
 		else if (m_currentState == CharacterBase::State::kAvoid)
 		{
-			m_currentAnimCount += m_animSpeed.avoid;
+			m_currentAnimCount += m_animSpeed.specialAttack;
 		}
 		else if (m_currentState == CharacterBase::State::kFightWalk)
 		{
@@ -383,9 +388,10 @@ void CharacterBase::UpdateAnim()
 			bool isAnimChange = m_currentState == CharacterBase::State::kAvoid || m_currentState == CharacterBase::State::kGuard || m_currentState == CharacterBase::State::kReceive;
 
 			// 攻撃アニメーションが終了したら待機状態に移行
-			if (m_isAttack)
+			if (m_isAttack || m_isSpecialAttack)
 			{
 				m_isAttack = false;
+				m_isSpecialAttack = false;
 				m_currentState = CharacterBase::State::kFightIdle;
 				PlayAnim(AnimKind::kFightIdle);
 			}

@@ -23,17 +23,24 @@ namespace Sound
 	{
 		{"data/sound/BGM/title.mp3", kMaxVolumePal},
 		{"data/sound/BGM/stageSelect.mp3", kMaxVolumePal},
-		{"data/sound/BGM/stage1.mp3", kMaxVolumePal},
-		{"data/sound/BGM/stage2.mp3", kMaxVolumePal},
+		{"data/sound/BGM/stage1.wav", kMaxVolumePal},
+		{"data/sound/BGM/stage2.wav", kMaxVolumePal},
 		{"data/sound/BGM/clear.mp3", kMaxVolumePal},
 		{"data/sound/BGM/gameover.mp3", kMaxVolumePal}
 	};
 
 	SoundData seData[] =
 	{
+		{"data/sound/SE/titleDisp.mp3", kMaxVolumePal},
 		{"data/sound/SE/cursor.mp3", kMaxVolumePal},
 		{"data/sound/SE/select.mp3", kMaxVolumePal},
+		{"data/sound/SE/walk.wav", kMaxVolumePal},
+		{"data/sound/SE/run.wav", kMaxVolumePal},
 		{"data/sound/SE/attack.mp3", kMaxVolumePal},
+		{"data/sound/SE/specialAttack.wav", kMaxVolumePal},
+		{"data/sound/SE/avoid.mp3", kMaxVolumePal},
+		{"data/sound/SE/battleStart.mp3", kMaxVolumePal},
+		{"data/sound/SE/battleEnd.mp3", kMaxVolumePal},
 		{"data/sound/SE/clearCheers.mp3", kMaxVolumePal}
 	};
 

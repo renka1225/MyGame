@@ -21,7 +21,6 @@ namespace
 	const Vec2 kFightTextPos = { 960, 500 };					// "Fight"のテキスト位置
 	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
 	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
-	constexpr int kClearStagingTime = 60;						// クリア演出の時間
 	constexpr int kMaxBattleNum = 3;							// 最大バトル数
 }
 
@@ -80,11 +79,24 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		// BGMを鳴らす
-		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)]))
+		
+		if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
 		{
-			PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)], DX_PLAYTYPE_LOOP);
+			// 開始時に1度だけSEを流す
+			if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))
+			{
+				PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)], DX_PLAYTYPE_BACK);
+			}
 		}
+		else
+		{
+			// BGMを鳴らす
+			if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)]))
+			{
+				PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)], DX_PLAYTYPE_LOOP);
+			}
+		}
+
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -160,6 +172,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	}
 	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 	{
+		StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)]);
 		return std::make_shared<SceneGameover>(shared_from_this());
 	}
 #endif
@@ -181,6 +194,5 @@ void SceneStage2::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "ステージ2", 0xffffff);
 	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
-	//DrawFormatString(0, 240, 0xfffff, "%d", m_clearStagingTime);
 #endif
 }

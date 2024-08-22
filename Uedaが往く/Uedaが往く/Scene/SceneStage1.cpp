@@ -14,8 +14,8 @@
 
 namespace
 {
-	constexpr int kMaxBattleNum = 1;	 // 最大バトル数
-	constexpr int kNextBattleTime = 150; // 次の試合が始まるまでの時間
+	constexpr int kMaxBattleNum = 1;		// 最大バトル数
+	constexpr int kFightTextDispStart = 80;	// "Fight"のテキストを表示し始める時間
 }
 
 /// <summary>
@@ -28,7 +28,6 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyTuto>();
 	m_battleNum = 0;
-	m_nextBattleTime = kNextBattleTime;
 }
 
 
@@ -70,11 +69,23 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		// BGMを鳴らす
-		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]))
+		if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
 		{
-			PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)], DX_PLAYTYPE_LOOP);
+			// 開始時に1度だけSEを流す
+			if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))
+			{
+				PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)], DX_PLAYTYPE_BACK);
+			}
 		}
+		else
+		{
+			// BGMを鳴らす
+			if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]))
+			{
+				PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)], DX_PLAYTYPE_LOOP);
+			}
+		}
+
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -129,6 +140,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	}
 	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 	{
+		StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]);
 		return std::make_shared<SceneGameover>(shared_from_this());
 	}
 #endif

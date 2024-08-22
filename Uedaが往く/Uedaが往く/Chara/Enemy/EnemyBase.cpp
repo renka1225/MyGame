@@ -61,8 +61,8 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		return nextState;
 	}
 
-	// 攻撃中または移動中は状態を更新しない
-	bool isKeepState = m_isAttack || m_isMove || m_isGuard || m_currentState == CharacterBase::State::kReceive;
+	// 攻撃中または移動中、ガード中、攻撃を受けている最中は状態を更新しない
+	bool isKeepState = m_isAttack || m_isMove || m_isGuard || (m_currentState == CharacterBase::State::kReceive);
 	if (isKeepState) return nextState;
 
 	// エネミーとプレイヤーの距離を計算
@@ -254,6 +254,7 @@ CharacterBase::State EnemyBase::Avoid()
 		return m_currentState;
 	}
 
+	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAvoid)], DX_PLAYTYPE_BACK); // SE再生
 	m_isFighting = false;
 	m_avoidCount++;
 
@@ -347,7 +348,6 @@ void EnemyBase::Receive()
 		PlayAnim(CharacterBase::AnimKind::kReceive);
 		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));	// エフェクトを再生する
 		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK);
-		
 	}
 }
 
@@ -391,8 +391,6 @@ void EnemyBase::OnDamage(float damage)
 	// ガード状態の場合
 	if (m_currentState == CharacterBase::State::kGuard)
 	{
-		m_pEffect->PlayGuardEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z)); // エフェクト表示
-
 		// 少し後ろに移動する
 		VECTOR backMoveVec = VScale(m_eToPDirVec, -1.0f);
 		m_pos = VAdd(m_pos, VScale(backMoveVec, m_status.backMove));

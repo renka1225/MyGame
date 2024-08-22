@@ -19,6 +19,7 @@ namespace
 	constexpr float kPunchGaugeCharge = 0.1f;						// パンチ時に増えるゲージ量
 	constexpr float kKickGaugeCharge = 0.13f;						// キック時に増えるゲージ量
 	constexpr float kDecreaseGauge = 0.15f;							// 攻撃を受けた際に減るゲージ量
+	constexpr float kSpecialAttackPower = 30.0f;					// 必殺技の攻撃力
 	constexpr float kHPRecoveryRate = 0.3f;							// プレイヤーのHPが回復する割合
 	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
 	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
@@ -105,7 +106,7 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	Avoid(input, stage, moveVec);		// 回避処理
 	Fighting(input);					// 構え処理
 	Guard(input);						// ガード処理
-	SpecialAttack(input);				// 必殺技
+	SpecialAttack(input, enemy);		// 必殺技処理
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec); // 移動処理
 
 	// エネミーとの当たり判定をチェックする
@@ -419,6 +420,7 @@ void Player::Avoid(const Input& input, Stage& stage, VECTOR& moveVec)
 		}
 		else
 		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAvoid)], DX_PLAYTYPE_BACK); // SE再生
 			m_currentState = CharacterBase::State::kAvoid;
 
 			// TODO:壁に当たった場合は壁の外に移動しないようにする
@@ -519,14 +521,27 @@ void Player::Receive()
 /// 必殺技の処理
 /// </summary>
 /// <param name="input">入力処理</param>
-void Player::SpecialAttack(const Input& input)
+void Player::SpecialAttack(const Input& input, EnemyBase& enemy)
 {
+	if (m_isSpecialAttack)
+	{
+		enemy.OnDamage(kSpecialAttackPower);
+	}
+
 	if (m_gauge < kMaxGauge) return;
 
 	// ボタンを押したら必殺技を発動する
 	if (input.IsTriggered("special"))
 	{
-		printfDx("必殺技発動！");
+		m_isSpecialAttack = true;
+		m_currentState = State::kSpecialAttack;
+		PlayAnim(AnimKind::kSpecialAttack);
+
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kSpecialAttack)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kSpecialAttack)], DX_PLAYTYPE_BACK); // SEを鳴らす
+		}
+
 		m_gauge = 0.0f;
 	}
 }

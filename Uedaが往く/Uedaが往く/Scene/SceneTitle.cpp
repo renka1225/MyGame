@@ -15,7 +15,7 @@ namespace
 	constexpr float kTitleLogoChangeScale = 0.3f;	// タイトルロゴのサイズ変化量
 	constexpr float kTitleLogoInitRot = 360.0f;		// 開始時のタイトルロゴの回転率
 	constexpr float kTitleLogoChangeRot = 20.0f;	// タイトルロゴの回転率変化量
-	const Vec2 kTextPos = { 500.0f, 750.0f };		// "PRESS ANY BUTTON"のテキスト位置
+	const Vec2 kTextPos = { 500.0f, 780.0f };		// "PRESS ANY BUTTON"のテキスト位置
 	constexpr int kTextDisplayTime = 2;				// テキストを表示する間隔
 	constexpr int kTextDisplayAnimTime = 240;		// テキストアニメーションの時間
 	constexpr int kMaxAlpha = 255;					// 最大アルファ値
@@ -58,7 +58,10 @@ SceneTitle::~SceneTitle()
 /// </summary>
 void SceneTitle::Init()
 {
-	// 処理なし
+	if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kTitleDisp)]))
+	{
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kTitleDisp)], DX_PLAYTYPE_BACK);
+	}
 }
 
 
@@ -83,7 +86,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	}
 
 	// シーン遷移
-	if (input.IsTriggered("OK"))
+	if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y"))
 	{
 		return std::make_shared<SceneSelectStage>(); // ステージ選択へ遷移
 	}

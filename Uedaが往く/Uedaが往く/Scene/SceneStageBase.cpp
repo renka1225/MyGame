@@ -16,9 +16,10 @@ namespace
 {
 	const VECTOR kPlayerInitPos = VGet(2600.0f, 69.0f, 4240.0f);  // プレイヤーの初期位置
 	const VECTOR kEnemyInitPos = VGet(2660, 69.0f, 4280.0f);	  // 敵の初期位置
-	constexpr int kChangeColorTime = 150;						  // 画面の表示を変更する時間
-	constexpr int kClearStagingTime = 180;						  // 画面の表示を変更する時間
+	constexpr int kChangeColorTime = 220;						  // 画面の表示を変更する時間
+	constexpr int kClearStagingTime = 240;						  // クリア演出の時間
 	constexpr int kNextBattleTime = 150;						  // 次の試合が始まるまでの時間
+	constexpr int kBattleEndSoundTime = 60;						  // コングのSEを鳴らす時間
 }
 
 
@@ -100,9 +101,19 @@ void SceneStageBase::Draw()
 void SceneStageBase::ClearStaging()
 {
 	// SEを鳴らす
-	if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)]))
+	if (m_clearStagingTime >= kClearStagingTime - kBattleEndSoundTime)
 	{
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)], DX_PLAYTYPE_BACK);
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleEnd)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleEnd)], DX_PLAYTYPE_BACK);
+		}
+	}
+	else
+	{
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)], DX_PLAYTYPE_BACK);
+		}
 	}
 
 	if (m_clearStagingTime >= kClearStagingTime - kChangeColorTime)

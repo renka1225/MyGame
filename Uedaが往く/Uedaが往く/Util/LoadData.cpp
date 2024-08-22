@@ -14,7 +14,7 @@ namespace
 	const char* const kEnemyInfoFileName = "data/csv/enemyInfo.csv";	// 敵データのファイル名
 
 	constexpr int kStatusNum = 16;		// 1キャラクターのステータス数
-	constexpr int kAnimNum = 16;		// 1キャラクターのアニメーションの数
+	constexpr int kAnimNum = 17;		// 1キャラクターのアニメーションの数
 	constexpr int kColNum = 16;			// 1キャラクターの当たり判定の情報数
 	constexpr int kEnemyInfoNum = 14;	// 1キャラクターの情報数
 }
@@ -164,10 +164,11 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 	data.m_animSpeed.punch1 = m_animSpeedData[9 + charType * kAnimNum];
 	data.m_animSpeed.punch2 = m_animSpeedData[10 + charType * kAnimNum];
 	data.m_animSpeed.punch3 = m_animSpeedData[11 + charType * kAnimNum];
-	data.m_animSpeed.receive = m_animSpeedData[12 + charType * kAnimNum];
-	data.m_animSpeed.run = m_animSpeedData[13 + charType * kAnimNum];
-	data.m_animSpeed.stand = m_animSpeedData[14 + charType * kAnimNum];
-	data.m_animSpeed.Stumble = m_animSpeedData[15 + charType * kAnimNum];
+	data.m_animSpeed.specialAttack = m_animSpeedData[12 + charType * kAnimNum];
+	data.m_animSpeed.receive = m_animSpeedData[13 + charType * kAnimNum];
+	data.m_animSpeed.run = m_animSpeedData[14 + charType * kAnimNum];
+	data.m_animSpeed.stand = m_animSpeedData[15 + charType * kAnimNum];
+	data.m_animSpeed.Stumble = m_animSpeedData[16 + charType * kAnimNum];
 }
 
 
