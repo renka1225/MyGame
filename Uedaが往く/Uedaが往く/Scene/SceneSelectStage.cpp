@@ -19,19 +19,21 @@
 // 定数
 namespace
 {
-	constexpr int kBackColor = 0xdddddd;			// 背景の色
-	constexpr int kBackBoxColor = 0x494949;			// 四角の色
-	constexpr int kBackBoxLTPos = 140;				// 四角の左上位置
-	constexpr int kBackBoxWidth = 490;				// 四角の幅
-	const Vec2 kSelectTextPos = { 260, 300 };		// 選択テキスト表示位置
-	constexpr float kSelectTextInterval = 120.0f;	// 選択テキスト表示間隔
-	constexpr float kSelectTextAdj = 40.0f;			// テキスト表示位置調整
-	const Vec2 kRankingTextPos = { 1150, 270 };		// "ランキング"表示位置
-	const Vec2 kCursorLTPos = { 140, 290 };			// カーソル左上位置
-	constexpr int kTextColor = 0xffffff;			// テキストの色
+	constexpr int kBackColor = 0xdddddd;					// 背景の色
+	constexpr int kBackBoxColor = 0x494949;					// 四角の色
+	constexpr int kBackBoxLTPos = 140;						// 四角の左上位置
+	constexpr int kBackBoxWidth = 490;						// 四角の幅
+	const Vec2 kSelectTextPos = { 260.0f, 300.0f };			// 選択テキスト表示位置
+	constexpr float kSelectTextInterval = 120.0f;			// 選択テキスト表示間隔
+	constexpr float kSelectTextAdj = 40.0f;					// テキスト表示位置調整
+	const Vec2 kRankingTextPos = { 1150.0f, 250.0f };		// "ランキング"表示位置
+	const Vec2 kIntroductionTextPos = { 900.0f, 770.0f };	// ステージ紹介テキスト位置
+	constexpr float kIntroductionTextAdj = 30.0f;			// ステージ紹介テキスト位置調整
+	const Vec2 kCursorLTPos = { 140.0f, 290.0f };			// カーソル左上位置
+	constexpr int kTextColor = 0xffffff;					// テキストの色
 
-	constexpr int kStartFadeAlpha = 255;			// スタート時のフェード値
-	constexpr int kFadeFrame = 8;					// フェード変化量
+	constexpr int kStartFadeAlpha = 255;					// スタート時のフェード値
+	constexpr int kFadeFrame = 8;							// フェード変化量
 }
 
 
@@ -168,12 +170,43 @@ void SceneSelectStage::Draw()
 		m_pRank->DrawStageSelectRanking();
 	}
 
+	//ステージの紹介文を表示する
+	DrawIntroductionText();
+
 	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ選択画面", 0xffffff);
 #endif
+}
+
+
+/// <summary>
+/// ステージの紹介文を表示する
+/// </summary>
+void SceneSelectStage::DrawIntroductionText()
+{
+	if (m_select == SelectScene::kStage1)
+	{
+		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
+			"操作方法の説明を行います", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+	}
+	else if (m_select == SelectScene::kStage2)
+	{
+		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y - kIntroductionTextAdj,
+			"3連続勝利したら優勝です\n優勝めざして頑張ってください!", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+	}
+	else if (m_select == SelectScene::kOption)
+	{
+		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
+			"音量の設定を行います", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+	}
+	else if (m_select == SelectScene::kEnd)
+	{
+		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
+			"ゲームを終了します", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+	}
 }
 
 

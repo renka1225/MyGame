@@ -25,7 +25,7 @@ namespace
 	constexpr int kTextColor = 0xffffff;				// テキストの色
 	constexpr float kRankingIntervalWidth = 400.0f;		// 横の表示間隔
 	// ステージ選択時
-	const Vec2 kStageSlectRankPos = { 900, 350 };		// 表示位置
+	const Vec2 kStageSlectRankPos = { 900, 320 };		// 表示位置
 	constexpr float kStageSlectRankInterval = 60.0f;	// 縦の表示間隔
 	// クリア時
 	const Vec2 kRankingPos = { 1000.0f, 550.0f };		// 表示位置

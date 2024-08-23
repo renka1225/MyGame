@@ -25,7 +25,8 @@ namespace Font
 
 		// 使うフォントを指定する
 		// SceneSelectStage
-		kSelectStage = kSize48_4, // ステージ選択で使う文字サイズ
+		kSelectStage = kSize48_4,		// ステージ選択で使う文字サイズ
+		kIntroductionText = kSize48_4,	// ステージ紹介の文字サイズ
 		// SceneOption
 		kOption = kSize48_4,	  // オプションで使用する文字サイズ
 		// ScenePause

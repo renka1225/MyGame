@@ -14,6 +14,9 @@ public:
 	virtual void Draw();
 
 private:
+	void DrawIntroductionText();	// Ğ‰î•¶‚ğ•\¦‚·‚é
+
+private:
 	// ƒV[ƒ“‚Ìí—Ş
 	enum SelectScene
 	{

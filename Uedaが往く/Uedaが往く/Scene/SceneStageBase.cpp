@@ -146,16 +146,12 @@ void SceneStageBase::ClearStaging()
 
 	if (m_clearStagingTime >= kClearStagingTime - kChangeColorTime)
 	{
-		// 画面の色を変える
-		//SetLightDifColor(GetColorF(0.0f, 0.3f, 0.5f, 0.0f));
-
 		m_clearStagingTime--;
 		return;
 	}
 
 	// クリア演出をリセット
 	m_clearStagingTime = 0;
-	//SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 	StopSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)]);
 }
 

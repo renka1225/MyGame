@@ -116,16 +116,16 @@ Input::Input()
 	m_commandTable["back"] = { {InputType::keybd, KEY_INPUT_Q},
 							   {InputType::pad, PAD_INPUT_B} };
 
-	m_commandTable["A"] = { {InputType::keybd, KEY_INPUT_RIGHT},
+	m_commandTable["A"] = { {InputType::keybd, KEY_INPUT_A},
 							{InputType::pad, PAD_INPUT_A} };
 
-	m_commandTable["B"] = { {InputType::keybd, KEY_INPUT_DOWN},
+	m_commandTable["B"] = { {InputType::keybd, KEY_INPUT_B},
 							{InputType::pad, PAD_INPUT_B} };
 
-	m_commandTable["X"] = { {InputType::keybd, KEY_INPUT_UP},
+	m_commandTable["X"] = { {InputType::keybd, KEY_INPUT_X},
 							{InputType::pad, PAD_INPUT_C} };
 
-	m_commandTable["Y"] = { {InputType::keybd, KEY_INPUT_LEFT},
+	m_commandTable["Y"] = { {InputType::keybd, KEY_INPUT_Y},
 							{InputType::pad, PAD_INPUT_X} };
 
 	m_commandTable["up"] = { {InputType::keybd, KEY_INPUT_UP},

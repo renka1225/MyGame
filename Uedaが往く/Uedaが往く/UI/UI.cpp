@@ -13,7 +13,11 @@ namespace
 	constexpr int kBackBoxColor = 0x494949;				// 四角の色
 	constexpr int kBackBoxLTPos = 140;					// 四角の左上位置
 	constexpr int kBackBoxWidth = 490;					// 四角の幅
-	const Vec2 kBackHandlePos = { 750.0f, 200.0f };		// 背景画像の表示位置
+	const Vec2 kBackHandleLTPos = { 750.0f, 200.0f };	// 背景画像の左上位置
+	const Vec2 kBackHandleRBPos = { 1779.0f, 670.0f };	// 背景画像の右下位置
+
+	const Vec2 kTextBoxLTPos = { 750.0f, 700.0f };		// ステージ選択画面のテキストボックス左上位置
+	const Vec2 kTextBoxRBPos = { 1779.0f, 890.0f };		// ステージ選択画面のテキストボックス右下位置
 
 	const Vec2 kPauseBackLTPos = { 600.0f, 200.0f };	// ポーズ画面の背景画像左上位置
 	const Vec2 kPauseBackRBPos = { 1320.0f, 880.0f };	// ポーズ画面の背景画像右下位置
@@ -124,7 +128,9 @@ void UI::DrawMenuBg()
 	// 背景の四角部分表示
 	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
 	// 背景画像表示
-	DrawGraphF(kBackHandlePos.x, kBackHandlePos.y, m_backHandle, true);
+	DrawExtendGraphF(kBackHandleLTPos.x, kBackHandleLTPos.y, kBackHandleRBPos.x, kBackHandleRBPos.y, m_backHandle, true);
+	// テキストボックス表示
+	DrawExtendGraphF(kTextBoxLTPos.x, kTextBoxLTPos.y, kTextBoxRBPos.x, kTextBoxRBPos.y, m_backHandle, true);
 }
 
 
