@@ -20,12 +20,16 @@ namespace
 	const char* const kHaibokuTextPath = "data/UI/haiboku.png";	// 敗北のテキスト画像のファイル位置
 	const char* const kCursorPath = "data/UI/cursor.png";		// カーソル画像のファイル位置
 	constexpr int kTextColor = 0xffffff;						// テキストの色
+	constexpr int kBackColor = 0x1a0306;						// 背景の色
 	const Vec2 kHaibokuTextPos = { 670, 120 };					// 敗北のテキスト画像表示位置
 	const Vec2 kRetryTextPos = { 870, 630 };					// "リトライ"表示位置
 	const Vec2 kStageTextPos = { 720, 760 };					// "ステージ選択にもどる"表示位置
 	const Vec2 kTitleTextPos = { 770, 890 };					// "タイトルにもどる"表示位置
 	const Vec2 kCursorPos = { 720, 620 };						// カーソル表示位置
 	constexpr float kCursorMove = 130.0f;						// カーソルの移動量
+
+	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
+	constexpr int kFadeFrame = 8;		 // フェード変化量
 }
 
 
@@ -35,6 +39,7 @@ namespace
 /// <param name="pScene">前に実行していたシーン</param>
 SceneGameover::SceneGameover(std::shared_ptr<SceneBase> pScene)
 {
+	m_fadeAlpha = kStartFadeAlpha;
 	m_select = Select::kRetry;
 	m_pPrevScene = pScene;
 	m_textHandle = LoadGraph(kHaibokuTextPath);
@@ -66,8 +71,9 @@ void SceneGameover::Init()
 /// <returns></returns>
 std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 {
-	// 選択状態更新
-	UpdateSelect(input, Select::kSelectNum);
+	FadeOut(kFadeFrame); // フェードアウト
+
+	UpdateSelect(input, Select::kSelectNum); 	// 選択状態更新
 	m_pUI->Update();
 
 	// BGMを鳴らす
@@ -87,20 +93,24 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 			// MEMO:typeidでクラスを取得する
 			if (typeid(*m_pPrevScene) == typeid(SceneStage1))
 			{
+				FadeIn(kFadeFrame); // フェードイン
 				return std::make_shared<SceneStage1>(pPlayer, pCamera, pStage); // ステージ1に移動
 			}
 			if (typeid(*m_pPrevScene) == typeid(SceneStage2))
 			{
+				FadeIn(kFadeFrame); // フェードイン
 				return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage); // ステージ2に移動
 			}
 
 		}
 		else if (m_select == kStageSelect)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneSelectStage>(); // ステージ選択画面に移動
 		}
 		else if (m_select == kTitle)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneTitle>();	// タイトル画面に移動
 		}
 	}
@@ -114,7 +124,7 @@ std::shared_ptr<SceneBase> SceneGameover::Update(Input& input)
 /// </summary>
 void SceneGameover::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x1a1a1a, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
 
 	// 敗北の文字を表示
 	DrawGraphF(kHaibokuTextPos.x, kHaibokuTextPos.y, m_textHandle, true);
@@ -129,6 +139,8 @@ void SceneGameover::Draw()
 		"ステージ選択にもどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kGameover)]);
 	DrawStringFToHandle(kTitleTextPos.x, kTitleTextPos.y,
 		"タイトルにもどる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kGameover)]);
+
+	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

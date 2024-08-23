@@ -17,11 +17,9 @@
 
 namespace
 {
-	const char* const kFightTextPath = "data/UI/Fight!.png";	// "Fight"のテキスト画像のファイル位置
-	const Vec2 kFightTextPos = { 960, 500 };					// "Fight"のテキスト位置
-	constexpr float kFightTextScele = 0.6f;						// "Fight"のテキストサイズ
-	constexpr int kFightTextDispStart = 80;						// "Fight"のテキストを表示し始める時間
-	constexpr int kMaxBattleNum = 3;							// 最大バトル数
+	constexpr int kMaxBattleNum = 3;		// 最大バトル数
+	constexpr int kFightTextDispStart = 80;	// "Fight"のテキストを表示し始める時間
+	constexpr int kFadeFrame = 4;			// フェード変化量
 }
 
 
@@ -79,7 +77,8 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		
+		FadeOut(kFadeFrame); // フェードアウト
+
 		if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
 		{
 			// 開始時に1度だけSEを流す
@@ -96,7 +95,6 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 				PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)], DX_PLAYTYPE_LOOP);
 			}
 		}
-
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -143,7 +141,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 					break;
 				case 2: // 勝利時
 					UpdateNextBattle();
-					return std::make_shared<SceneClear>(m_clearTime);
+					return std::make_shared<SceneClear>(StageKind::kStage2, m_clearTime);
 					break;
 				}
 
@@ -154,6 +152,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		// プレイヤーのHPが0になった場合
 		else if (m_pPlayer->GetHp() <= 0)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneGameover>(shared_from_this());
 		}
 		else
@@ -168,7 +167,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	// シーン遷移
 	if (input.IsTriggered("debug_clear"))
 	{
-		return std::make_shared<SceneClear>();
+		return std::make_shared<SceneClear>(StageKind::kStage2, m_clearTime);
 	}
 	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 	{

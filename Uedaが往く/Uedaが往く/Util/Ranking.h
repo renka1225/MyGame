@@ -10,11 +10,11 @@ class Ranking
 public:
 	Ranking();
 	~Ranking();
-	void CreateRanking();			   // ランキング作成
-	void UpdateRanking(int clearTime); // ランキング更新
-	void GetRanking();				   // ランキング取得
-	void DrawStageSelectRanking();	   // ステージ選択時ランキング描画
-	void DrawClearRanking();		   // クリア時ランキング描画
+	void CreateRanking(int m_stageKind);			  // ランキング作成
+	void UpdateRanking(int stageKind, int clearTime); // ランキング更新
+	void GetRanking(int stage);						  // ランキング取得
+	void DrawStageSelectRanking();					  // ステージ選択時ランキング描画
+	void DrawClearRanking();						  // クリア時ランキング描画
 
 private:
 	std::string HttpGet(const char* domain, const char* url); // Http通信でGet命令を送る

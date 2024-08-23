@@ -20,6 +20,9 @@ namespace
 	constexpr float kTimeTextInterval = 100.0f;				// テキスト表示間隔
 	constexpr float kTimeTextAdj = 155.0f;					// テキスト表示位置調整
 	constexpr int kTextColor = 0xfffffff;					// テキストの色
+
+	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
+	constexpr int kFadeFrame = 4;		 // フェード変化量
 }
 
 
@@ -27,11 +30,13 @@ namespace
 /// 引数付きコンストラクタ
 /// </summary>
 /// <param name="clearTime">クリアタイム</param>
-SceneClear::SceneClear(std::vector<int> clearTime):
+SceneClear::SceneClear(int stageKind, std::vector<int> clearTime):
 	m_totalClearTime(0)
 {
-	m_textHandle = LoadGraph(kSyoriTextPath);
+	m_fadeAlpha = kStartFadeAlpha;
 	m_clearTime = clearTime;
+	m_stageKind = stageKind;
+	m_textHandle = LoadGraph(kSyoriTextPath);
 }
 
 
@@ -48,6 +53,7 @@ SceneClear::~SceneClear()
 /// <summary>
 /// 初期化
 /// </summary>
+/// <param name="stage">クリアしたステージ</param>
 void SceneClear::Init()
 {
 	// トータルのクリア時間を計算する
@@ -57,8 +63,8 @@ void SceneClear::Init()
 	}
 
 	// ランキングの更新、取得
-	m_pRank->UpdateRanking(m_totalClearTime);
-	m_pRank->GetRanking();
+	m_pRank->UpdateRanking(m_stageKind, m_totalClearTime);
+	m_pRank->GetRanking(m_stageKind);
 }
 
 
@@ -69,6 +75,8 @@ void SceneClear::Init()
 /// <returns>遷移先</returns>
 std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 {
+	FadeOut(kFadeFrame); // フェードアウト
+
 	// BGMを鳴らす
 	if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kClear)]))
 	{
@@ -77,6 +85,7 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 
 	if (input.IsTriggered("OK"))
 	{
+		FadeIn(kFadeFrame); // フェードイン
 		return std::make_shared<SceneSelectStage>();
 	}
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -119,6 +128,8 @@ void SceneClear::Draw()
 
 	// テキスト表示
 	m_pUI->DrawClearButtonText();
+
+	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

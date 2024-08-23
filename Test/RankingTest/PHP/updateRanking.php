@@ -14,16 +14,14 @@ $que ="SELECT * FROM Ranking ORDER BY clearTime";
 //連想配列にする
 $value = $db->query($que)->fetchAll();
 
-// 受け取ったデータを配列に挿入
-$arr = [];
-$arr[$getClearTime] = $getClearTime;
-
 // テーブルデータの書き直し
 $rank=1;
-foreach($arr as $key => $temp)
+foreach ($value as $row)
 {
-    $que ="INSERT OR REPLACE INTO Ranking VALUES ({$rank},'{$key}')";
-    echo $que."\n";
+    $clearTime = $row['clearTime'];
+    
+    $que = "UPDATE Ranking SET rank = {$rank} WHERE clearTime = '{$clearTime}'";
+    echo $que . "\n";
     $rank++;
 }
 ?>

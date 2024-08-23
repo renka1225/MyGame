@@ -2,14 +2,10 @@
 // データベースの作成と接続(既にある場合は接続のみ)
 $db = new PDO('sqlite:ranking.db');
 
-// テーブルのデータを確認
-$que ="SELECT * From Ranking";
-$value = $db->query($que);
+// ランキング上位10件を取得するクエリ
+$que = "SELECT * FROM Ranking ORDER BY clearTime LIMIT 10";
+$value = $db->query($que)->fetchAll(PDO::FETCH_ASSOC);
 
-// 連想配列として入ってるのでこれで出せる
-foreach($value as $temp)
-{
-    echo $temp['rank'].",";
-    echo $temp['clearTime']."\n";
-}
+// JSON形式で結果を返す
+echo json_encode($value);
 ?>

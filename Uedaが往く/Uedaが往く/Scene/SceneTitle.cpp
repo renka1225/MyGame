@@ -23,6 +23,9 @@ namespace
 	constexpr int kTitleTime = 60;					// タイトルを表示するまでの時間
 	constexpr int kTextTime = 120;					// テキストを表示するまでの時間
 	constexpr int kBGMTime = 150;					// BGMを再生しはじめる時間
+	
+	constexpr int kStartFadeAlpha = 255;			// スタート時のフェード値
+	constexpr int kFadeFrame = 8;					// フェード変化量
 }
 
 /// <summary>
@@ -35,6 +38,7 @@ SceneTitle::SceneTitle():
 	m_titleLogoRot(kTitleLogoInitRot),
 	m_textAlpha(kMinAlpha)
 {
+	m_fadeAlpha = kStartFadeAlpha;
 	m_titleLogo = LoadGraph("data/UI/title.png");
 	m_titleLogoBack = LoadGraph("data/UI/titleBack.png");
 	m_textHandle = LoadGraph("data/UI/PRESS.png");
@@ -72,7 +76,9 @@ void SceneTitle::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
-	m_time++;
+	FadeOut(kFadeFrame); // フェードアウト
+
+	m_time++; // 経過時間を更新
 
 	UpdateDisplay(); // テキストの表示を更新する
 
@@ -88,6 +94,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// シーン遷移
 	if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y"))
 	{
+		FadeIn(kFadeFrame); // フェードイン
 		return std::make_shared<SceneSelectStage>(); // ステージ選択へ遷移
 	}
 
@@ -118,6 +125,8 @@ void SceneTitle::Draw()
 		DrawGraphF(kTextPos.x, kTextPos.y, m_textHandle, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
+	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

@@ -16,6 +16,7 @@ namespace
 {
 	constexpr int kMaxBattleNum = 1;		// 最大バトル数
 	constexpr int kFightTextDispStart = 80;	// "Fight"のテキストを表示し始める時間
+	constexpr int kFadeFrame = 4;			// フェード変化量
 }
 
 /// <summary>
@@ -69,6 +70,8 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
+		FadeOut(kFadeFrame); // フェードアウト
+
 		if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
 		{
 			// 開始時に1度だけSEを流す
@@ -85,7 +88,6 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 				PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)], DX_PLAYTYPE_LOOP);
 			}
 		}
-
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -115,13 +117,15 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			if (m_clearStagingTime <= 0)
 			{
 				UpdateNextBattle();
+				FadeIn(kFadeFrame); // フェードイン
 				m_clearTime.push_back(m_elapsedTime);
-				return std::make_shared<SceneClear>(m_clearTime);
+				return std::make_shared<SceneClear>(StageKind::kStage1, m_clearTime);
 			}
 		}
 		// プレイヤーのHPが0になった場合
 		else if (m_pPlayer->GetHp() <= 0)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneGameover>(shared_from_this());
 		}
 		else
@@ -136,7 +140,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	// シーン遷移
 	if (input.IsTriggered("debug_clear"))
 	{
-		return std::make_shared<SceneClear>();
+		return std::make_shared<SceneClear>(StageKind::kStage1, m_clearTime);
 	}
 	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 	{
@@ -158,7 +162,6 @@ void SceneStage1::Draw()
 
 	// 演出UIを表示
 	m_pUIBattle->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
-
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

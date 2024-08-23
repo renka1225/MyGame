@@ -29,6 +29,9 @@ namespace
 	const Vec2 kRankingTextPos = { 1150, 270 };		// "ランキング"表示位置
 	const Vec2 kCursorLTPos = { 140, 290 };			// カーソル左上位置
 	constexpr int kTextColor = 0xffffff;			// テキストの色
+
+	constexpr int kStartFadeAlpha = 255;			// スタート時のフェード値
+	constexpr int kFadeFrame = 8;					// フェード変化量
 }
 
 
@@ -37,6 +40,7 @@ namespace
 /// </summary>
 SceneSelectStage::SceneSelectStage()
 {
+	m_fadeAlpha = kStartFadeAlpha;
 	m_select = SelectScene::kStage1;
 }
 
@@ -56,7 +60,14 @@ SceneSelectStage::~SceneSelectStage()
 void SceneSelectStage::Init()
 {
 	// ランキング取得
-	m_pRank->GetRanking();
+	if (m_select == SelectScene::kStage1)
+	{
+		m_pRank->GetRanking(StageKind::kStage1);
+	}
+	else if (m_select == SelectScene::kStage2)
+	{
+		m_pRank->GetRanking(StageKind::kStage2);
+	}
 }
 
 
@@ -67,9 +78,20 @@ void SceneSelectStage::Init()
 /// <returns>遷移先のシーン</returns>
 std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 {
+	FadeOut(kFadeFrame); // フェードアウト
+
 	//選択状態更新
 	UpdateSelect(input, kSelectNum);
 	m_pUI->Update();
+
+	// ランキングを再取得
+	if (input.IsTriggered("up") || input.IsTriggered("down"))
+	{
+		if (m_select == SelectScene::kStage1 || m_select == SelectScene::kStage2)
+		{
+			Init();
+		}
+	}
 
 	// BGMを鳴らす
 	if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStageSelect)]))
@@ -88,14 +110,17 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 
 		if (m_select == SelectScene::kStage1)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneStage1>(pPlayer, pCamera, pStage);
 		}
 		else if (m_select == SelectScene::kStage2)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneStage2>(pPlayer, pCamera, pStage);
 		}
 		else if (m_select == kOption)
 		{
+			FadeIn(kFadeFrame); // フェードイン
 			return std::make_shared<SceneOption>(shared_from_this());
 		}
 		else if (m_select == kEnd)
@@ -106,6 +131,7 @@ std::shared_ptr<SceneBase> SceneSelectStage::Update(Input& input)
 	}
 	if (input.IsTriggered("back"))
 	{
+		FadeIn(kFadeFrame); // フェードイン
 		return std::make_shared<SceneTitle>();
 	}
 
@@ -135,12 +161,14 @@ void SceneSelectStage::Draw()
 		"ゲームを終わる", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSelectStage)]);
 
 	// ランキング表示
-	if (m_select == SelectScene::kStage2)
+	if (m_select == SelectScene::kStage1 || m_select == SelectScene::kStage2)
 	{
 		DrawStringFToHandle(kRankingTextPos.x, kRankingTextPos.y,
 			"ランキング", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
 		m_pRank->DrawStageSelectRanking();
 	}
+
+	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン

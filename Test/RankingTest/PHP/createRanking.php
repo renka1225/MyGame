@@ -2,7 +2,7 @@
 // データベースの作成と接続(既にある場合は接続のみ)
 $db = new PDO('sqlite:ranking.db');
 
-// ランキング用のテーブルを削除(無ければ無視)
+// ランキング用のテーブルを削除(なければ無視)
 $que = "DROP TABLE IF EXISTS Ranking";
 $db->query($que);
 
@@ -12,16 +12,26 @@ $que .= ' Ranking(rank integer primary key, clearTime integer)';
 $db->query($que);
 
 // テーブルのテストデータを初期化
-$db->query("INSERT OR REPLACE INTO Ranking VALUES (1, 0)");
-echo "INSERT OR REPLACE INTO Ranking VALUES (1, 0)"."<br>";
-$db->query("INSERT OR REPLACE INTO Ranking VALUES (2, 10)");
-echo "INSERT OR REPLACE INTO Ranking VALUES (2, 10)"."<br>";
-$db->query("INSERT OR REPLACE INTO Ranking VALUES (3, 30)");
-echo "INSERT OR REPLACE INTO Ranking VALUES (3, 30)"."<br>";
-$db->query("INSERT OR REPLACE INTO Ranking VALUES (4, 60)");
-echo "INSERT OR REPLACE INTO Ranking VALUES (4, 60)"."<br>";
-$db->query("INSERT OR REPLACE INTO Ranking VALUES (5, 100)");
-echo "INSERT OR REPLACE INTO Ranking VALUES (5, 100)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (1,5000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (1, 5000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (2,6000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (2, 6000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (3,7000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (3, 7000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (4, 8000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (4, 8000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (5, 9000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (5, 9000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (6, 10000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (6, 10000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (7, 11000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (7, 11000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (8, 12000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (8, 12000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (9, 13000)");
+echo "INSERT OR REPLACE INTO Ranking VALUES (9, 13000)"."<br>";
+$db->query("INSERT OR REPLACE INTO Ranking VALUES (10, 14000");
+echo "INSERT OR REPLACE INTO Ranking VALUES (10, 14000)"."<br>";
 
 // テーブルのデータを確認
 echo "【作成されたテーブルのデータ】"."<br>";

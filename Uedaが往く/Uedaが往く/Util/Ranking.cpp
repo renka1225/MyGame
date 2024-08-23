@@ -9,10 +9,14 @@ namespace
 {
 	// ドメイン名
 	const char* kDomainName = "rueda.zombie.jp";
-	// URI
-	const char* kCreateUri = "/Ranking/createRanking.php?clearTime=";  // 作成
-	const char* kUpdateUri = "/Ranking/updateRanking.php?clearTime=";  // 更新
-	const char* kGetUri = "/Ranking/getRanking.php";				   // 取得
+	// ステージ1URI
+	const char* kStage1CreateUri = "/Ranking/createRanking_stage1.php";				// 作成
+	const char* kStage1UpdateUri = "/Ranking/updateRanking_stage1.php?clearTime=";  // 更新
+	const char* kStage1GetUri = "/Ranking/getRanking_stage1.php";					// 取得
+	// ステージ2URI
+	const char* kStage2CreateUri = "/Ranking/createRanking_stage2.php";					// 作成
+	const char* kStage2UpdateUri = "/Ranking/updateRanking_stage2.php?clearTime=";		// 更新
+	const char* kStage2GetUri = "/Ranking/getRanking_stage2.php";						// 取得
 	constexpr int kPortNum = 80;		// ポート番号
 	constexpr int kMaxRankNum = 10;		// 表示するランキング数
 
@@ -51,19 +55,40 @@ Ranking::~Ranking()
 /// <summary>
 /// ランキング作成
 /// </summary>
-void Ranking::CreateRanking()
+/// <param name="stageKind">ステージの種類</param>
+void Ranking::CreateRanking(int stageKind)
 {
-	createRank = HttpGet(kDomainName, kCreateUri);
+	// ステージによってURIを変更する
+	switch (stageKind)
+	{
+	case 1:
+		createRank = HttpGet(kDomainName, kStage1CreateUri);
+		break;
+	case 2:
+		createRank = HttpGet(kDomainName, kStage2CreateUri);
+		break;
+	}
 }
 
 
 /// <summary>
 /// ランキング更新
 /// </summary>
+/// <param name="stageKind">ステージの種類</param>
 /// <param name="clearTime">クリアタイム</param>
-void Ranking::UpdateRanking(int clearTime)
+void Ranking::UpdateRanking(int stageKind, int clearTime)
 {
-	uri = kUpdateUri + std::to_string(clearTime);
+	// ステージによってURIを変更する
+	switch (stageKind)
+	{
+	case 1:
+		uri = kStage1UpdateUri + std::to_string(clearTime);
+		break;
+	case 2:
+		uri = kStage2UpdateUri + std::to_string(clearTime);
+		break;
+	}
+
 	std::string getRank = HttpGet(kDomainName, uri.c_str());
 }
 
@@ -71,9 +96,19 @@ void Ranking::UpdateRanking(int clearTime)
 /// <summary>
 /// ランキング取得
 /// </summary>
-void Ranking::GetRanking()
+/// <param name="stageKind">ステージの種類</param>
+void Ranking::GetRanking(int stageKind)
 {
-	getRank = HttpGet(kDomainName, kGetUri);
+	// ステージによってURIを変更する
+	switch (stageKind)
+	{
+	case 1:
+		getRank = HttpGet(kDomainName, kStage1GetUri);
+		break;
+	case 2:
+		getRank = HttpGet(kDomainName, kStage2GetUri);
+		break;
+	}
 
 	m_lineCount = 0;  // ランキングカウントをリセット
 	size_t m_pos = 0;
