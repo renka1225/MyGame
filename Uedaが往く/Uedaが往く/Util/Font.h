@@ -42,6 +42,8 @@ namespace Font
 		kClearButtonText = kSize36_4_EDGE,
 		// 操作説明
 		kOperation = kSize24_4_EDGE,
+		// 必殺技
+		kSpecialAttack = kSize36_4_EDGE,
 	};
 
 	// フォントのロード、アンロード

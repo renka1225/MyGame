@@ -27,8 +27,9 @@ public:
 	// エネミーとの当たり判定をチェックする
 	void CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPosBottom, float eCapRadius);
 
-	bool GetIsMove() const { return m_isMove; }			// 移動中かどうか取得
-	VECTOR GetDir() const { return m_targetMoveDir; }	// プレイヤーの向きベクトルを取得
+	bool GetIsMove() const { return m_isMove; }						// 移動中かどうか取得
+	bool GetIsSpecialAttack() const{ return m_isSpecialAttack; }	// 必殺技を発動中かどうか取得
+	VECTOR GetDir() const { return m_targetMoveDir; }				// プレイヤーの向きベクトルを取得
 
 private:
 	// 移動処理
@@ -57,5 +58,6 @@ private:
 private:
 	// プレイヤー情報
 	float m_gauge;				// ゲージ量
+	VECTOR m_pToEVec;			// プレイヤーから敵に向かうベクトル
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
 };

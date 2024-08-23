@@ -15,11 +15,11 @@ public:
 	virtual void Draw();
 
 private:
-	void UpdateSound(Input& input);		// サウンド更新
-	//void UpdateKeyConfig(Input& input); // キー更新
-	void DrawSound();					// サウンド部分表示
-	void DrawCredit();					// クレジット表記
-	void DrawKeyConfig();				// キーコンフィグ部分表示
+	void UpdateSound(Input& input);				// サウンド更新
+	//void UpdateKeyConfig(Input& input);		// キー更新
+	void DrawSound();							// サウンド部分表示
+	void DrawCredit();							// クレジット表記
+	void DrawKeyConfig();						// キーコンフィグ部分表示
 
 private:
 	std::shared_ptr<SceneBase> m_pPrevScene;	// 前に実行していたシーン

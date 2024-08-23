@@ -48,6 +48,8 @@ CharacterBase::CharacterBase():
 void CharacterBase::OnDamage(float damage)
 {
 	m_hp -= damage;
+	m_hp = std::max(0.0f, m_hp);
+
 	// HPバーを更新
 	if (damage > 0.0f)
 	{

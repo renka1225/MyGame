@@ -61,8 +61,8 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		return nextState;
 	}
 
-	// 攻撃中または移動中、ガード中、攻撃を受けている最中は状態を更新しない
-	bool isKeepState = m_isAttack || m_isMove || m_isGuard || (m_currentState == CharacterBase::State::kReceive);
+	// 特定の場合は状態を更新しない
+	bool isKeepState = m_isAttack || m_isMove || m_isGuard || (m_currentState == CharacterBase::State::kReceive) || player.GetIsSpecialAttack();
 	if (isKeepState) return nextState;
 
 	// エネミーとプレイヤーの距離を計算
