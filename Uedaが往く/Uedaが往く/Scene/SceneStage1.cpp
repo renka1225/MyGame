@@ -133,9 +133,9 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			m_isPause = true;
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
-	
-		// クリア演出中は動けないようにする
-		if (!(m_pEnemy->GetHp() <= 0 && m_clearStagingTime > 0))
+
+		// チュートリアル表示中、クリア演出中は動けないようにする
+		if (!m_isTuto && !(m_pEnemy->GetHp() <= 0 && m_clearStagingTime > 0))
 		{
 			m_pCamera->Update(input, *m_pPlayer);
 			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
@@ -201,15 +201,13 @@ void SceneStage1::Draw()
 {
 	SceneStageBase::Draw();
 
-	// チュートリアル表示
-	if (m_isTuto)
+	if (m_tutoNum <= TutoHandle::kTutoNum)
 	{
-		DrawTutorial();
+		DrawTutorial(); // チュートリアル表示
 	}
 	else
 	{
-		// 演出UIを表示
-		m_pUIBattle->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+		m_pUIBattle->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum); // 演出UIを表示
 	}
 
 #ifdef _DEBUG	// デバッグ表示
@@ -275,9 +273,7 @@ void SceneStage1::UpdateTuto(Input& input)
 void SceneStage1::DrawTutorial()
 {
 	// 背景表示
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	DrawGraph(0, 0, m_tutoHandle[m_tutoNum], true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// テキストボックス表示
 	DrawGraphF(kTutoTextBoxPos.x, kTutoTextBoxPos.y, m_tutoHandle[TutoHandle::kTextBox], true);
@@ -287,7 +283,7 @@ void SceneStage1::DrawTutorial()
 
 	// テキスト表示
 	if (m_tutoNum == TutoHandle::kTuto0)		m_tutoText = "ここでは基本的なルールなどについて説明するぞ！";
-	else if (m_tutoNum == TutoHandle::kTuto1)	m_tutoText = "左上の赤いゲージがプレイヤーのHPだ。\nその下の青いバーがが、プレイヤーのゲージだ。";
+	else if (m_tutoNum == TutoHandle::kTuto1)	m_tutoText = "左上の赤いゲージがプレイヤーのHPだ。\nその下の青いバーが、プレイヤーのゲージだ。";
 	else if (m_tutoNum == TutoHandle::kTuto2)	m_tutoText = "ゲージは攻撃を行うことで溜まっていくぞ。\nゲージが溜まると必殺技が発動できるぞ！";
 	else if (m_tutoNum == TutoHandle::kTuto3)	m_tutoText = "右下の赤いゲージが敵のHPだ。\n敵のHPを0にしたら勝利だ！";
 	else if (m_tutoNum == TutoHandle::kTuto4)	m_tutoText = "操作方法については右側に書いてあるから確認してくれ！";
