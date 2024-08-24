@@ -16,6 +16,7 @@ namespace Font
 		kSize42_4_EDGE,
 		kSize40_4,
 		kSize36_4_EDGE,
+		kSize30_4_EDGE,
 		kSize28_4,
 		kSize24_4,
 		kSize24_4_EDGE,
@@ -23,7 +24,7 @@ namespace Font
 		kNormal,
 		kNum,		// フォントの種類数
 
-		// 使うフォントを指定する
+		/*使うフォントを指定する*/
 		// SceneSelectStage
 		kSelectStage = kSize48_4,		// ステージ選択で使う文字サイズ
 		kIntroductionText = kSize48_4,	// ステージ紹介の文字サイズ
@@ -41,6 +42,9 @@ namespace Font
 		//右下に表示するボタン表示の文字サイズ
 		kButtonText = kSize42_4_EDGE,
 		kClearButtonText = kSize36_4_EDGE,
+		// チュートリアル
+		kTutorial = kSize36_4_EDGE,
+		kTutoButton = kSize30_4_EDGE,
 		// 操作説明
 		kOperation = kSize24_4_EDGE,
 		// 必殺技

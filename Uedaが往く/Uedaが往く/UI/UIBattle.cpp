@@ -4,6 +4,7 @@
 #include "UI.h"
 #include "CharacterBase.h"
 #include "UIBattle.h"
+#include <string>
 
 // 定数
 namespace
@@ -71,6 +72,11 @@ namespace
 	constexpr int kSpecialAttackTextColor = 0x1470cc;		 // テキストの色
 	constexpr int kSpecialAttackTextEdgeColor = 0x0a3866;	 // テキスト縁の色
 	constexpr int kMaxPal = 255;							 // 最大加算値
+
+	/*チュートリアル*/
+	const Vec2 kTutoTextPos = { 1300.0f, 780.0f };			// テキスト位置
+	const Vec2 kTutoButtonPos = { 1400.0f, 800.0f };		// ボタン位置
+	constexpr float kTutoButtonScale = 1.2f;				// ボタン拡大率
 }
 
 /// <summary>
@@ -133,6 +139,29 @@ void UIBattle::UpdateHpBar()
 		m_currentHp -= m_damage;
 		m_damage = 0.0f;
 	}
+}
+
+
+/// <summary>
+/// ダメージを受けた際にタイマーをセットする
+/// </summary>
+void UIBattle::SetDamageTimer()
+{
+	if (m_intervalTime < 0)
+	{
+		m_intervalTime = kIntervalTime;
+	}
+}
+
+
+/// <summary>
+/// ダメージを受けた時の処理
+/// </summary>
+/// <param name="damage">受けたダメージ量</param>
+void UIBattle::OnDamage(float damage)
+{
+	m_damage += damage;
+	SetDamageTimer();
 }
 
 
@@ -246,6 +275,21 @@ void UIBattle::DrawSilhouette(int charType)
 
 
 /// <summary>
+/// 必殺技のテキスト表示
+/// </summary>
+void UIBattle::DrawSpecialAttack()
+{
+	DrawStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, "必殺技", kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)], kSpecialAttackTextEdgeColor);
+	SetDrawBlendMode(DX_BLENDMODE_ADD, kMaxPal);
+	DrawStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, "必殺技", kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)]);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// ボタン画像表示
+	DrawRectRotaGraphF(kSpecialAttackButtonPos.x, kSpecialAttackButtonPos.y, kButtonSize * ButtonKind::kBButton, 0, kButtonSize, kButtonSize, kSpecialAttackButtonScale, 0.0f, m_buttonHandle, true);
+}
+
+
+/// <summary>
 /// 操作説明を表示
 /// </summary>
 void UIBattle::DrawOperation()
@@ -294,38 +338,14 @@ void UIBattle::DrawOperation()
 
 
 /// <summary>
-/// 必殺技のテキスト表示
+/// チュートリアル画面のボタン表示
 /// </summary>
-void UIBattle::DrawSpecialAttack()
+void UIBattle::DrawTutoButtonText()
 {
-	DrawStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, "必殺技", kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)], kSpecialAttackTextEdgeColor);
-	SetDrawBlendMode(DX_BLENDMODE_ADD, kMaxPal);
-	DrawStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, "必殺技", kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)]);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// テキスト表示
+	DrawStringFToHandle(kTutoTextPos.x, kTutoTextPos.y,
+		"次へ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTutoButton)]);
 
 	// ボタン画像表示
-	DrawRectRotaGraph(kSpecialAttackButtonPos.x, kSpecialAttackButtonPos.y, kButtonSize * ButtonKind::kBButton, 0, kButtonSize, kButtonSize, kSpecialAttackButtonScale, 0.0f, m_buttonHandle, true);
-}
-
-
-/// <summary>
-/// ダメージを受けた際にタイマーをセットする
-/// </summary>
-void UIBattle::SetDamageTimer()
-{
-	if (m_intervalTime < 0)
-	{
-		m_intervalTime = kIntervalTime;
-	}
-}
-
-
-/// <summary>
-/// ダメージを受けた時の処理
-/// </summary>
-/// <param name="damage">受けたダメージ量</param>
-void UIBattle::OnDamage(float damage)
-{
-	m_damage += damage;
-	SetDamageTimer();
+	DrawRectRotaGraphF(kTutoButtonPos.x, kTutoButtonPos.y, kButtonSize * ButtonKind::kAButton, 0, kButtonSize, kButtonSize, kTutoButtonScale, 0.0f, m_buttonHandle, true);
 }

@@ -79,22 +79,7 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 	{
 		FadeOut(kFadeFrame); // フェードアウト
 
-		if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
-		{
-			// 開始時に1度だけSEを流す
-			if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))
-			{
-				PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)], DX_PLAYTYPE_BACK);
-			}
-		}
-		else
-		{
-			// BGMを鳴らす
-			if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)]))
-			{
-				PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)], DX_PLAYTYPE_LOOP);
-			}
-		}
+		UpdateSound();		 // サウンド更新
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -194,4 +179,28 @@ void SceneStage2::Draw()
 	DrawString(0, 0, "ステージ2", 0xffffff);
 	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
+}
+
+
+/// <summary>
+/// サウンド更新
+/// </summary>
+void SceneStage2::UpdateSound()
+{
+	if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
+	{
+		// 開始時に1度だけSEを流す
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)], DX_PLAYTYPE_BACK);
+		}
+	}
+	else
+	{
+		// BGMを鳴らす
+		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)]))
+		{
+			PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)], DX_PLAYTYPE_LOOP);
+		}
+	}
 }

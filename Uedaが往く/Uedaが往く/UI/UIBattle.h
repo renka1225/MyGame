@@ -10,16 +10,17 @@ public:
 	UIBattle();
 	UIBattle(float maxHp);
 	virtual ~UIBattle();
-	void UpdateHpBar();
+	void UpdateHpBar();				// HP表示を更新する
+	void SetDamageTimer();			// ダメージを受けた際にタイマーをセットする
+	void OnDamage(float damage);	// 受けたダメージ量を計算する
 	void DrawStartProduction(int time, int matchNum, int maxMatch); // スタート時の演出を表示
 	void DrawPlayerHP(float currentHp);								// プレイヤーのHPバーを表示
 	void DrawPlayerGauge(float currentGauge, float MaxGauge);		// プレイヤーのゲージバーを表示
 	void DrawEnemyHp(float currentHp);								// 敵のHPバーを表示
 	void DrawSilhouette(int charType);								// シルエットを表示
-	void DrawOperation();											// 操作説明を表示
 	void DrawSpecialAttack();										// 必殺技のテキスト表示
-	void SetDamageTimer();			// ダメージを受けた際にタイマーをセットする
-	void OnDamage(float damage);	// 受けたダメージ量を計算する
+	void DrawOperation();											// 操作説明を表示
+	void DrawTutoButtonText();										// チュートリアル画面のボタン表示
 
 private:
 	float m_decreaseHp;				// ダメージを受けた後のHP

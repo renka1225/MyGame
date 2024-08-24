@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Font.h"
 #include "UIBattle.h"
 #include "Player.h"
 #include "EnemyTuto.h"
@@ -17,18 +18,70 @@ namespace
 	constexpr int kMaxBattleNum = 1;		// 最大バトル数
 	constexpr int kFightTextDispStart = 80;	// "Fight"のテキストを表示し始める時間
 	constexpr int kFadeFrame = 4;			// フェード変化量
+
+	/*チュートリアル*/
+	// 背景画像のパス
+	const char* kTutoDefPath = "data/UI/Tutorial/def.png";			  // デフォルト
+	const char* kTutoPBarPath = "data/UI/Tutorial/pGauge.png";		  // プレイヤーゲージ
+	const char* kTutoEBarPath = "data/UI/Tutorial/eGauge.png";		  // 敵ゲージ
+	const char* kTutoOpePath = "data/UI/Tutorial/ope.png";			  // 操作説明
+	const char* kTextBoxHandlePath = "data/UI/Tutorial/textBox.png";  // テキストボックス画像のパス
+	const Vec2 kTutoTextBoxPos = { 425.0f , 650.0f };				  // テキストボックス位置
+	const Vec2 kTutoTextPos = { 480.0f , 690.0f };					  // テキスト位置
+	constexpr int kTextColor = 0xffffff;							  // テキストの色
+	// チュートリアル画像
+	enum TutoHandle
+	{
+		kTuto0,
+		kTuto1,
+		kTuto2,
+		kTuto3,
+		kTuto4,
+		kTuto5,
+		kTutoNum,		// チュートリアルの数
+		kTextBox,		// テキストボックス
+		kTutoHandleNum,	// 画像の数
+	};
 }
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage)
+SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage):
+	m_tutoNum(0),
+	m_tutoSelect(Select::kYes),
+	m_isTuto(false)
 {
 	m_pPlayer = pPlayer;
 	m_pCamera = pCamera;
 	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyTuto>();
 	m_battleNum = 0;
+
+	m_tutoHandle.resize(TutoHandle::kTutoHandleNum);
+	for (int i = 0; i < m_tutoHandle.size(); i++)
+	{
+		if (i == TutoHandle::kTuto1 || i == TutoHandle::kTuto2)
+		{
+			m_tutoHandle[i] = LoadGraph(kTutoPBarPath);
+		}
+		else if (i == TutoHandle::kTuto3)
+		{
+			m_tutoHandle[i] = LoadGraph(kTutoEBarPath);
+		}
+		else if (i == TutoHandle::kTuto4)
+		{
+			m_tutoHandle[i] = LoadGraph(kTutoOpePath);
+		}
+		else if (i == TutoHandle::kTextBox)
+		{
+			m_tutoHandle[i] = LoadGraph(kTextBoxHandlePath);
+		}
+		else
+		{
+			m_tutoHandle[i] = LoadGraph(kTutoDefPath);
+		}
+	}
 }
 
 
@@ -72,22 +125,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	{
 		FadeOut(kFadeFrame); // フェードアウト
 
-		if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
-		{
-			// 開始時に1度だけSEを流す
-			if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))
-			{
-				PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)], DX_PLAYTYPE_BACK);
-			}
-		}
-		else
-		{
-			// BGMを鳴らす
-			if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]))
-			{
-				PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)], DX_PLAYTYPE_LOOP);
-			}
-		}
+		UpdateSound();		// サウンド更新
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -95,7 +133,7 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			m_isPause = true;
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
-
+	
 		// クリア演出中は動けないようにする
 		if (!(m_pEnemy->GetHp() <= 0 && m_clearStagingTime > 0))
 		{
@@ -103,6 +141,9 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 			m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
 		}
+
+		UpdateTuto(input);	// チュートリアルの表示状態を更新する
+		if (m_isTuto) return shared_from_this();
 
 		m_nextBattleTime--; // 次の試合が始まるまでの時間
 		if (m_nextBattleTime > 0) return shared_from_this();
@@ -160,12 +201,97 @@ void SceneStage1::Draw()
 {
 	SceneStageBase::Draw();
 
-	// 演出UIを表示
-	m_pUIBattle->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+	// チュートリアル表示
+	if (m_isTuto)
+	{
+		DrawTutorial();
+	}
+	else
+	{
+		// 演出UIを表示
+		m_pUIBattle->DrawStartProduction(m_nextBattleTime, m_battleNum, kMaxBattleNum);
+	}
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ1", 0xffffff);
 	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
+}
+
+
+/// <summary>
+/// サウンド更新
+/// </summary>
+void SceneStage1::UpdateSound()
+{
+	if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
+	{
+		// 開始時に1度だけSEを流す
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)], DX_PLAYTYPE_BACK);
+		}
+	}
+	else
+	{
+		// BGMを鳴らす
+		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]))
+		{
+			PlaySoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)], DX_PLAYTYPE_LOOP);
+		}
+	}
+}
+
+
+/// <summary>
+/// チュートリアルの表示状態を更新する
+/// </summary>
+/// <param name="input">入力状態</param>
+void SceneStage1::UpdateTuto(Input& input)
+{
+	if (m_tutoNum <= TutoHandle::kTutoNum)
+	{
+		m_isTuto = true;
+	}
+
+	if (m_isTuto)
+	{
+		if (input.IsTriggered("A"))
+		{
+			m_tutoNum++;	// チュートリアルの表示を進める
+			if (m_tutoNum > TutoHandle::kTutoNum)
+			{
+				m_isTuto = false;
+			}
+		}
+	}
+}
+
+
+/// <summary>
+/// チュートリアル表示
+/// </summary>
+void SceneStage1::DrawTutorial()
+{
+	// 背景表示
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawGraph(0, 0, m_tutoHandle[m_tutoNum], true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// テキストボックス表示
+	DrawGraphF(kTutoTextBoxPos.x, kTutoTextBoxPos.y, m_tutoHandle[TutoHandle::kTextBox], true);
+
+	// ボタン表示
+	m_pUIBattle->DrawTutoButtonText();
+
+	// テキスト表示
+	if (m_tutoNum == TutoHandle::kTuto0)		m_tutoText = "ここでは基本的なルールなどについて説明するぞ！";
+	else if (m_tutoNum == TutoHandle::kTuto1)	m_tutoText = "左上の赤いゲージがプレイヤーのHPだ。\nその下の青いバーがが、プレイヤーのゲージだ。";
+	else if (m_tutoNum == TutoHandle::kTuto2)	m_tutoText = "ゲージは攻撃を行うことで溜まっていくぞ。\nゲージが溜まると必殺技が発動できるぞ！";
+	else if (m_tutoNum == TutoHandle::kTuto3)	m_tutoText = "右下の赤いゲージが敵のHPだ。\n敵のHPを0にしたら勝利だ！";
+	else if (m_tutoNum == TutoHandle::kTuto4)	m_tutoText = "操作方法については右側に書いてあるから確認してくれ！";
+	else if (m_tutoNum == TutoHandle::kTuto5)	m_tutoText = "説明については以上だ！\n人形を用意したから実際に闘ってみよう！";
+
+	DrawStringFToHandle(kTutoTextPos.x, kTutoTextPos.y, m_tutoText.c_str(), kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kTutorial)]);
 }
