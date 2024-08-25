@@ -8,7 +8,7 @@
 namespace
 {
 	constexpr float kNear = 1.0f;							// カメラの手前クリップ距離
-	constexpr float kFar = 10000.0f;						// カメラの奥クリップ距離
+	constexpr float kFar = 50000.0f;						// カメラの奥クリップ距離
 	constexpr float kDist = 100.0f;							// カメラからプレイヤーまでの距離
 	constexpr float kHeight = 60.0f;						// カメラの注視点
 	constexpr float kAngle = 0.03f;							// カメラを動かす角度

@@ -71,8 +71,7 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 
 	if (m_intervalTime > 0)
 	{
-		m_intervalTime--;								// クールダウンタイマーを減少させる
-		nextState = CharacterBase::State::kFightIdle;	// クールダウン中は待機状態にする
+		m_intervalTime--;	// クールダウンタイマーを減少させる
 		return nextState;
 	}
 
@@ -125,7 +124,6 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		}
 
 		m_intervalTime = m_enemyInfo.stateIntervalTime;
-
 	}
 	else
 	{

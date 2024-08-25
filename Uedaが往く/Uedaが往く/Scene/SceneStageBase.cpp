@@ -26,6 +26,11 @@ namespace
 	constexpr int kClearBackColor = 0x0f2699;					  // クリア時の背景色
 	constexpr int kMULAPal = 200;								  // 乗算ブレンド値
 	constexpr int kAddPal = 80;									  // 加算ブレンド値
+	
+	/*影*/
+	constexpr int kShadowMapSize = 4096;	// 作成するシャドウマップのサイズ
+	const VECTOR kShadowAreaMinPos = VGet(-1.0f, -1.0f, -1.0f);		 // シャドウマップに描画する最小範囲
+	const VECTOR kShadowAreaMaxPos = VGet(4000.0f, 100.0f, 4500.0f); // シャドウマップに描画する最大範囲
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
 	constexpr int kFadeFrame = 8;		 // フェード変化量
@@ -42,6 +47,12 @@ SceneStageBase::SceneStageBase() :
 	m_elapsedTime(0),
 	m_isPause(false)
 {
+	m_shadowMap = MakeShadowMap(kShadowMapSize, kShadowMapSize);
+	// シャドウマップが想定するライトの方向をセット
+	SetShadowMapLightDirection(m_shadowMap, GetLightPosition());
+	// シャドウマップに描画する範囲を設定
+	SetShadowMapDrawArea(m_shadowMap, kShadowAreaMinPos, kShadowAreaMaxPos);
+
 	m_fadeAlpha = kStartFadeAlpha;
 	m_pUIBattle = std::make_shared<UIBattle>();
 	m_pEffect = std::make_shared<EffectManager>();
@@ -76,8 +87,9 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 /// </summary>
 SceneStageBase::~SceneStageBase()
 {
-	Light::DeleteLight();
+	DeleteShadowMap(m_shadowMap); // シャドウマップの削除
 	DeleteGraph(m_clearBackHandle);
+	Light::DeleteLight();
 }
 
 
@@ -102,10 +114,19 @@ void SceneStageBase::Init()
 /// </summary>
 void SceneStageBase::Draw()
 {
-	m_pStage->Draw();			  // ステージ描画
+	ShadowMap_DrawSetup(m_shadowMap); // シャドウマップへの描画の準備
+	m_pStage->Draw();	 // ステージ描画
+	m_pPlayer->Draw();	 // プレイヤー描画
+	m_pEnemy->Draw();	 // 敵描画
+	ShadowMap_DrawEnd(); // シャドウマップへの描画を終了
 
-	m_pPlayer->Draw();			  // プレイヤー描画
-	m_pEnemy->Draw();			  // 敵描画
+	SetUseShadowMap(0, m_shadowMap); // 描画に使用するシャドウマップを設定
+
+	m_pStage->Draw();	 // ステージ描画
+	m_pPlayer->Draw();	 // プレイヤー描画
+	m_pEnemy->Draw();	 // 敵描画
+
+	SetUseShadowMap(0, -1); // 描画に使用するシャドウマップの設定を解除
 
 	m_pUIBattle->DrawOperation(); // 操作説明を表示
 
@@ -122,6 +143,11 @@ void SceneStageBase::Draw()
 	}
 
 	DrawFade();	// フェードインアウト描画
+
+#ifdef _DEBUG
+	TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
+#endif // _DEBUG
+
 }
 
 

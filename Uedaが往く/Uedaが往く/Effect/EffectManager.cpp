@@ -9,7 +9,7 @@ namespace
 {
 	constexpr int kEffectNum = 2;				// エフェクトの種類
 	constexpr float kAttackEffectScale = 4.0f;	// 攻撃エフェクト拡大率
-	constexpr int kAttackEffectTime = 60;		// 攻撃エフェクトの再生時間
+	constexpr int kAttackEffectTime = 80;		// 攻撃エフェクトの再生時間
 	constexpr float kGaurdEffectScale = 8.0f;	// ガードエフェクトの拡大率
 	constexpr int kGaurdEffectTime = 30;		// ガードエフェクトの再生時間
 	constexpr float kGaurdEffectSpeed= 3.0f;	// ガードエフェクトの再生速度
