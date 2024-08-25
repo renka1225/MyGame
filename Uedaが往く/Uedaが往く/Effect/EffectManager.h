@@ -20,6 +20,7 @@ public:
 	void PlayGuardEffect(const VECTOR& pos);	// ガードエフェクトを再生する
 
 private:
+	int m_attackEffectTime;	// 攻撃エフェクトを再生する時間
 	int m_guardEffectTime;	// ガードエフェクトを再生する時間
 
 	struct Effect

@@ -9,6 +9,7 @@ namespace
 {
 	constexpr int kEffectNum = 2;				// エフェクトの種類
 	constexpr float kAttackEffectScale = 4.0f;	// 攻撃エフェクト拡大率
+	constexpr int kAttackEffectTime = 50;		// 攻撃エフェクトの再生時間
 	constexpr float kGaurdEffectScale = 8.0f;	// ガードエフェクトの拡大率
 	constexpr int kGaurdEffectTime = 30;		// ガードエフェクトの再生時間
 	constexpr float kGaurdEffectSpeed= 3.0f;	// ガードエフェクトの再生速度
@@ -19,6 +20,7 @@ namespace
 /// コンストラクタ
 /// </summary>
 EffectManager::EffectManager():
+	m_attackEffectTime(0),
 	m_guardEffectTime(0)
 {
 	emitter.emitterHandle.resize(kEffectNum);
@@ -57,6 +59,7 @@ void EffectManager::Update()
 	Effekseer_Sync3DSetting();	// 3Dの情報をDxLibとEffekseerで合わせる
 	UpdateEffekseer3D();
 
+	m_attackEffectTime--;
 	m_guardEffectTime--;
 }
 
@@ -89,6 +92,10 @@ void EffectManager::ClearEffect()
 /// <param name="pos">エフェクト位置</param>
 void EffectManager::PlayDamageEffect(const VECTOR& pos)
 {
+	// エフェクトが1回のみ表示されるようにする
+	if (m_attackEffectTime > 0) return;
+
+	m_attackEffectTime = kAttackEffectTime;
 	emitter.effects.push_back({ PlayEffekseer3DEffect(emitter.emitterHandle[EffectKind::kAttack]), {}});
 	auto& effect = emitter.effects.back();
 

@@ -118,7 +118,8 @@ public:
 	{
 		float maxHp;				// 最大HP
 		int punchReceptionTime;		// パンチコンボの入力受付時間
-		int punchCoolTime;			// パンチできるようになるまでの時間
+		int punchCoolTime;			// パンチのクールタイム
+		int kickCoolTime;			// キックのクールタイム
 		float punchPower;			// パンチの攻撃力
 		float secondPunchPower;		// パンチ2コンボ目の攻撃力
 		float thirdPunchPower;		// パンチ3コンボ目の攻撃力
@@ -198,6 +199,7 @@ protected:
 	int m_punchCount;			  // 現在のパンチのコンボ数
 	int m_punchComboTime;		  // コンボ入力受付時間
 	int m_punchCoolTime;		  // パンチできない時間
+	int m_kickCoolTime;			  // キックできない時間
 	int m_avoidCoolTime;		  // 回避できない時間
 	int m_avoidCount;			  // 回避した回数
 	bool m_isAttack;			  // 攻撃中かどうか(true:攻撃中)

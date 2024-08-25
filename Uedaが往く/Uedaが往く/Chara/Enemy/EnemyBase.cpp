@@ -233,9 +233,17 @@ CharacterBase::State EnemyBase::Punch()
 /// <returns>現在の状態</returns>
 CharacterBase::State EnemyBase::kick()
 {
+	// キックできない場合
+	if (m_kickCoolTime > 0)
+	{
+		m_kickCoolTime--;
+		return m_currentState;
+	}
+
 	// キック攻撃
 	m_isAttack = true;
 	m_isFighting = false;
+	m_kickCoolTime = m_status.kickCoolTime;	// クールダウンタイムを設定
 	PlayAnim(AnimKind::kKick);
 	return CharacterBase::State::kKick;
 }

@@ -51,6 +51,7 @@ Player::Player():
 	m_punchCount = 0;
 	m_punchComboTime = 0;
 	m_punchCoolTime = 0;
+	m_kickCoolTime = 0;
 	m_avoidCoolTime = 0;
 	m_avoidCount = 0;
 	m_isMove = false;
@@ -79,9 +80,12 @@ void Player::Init(VECTOR pos)
 {
 	m_pos = pos;
 	MV1SetPosition(m_modelHandle, m_pos);
+	m_isSpecialAttack = false;
+	m_isAttack = false;
 	m_targetMoveDir = kInitDir;
 	m_currentState = CharacterBase::State::kFightIdle;
 	PlayAnim(AnimKind::kFightIdle);
+
 	m_pEffect->Init();	// エフェクトの初期化
 
 	// モデル全体のコリジョン情報のセットアップ
@@ -399,11 +403,19 @@ void Player::Kick(const Input& input)
 	// 攻撃中はまたは攻撃を受けている最中はスキップ
 	if (m_isAttack || m_isReceive) return;
 
+	// キックできない場合
+	if (m_kickCoolTime > 0)
+	{
+		m_kickCoolTime--;
+		return;
+	}
+
 	// キック攻撃
 	else if (input.IsTriggered("kick"))
 	{
 		m_isAttack = true;
 		m_isFighting = false;
+		m_kickCoolTime = m_status.kickCoolTime;	// クールダウンタイムを設定
 		m_currentState = CharacterBase::State::kKick;
 		PlayAnim(AnimKind::kKick);
 	}

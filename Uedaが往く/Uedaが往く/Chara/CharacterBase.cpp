@@ -394,6 +394,7 @@ void CharacterBase::UpdateAnim()
 			{
 				m_isAttack = false;
 				m_isSpecialAttack = false;
+				m_isReceive = false;
 				m_currentState = CharacterBase::State::kFightIdle;
 				PlayAnim(AnimKind::kFightIdle);
 			}
@@ -439,9 +440,45 @@ void CharacterBase::UpdateAnim()
 		{
 			m_prevAnimCount += m_animSpeed.kick;
 		}
+		else if (m_currentState == CharacterBase::State::kSpecialAttack)
+		{
+			m_prevAnimCount += m_animSpeed.specialAttack;
+		}
 		else if (m_prevPlayAnim == static_cast<int>(CharacterBase::AnimKind::kAvoid))
 		{
 			m_prevAnimCount += m_animSpeed.avoid;
+		}
+		else if (m_currentState == CharacterBase::State::kAvoid)
+		{
+			m_prevAnimCount += m_animSpeed.specialAttack;
+		}
+		else if (m_currentState == CharacterBase::State::kFightWalk)
+		{
+			// 移動時のみアニメーションを再生
+			if (m_isMove)
+			{
+				m_prevAnimCount += m_animSpeed.fightWalk;
+			}
+			else
+			{
+				m_prevAnimCount = 0.0f;
+			}
+		}
+		else if (m_currentState == CharacterBase::State::kGuard)
+		{
+			m_prevAnimCount += m_animSpeed.guard;
+			if (m_isGuard)
+			{
+				m_prevAnimCount = std::min(m_currentAnimCount, m_status.guardAnimTime);
+			}
+		}
+		else if (m_currentState == CharacterBase::State::kReceive)
+		{
+			m_prevAnimCount += m_animSpeed.receive;
+		}
+		else
+		{
+			m_prevAnimCount += m_animSpeed.fightIdle;
 		}
 
 		// アニメーションの再生時間をループ
@@ -456,6 +493,7 @@ void CharacterBase::UpdateAnim()
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, kAnimBlendMax - m_animBlendRate);
 	}
 }
+
 
 
 /// <summary>
