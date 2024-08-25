@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "UI.h"
 #include "UIBattle.h"
+#include "EffectManager.h"
 #include "Sound.h"
 #include "Light.h"
 #include "Player.h"
@@ -43,6 +44,7 @@ SceneStageBase::SceneStageBase() :
 {
 	m_fadeAlpha = kStartFadeAlpha;
 	m_pUIBattle = std::make_shared<UIBattle>();
+	m_pEffect = std::make_shared<EffectManager>();
 	Light::SetLight();
 	m_clearBackHandle = LoadGraph(kClearBackHandlePath);
 }
@@ -86,9 +88,9 @@ void SceneStageBase::Init()
 {
 	if (!m_isPause)
 	{
-		m_pPlayer->Init(kPlayerInitPos);
+		m_pPlayer->Init(m_pEffect, kPlayerInitPos);
 		m_pCamera->Init();
-		m_pEnemy->Init(kEnemyInitPos);
+		m_pEnemy->Init(m_pEffect, kEnemyInitPos);
 	}
 
 	m_isPause = false;

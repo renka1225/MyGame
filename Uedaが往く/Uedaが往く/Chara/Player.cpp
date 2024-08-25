@@ -76,13 +76,14 @@ Player::~Player()
 /// <summary>
 /// èâä˙âª
 /// </summary>
-void Player::Init(VECTOR pos)
+void Player::Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos)
 {
 	m_pos = pos;
-	MV1SetPosition(m_modelHandle, m_pos);
+	m_pEffect = pEffect;
 	m_isSpecialAttack = false;
 	m_isAttack = false;
 	m_targetMoveDir = kInitDir;
+	MV1SetPosition(m_modelHandle, m_pos);
 	m_currentState = CharacterBase::State::kFightIdle;
 	PlayAnim(AnimKind::kFightIdle);
 

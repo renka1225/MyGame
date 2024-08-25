@@ -27,7 +27,7 @@ protected:
 public:
 	CharacterBase();
 	~CharacterBase() {};
-	virtual void Init(VECTOR pos) = 0;
+	virtual void Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos) = 0;
 	virtual void Draw() = 0;
 	virtual void OnDamage(float damage);		// ƒ_ƒ[ƒW‚ğó‚¯‚½Û‚Ìˆ—
 

@@ -7,6 +7,7 @@ class Camera;
 class Stage;
 class EnemyBase;
 class UIBattle;
+class EffectManager;
 
 /// <summary>
 /// プレイシーンの基底クラス
@@ -35,6 +36,7 @@ protected:
 	std::shared_ptr<Stage> m_pStage;				// ステージ
 	std::shared_ptr<EnemyBase> m_pEnemy;			// 敵
 	std::shared_ptr<UIBattle> m_pUIBattle;			// バトルUI
+	std::shared_ptr<EffectManager> m_pEffect;		// エフェクト
 	int m_battleNum;								// 現在のバトル数
 	int m_clearStagingTime;							// クリア演出の時間
 	int m_nextBattleTime;							// 次の試合が始まるまでの時間

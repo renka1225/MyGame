@@ -46,9 +46,10 @@ EnemyChef::~EnemyChef()
 /// 初期化
 /// </summary>
 /// <param name="pos">初期位置</param>
-void EnemyChef::Init(VECTOR pos)
+void EnemyChef::Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos)
 {
 	m_pos = pos;
+	m_pEffect = pEffect;
 	MV1SetPosition(m_modelHandle, m_pos);
 	m_pEffect->Init();	// エフェクトの初期化
 }

@@ -7,6 +7,7 @@ class EnemyBase;
 class Camera;
 class Input;
 class UIGauge;
+class EffectManager;
 
 /// <summary>
 /// プレイヤークラス
@@ -16,7 +17,7 @@ class Player : public CharacterBase
 public:
 	Player();
 	~Player();
-	virtual void Init(VECTOR pos) override;
+	virtual void Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos) override;
 	void Update(const Input& input, const Camera& camera, EnemyBase& enemy, Stage& stage);
 	virtual void Draw() override;
 

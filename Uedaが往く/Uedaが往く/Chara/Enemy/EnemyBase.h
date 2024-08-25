@@ -14,7 +14,7 @@ class EnemyBase : public CharacterBase
 public:
 	EnemyBase();
 	virtual ~EnemyBase();
-	virtual void Init(VECTOR pos) = 0;
+	virtual void Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos) = 0;
 	virtual void Update(Player& player, Stage& stage, SceneStageBase& sceneStage) = 0;
 	virtual void Draw() = 0;
 	// UŒ‚‚ğó‚¯‚½Û‚Ìˆ—

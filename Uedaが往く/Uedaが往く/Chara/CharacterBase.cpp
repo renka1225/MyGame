@@ -11,7 +11,7 @@ namespace
 	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
 	constexpr float kAnimBlendSpeed = 0.2f;	 // アニメーションブレンドの変化速度
 	constexpr int kPosLogNum = 8;			 // 覚えておく過去の位置情報の数
-	constexpr float kAlphaAdj = 0.3;		 // 残像の透明度を調整
+	constexpr float kAlphaAdj = 0.3f;		 // 残像の透明度を調整
 }
 
 /// <summary>
@@ -36,7 +36,6 @@ CharacterBase::CharacterBase():
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(0.0f)
 {
-	m_pEffect = std::make_shared<EffectManager>();
 	m_posLog.resize(kPosLogNum);
 }
 
@@ -502,7 +501,7 @@ void CharacterBase::UpdateAnim()
 void CharacterBase::UpdatePosLog()
 {
 	// 位置ログをずらす
-	for (int i = m_posLog.size() - 1; i >= 1; i--)
+	for (int i = static_cast<int>(m_posLog.size()) - 1; i >= 1; i--)
 	{
 		m_posLog[i] = m_posLog[i - 1];
 	}
