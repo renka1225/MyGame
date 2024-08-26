@@ -512,7 +512,7 @@ void CharacterBase::UpdatePosLog()
 /// </summary>
 void CharacterBase::DrawAfterImage()
 {
-	for (int i = 1; i < m_posLog.size(); i++)
+	for (int i = m_posLog.size() - 1; i >= 0; i--)
 	{
 		// ÉçÉOÇ™å√Ç≠Ç»ÇÈÇŸÇ«ìßñæÇ…Ç»ÇÈÇÊÇ§Ç…Ç∑ÇÈ
 		float alpha = (1.0f - (static_cast<float>(i) / m_posLog.size())) * kAlphaAdj;

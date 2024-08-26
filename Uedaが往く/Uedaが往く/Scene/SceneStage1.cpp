@@ -201,7 +201,7 @@ void SceneStage1::Draw()
 {
 	SceneStageBase::Draw();
 
-	if (m_tutoNum <= TutoHandle::kTutoNum)
+	if (m_tutoNum < TutoHandle::kTutoNum)
 	{
 		DrawTutorial(); // チュートリアル表示
 	}
@@ -248,20 +248,21 @@ void SceneStage1::UpdateSound()
 /// <param name="input">入力状態</param>
 void SceneStage1::UpdateTuto(Input& input)
 {
-	if (m_tutoNum <= TutoHandle::kTutoNum)
+	if (m_tutoNum < TutoHandle::kTutoNum)
 	{
 		m_isTuto = true;
 	}
 
 	if (m_isTuto)
 	{
+		if (m_tutoNum >= TutoHandle::kTutoNum)
+		{
+			m_isTuto = false;
+		}
+
 		if (input.IsTriggered("A"))
 		{
 			m_tutoNum++;	// チュートリアルの表示を進める
-			if (m_tutoNum > TutoHandle::kTutoNum)
-			{
-				m_isTuto = false;
-			}
 		}
 	}
 }

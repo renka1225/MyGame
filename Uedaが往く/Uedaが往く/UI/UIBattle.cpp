@@ -74,8 +74,8 @@ namespace
 	constexpr int kMaxPal = 255;							 // 最大加算値
 
 	/*チュートリアル*/
-	const Vec2 kTutoTextPos = { 1300.0f, 780.0f };			// テキスト位置
-	const Vec2 kTutoButtonPos = { 1400.0f, 800.0f };		// ボタン位置
+	const Vec2 kTutoTextPos = { 1300.0f, 770.0f };			// テキスト位置
+	const Vec2 kTutoButtonPos = { 1390.0f, 790.0f };		// ボタン位置
 	constexpr float kTutoButtonScale = 1.2f;				// ボタン拡大率
 }
 

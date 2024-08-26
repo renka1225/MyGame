@@ -15,11 +15,13 @@ namespace
 {
 	const char* const kSyoriTextPath = "data/UI/syori.png";	// 勝利のテキスト画像のファイル位置
 	const Vec2 kSyoriTextPos = { 650, 100 };				// 勝利のテキスト画像表示位置
-	const Vec2 kTimeTextPos = { 400, 550 };					// 時間表示位置
+	const Vec2 kTimeTextPos = { 600, 550 };					// 時間表示位置
 	const Vec2 kRankingTextPos = { 1250, 460 };				// "ランキング"表示位置
 	constexpr float kTimeTextInterval = 100.0f;				// テキスト表示間隔
-	constexpr float kTimeTextAdj = 155.0f;					// テキスト表示位置調整
-	constexpr int kTextColor = 0xfffffff;					// テキストの色
+	constexpr float kTotalTimeTextAdj = 350.0f;				// テキスト表示位置調整
+	constexpr float kTimeTextAdj = 250.0f;					// テキスト表示位置調整
+	constexpr int kTextColor = 0xffffff;					// テキストの色
+	constexpr int kTextColorRed = 0xb50d0d;					// テキストの色(赤)
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
 	constexpr int kFadeFrame = 4;		 // フェード変化量
@@ -107,8 +109,9 @@ void SceneClear::Draw()
 	int totalMin = Conversion::ChangeMin(m_totalClearTime);
 	int totalSec = Conversion::ChangeSec(m_totalClearTime);
 	int totalMilliSec = Conversion::ChangeMilliSec(m_totalClearTime);
-	DrawFormatStringFToHandle(kTimeTextPos.x - kTimeTextAdj, kTimeTextPos.y,
-		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "TOTAL TIME %02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
+	DrawStringToHandle(kTimeTextPos.x - kTotalTimeTextAdj, kTimeTextPos.y, "TOTAL TIME", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)]);
+	DrawFormatStringFToHandle(kTimeTextPos.x, kTimeTextPos.y,
+		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
 
 	// クリアタイムをフレーム数から秒数に変換
 	for (int i = 0; i < m_clearTime.size(); i++)
@@ -117,13 +120,15 @@ void SceneClear::Draw()
 		int sec = Conversion::ChangeSec(m_clearTime[i]);
 		int milliSec = Conversion::ChangeMilliSec(m_clearTime[i]);
 
+		DrawFormatStringToHandle(kTimeTextPos.x - kTimeTextAdj, kTimeTextPos.y + kTimeTextInterval * (i + 1),
+			kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%d回戦 ", i + 1);
 		DrawFormatStringFToHandle(kTimeTextPos.x, kTimeTextPos.y + kTimeTextInterval * (i + 1),
-			kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%d回戦 %02d:%02d:%03d", i + 1, min, sec, milliSec);
+			kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%02d:%02d:%03d", min, sec, milliSec);
 	}
 
 	// ランキング表示
 	DrawStringFToHandle(kRankingTextPos.x, kRankingTextPos.y,
-		"ランキング", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
+		"ランキング", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
 	m_pRank->DrawClearRanking();
 
 	// テキスト表示
@@ -135,6 +140,6 @@ void SceneClear::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "クリア画面", 0xffffff);
 	// 中心線
-	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
 }

@@ -56,8 +56,8 @@ SceneStageBase::SceneStageBase() :
 	m_fadeAlpha = kStartFadeAlpha;
 	m_pUIBattle = std::make_shared<UIBattle>();
 	m_pEffect = std::make_shared<EffectManager>();
-	Light::SetLight();
 	m_clearBackHandle = LoadGraph(kClearBackHandlePath);
+	//Light::SetLight();
 }
 
 
@@ -89,7 +89,7 @@ SceneStageBase::~SceneStageBase()
 {
 	DeleteShadowMap(m_shadowMap); // シャドウマップの削除
 	DeleteGraph(m_clearBackHandle);
-	Light::DeleteLight();
+	//Light::DeleteLight();
 }
 
 
@@ -145,7 +145,7 @@ void SceneStageBase::Draw()
 	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG
-	TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
+	//TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
 #endif // _DEBUG
 
 }

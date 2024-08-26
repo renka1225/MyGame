@@ -10,6 +10,7 @@ namespace Font
 		// フォントサイズ、太さ
 		kSize96_4,
 		kSize64_4,
+		kSize50_4,
 		kSize48_4,
 		kSize48_4_EDGE,
 		kSize42_4,
@@ -38,7 +39,7 @@ namespace Font
 		kGameover = kSize48_4,	  // ゲームオーバーで使う文字サイズ
 		// ランキング
 		kRanking = kSize42_4,
-		kRankingText = kSize48_4_EDGE,
+		kRankingText = kSize50_4,
 		//右下に表示するボタン表示の文字サイズ
 		kButtonText = kSize42_4_EDGE,
 		kClearButtonText = kSize36_4_EDGE,
