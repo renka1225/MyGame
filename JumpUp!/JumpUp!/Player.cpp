@@ -294,7 +294,7 @@ Player::State Player::UpdateMoveParameter(const Input& input, const Camera& came
 		moveVec = VScale(m_targetMoveDir, m_moveSpeed);
 
 		// ˆÚ“®SE‚ð–Â‚ç‚·
-		if (!CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kRunSE)]))
+		if (m_currentState != State::kJump && !CheckSoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kRunSE)]))
 		{
 			PlaySoundMem(Sound::m_soundHandle[static_cast<int>(Sound::SoundKind::kRunSE)], DX_PLAYTYPE_BACK);
 		}

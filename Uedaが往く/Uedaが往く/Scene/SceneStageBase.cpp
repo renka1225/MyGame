@@ -24,7 +24,7 @@ namespace
 	constexpr int kNextBattleTime = 150;						  // 次の試合が始まるまでの時間
 	constexpr int kBattleEndSoundTime = 60;						  // コングのSEを鳴らす時間
 	constexpr int kClearBackColor = 0x0f2699;					  // クリア時の背景色
-	constexpr int kMULAPal = 200;								  // 乗算ブレンド値
+	constexpr int kMULAPal = 240;								  // 乗算ブレンド値
 	constexpr int kAddPal = 80;									  // 加算ブレンド値
 	
 	/*影*/
@@ -121,11 +121,9 @@ void SceneStageBase::Draw()
 	ShadowMap_DrawEnd(); // シャドウマップへの描画を終了
 
 	SetUseShadowMap(0, m_shadowMap); // 描画に使用するシャドウマップを設定
-
 	m_pStage->Draw();	 // ステージ描画
 	m_pPlayer->Draw();	 // プレイヤー描画
 	m_pEnemy->Draw();	 // 敵描画
-
 	SetUseShadowMap(0, -1); // 描画に使用するシャドウマップの設定を解除
 
 	m_pUIBattle->DrawOperation(); // 操作説明を表示
@@ -146,8 +144,7 @@ void SceneStageBase::Draw()
 
 #ifdef _DEBUG
 	//TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
-#endif // _DEBUG
-
+#endif
 }
 
 

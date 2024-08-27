@@ -113,9 +113,11 @@ void SceneClear::Draw()
 	DrawFormatStringFToHandle(kTimeTextPos.x, kTimeTextPos.y,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
 
-	// クリアタイムをフレーム数から秒数に変換
+
+	// クリアタイムを表示
 	for (int i = 0; i < m_clearTime.size(); i++)
 	{
+		// クリアタイムをフレーム数から秒数に変換
 		int min = Conversion::ChangeMin(m_clearTime[i]);
 		int sec = Conversion::ChangeSec(m_clearTime[i]);
 		int milliSec = Conversion::ChangeMilliSec(m_clearTime[i]);
@@ -140,6 +142,6 @@ void SceneClear::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "クリア画面", 0xffffff);
 	// 中心線
-	DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
+	//DrawLine(Game::kScreenWidth * 0.5, 0, Game::kScreenWidth * 0.5, Game::kScreenHeight, 0x0000ff);
 #endif
 }
