@@ -37,8 +37,10 @@ protected:
 	};
 
 private:
-	float m_cursorWidth;	// カーソルの横幅
-	bool m_isOption;		// オプション画面かどうか
-	int m_cursorHandle;		// カーソルの画像
-	int m_backHandle;		// 背景の画像
+	bool m_isOption;			// オプション画面かどうか
+	float m_cursorWidth;		// カーソルの横幅
+	int m_cursorDisplayTime;	// カーソルを表示する時間
+	int m_cursorAlpha;			// カーソルのα値
+	int m_cursorHandle;			// カーソルの画像
+	int m_backHandle;			// 背景の画像
 };

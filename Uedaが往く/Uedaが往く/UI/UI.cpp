@@ -27,6 +27,10 @@ namespace
 	constexpr float kOptionCursorWidth = 1000.0f;		// オプション画面のカーソルの横幅
 	constexpr float kCursorHeight = 90.0f;				// カーソルの縦幅
 	constexpr float kCursorSpeed = 60.0f;				// カーソルの横幅の伸びる量
+	constexpr int kTextDisplayTime = 2;					// カーソルの表示間隔
+	constexpr int kTextDisplayAnimTime = 240;			// カーソルアニメーションの時間
+	constexpr int kMaxAlpha = 255;						// 最大アルファ値
+	constexpr int kMinAlpha = 40;						// 最小アルファ値
 
 	/*ボタンの画像とテキストの位置*/
 	const Vec2 kButtonPos = { 1500, 1000 };				// ボタン表示位置
@@ -45,8 +49,9 @@ namespace
 /// コンストラクタ
 /// </summary>
 UI::UI():
+	m_isOption(false),
 	m_cursorWidth(0.0f),
-	m_isOption(false)
+	m_cursorAlpha(kMaxAlpha)
 {
 	m_cursorHandle = LoadGraph("data/UI/cursor.png");
 	m_buttonHandle = LoadGraph("data/UI/button.png");
@@ -90,6 +95,13 @@ void UI::Update()
 	{
 		m_cursorWidth = std::min(m_cursorWidth, kCursorWidth);
 	}
+
+	// カーソルのα値を更新
+	m_cursorDisplayTime += kTextDisplayTime;
+	m_cursorDisplayTime %= kTextDisplayAnimTime;
+	// MEMO:sin波を使って0～1の範囲にする
+	float sinAlpha = 0.5f + 0.5f * sinf(static_cast<float>(m_cursorDisplayTime) / kTextDisplayAnimTime * DX_PI_F);
+	m_cursorAlpha = kMinAlpha + static_cast<int>((kMaxAlpha - kMinAlpha) * sinAlpha);
 }
 
 
@@ -102,9 +114,11 @@ void UI::Update()
 void UI::DrawCursor(Vec2 pos, int select, float interval, bool isOption)
 {
 	m_isOption = isOption;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_cursorAlpha);
 	DrawExtendGraphF(pos.x, pos.y + interval * select,
 		pos.x + m_cursorWidth, pos.y + interval * select + kCursorHeight,
 		m_cursorHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 

@@ -26,6 +26,11 @@ namespace
 	
 	constexpr int kStartFadeAlpha = 255;			// スタート時のフェード値
 	constexpr int kFadeFrame = 8;					// フェード変化量
+
+	// OP動画
+	const char* kOpMovePath = "data/op.mp4";		// 動画のパス名
+	constexpr int kOpMoveTime = 65010;				// 動画の再生時間
+	constexpr int kOpMoveStartTime = 1800;			// 動画を再生するまでの時間
 }
 
 /// <summary>
@@ -36,12 +41,14 @@ SceneTitle::SceneTitle():
 	m_textDisplayTime(0),
 	m_titleLogoScale(kTitleLogoMaxScale),
 	m_titleLogoRot(kTitleLogoInitRot),
-	m_textAlpha(kMinAlpha)
+	m_textAlpha(kMinAlpha),
+	m_opStartTime(0)
 {
 	m_fadeAlpha = kStartFadeAlpha;
 	m_titleLogo = LoadGraph("data/UI/title.png");
 	m_titleLogoBack = LoadGraph("data/UI/titleBack.png");
 	m_textHandle = LoadGraph("data/UI/PRESS.png");
+	m_opMoveHandle = LoadGraph(kOpMovePath);
 }
 
 
@@ -54,6 +61,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_titleLogo);
 	DeleteGraph(m_titleLogoBack);
 	DeleteGraph(m_textHandle);
+	DeleteGraph(m_opMoveHandle);
 }
 
 
@@ -62,10 +70,9 @@ SceneTitle::~SceneTitle()
 /// </summary>
 void SceneTitle::Init()
 {
-	if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kTitleDisp)]))
-	{
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kTitleDisp)], DX_PLAYTYPE_BACK);
-	}
+	m_titleLogoScale = kTitleLogoMaxScale;
+	m_titleLogoRot = kTitleLogoInitRot;
+	m_time = 0;
 }
 
 
@@ -78,11 +85,41 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
 	FadeOut(kFadeFrame); // フェードアウト
 
-	m_time++; // 経過時間を更新
+	m_opStartTime--;	// opを再生するまでの時間を更新
 
+	// 動画を再生する
+	if (m_opStartTime == 0)
+	{
+		Init();
+		StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kTitle)]);
+	}
+	else if (m_opStartTime < 0)
+	{
+		PlayMovieToGraph(m_opMoveHandle);
+
+		// 動画が終了したかボタンを押した場合タイトルに戻る
+		const bool isMoveStop = TellMovieToGraph(m_opMoveHandle) >= kOpMoveTime || input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y");
+		if (isMoveStop)
+		{
+			PauseMovieToGraph(m_opMoveHandle);
+			SeekMovieToGraph(m_opMoveHandle, 0);
+			m_opStartTime = kOpMoveStartTime;
+		}
+
+		return shared_from_this();
+	}
+
+	m_time++;		 // 経過時間を更新
 	UpdateDisplay(); // テキストの表示を更新する
 
 	// タイトルロゴ表示後BGMを鳴らす
+	if (m_time < kBGMTime)
+	{
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kTitleDisp)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kTitleDisp)], DX_PLAYTYPE_BACK);
+		}
+	}
 	if (m_time > kBGMTime)
 	{
 		if (!CheckSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kTitle)]))
@@ -126,11 +163,19 @@ void SceneTitle::Draw()
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
+	// 動画を表示する
+	if (m_opStartTime < 0)
+	{
+		DrawGraph(0, 0, m_opMoveHandle, true);
+	}
+
 	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "タイトル画面", 0xffffff);
+	DrawFormatString(0, 20, 0x0000ff, "動画再生までの時間:%d", m_opStartTime);
+	DrawFormatString(0, 40, 0xff0000, "現在の動画時間:%d", TellMovieToGraph(m_opMoveHandle));
 #endif
 }
 
