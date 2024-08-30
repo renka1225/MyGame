@@ -16,7 +16,6 @@
 
 namespace
 {
-	const char* kClearBackHandlePath = "data/UI/clearBack.png";	  // 画像のパス
 	const VECTOR kPlayerInitPos = VGet(2600.0f, 69.0f, 4240.0f);  // プレイヤーの初期位置
 	const VECTOR kEnemyInitPos = VGet(2660, 69.0f, 4280.0f);	  // 敵の初期位置
 	constexpr int kChangeColorTime = 220;						  // 画面の表示を変更する時間
@@ -56,8 +55,7 @@ SceneStageBase::SceneStageBase() :
 	m_fadeAlpha = kStartFadeAlpha;
 	m_pUIBattle = std::make_shared<UIBattle>();
 	m_pEffect = std::make_shared<EffectManager>();
-	m_clearBackHandle = LoadGraph(kClearBackHandlePath);
-	//Light::SetLight();
+	m_clearBackHandle = LoadGraph("data/UI/clearBack.png");
 }
 
 
@@ -89,7 +87,6 @@ SceneStageBase::~SceneStageBase()
 {
 	DeleteShadowMap(m_shadowMap); // シャドウマップの削除
 	DeleteGraph(m_clearBackHandle);
-	//Light::DeleteLight();
 }
 
 
@@ -144,6 +141,7 @@ void SceneStageBase::Draw()
 
 #ifdef _DEBUG
 	//TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
+	DrawFormatString(0, 140, 0xffffff, "経過時間:%d", m_elapsedTime); // 経過時間描画
 #endif
 }
 

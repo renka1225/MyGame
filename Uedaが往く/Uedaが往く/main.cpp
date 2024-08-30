@@ -13,7 +13,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetMainWindowText("Uedaが往く");
 
 	// windowモード設定
-	ChangeWindowMode(true);
+	ChangeWindowMode(false);
 	// 画面サイズ変更
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
 

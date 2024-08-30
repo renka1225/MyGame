@@ -9,8 +9,6 @@
 // 定数
 namespace
 {
-	const char* kBarHandlePath = "data/UI/Gauge.png";				// ゲージ画像のパス
-	const char* kSilhouetteHandlePath = "data/UI/silhouette.png";	// シルエット画像のパス
 	const Vec2 kESilhouettePos = { 1700.0f, 870.0f };				// 敵キャラクターのシルエット位置
 	constexpr int kSilhouetteWidth = 268;							// キャラクターのシルエット画像幅
 	constexpr int kSilhouetteHeight = 213;							// キャラクターのシルエット画像高さ
@@ -21,9 +19,6 @@ namespace
 	constexpr int kIntervalTime = 50;								// HPバーが減少するまでの時間
 
 	/*試合開始時*/
-	const char* const kFightTextPath = "data/UI/Fight!.png"; // "Fight"のテキスト画像のパス
-	const char* const kNumTextPath = "data/UI/number.png";	 // 数字の画像のパス
-
 	constexpr int kFightTextDispStart = 80;					 // "Fight"のテキストを表示し始める時間
 	const Vec2 kFightTextPos = { 960, 550 };				 // "Fight"のテキスト位置
 	constexpr float kFightTextScele = 0.6f;					 // "Fight"のテキストサイズ
@@ -91,8 +86,8 @@ UIBattle::UIBattle():
 	m_gaugeBarHandle(-1),
 	m_silhouetteHandle(-1)
 {
-	m_fightTextHandle = LoadGraph(kFightTextPath);
-	m_numTextHandle = LoadGraph(kNumTextPath);
+	m_fightTextHandle = LoadGraph("data/UI/Fight!.png");
+	m_numTextHandle = LoadGraph("data/UI/number.png");
 }
 
 
@@ -108,8 +103,8 @@ UIBattle::UIBattle(float maxHp):
 	m_fightTextHandle(-1),
 	m_numTextHandle(-1)
 {
-	m_gaugeBarHandle = LoadGraph(kBarHandlePath);
-	m_silhouetteHandle = LoadGraph(kSilhouetteHandlePath);
+	m_gaugeBarHandle = LoadGraph("data/UI/Gauge.png");
+	m_silhouetteHandle = LoadGraph("data/UI/silhouette.png");
 }
 
 

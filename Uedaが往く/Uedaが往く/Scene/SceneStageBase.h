@@ -43,7 +43,7 @@ protected:
 	int m_elapsedTime;								// 経過時間
 	std::vector<int> m_clearTime;					// 各試合ごとのクリアタイム
 	bool m_isPause;									// ポーズ状態かどうか(true:ポーズ状態)
-	int m_shadowMap;
+	int m_shadowMap;								// シャドウマップ
 	int m_clearBackHandle;							// クリア時の背景画像
 };
 

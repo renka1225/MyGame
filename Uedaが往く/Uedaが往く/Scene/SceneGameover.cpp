@@ -17,19 +17,17 @@
 // 定数
 namespace
 {
-	const char* const kHaibokuTextPath = "data/UI/haiboku.png";	// 敗北のテキスト画像のファイル位置
-	const char* const kCursorPath = "data/UI/cursor.png";		// カーソル画像のファイル位置
-	constexpr int kTextColor = 0xffffff;						// テキストの色
-	constexpr int kBackColor = 0x1a0306;						// 背景の色
-	const Vec2 kHaibokuTextPos = { 670, 120 };					// 敗北のテキスト画像表示位置
-	const Vec2 kRetryTextPos = { 870, 630 };					// "リトライ"表示位置
-	const Vec2 kStageTextPos = { 720, 760 };					// "ステージ選択にもどる"表示位置
-	const Vec2 kTitleTextPos = { 770, 890 };					// "タイトルにもどる"表示位置
-	const Vec2 kCursorPos = { 720, 620 };						// カーソル表示位置
-	constexpr float kCursorMove = 130.0f;						// カーソルの移動量
+	constexpr int kTextColor = 0xffffff;		// テキストの色
+	constexpr int kBackColor = 0x1a0306;		// 背景の色
+	const Vec2 kHaibokuTextPos = { 670, 120 };	// 敗北のテキスト画像表示位置
+	const Vec2 kRetryTextPos = { 870, 630 };	// "リトライ"表示位置
+	const Vec2 kStageTextPos = { 720, 760 };	// "ステージ選択にもどる"表示位置
+	const Vec2 kTitleTextPos = { 770, 890 };	// "タイトルにもどる"表示位置
+	const Vec2 kCursorPos = { 720, 620 };		// カーソル表示位置
+	constexpr float kCursorMove = 130.0f;		// カーソルの移動量
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
-	constexpr int kFadeFrame = 8;		 // フェード変化量
+	constexpr int kFadeFrame = 2;		 // フェード変化量
 }
 
 
@@ -42,7 +40,7 @@ SceneGameover::SceneGameover(std::shared_ptr<SceneBase> pScene)
 	m_fadeAlpha = kStartFadeAlpha;
 	m_select = Select::kRetry;
 	m_pPrevScene = pScene;
-	m_textHandle = LoadGraph(kHaibokuTextPath);
+	m_textHandle = LoadGraph("data/UI/haiboku.png");
 }
 
 

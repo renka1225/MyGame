@@ -20,8 +20,8 @@ namespace
 	constexpr float kSelectTextAdj = 30.0f;					 // 選択テキスト表示位置調整
 	constexpr float kSelectTextInterval = 120.0f;			 // 選択テキスト表示間隔
 	const Vec2 kAfterSelectTextPos = { 800.0f, 310.0f };	 // 選択後テキスト表示位置
-	const Vec2 kCursorPos = { 140.0f, 290.0f };				// カーソル表示位置
-	const Vec2 kAfterSelectCursorPos = { 780.0f, 300.0f };	// 選択後カーソル表示位置
+	const Vec2 kCursorPos = { 140.0f, 290.0f };				 // カーソル表示位置
+	const Vec2 kAfterSelectCursorPos = { 780.0f, 300.0f };	 // 選択後カーソル表示位置
 
 	// サウンド関連
 	const Vec2 kSoundNumTextPos = { 1650.0f, 320.0f };		 // 音量テキスト表示位置
@@ -32,6 +32,11 @@ namespace
 	constexpr int kCurrentSoundBarColor = 0xcf2223;			 // 現在の音量バーの色
 	const Vec2 kSoundKnobPos = { 1600.0f, 315.0f };			 // つまみ初期表示位置
 	constexpr float kSoundKnobMinPosX = 950.0f;				 // つまみ最小表示位置X
+
+	// 画面サイズ関連
+	const Vec2 kWindowModeTextPos = { 1300.0f, 310.0f };	 // ウィンドウテキスト位置
+	const Vec2 kArrowPos = { 1247.0f, 318.0f };				 // 矢印位置
+	constexpr float kWindowModeTextAdj = 50.0f;				 // 表示位置調整
 
 	// クレジット表記関連
 	const Vec2 kSoundCreditTextPos = { 800.0f, 250.0f }; 	 // サウンドクレジット表記位置
@@ -45,6 +50,7 @@ namespace
 	{
 		kSoundBar,
 		kSoundKnob,
+		kArrow,
 		kHandleNum,
 	};
 }
@@ -56,11 +62,13 @@ namespace
 SceneOption::SceneOption(std::shared_ptr<SceneBase> pScene) :
 	m_pPrevScene(pScene),
 	m_afterSelect(SelectSound::kBGM),
-	m_isSound(false)
+	m_isSound(false),
+	m_isWindow(false)
 {
 	m_handle.resize(static_cast<int>(Handle::kHandleNum));
 	m_handle[static_cast<int>(Handle::kSoundBar)] = LoadGraph("data/UI/soundBar.png");
 	m_handle[static_cast<int>(Handle::kSoundKnob)] = LoadGraph("data/UI/soundKnob.png");
+	m_handle[static_cast<int>(Handle::kArrow)] = LoadGraph("data/UI/arrow.png");
 }
 
 
@@ -81,6 +89,7 @@ SceneOption::~SceneOption()
 /// </summary>
 void SceneOption::Init()
 {
+	// 処理なし
 }
 
 
@@ -94,8 +103,11 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 	//選択状態更新
 	if (m_isSound)
 	{
-		// サウンド更新
-		UpdateSound(input);
+		UpdateSound(input);		 // サウンド更新
+	}
+	else if (m_isWindow)
+	{
+		UpdateWindowMode(input); // 画面サイズ更新
 	}
 	else
 	{
@@ -110,6 +122,10 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 		{
 			m_isSound = false;
 		}
+		else if (m_isWindow)
+		{
+			m_isWindow = false;
+		}
 		else
 		{
 			return m_pPrevScene;	// 前の画面にもどる
@@ -121,6 +137,11 @@ std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 		{
 			m_isSound = true;
 			m_afterSelect = SelectSound::kBGM;
+		}
+		else if (m_select == Select::kWindow)
+		{
+			m_isWindow = true;
+			m_afterSelect = SelectWindow::kFullScreen;
 		}
 	}
 
@@ -138,13 +159,17 @@ void SceneOption::Draw()
 	DrawBoxAA(kBackBoxPos.x, kBackBoxPos.y, kBackBoxPos.x + kBackBoxWidth, kBackBoxPos.y + kBackBoxHeight, kBackBoxColor, true);
 
 	// カーソル表示
-	if (!m_isSound)
+	if(m_isSound)
 	{
-		m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);
+		m_pUI->DrawCursor(kAfterSelectCursorPos, m_afterSelect, kSelectTextInterval, true);
+	}
+	else if (m_isWindow)
+	{
+		m_pUI->DrawCursor(kAfterSelectCursorPos, 0, kSelectTextInterval, true);
 	}
 	else
 	{
-		m_pUI->DrawCursor(kAfterSelectCursorPos, m_afterSelect, kSelectTextInterval, true);
+		m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);
 	}
 
 	// サウンド関連表示
@@ -157,24 +182,22 @@ void SceneOption::Draw()
 	{
 		DrawCredit();
 	}
-	// キーコンフィグ関連表示
-	//else if (m_select == Select::kKeyConfig)
-	//{
-	//	DrawKeyConfig();
-	//}
+	// 画面サイズ関連表示
+	else if (m_select == Select::kWindow)
+	{
+		DrawWindowMode();
+	}
 
 	// テキスト表示
 	DrawStringFToHandle(kSelectTextPos.x + kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kSound,
 		"サウンド", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kWindow,
+		"画面サイズ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 	DrawStringFToHandle(kSelectTextPos.x - kSelectTextAdj, kSelectTextPos.y + kSelectTextInterval * Select::kCredit,
 		"クレジット表記", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 
 	// ボタン画像表示
 	m_pUI->DrawButtonText();
-
-	// TODO:キーコンフィグは後ほど行う予定
-	//DrawStringFToHandle(kSelectTextPos.x, kSelectTextPos.y + kSelectTextInterval * Select::kKeyConfig,
-		//"ボタン配置", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
@@ -217,13 +240,34 @@ void SceneOption::UpdateSound(Input& input)
 }
 
 
-///// <summary>
-///// キー更新
-///// </summary>
-///// <param name="input">入力状態</param>
-//void SceneOption::UpdateKeyConfig(Input& input)
-//{
-//}
+/// <summary>
+/// 画面サイズの更新
+/// </summary>
+void SceneOption::UpdateWindowMode(Input& input)
+{
+	// 選択状態を1つ左にずらす
+	if (input.IsTriggered("left"))
+	{
+		m_afterSelect = (m_afterSelect + 1) % SelectWindow::kSelectWinNum;
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
+	}
+	// 選択状態を1つ右にずらす
+	if (input.IsTriggered("right"))
+	{
+		m_afterSelect = (m_afterSelect + (SelectWindow::kSelectWinNum - 1)) % SelectWindow::kSelectWinNum;
+		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kCursor)], DX_PLAYTYPE_BACK);
+	}
+
+	// 画面サイズを変更する
+	if (m_afterSelect == SelectWindow::kWindowMode)
+	{
+		ChangeWindowMode(true);		// ウィンドウモード
+	}
+	else
+	{
+		ChangeWindowMode(false);	// フルスクリーン
+	}
+}
 
 
 /// <summary>
@@ -265,6 +309,32 @@ void SceneOption::DrawSound()
 
 
 /// <summary>
+/// 画面サイズ部分表記
+/// </summary>
+void SceneOption::DrawWindowMode()
+{
+	// テキスト表示
+	DrawStringFToHandle(kAfterSelectTextPos.x, kAfterSelectTextPos.y,
+		"ウィンドウモード", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+
+	// 矢印表示
+	DrawGraphF(kArrowPos.x, kArrowPos.y, m_handle[static_cast<int>(Handle::kArrow)], true);
+
+	if (m_afterSelect == SelectWindow::kFullScreen)
+	{
+		DrawStringFToHandle(kWindowModeTextPos.x, kWindowModeTextPos.y,
+			"フルスクリーン", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	}
+	else
+	{
+		// テキスト表示
+		DrawStringFToHandle(kWindowModeTextPos.x + kWindowModeTextAdj, kWindowModeTextPos.y,
+			"ウィンドウ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
+	}
+}
+
+
+/// <summary>
 /// クレジット表記
 /// </summary>
 void SceneOption::DrawCredit()
@@ -278,12 +348,4 @@ void SceneOption::DrawCredit()
 		"・3Dモデル", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
 	DrawStringFToHandle(kModelCreditTextPos.x + kCreditTextAdj, kModelCreditTextPos.y + kCreditTextIntervel,
 		"Mixamo\nZENRIN City Asset SeriesTM", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOption)]);
-}
-
-
-/// <summary>
-/// キーコンフィグ部分表示
-/// </summary>
-void SceneOption::DrawKeyConfig()
-{
 }

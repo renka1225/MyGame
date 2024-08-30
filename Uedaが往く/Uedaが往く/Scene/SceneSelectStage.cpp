@@ -200,7 +200,7 @@ void SceneSelectStage::DrawIntroductionText()
 	else if (m_select == SelectScene::kOption)
 	{
 		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
-			"音量の設定を行います", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+			"音量や画面サイズの設定を行います", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
 	}
 	else if (m_select == SelectScene::kEnd)
 	{

@@ -28,7 +28,6 @@ namespace
 	constexpr int kFadeFrame = 8;					// フェード変化量
 
 	// OP動画
-	const char* kOpMovePath = "data/op.mp4";		// 動画のパス名
 	constexpr int kOpMoveTime = 65010;				// 動画の再生時間
 	constexpr int kOpMoveStartTime = 1800;			// 動画を再生するまでの時間
 }
@@ -48,7 +47,7 @@ SceneTitle::SceneTitle():
 	m_titleLogo = LoadGraph("data/UI/title.png");
 	m_titleLogoBack = LoadGraph("data/UI/titleBack.png");
 	m_textHandle = LoadGraph("data/UI/PRESS.png");
-	m_opMoveHandle = LoadGraph(kOpMovePath);
+	m_opMoveHandle = LoadGraph("data/op.mp4");
 }
 
 

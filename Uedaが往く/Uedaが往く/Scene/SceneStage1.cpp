@@ -21,14 +21,9 @@ namespace
 
 	/*チュートリアル*/
 	// 背景画像のパス
-	const char* kTutoDefPath = "data/UI/Tutorial/def.png";			  // デフォルト
-	const char* kTutoPBarPath = "data/UI/Tutorial/pGauge.png";		  // プレイヤーゲージ
-	const char* kTutoEBarPath = "data/UI/Tutorial/eGauge.png";		  // 敵ゲージ
-	const char* kTutoOpePath = "data/UI/Tutorial/ope.png";			  // 操作説明
-	const char* kTextBoxHandlePath = "data/UI/Tutorial/textBox.png";  // テキストボックス画像のパス
-	const Vec2 kTutoTextBoxPos = { 425.0f , 650.0f };				  // テキストボックス位置
-	const Vec2 kTutoTextPos = { 480.0f , 690.0f };					  // テキスト位置
-	constexpr int kTextColor = 0xffffff;							  // テキストの色
+	const Vec2 kTutoTextBoxPos = { 425.0f , 650.0f }; // テキストボックス位置
+	const Vec2 kTutoTextPos = { 480.0f , 690.0f };	  // テキスト位置
+	constexpr int kTextColor = 0xffffff;			  // テキストの色
 	// チュートリアル画像
 	enum TutoHandle
 	{
@@ -63,23 +58,23 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	{
 		if (i == TutoHandle::kTuto1 || i == TutoHandle::kTuto2)
 		{
-			m_tutoHandle[i] = LoadGraph(kTutoPBarPath);
+			m_tutoHandle[i] = LoadGraph("data/UI/Tutorial/pGauge.png");
 		}
 		else if (i == TutoHandle::kTuto3)
 		{
-			m_tutoHandle[i] = LoadGraph(kTutoEBarPath);
+			m_tutoHandle[i] = LoadGraph("data/UI/Tutorial/eGauge.png");
 		}
 		else if (i == TutoHandle::kTuto4)
 		{
-			m_tutoHandle[i] = LoadGraph(kTutoOpePath);
+			m_tutoHandle[i] = LoadGraph("data/UI/Tutorial/ope.png");
 		}
 		else if (i == TutoHandle::kTextBox)
 		{
-			m_tutoHandle[i] = LoadGraph(kTextBoxHandlePath);
+			m_tutoHandle[i] = LoadGraph("data/UI/Tutorial/textBox.png");
 		}
 		else
 		{
-			m_tutoHandle[i] = LoadGraph(kTutoDefPath);
+			m_tutoHandle[i] = LoadGraph("data/UI/Tutorial/def.png");
 		}
 	}
 }
@@ -91,6 +86,10 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 SceneStage1::~SceneStage1()
 {
 	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]);
+	for (auto& handle : m_tutoHandle)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 

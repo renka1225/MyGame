@@ -14,22 +14,21 @@
 namespace
 {
 	// プレイヤー情報
-	const char* const kfileName = "data/Model/Chara/Player.mv1";	// プレイヤーのファイル名
-	constexpr float kMaxGauge = 100.0f;								// 最大ゲージ量
-	constexpr float kPunchGaugeCharge = 0.1f;						// パンチ時に増えるゲージ量
-	constexpr float kKickGaugeCharge = 0.13f;						// キック時に増えるゲージ量
-	constexpr float kDecreaseGauge = 0.15f;							// 攻撃を受けた際に減るゲージ量
-	constexpr float kSpecialAttackPower = 30.0f;					// 必殺技の攻撃力
-	constexpr float kSpecialAttackDist = 55.0f;						// 必殺技を発動できる範囲
-	constexpr float kHPRecoveryRate = 0.3f;							// プレイヤーのHPが回復する割合
-	constexpr float kAngleSpeed = 0.2f;								// プレイヤー角度の変化速度
-	constexpr float kScale = 0.3f;									// プレイヤーモデルの拡大率
-	constexpr float kAdj = 3.0f;									// 敵に当たった時の位置調整量
-	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);					// 初期方向
-	constexpr float kEffectHeight = 30.0f;							// エフェクトを表示する高さ
+	constexpr float kMaxGauge = 100.0f;				// 最大ゲージ量
+	constexpr float kPunchGaugeCharge = 0.1f;		// パンチ時に増えるゲージ量
+	constexpr float kKickGaugeCharge = 0.13f;		// キック時に増えるゲージ量
+	constexpr float kDecreaseGauge = 0.15f;			// 攻撃を受けた際に減るゲージ量
+	constexpr float kSpecialAttackPower = 30.0f;	// 必殺技の攻撃力
+	constexpr float kSpecialAttackDist = 55.0f;		// 必殺技を発動できる範囲
+	constexpr float kHPRecoveryRate = 0.3f;			// プレイヤーのHPが回復する割合
+	constexpr float kAngleSpeed = 0.2f;				// プレイヤー角度の変化速度
+	constexpr float kScale = 0.3f;					// プレイヤーモデルの拡大率
+	constexpr float kAdj = 3.0f;					// 敵に当たった時の位置調整量
+	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);	// 初期方向
+	constexpr float kEffectHeight = 30.0f;			// エフェクトを表示する高さ
 
 	// アニメーション情報
-	constexpr float kAnimBlendMax = 1.0f;	 // アニメーションブレンドの最大値
+	constexpr float kAnimBlendMax = 1.0f;			// アニメーションブレンドの最大値
 }
 
 
@@ -56,7 +55,7 @@ Player::Player():
 	m_avoidCount = 0;
 	m_isMove = false;
 	m_isFighting = false;
-	m_modelHandle = MV1LoadModel(kfileName);
+	m_modelHandle = MV1LoadModel("data/Model/Chara/Player.mv1");
 
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	m_animBlendRate = kAnimBlendMax;
@@ -269,7 +268,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	// キックが当たった場合
 	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
-		// キックが当たった場合
+
 		if (!enemy.GetIsGuard() || isBackAttack)
 		{
 			enemy.OnDamage(m_status.kickPower);

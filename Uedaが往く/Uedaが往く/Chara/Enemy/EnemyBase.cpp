@@ -61,14 +61,29 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		return nextState;
 	}
 
+	// パンチできない場合
+	if (m_punchCoolTime > 0)
+	{
+		m_punchCoolTime--;
+		return m_currentState;
+	}
+	// コンボ入力の受付時間の更新
+	m_punchComboTime--;
+
+	// キックできない場合
+	if (m_kickCoolTime > 0)
+	{
+		m_kickCoolTime--;
+		return m_currentState;
+	}
+
 	// 特定の場合は状態を更新しない
-	bool isKeepState = m_isAttack || m_isMove || m_isGuard || (m_currentState == CharacterBase::State::kReceive) || player.GetIsSpecialAttack();
+	bool isKeepState =  m_isGuard || m_isAttack || (m_currentState == CharacterBase::State::kReceive) || player.GetIsSpecialAttack();
 	if (isKeepState) return nextState;
 
 	// エネミーとプレイヤーの距離を計算
 	m_eToPDirVec = VSub(player.GetPos(), m_pos);
 	float distance = VSize(m_eToPDirVec);
-
 	if (m_intervalTime > 0)
 	{
 		m_intervalTime--;	// クールダウンタイマーを減少させる
@@ -83,8 +98,6 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		{
 			m_eToPDirVec = VNorm(m_eToPDirVec);
 			moveVec = VScale(m_eToPDirVec, m_moveSpeed);
-
-			// 待機状態の場合
 			nextState = CharacterBase::State::kRun; // 移動状態にする
 		}
 		else
@@ -97,23 +110,24 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 	{
 		// 確率で攻撃を行う
 		int randNum = GetRand(m_enemyInfo.maxProb);
-		// キック攻撃
-		if (randNum <= m_enemyInfo.kickProb)
-		{
-			nextState = kick();
-		}
+
 		// パンチ攻撃
-		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+		if (randNum <= m_enemyInfo.punchProb)
 		{
 			nextState = Punch();
 		}
+		// キック攻撃
+		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb)
+		{
+			nextState = kick();
+		}
 		// 回避
-		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb + m_enemyInfo.avoidProb)
+		else if (randNum <= m_enemyInfo.avoidProb + m_enemyInfo.kickProb + m_enemyInfo.punchProb)
 		{
 			nextState = Avoid();
 		}
 		// ガード
-		else if (randNum <= m_enemyInfo.kickProb + m_enemyInfo.punchProb + m_enemyInfo.avoidProb + m_enemyInfo.guardProb)
+		else if (randNum <= m_enemyInfo.guardProb + m_enemyInfo.avoidProb + m_enemyInfo.kickProb + m_enemyInfo.punchProb)
 		{
 			nextState = Guard();
 		}
@@ -166,17 +180,6 @@ void EnemyBase::Move(const VECTOR& moveVec, Player& player, Stage& stage)
 CharacterBase::State EnemyBase::Punch()
 {
 	CharacterBase::State nextState = m_currentState;
-
-	// パンチできない場合
-	if (m_punchCoolTime > 0)
-	{
-		m_punchCoolTime--;
-		return m_currentState;
-	}
-
-	// コンボ入力の受付時間の更新
-	m_punchComboTime--;
-
 	// コンボ入力受付時間内にボタンが押された場合
 	if (m_punchComboTime > 0)
 	{
@@ -217,8 +220,6 @@ CharacterBase::State EnemyBase::Punch()
 		m_punchCoolTime = m_status.punchCoolTime;	// クールダウンタイムを設定
 		nextState = CharacterBase::State::kFightIdle;
 		break;
-	default:
-		break;
 	}
 
 	return nextState;
@@ -231,13 +232,6 @@ CharacterBase::State EnemyBase::Punch()
 /// <returns>現在の状態</returns>
 CharacterBase::State EnemyBase::kick()
 {
-	// キックできない場合
-	if (m_kickCoolTime > 0)
-	{
-		m_kickCoolTime--;
-		return m_currentState;
-	}
-
 	// キック攻撃
 	m_isAttack = true;
 	m_isFighting = false;

@@ -20,6 +20,7 @@ namespace
 	constexpr int kMaxBattleNum = 3;		// 最大バトル数
 	constexpr int kFightTextDispStart = 80;	// "Fight"のテキストを表示し始める時間
 	constexpr int kFadeFrame = 4;			// フェード変化量
+	constexpr int kGameoverFadeFrame = 1;	// ゲームオーバー時のフェード変化量
 }
 
 
@@ -137,7 +138,8 @@ std::shared_ptr<SceneBase> SceneStage2::Update(Input& input)
 		// プレイヤーのHPが0になった場合
 		else if (m_pPlayer->GetHp() <= 0)
 		{
-			FadeIn(kFadeFrame); // フェードイン
+			FadeIn(kGameoverFadeFrame); // フェードイン
+			StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage2)]);
 			return std::make_shared<SceneGameover>(shared_from_this());
 		}
 		else
@@ -177,7 +179,6 @@ void SceneStage2::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ2", 0xffffff);
-	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
 }
 
