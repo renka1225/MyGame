@@ -19,13 +19,19 @@ private:
 private:
 	int m_time;					// 現在の時間
 	int m_textDisplayTime;		// テキストを表示する時間
-	int m_titleLogo;			// タイトルロゴの画像
-	int m_titleLogoBack;		// タイトルロゴの後ろに表示する画像
 	float m_titleLogoScale;		// タイトルロゴの拡大率
 	float m_titleLogoRot;		// タイトルロゴの回転率
 	int m_textAlpha;			// テキストのアルファ値
-	int m_textHandle;			// テキストの画像
 	int m_opStartTime;			// オープニング動画を再生するまでの時間
-	int m_opMoveHandle;			// オープニング動画
+	std::vector<int> m_handle;  // ハンドル
 
+	// ハンドルの種類
+	enum HandleKind
+	{
+		kTitleLogo,		// タイトルロゴ
+		kTitleLogoBack,	// タイトルロゴの背景
+		kPressText,		// "PRESSANYBUTTON"のテキスト
+		kOpMovie,		// OP動画
+		kHandleNum		// ハンドルの数
+	};
 };

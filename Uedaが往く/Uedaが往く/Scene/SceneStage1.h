@@ -29,14 +29,21 @@ private:
 
 private:
 	int m_tutoNum;					// 現在のチュートリアル数
-	int m_tutoSelect;				// チュートリアルの選択状態
 	bool m_isTuto;					// チュートリアルを表示するか(true:表示する)
-	std::string m_tutoText;
+	std::string m_tutoText;			// チュートリアル時に表示するテキスト
 	std::vector<int> m_tutoHandle;	// チュートリアル時に表示する画像
 
-	enum Select
+	// チュートリアル画像
+	enum TutoHandle
 	{
-		kYes,	// はい
-		kNo,	// いいえ
+		kTuto0,
+		kTuto1,
+		kTuto2,
+		kTuto3,
+		kTuto4,
+		kTuto5,
+		kTutoNum,		// チュートリアルの数
+		kTextBox,		// テキストボックス
+		kTutoHandleNum,	// 画像の数
 	};
 };

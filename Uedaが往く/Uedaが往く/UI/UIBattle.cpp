@@ -9,14 +9,14 @@
 // 定数
 namespace
 {
-	const Vec2 kESilhouettePos = { 1700.0f, 870.0f };				// 敵キャラクターのシルエット位置
-	constexpr int kSilhouetteWidth = 268;							// キャラクターのシルエット画像幅
-	constexpr int kSilhouetteHeight = 213;							// キャラクターのシルエット画像高さ
+	const Vec2 kESilhouettePos = { 1700.0f, 870.0f };		// 敵キャラクターのシルエット位置
+	constexpr int kSilhouetteWidth = 268;					// キャラクターのシルエット画像幅
+	constexpr int kSilhouetteHeight = 213;					// キャラクターのシルエット画像高さ
 
-	constexpr int kHpColor = 0xff0000;								// HPバーの色
-	constexpr int kDamageHpColor = 0xffd700;						// ダメージ時のHPバーの色
-	constexpr int kpGaugeColor = 0x0000ff;							// ゲージバーの色
-	constexpr int kIntervalTime = 50;								// HPバーが減少するまでの時間
+	constexpr int kHpColor = 0xff0000;						// HPバーの色
+	constexpr int kDamageHpColor = 0xffd700;				// ダメージ時のHPバーの色
+	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
+	constexpr int kIntervalTime = 50;						// HPバーが減少するまでの時間
 
 	/*試合開始時*/
 	constexpr int kFightTextDispStart = 80;					 // "Fight"のテキストを表示し始める時間
@@ -82,12 +82,13 @@ UIBattle::UIBattle():
 	m_currentHp(0),
 	m_maxHp(0),
 	m_damage(0.0f),
-	m_intervalTime(0),
-	m_gaugeBarHandle(-1),
-	m_silhouetteHandle(-1)
+	m_intervalTime(0)
 {
-	m_fightTextHandle = LoadGraph("data/UI/Fight!.png");
-	m_numTextHandle = LoadGraph("data/UI/number.png");
+	m_handle.resize(HandleKind::kHandleNum);
+	m_handle[HandleKind::kFightText] = LoadGraph("data/UI/Fight!.png");
+	m_handle[HandleKind::kNumText] = LoadGraph("data/UI/number.png");
+	m_handle[HandleKind::kGaugeBar] = LoadGraph("data/UI/Gauge.png");
+	m_handle[HandleKind::kSilhouette] = LoadGraph("data/UI/silhouette.png");
 }
 
 
@@ -99,12 +100,13 @@ UIBattle::UIBattle(float maxHp):
 	m_currentHp(maxHp),
 	m_maxHp(maxHp),
 	m_damage(0.0f),
-	m_intervalTime(0),
-	m_fightTextHandle(-1),
-	m_numTextHandle(-1)
+	m_intervalTime(0)
 {
-	m_gaugeBarHandle = LoadGraph("data/UI/Gauge.png");
-	m_silhouetteHandle = LoadGraph("data/UI/silhouette.png");
+	m_handle.resize(HandleKind::kHandleNum);
+	m_handle[HandleKind::kFightText] = LoadGraph("data/UI/Fight!.png");
+	m_handle[HandleKind::kNumText] = LoadGraph("data/UI/number.png");
+	m_handle[HandleKind::kGaugeBar] = LoadGraph("data/UI/Gauge.png");
+	m_handle[HandleKind::kSilhouette] = LoadGraph("data/UI/silhouette.png");
 }
 
 
@@ -113,10 +115,10 @@ UIBattle::UIBattle(float maxHp):
 /// </summary>
 UIBattle::~UIBattle()
 {
-	DeleteGraph(m_gaugeBarHandle);
-	DeleteGraph(m_silhouetteHandle);
-	DeleteGraph(m_fightTextHandle);
-	DeleteGraph(m_numTextHandle);
+	for (auto& handle : m_handle)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 
@@ -171,26 +173,26 @@ void UIBattle::DrawStartProduction(int time, int matchNum, int maxMatch)
 	if (time > kFightTextDispStart)
 	{
 		int sizeW, sizeH;
-		GetGraphSize(m_numTextHandle, &sizeW, &sizeH);
+		GetGraphSize(m_handle[HandleKind::kNumText], &sizeW, &sizeH);
 		// 現在の試合数を表示
 		DrawRectRotaGraphF(kMatcheNumTextPos.x, kMatcheNumTextPos.y,
 			kMatchNumTextWidth * matchNum, 0, kMatchNumTextWidth, sizeH,
-			kMatchNumTextScele, 0.0f, m_numTextHandle, true);
+			kMatchNumTextScele, 0.0f, m_handle[HandleKind::kNumText], true);
 		// /表示
 		DrawRectRotaGraphF(kMatcheNumTextPos.x + kMatchNumTextInterval, kMatcheNumTextPos.y,
 			sizeW - kMatchNumTextWidth, 0, kMatchNumTextWidth, sizeH,
-			kMatchNumTextScele, 0.0f, m_numTextHandle, true);
+			kMatchNumTextScele, 0.0f, m_handle[HandleKind::kNumText], true);
 		// 最大試合数を表示
 		DrawRectRotaGraphF(kMatcheNumTextPos.x + kMatchNumTextInterval * 2 + kTextAdj, kMatcheNumTextPos.y,
 			kMatchNumTextWidth * (maxMatch - 1), 0, kMatchNumTextWidth, sizeH,
-			kMatchNumTextScele, 0.0f, m_numTextHandle, true);
+			kMatchNumTextScele, 0.0f, m_handle[HandleKind::kNumText], true);
 	}
 	// "Fight!"の文字を表示
 	else if (time < kFightTextDispStart && time > 0)
 	{
 		int sizeW, sizeH;
-		GetGraphSize(m_fightTextHandle, &sizeW, &sizeH);
-		DrawRectRotaGraphF(kFightTextPos.x, kFightTextPos.y, 0, 0, sizeW, sizeH, kFightTextScele, 0.0f, m_fightTextHandle, true);
+		GetGraphSize(m_handle[HandleKind::kFightText], &sizeW, &sizeH);
+		DrawRectRotaGraphF(kFightTextPos.x, kFightTextPos.y, 0, 0, sizeW, sizeH, kFightTextScele, 0.0f, m_handle[HandleKind::kFightText], true);
 	}
 }
 
@@ -209,7 +211,7 @@ void UIBattle::DrawPlayerHP(float currentHp)
 	float decreaseHpLength = kPlayerHpWidth * decreaseHpRatio;
 
 	// バーの背景部分
-	DrawExtendGraphF(kPlayerHpBarLT.x, kPlayerHpBarLT.y, kPlayerHpBarRB.x, kPlayerHpBarRB.y, m_gaugeBarHandle, true);
+	DrawExtendGraphF(kPlayerHpBarLT.x, kPlayerHpBarLT.y, kPlayerHpBarRB.x, kPlayerHpBarRB.y, m_handle[HandleKind::kGaugeBar], true);
 	// ダメージを受けた際に表示する
 	if (m_intervalTime > 0)
 	{
@@ -232,7 +234,7 @@ void UIBattle::DrawPlayerGauge(float currentGauge, float MaxGauge)
 	float hpLength = kPlayerGaugeWidth * hpRatio;
 
 	// バーの背景部分
-	DrawExtendGraphF(kPlayerGaugeBarLT.x, kPlayerGaugeBarLT.y, kPlayerGaugeBarRB.x, kPlayerGaugeBarRB.y, m_gaugeBarHandle, true);
+	DrawExtendGraphF(kPlayerGaugeBarLT.x, kPlayerGaugeBarLT.y, kPlayerGaugeBarRB.x, kPlayerGaugeBarRB.y, m_handle[HandleKind::kGaugeBar], true);
 	DrawBoxAA(kPlayerCurrentGaugeLT.x, kPlayerCurrentGaugeLT.y, kPlayerCurrentGaugeLT.x + hpLength, kPlayerCurrentGaugeLT.y + kPlayerGaugeHeight, kpGaugeColor, true);
 }
 
@@ -250,7 +252,7 @@ void UIBattle::DrawEnemyHp(float currentHp)
 	float decreaseHpLength = kEnemyHpWidth * decreaseHpRatio;
 
 	// バーの背景部分
-	DrawExtendGraphF(kEnemyHpBarLT.x, kEnemyHpBarLT.y, kEnemyHpBarRB.x, kEnemyHpBarRB.y, m_gaugeBarHandle, true);
+	DrawExtendGraphF(kEnemyHpBarLT.x, kEnemyHpBarLT.y, kEnemyHpBarRB.x, kEnemyHpBarRB.y, m_handle[HandleKind::kGaugeBar], true);
 	// ダメージを受けた分のバー
 	if (m_intervalTime > 0)
 	{
@@ -265,7 +267,7 @@ void UIBattle::DrawEnemyHp(float currentHp)
 /// </summary>
 void UIBattle::DrawSilhouette(int charType)
 {
-	DrawRectRotaGraphF(kESilhouettePos.x, kESilhouettePos.y, kSilhouetteWidth * charType, 0, kSilhouetteWidth, kSilhouetteHeight, 1.0f, 0.0f, m_silhouetteHandle, true);
+	DrawRectRotaGraphF(kESilhouettePos.x, kESilhouettePos.y, kSilhouetteWidth * charType, 0, kSilhouetteWidth, kSilhouetteHeight, 1.0f, 0.0f, m_handle[HandleKind::kSilhouette], true);
 }
 
 

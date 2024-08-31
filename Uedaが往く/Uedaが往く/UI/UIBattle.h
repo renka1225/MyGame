@@ -32,6 +32,17 @@ private:
 	int m_silhouetteHandle;			// キャラクターのシルエット画像
 	int m_fightTextHandle;			// "Fight"のテキスト画像
 	int m_numTextHandle;			// 数字の画像
+	std::vector<int> m_handle;		// ハンドル
+
+	// 画像の種類
+	enum HandleKind
+	{
+		kGaugeBar,	 // ゲージバー
+		kSilhouette, // キャラクターのシルエット
+		kFightText,	 // "Fight!"のテキスト
+		kNumText,	 // 数字
+		kHandleNum	 // ハンドルの種類
+	};
 
 	// 操作説明で表示する順番
 	enum OperationOrder

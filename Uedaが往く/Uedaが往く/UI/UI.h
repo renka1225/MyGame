@@ -41,6 +41,13 @@ private:
 	float m_cursorWidth;		// カーソルの横幅
 	int m_cursorDisplayTime;	// カーソルを表示する時間
 	int m_cursorAlpha;			// カーソルのα値
-	int m_cursorHandle;			// カーソルの画像
-	int m_backHandle;			// 背景の画像
+	std::vector<int> m_handle;  // ハンドル
+
+	// 画像の種類
+	enum HandleKind
+	{
+		kCursor,	// カーソル
+		kBg,		// 背景
+		kHandleNum	// ハンドルの種類
+	};
 };

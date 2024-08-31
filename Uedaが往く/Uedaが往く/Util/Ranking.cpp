@@ -238,7 +238,7 @@ std::string Ranking::HttpGet(const char* domain, const char* uri)
 #endif // _DEBUG
 
 		// データ送信(http命令を送る)
-		NetWorkSend(NetHandle, HttpCmd, strlen(HttpCmd));
+		NetWorkSend(NetHandle, HttpCmd, static_cast<int>(strlen(HttpCmd)));
 
 		// データがくるのを待つ
 		while (!ProcessMessage())

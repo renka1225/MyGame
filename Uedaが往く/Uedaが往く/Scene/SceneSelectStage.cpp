@@ -23,6 +23,7 @@ namespace
 	constexpr int kBackBoxColor = 0x494949;					// 四角の色
 	constexpr int kBackBoxLTPos = 140;						// 四角の左上位置
 	constexpr int kBackBoxWidth = 490;						// 四角の幅
+
 	const Vec2 kSelectTextPos = { 260.0f, 300.0f };			// 選択テキスト表示位置
 	constexpr float kSelectTextInterval = 120.0f;			// 選択テキスト表示間隔
 	constexpr float kSelectTextAdj = 40.0f;					// テキスト表示位置調整
@@ -190,22 +191,22 @@ void SceneSelectStage::DrawIntroductionText()
 	if (m_select == SelectScene::kStage1)
 	{
 		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
-			"操作方法の説明を行います", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+			"操作方法の説明を行います。", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
 	}
 	else if (m_select == SelectScene::kStage2)
 	{
 		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y - kIntroductionTextAdj,
-			"3連続勝利したら優勝です\n優勝めざして頑張ってください!", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+			"3連続勝利したら優勝です。\n優勝めざして頑張ってください!", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
 	}
 	else if (m_select == SelectScene::kOption)
 	{
 		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
-			"音量や画面サイズの設定を行います", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+			"音量や画面サイズの設定を行います。", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
 	}
 	else if (m_select == SelectScene::kEnd)
 	{
 		DrawStringFToHandle(kIntroductionTextPos.x, kIntroductionTextPos.y,
-			"ゲームを終了します", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
+			"ゲームを終了します。", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kIntroductionText)]);
 	}
 }
 

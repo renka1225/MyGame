@@ -90,7 +90,7 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 				// 文字列をfloatに変換して追加する
 				m_charData.push_back(std::stof(field));
 			}
-			catch (const std::invalid_argument& e)
+			catch (const std::invalid_argument&)
 			{
 				// 無効な文字列をスキップ
 			}
@@ -99,9 +99,9 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 
 	// 外部ファイルの情報を入れる
 	data.m_status.maxHp = m_charData[0 + charType * kStatusNum];
-	data.m_status.punchReceptionTime = m_charData[1 + charType * kStatusNum];
-	data.m_status.punchCoolTime = m_charData[2 + charType * kStatusNum];
-	data.m_status.kickCoolTime = m_charData[3 + charType * kStatusNum];
+	data.m_status.punchReceptionTime = static_cast<int>(m_charData[1 + charType * kStatusNum]);
+	data.m_status.punchCoolTime = static_cast<int>(m_charData[2 + charType * kStatusNum]);
+	data.m_status.kickCoolTime = static_cast<int>(m_charData[3 + charType * kStatusNum]);
 	data.m_status.punchPower = m_charData[4 + charType * kStatusNum];
 	data.m_status.secondPunchPower = m_charData[5 + charType * kStatusNum];
 	data.m_status.thirdPunchPower = m_charData[6 + charType * kStatusNum];
@@ -111,8 +111,8 @@ void LoadData::LoadCharaData(CharacterBase& data, int charType)
 	data.m_status.acceleration = m_charData[10 + charType * kStatusNum];
 	data.m_status.deceleration = m_charData[11 + charType * kStatusNum];
 	data.m_status.avoidDist = m_charData[12 + charType * kStatusNum];
-	data.m_status.maxAvoidCount = m_charData[13 + charType * kStatusNum];
-	data.m_status.avoidCoolTime = m_charData[14 + charType * kStatusNum];
+	data.m_status.maxAvoidCount = static_cast<int>(m_charData[13 + charType * kStatusNum]);
+	data.m_status.avoidCoolTime = static_cast<int>(m_charData[14 + charType * kStatusNum]);
 	data.m_status.guardAnimTime = m_charData[15 + charType * kStatusNum];
 	data.m_status.backMove = m_charData[16 + charType * kStatusNum];
 }
@@ -145,7 +145,7 @@ void LoadData::LoadAnimSpeedData(CharacterBase& data, int charType)
 				// 文字列をfloatに変換してm_dataに追加する
 				m_animSpeedData.push_back(std::stof(field));
 			}
-			catch (const std::invalid_argument& e)
+			catch (const std::invalid_argument&)
 			{
 				// 無効な文字列をスキップ
 			}
@@ -200,7 +200,7 @@ void LoadData::LoadColData(CharacterBase& data, int charType)
 				// 文字列をfloatに変換してm_dataに追加する
 				m_colData.push_back(std::stof(field));
 			}
-			catch (const std::invalid_argument& e)
+			catch (const std::invalid_argument&)
 			{
 				// 無効な文字列をスキップ
 			}
@@ -254,7 +254,7 @@ void LoadData::LoadEnemyData(CharacterBase& data, int charType)
 				m_enemyData.push_back(std::stof(field));
 			
 			}
-			catch (const std::invalid_argument& e)
+			catch (const std::invalid_argument&)
 			{
 				// 無効な文字列をスキップ
 			}
@@ -265,16 +265,16 @@ void LoadData::LoadEnemyData(CharacterBase& data, int charType)
 	// MEMO:敵番号が1番から始まるため、charType-1をする
 	data.m_enemyInfo.approachRange = m_enemyData[0 + (charType - 1) * kEnemyInfoNum];
 	data.m_enemyInfo.attackRange = m_enemyData[1 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.minStopTime = m_enemyData[2 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.maxStopTime = m_enemyData[3 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.maxProb = m_enemyData[4 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.punchProb = m_enemyData[5 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.kickProb = m_enemyData[6 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.avoidProb = m_enemyData[7 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.guardProb = m_enemyData[8 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.grabProb = m_enemyData[9 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.changeAngleProb = m_enemyData[10 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.changeAngleFrame = m_enemyData[11 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.guardTime = m_enemyData[12 + (charType - 1) * kEnemyInfoNum];
-	data.m_enemyInfo.stateIntervalTime = m_enemyData[13 + (charType - 1) * kEnemyInfoNum];
+	data.m_enemyInfo.minStopTime = static_cast<int>(m_enemyData[2 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.maxStopTime = static_cast<int>(m_enemyData[3 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.maxProb = static_cast<int>(m_enemyData[4 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.punchProb = static_cast<int>(m_enemyData[5 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.kickProb = static_cast<int>(m_enemyData[6 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.avoidProb = static_cast<int>(m_enemyData[7 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.guardProb = static_cast<int>(m_enemyData[8 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.grabProb = static_cast<int>(m_enemyData[9 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.changeAngleProb = static_cast<int>(m_enemyData[10 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.changeAngleFrame = static_cast<int>(m_enemyData[11 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.guardTime = static_cast<int>(m_enemyData[12 + (charType - 1) * kEnemyInfoNum]);
+	data.m_enemyInfo.stateIntervalTime = static_cast<int>(m_enemyData[13 + (charType - 1) * kEnemyInfoNum]);
 }

@@ -53,9 +53,10 @@ UI::UI():
 	m_cursorWidth(0.0f),
 	m_cursorAlpha(kMaxAlpha)
 {
-	m_cursorHandle = LoadGraph("data/UI/cursor.png");
 	m_buttonHandle = LoadGraph("data/UI/button.png");
-	m_backHandle = LoadGraph("data/UI/back.png");
+	m_handle.resize(HandleKind::kHandleNum);
+	m_handle[HandleKind::kCursor] = LoadGraph("data/UI/cursor.png");
+	m_handle[HandleKind::kBg] = LoadGraph("data/UI/back.png");
 }
 
 
@@ -64,9 +65,11 @@ UI::UI():
 /// </summary>
 UI::~UI()
 {
-	DeleteGraph(m_cursorHandle);
 	DeleteGraph(m_buttonHandle);
-	DeleteGraph(m_backHandle);
+	for (auto& handle : m_handle)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 
@@ -117,7 +120,7 @@ void UI::DrawCursor(Vec2 pos, int select, float interval, bool isOption)
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_cursorAlpha);
 	DrawExtendGraphF(pos.x, pos.y + interval * select,
 		pos.x + m_cursorWidth, pos.y + interval * select + kCursorHeight,
-		m_cursorHandle, true);
+		m_handle[HandleKind::kCursor], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -128,7 +131,7 @@ void UI::DrawCursor(Vec2 pos, int select, float interval, bool isOption)
 void UI::DrawPauseBack()
 {
 	// ”wŒi‰æ‘œ•\Ž¦
-	DrawExtendGraphF(kPauseBackLTPos.x, kPauseBackLTPos.y, kPauseBackRBPos.x, kPauseBackRBPos.y, m_backHandle, true);
+	DrawExtendGraphF(kPauseBackLTPos.x, kPauseBackLTPos.y, kPauseBackRBPos.x, kPauseBackRBPos.y, m_handle[HandleKind::kBg], true);
 }
 
 
@@ -142,9 +145,9 @@ void UI::DrawMenuBg()
 	// ”wŒi‚ÌŽlŠp•”•ª•\Ž¦
 	DrawBox(kBackBoxLTPos, 0, kBackBoxLTPos + kBackBoxWidth, Game::kScreenHeight, kBackBoxColor, true);
 	// ”wŒi‰æ‘œ•\Ž¦
-	DrawExtendGraphF(kBackHandleLTPos.x, kBackHandleLTPos.y, kBackHandleRBPos.x, kBackHandleRBPos.y, m_backHandle, true);
+	DrawExtendGraphF(kBackHandleLTPos.x, kBackHandleLTPos.y, kBackHandleRBPos.x, kBackHandleRBPos.y, m_handle[HandleKind::kBg], true);
 	// ƒeƒLƒXƒgƒ{ƒbƒNƒX•\Ž¦
-	DrawExtendGraphF(kTextBoxLTPos.x, kTextBoxLTPos.y, kTextBoxRBPos.x, kTextBoxRBPos.y, m_backHandle, true);
+	DrawExtendGraphF(kTextBoxLTPos.x, kTextBoxLTPos.y, kTextBoxRBPos.x, kTextBoxRBPos.y, m_handle[HandleKind::kBg], true);
 }
 
 

@@ -16,8 +16,8 @@ public:
 	virtual void Draw();
 
 private:
-	int m_textHandle;				// テキストの画像
 	int m_totalClearTime;			// トータルのクリアタイム
 	std::vector<int> m_clearTime;	// クリアタイム
 	int m_stageKind;				// クリアしたステージの種類
+	int m_textHandle;				// テキストの画像
 };

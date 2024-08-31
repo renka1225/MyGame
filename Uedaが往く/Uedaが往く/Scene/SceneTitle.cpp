@@ -9,25 +9,28 @@
 // 定数
 namespace
 {
+	constexpr int kStartFadeAlpha = 255;			// スタート時のフェード値
+	constexpr int kFadeFrame = 8;					// フェード変化量
+	constexpr int kBGMTime = 150;					// BGMを再生しはじめる時間
+
+	/*タイトルロゴ*/
 	const Vec2 kTitleLogoPos = { 950.0f, 400.0f };	// タイトルロゴ表示位置
 	constexpr float kTitleLogoMinScale = 0.5f;		// タイトルロゴの最小サイズ
 	constexpr float kTitleLogoMaxScale = 10.0f;		// タイトルロゴの最大サイズ
 	constexpr float kTitleLogoChangeScale = 0.3f;	// タイトルロゴのサイズ変化量
 	constexpr float kTitleLogoInitRot = 360.0f;		// 開始時のタイトルロゴの回転率
 	constexpr float kTitleLogoChangeRot = 20.0f;	// タイトルロゴの回転率変化量
+	constexpr int kTitleTime = 60;					// タイトルを表示するまでの時間
+
+	/*テキスト*/
 	const Vec2 kTextPos = { 500.0f, 780.0f };		// "PRESS ANY BUTTON"のテキスト位置
 	constexpr int kTextDisplayTime = 2;				// テキストを表示する間隔
 	constexpr int kTextDisplayAnimTime = 240;		// テキストアニメーションの時間
 	constexpr int kMaxAlpha = 255;					// 最大アルファ値
 	constexpr int kMinAlpha = 30;					// 最小アルファ値
-	constexpr int kTitleTime = 60;					// タイトルを表示するまでの時間
 	constexpr int kTextTime = 120;					// テキストを表示するまでの時間
-	constexpr int kBGMTime = 150;					// BGMを再生しはじめる時間
-	
-	constexpr int kStartFadeAlpha = 255;			// スタート時のフェード値
-	constexpr int kFadeFrame = 8;					// フェード変化量
 
-	// OP動画
+	/* OP動画*/
 	constexpr int kOpMoveTime = 65010;				// 動画の再生時間
 	constexpr int kOpMoveStartTime = 1800;			// 動画を再生するまでの時間
 }
@@ -35,7 +38,7 @@ namespace
 /// <summary>
 /// コンストラクタ
 /// </summary>
-SceneTitle::SceneTitle():
+SceneTitle::SceneTitle() :
 	m_time(0),
 	m_textDisplayTime(0),
 	m_titleLogoScale(kTitleLogoMaxScale),
@@ -44,10 +47,12 @@ SceneTitle::SceneTitle():
 	m_opStartTime(0)
 {
 	m_fadeAlpha = kStartFadeAlpha;
-	m_titleLogo = LoadGraph("data/UI/title.png");
-	m_titleLogoBack = LoadGraph("data/UI/titleBack.png");
-	m_textHandle = LoadGraph("data/UI/PRESS.png");
-	m_opMoveHandle = LoadGraph("data/op.mp4");
+
+	m_handle.resize(HandleKind::kHandleNum);
+	m_handle[HandleKind::kTitleLogo] = LoadGraph("data/UI/title.png");
+	m_handle[HandleKind::kTitleLogoBack] = LoadGraph("data/UI/titleBack.png");
+	m_handle[HandleKind::kPressText] = LoadGraph("data/UI/PRESS.png");
+	m_handle[HandleKind::kOpMovie] = LoadGraph("data/op.mp4");
 }
 
 
@@ -57,10 +62,10 @@ SceneTitle::SceneTitle():
 SceneTitle::~SceneTitle()
 {
 	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kTitle)]);
-	DeleteGraph(m_titleLogo);
-	DeleteGraph(m_titleLogoBack);
-	DeleteGraph(m_textHandle);
-	DeleteGraph(m_opMoveHandle);
+	for (auto& handle : m_handle)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 
@@ -94,14 +99,14 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	}
 	else if (m_opStartTime < 0)
 	{
-		PlayMovieToGraph(m_opMoveHandle);
+		PlayMovieToGraph(m_handle[HandleKind::kOpMovie]);
 
 		// 動画が終了したかボタンを押した場合タイトルに戻る
-		const bool isMoveStop = TellMovieToGraph(m_opMoveHandle) >= kOpMoveTime || input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y");
+		const bool isMoveStop = TellMovieToGraph(m_handle[HandleKind::kOpMovie]) >= kOpMoveTime || input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y");
 		if (isMoveStop)
 		{
-			PauseMovieToGraph(m_opMoveHandle);
-			SeekMovieToGraph(m_opMoveHandle, 0);
+			PauseMovieToGraph(m_handle[HandleKind::kOpMovie]);
+			SeekMovieToGraph(m_handle[HandleKind::kOpMovie], 0);
 			m_opStartTime = kOpMoveStartTime;
 		}
 
@@ -147,10 +152,10 @@ void SceneTitle::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xffffff, true);
 
 	// タイトルロゴ表示
-	DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, m_titleLogoRot, m_titleLogoBack, true);
+	DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, m_titleLogoRot, m_handle[HandleKind::kTitleLogoBack], true);
 	if (m_time > kTitleTime)
 	{
-		DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, 0.0f, m_titleLogo, true);
+		DrawRectRotaGraphF(kTitleLogoPos.x, kTitleLogoPos.y, 0, 0, Game::kScreenWidth, Game::kScreenHeight, m_titleLogoScale, 0.0f, m_handle[HandleKind::kTitleLogo], true);
 	}
 
 	// "PRESSANYBUTTON"表示
@@ -158,14 +163,14 @@ void SceneTitle::Draw()
 	{
 		// 文字を点滅させる
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_textAlpha);
-		DrawGraphF(kTextPos.x, kTextPos.y, m_textHandle, true);
+		DrawGraphF(kTextPos.x, kTextPos.y, m_handle[HandleKind::kPressText], true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
 	// 動画を表示する
 	if (m_opStartTime < 0)
 	{
-		DrawGraph(0, 0, m_opMoveHandle, true);
+		DrawGraph(0, 0, m_handle[HandleKind::kOpMovie], true);
 	}
 
 	DrawFade();	// フェードインアウト描画
@@ -174,7 +179,7 @@ void SceneTitle::Draw()
 	// 現在のシーン
 	DrawString(0, 0, "タイトル画面", 0xffffff);
 	DrawFormatString(0, 20, 0x0000ff, "動画再生までの時間:%d", m_opStartTime);
-	DrawFormatString(0, 40, 0xff0000, "現在の動画時間:%d", TellMovieToGraph(m_opMoveHandle));
+	DrawFormatString(0, 40, 0xff0000, "現在の動画時間:%d", TellMovieToGraph(m_handle[HandleKind::kOpMovie]));
 #endif
 }
 

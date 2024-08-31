@@ -12,7 +12,7 @@
 namespace
 {
 	constexpr int kAlpha = 200;
-	constexpr int kBackColor = 0xdcdcdc;				// 背景の色
+	constexpr int kBackColor = 0x1a1a1a;				// 背景の色
 	constexpr int kBackBoxColor = 0x494949;				// 四角の色
 	constexpr int kTextColor = 0xffffff;				// テキストの色
 	const Vec2 kBackTextPos = { 800, 350 };				// "ゲームにもどる"表示位置
@@ -64,16 +64,20 @@ std::shared_ptr<SceneBase> ScenePause::Update(Input& input)
 	{
 		if (m_select == Select::kBack)
 		{
-			return m_pPrevScene;	// ゲーム画面
+			return m_pPrevScene;	// ゲーム画面にもどる
 		}
 		else if (m_select == Select::kOption)
 		{
-			return std::make_shared<SceneOption>(shared_from_this());	// オプション画面
+			return std::make_shared<SceneOption>(shared_from_this());	// オプション画面に遷移
 		}
 		else if (m_select == Select::kStageSelect)
 		{
-			return std::make_shared<SceneSelectStage>(); // ステージ選択画面
+			return std::make_shared<SceneSelectStage>(); // ステージ選択画面に遷移
 		}
+	}
+	else if (input.IsTriggered("pause"))
+	{
+		return m_pPrevScene;	// ゲーム画面にもどる
 	}
 
 	return shared_from_this();	// 自身のshared_ptrを返す
@@ -93,8 +97,8 @@ void ScenePause::Draw()
 	// 背景表示
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBackColor, true);
-	m_pUI->DrawPauseBack();
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	m_pUI->DrawPauseBack();
 
 	// カーソル表示
 	m_pUI->DrawCursor(kCursorPos, m_select, kSelectTextInterval);

@@ -24,19 +24,6 @@ namespace
 	const Vec2 kTutoTextBoxPos = { 425.0f , 650.0f }; // テキストボックス位置
 	const Vec2 kTutoTextPos = { 480.0f , 690.0f };	  // テキスト位置
 	constexpr int kTextColor = 0xffffff;			  // テキストの色
-	// チュートリアル画像
-	enum TutoHandle
-	{
-		kTuto0,
-		kTuto1,
-		kTuto2,
-		kTuto3,
-		kTuto4,
-		kTuto5,
-		kTutoNum,		// チュートリアルの数
-		kTextBox,		// テキストボックス
-		kTutoHandleNum,	// 画像の数
-	};
 }
 
 /// <summary>
@@ -44,7 +31,6 @@ namespace
 /// </summary>
 SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage):
 	m_tutoNum(0),
-	m_tutoSelect(Select::kYes),
 	m_isTuto(false)
 {
 	m_pPlayer = pPlayer;
@@ -212,7 +198,6 @@ void SceneStage1::Draw()
 #ifdef _DEBUG	// デバッグ表示
 	// 現在のシーン
 	DrawString(0, 0, "ステージ1", 0xffffff);
-	DrawFormatString(0, 200, 0xffffff, "%d", m_elapsedTime);
 #endif
 }
 

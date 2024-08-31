@@ -109,7 +109,7 @@ void SceneClear::Draw()
 	int totalMin = Conversion::ChangeMin(m_totalClearTime);
 	int totalSec = Conversion::ChangeSec(m_totalClearTime);
 	int totalMilliSec = Conversion::ChangeMilliSec(m_totalClearTime);
-	DrawStringToHandle(kTimeTextPos.x - kTotalTimeTextAdj, kTimeTextPos.y, "TOTAL TIME", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)]);
+	DrawStringFToHandle(kTimeTextPos.x - kTotalTimeTextAdj, kTimeTextPos.y, "TOTAL TIME", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)]);
 	DrawFormatStringFToHandle(kTimeTextPos.x, kTimeTextPos.y,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
 
@@ -122,7 +122,7 @@ void SceneClear::Draw()
 		int sec = Conversion::ChangeSec(m_clearTime[i]);
 		int milliSec = Conversion::ChangeMilliSec(m_clearTime[i]);
 
-		DrawFormatStringToHandle(kTimeTextPos.x - kTimeTextAdj, kTimeTextPos.y + kTimeTextInterval * (i + 1),
+		DrawFormatStringFToHandle(kTimeTextPos.x - kTimeTextAdj, kTimeTextPos.y + kTimeTextInterval * (i + 1),
 			kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%dâÒêÌ ", i + 1);
 		DrawFormatStringFToHandle(kTimeTextPos.x, kTimeTextPos.y + kTimeTextInterval * (i + 1),
 			kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%02d:%02d:%03d", min, sec, milliSec);
