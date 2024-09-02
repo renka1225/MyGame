@@ -96,7 +96,7 @@ void EnemyAbe::Update(Player& player, Stage& stage, SceneStageBase& sceneStage)
 /// </summary>
 void EnemyAbe::Draw()
 {
-	MV1DrawModel(m_modelHandle);	// 敵モデル描画
+	EnemyBase::Draw();
 	m_pEffect->Draw();				// エフェクト描画
 	m_pUIBattle->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyAbe));	// シルエット描画
 	m_pUIBattle->DrawEnemyHp(m_hp);	// HPゲージを表示

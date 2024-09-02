@@ -12,6 +12,11 @@ namespace
 {
 	constexpr float kInitAngle = 180.0f;	// 開始時の敵の向く方向
 	constexpr float kEffectHeight = 30.0f;	// エフェクトを表示する高さ
+
+	/*影*/
+	constexpr int kShadowMapSize = 4096;							  // 作成するシャドウマップのサイズ
+	const VECTOR kShadowAreaMinPos = VGet(2000.0f, 50.0f, 4000.0f);	  // シャドウマップに描画する最小範囲
+	const VECTOR kShadowAreaMaxPos = VGet(3500.0f, 100.0f, 5000.0f);  // シャドウマップに描画する最大範囲
 }
 
 
@@ -23,10 +28,18 @@ EnemyBase::EnemyBase() :
 	m_angleIntervalTime(0),
 	m_intervalTime(0),
 	m_guardTime(0),
-	m_eToPDirVec(VGet(0.0f, 0.0f, 0.0f))
+	m_eToPDirVec(VGet(0.0f, 0.0f, 0.0f)),
+	m_shadowMap(-1)
 {
 	m_currentState = CharacterBase::State::kFightIdle;
 	m_angle = kInitAngle; // 真正面を向くようにする
+
+	// シャドウマップの準備
+	m_shadowMap = MakeShadowMap(kShadowMapSize, kShadowMapSize);
+	// シャドウマップが想定するライトの方向をセット
+	SetShadowMapLightDirection(m_shadowMap, VGet(1.0f, 0.0f, 0.0f));
+	// シャドウマップに描画する範囲を設定
+	SetShadowMapDrawArea(m_shadowMap, kShadowAreaMinPos, kShadowAreaMaxPos);
 }
 
 
@@ -284,7 +297,6 @@ CharacterBase::State  EnemyBase::Fighting()
 	m_isFighting = true;
 	PlayAnim(AnimKind::kFightWalk);
 	return CharacterBase::State::kFightWalk;
-
 }
 
 
@@ -348,7 +360,6 @@ void EnemyBase::Receive()
 		PlayAnim(CharacterBase::AnimKind::kReceive);
 		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));					// 攻撃エフェクト再生
 		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK); 	// 攻撃SE再生
-
 	}
 }
 
@@ -378,6 +389,21 @@ void EnemyBase::UpdateAngle()
 	}
 
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
+}
+
+
+/// <summary>
+/// 描画
+/// </summary>
+void EnemyBase::Draw()
+{
+	ShadowMap_DrawSetup(m_shadowMap); // シャドウマップへの描画の準備
+	MV1DrawModel(m_modelHandle);	 
+	ShadowMap_DrawEnd();			  // シャドウマップへの描画を終了
+
+	SetUseShadowMap(0, m_shadowMap); // 描画に使用するシャドウマップを設定
+	MV1DrawModel(m_modelHandle);	 // 敵モデル描画
+	SetUseShadowMap(0, -1);			 // 描画に使用するシャドウマップの設定を解除
 }
 
 

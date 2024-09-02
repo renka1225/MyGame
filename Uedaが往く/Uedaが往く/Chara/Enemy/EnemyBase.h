@@ -16,7 +16,7 @@ public:
 	virtual ~EnemyBase();
 	virtual void Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos) = 0;
 	virtual void Update(Player& player, Stage& stage, SceneStageBase& sceneStage) = 0;
-	virtual void Draw() = 0;
+	virtual void Draw();
 	// 攻撃を受けた際の処理
 	virtual void OnDamage(float damage) override;
 	// プレイヤーとの当たり判定をチェックする
@@ -60,6 +60,7 @@ protected:
 	int m_angleIntervalTime;	// 角度を更新するまでの時間
 	int m_intervalTime;			// 次の状態を更新するまでの時間
 	int m_guardTime;			// ガードの時間
+	int m_shadowMap;			// シャドウマップ
 	VECTOR m_eToPDirVec;		// 敵の位置からプレイヤー位置のベクトル
 };
 

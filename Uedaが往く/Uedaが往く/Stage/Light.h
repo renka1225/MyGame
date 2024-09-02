@@ -1,12 +1,14 @@
 #pragma once
 #include "DxLib.h"
+#include "Input.h"
 
 // 定数
 namespace
 {
 	/*ディレクショナルライト*/
-	const VECTOR kDirLightPos = VGet(4000.0f, 100.0f, 4000.0f);	 // 位置
-	const VECTOR kDirLightDir = VGet(0.0f, -1.0f, 0.0f);		 // 方向
+	//const VECTOR kDirLightPos = VGet(4000.0f, 10000.0f, 4000.0f); // 位置
+	const VECTOR kDirLightPos = VGet(0.0f, 100.0f, 1000.0f);		 // 位置
+	const VECTOR kDirLightDir = VGet(-1.0f, -1.0f, 1.0f);			 // 方向
 
 	/*ポイントライト*/
 	const VECTOR kPointLightPos = VGet(8000.0f, 200.0f, 0.0f);   // 位置
@@ -31,6 +33,8 @@ namespace
 /// </summary>
 namespace Light
 {
+	VECTOR m_lightPos = kDirLightPos;
+
 	/// <summary>
 	///	ライトセット
 	/// </summary>
@@ -39,6 +43,8 @@ namespace Light
 		// ライト位置調整
 		SetLightPosition(kDirLightPos);
 		SetLightDirection(kDirLightDir);
+
+		printfDx("X:%f,Y:%f,Z:%f", GetLightPosition().x, GetLightPosition().y, GetLightPosition().z);
 
 		// ポイントライト作成
 		//int pointLight = CreatePointLightHandle(kPointLightPos, kPointLightRange, kPointLightAtten0, kPointLightAtten1, kPointLightAtten2);
@@ -55,4 +61,15 @@ namespace Light
 	{
 		DeleteLightHandleAll();
 	}
+
+
+#ifdef _DEBUG
+	void UpdateLightPos()
+	{
+		//m_lightPos.z++;
+		SetLightPosition(m_lightPos);
+
+		//DrawFormatString(0, 400, 0xffffff, "X:%f,Y:%f,Z:%f", GetLightPosition().x, GetLightPosition().y, GetLightPosition().z);
+	}
+#endif
 }
