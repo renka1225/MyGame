@@ -5,7 +5,7 @@
 namespace
 {
 	/*ディレクショナルライト*/
-	const VECTOR kDirLightPos = VGet(8000.0f, 1000.0f, 0.0f);	 // 位置
+	const VECTOR kDirLightPos = VGet(4000.0f, 100.0f, 4000.0f);	 // 位置
 	const VECTOR kDirLightDir = VGet(0.0f, -1.0f, 0.0f);		 // 方向
 
 	/*ポイントライト*/
@@ -41,11 +41,11 @@ namespace Light
 		SetLightDirection(kDirLightDir);
 
 		// ポイントライト作成
-		int pointLight = CreatePointLightHandle(kPointLightPos, kPointLightRange, kPointLightAtten0, kPointLightAtten1, kPointLightAtten2);
+		//int pointLight = CreatePointLightHandle(kPointLightPos, kPointLightRange, kPointLightAtten0, kPointLightAtten1, kPointLightAtten2);
 	
 		// スポットライト作成
-		int spotLight = CreateSpotLightHandle(kSpotLightPos, kSpotLightDir, kSpotLightOutAngle, kSpotLightInAngle,
-			kSpotLightRange, kSpotLighAtten0, kSpotLighAtten1, kSpotLighAtten2);
+		//int spotLight = CreateSpotLightHandle(kSpotLightPos, kSpotLightDir, kSpotLightOutAngle, kSpotLightInAngle,
+			//kSpotLightRange, kSpotLighAtten0, kSpotLighAtten1, kSpotLighAtten2);
 	};
 
 	/// <summary>

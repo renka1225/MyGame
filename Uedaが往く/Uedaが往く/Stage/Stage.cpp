@@ -30,7 +30,9 @@ namespace
 /// </summary>
 Stage::Stage():
     m_wallNum(0),
-    m_floorNum(0)
+    m_floorNum(0),
+    m_floor(),
+    m_wall()
 {
 	m_stageHandle = MV1LoadModel("data/Model/Stage/city.mv1");
     m_skydoomHandle = MV1LoadModel("data/Model/Stage/skydoom.mv1");

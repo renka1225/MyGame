@@ -14,7 +14,7 @@ class CharacterBase;
 class SceneStage1 : public SceneStageBase
 {
 public:
-	SceneStage1() {};
+	SceneStage1():m_isTuto(false),m_tutoNum(0) {};
 	SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<Stage> pStage);
 	virtual  ~SceneStage1();
 	virtual void Init() override;

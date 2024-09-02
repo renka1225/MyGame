@@ -27,9 +27,9 @@ namespace
 	constexpr int kAddPal = 80;									  // 加算ブレンド値
 	
 	/*影*/
-	constexpr int kShadowMapSize = 4096;	// 作成するシャドウマップのサイズ
-	const VECTOR kShadowAreaMinPos = VGet(-1.0f, -1.0f, -1.0f);		 // シャドウマップに描画する最小範囲
-	const VECTOR kShadowAreaMaxPos = VGet(4000.0f, 100.0f, 4500.0f); // シャドウマップに描画する最大範囲
+	constexpr int kShadowMapSize = 4096;							  // 作成するシャドウマップのサイズ
+	const VECTOR kShadowAreaMinPos = VGet(2000.0f, 50.0f, 4000.0f);	  // シャドウマップに描画する最小範囲
+	const VECTOR kShadowAreaMaxPos = VGet(3500.0f, 80.0f, 5000.0f);   // シャドウマップに描画する最大範囲
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
 	constexpr int kFadeFrame = 8;		 // フェード変化量
@@ -75,6 +75,7 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_nextBattleTime(0),
 	m_elapsedTime(0),
 	m_isPause(false),
+	m_shadowMap(-1),
 	m_clearBackHandle(-1)
 {
 }
@@ -140,7 +141,7 @@ void SceneStageBase::Draw()
 	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG
-	//TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
+	TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
 	DrawFormatString(0, 140, 0xffffff, "経過時間:%d", m_elapsedTime); // 経過時間描画
 #endif
 }

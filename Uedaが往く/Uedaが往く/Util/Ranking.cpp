@@ -7,6 +7,14 @@
 // 定数
 namespace
 {
+	/*テキスト関連*/
+	constexpr int kTextDisplayTime = 3;			// テキストを表示する間隔
+	constexpr int kTextDisplayAnimTime = 220;	// テキストアニメーションの時間
+	constexpr int kMaxAlpha = 255;				// 最大アルファ値
+	constexpr int kMinAlpha = 0;				// 最小アルファ値
+	constexpr int kTextTime = 120;				// テキストを表示するまでの時間
+
+	/*ネットワーク関連*/
 	// ドメイン名
 	const char* kDomainName = "rueda.zombie.jp";
 	// ステージ1URI
@@ -14,15 +22,16 @@ namespace
 	const char* kStage1UpdateUri = "/Ranking/updateRanking_stage1.php?clearTime=";  // 更新
 	const char* kStage1GetUri = "/Ranking/getRanking_stage1.php";					// 取得
 	// ステージ2URI
-	const char* kStage2CreateUri = "/Ranking/createRanking_stage2.php";					// 作成
-	const char* kStage2UpdateUri = "/Ranking/updateRanking_stage2.php?clearTime=";		// 更新
-	const char* kStage2GetUri = "/Ranking/getRanking_stage2.php";						// 取得
+	const char* kStage2CreateUri = "/Ranking/createRanking_stage2.php";				// 作成
+	const char* kStage2UpdateUri = "/Ranking/updateRanking_stage2.php?clearTime=";	// 更新
+	const char* kStage2GetUri = "/Ranking/getRanking_stage2.php";					// 取得
 	constexpr int kPortNum = 80;		// ポート番号
 	constexpr int kMaxRankNum = 10;		// 表示するランキング数
 
 	// ランキング表示
 	constexpr float kRankingIntervalAdj = 28.0f;		// 表示位置調整
 	constexpr int kTextColor = 0xffffff;				// テキストの色
+	constexpr int kRankInTextColor = 0xff0000;			// ランキング圏内に入った時のテキストの色
 	constexpr float kRankingIntervalWidth = 400.0f;		// 横の表示間隔
 	// ステージ選択時
 	const Vec2 kStageSlectRankPos = { 900, 320 };		// 表示位置
@@ -37,6 +46,8 @@ namespace
 /// コンストラクタ
 /// </summary>
 Ranking::Ranking():
+	m_rankInTextDispTime(0),
+	m_rankInTextAlpha(kMaxAlpha),
 	m_pos(0),
 	m_lineCount(0)
 {
@@ -90,6 +101,20 @@ void Ranking::UpdateRanking(int stageKind, int clearTime)
 	}
 
 	std::string getRank = HttpGet(kDomainName, uri.c_str());
+}
+
+
+/// <summary>
+/// ランクイン時のテキストを更新する
+/// </summary>
+void Ranking::UpdateRankInText()
+{
+	// テキストのアルファ値を調整する
+	m_rankInTextDispTime += kTextDisplayTime;
+	m_rankInTextDispTime %= kTextDisplayAnimTime;
+	// MEMO:sin波を使って0～1の範囲にする
+	float sinAlpha = 0.5f + 0.5f * sinf(static_cast<float>(m_rankInTextDispTime) / kTextDisplayAnimTime * DX_PI_F);
+	m_rankInTextAlpha = kMinAlpha + static_cast<int>((kMaxAlpha - kMinAlpha) * sinAlpha);
 }
 
 
@@ -178,33 +203,65 @@ void Ranking::DrawStageSelectRanking()
 /// <summary>
 /// クリア時のランキング描画
 /// </summary>
-void Ranking::DrawClearRanking()
+void Ranking::DrawClearRanking(int totalClearTime)
 {
 	m_pos = getRank.find_first_of("\r\n");
+	UpdateRankInText(); // テキストの表示を更新する
 
 	for (int i = 0; i < m_lineCount; i++)
 	{
 		// フレーム数から秒数に変換する
-		int min = Conversion::ChangeMin(m_rankingList[i]);			 // 分
-		int sec = Conversion::ChangeSec(m_rankingList[i]);			 // 秒
-		int milliSec = Conversion::ChangeMilliSec(m_rankingList[i]); // ミリ秒
+		const int min = Conversion::ChangeMin(m_rankingList[i]);			 // 分
+		const int sec = Conversion::ChangeSec(m_rankingList[i]);			 // 秒
+		const int milliSec = Conversion::ChangeMilliSec(m_rankingList[i]);   // ミリ秒
+		int textColor = kTextColor;
 
 		// 1位～5位、6位～10位の表示位置をずらす
 		if (i < 5)
 		{
+			textColor = CheckRankIn(totalClearTime, i); // ランキング圏内に入ったかチェックする
+
 			DrawFormatStringFToHandle(kRankingPos.x, kRankingPos.y + i * kClearRankInterval,
-				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+				textColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		else if(i < 9)
 		{
+			textColor = CheckRankIn(totalClearTime, i);
+
 			DrawFormatStringFToHandle(kRankingPos.x + kRankingIntervalWidth, kRankingPos.y + (i - 5) * kClearRankInterval,
-				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+				textColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		else
-		{ 
+		{
+			textColor = CheckRankIn(totalClearTime, i);
+
 			DrawFormatStringFToHandle(kRankingPos.x + kRankingIntervalWidth - kRankingIntervalAdj, kRankingPos.y + (i - 5) * kClearRankInterval,
-				kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+				textColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kRanking)], "%d位 %02d:%02d:%03d", (i + 1), min, sec, milliSec);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
+	}
+}
+
+
+/// <summary>
+/// ランキング圏内に入ったかチェックする
+/// </summary>
+/// <param name="totalClearTime">トータルのクリアタイム</param>
+/// <param name="index">確認する順位</param>
+/// <returns>テキストの色</returns>
+int Ranking::CheckRankIn(int totalClearTime, int index)
+{
+	// ランキング圏内に入った場合
+	if (totalClearTime == m_rankingList[index])
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_rankInTextAlpha); // テキストのα値を変更する
+		return kRankInTextColor; // テキストの色を変更する
+	}
+	else
+	{
+		return kTextColor;
 	}
 }
 

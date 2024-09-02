@@ -13,7 +13,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetMainWindowText("Uedaが往く");
 
 	// windowモード設定
-	ChangeWindowMode(false);
+	ChangeWindowMode(true);
 	// 画面サイズ変更
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
 
@@ -83,8 +83,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Font::UnLoad();	 // フォントの解放
 	Sound::UnLode(); // サウンドの解放
 	Effkseer_End();	 // Effekseerの終了処理
-
-	DxLib_End();	// Dxライブラリ使用の終了処理
+	DxLib_End();	 // Dxライブラリ使用の終了処理
 
 	return 0;		// ソフトの終了 
 }

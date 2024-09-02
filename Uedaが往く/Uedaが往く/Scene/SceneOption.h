@@ -7,7 +7,7 @@
 class SceneOption : public SceneBase
 {
 public:
-	SceneOption() {};
+	SceneOption():m_afterSelect(0), m_isSound(false),m_isWindow(false){};
 	SceneOption(std::shared_ptr<SceneBase> pScene);
 	virtual ~SceneOption();
 	virtual void Init();

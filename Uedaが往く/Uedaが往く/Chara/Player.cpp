@@ -13,7 +13,7 @@
 // 定数
 namespace
 {
-	// プレイヤー情報
+	/*プレイヤー情報*/
 	constexpr float kMaxGauge = 100.0f;				// 最大ゲージ量
 	constexpr float kPunchGaugeCharge = 0.1f;		// パンチ時に増えるゲージ量
 	constexpr float kKickGaugeCharge = 0.13f;		// キック時に増えるゲージ量
@@ -27,7 +27,7 @@ namespace
 	const VECTOR kInitDir = VGet(0.0f, 0.0f, 0.0f);	// 初期方向
 	constexpr float kEffectHeight = 30.0f;			// エフェクトを表示する高さ
 
-	// アニメーション情報
+	/*アニメーション情報*/
 	constexpr float kAnimBlendMax = 1.0f;			// アニメーションブレンドの最大値
 }
 
@@ -143,6 +143,7 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 void Player::Draw()
 {
 	MV1DrawModel(m_modelHandle); // プレイヤー描画
+
 	m_pEffect->Draw();			 // エフェクト描画
 	// ゲージを表示
 	m_pUIBattle->DrawPlayerHP(m_hp);

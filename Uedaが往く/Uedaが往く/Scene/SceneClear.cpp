@@ -113,8 +113,7 @@ void SceneClear::Draw()
 	DrawFormatStringFToHandle(kTimeTextPos.x, kTimeTextPos.y,
 		kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kClearTime)], "%02d:%02d:%03d", totalMin, totalSec, totalMilliSec);
 
-
-	// クリアタイムを表示
+	// 各戦のクリアタイムを表示
 	for (int i = 0; i < m_clearTime.size(); i++)
 	{
 		// クリアタイムをフレーム数から秒数に変換
@@ -131,7 +130,7 @@ void SceneClear::Draw()
 	// ランキング表示
 	DrawStringFToHandle(kRankingTextPos.x, kRankingTextPos.y,
 		"ランキング", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
-	m_pRank->DrawClearRanking();
+	m_pRank->DrawClearRanking(m_totalClearTime);
 
 	// テキスト表示
 	m_pUI->DrawClearButtonText();
