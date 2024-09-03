@@ -16,7 +16,7 @@ namespace
 	/*テキスト関連*/
 	const Vec2 kSyoriTextPos = { 650, 80 };					// 勝利のテキスト画像表示位置
 	const Vec2 kTimeTextPos = { 600, 550 };					// 時間表示位置
-	const Vec2 kRankingTextPos = { 1250, 460 };				// "ランキング"表示位置
+	const Vec2 kRankingTextPos = { 1100, 460 };				// "ランキング"表示位置
 	constexpr float kTimeTextInterval = 100.0f;				// テキスト表示間隔
 	constexpr float kTotalTimeTextAdj = 350.0f;				// テキスト表示位置調整
 	constexpr float kTimeTextAdj = 250.0f;					// テキスト表示位置調整
@@ -31,7 +31,7 @@ namespace
 	const VECTOR kCameraTarget = VGet(0.0f, 0.0f, 0.0f);		// カメラの注視点
 
 	/*背景*/
-	constexpr int kBgColor = 0xb3b3b3; // 背景の色
+	constexpr int kBgColor = 0xb3b3b3;   // 背景の色
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
 	constexpr int kFadeFrame = 4;		 // フェード変化量
@@ -147,7 +147,7 @@ void SceneClear::Draw()
 
 	// ランキング表示
 	DrawStringFToHandle(kRankingTextPos.x, kRankingTextPos.y,
-		"ランキング", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
+		"オンラインランキング", kTextColorRed, Font::m_fontHandle[static_cast<int>(Font::FontId::kRankingText)]);
 	m_pRank->DrawClearRanking(m_totalClearTime);
 
 	// テキスト表示
