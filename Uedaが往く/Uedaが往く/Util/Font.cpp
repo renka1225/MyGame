@@ -34,6 +34,8 @@ namespace Font
 		{kFontName, 64, 4, DX_FONTTYPE_ANTIALIASING_8X8},
 		// Size50_4
 		{kFontName, 50, 4, DX_FONTTYPE_ANTIALIASING_8X8},
+		// Size50_4_EDGE
+		{kFontName, 50, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8},
 		// Size48_4
 		{kFontName, 48, 4, DX_FONTTYPE_ANTIALIASING_8X8},
 		// Size48_4_EDGE

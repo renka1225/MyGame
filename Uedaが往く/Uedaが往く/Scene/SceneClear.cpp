@@ -13,15 +13,25 @@
 // 定数
 namespace
 {
-	const char* const kSyoriTextPath = "data/UI/syori.png";	// 勝利のテキスト画像のファイル位置
-	const Vec2 kSyoriTextPos = { 650, 100 };				// 勝利のテキスト画像表示位置
+	/*テキスト関連*/
+	const Vec2 kSyoriTextPos = { 650, 80 };					// 勝利のテキスト画像表示位置
 	const Vec2 kTimeTextPos = { 600, 550 };					// 時間表示位置
 	const Vec2 kRankingTextPos = { 1250, 460 };				// "ランキング"表示位置
 	constexpr float kTimeTextInterval = 100.0f;				// テキスト表示間隔
 	constexpr float kTotalTimeTextAdj = 350.0f;				// テキスト表示位置調整
 	constexpr float kTimeTextAdj = 250.0f;					// テキスト表示位置調整
 	constexpr int kTextColor = 0xffffff;					// テキストの色
-	constexpr int kTextColorRed = 0xb50d0d;					// テキストの色(赤)
+	constexpr int kTextColorRed = 0xe60000;					// テキストの色(赤)
+
+	/*3Dモデル関連*/
+	const VECTOR kCaseModelPos = VGet(0.0f, -45.0f, 0.0f);		// モデル位置
+	const VECTOR kCaseModelScale = VGet(0.8f, 0.8f, 0.8f);		// モデル拡大率
+	const VECTOR kCaseModelAngle = VGet(0.0f, 0.0f, 0.0f);		// モデル角度
+	const VECTOR kCameraPos = VGet(0.0f, 50.0f, -120.0f);		// カメラの位置
+	const VECTOR kCameraTarget = VGet(0.0f, 0.0f, 0.0f);		// カメラの注視点
+
+	/*背景*/
+	constexpr int kBgColor = 0xb3b3b3; // 背景の色
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
 	constexpr int kFadeFrame = 4;		 // フェード変化量
@@ -38,7 +48,8 @@ SceneClear::SceneClear(int stageKind, std::vector<int> clearTime):
 	m_fadeAlpha = kStartFadeAlpha;
 	m_clearTime = clearTime;
 	m_stageKind = stageKind;
-	m_textHandle = LoadGraph(kSyoriTextPath);
+	m_textHandle = LoadGraph("data/UI/syori.png");
+	m_clearBgModel = MV1LoadModel("data/Model/clearBg.mv1");
 }
 
 
@@ -49,6 +60,7 @@ SceneClear::~SceneClear()
 {
 	StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kClear)]);
 	DeleteGraph(m_textHandle);
+	MV1DeleteModel(m_clearBgModel);
 }
 
 
@@ -67,6 +79,13 @@ void SceneClear::Init()
 	// ランキングの更新、取得
 	m_pRank->UpdateRanking(m_stageKind, m_totalClearTime);
 	m_pRank->GetRanking(m_stageKind);
+
+	// 3Dモデル更新
+	MV1SetPosition(m_clearBgModel, kCaseModelPos);
+	MV1SetScale(m_clearBgModel, kCaseModelScale);
+	MV1SetRotationXYZ(m_clearBgModel, kCaseModelAngle);
+	// カメラ位置更新
+	SetCameraPositionAndTarget_UpVecY(VAdd(kCaseModelPos, kCameraPos), kCameraTarget);
 }
 
 
@@ -99,11 +118,10 @@ std::shared_ptr<SceneBase> SceneClear::Update(Input& input)
 /// </summary>
 void SceneClear::Draw()
 {
-	// 背景表示
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xb3b3b3, true);
-
-	// 勝利の文字を表示
-	DrawGraphF(kSyoriTextPos.x, kSyoriTextPos.y, m_textHandle, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kBgColor, true); // 背景表示
+	MV1DrawModel(m_clearBgModel); // アタッシュケースのモデル表示
+	DrawGraphF(kSyoriTextPos.x, kSyoriTextPos.y, m_textHandle, true); // 勝利の文字を表示
+	m_pUI->DrawClearBgFrame();  // 枠表示
 
 	// トータルタイム表示
 	int totalMin = Conversion::ChangeMin(m_totalClearTime);

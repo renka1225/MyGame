@@ -11,6 +11,7 @@ namespace Font
 		kSize96_4,
 		kSize64_4,
 		kSize50_4,
+		kSize50_4_EDGE,
 		kSize48_4,
 		kSize48_4_EDGE,
 		kSize42_4,
@@ -33,13 +34,13 @@ namespace Font
 		kOption = kSize48_4,	  // オプションで使用する文字サイズ
 		// ScenePause
 		kPause = kSize42_4_EDGE,  // ポーズ画面で使用する文字サイズ
-		// SceneClear
-		kClearTime = kSize42_4,	  // 時間表示で使う文字サイズ
 		// SceneGameover
 		kGameover = kSize48_4,	  // ゲームオーバーで使う文字サイズ
+		// SceneClear
+		kClearTime = kSize42_4_EDGE,	// 時間表示で使う文字サイズ
 		// ランキング
-		kRanking = kSize42_4,
-		kRankingText = kSize50_4,
+		kRanking = kSize42_4_EDGE,
+		kRankingText = kSize50_4_EDGE,
 		//右下に表示するボタン表示の文字サイズ
 		kButtonText = kSize42_4_EDGE,
 		kClearButtonText = kSize36_4_EDGE,

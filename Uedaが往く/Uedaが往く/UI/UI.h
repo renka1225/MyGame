@@ -16,6 +16,7 @@ public:
 	void DrawMenuBg();			// メニューの背景表示
 	void DrawButtonText();		// ボタンテキスト表示
 	void DrawClearButtonText();	// クリア画面でのボタンテキスト表示
+	void DrawClearBgFrame();	// クリア画面の背景枠表示
 
 
 protected:

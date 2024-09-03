@@ -22,6 +22,11 @@ namespace
 	const Vec2 kPauseBackLTPos = { 600.0f, 200.0f };	// ポーズ画面の背景画像左上位置
 	const Vec2 kPauseBackRBPos = { 1320.0f, 880.0f };	// ポーズ画面の背景画像右下位置
 
+	const Vec2 kClearTimeBgFrameLTPos = { 170, 420 };	// クリア画面(クリアタイム部分)の背景画像左上位置
+	const Vec2 kClearTimeBgFrameRBPos = { 900, 950 };	// クリア画面(クリアタイム部分)の背景画像右下位置
+	const Vec2 kClearRankBgFrameLTPos = { 950, 420 };	// クリア画面(ランキング部分)の背景画像左上位置
+	const Vec2 kClearRankBgFrameRBPos = { 1800, 950 };	// クリア画面(ランキング部分)の背景画像右下位置
+
 	/*カーソル関連*/
 	constexpr float kCursorWidth = 489.0f;				// カーソルの横幅
 	constexpr float kOptionCursorWidth = 1000.0f;		// オプション画面のカーソルの横幅
@@ -179,4 +184,16 @@ void UI::DrawClearButtonText()
 
 	// ボタン画像表示
 	DrawRectRotaGraphF(kClearButtonPos.x, kClearButtonPos.y, kButtonSize * ButtonKind::kAButton, 0, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_buttonHandle, true);
+}
+
+
+/// <summary>
+/// クリア画面の背景枠表示
+/// </summary>
+void UI::DrawClearBgFrame()
+{
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
+	DrawExtendGraphF(kClearTimeBgFrameLTPos.x, kClearTimeBgFrameLTPos.y, kClearTimeBgFrameRBPos.x, kClearTimeBgFrameRBPos.y, m_handle[HandleKind::kBg], true);
+	DrawExtendGraphF(kClearRankBgFrameLTPos.x, kClearRankBgFrameLTPos.y, kClearRankBgFrameRBPos.x, kClearRankBgFrameRBPos.y, m_handle[HandleKind::kBg], true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

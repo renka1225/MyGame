@@ -145,9 +145,8 @@ void SceneStageBase::Draw()
 	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG
-	TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
+	//TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
 	DrawFormatString(0, 140, 0xffffff, "経過時間:%d", m_elapsedTime); // 経過時間描画
-	DrawFormatString(0, 400, 0xffffff, "X:%f,Y:%f,Z:%f", GetLightPosition().x, GetLightPosition().y, GetLightPosition().z);
 #endif
 }
 

@@ -20,4 +20,5 @@ private:
 	std::vector<int> m_clearTime;	// クリアタイム
 	int m_stageKind;				// クリアしたステージの種類
 	int m_textHandle;				// テキストの画像
+	int m_clearBgModel;				// クリア背景の3Dモデル
 };
