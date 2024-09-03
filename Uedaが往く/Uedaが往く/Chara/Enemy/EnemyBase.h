@@ -16,7 +16,8 @@ public:
 	virtual ~EnemyBase();
 	virtual void Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos) = 0;
 	virtual void Update(Player& player, Stage& stage, SceneStageBase& sceneStage) = 0;
-	virtual void Draw();
+	virtual void Draw() = 0;
+	virtual void DrawUi() = 0; // UIの表示
 	// 攻撃を受けた際の処理
 	virtual void OnDamage(float damage) override;
 	// プレイヤーとの当たり判定をチェックする

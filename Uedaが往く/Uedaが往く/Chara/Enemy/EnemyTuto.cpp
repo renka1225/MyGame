@@ -99,10 +99,8 @@ void EnemyTuto::Update(Player& player, Stage& stage, SceneStageBase& sceneStage)
 /// </summary>
 void EnemyTuto::Draw()
 {
-	EnemyBase::Draw();
+	MV1DrawModel(m_modelHandle);
 	m_pEffect->Draw();				  // エフェクト描画
-	m_pUIBattle->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyTuto));	// シルエット描画
-	m_pUIBattle->DrawEnemyHp(m_hp);	// HPゲージを表示
 
 	// 回避中は残像を表示する
 	if (m_currentState == State::kAvoid)
@@ -118,6 +116,16 @@ void EnemyTuto::Draw()
 	debug.DrawAimCol(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius);		// 腕
 	debug.DrawLegCol(m_col.legStartPos, m_col.legEndPos, m_colInfo.legRadius);		// 脚
 #endif
+}
+
+
+/// <summary>
+/// UI描画
+/// </summary>
+void EnemyTuto::DrawUi()
+{
+	m_pUIBattle->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyTuto));	// シルエット描画
+	m_pUIBattle->DrawEnemyHp(m_hp);	// HPゲージを表示
 }
 
 

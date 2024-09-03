@@ -28,8 +28,8 @@ namespace
 	
 	/*影*/
 	constexpr int kShadowMapSize = 4096;							  // 作成するシャドウマップのサイズ
-	const VECTOR kShadowAreaMinPos = VGet(2000.0f, 50.0f, 4000.0f);	  // シャドウマップに描画する最小範囲
-	const VECTOR kShadowAreaMaxPos = VGet(3500.0f, 100.0f, 5000.0f);   // シャドウマップに描画する最大範囲
+	const VECTOR kShadowAreaMinPos = VGet(2200.0f, 65.0f, 3800.0f);	  // シャドウマップに描画する最小範囲
+	const VECTOR kShadowAreaMaxPos = VGet(3000.0f, 100.0f, 5000.0f);  // シャドウマップに描画する最大範囲
 
 	constexpr int kStartFadeAlpha = 255; // スタート時のフェード値
 	constexpr int kFadeFrame = 8;		 // フェード変化量
@@ -124,10 +124,10 @@ void SceneStageBase::Draw()
 	SetUseShadowMap(0, m_shadowMap); // 描画に使用するシャドウマップを設定
 	m_pStage->Draw();				 // ステージ描画
 	m_pPlayer->Draw();				 // プレイヤー描画
+	m_pEnemy->Draw();				 // 敵描画
 	SetUseShadowMap(0, -1); // 描画に使用するシャドウマップの設定を解除
-	m_pEnemy->Draw();	 // 敵描画
 
-	//m_pEnemy->Draw();	 // 敵描画
+	m_pEnemy->DrawUi(); // 敵のUI描画
 
 	m_pUIBattle->DrawOperation(); // 操作説明を表示
 

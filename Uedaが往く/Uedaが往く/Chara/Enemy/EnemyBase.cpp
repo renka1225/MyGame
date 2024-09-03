@@ -35,11 +35,11 @@ EnemyBase::EnemyBase() :
 	m_angle = kInitAngle; // 真正面を向くようにする
 
 	// シャドウマップの準備
-	m_shadowMap = MakeShadowMap(kShadowMapSize, kShadowMapSize);
+	//m_shadowMap = MakeShadowMap(kShadowMapSize, kShadowMapSize);
 	// シャドウマップが想定するライトの方向をセット
-	SetShadowMapLightDirection(m_shadowMap, VGet(1.0f, 0.0f, 0.0f));
+	//SetShadowMapLightDirection(m_shadowMap, VGet(1.0f, 0.0f, 0.0f));
 	// シャドウマップに描画する範囲を設定
-	SetShadowMapDrawArea(m_shadowMap, kShadowAreaMinPos, kShadowAreaMaxPos);
+	//SetShadowMapDrawArea(m_shadowMap, kShadowAreaMinPos, kShadowAreaMaxPos);
 }
 
 
@@ -389,21 +389,6 @@ void EnemyBase::UpdateAngle()
 	}
 
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
-}
-
-
-/// <summary>
-/// 描画
-/// </summary>
-void EnemyBase::Draw()
-{
-	ShadowMap_DrawSetup(m_shadowMap); // シャドウマップへの描画の準備
-	MV1DrawModel(m_modelHandle);	 
-	ShadowMap_DrawEnd();			  // シャドウマップへの描画を終了
-
-	SetUseShadowMap(0, m_shadowMap); // 描画に使用するシャドウマップを設定
-	MV1DrawModel(m_modelHandle);	 // 敵モデル描画
-	SetUseShadowMap(0, -1);			 // 描画に使用するシャドウマップの設定を解除
 }
 
 
