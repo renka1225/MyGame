@@ -1,2 +1,0 @@
-C:\GitHub\MyGame\LightTest\x64\Debug\LightTest.exe
-C:\GitHub\MyGame\Test\LightTest\x64\Debug\LightTest.exe

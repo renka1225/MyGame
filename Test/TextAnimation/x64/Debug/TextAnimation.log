@@ -1,3 +1,0 @@
-﻿  Text1.cpp
-C:\Users\lotus\デスクトップ\TextAnimation\Text1.cpp(60,20): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  TextAnimation.vcxproj -> C:\Users\lotus\デスクトップ\TextAnimation\x64\Debug\TextAnimation.exe
