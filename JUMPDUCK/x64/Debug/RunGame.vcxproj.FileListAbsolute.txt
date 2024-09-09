@@ -1,3 +1,0 @@
-C:\GitHub\MyGame\RunGame\x64\Debug\RunGame.exe
-C:\Users\lotus\デスクトップ\MyGame\RunGame\x64\Debug\RunGame.exe
-C:\Users\fko2347058\Desktop\ueda\GitHub\MyGame\RunGame\x64\Debug\JUMPDUCK.exe
