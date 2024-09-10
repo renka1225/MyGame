@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Input.h"
 #include "Sound.h"
+#include "UI.h"
 #include "SceneSelectStage.h"
 #include "SceneTitle.h"
 #include "Game.h"
@@ -29,6 +30,7 @@ namespace
 	constexpr int kMaxAlpha = 255;					// 最大アルファ値
 	constexpr int kMinAlpha = 30;					// 最小アルファ値
 	constexpr int kTextTime = 120;					// テキストを表示するまでの時間
+	constexpr int kTextColor = 0x000000;			// テキストの色
 
 	/* OP動画*/
 	constexpr int kOpMoveTime = 65010;				// 動画の再生時間
@@ -87,9 +89,10 @@ void SceneTitle::Init()
 /// <returns>遷移先のポインタ</returns>
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
-	FadeOut(kFadeFrame); // フェードアウト
+	FadeOut(kFadeFrame);	// フェードアウト
+	if (m_isFadeOut) return shared_from_this(); // フェード中は操作できないようにする
 
-	m_opStartTime--;	// opを再生するまでの時間を更新
+	m_opStartTime--;	 // opを再生するまでの時間を更新
 
 	// 動画を再生する
 	if (m_opStartTime == 0)
@@ -102,7 +105,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		PlayMovieToGraph(m_handle[HandleKind::kOpMovie]);
 
 		// 動画が終了したかボタンを押した場合タイトルに戻る
-		const bool isMoveStop = TellMovieToGraph(m_handle[HandleKind::kOpMovie]) >= kOpMoveTime || input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y");
+		const bool isMoveStop = TellMovieToGraph(m_handle[HandleKind::kOpMovie]) >= kOpMoveTime || input.IsTriggered("A");
 		if (isMoveStop)
 		{
 			PauseMovieToGraph(m_handle[HandleKind::kOpMovie]);
@@ -133,7 +136,9 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	}
 
 	// シーン遷移
-	if (input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y"))
+	const bool isButton = input.IsTriggered("A") || input.IsTriggered("B") || input.IsTriggered("X") || input.IsTriggered("Y") ||
+		input.IsTriggered("up") || input.IsTriggered("down") || input.IsTriggered("left") || input.IsTriggered("right") || input.IsTriggered("LB") || input.IsTriggered("RB");
+	if (isButton)
 	{
 		FadeIn(kFadeFrame); // フェードイン
 		return std::make_shared<SceneSelectStage>(); // ステージ選択へ遷移
@@ -171,6 +176,7 @@ void SceneTitle::Draw()
 	if (m_opStartTime < 0)
 	{
 		DrawGraph(0, 0, m_handle[HandleKind::kOpMovie], true);
+		m_pUI->DrawTitleButtonText();
 	}
 
 	DrawFade();	// フェードインアウト描画

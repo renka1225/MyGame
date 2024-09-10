@@ -5,7 +5,6 @@
 #include "UIBattle.h"
 #include "EffectManager.h"
 #include "Sound.h"
-#include "Light.h"
 #include "Player.h"
 #include "EnemyBase.h"
 #include "Camera.h"
@@ -19,10 +18,11 @@ namespace
 	const VECTOR kPlayerInitPos = VGet(2600.0f, 69.0f, 4240.0f);  // プレイヤーの初期位置
 	const VECTOR kEnemyInitPos = VGet(2660, 69.0f, 4280.0f);	  // 敵の初期位置
 	constexpr int kChangeColorTime = 220;						  // 画面の表示を変更する時間
-	constexpr int kClearStagingTime = 240;						  // クリア演出の時間
-	constexpr int kNextBattleTime = 150;						  // 次の試合が始まるまでの時間
-	constexpr int kBattleEndSoundTime = 60;						  // コングのSEを鳴らす時間
-	constexpr int kClearBackColor = 0x0f2699;					  // クリア時の背景色
+	constexpr int kClearProductionTime = 240;					  // クリア演出の時間
+	constexpr int kGameoverProductionTime = 240;				  // ゲームオーバー演出の時間
+	constexpr int kNextBattleTime = 360;						  // 次の試合が始まるまでの時間
+	constexpr int kLastAttackSoundTime = 20;					  // 最後の攻撃SEを鳴らす時間
+	constexpr int kBattleEndSoundTime = 60;						  // クリアのコングのSEを鳴らす時間
 	constexpr int kMULAPal = 240;								  // 乗算ブレンド値
 	constexpr int kAddPal = 80;									  // 加算ブレンド値
 	
@@ -42,12 +42,12 @@ namespace
 SceneStageBase::SceneStageBase() :
 	m_battleNum(0),
 	m_nextBattleTime(kNextBattleTime),
-	m_clearStagingTime(kClearStagingTime),
+	m_clearProductionTime(kClearProductionTime),
+	m_gameoverProductionTime(kGameoverProductionTime),
 	m_elapsedTime(0),
 	m_isPause(false)
 {
-	//Light::SetLight();
-
+	//m_pLight->Create(m_pPlayer);
 	m_shadowMap = MakeShadowMap(kShadowMapSize, kShadowMapSize);
 	// シャドウマップが想定するライトの方向をセット
 	SetShadowMapLightDirection(m_shadowMap, GetLightPosition());
@@ -55,7 +55,6 @@ SceneStageBase::SceneStageBase() :
 	SetShadowMapDrawArea(m_shadowMap, kShadowAreaMinPos, kShadowAreaMaxPos);
 
 	m_fadeAlpha = kStartFadeAlpha;
-	m_pUIBattle = std::make_shared<UIBattle>();
 	m_pEffect = std::make_shared<EffectManager>();
 	m_clearBackHandle = LoadGraph("data/UI/clearBack.png");
 }
@@ -72,8 +71,10 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_pCamera(pCamera),
 	m_pStage(pStage),
 	m_pEnemy(nullptr),
+	m_pUIBattle(nullptr),
 	m_battleNum(0),
-	m_clearStagingTime(0),
+	m_clearProductionTime(0),
+	m_gameoverProductionTime(0),
 	m_nextBattleTime(0),
 	m_elapsedTime(0),
 	m_isPause(false),
@@ -88,7 +89,6 @@ SceneStageBase::SceneStageBase(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 /// </summary>
 SceneStageBase::~SceneStageBase()
 {
-	//Light::DeleteLight();
 	DeleteShadowMap(m_shadowMap); // シャドウマップの削除
 	DeleteGraph(m_clearBackHandle);
 }
@@ -105,7 +105,6 @@ void SceneStageBase::Init()
 		m_pCamera->Init();
 		m_pEnemy->Init(m_pEffect, kEnemyInitPos);
 	}
-
 	m_isPause = false;
 }
 
@@ -116,37 +115,39 @@ void SceneStageBase::Init()
 void SceneStageBase::Draw()
 {
 	ShadowMap_DrawSetup(m_shadowMap); // シャドウマップへの描画の準備
-	m_pStage->Draw();	 // ステージ描画
-	m_pPlayer->Draw();	 // プレイヤー描画
-	m_pEnemy->Draw();	 // 敵描画
-	ShadowMap_DrawEnd(); // シャドウマップへの描画を終了
+	m_pStage->Draw();				  // ステージ描画
+	m_pPlayer->Draw();				  // プレイヤー描画
+	m_pEnemy->Draw();				  // 敵描画
+	ShadowMap_DrawEnd();			  // シャドウマップへの描画を終了
 
 	SetUseShadowMap(0, m_shadowMap); // 描画に使用するシャドウマップを設定
 	m_pStage->Draw();				 // ステージ描画
 	m_pPlayer->Draw();				 // プレイヤー描画
 	m_pEnemy->Draw();				 // 敵描画
-	SetUseShadowMap(0, -1); // 描画に使用するシャドウマップの設定を解除
+	SetUseShadowMap(0, -1);			 // 描画に使用するシャドウマップの設定を解除
+	m_pEnemy->DrawUi();				 // 敵のUI描画
+	m_pUIBattle->DrawOperation();	 // 操作説明を表示
 
-	m_pEnemy->DrawUi(); // 敵のUI描画
-
-	m_pUIBattle->DrawOperation(); // 操作説明を表示
-
-	// クリア時画面の色味を変える
-	if (m_clearStagingTime < kClearStagingTime && m_clearStagingTime >= 0)
+	// クリア演出表示
+	const bool isClearProduction = m_clearProductionTime < kClearProductionTime && m_clearProductionTime >= 0;
+	if (isClearProduction)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_MULA, kMULAPal);
-		DrawGraph(0, 0, m_clearBackHandle, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-		SetDrawBlendMode(DX_BLENDMODE_ADD, kAddPal);
-		DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kClearBackColor, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		m_pPlayer->SetIsClearProduction(true);
+		m_pUIBattle->DrawClearProduction(m_clearProductionTime);
 	}
+	const bool isGameoverProduction = m_gameoverProductionTime < kGameoverProductionTime && m_gameoverProductionTime >= 0;
+	// ゲームオーバー演出表示
+	if (isGameoverProduction)
+	{
+		m_pPlayer->SetIsGameoverProduction(true);
+		m_pUIBattle->DrawGameoverProduciton();
+	}
+
 	DrawFade();	// フェードインアウト描画
 
 #ifdef _DEBUG
 	//TestDrawShadowMap(m_shadowMap, 0, 0, 320, 240); // 画面左上にシャドウマップをテスト描画
-	DrawFormatString(0, 140, 0xffffff, "経過時間:%d", m_elapsedTime); // 経過時間描画
+	DrawFormatString(0, 180, 0xffffff, "経過時間:%d", m_elapsedTime);
 #endif
 }
 
@@ -154,10 +155,17 @@ void SceneStageBase::Draw()
 /// <summary>
 /// クリア演出を行う
 /// </summary>
-void SceneStageBase::ClearStaging()
+void SceneStageBase::ClearProduction()
 {
 	// SEを鳴らす
-	if (m_clearStagingTime >= kClearStagingTime - kBattleEndSoundTime)
+	if (m_clearProductionTime >= kClearProductionTime && m_clearProductionTime >= kClearProductionTime - kLastAttackSoundTime)
+	{
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kLastAttack)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kLastAttack)], DX_PLAYTYPE_BACK);
+		}
+	}
+	else if (m_clearProductionTime >= kClearProductionTime - kBattleEndSoundTime)
 	{
 		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleEnd)]))
 		{
@@ -172,14 +180,15 @@ void SceneStageBase::ClearStaging()
 		}
 	}
 
-	if (m_clearStagingTime >= kClearStagingTime - kChangeColorTime)
+	if (m_clearProductionTime >= kClearProductionTime - kChangeColorTime)
 	{
-		m_clearStagingTime--;
+		m_clearProductionTime--;
 		return;
 	}
 
 	// クリア演出をリセット
-	m_clearStagingTime = 0;
+	m_clearProductionTime = 0;
+	m_pUIBattle->ResetClearProduction();
 	StopSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kClearCheers)]);
 }
 
@@ -190,10 +199,24 @@ void SceneStageBase::ClearStaging()
 void SceneStageBase::UpdateNextBattle()
 {
 	m_nextBattleTime = kNextBattleTime;
-	m_clearStagingTime = kClearStagingTime;
+	m_clearProductionTime = kClearProductionTime;
+	m_pUIBattle->ResetStartProduction();
+	m_pUIBattle->SetEnemyKind(m_pEnemy->GetEnemyType());
 	// プレイヤーの位置、カメラ位置を最初の状態に戻す
 	m_pPlayer->Recovery();
 	Init();
-
+	m_pPlayer->SetIsStartProduction(true);
 	FadeIn(kFadeFrame); // フェードイン
+}
+
+
+/// <summary>
+/// ゲームオーバー時の演出
+/// </summary>
+void SceneStageBase::GameoverProduction()
+{
+	if (m_gameoverProductionTime >= 0)
+	{
+		m_gameoverProductionTime--;
+	}
 }

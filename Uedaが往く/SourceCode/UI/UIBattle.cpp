@@ -9,64 +9,90 @@
 // 定数
 namespace
 {
-	const Vec2 kESilhouettePos = { 1700.0f, 870.0f };		// 敵キャラクターのシルエット位置
-	constexpr int kSilhouetteWidth = 268;					// キャラクターのシルエット画像幅
-	constexpr int kSilhouetteHeight = 213;					// キャラクターのシルエット画像高さ
+	/*試合開始時*/
+	constexpr int kEnemyNameDispStart = 300;				// 敵名を表示し始める時間
+	constexpr int kMatchNumDispStart = 200;					// 試合数を表示し始める時間
+	constexpr int kFightTextDispStart = 80;					// "Fight"のテキストを表示し始める時間
+	constexpr float kFightTextScele = 0.6f;					// "Fight"のテキストサイズ
+	const Vec2 kFightTextPos = { 960, 550 };				// "Fight"のテキスト位置
+	const Vec2 kStartEnemyNamePos = { 950, 500 };			// 敵の名前表示位置
+	const Vec2 kMatcheNumTextPos = { 850, 700 };			// 現在の試合数表示位置
+	constexpr int kMatchNumTextWidth = 260;					// 1つ当たりのテキストの幅
+	constexpr int kMatchNumTextInterval = 70;				// テキストの表示間隔
+	constexpr int kTextAdj = 60;							// テキストの表示間隔調整
+	constexpr float kMatchNumTextScele = 0.4f;				// 試合数のテキストサイズ
+	constexpr float kEnemyNameMinScale = 0.5f;				// 敵名最小サイズ
+	constexpr float kEnemyNameMaxScale = 10.0f;				// 敵名最大サイズ
+	constexpr float kEnemyNameChangeScale = 0.6f;			// 敵名サイズ変化量
 
+	/*クリア時*/
+	const Vec2 kClearBgPos = { 200, 0 };					// クリア背景位置
+	const Vec2 kGekihaTextPos = { 950, 500 };				// "撃破"テキスト位置
+	constexpr int kGekihaDispTime = 140;				    // "撃破"テキストを表示しはじめる時間
+	constexpr float kGekihaTextMinScale = 1.0f;				// "撃破"テキスト最小サイズ
+	constexpr float kGekihaTextMaxScale = 10.0f;			// "撃破"テキスト最大サイズ
+	constexpr float kGekihaTextChangeScale = 0.6f;			// "撃破"テキストサイズ変化量
+	constexpr int kMULAPal = 255;							// 乗算ブレンド値
+
+	/*キャラクターUI*/
+	constexpr int kSilhouetteWidth = 268;					// シルエット画像幅
+	constexpr int kSilhouetteHeight = 213;					// キャラクターのシルエット画像高さ
 	constexpr int kHpColor = 0xff0000;						// HPバーの色
 	constexpr int kDamageHpColor = 0xffd700;				// ダメージ時のHPバーの色
 	constexpr int kpGaugeColor = 0x0000ff;					// ゲージバーの色
-	constexpr int kIntervalTime = 50;						// HPバーが減少するまでの時間
-
-	/*試合開始時*/
-	constexpr int kFightTextDispStart = 80;					 // "Fight"のテキストを表示し始める時間
-	const Vec2 kFightTextPos = { 960, 550 };				 // "Fight"のテキスト位置
-	constexpr float kFightTextScele = 0.6f;					 // "Fight"のテキストサイズ
-	const Vec2 kMatcheNumTextPos = { 850, 600 };			 // 現在の試合数表示位置
-	constexpr int kMatchNumTextWidth = 260;					 // 1つ当たりのテキストの幅
-	constexpr int kMatchNumTextInterval = 70;				 // テキストの表示間隔
-	constexpr int kTextAdj = 60;							 // テキストの表示間隔調整
-	constexpr float kMatchNumTextScele = 0.5f;				 // 試合数のテキストサイズ
+	constexpr int kIntervalTime = 80;						// HPバーが減少するまでの時間
 
 	/*プレイヤーUI*/
-	const Vec2 kPlayerHpBarLT = { 25.0f, 50.0f };			 // HPバー左上位置
-	const Vec2 kPlayerHpBarRB = { 1000.0f, 80.0f };			 // HPバー右下位置
-	const Vec2 kPlayerCurrentHpLT = { 50.0f, 56.0f };		 // 現在のHP左上位置
-	constexpr float kPlayerHpWidth = 907.0f;				 // HPバーの横幅
+	const Vec2 kPSilhouettePos = { 130.0f, 100.0f };		 // プレイヤーのシルエット位置
+	const Vec2 kPNameBackPos = { 150.0f, 58.0f };			 // プレイヤーの名前の背景位置
+	const Vec2 kPNamePos = { 250.0f, 56.0f };				 // プレイヤーの名前位置
+	const Vec2 kPlayerHpBarLT = { 125.0f, 100.0f };			 // HPバー左上位置
+	const Vec2 kPlayerHpBarRB = { 950.0f, 130.0f };			 // HPバー右下位置
+	const Vec2 kPlayerCurrentHpLT = { 150.0f, 106.0f };		 // 現在のHP左上位置
+	constexpr float kPlayerHpWidth = 765.0f;				 // HPバーの横幅
 	constexpr float kPlayerHpHeight = 18.0f;				 // HPバーの縦幅
-		
-	const Vec2 kPlayerGaugeBarLT = { 25.0f, 95.0f };		 // ゲージバー左上位置
-	const Vec2 kPlayerGaugeBarRB = { 800.0f, 120.0f };		 // ゲージバー右下位置
-	const Vec2 kPlayerCurrentGaugeLT = { 40.0f, 100.0f };	 // 現在のゲージ量左上位置
-	constexpr float kPlayerGaugeWidth = 727.0f;				 // ゲージバーの横幅
+	const Vec2 kPlayerGaugeBarLT = { 125.0f, 145.0f };		 // ゲージバー左上位置
+	const Vec2 kPlayerGaugeBarRB = { 800.0f, 170.0f };		 // ゲージバー右下位置
+	const Vec2 kPlayerCurrentGaugeLT = { 145.0f, 150.0f };	 // 現在のゲージ量左上位置
+	constexpr float kPlayerGaugeWidth = 627.0f;				 // ゲージバーの横幅
 	constexpr float kPlayerGaugeHeight = 15.0f;				 // ゲージバーの縦幅
+	constexpr float kPSilhouetteScale = 0.7f;				 // プレイヤーのシルエットサイズ
 
 	/*敵UI*/
+	const Vec2 kESilhouettePos = { 1700.0f, 870.0f };		 // 敵キャラクターのシルエット位置
+	const Vec2 kENameBackPos = { 1350.0f, 928.0f };			 // 敵キャラクターの名前の背景位置
+	const Vec2 kENamePos = { 1460.0f, 924.0f };				 // 敵の名前位置
 	const Vec2 kEnemyHpBarLT = { 850.0f, 970.0f };			 // HPバー左上位置
 	const Vec2 kEnemyHpBarRB = { 1850.0f, 1000.0f };		 // HPバー右下位置
 	const Vec2 kEnemyCurrentHpLT = { 885.0f, 976.0f };		 // 現在のHP左上位置
 	constexpr float kEnemyHpWidth = 920.0f;					 // HPバーの横幅
 	constexpr float kEnemyHpHeight = 17.0f;					 // HPバーの縦幅
+	constexpr float kESilhouetteScale = 1.0f;				 // 敵のシルエットサイズ
 
 	/*操作説明画面*/
 	const Vec2 kOperationFramePos = { 1720.0f, 280.0f };	 // 枠表示位置
-	constexpr float kOperationWidth = 300.0f;				 // 枠の横幅
-	constexpr float kOperationHeight = 350.0f;				 // 枠の縦幅
-	constexpr int kOperationBackColor = 0x000000;			 // 枠の背景色
 	const Vec2 kOperationTextPos = { 1730.0f, 300.0f };		 // テキストの表示位置
 	const Vec2 kOperationButtonPos = { 1880.0f, 320.0f };	 // ボタン位置
+	constexpr float kOperationWidth = 250.0f;				 // 枠の横幅
+	constexpr float kOperationHeight = 390.0f;				 // 枠の縦幅
+	constexpr int kOperationBackColor = 0x000000;			 // 枠の背景色
+	constexpr int kOperationBackAlpha = 200;				 // α値
 	constexpr int kButtonSize = 32;						 	 // ボタン画像のサイズ
 	constexpr float kOperationButtonScale = 1.0f;		 	 // ボタンの拡大率
 	constexpr float kOperationInterval = 40.0f;				 // 表示間隔
 	constexpr int kTextColor = 0xffffff;					 // テキストの色
 
 	/*必殺技*/
-	const Vec2 kSpecialAttackButtonPos = { 760.0f, 140.0f }; // ボタン位置 
+	const Vec2 kSpecialAttackButtonPos = { 760.0f, 200.0f }; // ボタン位置 
 	constexpr float kSpecialAttackButtonScale = 1.2f;		 // ボタン拡大率
-	const Vec2 kSpecialAttackTextPos = { 620.0f, 120.0f };	 // テキスト位置
-	constexpr int kSpecialAttackTextColor = 0x1470cc;		 // テキストの色
+	const Vec2 kSpecialAttackTextPos = { 620.0f, 180.0f };	 // テキスト位置
+	constexpr int kSpecialAttackTextColor = 0x1470cc;		 // 必殺技を放てる場合のテキストの色
+	constexpr int kNotSpecialTextColor = 0x808080;			 // 必殺技が放てない場合のテキストの色
 	constexpr int kSpecialAttackTextEdgeColor = 0x0a3866;	 // テキスト縁の色
 	constexpr int kMaxPal = 255;							 // 最大加算値
+	constexpr float kSpecialTextMinScale = 1.0f;			 // "必殺技"テキスト最小サイズ
+	constexpr float kSpecialTextMaxScale = 8.0f;			 // "必殺技"テキスト最大サイズ
+	constexpr float kSpecialTextChangeScale = 0.6f;			 // "必殺技"テキストサイズ変化量
 
 	/*チュートリアル*/
 	const Vec2 kTutoTextPos = { 1300.0f, 770.0f };			// テキスト位置
@@ -74,39 +100,34 @@ namespace
 	constexpr float kTutoButtonScale = 1.2f;				// ボタン拡大率
 }
 
-/// <summary>
-/// コンストラクタ
-/// </summary>
-UIBattle::UIBattle():
-	m_decreaseHp(0),
-	m_currentHp(0),
-	m_maxHp(0),
-	m_damage(0.0f),
-	m_intervalTime(0)
-{
-	m_handle.resize(HandleKind::kHandleNum);
-	m_handle[HandleKind::kFightText] = LoadGraph("data/UI/Fight!.png");
-	m_handle[HandleKind::kNumText] = LoadGraph("data/UI/number.png");
-	m_handle[HandleKind::kGaugeBar] = LoadGraph("data/UI/Gauge.png");
-	m_handle[HandleKind::kSilhouette] = LoadGraph("data/UI/silhouette.png");
-}
-
 
 /// <summary>
 /// 引数つきコンストラクタ
 /// </summary>
-UIBattle::UIBattle(float maxHp):
+UIBattle::UIBattle(float maxHp, int charType) :
 	m_decreaseHp(maxHp),
 	m_currentHp(maxHp),
 	m_maxHp(maxHp),
 	m_damage(0.0f),
-	m_intervalTime(0)
+	m_intervalTime(0),
+	m_enemyNameScale(kEnemyNameMaxScale),
+	m_gekihaTextScale(kGekihaTextMaxScale),
+	m_specialTextScale(),
+	m_currentEnemy(charType)
 {
 	m_handle.resize(HandleKind::kHandleNum);
-	m_handle[HandleKind::kFightText] = LoadGraph("data/UI/Fight!.png");
-	m_handle[HandleKind::kNumText] = LoadGraph("data/UI/number.png");
-	m_handle[HandleKind::kGaugeBar] = LoadGraph("data/UI/Gauge.png");
+	m_handle[HandleKind::kTutoName] = LoadGraph("data/UI/Name/Akagi.png");
+	m_handle[HandleKind::kNinjaName] = LoadGraph("data/UI/Name/Bob.png");
+	m_handle[HandleKind::kCiefName] = LoadGraph("data/UI/Name/Sato.png");
+	m_handle[HandleKind::kOldManName] = LoadGraph("data/UI/Name/Abe.png");
+	m_handle[HandleKind::kNameBack] = LoadGraph("data/UI/nameBack.png");
+	m_handle[HandleKind::kGaugeBar] = LoadGraph("data/UI/gauge.png");
 	m_handle[HandleKind::kSilhouette] = LoadGraph("data/UI/silhouette.png");
+	m_handle[HandleKind::kFightText] = LoadGraph("data/UI/fight!.png");
+	m_handle[HandleKind::kGekihaText] = LoadGraph("data/UI/gekiha.png");
+	m_handle[HandleKind::kClearBg] = LoadGraph("data/UI/clearBg.png");
+	m_handle[HandleKind::kGameoverBg] = LoadGraph("data/UI/gameoverBg.png");
+	m_handle[HandleKind::kNumText] = LoadGraph("data/UI/number.png");
 }
 
 
@@ -163,22 +184,45 @@ void UIBattle::OnDamage(float damage)
 
 
 /// <summary>
-/// スタート時の演出表示
+/// スタート演出をリセットする
 /// </summary>
-/// <param name="time">経過時間</param>
+void UIBattle::ResetStartProduction()
+{
+	m_enemyNameScale = kEnemyNameMaxScale;
+}
+
+
+/// <summary>
+/// スタート演出表示
+/// </summary>
+/// <param name="time">演出経過時間</param>
 /// <param name="matchNum">現在の試合数</param>
 /// <param name="maxMatch">最大試合数</param>
+/// <param name="enemyKind">敵の種類</param>
 void UIBattle::DrawStartProduction(int time, int matchNum, int maxMatch)
 {
-	if (time > kFightTextDispStart)
+	// 敵の名前を表示
+	if (time < kEnemyNameDispStart && time > kFightTextDispStart)
+	{
+		// 敵名のサイズをだんだん小さくする
+		m_enemyNameScale -= kEnemyNameChangeScale;
+		m_enemyNameScale = std::max(kEnemyNameMinScale, m_enemyNameScale);
+
+		int sizeW, sizeH;
+		GetGraphSize(m_handle[m_currentEnemy], &sizeW, &sizeH);
+		DrawRectRotaGraphF(kStartEnemyNamePos.x, kStartEnemyNamePos.y, 0, 0, sizeW, sizeH, m_enemyNameScale, 0.0f, m_handle[m_currentEnemy], true);
+	}
+	// 試合数を表示
+	if (time < kMatchNumDispStart && time > kFightTextDispStart)
 	{
 		int sizeW, sizeH;
 		GetGraphSize(m_handle[HandleKind::kNumText], &sizeW, &sizeH);
-		// 現在の試合数を表示
+
+		// 現在の試合数表示
 		DrawRectRotaGraphF(kMatcheNumTextPos.x, kMatcheNumTextPos.y,
 			kMatchNumTextWidth * matchNum, 0, kMatchNumTextWidth, sizeH,
 			kMatchNumTextScele, 0.0f, m_handle[HandleKind::kNumText], true);
-		// /表示
+		// '/'表示
 		DrawRectRotaGraphF(kMatcheNumTextPos.x + kMatchNumTextInterval, kMatcheNumTextPos.y,
 			sizeW - kMatchNumTextWidth, 0, kMatchNumTextWidth, sizeH,
 			kMatchNumTextScele, 0.0f, m_handle[HandleKind::kNumText], true);
@@ -188,12 +232,65 @@ void UIBattle::DrawStartProduction(int time, int matchNum, int maxMatch)
 			kMatchNumTextScele, 0.0f, m_handle[HandleKind::kNumText], true);
 	}
 	// "Fight!"の文字を表示
-	else if (time < kFightTextDispStart && time > 0)
+	if (time < kFightTextDispStart && time > 0)
 	{
 		int sizeW, sizeH;
 		GetGraphSize(m_handle[HandleKind::kFightText], &sizeW, &sizeH);
 		DrawRectRotaGraphF(kFightTextPos.x, kFightTextPos.y, 0, 0, sizeW, sizeH, kFightTextScele, 0.0f, m_handle[HandleKind::kFightText], true);
 	}
+}
+
+
+/// <summary>
+/// クリア演出をリセットする
+/// </summary>
+void UIBattle::ResetClearProduction()
+{
+	m_gekihaTextScale = kGekihaTextMaxScale;
+}
+
+
+/// <summary>
+/// クリア演出表示
+/// </summary>
+/// <param name="time">現在のクリア演出時間</param>
+void UIBattle::DrawClearProduction(int time)
+{
+	SetDrawBlendMode(DX_BLENDMODE_MULA, kMULAPal);
+	DrawGraphF(kClearBgPos.x, kClearBgPos.y, m_handle[HandleKind::kClearBg], true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	if (time < kGekihaDispTime)
+	{
+		// テキストのサイズをだんだん小さくする
+		m_gekihaTextScale -= kGekihaTextChangeScale;
+		m_gekihaTextScale = std::max(kGekihaTextMinScale, m_gekihaTextScale);
+
+		int sizeW, sizeH;
+		GetGraphSize(m_handle[HandleKind::kGekihaText], &sizeW, &sizeH);
+		DrawRectRotaGraphF(kGekihaTextPos.x, kGekihaTextPos.y, 0, 0, sizeW, sizeH, m_gekihaTextScale, 0.0f, m_handle[HandleKind::kGekihaText], true);
+	}
+}
+
+
+/// <summary>
+/// ゲームオーバー演出を表示
+/// </summary>
+void UIBattle::DrawGameoverProduciton()
+{
+	SetDrawBlendMode(DX_BLENDMODE_MULA, kMULAPal);
+	DrawGraph(0 ,0, m_handle[HandleKind::kGameoverBg], true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+
+/// <summary>
+/// プレイヤーの名前を表示
+/// </summary>
+void UIBattle::DrawPlayerName()
+{
+	DrawGraphF(kPNameBackPos.x, kPNameBackPos.y, m_handle[HandleKind::kNameBack], true);
+	DrawStringFToHandle(kPNamePos.x, kPNamePos.y, "Ueda", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kCharaName)]);
 }
 
 
@@ -240,6 +337,31 @@ void UIBattle::DrawPlayerGauge(float currentGauge, float MaxGauge)
 
 
 /// <summary>
+/// 敵の名前を表示
+/// </summary>
+void UIBattle::DrawEnemyName(int charType)
+{
+	DrawGraphF(kENameBackPos.x, kENameBackPos.y, m_handle[HandleKind::kNameBack], true);
+	if (charType == HandleKind::kTutoName)
+	{
+		DrawStringFToHandle(kENamePos.x, kENamePos.y, "Akagi", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kCharaName)]);
+	}
+	if (charType == HandleKind::kNinjaName)
+	{
+		DrawStringFToHandle(kENamePos.x, kENamePos.y, "Bob", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kCharaName)]);
+	}
+	if (charType == HandleKind::kCiefName)
+	{
+		DrawStringFToHandle(kENamePos.x, kENamePos.y, "Sato", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kCharaName)]);
+	}
+	if (charType == HandleKind::kOldManName)
+	{
+		DrawStringFToHandle(kENamePos.x, kENamePos.y, "Abe", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kCharaName)]);
+	}
+}
+
+
+/// <summary>
 /// 敵のHPバーを表示
 /// </summary>
 /// <param name="currentHp">現在のHP</param>
@@ -263,26 +385,67 @@ void UIBattle::DrawEnemyHp(float currentHp)
 
 
 /// <summary>
-/// シルエット描画
+/// プレイヤーのシルエット描画
 /// </summary>
-void UIBattle::DrawSilhouette(int charType)
+void UIBattle::DrawPlayerSilhouette()
 {
-	DrawRectRotaGraphF(kESilhouettePos.x, kESilhouettePos.y, kSilhouetteWidth * charType, 0, kSilhouetteWidth, kSilhouetteHeight, 1.0f, 0.0f, m_handle[HandleKind::kSilhouette], true);
+	DrawRectRotaGraphF(kPSilhouettePos.x, kPSilhouettePos.y, 0, 0, kSilhouetteWidth, kSilhouetteHeight, kPSilhouetteScale, 0.0f, m_handle[HandleKind::kSilhouette], true);
+}
+
+
+/// <summary>
+/// 敵のシルエット描画
+/// </summary>
+/// <param name="charType">敵の種類</param>
+void UIBattle::DrawEnemySilhouette(int charType)
+{
+	DrawRectRotaGraphF(kESilhouettePos.x, kESilhouettePos.y, kSilhouetteWidth * charType, 0, kSilhouetteWidth, kSilhouetteHeight, kESilhouetteScale, 0.0f, m_handle[HandleKind::kSilhouette], true);
+}
+
+
+/// <summary>
+/// 必殺技の表示をリセットする
+/// </summary>
+void UIBattle::ResetSpecialAttack()
+{
+	m_specialTextScale = kSpecialTextMaxScale;
 }
 
 
 /// <summary>
 /// 必殺技のテキスト表示
 /// </summary>
-void UIBattle::DrawSpecialAttack()
+/// <param name="currentGauge">現在の必殺技ゲージ量</param>
+/// <param name="maxGauge">最大ゲージ量</param>
+void UIBattle::DrawSpecialAttack(float currentGauge, float maxGauge)
 {
-	DrawStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, "必殺技", kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)], kSpecialAttackTextEdgeColor);
-	SetDrawBlendMode(DX_BLENDMODE_ADD, kMaxPal);
-	DrawStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, "必殺技", kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)]);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// 必殺技を発動できる場合
+	if (currentGauge >= maxGauge)
+	{
+		m_specialTextScale -= kSpecialTextChangeScale;
+		m_specialTextScale = std::max(kSpecialTextMinScale, m_specialTextScale);
 
-	// ボタン画像表示
-	DrawRectRotaGraphF(kSpecialAttackButtonPos.x, kSpecialAttackButtonPos.y, kButtonSize * ButtonKind::kBButton, 0, kButtonSize, kButtonSize, kSpecialAttackButtonScale, 0.0f, m_buttonHandle, true);
+		DrawExtendStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, m_specialTextScale, m_specialTextScale, "必殺技",
+			kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)], kSpecialAttackTextEdgeColor);
+		SetDrawBlendMode(DX_BLENDMODE_ADD, kMaxPal);
+		DrawExtendStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, m_specialTextScale, m_specialTextScale, "必殺技",
+			kSpecialAttackTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)]);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		// ボタン画像表示
+		DrawRectRotaGraphF(kSpecialAttackButtonPos.x, kSpecialAttackButtonPos.y, kButtonSize * ButtonKind::kBButton, 0, 
+			kButtonSize, kButtonSize, kSpecialAttackButtonScale, 0.0f, m_buttonHandle, true);
+
+	}
+	// 必殺技を出せない場合
+	else
+	{
+		m_specialTextScale = kSpecialTextMinScale;
+
+		DrawExtendStringFToHandle(kSpecialAttackTextPos.x, kSpecialAttackTextPos.y, m_specialTextScale, m_specialTextScale, "必殺技",
+			kNotSpecialTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kSpecialAttack)]);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 }
 
 
@@ -292,9 +455,10 @@ void UIBattle::DrawSpecialAttack()
 void UIBattle::DrawOperation()
 {
 	// 背景を薄く表示する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kOperationBackAlpha);
 	DrawBoxAA(kOperationFramePos.x, kOperationFramePos.y, kOperationFramePos.x + kOperationWidth, kOperationFramePos.y + kOperationHeight, kOperationBackColor, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	DrawBoxAA(kOperationFramePos.x, kOperationFramePos.y, kOperationFramePos.x + kOperationWidth, kOperationFramePos.y + kOperationHeight, 0xff0000, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// テキスト表示
 	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kMove,
@@ -305,6 +469,8 @@ void UIBattle::DrawOperation()
 		"パンチ", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
 	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kKick,
 		"キック", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
+	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kSpecialAttack,
+		"必殺技", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
 	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kAvoid,
 		"回避", kTextColor, Font::m_fontHandle[static_cast<int>(Font::FontId::kOperation)]);
 	DrawStringFToHandle(kOperationTextPos.x, kOperationTextPos.y + kOperationInterval * OperationOrder::kGuard,
@@ -323,6 +489,8 @@ void UIBattle::DrawOperation()
 		kButtonSize * ButtonKind::kXButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// X
 	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kKick,
 		kButtonSize * ButtonKind::kYButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// Y
+	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kSpecialAttack,
+		kButtonSize * ButtonKind::kBButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// B
 	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kAvoid,
 		kButtonSize * ButtonKind::kAButton, 0, kButtonSize, kButtonSize, kOperationButtonScale, 0.0f, m_buttonHandle, true);	// A
 	DrawRectRotaGraphF(kOperationButtonPos.x, kOperationButtonPos.y + kOperationInterval * OperationOrder::kGuard,

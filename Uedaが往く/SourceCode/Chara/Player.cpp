@@ -15,12 +15,12 @@ namespace
 {
 	/*プレイヤー情報*/
 	constexpr float kMaxGauge = 100.0f;				// 最大ゲージ量
-	constexpr float kPunchGaugeCharge = 0.1f;		// パンチ時に増えるゲージ量
-	constexpr float kKickGaugeCharge = 0.13f;		// キック時に増えるゲージ量
-	constexpr float kDecreaseGauge = 0.15f;			// 攻撃を受けた際に減るゲージ量
-	constexpr float kSpecialAttackPower = 30.0f;	// 必殺技の攻撃力
-	constexpr float kSpecialAttackDist = 55.0f;		// 必殺技を発動できる範囲
-	constexpr float kHPRecoveryRate = 0.3f;			// プレイヤーのHPが回復する割合
+	constexpr float kPunchGaugeCharge = 2.8f;		// パンチ時に増えるゲージ量
+	constexpr float kKickGaugeCharge = 5.0f;		// キック時に増えるゲージ量
+	constexpr float kDecreaseGauge = 0.0f;			// 攻撃を受けた際に減るゲージ量
+	constexpr float kAttackDist = 50.0f;			// 攻撃範囲
+	constexpr float kAttackMove = 0.3f;				// 攻撃時の移動量
+	constexpr float kHPRecoveryRate = 1.0f;			// プレイヤーのHPが回復する割合
 	constexpr float kAngleSpeed = 0.2f;				// プレイヤー角度の変化速度
 	constexpr float kScale = 0.3f;					// プレイヤーモデルの拡大率
 	constexpr float kAdj = 3.0f;					// 敵に当たった時の位置調整量
@@ -29,6 +29,12 @@ namespace
 
 	/*アニメーション情報*/
 	constexpr float kAnimBlendMax = 1.0f;			// アニメーションブレンドの最大値
+
+	/*コントローラー*/
+	constexpr int kVibrationPower = 1000;				// 振動の強さ
+	constexpr int kVibrationTime = 150;					// 振動させる時間
+	constexpr int kSpecialAttackVibrationPower = 150;	// 必殺技時の振動の強さ
+	constexpr int kSpecialAttackVibrationTime = 10;		// 必殺技時の振動させる時間
 }
 
 
@@ -38,11 +44,12 @@ namespace
 Player::Player():
 	m_gauge(0.0f),
 	m_pToEVec(VGet(0.0f, 0.0f, 0.0f)),
-	m_targetMoveDir(kInitDir)
+	m_targetMoveDir(kInitDir),
+	m_isAccumulateGaugeSe(false)
 {
 	// キャラクター情報を読み込む
 	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kPlayer));
-	m_pUIBattle = std::make_shared<UIBattle>(m_status.maxHp);
+	m_pUIBattle = std::make_shared<UIBattle>(m_status.maxHp, static_cast<int>(CharaType::kPlayer));
 
 	m_hp = m_status.maxHp;
 	m_moveSpeed = 0.0f;
@@ -51,6 +58,7 @@ Player::Player():
 	m_punchComboTime = 0;
 	m_punchCoolTime = 0;
 	m_kickCoolTime = 0;
+	m_attackTime = 0;
 	m_avoidCoolTime = 0;
 	m_avoidCount = 0;
 	m_isMove = false;
@@ -79,8 +87,11 @@ void Player::Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos)
 {
 	m_pos = pos;
 	m_pEffect = pEffect;
-	m_isSpecialAttack = false;
+	m_isStartProduction = true;
+	m_isClearProduction = false;
+	m_isGameoverProduction = false;
 	m_isAttack = false;
+	m_isSpecialAttack = false;
 	m_targetMoveDir = kInitDir;
 	MV1SetPosition(m_modelHandle, m_pos);
 	m_currentState = CharacterBase::State::kFightIdle;
@@ -108,16 +119,33 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 	// プレイヤーの状態を更新
 	CharacterBase::State prevState = m_currentState;
 
-	// 必殺技を発動中はほかの処理をできないようにする
-	if(!m_isSpecialAttack)
+	// 攻撃処理の更新
+	m_attackTime--;
+
+	// 特定の状態中はほかの処理をできないようにする
+	const bool isUpdate = (m_currentState == CharacterBase::State::kDown) || !m_isSpecialAttack && !m_isStartProduction && !m_isClearProduction && !m_isGameoverProduction;
+	if(isUpdate)
 	{	
 		Punch(input);						// パンチ処理
 		Kick(input);						// キック処理
 		Avoid(input, stage, moveVec);		// 回避処理
-		Fighting(input);					// 構え処理
 		Guard(input);						// ガード処理
+		Fighting(input);					// 構え処理
 	}
-	SpecialAttack(input, enemy);			// 必殺技処理
+	else if (m_isClearProduction)
+	{
+		DestroyEnemy();						// 敵撃破時処理
+
+	}
+	else if (m_isGameoverProduction)
+	{
+		Gameover();							// ゲームオーバー処理
+	}
+
+	if (!m_isClearProduction && !m_isGameoverProduction)
+	{
+		SpecialAttack(input, enemy);		// 必殺技処理
+	}
 
 	m_currentState = UpdateMoveParameter(input, camera, upMoveVec, leftMoveVec, moveVec); // 移動処理
 
@@ -142,12 +170,12 @@ void Player::Update(const Input& input, const Camera& camera, EnemyBase& enemy, 
 /// </summary>
 void Player::Draw()
 {
-	MV1DrawModel(m_modelHandle); // プレイヤー描画
-
-	m_pEffect->Draw();			 // エフェクト描画
-	// ゲージを表示
-	m_pUIBattle->DrawPlayerHP(m_hp);
-	m_pUIBattle->DrawPlayerGauge(m_gauge, kMaxGauge);
+	MV1DrawModel(m_modelHandle);					  // プレイヤー描画
+	m_pEffect->Draw();								  // エフェクト描画
+	m_pUIBattle->DrawPlayerSilhouette();			  // シルエット描画
+	m_pUIBattle->DrawPlayerName();					  // プレイヤー名表示
+	m_pUIBattle->DrawPlayerHP(m_hp);				  // HPゲージを表示
+	m_pUIBattle->DrawPlayerGauge(m_gauge, kMaxGauge); // ゲージ表示
 
 	// 回避中は残像を表示する
 	if (m_currentState == State::kAvoid)
@@ -155,17 +183,13 @@ void Player::Draw()
 		DrawAfterImage();
 	}
 
-	// プレイヤーと敵の距離を求める
-	float pToEDist = VSize(m_pToEVec);
-	// ゲージが溜まっている、かつ敵に近づいた場合必殺技の文字を表示する
-	if (m_gauge >= kMaxGauge && VSize(m_targetMoveDir) && pToEDist <= kSpecialAttackDist)
-	{
-		m_pUIBattle->DrawSpecialAttack();
-	}
+	// 必殺技の文字を表示する
+	m_pUIBattle->DrawSpecialAttack(m_gauge, kMaxGauge);
+
 
 #ifdef _DEBUG	// デバッグ表示
 	DebugDraw debug;
-	debug.DrawPlayerInfo(m_pos, m_hp, static_cast<int>(m_currentState));
+	debug.DrawPlayerInfo(m_pos, m_hp, static_cast<int>(m_currentState), m_attackTime);
 	// 当たり判定描画
 	debug.DrawBodyCol(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius); // 全身
 	debug.DrawAimCol(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius);		// 腕
@@ -198,8 +222,8 @@ void Player::OnDamage(float damage)
 	else
 	{
 		m_isAttack = false;
-		m_gauge -= kDecreaseGauge;
 		Receive();
+		OffGuard();
 	}
 }
 
@@ -209,7 +233,7 @@ void Player::OnDamage(float damage)
 /// </summary>
 void Player::Recovery()
 {
-	// 次試合の前にHPを回復する
+	// 次試合の前にHPを全回復する
 	m_hp = std::min(m_hp + m_status.maxHp * kHPRecoveryRate, m_status.maxHp);
 }
 
@@ -236,28 +260,36 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	// パンチ状態かどうか
 	bool isStatePunch = m_currentState == CharacterBase::State::kPunch1 || m_currentState == CharacterBase::State::kPunch2 || m_currentState == CharacterBase::State::kPunch3;
 
-	// 1コンボ目が当たった場合
+	// パンチが当たった場合
 	if (isHitPunch && isStatePunch)
 	{
+		if (m_attackTime > 0) return;
+		AdjAttackPos(enemy); // 敵に近づく
+
 		// 敵がガードしていないか、背後から攻撃した場合
 		if (!enemy.GetIsGuard() || isBackAttack)
 		{
+			VibrationPad(); // パッドを振動させる
+
 			// 1コンボ目
 			if (m_currentState == CharacterBase::State::kPunch1)
 			{
 				enemy.OnDamage(m_status.punchPower);
-				m_gauge += kPunchGaugeCharge;					// ゲージを増やす
+				m_attackTime = m_status.punchTime;
+				m_gauge += kPunchGaugeCharge;	// 必殺技ゲージを増やす
 			}
 			// 2コンボ目
 			if (m_currentState == CharacterBase::State::kPunch2)
 			{
 				enemy.OnDamage(m_status.secondPunchPower);
+				m_attackTime = m_status.punchTime;
 				m_gauge += kPunchGaugeCharge;
 			}
 			// 3コンボ目
 			if (m_currentState == CharacterBase::State::kPunch3)
 			{
 				enemy.OnDamage(m_status.thirdPunchPower);
+				m_attackTime = m_status.punchTime;
 				m_gauge += kPunchGaugeCharge;
 			}
 		}
@@ -269,10 +301,14 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	// キックが当たった場合
 	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
+		if (m_attackTime > 0) return;
+		AdjAttackPos(enemy); // 敵に近づく
 
 		if (!enemy.GetIsGuard() || isBackAttack)
 		{
 			enemy.OnDamage(m_status.kickPower);
+			VibrationPad();	 // パッドを振動させる
+			m_attackTime = m_status.kickTime;
 			m_gauge += kKickGaugeCharge;
 		}
 		else
@@ -284,9 +320,7 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	else if(isHit)
 	{
 		// プレイヤーの位置を補正する
-		VECTOR collisionNormal = VSub(m_pos, enemy.GetPos());
-		collisionNormal = VNorm(collisionNormal);
-
+		VECTOR collisionNormal = VNorm(VSub(m_pos, enemy.GetPos()));
 		m_pos = VAdd(m_pos, VScale(collisionNormal, kAdj));
 	}
 
@@ -295,6 +329,21 @@ void Player::CheckHitEnemyCol(EnemyBase& enemy, VECTOR eCapPosTop, VECTOR eCapPo
 	{
 		// 掴み失敗のアニメーションを再生する
 		PlayAnim(CharacterBase::AnimKind::kStumble);
+	}
+
+	// ゲージが溜まったらSEを再生する
+	if (m_gauge >= kMaxGauge && !m_isAccumulateGaugeSe)
+	{
+		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAccumulateGauge)]))
+		{
+			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAccumulateGauge)], DX_PLAYTYPE_BACK);
+			m_isAccumulateGaugeSe = true;
+		}
+	}
+
+	if (m_gauge < kMaxGauge)
+	{
+		m_isAccumulateGaugeSe = false;
 	}
 
 	// ゲージ量の調整
@@ -334,8 +383,9 @@ void Player::Move(const VECTOR& moveVec, Stage& stage)
 /// <returns>現在の状態</returns>
 void Player::Punch(const Input& input)
 {
-	// 攻撃中はまたは攻撃を受けている最中はスキップ
-	if (m_isAttack || m_isReceive) return;
+	// 特定の状態中はスキップ
+	const bool isSkip = m_isAttack || m_isReceive || m_isGuard || m_isClearProduction || m_hp <= 0;
+	if (isSkip) return;
 
 	// パンチできない場合
 	if (m_punchCoolTime > 0)
@@ -349,6 +399,8 @@ void Player::Punch(const Input& input)
 
 	if (input.IsTriggered("punch"))
 	{
+		m_isGuard = false;
+
 		// コンボ入力受付時間内にボタンが押された場合
 		if (m_punchComboTime > 0)
 		{
@@ -384,7 +436,7 @@ void Player::Punch(const Input& input)
 			PlayAnim(AnimKind::kPunch3);
 			break;
 		case 3:
-			m_punchCount = 0;
+			m_punchCount = -1;
 			m_punchCoolTime = m_status.punchCoolTime;	// クールダウンタイムを設定
 			break;
 		default:
@@ -401,8 +453,9 @@ void Player::Punch(const Input& input)
 /// <returns>現在の状態</returns>
 void Player::Kick(const Input& input)
 {
-	// 攻撃中はまたは攻撃を受けている最中はスキップ
-	if (m_isAttack || m_isReceive) return;
+	// 特定の状態中はスキップ
+	const bool isSkip = m_isAttack || m_isReceive || m_isClearProduction || m_isGuard || m_hp <= 0;;
+	if (isSkip) return;
 
 	// キックできない場合
 	if (m_kickCoolTime > 0)
@@ -416,6 +469,7 @@ void Player::Kick(const Input& input)
 	{
 		m_isAttack = true;
 		m_isFighting = false;
+		m_isGuard = false;
 		m_kickCoolTime = m_status.kickCoolTime;	// クールダウンタイムを設定
 		m_currentState = CharacterBase::State::kKick;
 		PlayAnim(AnimKind::kKick);
@@ -430,6 +484,10 @@ void Player::Kick(const Input& input)
 /// <returns>現在の状態</returns>
 void Player::Avoid(const Input& input, Stage& stage, VECTOR& moveVec)
 {
+	// 特定の状態中はスキップ
+	const bool isSkip = m_isGuard || m_isClearProduction || m_hp <= 0;
+	if (isSkip) return;
+
 	// 回避できない場合
 	if (m_avoidCoolTime > 0)
 	{
@@ -441,6 +499,7 @@ void Player::Avoid(const Input& input, Stage& stage, VECTOR& moveVec)
 	if (input.IsTriggered("avoidance"))
 	{
 		m_isFighting = false;
+		m_isGuard = false;
 		m_avoidCount++;
 		// 回避数が最大になった場合
 		if (m_avoidCount > m_status.maxAvoidCount)
@@ -478,9 +537,15 @@ void Player::Avoid(const Input& input, Stage& stage, VECTOR& moveVec)
 /// <returns>現在の状態</returns>
 void Player::Fighting(const Input& input)
 {
+	// 特定の状態中はスキップ
+	const bool isSkip = m_isAttack || m_isReceive || m_isGuard || m_isClearProduction || m_hp <= 0;
+	if (isSkip) return;
+
 	if (input.IsTriggered("fighting"))
 	{
 		m_isFighting = true;
+		m_isAttack = false;
+		m_isGuard = false;
 		m_currentState = CharacterBase::State::kFightWalk;
 		PlayAnim(AnimKind::kFightWalk);
 	}
@@ -500,17 +565,20 @@ void Player::Fighting(const Input& input)
 /// <returns>現在の状態</returns>
 void Player::Guard(const Input& input)
 {
+	if (m_isClearProduction || m_hp <= 0) return; // 演出時は操作できないようにする
+	
 	if (input.IsTriggered("guard"))
 	{
+		m_isAttack = false;
+		m_isFighting = false;
 		m_isGuard = true;
+		m_attackTime = 0;
 		m_currentState = CharacterBase::State::kGuard;
 		PlayAnim(AnimKind::kGuard);
 	}
 	else if (input.IsReleased("guard"))
 	{
-		m_isGuard = false;
-		m_currentState = CharacterBase::State::kFightIdle;
-		PlayAnim(AnimKind::kFightIdle);
+		OffGuard();
 	}
 }
 
@@ -532,15 +600,12 @@ void Player::OffGuard()
 void Player::Receive()
 {
 	m_currentState = CharacterBase::State::kReceive;
-
-	// 攻撃を受けている間は更新しない
-	if (!m_isReceive)
-	{
-		m_isReceive = true;
-		PlayAnim(CharacterBase::AnimKind::kReceive);
-		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));				 // 攻撃エフェクト表示
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK); // 攻撃SE再生
-	}
+	PlayAnim(CharacterBase::AnimKind::kReceive);
+	m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));				 // 攻撃エフェクト表示
+	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK); // 攻撃SE再生
+	// ゲージを減らす
+	m_gauge -= kDecreaseGauge;
+	m_pUIBattle->ResetSpecialAttack();
 }
 
 
@@ -552,14 +617,15 @@ void Player::SpecialAttack(const Input& input, EnemyBase& enemy)
 {
 	if (m_isSpecialAttack)
 	{
-		enemy.OnDamage(kSpecialAttackPower);
+		VibrationPad(); // パッドを振動させる
+		enemy.OnDamage(m_status.specialAttackPower);
 	}
 
 	// プレイヤーと敵の距離を求める
 	float pToEDist = VSize(m_pToEVec);
 
 	// ゲージが溜まっていない、または敵が近くにいないときは必殺技を出せないようにする
-	if (m_gauge < kMaxGauge || pToEDist >= kSpecialAttackDist) return;
+	if (m_gauge < kMaxGauge || pToEDist >= kAttackDist) return;
 
 	// ボタンを押したら必殺技を発動する
 	if (input.IsTriggered("special"))
@@ -575,6 +641,43 @@ void Player::SpecialAttack(const Input& input, EnemyBase& enemy)
 			PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kSpecialAttack)], DX_PLAYTYPE_BACK); // SEを鳴らす
 		}
 	}
+}
+
+
+/// <summary>
+/// 攻撃時に位置を位置を調整する
+/// </summary>
+void Player::AdjAttackPos(EnemyBase& enemy)
+{
+	if (VSize(m_pToEVec) > kAttackDist)
+	{
+		m_pos = VAdd(m_pos, VScale(m_pToEVec, kAttackMove));
+	}
+}
+
+
+/// <summary>
+/// 敵を倒した時の処理
+/// </summary>
+void Player::DestroyEnemy()
+{
+	// 待機状態にする
+	m_currentState = State::kFightIdle;
+	PlayAnim(AnimKind::kFightIdle);
+}
+
+
+/// <summary>
+/// ゲームオーバー時の処理
+/// </summary>
+void Player::Gameover()
+{
+	m_isAttack = false;
+	m_isFighting = false;
+	m_isGuard = false;
+	// ダウン状態にする
+	m_currentState = CharacterBase::State::kDown;
+	PlayAnim(CharacterBase::AnimKind::kDown);
 }
 
 
@@ -609,8 +712,9 @@ Player::CharacterBase::State Player::UpdateMoveParameter(const Input& input, con
 	// 移動したか(true:移動した)
 	bool isPressMove = false;
 
-	// 攻撃中、ガード中でない場合
-	if (!m_isAttack && !m_isSpecialAttack && !m_isGuard )
+	// 特定の状態中は動けないようにする
+	const bool isMove = !m_isAttack && !m_isSpecialAttack && !m_isGuard && !m_isStartProduction && !m_isClearProduction && !m_isGameoverProduction;
+	if (isMove)
 	{
 		// ボタンを押したら移動
 		if (input.IsPressing("up"))
@@ -705,4 +809,20 @@ void Player::UpdateAngle(EnemyBase& enemy)
 		m_angle = atan2f(m_targetMoveDir.x, m_targetMoveDir.z);
 	}
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
+}
+
+
+/// <summary>
+/// パッドを振動させる
+/// </summary>
+void Player::VibrationPad()
+{
+	if (m_isSpecialAttack)
+	{
+		StartJoypadVibration(DX_INPUT_PAD1, kSpecialAttackVibrationPower, kSpecialAttackVibrationTime, -1);
+	}
+	else
+	{
+		StartJoypadVibration(DX_INPUT_PAD1, kVibrationPower, kVibrationTime, -1);
+	}
 }

@@ -25,10 +25,20 @@ CharacterBase::CharacterBase():
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_moveSpeed(0.0f),
 	m_angle(0.0f),
+	m_punchCount(0),
+	m_punchComboTime(0),
+	m_punchCoolTime(0),
+	m_kickCoolTime(0),
+	m_attackTime(0),
+	m_avoidCoolTime(0),
+	m_avoidCount(0),
 	m_isAttack(false),
 	m_isGuard(false),
 	m_isReceive(false),
 	m_isSpecialAttack(false),
+	m_isStartProduction(false),
+	m_isClearProduction(false),
+	m_isGameoverProduction(false),
 	m_modelHandle(-1),
 	m_currentPlayAnim(-1),
 	m_currentAnimCount(0.0f),
@@ -374,6 +384,18 @@ void CharacterBase::UpdateAnim()
 		{
 			m_currentAnimCount += m_animSpeed.receive;
 		}
+		else if (m_currentState == CharacterBase::State::kDown)
+		{
+			m_currentAnimCount += m_animSpeed.down;
+			// アニメーションを一時停止する
+			if (m_currentAnimCount > animTotalTime)
+			{
+				m_currentAnimCount = animTotalTime;
+				MV1SetAttachAnimTime(m_modelHandle, m_currentPlayAnim, m_currentAnimCount);
+				MV1SetAttachAnimBlendRate(m_modelHandle, m_currentPlayAnim, m_animBlendRate);
+				return;
+			}
+		}
 		else
 		{
 			m_currentAnimCount += m_animSpeed.fightIdle;
@@ -444,10 +466,6 @@ void CharacterBase::UpdateAnim()
 		{
 			m_prevAnimCount += m_animSpeed.avoid;
 		}
-		else if (m_currentState == CharacterBase::State::kAvoid)
-		{
-			m_prevAnimCount += m_animSpeed.specialAttack;
-		}
 		else if (m_currentState == CharacterBase::State::kFightWalk)
 		{
 			// 移動時のみアニメーションを再生
@@ -471,6 +489,10 @@ void CharacterBase::UpdateAnim()
 		else if (m_currentState == CharacterBase::State::kReceive)
 		{
 			m_prevAnimCount += m_animSpeed.receive;
+		}
+		else if (m_currentState == CharacterBase::State::kDown)
+		{
+			m_prevAnimCount += m_animSpeed.down;
 		}
 		else
 		{

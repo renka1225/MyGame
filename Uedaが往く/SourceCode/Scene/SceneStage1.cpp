@@ -16,8 +16,9 @@
 namespace
 {
 	constexpr int kMaxBattleNum = 1;		// 最大バトル数
-	constexpr int kFightTextDispStart = 80;	// "Fight"のテキストを表示し始める時間
+	constexpr int kStartSeTime = 60;		// スタートSEを再生表示し始める時間
 	constexpr int kFadeFrame = 4;			// フェード変化量
+	constexpr int kGameoverFadeFrame = 1;	// ゲームオーバー時のフェード変化量
 
 	/*チュートリアル*/
 	// 背景画像のパス
@@ -37,6 +38,7 @@ SceneStage1::SceneStage1(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pCamera = pCamera;
 	m_pStage = pStage;
 	m_pEnemy = std::make_shared<EnemyTuto>();
+	m_pUIBattle = std::make_shared<UIBattle>(0.0f, m_pEnemy->GetEnemyType());
 	m_battleNum = 0;
 
 	m_tutoHandle.resize(TutoHandle::kTutoHandleNum);
@@ -108,9 +110,8 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	if (m_debugState != DebugState::Pause || input.IsTriggered("debug_pause"))
 #endif
 	{
-		FadeOut(kFadeFrame); // フェードアウト
-
-		UpdateSound();		// サウンド更新
+		FadeOut(kFadeFrame);	// フェードアウト
+		UpdateSound();			// サウンド更新
 
 		// ポーズ画面を開く
 		if (input.IsTriggered("pause"))
@@ -119,9 +120,10 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 			return std::make_shared<ScenePause>(shared_from_this());
 		}
 
-		// チュートリアル表示中、クリア演出中は動けないようにする
-		if (!m_isTuto && !(m_pEnemy->GetHp() <= 0 && m_clearStagingTime > 0))
+		// チュートリアル表示中は動けないようにする
+		if (!m_isTuto)
 		{
+			m_pCamera->StartProduction();
 			m_pCamera->Update(input, *m_pPlayer);
 			m_pPlayer->Update(input, *m_pCamera, *m_pEnemy, *m_pStage);
 			m_pEnemy->Update(*m_pPlayer, *m_pStage, *this);
@@ -130,17 +132,25 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 		UpdateTuto(input);	// チュートリアルの表示状態を更新する
 		if (m_isTuto) return shared_from_this();
 
-		m_nextBattleTime--; // 次の試合が始まるまでの時間
-		if (m_nextBattleTime > 0) return shared_from_this();
+		// スタート演出の更新
+		m_nextBattleTime--;
+		if (m_nextBattleTime > 0)
+		{
+			return shared_from_this();
+		}
+		else
+		{
+			m_pPlayer->SetIsStartProduction(false);
+		}
 
 		// 敵のHPが0になった場合
 		if (m_pEnemy->GetHp() <= 0)
 		{
 			// クリア演出を行う
-			ClearStaging();
+			ClearProduction();
 
 			// クリア演出が終わったら次のバトルに移行する
-			if (m_clearStagingTime <= 0)
+			if (m_clearProductionTime <= 0)
 			{
 				UpdateNextBattle();
 				FadeIn(kFadeFrame); // フェードイン
@@ -151,8 +161,16 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 		// プレイヤーのHPが0になった場合
 		else if (m_pPlayer->GetHp() <= 0)
 		{
-			FadeIn(kFadeFrame); // フェードイン
-			return std::make_shared<SceneGameover>(shared_from_this());
+			if (m_gameoverProductionTime > 0)
+			{
+				GameoverProduction();
+			}
+			else
+			{
+				FadeIn(kGameoverFadeFrame); // フェードイン
+				StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]);
+				return std::make_shared<SceneGameover>(shared_from_this());
+			}
 		}
 		else
 		{
@@ -170,8 +188,16 @@ std::shared_ptr<SceneBase> SceneStage1::Update(Input& input)
 	}
 	else if (m_pPlayer->GetHp() <= 0.0f || input.IsTriggered("debug_gameover"))
 	{
-		StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]);
-		return std::make_shared<SceneGameover>(shared_from_this());
+		if (m_gameoverProductionTime > 0)
+		{
+			GameoverProduction();
+		}
+		else
+		{
+			FadeIn(kGameoverFadeFrame); // フェードイン
+			StopSoundMem(Sound::m_bgmHandle[static_cast<int>(Sound::BgmKind::kStage1)]);
+			return std::make_shared<SceneGameover>(shared_from_this());
+		}
 	}
 #endif
 
@@ -207,7 +233,7 @@ void SceneStage1::Draw()
 /// </summary>
 void SceneStage1::UpdateSound()
 {
-	if (m_nextBattleTime < kFightTextDispStart && m_nextBattleTime > 0)
+	if (m_nextBattleTime < kStartSeTime && m_nextBattleTime > 0)
 	{
 		// 開始時に1度だけSEを流す
 		if (!CheckSoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kBattleStart)]))

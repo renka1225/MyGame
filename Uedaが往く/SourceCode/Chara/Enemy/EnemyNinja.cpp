@@ -24,8 +24,8 @@ EnemyNinja::EnemyNinja()
 {
 	// キャラクター情報を読み込む
 	m_pLoadData = std::make_shared<LoadData>(*this, static_cast<int>(CharaType::kEnemyNinja));
-	m_pUIBattle = std::make_shared<UIBattle>(m_status.maxHp);
-
+	m_enemyType = static_cast<int>(CharaType::kEnemyNinja);
+	m_pUIBattle = std::make_shared<UIBattle>(m_status.maxHp, m_enemyType);
 	m_hp = m_status.maxHp;
 	m_pos = kInitPos;
 	m_moveSpeed = m_status.maxMoveSpeed;
@@ -54,6 +54,7 @@ void EnemyNinja::Init(std::shared_ptr<EffectManager> pEffect, VECTOR pos)
 	m_pEffect = pEffect;
 	MV1SetPosition(m_modelHandle, m_pos);
 	m_pEffect->Init();	// エフェクトの初期化
+	//m_pUIBattle->SetEnemyKind(static_cast<int>(CharaType::kEnemyNinja));
 }
 
 
@@ -71,6 +72,9 @@ void EnemyNinja::Update(Player& player, Stage& stage, SceneStageBase& sceneStage
 
 	// エネミーの状態を更新
 	CharacterBase::State prevState = m_currentState;
+
+	// 攻撃処理の更新
+	m_attackTime--;
 
 	// 敵の位置からプレイヤー位置までのベクトルを求める
 	m_eToPDirVec = VSub(player.GetPos(), m_pos);
@@ -109,7 +113,7 @@ void EnemyNinja::Draw()
 
 #ifdef _DEBUG
 	DebugDraw debug;
-	debug.DrawEnemyInfo(m_pos, m_hp, static_cast<int>(m_currentState));
+	debug.DrawEnemyInfo(m_pos, m_hp, static_cast<int>(m_currentState), m_attackTime);
 	// 当たり判定描画
 	debug.DrawBodyCol(m_col.bodyTopPos, m_col.bodyBottomPos, m_colInfo.bodyRadius); // 全身
 	debug.DrawAimCol(m_col.armStartPos, m_col.armEndPos, m_colInfo.aimRadius);		// 腕
@@ -123,6 +127,7 @@ void EnemyNinja::Draw()
 /// </summary>
 void EnemyNinja::DrawUi()
 {
-	m_pUIBattle->DrawSilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyNinja));	// シルエット描画
+	m_pUIBattle->DrawEnemySilhouette(static_cast<int>(CharacterBase::CharaType::kEnemyNinja)); // シルエット描画
+	m_pUIBattle->DrawEnemyName(static_cast<int>(CharacterBase::CharaType::kEnemyNinja));	   // 敵の名前ゲージ表示
 	m_pUIBattle->DrawEnemyHp(m_hp);	// HPゲージを表示
 }

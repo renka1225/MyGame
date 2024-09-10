@@ -51,14 +51,23 @@ private:
 	void Receive();
 	// 必殺技
 	void SpecialAttack(const Input& input, EnemyBase& enemy);
+	//攻撃時位置調整
+	void AdjAttackPos(EnemyBase& enemy);
+	// 敵を倒したとき
+	void DestroyEnemy();
+	// ゲームオーバー時
+	void Gameover();
 	// 移動パラメータを設定する
 	CharacterBase::State UpdateMoveParameter(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 	// プレイヤーの角度を更新
 	void UpdateAngle(EnemyBase& enemy);
+	// パッドの振動をさせる
+	void VibrationPad();
 
 private:
 	// プレイヤー情報
-	float m_gauge;				// ゲージ量
 	VECTOR m_pToEVec;			// プレイヤーから敵に向かうベクトル
 	VECTOR m_targetMoveDir;		// 向くべき方向のベクトル
+	float m_gauge;				// ゲージ量
+	bool m_isAccumulateGaugeSe;	// ゲージが溜まったSEを再生するかどうか(true:再生する)
 };

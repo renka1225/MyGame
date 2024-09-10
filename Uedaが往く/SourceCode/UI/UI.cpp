@@ -15,6 +15,7 @@ namespace
 	constexpr int kBackBoxWidth = 490;					// 四角の幅
 	const Vec2 kBackHandleLTPos = { 750.0f, 200.0f };	// 背景画像の左上位置
 	const Vec2 kBackHandleRBPos = { 1779.0f, 670.0f };	// 背景画像の右下位置
+	constexpr int kMulaPal = 255;						// 乗算値
 
 	const Vec2 kTextBoxLTPos = { 750.0f, 700.0f };		// ステージ選択画面のテキストボックス左上位置
 	const Vec2 kTextBoxRBPos = { 1779.0f, 890.0f };		// ステージ選択画面のテキストボックス右下位置
@@ -26,6 +27,9 @@ namespace
 	const Vec2 kClearTimeBgFrameRBPos = { 900, 950 };	// クリア画面(クリアタイム部分)の背景画像右下位置
 	const Vec2 kClearRankBgFrameLTPos = { 950, 420 };	// クリア画面(ランキング部分)の背景画像左上位置
 	const Vec2 kClearRankBgFrameRBPos = { 1800, 950 };	// クリア画面(ランキング部分)の背景画像右下位置
+
+	const Vec2 kGameoverBgFrameLTPos = { 620, 580 };	// ゲームオーバー画面の背景画像左上位置
+	const Vec2 kGameoverBgFrameRBPos = { 1300, 1000 };	// ゲームオーバー画面の背景画像右下位置
 
 	/*カーソル関連*/
 	constexpr float kCursorWidth = 489.0f;				// カーソルの横幅
@@ -39,14 +43,17 @@ namespace
 
 	/*ボタンの画像とテキストの位置*/
 	const Vec2 kButtonPos = { 1500, 1000 };				// ボタン表示位置
+	const Vec2 kButtonTextPos = { 1530, 970 };			// テキストの位置
+	const Vec2 kTitleButtonPos = { 1605, 1005 };		// タイトル画面ボタン位置
+	const Vec2 kTitleButtonTextPos = { 1630, 980 };		// タイトル画面ボタンテキスト位置
 	const Vec2 kClearButtonPos = { 1450, 1000 };		// クリア時ボタン表示位置
+	const Vec2 kClearButtonTextPos = { 1480, 975 };		// クリア時のテキスト位置
 	constexpr float kButtonWidth = 180.0f;				// 表示するボタンの幅
 	constexpr int kButtonSize = 32;						// ボタン画像のサイズ
 	constexpr float kButtonScale = 1.5f;				// ボタンの拡大率
-	const Vec2 kButtonTextPos = { 1530, 970 };			// テキストの位置
-	const Vec2 kClearButtonTextPos = { 1480, 975 };		// クリア時のテキスト位置
 	constexpr float kButtonTextWidth = 170.0f;			// テキストの幅
 	constexpr int kTextColor = 0xffffff;				// テキストの色
+	constexpr int kTitleTextColor = 0x000000;			// タイトル部分のテキストの色
 }
 
 
@@ -174,6 +181,20 @@ void UI::DrawButtonText()
 
 
 /// <summary>
+/// タイトル画面でボタンの画像とテキストを表示する
+/// </summary>
+void UI::DrawTitleButtonText()
+{
+	// エッジ付きテキスト表示
+	DrawFormatString2FToHandle(kTitleButtonTextPos.x, kTitleButtonTextPos.y, kTitleTextColor, kTextColor, 
+		Font::m_fontHandle[static_cast<int>(Font::FontId::kTitleButtonText)], "でスキップ");
+
+	// ボタン画像表示
+	DrawRectRotaGraphF(kTitleButtonPos.x, kTitleButtonPos.y, kButtonSize * ButtonKind::kAButton, 0, kButtonSize, kButtonSize, kButtonScale, 0.0f, m_buttonHandle, true);
+}
+
+
+/// <summary>
 /// クリア画面でボタンの画像とテキスト表示する
 /// </summary>
 void UI::DrawClearButtonText()
@@ -192,8 +213,19 @@ void UI::DrawClearButtonText()
 /// </summary>
 void UI::DrawClearBgFrame()
 {
-	SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
+	SetDrawBlendMode(DX_BLENDMODE_MULA, kMulaPal);
 	DrawExtendGraphF(kClearTimeBgFrameLTPos.x, kClearTimeBgFrameLTPos.y, kClearTimeBgFrameRBPos.x, kClearTimeBgFrameRBPos.y, m_handle[HandleKind::kBg], true);
 	DrawExtendGraphF(kClearRankBgFrameLTPos.x, kClearRankBgFrameLTPos.y, kClearRankBgFrameRBPos.x, kClearRankBgFrameRBPos.y, m_handle[HandleKind::kBg], true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+
+/// <summary>
+/// ゲームオーバーの背景枠表示
+/// </summary>
+void UI::DrawGameoverBgFrame()
+{
+	SetDrawBlendMode(DX_BLENDMODE_MULA, kMulaPal);
+	DrawExtendGraphF(kGameoverBgFrameLTPos.x, kGameoverBgFrameLTPos.y, kGameoverBgFrameRBPos.x, kGameoverBgFrameRBPos.y, m_handle[HandleKind::kBg], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

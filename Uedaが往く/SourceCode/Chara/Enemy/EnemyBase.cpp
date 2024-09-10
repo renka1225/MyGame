@@ -12,11 +12,6 @@ namespace
 {
 	constexpr float kInitAngle = 180.0f;	// 開始時の敵の向く方向
 	constexpr float kEffectHeight = 30.0f;	// エフェクトを表示する高さ
-
-	/*影*/
-	constexpr int kShadowMapSize = 4096;							  // 作成するシャドウマップのサイズ
-	const VECTOR kShadowAreaMinPos = VGet(2000.0f, 50.0f, 4000.0f);	  // シャドウマップに描画する最小範囲
-	const VECTOR kShadowAreaMaxPos = VGet(3500.0f, 100.0f, 5000.0f);  // シャドウマップに描画する最大範囲
 }
 
 
@@ -24,6 +19,7 @@ namespace
 /// コンストラクタ
 /// </summary>
 EnemyBase::EnemyBase() :
+	m_enemyType(0),
 	m_stopTime(0),
 	m_angleIntervalTime(0),
 	m_intervalTime(0),
@@ -33,13 +29,6 @@ EnemyBase::EnemyBase() :
 {
 	m_currentState = CharacterBase::State::kFightIdle;
 	m_angle = kInitAngle; // 真正面を向くようにする
-
-	// シャドウマップの準備
-	//m_shadowMap = MakeShadowMap(kShadowMapSize, kShadowMapSize);
-	// シャドウマップが想定するライトの方向をセット
-	//SetShadowMapLightDirection(m_shadowMap, VGet(1.0f, 0.0f, 0.0f));
-	// シャドウマップに描画する範囲を設定
-	//SetShadowMapDrawArea(m_shadowMap, kShadowAreaMinPos, kShadowAreaMaxPos);
 }
 
 
@@ -74,14 +63,20 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 		return nextState;
 	}
 
+	// プレイヤーが必殺技を発動時ガードを解除する
+	if (player.GetIsSpecialAttack())
+	{
+		OffGuard();
+	}
+
 	// パンチできない場合
 	if (m_punchCoolTime > 0)
 	{
 		m_punchCoolTime--;
 		return m_currentState;
 	}
-	// コンボ入力の受付時間の更新
-	m_punchComboTime--;
+
+	m_punchComboTime--; // コンボ入力の受付時間の更新
 
 	// キックできない場合
 	if (m_kickCoolTime > 0)
@@ -91,8 +86,21 @@ EnemyBase::CharacterBase::State EnemyBase::UpdateState(Player& player, SceneStag
 	}
 
 	// 特定の場合は状態を更新しない
-	bool isKeepState =  m_isGuard || m_isAttack || (m_currentState == CharacterBase::State::kReceive) || player.GetIsSpecialAttack();
+	bool isKeepState =
+		   m_isGuard
+		|| m_isAttack
+		|| (m_currentState == CharacterBase::State::kReceive)
+		|| (m_currentState == CharacterBase::State::kDown)
+		|| player.GetIsSpecialAttack()
+		|| player.GetHp() <= 0;
 	if (isKeepState) return nextState;
+
+	// 敵のHPが0になった場合
+	if (m_hp <= 0)
+	{
+		Down(); // ダウン処理を行う
+		return m_currentState;
+	}
 
 	// エネミーとプレイヤーの距離を計算
 	m_eToPDirVec = VSub(player.GetPos(), m_pos);
@@ -341,6 +349,7 @@ void EnemyBase::UpdateGuard()
 CharacterBase::State EnemyBase::OffGuard()
 {
 	m_isGuard = false;
+	m_guardTime = 0;
 	return CharacterBase::State::kFightIdle;
 }
 
@@ -354,13 +363,23 @@ void EnemyBase::Receive()
 	m_isAttack = false; // 攻撃状態を解除
 	m_currentState = CharacterBase::State::kReceive;
 
-	if (!m_isReceive)
-	{
-		m_isReceive = true;
-		PlayAnim(CharacterBase::AnimKind::kReceive);
-		m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));					// 攻撃エフェクト再生
-		PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK); 	// 攻撃SE再生
-	}
+	if (m_attackTime > 0) return;
+	PlayAnim(CharacterBase::AnimKind::kReceive);
+	m_pEffect->PlayDamageEffect(VGet(m_pos.x, m_pos.y + kEffectHeight, m_pos.z));					// 攻撃エフェクト再生
+	PlaySoundMem(Sound::m_seHandle[static_cast<int>(Sound::SeKind::kAttack)], DX_PLAYTYPE_BACK); 	// 攻撃SE再生
+}
+
+
+/// <summary>
+/// ダウン処理
+/// </summary>
+void EnemyBase::Down()
+{
+	m_isAttack = false;
+	m_isFighting = false;
+	m_isGuard = false;
+	m_currentState = CharacterBase::State::kDown;
+	PlayAnim(CharacterBase::AnimKind::kDown);
 }
 
 
@@ -444,6 +463,8 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	// パンチが当たった場合
 	if (isHitPunch && isStatePunch)
 	{
+		if (m_attackTime > 0) return;
+
 		// プレイヤーがガードしていないか、背後から攻撃した場合
 		if (!player.GetIsGuard())
 		{
@@ -451,16 +472,19 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 			if (m_currentState == CharacterBase::State::kPunch1)
 			{
 				player.OnDamage(m_status.punchPower);
+				m_attackTime = m_status.punchTime;
 			}
 			// 2コンボ目
 			if (m_currentState == CharacterBase::State::kPunch2)
 			{
 				player.OnDamage(m_status.secondPunchPower);
+				m_attackTime = m_status.punchTime;
 			}
 			// 3コンボ目
 			if (m_currentState == CharacterBase::State::kPunch3)
 			{
 				player.OnDamage(m_status.thirdPunchPower);
+				m_attackTime = m_status.punchTime;
 			}
 		}
 		else
@@ -471,10 +495,13 @@ void EnemyBase::CheckHitPlayerCol(Player& player, VECTOR eCapPosTop, VECTOR eCap
 	// キックが当たった場合
 	else if (isHitKick && m_currentState == CharacterBase::State::kKick)
 	{
+		if (m_attackTime > 0) return;
+
 		// キックが当たった場合
 		if (!player.GetIsGuard())
 		{
 			player.OnDamage(m_status.kickPower);
+			m_attackTime = m_status.kickTime;
 		}
 		else
 		{

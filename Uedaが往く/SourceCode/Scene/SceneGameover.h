@@ -9,7 +9,7 @@ class SceneStageBase;
 class SceneGameover : public SceneBase
 {
 public:
-	SceneGameover():m_textHandle(-1) {};
+	SceneGameover():m_textHandle(-1), m_backHandle(-1) {};
 	SceneGameover(std::shared_ptr<SceneBase> pScene);
 	virtual ~SceneGameover();
 	virtual void Init();
@@ -19,6 +19,7 @@ public:
 private:
 	std::shared_ptr<SceneBase> m_pPrevScene;	// 前に実行していたシーン
 	int m_textHandle;	// テキストの画像
+	int m_backHandle;	// 背景の画像
 
 	// 選択項目
 	enum Select
